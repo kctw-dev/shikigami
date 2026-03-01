@@ -24,7 +24,7 @@
 | US-07：Health Check 路由 | 更新 `skills/scrum-master/SKILL.md` 決策樹，新增 health-check 路由 | Developer | 待開發 |
 | US-S01：Standup 遠端差距感知 | 修改 `commands/standup.md`，新增 Git 同步狀態區塊 | Developer | 待開發 |
 | Retro #2：不阻塞原則強化 | `skills/scrum-master/SKILL.md` 新增獨立章節 | Scrum Master | 待開發 |
-| Retro #3：Plan Mode 互斥說明 | `docs/PLUGIN_DEV_NOTES.md` 新增章節 | Developer | 待開發 |
+| Retro #3：Plan Mode 互斥說明 | `docs/km/PLUGIN_DEV_NOTES.md` 新增章節 | Developer | 待開發 |
 
 ---
 
@@ -98,7 +98,7 @@ As a Developer, I want the daily standup to show the git sync status between loc
 
 ### Retro #3：Plan Mode 互斥說明
 
-**任務**：在 `docs/PLUGIN_DEV_NOTES.md` 新增「Plan Mode 與 Shikigami 的互斥關係」章節
+**任務**：在 `docs/km/PLUGIN_DEV_NOTES.md` 新增「Plan Mode 與 Shikigami 的互斥關係」章節
 
 **Done 定義**：
 - 含問題描述（Plan Mode 啟用時 Skill 調度被封印）
