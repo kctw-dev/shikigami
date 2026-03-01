@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 9 Review 完成）
+**最後更新**：2026-03-01（Sprint 10 Planning 完成）
 **管理者**：Product Owner
 
 ---
@@ -15,7 +15,8 @@
 | 2 | US-18：Sprint Execution Issue 回覆自動化 | 23.8 | Should | M | Issue #9 | Done (Sprint 8) |
 | 3 | US-20：輕量 Bypass 機制 | 20.25 | Should | M | Issue #12-2 | Done (Sprint 8) |
 | 4 | US-19：Token 成本透明化 | 11.2 | Must | M | Issue #12-1 | Done (Sprint 9) |
-| 5 | US-22：Retrospective 驅動角色權重自動調整 | 6.6 | Could | L | Issue #12-4 | 待選 |
+| 5 | US-22：Retrospective 驅動角色權重自動調整 | 6.6 | Could | L | Issue #12-4 | In Sprint (Sprint 10) |
+| 6 | US-23：Token 成本分環節記錄 | 33.6 | Must | M | Retro #18 | In Sprint (Sprint 10) |
 
 ### v0.3.0 知識沉澱 — 候選 Stories
 
@@ -190,6 +191,41 @@ As a Scrum Master, I want Sprint Planning to automatically read Retrospective tr
 **Size**：L
 **對應 Issue**：#12（建議 4）
 **備注**：US-09 Retrospective Analytics（已完成）實現展示歷史趨勢；本 Story 進一步將趨勢轉化為 Sprint Planning 的自動決策輸入，屬新增能力而非重複。
+**狀態**：In Sprint (Sprint 10)
+
+---
+
+### US-23：Token 成本分環節記錄
+
+**標題**：Sprint 各環節（Planning / Execution / Review）Token 消耗獨立記錄與佔比分析
+
+**User Story**
+As a Product Owner, I want token consumption broken down by sprint phase (Planning, Execution, Review) and recorded in Metrics_Log.md, so that I can understand which phases consume the most resources and make data-driven decisions about where to optimize or reduce ceremony depth.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 分環節表格格式 | 在 `docs/km/Metrics_Log.md` 現有 Token 成本記錄表格之後，新建獨立 H2 區塊「## Token 成本分環節記錄」。表格欄位：Sprint 編號、Planning token、Execution token、Review token、合計 token、各環節佔比。「各環節佔比」計算基準：本環節 token ÷ 三環節 token 總和（Planning + Execution + Review）。不修改現有 Token 成本記錄表格 |
+| AC2 | [靜態] | sprint-planning 整合 | `skills/sprint-planning/SKILL.md` 新增指引：Sprint Planning 結束時，記錄本次 Planning 環節的 token 消耗至分環節表格對應列（Planning token 欄）；不修改現有 Token 成本摘要指引的任何內容 |
+| AC3 | [靜態] | 示範資料 | 分環節表格含至少一列示範資料；數值採 K 格式（如 `12K`）；各環節佔比三欄加總等於 100% |
+| AC4 | [動態] | 降級處理 | 當 token 數據不可得時，分環節表格各 token 欄填「N/A」，佔比欄填「N/A」；在 sprint-planning SKILL.md 對應位置輸出精確字串「Token 資料不可用，需手動補充」 |
+| AC5 | [靜態] | ADR-003 Checklist | 本 Story 修改 `skills/sprint-planning/SKILL.md`，需在 Sprint 執行前確認 ADR-003 Framework Document Change Audit Checklist 通過 |
+
+**RICE 評分**
+
+| 維度 | 分數 |
+|------|------|
+| Reach | 8 |
+| Impact | 3 |
+| Confidence | 70% |
+| Effort | 0.5 人週 |
+| **RICE Score** | **33.6** |
+
+**MoSCoW**：Must
+**Size**：M / **Points**：2
+**對應 Retro Action**：#18（Sprint 9，合併執行）
+**狀態**：In Sprint (Sprint 10)
 
 ---
 
