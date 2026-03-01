@@ -4,19 +4,21 @@
 
 ---
 
-## 概念
+## 這是什麼？
 
 你一個人開發，寫完的代碼沒人 review，架構決策靠直覺，安全問題等上線才發現。
 
 Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：QA 審你的代碼並挑戰架構決策，Security 審外部輸入，SRE 從維運角度評估部署可行性。
 
-**當前版本：v0.3.0**（16 Skills / 7 Agents / 3 Commands）
+**不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
+
+**當前版本：v0.3.0**（16 Skills / 7 Agents / 3 Commands）— 本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，連續 6 個 Sprint 完成率 100%。
 
 ---
 
-## 安裝方式
+## 快速開始
 
-### Claude Code
+### 安裝（Claude Code）
 
 在 Claude Code 互動介面中執行以下指令：
 
@@ -31,60 +33,23 @@ Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專
 
 > **注意**：所有指令都在 Claude Code 互動介面中輸入（不是終端機 shell）。安裝後開新 session 即自動啟動。
 
----
+### 第一步：初始化專案
 
-## 7 個角色
+安裝完成後，對 Claude 說：
 
-| 角色 | 職責 | 觸發時機 |
-|---|---|---|
-| **Product Owner** | 需求定義、優先級決策、Backlog 管理 | 需求討論、Sprint 規劃、功能排序 |
-| **Architect** | 架構決策、SDD 撰寫、技術選型 | 技術選型、系統設計、效能瓶頸分析 |
-| **Developer** | 功能實作、TDD 開發、Bug 修復 | Sprint 執行、代碼撰寫、技術實作 |
-| **QA Engineer** | 代碼審查、測試策略、品質把關 | 功能完成、PR 審查、品質檢測 |
-| **Security Engineer** | 安全掃描、漏洞評估、OWASP 檢查 | 外部輸入處理、API 端點、配置變更 |
-| **SRE Engineer** | 部署檢查、監控配置、環境管理 | 部署準備、版本發布、環境變更 |
-| **Stakeholder** | 最終仲裁、打破僵局 | 團隊升級鏈走完仍無法解決 |
+```
+> 幫我初始化 Shikigami
+```
 
-**重點：它們會互相制衡。** 不是 7 個獨立助手，是一組有紀律的工程團隊。
-
----
-
-## 可用 Skills（16 個）
-
-| Skill | 說明 |
-|---|---|
-| **scrum-master** | 自動調度 Agent Scrum Team 的角色分工與 Sprint 流程 |
-| **sprint-planning** | 啟動新 Sprint、從 Backlog 選取 Stories、規劃 Sprint 目標 |
-| **sprint-execution** | 執行 Sprint Stories、功能實作、處理 Sprint Backlog |
-| **sprint-review** | Sprint 結束時進行回顧與驗收、評估 Sprint 成果 |
-| **backlog-management** | 新需求管理、需求變更、Backlog 梳理、產品探索 |
-| **architecture-decision** | 技術決策、架構審查、技術選型、ADR 撰寫 |
-| **quality-gate** | 代碼審查、功能驗收、PR 檢查、品質指標檢測 |
-| **security-review** | 外部輸入處理、API 安全、配置安全、漏洞評估 |
-| **deployment-readiness** | 部署準備、版本發布、環境配置、生產就緒檢查 |
-| **escalation** | 團隊衝突無法解決、重大產品轉向、升級鏈啟動 |
-| **systematic-debugging** | Bug 排查、測試失敗分析、系統化除錯流程 |
-| **git-workflow** | 分支隔離、Worktree 管理、開發完成後的合併/PR 流程 |
-| **parallel-dispatch** | 多個獨立任務的平行 Subagent 派遣 |
-| **issue-management** | GitHub Issue 管理、自動分類、回覆、Issue 轉 Backlog |
-| **health-check** | 框架自我診斷、結構完整性檢查、逾期 Action Items 偵測 |
-| **onboarding** | 新專案初始化、目錄結構建立、CLAUDE.md 生成引導 |
-
----
-
-## Slash Commands
-
-| 指令 | 說明 |
-|---|---|
-| `/sprint` | 啟動 Sprint 規劃 |
-| `/standup` | 每日站立會議 |
-| `/review` | Sprint 回顧 |
+Scrum Master 會觸發 `onboarding`，引導你建立專案的 `CLAUDE.md` 與文件目錄結構。
 
 ---
 
 ## 怎麼用？
 
-不需要記指令，**用自然語言說你要做什麼**，Scrum Master 會自動調度。以下是模擬互動範例：
+用自然語言說你要做什麼，Scrum Master 會自動調度。也可以用 Slash Commands 直接觸發流程：`/sprint`（Sprint 規劃）、`/standup`（每日站立會議）、`/review`（Sprint 回顧）。
+
+以下是模擬互動範例：
 
 ### 從零開始一個功能
 
@@ -183,9 +148,7 @@ Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專
 
 > **提示**：你不需要精確匹配上面的用語。Scrum Master 會分析你的意圖，自動路由到對應流程。只要說出你想做什麼就好。
 
----
-
-## 使用流程概覽
+### 使用流程概覽
 
 ```
 Discovery → Sprint Planning → Sprint Execution → Sprint Review
@@ -225,6 +188,57 @@ shikigami.project_level: medium
 | **low** | 個人專案、實驗 | 完全自治，所有操作自動執行 |
 | **medium**（預設） | 一般開發專案 | 低風險自動，高風險由 QA 審核後自動執行 |
 | **high** | 重要產品、公開 repo | 低風險自動，高風險需人工確認 |
+
+---
+
+## 角色與能力
+
+### 7 個角色
+
+| 角色 | 職責 | 觸發時機 |
+|---|---|---|
+| **Product Owner** | 需求定義、優先級決策、Backlog 管理 | 需求討論、Sprint 規劃、功能排序 |
+| **Architect** | 架構決策、SDD 撰寫、技術選型 | 技術選型、系統設計、效能瓶頸分析 |
+| **Developer** | 功能實作、TDD 開發、Bug 修復 | Sprint 執行、代碼撰寫、技術實作 |
+| **QA Engineer** | 代碼審查、測試策略、品質把關 | 功能完成、PR 審查、品質檢測 |
+| **Security Engineer** | 安全掃描、漏洞評估、OWASP 檢查 | 外部輸入處理、API 端點、配置變更 |
+| **SRE Engineer** | 部署檢查、監控配置、環境管理 | 部署準備、版本發布、環境變更 |
+| **Stakeholder** | 最終仲裁、打破僵局 | 團隊升級鏈走完仍無法解決 |
+
+**重點：它們會互相制衡。** 不是 7 個獨立助手，是一組有紀律的工程團隊。
+
+### 16 個 Skills
+
+**Scrum 流程**
+
+| Skill | 說明 |
+|---|---|
+| **scrum-master** | 自動調度 Agent Scrum Team 的角色分工與 Sprint 流程 |
+| **sprint-planning** | 啟動新 Sprint、從 Backlog 選取 Stories、規劃 Sprint 目標 |
+| **sprint-execution** | 執行 Sprint Stories、功能實作、處理 Sprint Backlog |
+| **sprint-review** | Sprint 結束時進行回顧與驗收、評估 Sprint 成果 |
+| **backlog-management** | 新需求管理、需求變更、Backlog 梳理、產品探索 |
+| **escalation** | 團隊衝突無法解決、重大產品轉向、升級鏈啟動 |
+
+**工程實踐**
+
+| Skill | 說明 |
+|---|---|
+| **architecture-decision** | 技術決策、架構審查、技術選型、ADR 撰寫 |
+| **quality-gate** | 代碼審查、功能驗收、PR 檢查、品質指標檢測 |
+| **security-review** | 外部輸入處理、API 安全、配置安全、漏洞評估 |
+| **deployment-readiness** | 部署準備、版本發布、環境配置、生產就緒檢查 |
+| **systematic-debugging** | Bug 排查、測試失敗分析、系統化除錯流程 |
+
+**工具整合**
+
+| Skill | 說明 |
+|---|---|
+| **git-workflow** | 分支隔離、Worktree 管理、開發完成後的合併/PR 流程 |
+| **parallel-dispatch** | 多個獨立任務的平行 Subagent 派遣 |
+| **issue-management** | GitHub Issue 管理、自動分類、回覆、Issue 轉 Backlog |
+| **health-check** | 框架自我診斷、結構完整性檢查、逾期 Action Items 偵測 |
+| **onboarding** | 新專案初始化、目錄結構建立、CLAUDE.md 生成引導 |
 
 ---
 
