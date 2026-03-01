@@ -1,7 +1,7 @@
 # Sprint 10
 
 > 週期：2026-03-01 ~ 2026-03-08
-> 狀態：進行中
+> 狀態：完成
 > 專案等級：low（完全自治）
 
 ---
@@ -157,28 +157,26 @@ US-19 在 Sprint 9 建立了 Token 記錄機制，但 Sprint 9 Review 時 Token 
 
 ### Retro #19：領域專家審查機制設計
 
-- [ ] `docs/decisions/retro-19-domain-expert-review.md` 已建立，含四個必要欄位（AC1 通過）
-- [ ] 調查結果覆蓋使用案例、現有框架限制、至少兩個可行方案（AC2 通過）
-- [ ] 決策結論明確（採納或不採納），若採納則後續行動描述完整（AC3 通過）
-- [ ] GitHub Issue #19 在 Sprint 10 Review 時關閉（AC4 通過）
+- [x] `docs/decisions/retro-19-domain-expert-review.md` 已建立，含四個必要欄位（AC1 通過）
+- [x] 調查結果覆蓋使用案例、現有框架限制、至少兩個可行方案（AC2 通過）
+- [x] 決策結論明確（採納或不採納），若採納則後續行動描述完整（AC3 通過）
+- [x] GitHub Issue #19 在 Sprint 10 Review 時關閉（AC4 通過）
 
 ### US-23：Token 成本分環節記錄
 
-- [ ] Metrics_Log.md 現有 Token 表格後新建 H2「Token 成本分環節記錄」，含六欄位 + 佔比計算基準（AC1 通過）
-- [ ] sprint-planning SKILL.md 新增 Planning token 記錄指引，未修改現有 Token 成本摘要指引（AC2 通過）
-- [ ] 分環節表格含示範資料（K 格式，佔比三欄加總 100%）（AC3 通過）
-- [ ] 降級字串統一為「Token 資料不可用，需手動補充」；分環節表格欄位填 N/A（AC4 通過）
-- [ ] ADR-003 Checklist 通過確認（AC5 通過）
+- [x] Metrics_Log.md 現有 Token 表格後新建 H2「Token 成本分環節記錄」，含六欄位 + 佔比計算基準（AC1 通過）
+- [x] sprint-planning SKILL.md 新增 Planning token 記錄指引，未修改現有 Token 成本摘要指引（AC2 通過）
+- [x] 分環節表格含示範資料（K 格式，佔比三欄加總 100%）（AC3 通過）
+- [x] 降級字串統一為「Token 資料不可用，需手動補充」；分環節表格欄位填 N/A（AC4 通過）
+- [x] ADR-003 Checklist 通過確認（AC5 通過）
 
 ### US-22：Retrospective 驅動角色權重自動調整
 
-- [ ] sprint-planning SKILL.md 在健康檢查後、PO 第一輪前新增「角色權重調整檢查」步驟（AC1 通過）
-- [ ] 步驟內容正確引用 ADR-004 關鍵字清單與連續定義，觸發邏輯完整（AC2 通過）
-- [ ] 調整結果持久化至 sprint_N.md「## 權重調整記錄」區塊（AC3 通過）
-- [ ] 資料不足時輸出正確降級訊息並寫入 sprint_N.md（AC4 通過）
+- [x] sprint-planning SKILL.md 在健康檢查後、PO 第一輪前新增「角色權重調整檢查」步驟（AC1 通過）
+- [x] 步驟內容正確引用 ADR-004 關鍵字清單與連續定義，觸發邏輯完整（AC2 通過）
+- [x] 調整結果持久化至 sprint_N.md「## 權重調整記錄」區塊（AC3 通過）
+- [x] 資料不足時輸出正確降級訊息並寫入 sprint_N.md（AC4 通過）
 
 ## 權重調整記錄
 
-> 本區塊於 Sprint Planning 執行「角色權重調整檢查」時填入（US-22 實作後生效）。
-
-（待 US-22 實作後由 sprint-planning 自動填入）
+US-22 於 Sprint 10 Execution 期間完成實作。sprint-planning SKILL.md §7「角色權重調整檢查」將於 Sprint 11 Planning 首次執行。Sprint 10 Planning 時 US-22 尚未實作，故本 Sprint 無權重調整執行記錄。

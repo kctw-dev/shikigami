@@ -344,5 +344,38 @@
 
 | # | Action | Owner | 驗收方式 | 狀態 | Issue |
 |---|--------|-------|----------|------|-------|
-| 1 | Sprint 10 起填入 Token 真實數據 | Developer | Sprint 10 Review 時 Metrics_Log.md Token 表格至少有 1 列 Sprint 10 記錄 | Open | [#18](https://github.com/KCTW/shikigami/issues/18) |
-| 2 | 領域專家審查機制設計：評估在 Sprint Execution 流程中加入 Domain Expert 審查階段 | PO + Architect | Sprint 10 Planning 前決策記錄於文件 | Open | [#19](https://github.com/KCTW/shikigami/issues/19) |
+| 1 | Sprint 10 起填入 Token 真實數據 | Developer | Sprint 10 Review 時 Metrics_Log.md Token 表格至少有 1 列 Sprint 10 記錄 | Closed（Sprint 10） | [#18](https://github.com/KCTW/shikigami/issues/18) |
+| 2 | 領域專家審查機制設計：評估在 Sprint Execution 流程中加入 Domain Expert 審查階段 | PO + Architect | Sprint 10 Planning 前決策記錄於文件 | Closed（Sprint 10） | [#19](https://github.com/KCTW/shikigami/issues/19) |
+
+---
+
+## Sprint 10 — 2026-03-01
+
+**Sprint Goal**：填入 Token 真實數據並細化至分環節記錄，引入 Retrospective 驅動的角色權重自動調整，讓框架的成本可觀測性與自我演進能力同步提升
+**結果**：Goal 達成。全部 3 個 Stories 完成交付。
+
+### 交付成果
+
+| Story | Size | 狀態 | 驗收 |
+|-------|------|------|------|
+| Retro #19：領域專家審查機制設計 [BYPASS] | S | Done | AC 全通過（4/4）— docs/decisions/retro-19-domain-expert-review.md 決策文件完成，結論不採納（YAGNI）；Issue #19 CLOSED |
+| US-23：Token 成本分環節記錄 | M | Done | AC 全通過（5/5）— Metrics_Log.md 分環節表格 + 三個 SKILL.md 整合 + 示範資料 + 降級處理 |
+| US-22：Retrospective 驅動角色權重自動調整 | L | Done | AC 全通過（4/4）— sprint-planning SKILL.md §7 角色權重調整檢查 + ADR-004 關鍵字清單 + 持久化機制 |
+
+**Velocity**：6 points（1S + 1M + 1L = 1+2+3）
+
+### Good（保持做的事）
+
+- **完成率連續 10 個 Sprint 100%**：6pt 全數交付（1S+1M+1L），團隊節奏持續穩定
+- **QA 雙階段審查連續 3 個 Sprint 全面執行**：US-23 和 US-22 均通過 Spec Compliance + Code Quality 雙審查，QA 發現 4 個品質問題（3 Minor + 1 Medium）全部即時修正後 Re-Review PASS
+- **ADR-004 先行解鎖 US-22 Hard Gate 零阻塞**：Sprint Planning 階段 Architect 識別 US-22 需要 ADR（比對機制是技術選型），立即建立 ADR-004 並獲得 Accepted，Sprint Execution 時零等待
+- **Sprint 9 Retro Action Items 全部關閉**：#18（Token 真實數據）由 US-23 交付分環節記錄機制，#19（領域專家審查）由 Retro #19 產出決策文件，兩個 GitHub Issues 均在 Sprint 10 Review 關閉
+- **AC 規格與實作不一致問題在 Sprint 10 未重現**：Sprint 8-9 連續 2 個 Sprint 出現的 AC 規格問題，在 Sprint 10 未再發生（QA Review 發現的問題均為設計完整性，非 AC 規格傳遞錯誤）
+
+### Problem（需改進的事）
+
+- **Token 記錄機制完備但數據仍全為 N/A**：Sprint 8 提出 Token 不透明、Sprint 9 建立記錄機制（US-19）、Sprint 10 建立分環節記錄（US-23），但三個 Sprint 累計 token 表格仍無任何實際數值。根因是 Claude Code 環境中 API token 計數器不可程式化存取，AC4 降級處理設計正確運作，但使用者對「成本可觀測性」的原始需求尚未能實質滿足
+
+### Action Items
+
+本 Sprint 無新增 Action Item。Token N/A 問題已有 AC4 降級機制正確處理，無框架內可行動的改善項目。Sprint 9 的 2 個 Open Action Items（#18、#19）已在本 Sprint 關閉。

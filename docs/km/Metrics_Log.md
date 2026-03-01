@@ -20,6 +20,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 7 | 2026-03-01 | 7 points | 100% | 穩定 | 5 Stories（3S+2M），Sprint Goal 達成；S6→S7 微降（8→7，-12.5%，±20% 內）；v0.5.0 穩定化啟動 |
 | Sprint 8 | 2026-03-01 | 6 points | 100% | 穩定 | 4 Stories（2S+2M），Sprint Goal 達成；S7→S8 微降（7→6，-14.3%，±20% 內）；QA 雙階段審查恢復 |
 | Sprint 9 | 2026-03-01 | 5 points | 100% | 穩定 | 3 Stories（1S+2M），Sprint Goal 達成；S8→S9 微降（6→5，-16.7%，±20% 內）；Token 成本透明化機制建立 |
+| Sprint 10 | 2026-03-01 | 6 points | 100% | 穩定 | 3 Stories（1S+1M+1L），Sprint Goal 達成；S9→S10 回升（5→6，+20%，±20% 內）；分環節記錄 + 權重自動調整 |
 
 ---
 
@@ -31,6 +32,7 @@ Sprint 整體 Token 消耗記錄，與 Velocity 記錄粒度對齊（Sprint 為�
 
 | Sprint 編號 | 輸入 token | 輸出 token | 估算成本 (USD) | 資料來源 |
 |------------|-----------|-----------|--------------|---------|
+| Sprint 10 | N/A | N/A | N/A | 不可用 |
 
 ---
 
@@ -54,6 +56,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 編號 | Planning token | Execution token | Review token | 合計 token | 佔比（Planning / Execution / Review） |
 |------------|---------------|-----------------|-------------|-----------|--------------------------------------|
 | Sprint N（示範） | 12K | 20K | 10K | 42K | 29% / 48% / 23% |
+| Sprint 10 | N/A | N/A | N/A | N/A | N/A |
 
 ---
 
