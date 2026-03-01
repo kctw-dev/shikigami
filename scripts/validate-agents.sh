@@ -71,6 +71,7 @@ extract_frontmatter_value() {
   local field="$2"
   awk '/^---/{c++; if(c==2) exit} c==1' "$filepath" \
     | grep -E "^${field}[[:space:]]*:" \
+    | head -1 \
     | sed "s/^${field}[[:space:]]*:[[:space:]]*//" \
     | sed 's/^"\(.*\)"$/\1/' \
     | sed "s/^'\(.*\)'$/\1/" \
