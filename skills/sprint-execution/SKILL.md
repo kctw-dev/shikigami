@@ -96,12 +96,15 @@ Sprint Backlog 還有 Story？
    > - **原生支援**：gh CLI 原生 `--label` 篩選，指令簡單、無副作用
    > - **低成本**：不需要引入新的基礎設施或 ADR，符合 YAGNI 原則
 
-2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。
-3. **派遣 Developer subagent**：使用 `developer-prompt.md` 作為 prompt，注入 Story 的 Acceptance Criteria、相關 ADR、設計文件。
+2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。**主 session 不讀取 Story 內容**，Story ID 與路徑傳入 subagent prompt，由 subagent 自行讀取。
+3. **派遣 Developer subagent**：使用 `developer-prompt.md` 作為 prompt，在 prompt 中指定以下檔案路徑由 **Developer subagent 自行讀取**，主 session 不預讀這些內容：
+   - `docs/sprints/sprint_N.md`（Story AC 與完整需求）
+   - 相關 ADR 路徑（如 `docs/adr/ADR-XXX.md`）
+   - 相關設計文件路徑（如 `docs/sdd/SDD-XXX.md`）
 4. **Developer 實作**：遵循 TDD（Red → Green → Refactor），每個小步驟一個 commit，完成後執行自我審查 checklist。
-5. **Spec Compliance Review**：派遣 QA subagent 使用 `spec-reviewer-prompt.md`，獨立驗證實作是否符合所有 Acceptance Criteria。
-6. **Code Quality Review**：派遣 QA subagent 使用 `quality-reviewer-prompt.md`，評估代碼品質、SOLID 原則、測試品質。
-7. **安全審查（條件觸發）**：若 Story 涉及外部輸入、API 端點、配置變更，派遣 Security subagent 進行安全審查。
+5. **Spec Compliance Review**：派遣 QA subagent 使用 `spec-reviewer-prompt.md`，在 prompt 中指定 `docs/sprints/sprint_N.md` 路徑由 **QA subagent 自行讀取** Story AC，獨立驗證實作是否符合所有 Acceptance Criteria。QA subagent **回傳格式**：`PASS/FAIL + 一句話摘要`（例：`PASS — 所有 AC 均通過，測試覆蓋完整`）。
+6. **Code Quality Review**：派遣 QA subagent 使用 `quality-reviewer-prompt.md`，在 prompt 中指定需審查的代碼路徑由 **QA subagent 自行讀取**，評估代碼品質、SOLID 原則、測試品質。QA subagent **回傳格式**：`PASS/FAIL + 一句話摘要`（例：`FAIL — 發現 3 個硬編碼常數，需提取為命名常量`）。
+7. **安全審查（條件觸發）**：若 Story 涉及外部輸入、API 端點、配置變更，派遣 Security subagent 進行安全審查。在 prompt 中指定相關檔案路徑由 **Security subagent 自行讀取**。Security subagent **回傳格式**：`PASS/FAIL + 一句話摘要`（例：`PASS — 無外部輸入注入風險，配置透過環境變數管理`）。
 8. **更新看板與同步 Sprint 文件**：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。
 
    **記錄本次 Execution 環節 Token 消耗**：所有 Story 完成後（即 Sprint Backlog 清空時），將本 Execution 環節累計 Token 消耗記錄至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格（對應 Execution token 欄）：
