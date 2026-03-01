@@ -34,14 +34,13 @@ readonly SKILLS_DIR="skills"
 EXIT_CODE=0
 ERROR_COUNT=0
 SKILL_COUNT=0
-PASS_COUNT=0
 
 # ---------------------------------------------------------------------------
 # 前置檢查：skills/ 目錄必須存在
 # ---------------------------------------------------------------------------
 preflight_check() {
   if [ ! -d "$SKILLS_DIR" ]; then
-    echo "[ERROR] 找不到目錄：$SKILLS_DIR"
+    print_error "找不到目錄：$SKILLS_DIR"
     exit 1
   fi
 }
@@ -72,7 +71,7 @@ extract_frontmatter_name() {
 # ---------------------------------------------------------------------------
 # 驗證單一 Skill 目錄（AC2 + AC3 + AC4）
 # 參數：$1 = skill 目錄路徑（如 skills/git-workflow）
-# 副作用：可能修改全域 EXIT_CODE、ERROR_COUNT、PASS_COUNT
+# 副作用：可能修改全域 EXIT_CODE、ERROR_COUNT
 # ---------------------------------------------------------------------------
 validate_skill_dir() {
   local skill_dir="$1"
@@ -89,8 +88,10 @@ validate_skill_dir() {
   fi
 
   # AC2：frontmatter 必須含 name 欄位
+  local has_name=0
   if has_frontmatter_field "$skill_md" "name"; then
     print_pass "$skill_name：frontmatter 含 name 欄位"
+    has_name=1
   else
     print_error "$skill_name：frontmatter 缺少 name 欄位"
   fi
@@ -103,12 +104,11 @@ validate_skill_dir() {
   fi
 
   # AC3：name 值必須與目錄名稱完全一致（大小寫敏感）
-  if has_frontmatter_field "$skill_md" "name"; then
+  if [ "$has_name" -eq 1 ]; then
     local name_value
     name_value=$(extract_frontmatter_name "$skill_md")
     if [ "$name_value" = "$skill_name" ]; then
       print_pass "$skill_name：name 值與目錄名稱一致（\"$name_value\"）"
-      PASS_COUNT=$((PASS_COUNT + 1))
     else
       print_error "$skill_name：name 值「$name_value」與目錄名稱「$skill_name」不一致"
     fi
