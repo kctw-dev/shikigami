@@ -107,6 +107,29 @@ Sprint Backlog 還有 Story？
 7. **安全審查（條件觸發）**：若 Story 涉及外部輸入、API 端點、配置變更，派遣 Security subagent 進行安全審查。在 prompt 中指定相關檔案路徑由 **Security subagent 自行讀取**。Security subagent **回傳格式**：`PASS/FAIL + 一句話摘要`（例：`PASS — 無外部輸入注入風險，配置透過環境變數管理`）。
 8. **更新看板與同步 Sprint 文件**：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。
 
+   <HARD-GATE>
+   **Developer 更新範圍限制（越權禁止）**
+
+   **PROJECT_BOARD.md — Developer 可更新欄位：**
+   - 僅限個別 Story 的狀態欄（「待辦」→「進行中」→「已完成」欄位移動）
+
+   **PROJECT_BOARD.md — 禁止 Developer 修改的欄位：**
+   - Sprint 完成標記（如「Sprint N 完成」、「已關閉」等 Sprint 級別狀態）
+   - Stakeholder 驗收欄位（如「Stakeholder 驗收：接受」）
+   - Sprint 級別的任何結果欄位
+
+   **sprint_N.md — Developer 可更新欄位：**
+   - 僅限 Sprint Backlog 表格中各 Story 列的「狀態」欄（如「待開始」→「進行中」→「完成」）
+
+   **sprint_N.md — 禁止 Developer 修改的欄位（Sprint 級別欄位）：**
+   - 文件頂部的「狀態：」欄位
+   - Sprint Goal 結果描述
+   - Sprint 驗收結論
+   - 任何 Sprint 級別的完成標記或驗收記錄
+
+   以上 Sprint 級別欄位僅由 **sprint-review** Skill 負責更新，Developer 不得觸碰。
+   </HARD-GATE>
+
    **記錄本次 Execution 環節 Token 消耗**：所有 Story 完成後（即 Sprint Backlog 清空時），將本 Execution 環節累計 Token 消耗記錄至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格（對應 Execution token 欄）：
    - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens` 與 `output_tokens`，加總後填入 Metrics_Log.md 對應欄位。
    - **次選（降級方法）**：若 JSONL 檔案不存在、路徑不可存取、或 `message.usage` 欄位解析失敗，則各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
