@@ -8,7 +8,9 @@
 
 你一個人開發，寫完的代碼沒人 review，架構決策靠直覺，安全問題等上線才發現。
 
-Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：SRE 從維運角度評估 Architect 的 ADR 可行性，QA 審你的代碼並挑戰架構決策，SecOps 審外部輸入。
+Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：QA 審你的代碼並挑戰架構決策，Security 審外部輸入，SRE 從維運角度評估部署可行性。
+
+**當前版本：v0.3.0**（16 Skills / 7 Agents / 3 Commands）
 
 ---
 
@@ -47,7 +49,7 @@ Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專
 
 ---
 
-## 可用 Skills（14 個）
+## 可用 Skills（16 個）
 
 | Skill | 說明 |
 |---|---|
@@ -65,6 +67,8 @@ Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專
 | **git-workflow** | 分支隔離、Worktree 管理、開發完成後的合併/PR 流程 |
 | **parallel-dispatch** | 多個獨立任務的平行 Subagent 派遣 |
 | **issue-management** | GitHub Issue 管理、自動分類、回覆、Issue 轉 Backlog |
+| **health-check** | 框架自我診斷、結構完整性檢查、逾期 Action Items 偵測 |
+| **onboarding** | 新專案初始化、目錄結構建立、CLAUDE.md 生成引導 |
 
 ---
 
@@ -226,19 +230,31 @@ shikigami.project_level: medium
 
 ## 實戰驗證
 
-本框架已在以下專案中驗證：
+Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，目前已完成 6 個 Sprint，交付 3 個版本：
 
-Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發：
+| 版本 | 主題 | Sprint | 交付內容 |
+|------|------|--------|----------|
+| v0.1.0 | 核心框架 | Sprint 1 | 16 Skills + 7 Agents + 3 Commands + Issue Management |
+| v0.2.0 | 自我感知 | Sprint 2–4 | Onboarding + Health Check + Sprint Metrics |
+| v0.3.0 | 知識沉澱 | Sprint 4–6 | Retrospective Analytics + Tech Debt Registry + 5 驗證腳本 + Hard Gate 機制 |
 
+**累積數據**（截至 v0.3.0）：
+- 連續 6 個 Sprint 完成率 100%，Velocity 上升趨勢（4→6→8）
+- 3 個 ADR（架構決策紀錄）、14 個 Retro Action Items 全部關閉
+- 5 個自動化驗證腳本（Skill / Command / Version / Agent / JSON Schema）
+
+**開發流程實證**：
 - **Product Discovery**：PO 分析需求 → Architect 評估可行性 → QA 確認驗收標準
-- **Sprint Execution**：Developer 依 SDD 實作 → QA 雙階段審查（Spec Review + Code Quality）
-- **Architecture Decision**：Architect 提案 → QA 扮演 Devil's Advocate 挑戰 → ADR 記錄決策
-- **Sprint Review**：自動觸發驗收 → Retrospective 記錄改進 → Action Items 轉為 GitHub Issues
+- **Sprint Execution**：Developer 依 TDD 實作 → QA 雙階段審查（Spec Compliance + Code Quality）
+- **Architecture Decision**：Architect 提案 → QA 扮演 Decision Challenger 挑戰 → ADR 記錄決策
+- **Sprint Review**：自動觸發驗收 → Retrospective Analytics 展示趨勢 → Action Items 轉為 GitHub Issues
+- **Hard Gate**：框架文件修改前 Preflight Check、儀式完整性稽核、Sprint 外變更偵測
 
 產出：
-- `docs/adr/` — 架構決策紀錄（ADR）
-- `docs/sprints/` — Sprint 規劃與執行紀錄
+- `docs/adr/` — 架構決策紀錄（ADR-001 ~ ADR-003）
+- `docs/sprints/` — Sprint 規劃與執行紀錄（sprint_1 ~ sprint_6）
 - `docs/km/Retrospective_Log.md` — 每次犯的錯都記下來，不重複犯
+- `docs/km/Metrics_Log.md` — Velocity 趨勢與完成率追蹤
 - `docs/prd/PRODUCT_BACKLOG.md` — RICE 評分排序的 Backlog
 
 ---
