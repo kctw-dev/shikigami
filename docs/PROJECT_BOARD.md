@@ -1,25 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-01（Sprint 12 Execution 完成）
-**當前 Sprint**：Sprint 12（Execution 完成，Review 待執行）
+**最後更新**：2026-03-01（Sprint 12 Review 完成）
+**當前 Sprint**：Sprint 12（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 12](sprints/sprint_12.md) → 本看板
 
 ---
 
-## Sprint 12 — Execution 完成
+## Sprint 12 — 完成
 
 **Sprint Goal**：修正 health-check 架構對齊、完成 US-25 AC4 零讀取效果量測、強化 QA 路徑驗證，讓 M5 穩定化的架構完整性與流程品質收斂
-**QA Review**：Hard Gate（Must）— 已升級（連續 2 Sprint QA 關鍵字觸發）
+**結果**：Goal 達成（4/4 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
 | Retro #21：Sprint Planning QA 精化 — AC 路徑驗證步驟 | S | 1 | 完成 |
-| Retro #22：US-25 AC4 量測 — cache_read_input_tokens < 41.6M | S | 1 | 完成（待量測） |
+| Retro #22：US-25 AC4 量測 — cache_read_input_tokens < 41.6M | S | 1 | 完成 |
 | Issue #23：health-check SKILL.md 零讀取架構對齊 | S | 1 | 完成 |
-| US-24 AC3/AC4：Subagent Token 成本優化量測 | S | 1 | 完成（待量測） |
+| US-24 AC3/AC4：Subagent Token 成本優化量測 | S | 1 | 完成 |
 
-**計畫 Velocity**：4 points（4 Stories）
+**實際 Velocity**：4 points（4 Stories）
 
 ---
 

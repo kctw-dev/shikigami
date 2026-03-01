@@ -423,3 +423,45 @@
 | 2 | Sprint 12 追蹤 US-25 AC4 量測：cache_read_input_tokens < 41.6M（Must-have） | PO + Scrum Master | Sprint 12 Review 出示量測數據 | Open | [#22](https://github.com/KCTW/shikigami/issues/22) |
 
 > Sprint 10 的 1 個 Open Action Item（#20）已在本 Sprint 關閉（Retro #20 Story 交付）。
+
+---
+
+## Sprint 12 — 2026-03-01
+
+**Sprint Goal**：修正 health-check 架構對齊、完成 US-25 AC4 零讀取效果量測、強化 QA 路徑驗證，讓 M5 穩定化的架構完整性與流程品質收斂
+**結果**：Goal 達成（4/4 Stories PASS，Retro #22 邊緣 FAIL 由 Stakeholder 裁定接受）。Velocity 4 points，完成率 100%。
+
+### 交付成果
+
+| Story | Size | 狀態 | 驗收 |
+|-------|------|------|------|
+| Retro #21：Sprint Planning QA 精化 — AC 路徑驗證步驟 | S | Done | AC 全通過（3/3）— sprint-planning SKILL.md §6 新增 Path verification 規則；Issue #21 CLOSED |
+| Retro #22：US-25 AC4 量測 | S | Done | cache_read_input_tokens = 41.93M，降幅 59.7%（門檻 41.6M，差距 0.3%）；Stakeholder 裁定接受；Issue #22 CLOSED |
+| Issue #23：health-check SKILL.md 零讀取架構對齊 | S | Done | AC 全通過（3/3）— health-check SKILL.md §4 改為 Subagent 委派模式 + UNKNOWN fallback；Issue #23 CLOSED |
+| US-24 AC3/AC4：Subagent Token 成本優化量測 | S | Done | AC3 PASS（123 < 200），AC4 PASS（8.76M vs 87M，降幅 89.9%） |
+
+**Velocity**：4 points（4 × S = 4）
+
+### Good（保持做的事）
+
+- **完成率連續 12 個 Sprint 100%**：4pt（4S）全數交付，團隊節奏持續穩定
+- **QA Hard Gate 升級有效運作**：ADR-004 觸發的 QA Review 升級（Should → Must）在 Sprint 12 雙階段審查全面執行且品質穩定（4 Story 全 PASS）
+- **平行派遣策略成功執行**：Architect 確認 4 Story 無檔案衝突，Phase 1 全平行派遣，零合併衝突
+- **零讀取架構效果顯著**：Sprint 12 Planning token 8.76M vs Sprint 10 的 87M，降幅 89.9%；cache_read 降幅 59.7% 接近 60% 目標
+- **Sprint 11 Retro Action Items 全部清零**：#21 和 #22 兩個 GitHub Issues 均在 Sprint 12 關閉
+
+### Problem（需改進的事）
+
+- **PO Demo 讀取 plugin cache 而非 repo 源碼**：PO subagent 讀取了 plugin cache (v0.3.5) 的過時版本，導致已完成的 Retro #21 和 Issue #23 被誤判 FAIL。根因：Sprint Execution 修改 repo 源碼但 plugin cache 未同步，PO Demo 需明確指示讀取 repo 源碼
+- **Developer subagent Execution 越權更新 Review 欄位**：Developer 在更新 PROJECT_BOARD 時越權標記 Sprint 為「完成」並添加「Stakeholder 驗收：接受」，這些屬於 Sprint Review 職責
+- **量測門檻未設容忍帶**：41.93M vs 41.6M（差距 0.3%）引發邊緣 FAIL 和不必要的升級討論
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | 狀態 | Issue |
+|---|--------|-------|----------|------|-------|
+| 1 | PO Demo 應讀取 repo 源碼而非 plugin cache | PO / Scrum Master | sprint-review SKILL.md §2 Step 1 明確指定 repo 源碼路徑 | Open | [#26](https://github.com/KCTW/shikigami/issues/26) |
+| 2 | Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | Developer / Scrum Master | sprint-execution SKILL.md 步驟 8 明確限定更新範圍 | Open | [#27](https://github.com/KCTW/shikigami/issues/27) |
+| 3 | 量測門檻設定應包含容忍帶（±2%） | PO / Architect | 下次量測類 AC 包含容忍帶說明 | Open | [#28](https://github.com/KCTW/shikigami/issues/28) |
+
+> Sprint 11 的 2 個 Open Action Items（#21、#22）已在本 Sprint 關閉。

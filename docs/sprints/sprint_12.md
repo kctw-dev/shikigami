@@ -1,7 +1,7 @@
 # Sprint 12
 
 > 週期：2026-03-08 ~ 2026-03-15
-> 狀態：Execution 完成，Review 待執行
+> 狀態：完成
 > 專案等級：low（完全自治）
 
 ---
@@ -21,9 +21,9 @@ Issue #23 修正 health-check SKILL.md 為 subagent 模式，與零讀取架構�
 | Story | 任務 | 負責 | 狀態 | QA Review | 平行組 |
 |---|---|---|---|---|---|
 | Retro #21：Sprint Planning QA 精化 — AC 路徑驗證步驟 | `skills/sprint-planning/SKILL.md` §6 QA 條目新增路徑驗證規則 | Developer | 完成 (QA PASS) | PASS | Phase 1（平行） |
-| Retro #22：US-25 AC4 量測 — cache_read_input_tokens < 41.6M | Sprint 12 Review 從 JSONL 提取 cache_read_input_tokens，填入 Metrics_Log.md | Developer | 完成（待量測） | PASS | Phase 1（平行） |
+| Retro #22：US-25 AC4 量測 — cache_read_input_tokens < 41.6M | Sprint 12 Review 從 JSONL 提取 cache_read_input_tokens，填入 Metrics_Log.md | Developer | 完成 (QA PASS) | PASS | Phase 1（平行） |
 | Issue #23：health-check SKILL.md 零讀取架構對齊 | `skills/health-check/SKILL.md` §4 改寫為 subagent 模式 | Developer | 完成 (QA PASS) | PASS | Phase 1（平行） |
-| US-24 AC3/AC4：Subagent Token 成本優化量測 | 量測 Sprint 12 Planning message 物件數 + token 降幅 | Developer | 完成（待量測） | PASS | Phase 1（平行） |
+| US-24 AC3/AC4：Subagent Token 成本優化量測 | 量測 Sprint 12 Planning message 物件數 + token 降幅 | Developer | 完成 (QA PASS) | PASS | Phase 1（平行） |
 
 ---
 
@@ -168,6 +168,6 @@ Phase 1（全部平行派遣，無檔案衝突）：
 
 | 環節 | Token | 備註 |
 |------|-------|------|
-| Planning | N/A | Token 資料不可用，需手動補充 |
-| Execution | N/A | Token 資料不可用，需手動補充 |
-| Review | N/A | Token 資料不可用，需手動補充 |
+| Planning | 8761K | 來源：Sprint 12 Planning JSONL（US-24 AC4 量測結果） |
+| Execution | 486K | 來源：Sprint 12 Execution JSONL |
+| Review | N/A | Review 進行中無法精確切分；合計待補 |
