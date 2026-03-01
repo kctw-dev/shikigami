@@ -39,6 +39,7 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 | `issue-management` | GitHub Issue 管理、分類、回覆、Issue 轉 Backlog |
 | `health-check` | 框架狀態檢查、自我診斷、結構完整性驗證 |
 | `onboarding` | 新用戶安裝後初始化、專案目錄 scaffold、CLAUDE.md 生成 |
+| `dispel` | Legacy 系統考古、不熟悉 codebase 分析、解咒模式 |
 
 ---
 
@@ -96,6 +97,7 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 ├── 部署/發布 → invoke shikigami:deployment-readiness
 ├── 衝突/僵局 → invoke shikigami:escalation
 ├── Sprint 結束 → invoke shikigami:sprint-review
+├── 解咒/考古/legacy 分析/不熟悉的 codebase → invoke shikigami:dispel
 ├── Bug/錯誤/測試失敗 → invoke shikigami:systematic-debugging
 ├── 分支隔離/worktree → invoke shikigami:git-workflow
 ├── 開發完成/合併/PR → invoke shikigami:git-workflow
@@ -106,6 +108,11 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 ├── 初始化專案/第一次使用/scaffold/onboarding → invoke shikigami:onboarding
 └── 日常開發 → 主 Agent 直接執行（不需觸發角色）
 ```
+
+**路由邊界：dispel vs systematic-debugging**
+- `dispel`：Legacy 或不活躍 codebase 的全面考古分析，使用者意圖是「理解這個系統」
+- `systematic-debugging`：活躍開發中的特定 bug、測試失敗、非預期行為，使用者意圖是「修復這個問題」
+- 兩者互斥，不得同時觸發
 
 ### 5.2 狀態驅動（自動觸發）
 
