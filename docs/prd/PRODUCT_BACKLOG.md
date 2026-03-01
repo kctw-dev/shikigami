@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 11 Planning — US-25、Retro #20、US-S02 排入 Sprint）
+**最後更新**：2026-03-01（Sprint 11 Review — US-25、US-S02 完成歸檔）
 **管理者**：Product Owner
 
 ---
@@ -22,10 +22,10 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-25：Scrum Master 零讀取架構（主 session context 瘦身） | 45.0 | Must | M | Issue #12 | In Sprint 11 |
+| 1 | US-25：Scrum Master 零讀取架構（主 session context 瘦身） | 45.0 | Must | M | Issue #12 | Done (Sprint 11) |
 | 2 | US-24：Subagent Token 成本優化（成本 + 速度） | 36.0 | Should | L | Sprint 10 Retro | 待選 |
-| 3 | Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | — | Must | S | Sprint 10 Retro | In Sprint 11 |
-| 4 | US-S02：Standup 健康快篩框架 Repo 誤判修正 | 18.0 | Should | S | Standup 回饋 | In Sprint 11 |
+| 3 | Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | — | Must | S | Sprint 10 Retro | Done (Sprint 11) |
+| 4 | US-S02：Standup 健康快篩框架 Repo 誤判修正 | 18.0 | Should | S | Standup 回饋 | Done (Sprint 11) |
 
 ---
 

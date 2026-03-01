@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-01（Sprint 10 Review）
+> 最後更新：2026-03-01（Sprint 11 Review）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -165,6 +165,8 @@ Sprint Review 時自動產出：
 | ADR-004 | Retrospective Problem 主題比對機制 | Sprint 10 ✅ |
 | US-23 | Token 成本分環節記錄 | Sprint 10 ✅ |
 | US-22 | Retrospective 驅動角色權重自動調整 | Sprint 10 ✅ |
+| US-25 | Scrum Master 零讀取架構 | Sprint 11 ✅ |
+| US-S02 | Standup 健康快篩框架 Repo 誤判修正 | Sprint 11 ✅ |
 | US-15 | 完整安裝流程驗證（全新環境測試） | TBD |
 | US-16 | 使用者文件完善（Tutorial + Troubleshooting） | TBD |
 | US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | TBD |

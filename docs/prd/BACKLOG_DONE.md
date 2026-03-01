@@ -790,6 +790,62 @@ As a Product Owner, I want token consumption broken down by sprint phase (Planni
 
 ---
 
+## Sprint 11（2026-03-01）
+
+**Sprint Goal**：導入 Scrum Master 零讀取架構，讓主 session context 瘦身，同步清零 Sprint 10 Retro Action Item，為 Token 成本大幅下降奠定結構基礎
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| US-25：Scrum Master 零讀取架構 | 45.0 | Must | ADR-003 | Done |
+| US-S02：Standup 健康快篩框架 Repo 誤判修正 | 18.0 | Should | ADR-003 | Done |
+
+> 備注：Retro #20（SKILL.md token 記錄指引更新）為 Retro Action Item，不是 Backlog Story，不歸入此表。
+
+---
+
+### US-25：Scrum Master 零讀取架構
+
+**標題**：主 session 不直接讀取大檔案，全部委託 Subagent 處理並回傳摘要
+
+**User Story**
+As a framework user, I want the Scrum Master (main session) to never read large files directly but instead delegate all file reading to subagents who return concise summaries, so that the main session's context stays lean and each API call's cache read overhead is minimized.
+
+**Acceptance Criteria**（Sprint 11 精化版）
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | sprint-planning 零讀取 | PO subagent prompt 指定完整路徑，由 subagent 自行讀取；主 session 不 Read；subagent 回傳 Markdown 表格 |
+| AC2 | [靜態] | sprint-execution 零讀取 | Developer/QA/Security subagent 接收檔案路徑，主 session 不預讀；回傳 PASS/FAIL + 一句話摘要 |
+| AC3 | [靜態] | sprint-review 零讀取 | Retro Analytics/PO Demo/Stakeholder/Metrics 由 subagent 讀取所需檔案；主 session 不直接讀取 |
+| AC4 | [動態] | context 瘦身驗證 | 量測 Sprint：Sprint 12。基準：Sprint 10 = 104M。通過：Sprint 12 < 41.6M（下降 60%）|
+
+**RICE**：45.0
+**MoSCoW**：Must
+**Size**：M / **Points**：2
+
+---
+
+### US-S02：Standup 健康快篩框架 Repo 誤判修正
+
+**標題**：健康快篩在框架 Repo 本身執行時跳過 CLAUDE.md 檢查
+
+**User Story**
+As a framework developer working in the shikigami repo itself, I want the standup health check to recognize it's running in the framework repo and skip the CLAUDE.md existence check, so that I don't get false positive CRITICAL alerts every standup.
+
+**Acceptance Criteria**（Sprint 11 精化版）
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 框架 Repo 偵測 | commands/standup.md 新增前置判斷：若 `./.claude-plugin/plugin.json` 存在且非空，跳過 CLAUDE.md 檢查 |
+| AC2 | [動態] | 消費端不受影響 | 無 plugin.json 專案中 CLAUDE.md 缺失仍觸發 CRITICAL |
+| AC3 | [動態] | 框架端正向驗證 | 含 plugin.json 且缺 CLAUDE.md 時快篩為 HEALTHY |
+
+**RICE**：18.0
+**MoSCoW**：Should
+**Size**：S / **Points**：1
+
+---
+
 ### US-22：Retrospective 驅動角色權重自動調整
 
 **標題**：Sprint Planning 自動讀取 Retro 趨勢，調整角色介入深度
