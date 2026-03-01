@@ -695,3 +695,59 @@ As a Scrum Master, I want a lightweight bypass mode for simple, well-defined tas
 **RICE**：20.25
 **MoSCoW**：Should
 **Size**：M
+
+---
+
+## Sprint 9（2026-03-01）
+
+**Sprint Goal**：建立 Token 成本透明化機制，強化 Sprint 流程檔案即時持久化，並建立孤兒文件自動偵測能力
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| US-19：Token 成本透明化 | 11.2 | Must | — | Done |
+| US-T09：孤兒文件清理規範 | 16.7 | Could | — | Done |
+
+> 備注：Retro #16（Sprint 文件即時 commit + push）為 Retro Action Item，不是 Backlog Story，不歸入此表。
+
+---
+
+### US-19：Token 成本透明化
+
+**標題**：Sprint Review 自動輸出 Token 消耗與成本對照表
+
+**User Story**
+As a Product Owner, I want token consumption recorded and displayed at each Sprint Review, so that I can understand the AI infrastructure cost of operating this framework and make informed decisions about sprint scope and automation depth.
+
+**Acceptance Criteria**（Sprint 9 精化版）
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 記錄格式 | Metrics_Log.md 新增獨立 Token 表格，五欄位 + 資料來源允許值定義 |
+| AC2 | [靜態+動態] | Sprint Review 整合 | sprint-review SKILL.md 新增 Token 成本摘要子節 + fallback 規範 |
+| AC3 | [動態] | 成本對照 | 前置條件 3+ 完整記錄；2x 平均值標記 [OUTLIER] |
+| AC4 | [靜態] | 手動降級 | 手動記錄模板含示範資料 |
+
+**RICE**：11.2
+**MoSCoW**：Must
+**Size**：M
+
+---
+
+### US-T09：孤兒文件清理規範
+
+**標題**：定義孤兒文件判斷規則、自動偵測與處置流程
+
+**User Story**
+As a Product Owner, I want a defined policy for handling orphan artifacts, so that the repo stays clean.
+
+**Acceptance Criteria**（Sprint 9 精化版）
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 孤兒判斷規則 | 正向定義 + 4 類豁免清單 + 每次 CI 判定 |
+| AC2 | [靜態+動態] | Linter 孤兒標記 | validate-orphans.sh + CI 步驟 + exit code = 0 + WARNING 格式 |
+| AC3 | [靜態] | 孤兒處置規範 | Retro Problem → PO 裁定（刪除/補引用/加豁免）→ 關閉 issue |
+
+**RICE**：16.7
+**MoSCoW**：Could
+**Size**：M

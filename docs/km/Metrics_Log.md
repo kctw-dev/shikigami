@@ -19,6 +19,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 6 | 2026-03-01 | 8 points | 100% | 上升趨勢 | 5 Stories（3S+1M+1L），Sprint Goal 達成；S5→S6 續升（6→8，+33%）；v0.3.0 里程碑結案 |
 | Sprint 7 | 2026-03-01 | 7 points | 100% | 穩定 | 5 Stories（3S+2M），Sprint Goal 達成；S6→S7 微降（8→7，-12.5%，±20% 內）；v0.5.0 穩定化啟動 |
 | Sprint 8 | 2026-03-01 | 6 points | 100% | 穩定 | 4 Stories（2S+2M），Sprint Goal 達成；S7→S8 微降（7→6，-14.3%，±20% 內）；QA 雙階段審查恢復 |
+| Sprint 9 | 2026-03-01 | 5 points | 100% | 穩定 | 3 Stories（1S+2M），Sprint Goal 達成；S8→S9 微降（6→5，-16.7%，±20% 內）；Token 成本透明化機制建立 |
 
 ---
 

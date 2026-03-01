@@ -1,23 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-01
+**最後更新**：2026-03-01（Sprint 9 Review 完成）
 **當前 Sprint**：Sprint 9（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 9](sprints/sprint_9.md) → 本看板
 
 ---
 
-## Sprint 9 — 進行中
+## Sprint 9 — 完成
 
 **Sprint Goal**：建立 Token 成本透明化機制，強化 Sprint 流程檔案即時持久化，並建立孤兒文件自動偵測能力
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 5 points，完成率 100%。
+**Stakeholder 驗收**：接受
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-19：Token 成本透明化 | M | 2 | 完成 |
 | Retro #16：Sprint 文件即時 commit + push | S | 1 | 完成 |
+| US-19：Token 成本透明化 | M | 2 | 完成 |
 | US-T09：孤兒文件清理規範 | M | 2 | 完成 |
 
-**計畫 Velocity**：5 points（3 Stories）
+**實際 Velocity**：5 points（3 Stories）
 
 ---
 

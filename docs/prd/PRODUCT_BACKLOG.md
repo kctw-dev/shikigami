@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 9 Planning 完成）
+**最後更新**：2026-03-01（Sprint 9 Review 完成）
 **管理者**：Product Owner
 
 ---
@@ -14,7 +14,7 @@
 | 1 | US-21：真實制衡案例文件 | 25.3 | Should | S | Issue #12-3 | Done (Sprint 8) |
 | 2 | US-18：Sprint Execution Issue 回覆自動化 | 23.8 | Should | M | Issue #9 | Done (Sprint 8) |
 | 3 | US-20：輕量 Bypass 機制 | 20.25 | Should | M | Issue #12-2 | Done (Sprint 8) |
-| 4 | US-19：Token 成本透明化 | 11.2 | Must | M | Issue #12-1 | In Sprint 9 |
+| 4 | US-19：Token 成本透明化 | 11.2 | Must | M | Issue #12-1 | Done (Sprint 9) |
 | 5 | US-22：Retrospective 驅動角色權重自動調整 | 6.6 | Could | L | Issue #12-4 | 待選 |
 
 ### v0.3.0 知識沉澱 — 候選 Stories
@@ -27,7 +27,7 @@
 |------|-------|------|--------|------|-----|------|
 | 1 | US-T05：交叉引用驗證 | 25.6 | Should | S | — | Done (Sprint 7) |
 | 2 | US-T07：CI Pipeline | 24.0 | Should | M | — | Done (Sprint 7) |
-| 3 | US-T09：孤兒文件清理規範 | 16.7 | Could | M | — | In Sprint 9 |
+| 3 | US-T09：孤兒文件清理規範 | 16.7 | Could | M | — | Done (Sprint 9) |
 | 4 | US-T08：Intent Routing 測試 | 6.0 | Could | L | — | 待選 |
 
 ---

@@ -1,7 +1,7 @@
 # Sprint 9
 
 > 週期：2026-03-01 ~ 2026-03-08
-> 狀態：進行中
+> 狀態：完成
 > 專案等級：low（完全自治）
 
 ---
@@ -137,21 +137,21 @@ Sprint 8 Planning 期間 Stakeholder 指出：Sprint 文件更新累積到最後
 
 ### US-19：Token 成本透明化
 
-- [ ] Metrics_Log.md 新增獨立 Token 表格，含五欄位 + 允許值定義（AC1 通過）
-- [ ] sprint-review SKILL.md 新增「Token 成本摘要」子節 + fallback 規範（AC2 通過）
-- [ ] 離群值計算含「資料不足」前置條件（AC3 通過）
-- [ ] 手動記錄模板含示範資料（AC4 通過）
+- [x] Metrics_Log.md 新增獨立 Token 表格，含五欄位 + 允許值定義（AC1 通過）
+- [x] sprint-review SKILL.md 新增「Token 成本摘要」子節 + fallback 規範（AC2 通過）
+- [x] 離群值計算含「資料不足」前置條件（AC3 通過）
+- [x] 手動記錄模板含示範資料（AC4 通過）
 
 ### Retro #16：Sprint 文件即時 commit + push
 
-- [ ] sprint-planning SKILL.md 新增 commit 規範（AC1 通過）
-- [ ] sprint-execution SKILL.md 新增 commit 規範（AC2 通過）
-- [ ] sprint-review SKILL.md 新增 commit 規範（AC3 通過）
-- [ ] 範圍排除聲明存在（AC4 通過）
-- [ ] GitHub Issue #16 關閉
+- [x] sprint-planning SKILL.md 新增 commit 規範（AC1 通過）
+- [x] sprint-execution SKILL.md 新增 commit 規範（AC2 通過）
+- [x] sprint-review SKILL.md 新增 commit 規範（AC3 通過）
+- [x] 範圍排除聲明存在（AC4 通過）
+- [x] GitHub Issue #16 關閉
 
 ### US-T09：孤兒文件清理規範
 
-- [ ] 孤兒判斷規則定義完整（正向定義 + 豁免清單 + 判定週期）（AC1 通過）
-- [ ] validate-orphans.sh 存在，CI 新增步驟，exit code = 0（AC2 通過）
-- [ ] 孤兒處置規範含三種路徑（AC3 通過）
+- [x] 孤兒判斷規則定義完整（正向定義 + 豁免清單 + 判定週期）（AC1 通過）
+- [x] validate-orphans.sh 存在，CI 新增步驟，exit code = 0（AC2 通過）
+- [x] 孤兒處置規範含三種路徑（AC3 通過）

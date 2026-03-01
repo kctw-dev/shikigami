@@ -309,3 +309,40 @@
 | # | Action | Owner | 驗收方式 | 狀態 |
 |---|--------|-------|----------|------|
 | 1 | US-19 Token 成本透明化優先排入 Sprint 9：使用者明確要求先掌握 token 用量變化數據，再決定是否需要流程優化 | PO | Sprint 9 Planning 時 US-19 納入 Sprint Backlog | Closed（Sprint 9） | [#17](https://github.com/KCTW/shikigami/issues/17) |
+
+---
+
+## Sprint 9 — 2026-03-01
+
+**Sprint Goal**：建立 Token 成本透明化機制，強化 Sprint 流程檔案即時持久化，並建立孤兒文件自動偵測能力
+**結果**：Goal 達成。全部 3 個 Stories 完成交付。
+
+### 交付成果
+
+| Story | Size | 狀態 | 驗收 |
+|-------|------|------|------|
+| Retro #16：Sprint 文件即時 commit + push | S | Done | AC 全通過（4/4）— 三個 SKILL.md 新增 commit + push 規範 + 範圍排除聲明；Issue #16 CLOSED |
+| US-19：Token 成本透明化 | M | Done | AC 全通過（4/4）— Metrics_Log.md Token 表格 + sprint-review 整合 + 離群值邏輯 + 手動模板 |
+| US-T09：孤兒文件清理規範 | M | Done | AC 全通過（3/3）— health-check §6 孤兒規則 + validate-orphans.sh + CI 整合 + 處置流程 |
+
+**Velocity**：5 points（1S + 2M = 1+2+2）
+
+### Good（保持做的事）
+
+- **使用者最高優先需求優先交付**：US-19 Token 成本透明化作為使用者明確要求的最高優先項目，成功在 Sprint 9 核心交付
+- **QA 雙階段審查連續 2 個 Sprint 全面執行**：3 個 Story 全部通過 Spec Compliance + Code Quality，每個 Story 的品質問題都在 Review 階段攔截並修復（Retro #16 的排除聲明矛盾、US-T09 的輸出格式與引用偵測精度）
+- **完成率連續 9 個 Sprint 100%**：5pt 全數交付，團隊節奏穩定
+- **Sprint 8 Retro Action Items 清零**：#17 在 Sprint 9 Planning 即關閉
+
+### Problem（需改進的事）
+
+- **Token 表格建好但無真實數據**：US-19 交付了記錄機制，但 Sprint 9 Review 時 Token 表格仍為空。離群值分析需至少 3 個 Sprint 記錄，實際商業價值需持續累積數據才能兌現
+- **AC 規格與實作不一致（第 4 次）**：US-T09 AC2 定義 `WARNING:` 格式但 Developer 實作用了 `[WARNING]`（共用函式庫格式）；US-19 Code Quality Review 的 M1 發現是 QA 對照了舊版 AC（PRODUCT_BACKLOG）而非 Sprint 精化版 AC（sprint_9.md）。根因持續存在：AC 撰寫與實作之間的規格傳遞不夠精確
+- **缺乏領域專家審查機制**：使用者指出目前框架缺乏在特定階段引入外部領域專家（Domain Expert）的機制，可能導致專業知識不足的盲區
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | 狀態 | Issue |
+|---|--------|-------|----------|------|-------|
+| 1 | Sprint 10 起填入 Token 真實數據 | Developer | Sprint 10 Review 時 Metrics_Log.md Token 表格至少有 1 列 Sprint 10 記錄 | Open | [#18](https://github.com/KCTW/shikigami/issues/18) |
+| 2 | 領域專家審查機制設計：評估在 Sprint Execution 流程中加入 Domain Expert 審查階段 | PO + Architect | Sprint 10 Planning 前決策記錄於文件 | Open | [#19](https://github.com/KCTW/shikigami/issues/19) |
