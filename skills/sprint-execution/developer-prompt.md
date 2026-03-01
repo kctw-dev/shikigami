@@ -85,6 +85,89 @@
 
 ---
 
+## Tech Debt 管理
+
+### 何時應標記 Tech Debt
+
+當你在實作過程中**刻意取捷徑**以趕上 Sprint 目標，必須立即標記技術債。以下三種情況為強制觸發：
+
+1. **跳過測試**：功能可運行但缺乏單元測試或整合測試覆蓋，或測試覆蓋率低於可接受標準。
+2. **使用硬編碼**：配置值、URL、金鑰或業務邏輯常數直接寫死在代碼中，未透過環境變數或設定檔管理。
+3. **延後必要重構**：明知代碼結構有問題（重複邏輯、過長函式、職責混亂），但為趕進度選擇保留，未在當前 Sprint 內重構。
+
+> 發現其他情況（例如：使用了已廢棄的 API、忽略性能問題、繞過安全驗證）同樣應標記技術債，不限於以上三種。
+
+### [TECH-DEBT] 標記格式
+
+在 Commit message、代碼註解或 PR description 中使用以下格式標記技術債：
+
+```
+[TECH-DEBT] TD-XXX: {具體描述技術債內容} | 嚴重度: {H/M/L} | 引入: {Story ID}
+```
+
+**範例：**
+
+```
+[TECH-DEBT] TD-002: 跳過 payment-service 整合測試，目前僅有 happy path 覆蓋 | 嚴重度: H | 引入: US-12
+[TECH-DEBT] TD-003: API base URL 硬編碼在 config.ts 第 42 行，未透過環境變數管理 | 嚴重度: M | 引入: US-12
+[TECH-DEBT] TD-004: UserRepository 與 AuthService 職責混亂，需抽離 token 驗證邏輯 | 嚴重度: L | 引入: US-09
+```
+
+**ID 指派規則**：新增技術債時，先查閱 `docs/km/Tech_Debt_Registry.md` 取得最新 ID 流水號，依序累加。
+
+### Registry 更新指引
+
+每當產生 `[TECH-DEBT]` 標記，必須在**當次 Sprint 結束前**完成以下步驟：
+
+1. 開啟 `docs/km/Tech_Debt_Registry.md`
+2. 在 Registry 表格中新增一行，填入所有欄位：
+   - **ID**：依流水號指派
+   - **描述**：技術債詳細說明（比標記更完整）
+   - **引入 Story**：當前 Story ID
+   - **解決 Story**：填 `TBD`（待排程時更新）
+   - **嚴重度**：H / M / L
+   - **建議解法**：具體的解決方向或行動方案
+   - **RICE**：填 `TBD`（由 Scrum Master 在 Grooming 時評估）
+   - **狀態**：`Active`
+3. Commit 更新，格式：`docs: 新增技術債 TD-XXX 至 Registry`
+
+當某 Story 解決了對應技術債，需將狀態更新為 `Resolved`，並填入「解決 Story」欄位。
+
+### Tech Debt Grooming
+
+**觸發時機**：每次 Sprint Planning **開始前**，作為 Backlog Grooming 的最後一步，由 Scrum Master 主持。
+
+**執行步驟：**
+
+1. 掃描 `docs/km/Tech_Debt_Registry.md` 中所有 `Active` 條目
+2. 標記逾期未解決項目（Active 超過 3 個 Sprint 且「解決 Story」仍為 `TBD`）
+3. 評估逾期項目是否需要強制納入本 Sprint Backlog
+4. 產出 Grooming 報告（格式見下方）
+
+**Grooming 報告輸出格式：**
+
+```
+### Grooming #N — YYYY-MM-DD（Sprint S-XX 前）
+
+**Active 條目**：X 筆
+**Resolved 條目**：Y 筆（本次新增 Z 筆解決）
+**本次變化量**：相對上次 Grooming Active 總數差值（+N / -N / 0）
+**趨勢判定**：增加中 / 減少中 / 穩定 / 資料不足
+
+#### Active 條目清單
+- TD-XXX：{描述摘要}（嚴重度：H/M/L）
+
+#### 本次解決條目
+- TD-XXX：{描述摘要}（由 US-XX 解決）
+
+#### 逾期未解決警示（Active 超過 3 個 Sprint 未排入解決 Story）
+- TD-XXX：已 Active {N} 個 Sprint，建議本 Sprint Planning 強制排入
+```
+
+趨勢判定規則詳見 `docs/km/Tech_Debt_Registry.md` 的「趨勢判定規則」章節。
+
+---
+
 ## DoD 自檢清單
 
 實作完成後，逐項檢查以下清單，全部通過才能提交：
