@@ -112,6 +112,14 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
    此階段 PO 需明確定義本次 Sprint 要達成的目標。
 2. **Architect**：對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若發現 Hard Gate 問題，該 Story 退回 Backlog。
 3. **QA**：逐一確認剩餘 Stories 的 Acceptance Criteria 是否明確且可被自動化測試驗證。若驗收標準模糊，退回 PO 補充後重新評估。
+
+   **路徑驗證規則（AC 路徑存在性檢查）**：
+   - 若 Story 的 AC 中包含具體檔案路徑（例如 `docs/xxx.md`、`skills/xxx/SKILL.md`），QA **須執行 Glob 或 ls 確認路徑存在**，並在回報中標注：
+     - `Path verification: PASS` — 路徑存在
+     - `Path verification: FAIL` — 路徑不存在
+     - `Path verification: N/A` — AC 未引用任何具體路徑
+   - 若結果為 `FAIL`：QA 標記該 Story 為 `NEEDS_REVISION`，Story 退回 PO 修正路徑後重新提交。
+   - 若 AC 不引用任何路徑：填 `N/A`，不需執行 Glob/ls。
 4. **PO（第二輪）**：根據 Architect 與 QA 的回饋，最終確認 Sprint Backlog，建立 `docs/sprints/sprint_N.md`，並由 PO subagent 更新 `docs/PROJECT_BOARD.md` 與 `docs/prd/PRODUCT_BACKLOG.md`。PO subagent 回傳最終 Sprint Backlog 結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果），**主 session 不直接讀取 PRODUCT_BACKLOG.md 或 PROJECT_BOARD.md，僅接收 subagent 回傳的摘要**。
 
 ---
