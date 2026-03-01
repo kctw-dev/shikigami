@@ -111,6 +111,34 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
 
    此階段 PO 需明確定義本次 Sprint 要達成的目標，並評估各 Story 間的檔案修改獨立性：逐一列出每個 Story 預計修改的主要檔案，判斷哪些 Story 修改不同檔案（可平行執行），哪些 Story 修改相同檔案（有衝突，需順序執行）。「獨立性評估」欄位填入「獨立」或「與 US-XX 衝突（同修改 path/to/file）」，供 Architect 後續規劃平行派工分群使用。
 2. **Architect**：對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若發現 Hard Gate 問題，該 Story 退回 Backlog。
+
+   **平行分群建議**（正式輸出項目）：Architect 須根據 PO 回傳表格中的「獨立性評估」欄位，輸出平行派工分群建議，供主 session 後續調度使用。
+
+   輸出格式：
+
+   ```markdown
+   ## 平行分群建議
+
+   ### Phase 1（可平行執行）
+   | Story ID | 標題 | T-shirt | 說明 |
+   |----------|------|---------|------|
+   | US-XX    | ...  | S       | 修改獨立檔案，無衝突 |
+
+   ### Phase 2（需序列執行）
+   | Story ID | 標題 | T-shirt | 衝突原因 |
+   |----------|------|---------|---------|
+   | US-YY    | ...  | M       | 與 US-ZZ 同修改 path/to/file，需等 US-ZZ 完成後執行 |
+
+   ### 檔案衝突分析
+   | 衝突檔案 | 涉及 Story | 建議執行順序 |
+   |---------|-----------|------------|
+   | path/to/file | US-YY, US-ZZ | US-ZZ → US-YY |
+   ```
+
+   **分群規則**：
+   - **Phase 1（可平行）**：PO 獨立性評估為「獨立」的 Story，可同時派遣給不同 Developer subagent 執行
+   - **Phase 2（需序列）**：PO 獨立性評估標注衝突的 Story，需依建議順序逐一執行，避免 merge conflict
+   - 若所有 Story 皆獨立，Phase 2 區塊可省略，填「無」
 3. **QA**：逐一確認剩餘 Stories 的 Acceptance Criteria 是否明確且可被自動化測試驗證。若驗收標準模糊，退回 PO 補充後重新評估。
 
    **路徑驗證規則（AC 路徑存在性檢查）**：
