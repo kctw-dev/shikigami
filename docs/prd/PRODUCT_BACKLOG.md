@@ -18,6 +18,50 @@
 | 5 | US-22：Retrospective 驅動角色權重自動調整 | 6.6 | Could | L | Issue #12-4 | Done (Sprint 10) |
 | 6 | US-23：Token 成本分環節記錄 | 33.6 | Must | M | Retro #18 | Done (Sprint 10) |
 
+### Sprint 10 Retro — 新增 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-24：Subagent Token 成本優化（成本 + 速度） | 36.0 | Should | L | Sprint 10 Retro | 待選 |
+| 2 | Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | — | Must | S | Sprint 10 Retro | 待選 |
+
+---
+
+### US-24：Subagent Token 成本優化（成本 + 速度）
+
+**標題**：降低 Subagent 派遣的 Token 消耗與回應延遲
+
+**User Story**
+As a framework user paying per-token API costs, I want the Subagent dispatch pattern to minimize token exchange overhead, so that running a full Sprint cycle is affordable (target: <$50/Sprint on API pricing) and fast.
+
+**背景**
+Sprint 10 實測數據：108M tokens / $234 / 957 API calls。Planning 佔 81%（87M），根因是每次 subagent 派遣都帶入完整 context（104M cache read tokens）。對 API 付費使用者而言，每月 4 Sprint ≈ $1000，構成採用門檻。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 檔案傳遞模式 | sprint-planning SKILL.md subagent 派遣改為「指令 + 檔案路徑」模式：主 agent 不預讀檔案內容塞入 prompt，subagent 自行讀檔。中間結果寫入 `docs/sprints/sprint_N.md`，下一個 subagent 從檔案讀取 |
+| AC2 | [靜態] | 輕量模型指定 | QA Review（Spec Compliance + Code Quality）、PO Issue Triage、Architect Size 估算等例行任務的 subagent 指定使用 haiku 模型，僅在需要深度推理時使用 opus/sonnet |
+| AC3 | [動態] | API call 數量下降 | Sprint Planning 的 API call 數量從 ~800 降至 <200（透過合併步驟、減少來回） |
+| AC4 | [動態] | 成本下降驗證 | 下一個 Sprint 的 token 總量較 Sprint 10 下降 50% 以上，或估算成本 <$120 |
+
+**RICE 評分**
+
+| 維度 | 分數 |
+|------|------|
+| Reach | 9 |
+| Impact | 3 |
+| Confidence | 60% |
+| Effort | 2.0 人週 |
+| **RICE Score** | **36.0** |
+
+**MoSCoW**：Should
+**Size**：L / **Points**：3
+**備注**：AC2 的模型指定可能需要 ADR（是否屬於技術選型），Sprint Planning 時由 Architect 判斷
+
+---
+
 ### v0.3.0 知識沉澱 — 候選 Stories
 
 （US-09、US-10 已完成；US-11 待排入）
