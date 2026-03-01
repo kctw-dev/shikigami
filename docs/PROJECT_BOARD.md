@@ -15,7 +15,7 @@
 |-------|------|--------|------|
 | Retro #19：領域專家審查機制設計 [BYPASS] | S | 1 | 完成 |
 | US-23：Token 成本分環節記錄 | M | 2 | 完成 |
-| US-22：Retrospective 驅動角色權重自動調整 | L | 3 | 進行中 |
+| US-22：Retrospective 驅動角色權重自動調整 | L | 3 | 完成 |
 
 **Sprint Velocity 目標**：6 points（3 Stories）
 

@@ -134,6 +134,7 @@ qa_keywords: ["QA", "審查", "Review", "Code Quality", "Spec Compliance", "雙�
 | 條件 | 調整 |
 |------|------|
 | 連續 2 Sprint 有 QA 相關 Problem | QA Review 從 Should 升為 Hard Gate（Must，不可 Bypass） |
+| 連續 2 Sprint 無 QA 相關 Problem（升級中） | QA Review 恢復為 Should（降級，自動解除 Hard Gate） |
 | 連續 2 Sprint 無任何 Problem（所有領域） | Bypass 門檻從 S 放寬至 M |
 
 ### 輸出格式
