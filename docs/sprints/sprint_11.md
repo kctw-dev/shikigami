@@ -20,9 +20,9 @@ US-25（RICE 45.0, Must）為本 Sprint 核心——三個 SKILL.md 改為「主
 
 | Story | 任務 | 負責 | 狀態 | QA Review | 平行組 |
 |---|---|---|---|---|---|
-| Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | 3 個 SKILL.md token 指引段落更新 | Developer | 待開始 | — | Phase 1-A |
-| US-S02：Standup 健康快篩框架 Repo 誤判修正 | commands/standup.md 新增 plugin.json 判斷 | Developer | 待開始 | — | Phase 1-B |
-| US-25：Scrum Master 零讀取架構 | 3 個 SKILL.md subagent 調度重構 | Developer | 待開始 | — | Phase 2（依賴 Phase 1） |
+| Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | 3 個 SKILL.md token 指引段落更新 | Developer | 完成 | Spec: PASS / Code: PASS（1 Low） | Phase 1-A |
+| US-S02：Standup 健康快篩框架 Repo 誤判修正 | commands/standup.md 新增 .claude-plugin/plugin.json 判斷 | Developer | 完成 | Spec: PASS / Code: PASS（Re-Review） | Phase 1-B |
+| US-25：Scrum Master 零讀取架構 | 3 個 SKILL.md subagent 調度重構 | Developer | 完成 | Spec: PASS / Code: PASS（2 Low） | Phase 2（依賴 Phase 1） |
 
 ---
 
