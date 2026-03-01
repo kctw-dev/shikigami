@@ -13,7 +13,7 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| Retro #7：DoD 第 8 層同步 | S | 1 | 待開始 |
+| Retro #7：DoD 第 8 層同步 | S | 1 | 完成 |
 | Retro #8：QA Review 範圍界定 | S | 1 | 待開始 |
 | US-T02：Agent 完整性驗證 | S | 1 | 待開始 |
 | US-T03：JSON Schema 驗證 | M | 2 | 待開始 |
