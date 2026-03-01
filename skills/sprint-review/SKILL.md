@@ -24,6 +24,8 @@ Sprint Review 的目的是驗收本 Sprint 交付的成果，確認是否符合�
 
 1. **PO Subagent 展示 Demo 結果**
    - PO subagent prompt 中指定 `docs/sprints/sprint_N.md` 完整路徑，由 **PO subagent 自行讀取** Sprint 成果內容；**主 session 不直接讀取 sprint_N.md**
+   - **【源碼路徑】** PO subagent 驗收 Story 時，須從 **repo working directory**（即 `skills/` 目錄下的實際檔案）讀取最新源碼，例如：讀取 `skills/sprint-review/SKILL.md` 應使用 working directory 下的完整絕對路徑
+   - **【禁止項】** 不得依賴 plugin cache 版本。plugin cache 可能快取舊版本（例如已過期的 v0.3.5），若以 cache 版本驗收，將導致誤判「已完成」的 Story 為 FAIL
    - 針對每個已完成的 User Story，展示可運行的功能
    - Demo 應基於實際程式碼執行結果，而非文件描述
    - 逐一對照 Acceptance Criteria 確認通過狀態
