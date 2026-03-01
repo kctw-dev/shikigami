@@ -216,8 +216,8 @@ Action Items 透過 **GitHub Issues** 追蹤（`retro-action` label），具備�
    - 逐項確認執行狀況
 
 3. **結論判定**
-   - **已完成** → `gh issue close` 並留言記錄結論
-   - **未完成** → 保持 open，加上 `deferred` label
+   - **已完成** → 執行 `gh issue close -c "Sprint N 驗收通過：[結論描述]"` 關閉 Issue 並留言記錄結論
+   - **未完成** → 保持 open，執行 `gh issue edit --add-label deferred` 加上 `deferred` label
 
 4. **升級機制**
    - 連續兩個 Sprint 仍為 open 的 `retro-action` Issue 自動升級至 Stakeholder
@@ -247,6 +247,7 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 | `docs/km/Metrics_Log.md` | 追加本 Sprint Velocity、完成率、趨勢分析記錄 |
 | `docs/prd/PRODUCT_BACKLOG.md` | 未完成 Story 回填至 Backlog，標注未達標原因與重新排序 |
 | `docs/prd/BACKLOG_DONE.md` | 已完成 Story 從 Backlog 移至此處，按 Sprint 歸檔，保留完整 RICE 評分與 AC |
+| `docs/prd/ROADMAP.md` | 更新版本里程碑狀態（進行中/已完成），反映本 Sprint 交付進度 |
 
 ---
 
@@ -266,6 +267,7 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 - [ ] 連續兩個 Sprint 未關閉的 Action 已升級至 Stakeholder
 - [ ] `PRODUCT_BACKLOG.md` 已更新（未完成 Story 回填）
 - [ ] 已完成 Story 從 `PRODUCT_BACKLOG.md` 移至 `BACKLOG_DONE.md`，按 Sprint 歸檔
+- [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步）
 - [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag）
 - [ ] Sprint Metrics 計算並追加至 `docs/km/Metrics_Log.md`（見下方計算指引）
 
