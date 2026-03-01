@@ -12,7 +12,7 @@ Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專
 
 **不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
 
-**當前版本：v0.3.0**（17 Skills / 7 Agents / 4 Commands）— 本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，連續 7 個 Sprint 完成率 100%。
+**當前版本：v0.3.1**（17 Skills / 7 Agents / 4 Commands）— 本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，連續 7 個 Sprint 完成率 100%。
 
 ---
 
