@@ -268,6 +268,7 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 - [ ] `PRODUCT_BACKLOG.md` 已更新（未完成 Story 回填）
 - [ ] 已完成 Story 從 `PRODUCT_BACKLOG.md` 移至 `BACKLOG_DONE.md`，按 Sprint 歸檔
 - [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步）
+- [ ] **Token 成本摘要**（見下方子節）
 - [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag）
 - [ ] Sprint Metrics 計算並追加至 `docs/km/Metrics_Log.md`（見下方計算指引）
 - [ ] 是否有本 Sprint 值得記錄的角色制衡案例？若有，更新 `docs/km/ROLE_BALANCE_CASES.md`
@@ -339,3 +340,57 @@ Sprint Review 結束時，依序執行以下計算並將結果追加至 `docs/km
 - **完成率**：步驟 3 計算結果，格式為「N%」或「N/A」
 - **趨勢**：步驟 4 計算結果
 - **備註**：可選填，例如特殊情況說明或 Sprint Goal 達成狀態
+
+### Token 成本摘要指引
+
+Sprint Review 結束時，依下列步驟產出 Token 成本摘要。
+
+#### 步驟 1：讀取 Token 表格
+
+開啟 `docs/km/Metrics_Log.md`，找到「Token 成本記錄」區塊的表格。
+
+#### 步驟 2：Fallback 判斷
+
+若 Token 表格中**無本 Sprint 對應的記錄列**（Sprint 編號不存在），或 **Token 計數器不可存取**，則輸出精確字串：
+
+```
+Token 資料不可用，需手動補充
+```
+
+並結束本子節，不繼續執行步驟 3。
+
+#### 步驟 3：離群值分析
+
+**前置條件**：Token 表格中本 Sprint **之前**已有 3 列以上的完整記錄（輸入 token、輸出 token、估算成本均非空白）。
+
+- 若不滿足前置條件，輸出：
+
+  ```
+  Token 歷史資料不足（需至少 3 個 Sprint 記錄），跳過離群值分析
+  ```
+
+- 若滿足前置條件，執行以下計算：
+
+  1. 計算本 Sprint **之前**所有完整記錄的**平均輸入 token** 與**平均輸出 token**
+  2. 對本 Sprint 的記錄執行比對：
+     - 若本 Sprint 輸入 token > 平均輸入 token × 2，標記輸入欄為 `[OUTLIER]`
+     - 若本 Sprint 輸出 token > 平均輸出 token × 2，標記輸出欄為 `[OUTLIER]`
+  3. 輸出摘要，範例格式：
+
+  ```
+  Token 成本摘要（Sprint N）
+  - 輸入 token：25000 [OUTLIER]（歷史平均：10500，超過 2 倍閾值）
+  - 輸出 token：3100
+  - 估算成本：$0.0312
+  - 資料來源：Claude Code API
+  ```
+
+  若無任何 `[OUTLIER]`，範例格式：
+
+  ```
+  Token 成本摘要（Sprint N）
+  - 輸入 token：9800
+  - 輸出 token：2900
+  - 估算成本：$0.0198
+  - 資料來源：Claude Code API
+  ```
