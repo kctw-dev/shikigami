@@ -270,6 +270,7 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 - [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步）
 - [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag）
 - [ ] Sprint Metrics 計算並追加至 `docs/km/Metrics_Log.md`（見下方計算指引）
+- [ ] 是否有本 Sprint 值得記錄的角色制衡案例？若有，更新 `docs/km/ROLE_BALANCE_CASES.md`
 
 ### Sprint Metrics 計算指引
 
