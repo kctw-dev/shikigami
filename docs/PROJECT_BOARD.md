@@ -1,15 +1,17 @@
 # Project Board
 
 **最後更新**：2026-03-01
-**當前 Sprint**：Sprint 7（進行中）
+**當前 Sprint**：Sprint 7（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 7](sprints/sprint_7.md) → 本看板
 
 ---
 
-## Sprint 7 — 進行中
+## Sprint 7 — 完成
 
 **Sprint Goal**：啟動 v0.5.0 穩定化，清零 Sprint 6 Retro 技術債，建立解咒模式（Legacy 系統考古 Skill），並完成測試框架 CI 整合
+**結果**：Goal 達成（5/5 Stories PASS）。Velocity 7 points，完成率 100%。
+**Stakeholder 驗收**：接受
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
@@ -19,7 +21,7 @@
 | US-T05：交叉引用驗證 | S | 1 | 完成 |
 | US-T07：CI Pipeline | M | 2 | 完成 |
 
-**計畫 Velocity**：7 points（5 Stories）
+**實際 Velocity**：7 points（5 Stories）
 
 ---
 

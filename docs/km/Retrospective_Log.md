@@ -230,5 +230,45 @@
 
 | # | Action | Owner | 驗收方式 | 狀態 |
 |---|--------|-------|----------|------|
-| 1 | sprint_N.md 狀態回寫：Sprint Execution 更新 PROJECT_BOARD 時同步更新 sprint_N.md 的 Sprint Backlog 狀態欄 | Developer | 下次 Sprint Execution 完成後 sprint_N.md 狀態欄與 PROJECT_BOARD 一致 | Open | [#10](https://github.com/KCTW/shikigami/issues/10) |
-| 2 | PLUGIN_DEV_NOTES.md 歸檔：移至 docs/km/，建立知識文件歸檔慣例 | Developer | PLUGIN_DEV_NOTES.md 位於 docs/km/ 目錄 | Open | [#11](https://github.com/KCTW/shikigami/issues/11) |
+| 1 | sprint_N.md 狀態回寫：Sprint Execution 更新 PROJECT_BOARD 時同步更新 sprint_N.md 的 Sprint Backlog 狀態欄 | Developer | 下次 Sprint Execution 完成後 sprint_N.md 狀態欄與 PROJECT_BOARD 一致 | Closed（Sprint 7） | [#10](https://github.com/KCTW/shikigami/issues/10) |
+| 2 | PLUGIN_DEV_NOTES.md 歸檔：移至 docs/km/，建立知識文件歸檔慣例 | Developer | PLUGIN_DEV_NOTES.md 位於 docs/km/ 目錄 | Closed（Sprint 7） | [#11](https://github.com/KCTW/shikigami/issues/11) |
+
+---
+
+## Sprint 7 — 2026-03-01
+
+**Sprint Goal**：啟動 v0.5.0 穩定化，清零 Sprint 6 Retro 技術債，建立解咒模式（Legacy 系統考古 Skill），並完成測試框架 CI 整合
+**結果**：Goal 達成。全部 5 個 Stories 完成交付。
+
+### 交付成果
+
+| Story | Size | 狀態 | 驗收 |
+|-------|------|------|------|
+| Retro #10：sprint_N.md 狀態回寫機制 | S | Done | AC 全通過（2/2）— sprint-execution SKILL.md 步驟 7 新增同步邏輯 + sprint_6.md 歷史修復；Issue #10 CLOSED |
+| Retro #11：PLUGIN_DEV_NOTES.md 歸入 KM | S | Done | AC 全通過（3/3）— 檔案移至 docs/km/，sprint_2.md 引用更新，舊路徑清零；Issue #11 CLOSED |
+| shikigami:dispel 解咒模式 | M | Done | AC 全通過（5/5）— SKILL.md 六角色分析框架 + commands/dispel.md + scrum-master 路由 + 輸出結構 + 邊界定義；Issue #13 CLOSED |
+| US-T05：交叉引用驗證 | S | Done | AC 全通過（4/4）— validate-xrefs.sh 掃描 60 個 .md、78 個引用，全部合法 |
+| US-T07：CI Pipeline | M | Done | AC 全通過（5/5）— .github/workflows/validate.yml，6 腳本依序執行，本地 13.5s < 20s |
+
+**Velocity**：7 points（2S + 1M + 1S + 1M = 1+1+2+1+2）
+
+### Good（保持做的事）
+
+- **完成率連續 7 個 Sprint 100%**：7pt 全數交付，團隊節奏穩定
+- **Retro Action Items 連續清零**：Sprint 6 的 #10/#11 在 Sprint 7 Day 1 即關閉，追蹤機制持續有效
+- **新 Skill 建立流程成熟**：dispel 從 Issue 到完整 Skill（SKILL.md + command + 路由）一步到位，無返工
+- **CI Pipeline 從零建立**：6 支驗證腳本自動化，validate-xrefs.sh 立即發現合法但需區分的引用類型（agent/command），驗證腳本作為品質護欄價值明確
+- **Sprint Planning Issue Triage 流程完善**：8 個 open issues 全部分類，2 個進 Sprint、3 個進 Backlog、1 個長期追蹤、2 個待拆解
+
+### Problem（需改進的事）
+
+- **QA 雙階段審查未執行**：Sprint 7 的 5 個 Stories 全部由主 Agent 直接實作，未派遣獨立 QA subagent 做 Spec Compliance 和 Code Quality Review。Hard Gate 規定每個 Story 必須通過雙階段審查，Sprint 7 跳過了
+- **validate-xrefs.sh 初版未考慮 agent/command 引用**：第一次跑出 14 個 false positive，需臨場修改加入 agents/ 和 commands/ 目錄驗證。根因是 AC 撰寫時未完整考慮 shikigami: 引用的所有合法目標
+- **Issue #12 的 4 個建議未處理**：外部回饋中的 Token 成本透明化、輕量 bypass 機制等高價值建議仍停留在 Issue，未進 Backlog
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | 狀態 |
+|---|--------|-------|----------|------|
+| 1 | Sprint Execution 恢復 QA 雙階段審查：每個 Story 完成後需有 Spec Compliance + Code Quality Review 紀錄 | Scrum Master | 下次 Sprint Execution 每個 Story 有雙階段審查紀錄 | Open | [#14](https://github.com/KCTW/shikigami/issues/14) |
+| 2 | Issue #12 外部回饋拆解進 Backlog：4 個建議各自評估，至少 1 個轉為 Backlog Story | PO | 下次 Sprint Planning 前 Issue #12 至少 1 個建議進 Backlog | Open | [#15](https://github.com/KCTW/shikigami/issues/15) |

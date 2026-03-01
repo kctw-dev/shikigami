@@ -12,7 +12,7 @@ Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專
 
 **不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
 
-**當前版本：v0.3.0**（16 Skills / 7 Agents / 3 Commands）— 本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，連續 6 個 Sprint 完成率 100%。
+**當前版本：v0.3.0**（17 Skills / 7 Agents / 4 Commands）— 本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，連續 7 個 Sprint 完成率 100%。
 
 ---
 
@@ -47,7 +47,7 @@ Scrum Master 會觸發 `onboarding`，引導你建立專案的 `CLAUDE.md` 與�
 
 ## 怎麼用？
 
-用自然語言說你要做什麼，Scrum Master 會自動調度。也可以用 Slash Commands 直接觸發流程：`/sprint`（Sprint 規劃）、`/standup`（每日站立會議）、`/review`（Sprint 回顧）。
+用自然語言說你要做什麼，Scrum Master 會自動調度。也可以用 Slash Commands 直接觸發流程：`/sprint`（Sprint 規劃）、`/standup`（每日站立會議）、`/review`（Sprint 回顧）、`/dispel`（Legacy 系統考古）。
 
 以下是模擬互動範例：
 
@@ -207,7 +207,7 @@ shikigami.project_level: medium
 
 **重點：它們會互相制衡。** 不是 7 個獨立助手，是一組有紀律的工程團隊。
 
-### 16 個 Skills
+### 17 個 Skills
 
 **Scrum 流程**
 
@@ -229,6 +229,7 @@ shikigami.project_level: medium
 | **security-review** | 外部輸入處理、API 安全、配置安全、漏洞評估 |
 | **deployment-readiness** | 部署準備、版本發布、環境配置、生產就緒檢查 |
 | **systematic-debugging** | Bug 排查、測試失敗分析、系統化除錯流程 |
+| **dispel** | Legacy 系統考古、不熟悉 codebase 分析、解咒模式 |
 
 **工具整合**
 
@@ -244,18 +245,19 @@ shikigami.project_level: medium
 
 ## 實戰驗證
 
-Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，目前已完成 6 個 Sprint，交付 3 個版本：
+Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，目前已完成 7 個 Sprint，交付 3 個版本：
 
 | 版本 | 主題 | Sprint | 交付內容 |
 |------|------|--------|----------|
 | v0.1.0 | 核心框架 | Sprint 1 | 16 Skills + 7 Agents + 3 Commands + Issue Management |
 | v0.2.0 | 自我感知 | Sprint 2–4 | Onboarding + Health Check + Sprint Metrics |
 | v0.3.0 | 知識沉澱 | Sprint 4–6 | Retrospective Analytics + Tech Debt Registry + 5 驗證腳本 + Hard Gate 機制 |
+| v0.5.0 | 穩定化 | Sprint 7+ | dispel 解咒模式 + 交叉引用驗證 + CI Pipeline（進行中） |
 
-**累積數據**（截至 v0.3.0）：
-- 連續 6 個 Sprint 完成率 100%，Velocity 上升趨勢（4→6→8）
-- 3 個 ADR（架構決策紀錄）、14 個 Retro Action Items 全部關閉
-- 5 個自動化驗證腳本（Skill / Command / Version / Agent / JSON Schema）
+**累積數據**（截至 Sprint 7）：
+- 連續 7 個 Sprint 完成率 100%，Velocity 穩定（8→7，±20% 內）
+- 3 個 ADR（架構決策紀錄）、16 個 Retro Action Items（14 已關閉）
+- 7 個自動化驗證腳本（Skill / Command / Version / Agent / JSON Schema / Cross-Reference / CI Pipeline）
 
 **開發流程實證**：
 - **Product Discovery**：PO 分析需求 → Architect 評估可行性 → QA 確認驗收標準
@@ -266,7 +268,7 @@ Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum
 
 產出：
 - `docs/adr/` — 架構決策紀錄（ADR-001 ~ ADR-003）
-- `docs/sprints/` — Sprint 規劃與執行紀錄（sprint_1 ~ sprint_6）
+- `docs/sprints/` — Sprint 規劃與執行紀錄（sprint_1 ~ sprint_7）
 - `docs/km/Retrospective_Log.md` — 每次犯的錯都記下來，不重複犯
 - `docs/km/Metrics_Log.md` — Velocity 趨勢與完成率追蹤
 - `docs/prd/PRODUCT_BACKLOG.md` — RICE 評分排序的 Backlog

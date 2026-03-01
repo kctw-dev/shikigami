@@ -157,7 +157,7 @@ Sprint Review 時自動產出：
 
 ---
 
-## v0.5.0 穩定化 — 規劃中
+## v0.5.0 穩定化 — 進行中（Sprint 7+）
 
 **主題**：準備正式發布，品質與文件達到公開標準
 
@@ -165,11 +165,16 @@ Sprint Review 時自動產出：
 
 | Story | 功能 | Sprint |
 |---|---|---|
-| US-15 | 完整安裝流程驗證（全新環境測試） | Sprint 7 |
-| US-16 | 使用者文件完善（Tutorial + Troubleshooting） | Sprint 7 |
-| US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | Sprint 7–8 |
+| shikigami:dispel | 解咒模式 — Legacy 系統考古分析 Skill | Sprint 7 ✅ |
+| US-T05 | 交叉引用驗證腳本 | Sprint 7 ✅ |
+| US-T07 | CI Pipeline — GitHub Actions 自動化驗證 | Sprint 7 ✅ |
+| US-15 | 完整安裝流程驗證（全新環境測試） | TBD |
+| US-16 | 使用者文件完善（Tutorial + Troubleshooting） | TBD |
+| US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | TBD |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
+
+> **備注**：Sprint 7 啟動 v0.5.0 穩定化，交付解咒模式（dispel Skill）、交叉引用驗證、CI Pipeline。Sprint 6 Retro 技術債（#10 狀態回寫、#11 KM 歸檔）同步清零。
 
 ---
 
@@ -193,5 +198,5 @@ Issue Mgmt            │ Onboard  │ Metrics ✅│ Retro    │ Tech Debt │
 專案等級              │ Health   │           │ Analytic✅│ ADR KB    │ 整合     │ Metrics  │ 多平台調查       │ 上架
 ADR-001               │ Check    │           │          │           │          │ 通知     │ 使用者文件       │
 ──────────────────────┴──────────┴───────────┴──────────┴───────────┴──────────┴──────────┴──────────────────┴─────
-已交付 ✅              已交付 ✅               已交付 ✅               規劃中                 規劃中            遠期
+已交付 ✅              已交付 ✅               已交付 ✅               規劃中                 進行中            遠期
 ```

@@ -556,3 +556,61 @@ As a Scrum Master, I want structural Hard Gate checklists at framework document 
 **MoSCoW**：Must
 **ADR**：ADR-003
 **Size**：L
+
+---
+
+## Sprint 7（2026-03-01）
+
+**Sprint Goal**：啟動 v0.5.0 穩定化，清零 Sprint 6 Retro 技術債，建立解咒模式（Legacy 系統考古 Skill），並完成測試框架 CI 整合
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| US-T05：交叉引用驗證 | 25.6 | Should | — | Done |
+| US-T07：CI Pipeline | 24.0 | Should | — | Done |
+
+> 備注：Retro #10（狀態回寫）、Retro #11（KM 歸檔）、shikigami:dispel（解咒模式）為 Retro Action Items / Stakeholder 要求，不是 Backlog Stories，不歸入此表。
+
+---
+
+### US-T05：交叉引用驗證
+
+**標題**：shikigami:xxx 引用完整性驗證腳本
+
+**User Story**
+As a Developer, I want a script that verifies all `shikigami:xxx` references point to existing skills, so that broken cross-references are caught before pushing.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 掃描範圍 | `scripts/validate-xrefs.sh` 存在；掃描倉庫根目錄下所有 .md 檔案（遞迴），擷取 `shikigami:[a-z-]+` 格式的引用 |
+| AC2 | [靜態] | 存在性驗證 | 對每個引用 `shikigami:<name>`，驗證 `skills/<name>/SKILL.md` 存在；不存在則標記為 ERROR |
+| AC3 | [靜態] | 報告格式 | 有 broken reference 時輸出：`ERROR: <file>:<line>: broken reference 'shikigami:<name>'` |
+| AC4 | [靜態] | Exit code | exit code 0 = 無 broken reference；非 0 = 至少一個 broken reference |
+
+**RICE**：25.6
+**MoSCoW**：Should
+**Size**：S
+
+---
+
+### US-T07：CI Pipeline
+
+**標題**：GitHub Actions 自動化驗證 Pipeline
+
+**User Story**
+As a Developer, I want all structural validation scripts to run automatically on every push, so that broken commits never reach users.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | Workflow 文件 | `.github/workflows/validate.yml` 存在；trigger 條件包含 push 與 pull_request |
+| AC2 | [靜態] | 腳本清單 | Pipeline 執行以下腳本：`validate-skills.sh`、`validate-agents.sh`、`validate-json.sh`、`validate-version.sh`、`validate-xrefs.sh`、`validate-commands.sh` |
+| AC3 | [靜態] | 失敗行為 | workflow YAML 無 `continue-on-error: true`；任一腳本 exit 非 0 則 job 失敗 |
+| AC4 | [靜態] | 執行時間 | 本地執行全部驗證腳本總時間 < 20 秒 |
+| AC5 | [靜態] | Step 命名 | 每個 step 有可讀名稱對應腳本功能，不接受全部命名為 "run" |
+
+**RICE**：24.0
+**MoSCoW**：Should
+**Size**：M
