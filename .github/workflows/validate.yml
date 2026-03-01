@@ -30,3 +30,6 @@ jobs:
 
       - name: Validate Commands
         run: bash scripts/validate-commands.sh
+
+      - name: Validate Orphans
+        run: bash scripts/validate-orphans.sh
