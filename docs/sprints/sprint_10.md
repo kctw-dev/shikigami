@@ -21,7 +21,7 @@ Retro #18（Token 真實數據）與 US-23 合併執行，從 Sprint 10 起在 M
 | Story | 任務 | 負責 | 狀態 | QA Review |
 |---|---|---|---|---|
 | Retro #19：領域專家審查機制設計 [BYPASS] | 調查文件撰寫 + 決策結論記錄 | PO + Architect | 完成 | Bypass（S size Retro Action Item） |
-| US-23：Token 成本分環節記錄 | Metrics_Log.md 分環節表格 + sprint-planning 整合 + 示範資料 | Developer + Architect | 待開始 | — |
+| US-23：Token 成本分環節記錄 | Metrics_Log.md 分環節表格 + sprint-planning 整合 + 示範資料 | Developer + Architect | 完成 | Spec: PASS / Code: PASS |
 | US-22：Retrospective 驅動角色權重自動調整 | sprint-planning SKILL.md 權重調整步驟 + 關鍵字清單 + 持久化機制 | Developer | 待開始 | — |
 
 ---

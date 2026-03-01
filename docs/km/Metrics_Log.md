@@ -41,3 +41,26 @@ Sprint 整體 Token 消耗記錄，與 Velocity 記錄粒度對齊（Sprint 為�
 | Sprint 編號 | 輸入 token | 輸出 token | 估算成本 (USD) | 資料來源 |
 |------------|-----------|-----------|--------------|---------|
 | Sprint N | 12500 | 3200 | $0.0245 | 手動記錄 |
+
+---
+
+## Token 成本分環節記錄
+
+Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記錄。
+
+佔比計算基準：本環節 token（輸入 + 輸出）÷ 三環節 token 總和 × 100%（取整數）。
+數值格式：≥1000 用 K 表示（如 45K），<1000 顯示原始數字。
+
+| Sprint 編號 | Planning token | Execution token | Review token | 合計 token | 佔比（Planning / Execution / Review） |
+|------------|---------------|-----------------|-------------|-----------|--------------------------------------|
+| Sprint N（示範） | 12K | 20K | 10K | 42K | 29% / 48% / 23% |
+
+---
+
+### 分環節手動記錄模板
+
+當分環節 Token 資料無法自動取得時，依下列模板手動填入：
+
+| Sprint 編號 | Planning token | Execution token | Review token | 合計 token | 佔比（Planning / Execution / Review） |
+|------------|---------------|-----------------|-------------|-----------|--------------------------------------|
+| Sprint N | 12K | 20K | 10K | 42K | 29% / 48% / 23% |

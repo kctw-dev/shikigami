@@ -27,6 +27,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。主要由 **Product Own
 - [ ] 上個 Sprint 的 **Retro Action Items** 自動列入 Backlog（若有未完成項目）
 - [ ] **PO subagent** 建立 `docs/sprints/sprint_N.md`（N 為遞增的 Sprint 編號）
 - [ ] 更新 `docs/PROJECT_BOARD.md`，反映新 Sprint 的 Stories 配置
+- [ ] **記錄本次 Planning 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格**（對應 Planning token 欄）；若 Token 資料不可得，各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」
 - [ ] **完成 `docs/PROJECT_BOARD.md` 或 `docs/sprints/sprint_N.md` 修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件，格式與範圍見 §5 Commit + Push 規範）
 
 ---

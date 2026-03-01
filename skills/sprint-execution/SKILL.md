@@ -102,7 +102,11 @@ Sprint Backlog 還有 Story？
 5. **Spec Compliance Review**：派遣 QA subagent 使用 `spec-reviewer-prompt.md`，獨立驗證實作是否符合所有 Acceptance Criteria。
 6. **Code Quality Review**：派遣 QA subagent 使用 `quality-reviewer-prompt.md`，評估代碼品質、SOLID 原則、測試品質。
 7. **安全審查（條件觸發）**：若 Story 涉及外部輸入、API 端點、配置變更，派遣 Security subagent 進行安全審查。
-8. **更新看板與同步 Sprint 文件**：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。**更新完成後，立即執行 git commit + git push**（本步驟僅 commit `PROJECT_BOARD.md` 與 `sprint_N.md`；`Metrics_Log.md` 與 `Retrospective_Log.md` 由 sprint-review 負責 commit。其他 Knowledge Management 文件不適用本規範，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
+8. **更新看板與同步 Sprint 文件**：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。
+
+   **記錄本次 Execution 環節 Token 消耗**：所有 Story 完成後（即 Sprint Backlog 清空時），將本 Execution 環節累計 Token 消耗記錄至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格（對應 Execution token 欄）；若 Token 資料不可得，各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
+
+   **更新完成後，立即執行 git commit + git push**（本步驟僅 commit `PROJECT_BOARD.md` 與 `sprint_N.md`；`Metrics_Log.md` 與 `Retrospective_Log.md` 由 sprint-review 負責 commit。其他 Knowledge Management 文件不適用本規範，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
 
    ```bash
    git add docs/PROJECT_BOARD.md docs/sprints/sprint_N.md
