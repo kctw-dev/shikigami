@@ -111,3 +111,5 @@ Phase 2（序列，Phase 1 commit 後）：
 | 環節 | Token | 備註 |
 |------|-------|------|
 | Planning | N/A | Token 資料不可用，需手動補充 |
+| Execution | N/A | Token 資料不可用，需手動補充 |
+| Review | N/A | Token 資料不可用，需手動補充 |

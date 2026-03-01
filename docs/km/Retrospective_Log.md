@@ -381,6 +381,45 @@
 
 | # | Action | Owner | 驗收方式 | 狀態 | Issue |
 |---|--------|-------|----------|------|-------|
-| 1 | 更新三個 SKILL.md 的 token 記錄指引：優先從 `~/.claude/projects/` JSONL 提取 `message.usage`，解析失敗才走 N/A 降級 | Developer | sprint-planning/execution/review SKILL.md 含 JSONL 提取指引 | Open | [#20](https://github.com/KCTW/shikigami/issues/20) |
+| 1 | 更新三個 SKILL.md 的 token 記錄指引：優先從 `~/.claude/projects/` JSONL 提取 `message.usage`，解析失敗才走 N/A 降級 | Developer | sprint-planning/execution/review SKILL.md 含 JSONL 提取指引 | Closed（Sprint 11） | [#20](https://github.com/KCTW/shikigami/issues/20) |
 
 > Sprint 9 的 2 個 Open Action Items（#18、#19）已在本 Sprint 關閉。
+
+---
+
+## Sprint 11 — 2026-03-01
+
+**Sprint Goal**：導入 Scrum Master 零讀取架構，讓主 session context 瘦身，同步清零 Sprint 10 Retro Action Item，為 Token 成本大幅下降奠定結構基礎
+**結果**：Goal 達成。全部 3 個 Stories 完成交付。
+
+### 交付成果
+
+| Story | Size | 狀態 | 驗收 |
+|-------|------|------|------|
+| Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | S | Done | AC 全通過（3/3）— 3 個 SKILL.md token 指引段落更新為 JSONL 提取優先 + 降級標注；Issue #20 CLOSED |
+| US-S02：Standup 健康快篩框架 Repo 誤判修正 | S | Done | AC 全通過（3/3）— commands/standup.md 新增 .claude-plugin/plugin.json 框架 Repo 前置判斷；QA Re-Review 後 PASS |
+| US-25：Scrum Master 零讀取架構 | M | Done | AC 靜態全通過（3/3）— 3 個 SKILL.md subagent 調度重構；AC4 DEFERRED 至 Sprint 12 量測 |
+
+**Velocity**：4 points（2S + 1M = 1+1+2）
+
+### Good（保持做的事）
+
+- **完成率連續 11 個 Sprint 100%**：4pt（2S+1M）全數交付，團隊節奏持續穩定
+- **平行派遣策略成功執行**：Architect 在 Planning 分析檔案衝突，Phase 1 平行（Retro #20 + US-S02 修改不同檔案）、Phase 2 序列（US-25 與 Retro #20 修改相同 SKILL.md），零合併衝突
+- **QA 雙階段審查連續第 4 個 Sprint 全面執行**：3 個 Story 全部通過 Spec Compliance + Code Quality 雙審查。US-S02 路徑錯誤（`./plugin.json` → `./.claude-plugin/plugin.json`）在 QA Spec Review 即時攔截修正，驗證品質門禁對路徑層面錯誤的偵測能力
+- **Sprint 10 Retro Action Items 全部清零**：#20（SKILL.md token 記錄指引更新）作為 Story 交付，Issue #20 已關閉。歷史累計 20 個 Action Items 全數關閉
+- **零讀取架構一次到位**：US-25 修改 3 個 SKILL.md（sprint-planning / sprint-execution / sprint-review），將所有大檔案讀取從主 session 委託至 subagent，架構改變明確且無返工
+
+### Problem（需改進的事）
+
+- **AC 檔案路徑未在 Planning 驗證**：US-S02 AC1 原寫 `./plugin.json`，實際路徑為 `./.claude-plugin/plugin.json`。PO 撰寫 AC 時未確認實際檔案結構，Architect 和 QA 在 Planning 精化均未偵測，最終由 Sprint Execution QA Review 攔截。屬「AC 規格與實作不一致」問題（曾出現於 Sprint 3/5/9）的路徑變體
+- **Token 分環節記錄 Planning 欄仍為 N/A**：Retro #20 更新 JSONL 提取指引在 Sprint 11 Phase 1 完成，但 Planning 在 Phase 1 之前已執行完畢，因此 Planning 環節無法使用新指引。時序問題非流程缺陷，下 Sprint 起自然修正
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | 狀態 | Issue |
+|---|--------|-------|----------|------|-------|
+| 1 | Sprint Planning QA 精化增加 AC 路徑驗證步驟：若 AC 引用具體檔案路徑，QA 需執行路徑存在性確認 | QA | 下次 Sprint Planning QA 精化有路徑檢查記錄 | Open | [#21](https://github.com/KCTW/shikigami/issues/21) |
+| 2 | Sprint 12 追蹤 US-25 AC4 量測：cache_read_input_tokens < 41.6M（Must-have） | PO + Scrum Master | Sprint 12 Review 出示量測數據 | Open | [#22](https://github.com/KCTW/shikigami/issues/22) |
+
+> Sprint 10 的 1 個 Open Action Item（#20）已在本 Sprint 關閉（Retro #20 Story 交付）。
