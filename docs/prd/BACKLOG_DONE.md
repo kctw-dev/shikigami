@@ -751,3 +751,62 @@ As a Product Owner, I want a defined policy for handling orphan artifacts, so th
 **RICE**：16.7
 **MoSCoW**：Could
 **Size**：M
+
+---
+
+## Sprint 10（2026-03-01）
+
+**Sprint Goal**：填入 Token 真實數據並細化至分環節記錄，引入 Retrospective 驅動的角色權重自動調整
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| US-23：Token 成本分環節記錄 | 33.6 | Must | — | Done |
+| US-22：Retrospective 驅動角色權重自動調整 | 6.6 | Could | ADR-004 | Done |
+
+> 備注：Retro #19（領域專家審查機制設計）為 Retro Action Item，不是 Backlog Story，不歸入此表。ADR-004 為 US-22 前置依賴。
+
+---
+
+### US-23：Token 成本分環節記錄
+
+**標題**：Sprint 各環節（Planning / Execution / Review）Token 消耗獨立記錄與佔比分析
+
+**User Story**
+As a Product Owner, I want token consumption broken down by sprint phase (Planning, Execution, Review) and recorded in Metrics_Log.md, so that I can understand which phases consume the most resources and make data-driven decisions about where to optimize or reduce ceremony depth.
+
+**Acceptance Criteria**（Sprint 10 精化版）
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 分環節表格格式 | Metrics_Log.md 新增 H2「Token 成本分環節記錄」，六欄位 + 佔比計算基準定義 |
+| AC2 | [靜態] | sprint-planning 整合 | sprint-planning SKILL.md 新增 Planning token 記錄指引 |
+| AC3 | [靜態] | 示範資料 | K 格式，佔比三欄加總 100% |
+| AC4 | [動態] | 降級處理 | N/A 填入 + 精確字串「Token 資料不可用，需手動補充」 |
+| AC5 | [靜態] | ADR-003 Checklist | Framework Document Change Audit 通過 |
+
+**RICE**：33.6
+**MoSCoW**：Must
+**Size**：M
+
+---
+
+### US-22：Retrospective 驅動角色權重自動調整
+
+**標題**：Sprint Planning 自動讀取 Retro 趨勢，調整角色介入深度
+
+**User Story**
+As a Scrum Master, I want Sprint Planning to automatically read Retrospective trends and adjust the depth of each role's involvement for the upcoming sprint, so that the framework learns from past problems rather than applying the same fixed ceremony depth regardless of team history.
+
+**Acceptance Criteria**（Sprint 10 精化版）
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 觸發時機與插入位置 | sprint-planning SKILL.md 在「健康檢查」後、「PO 第一輪」前新增步驟 |
+| AC2 | [動態] | 權重調整規則 | ADR-004 關鍵字清單比對 + 連續 2 Sprint 觸發 + 重置條件 |
+| AC3 | [動態] | 調整透明化與持久化 | 輸出調整清單 + 持久化至 sprint_N.md 權重調整記錄區塊 |
+| AC4 | [靜態] | 資料不足降級 | < 3 Sprint 記錄時輸出降級訊息 |
+
+**RICE**：6.6
+**MoSCoW**：Could
+**Size**：L
+**ADR**：ADR-004（Accepted）

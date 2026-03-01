@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 10 Planning 完成）
+**最後更新**：2026-03-01（Sprint 10 Review 完成）
 **管理者**：Product Owner
 
 ---
@@ -15,8 +15,8 @@
 | 2 | US-18：Sprint Execution Issue 回覆自動化 | 23.8 | Should | M | Issue #9 | Done (Sprint 8) |
 | 3 | US-20：輕量 Bypass 機制 | 20.25 | Should | M | Issue #12-2 | Done (Sprint 8) |
 | 4 | US-19：Token 成本透明化 | 11.2 | Must | M | Issue #12-1 | Done (Sprint 9) |
-| 5 | US-22：Retrospective 驅動角色權重自動調整 | 6.6 | Could | L | Issue #12-4 | In Sprint (Sprint 10) |
-| 6 | US-23：Token 成本分環節記錄 | 33.6 | Must | M | Retro #18 | In Sprint (Sprint 10) |
+| 5 | US-22：Retrospective 驅動角色權重自動調整 | 6.6 | Could | L | Issue #12-4 | Done (Sprint 10) |
+| 6 | US-23：Token 成本分環節記錄 | 33.6 | Must | M | Retro #18 | Done (Sprint 10) |
 
 ### v0.3.0 知識沉澱 — 候選 Stories
 
@@ -191,7 +191,7 @@ As a Scrum Master, I want Sprint Planning to automatically read Retrospective tr
 **Size**：L
 **對應 Issue**：#12（建議 4）
 **備注**：US-09 Retrospective Analytics（已完成）實現展示歷史趨勢；本 Story 進一步將趨勢轉化為 Sprint Planning 的自動決策輸入，屬新增能力而非重複。
-**狀態**：In Sprint (Sprint 10)
+**狀態**：Done (Sprint 10)
 
 ---
 
@@ -225,7 +225,7 @@ As a Product Owner, I want token consumption broken down by sprint phase (Planni
 **MoSCoW**：Must
 **Size**：M / **Points**：2
 **對應 Retro Action**：#18（Sprint 9，合併執行）
-**狀態**：In Sprint (Sprint 10)
+**狀態**：Done (Sprint 10)
 
 ---
 

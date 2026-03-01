@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-01（Sprint 9 Review）
+> 最後更新：2026-03-01（Sprint 10 Review）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -162,6 +162,9 @@ Sprint Review 時自動產出：
 | US-20 | 輕量 Bypass 機制 | Sprint 8 ✅ |
 | US-19 | Token 成本透明化 | Sprint 9 ✅ |
 | US-T09 | 孤兒文件清理規範 + CI 整合 | Sprint 9 ✅ |
+| ADR-004 | Retrospective Problem 主題比對機制 | Sprint 10 ✅ |
+| US-23 | Token 成本分環節記錄 | Sprint 10 ✅ |
+| US-22 | Retrospective 驅動角色權重自動調整 | Sprint 10 ✅ |
 | US-15 | 完整安裝流程驗證（全新環境測試） | TBD |
 | US-16 | 使用者文件完善（Tutorial + Troubleshooting） | TBD |
 | US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | TBD |
