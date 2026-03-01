@@ -3,7 +3,7 @@ description: "執行每日站立會議，檢視當前 Sprint 進度與阻礙"
 disable-model-invocation: true
 ---
 
-執行 Daily Standup，依序完成以下三個區塊：
+執行 Daily Standup，依序完成以下四個區塊：
 
 ## 區塊零：健康快篩
 
@@ -59,7 +59,20 @@ WARNING/CRITICAL 僅附提示，不阻塞後續 Standup 流程，繼續執行區
    - **Git 同步**：⚠️ 遠端有 N 個未拉取的 commits，建議執行 `git pull`（未拉取 > 0）
    - 兩者皆 > 0 時兩條都顯示
 
-## 區塊二：Sprint 進度
+## 區塊二：GitHub Issues 掃描
+
+檢查是否有需要關注的 open issues：
+
+> **掃描範圍**：僅掃描本 repo 的 open issues（不含 Pull Requests）。目的是在每日 Standup 中揭露新進 issues，避免 Sprint Planning（每週一次）之間的盲區。
+
+1. 執行 `gh issue list --state open --limit 20`（超時 5 秒）
+   - 若失敗（gh 未安裝/未認證/離線）→ 顯示「**Issues 掃描**：無法連線 GitHub，略過 Issues 掃描」，跳到區塊三
+2. 計算 open issues 數量
+3. 顯示結果：
+   - **Issues 掃描**：目前無 open issues（數量為 0）
+   - **Issues 掃描**：目前有 N 個 open issues（數量 > 0 時，列出最多 5 個摘要：編號 + 標題 + label）
+
+## 區塊三：Sprint 進度
 
 讀取 `docs/PROJECT_BOARD.md` 的內容，產出 Sprint 進度摘要：
 
