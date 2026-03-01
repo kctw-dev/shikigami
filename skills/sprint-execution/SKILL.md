@@ -36,12 +36,12 @@ Sprint Backlog 中取出 Story
 Developer 實作 + TDD + 自我審查
   |
   v
-派遣 QA subagent 做 Spec Compliance Review（使用 spec-reviewer-prompt.md）
+派遣 QA subagent 做 Spec Compliance Review（使用 spec-reviewer-prompt.md）← 不可跳過（HARD-GATE）
   |-- 不通過 --> Developer 修復 --> 重新審查
   +-- 通過
         |
         v
-派遣 QA subagent 做 Code Quality Review（使用 quality-reviewer-prompt.md）
+派遣 QA subagent 做 Code Quality Review（使用 quality-reviewer-prompt.md）← 不可跳過（HARD-GATE）
   |-- 不通過 --> Developer 修復 --> 重新審查
   +-- 通過
         |
@@ -74,6 +74,8 @@ Sprint Backlog 還有 Story？
 <HARD-GATE>
 每個 Story 必須通過雙階段審查（Spec Compliance + Code Quality）才能標記為完成。
 不得跳過任何一個審查階段。
+
+> 歷史案例：Sprint 7 因跳過此步驟列為 Retro Problem（Issue #14），導致品質門禁失效。
 </HARD-GATE>
 
 <HARD-GATE>
