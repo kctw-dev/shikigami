@@ -308,4 +308,4 @@
 
 | # | Action | Owner | 驗收方式 | 狀態 |
 |---|--------|-------|----------|------|
-| 1 | US-19 Token 成本透明化優先排入 Sprint 9：使用者明確要求先掌握 token 用量變化數據，再決定是否需要流程優化 | PO | Sprint 9 Planning 時 US-19 納入 Sprint Backlog | Open | [#17](https://github.com/KCTW/shikigami/issues/17) |
+| 1 | US-19 Token 成本透明化優先排入 Sprint 9：使用者明確要求先掌握 token 用量變化數據，再決定是否需要流程優化 | PO | Sprint 9 Planning 時 US-19 納入 Sprint Backlog | Closed（Sprint 9） | [#17](https://github.com/KCTW/shikigami/issues/17) |
