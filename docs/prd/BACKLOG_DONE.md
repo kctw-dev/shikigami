@@ -918,3 +918,52 @@ As a Scrum Master, I want Sprint Planning to automatically read Retrospective tr
 
 **備注**：US-24 AC1（檔案傳遞模式）與 AC2（輕量模型指定）暫緩，US-24 未從 PRODUCT_BACKLOG.md 移除。本條目僅記錄 AC3/AC4 的部分交付。
 **Size（子集）**：S / **Points**：1
+
+---
+
+## Sprint 13（2026-03-01）
+
+**Sprint Goal**：清零 Sprint 12 Retro 流程缺口，建立 Sprint Planning 平行派工正式規範，為 M5 外部發布排除最後的流程控制風險
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| Retro #26：PO Demo 應讀取 repo 源碼而非 plugin cache | — | Must | ADR-003 | Done |
+| Retro #27：Developer Board 更新範圍限制 | — | Must | ADR-003 | Done |
+| Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量 | — | Must | ADR-003 | Done |
+| Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | — | Must | ADR-003 | Done |
+
+---
+
+### Retro #26：PO Demo 應讀取 repo 源碼而非 plugin cache
+
+**來源**：Sprint 12 Retro Action Item #26（[Issue #26](https://github.com/KCTW/shikigami/issues/26)）
+**交付摘要**：`skills/sprint-review/SKILL.md` §2 Step 1 新增【源碼路徑】和【禁止項】兩條規則，明確指定讀取 repo working directory 源碼，禁止依賴 plugin cache 版本。
+**驗收結果**：AC1 PASS（靜態），AC2 待動態驗證（PO Demo 已即時自證）；Issue #26 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### Retro #27：Developer Board 更新範圍限制
+
+**來源**：Sprint 12 Retro Action Item #27（[Issue #27](https://github.com/KCTW/shikigami/issues/27)）
+**交付摘要**：`skills/sprint-execution/SKILL.md` 步驟 8 新增 HARD-GATE 區塊，明確限定 Developer 只能更新 Story 狀態行，禁止修改 Sprint 級別欄位。sprint_N.md 同樣限定。
+**驗收結果**：AC 全通過（2/2）；Issue #27 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量
+
+**來源**：Sprint 12 Retro Action Item #25（[Issue #25](https://github.com/KCTW/shikigami/issues/25)）
+**交付摘要**：`skills/sprint-planning/SKILL.md` §6 Step 1 PO 第一輪回傳表格新增「獨立性評估」欄位，描述段落加入檔案修改獨立性評估指引。
+**驗收結果**：AC 全通過（2/2）；Issue #25 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### Retro #24：Architect Sprint Planning 評估應包含平行派工策略
+
+**來源**：Sprint 12 Retro Action Item #24（[Issue #24](https://github.com/KCTW/shikigami/issues/24)）
+**交付摘要**：`skills/sprint-planning/SKILL.md` §6 Step 2 Architect 區段新增「平行分群建議」正式輸出項目，含 Phase 1/Phase 2 分組表格、檔案衝突分析表格、分群規則。
+**驗收結果**：AC 全通過（2/2）；Issue #24 CLOSED
+**Size**：S / **Points**：1

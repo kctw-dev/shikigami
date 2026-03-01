@@ -23,6 +23,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 10 | 2026-03-01 | 6 points | 100% | 穩定 | 3 Stories（1S+1M+1L），Sprint Goal 達成；S9→S10 回升（5→6，+20%，±20% 內）；分環節記錄 + 權重自動調整 |
 | Sprint 11 | 2026-03-01 | 4 points | 100% | 不規則 | 3 Stories（2S+1M），Sprint Goal 達成；S10→S11 下降（6→4，-33.3%）；零讀取架構導入 |
 | Sprint 12 | 2026-03-01 | 4 points | 100% | 穩定 | 4 Stories（4S），Sprint Goal 達成；S11→S12 持平（4→4，0%，±20% 內）；health-check 架構對齊 + US-25 AC4 量測完成 |
+| Sprint 13 | 2026-03-01 | 4 points | 100% | 穩定 | 4 Stories（4S），Sprint Goal 達成；S12→S13 持平（4→4，0%，±20% 內）；Sprint Planning 平行派工規範建立 + Retro #24-#27 流程缺口清零 |
 
 ---
 
@@ -62,7 +63,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 10 | 87M | 10M | 11M | 108M | 81% / 9% / 10% |
 | Sprint 11 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 12 | 8761K | 486K | N/A | N/A（Review 進行中，無法精確切分） | N/A（Review token 進行中無法精確切分，合計待補） |
-| Sprint 13 | 5450K | 4242K | 待補 | 待補 | 待補 |
+| Sprint 13 | 5450K | 4242K | 5804K | 15496K | 35% / 27% / 38% |
 
 ---
 

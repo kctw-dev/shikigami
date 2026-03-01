@@ -465,3 +465,43 @@
 | 3 | 量測門檻設定應包含容忍帶（±2%） | PO / Architect | 下次量測類 AC 包含容忍帶說明 | Open | [#28](https://github.com/KCTW/shikigami/issues/28) |
 
 > Sprint 11 的 2 個 Open Action Items（#21、#22）已在本 Sprint 關閉。
+
+---
+
+## Sprint 13 — 2026-03-01
+
+**Sprint Goal**：清零 Sprint 12 Retro 流程缺口，建立 Sprint Planning 平行派工正式規範，為 M5 外部發布排除最後的流程控制風險
+**結果**：Goal 達成。全部 4 個 Stories 完成交付。
+
+### 交付成果
+
+| Story | Size | 狀態 | 驗收 |
+|-------|------|------|------|
+| Retro #26：PO Demo 應讀取 repo 源碼而非 plugin cache | S | Done | AC1 PASS（靜態），AC2 待動態驗證（PO Demo 已即時自證）；Issue #26 CLOSED |
+| Retro #27：Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | S | Done | AC 全通過（2/2）— sprint-execution SKILL.md 步驟 8 HARD-GATE 新增；Issue #27 CLOSED |
+| Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量 | S | Done | AC 全通過（2/2）— sprint-planning SKILL.md §6 Step 1 獨立性評估欄位 + 指引；Issue #25 CLOSED |
+| Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | S | Done | AC 全通過（2/2）— sprint-planning SKILL.md §6 Step 2 平行分群建議輸出項目；Issue #24 CLOSED |
+
+**Velocity**：4 points（4 × S = 4）
+
+### Good（保持做的事）
+
+- **完成率連續 13 個 Sprint 100%**：4pt（4S）全數交付，團隊節奏持續穩定
+- **Phase 1 三路平行派遣零衝突成功**：Architect 的平行化分析正確，Retro #26/#27/#25 同時修改不同 SKILL.md 檔案（sprint-review / sprint-execution / sprint-planning），零合併衝突
+- **QA 雙階段審查連續第 6 個 Sprint 全面執行**：4 Story 全 PASS（Spec Compliance + Code Quality），品質門禁穩定運作
+- **Sprint 12 Retro Action Items 全部清零**：#26/#27 作為 Story 交付，#28 於 Planning 階段即關閉（容忍帶規範落地）；歷史累計 25 個 Action Items 全數關閉
+- **Retro #26 AC2 動態 AC 本 Sprint 即時自證**：PO Demo 依據新規範從 repo working directory 讀取源碼，未讀取 plugin cache，等同 AC2 動態驗證通過
+
+### Problem（需改進的事）
+
+- **Issue 快掃觸發條件未排除 retro-action 內部 issue**：快掃篩出 #24/#25/#26/#27（retro-action label），但這些是內部追蹤 issue 非社群使用者問題，無需發送回覆。觸發條件 (a) 僅排除 `in-backlog`，未排除 `retro-action`，導致每次快掃都會無效處理內部 issue
+- **QA Code Quality Review 發現 Retro #26 硬編碼版本號未修正**：禁止項說明中硬編碼了 `v0.3.5` 版本號，QA 標記為 Important 但因在 PASS 閾值內（≤2）放行。指引文件中的硬編碼版本會隨迭代失效
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | 狀態 | Issue |
+|---|--------|-------|----------|------|-------|
+| 1 | Issue 快掃觸發條件新增排除 `retro-action` label：standup.md 和 sprint-execution SKILL.md 的快掃條件 (a) 包含排除 retro-action | Developer | standup/sprint-execution 快掃觸發條件含 retro-action 排除規則 | Open | [#29](https://github.com/KCTW/shikigami/issues/29) |
+| 2 | sprint-review SKILL.md 禁止項硬編碼版本號修正：改用版本無關描述取代 v0.3.5 | Developer | sprint-review SKILL.md 禁止項無硬編碼版本號 | Open | [#30](https://github.com/KCTW/shikigami/issues/30) |
+
+> Sprint 12 的 3 個 Open Action Items（#26、#27、#28）已在本 Sprint 關閉（#26/#27 作為 Story 交付，#28 於 Planning 落地解決）。

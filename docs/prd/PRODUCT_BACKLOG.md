@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 13 Planning 完成）
+**最後更新**：2026-03-01（Sprint 13 Review 完成）
 **管理者**：Product Owner
 
 ---
@@ -40,10 +40,10 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | Retro #26：PO Demo 應讀取 repo 源碼而非 plugin cache | — | Must | S | Sprint 12 Retro | Sprint 13 (#26) |
-| 2 | Retro #27：Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | — | Must | S | Sprint 12 Retro | Sprint 13 (#27) |
-| 3 | Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量 | — | Must | S | Sprint 12 Retro | Sprint 13 (#25) |
-| 4 | Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | — | Must | S | Sprint 12 Retro | Sprint 13 (#24) |
+| 1 | Retro #26：PO Demo 應讀取 repo 源碼而非 plugin cache | — | Must | S | Sprint 12 Retro | Done (Sprint 13) |
+| 2 | Retro #27：Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | — | Must | S | Sprint 12 Retro | Done (Sprint 13) |
+| 3 | Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量 | — | Must | S | Sprint 12 Retro | Done (Sprint 13) |
+| 4 | Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | — | Must | S | Sprint 12 Retro | Done (Sprint 13) |
 
 ---
 
