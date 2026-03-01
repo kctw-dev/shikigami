@@ -8,11 +8,11 @@
 
 你一個人開發，寫完的代碼沒人 review，架構決策靠直覺，安全問題等上線才發現。
 
-Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：QA 審你的代碼並挑戰架構決策，Security 審外部輸入，SRE 從維運角度評估部署可行性。
+Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：QA 審你的代碼並挑戰架構決策，Security 審外部輸入，SRE 從維運角度評估部署可行性。**不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
 
-**不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
+這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 9 個 Sprint 完成率 100%，交付 30+ Stories，QA 雙階段審查攔截了每個 Sprint 的品質問題。
 
-**當前版本：v0.3.3**（17 Skills / 7 Agents / 4 Commands）— 本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，連續 9 個 Sprint 完成率 100%。
+**當前版本：v0.3.3**（17 Skills / 7 Agents / 4 Commands）
 
 ---
 
@@ -148,16 +148,7 @@ Scrum Master 會觸發 `onboarding`，引導你建立專案的 `CLAUDE.md` 與�
 
 > **提示**：你不需要精確匹配上面的用語。Scrum Master 會分析你的意圖，自動路由到對應流程。只要說出你想做什麼就好。
 
-### 使用流程概覽
-
-```
-Discovery → Sprint Planning → Sprint Execution → Sprint Review
-```
-
-1. **Discovery**：與 PO 討論需求，產出 ROADMAP 與 PRODUCT_BACKLOG
-2. **Sprint Planning**：選取 Stories，Architect 產出 SDD，QA 進行 Decision Challenge
-3. **Sprint Execution**：Developer 依 SDD 進行 TDD 開發，QA/SRE/SecOps 按需審查
-4. **Sprint Review**：驗收成果、記錄教訓、更新 Retrospective Log
+完整的開發流程是 **Discovery → Sprint Planning → Sprint Execution → Sprint Review** 四步循環，但你不必一次全用 — 隨時從任何一步開始，Scrum Master 會銜接上下文。
 
 ---
 
@@ -245,7 +236,9 @@ shikigami.project_level: medium
 
 ## 實戰驗證
 
-Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，目前已完成 9 個 Sprint，交付 3 個版本 + 穩定化持續中：
+Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發記錄。
+
+### 版本歷程
 
 | 版本 | 主題 | Sprint | 交付內容 |
 |------|------|--------|----------|
@@ -254,25 +247,33 @@ Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum
 | v0.3.0 | 知識沉澱 | Sprint 4–6 | Retrospective Analytics + Tech Debt Registry + 5 驗證腳本 + Hard Gate 機制 |
 | v0.3.x | 穩定化 | Sprint 7–9 | dispel 解咒模式 + CI Pipeline + 制衡案例 + Issue 回覆自動化 + Bypass 機制 + Token 成本透明化 + 孤兒文件偵測 |
 
-**累積數據**（截至 Sprint 9）：
-- 連續 9 個 Sprint 完成率 100%，Velocity 穩定（歷史：8→5→5→4→6→8→7→6→5）
-- 3 個 ADR（架構決策紀錄）、19 個 Retro Action Items（17 已關閉）
-- 8 個自動化驗證腳本（Skill / Command / Version / Agent / JSON Schema / Cross-Reference / Orphan / CI Pipeline）
+### 累積數據（截至 Sprint 9）
 
-**開發流程實證**：
-- **Product Discovery**：PO 分析需求 → Architect 評估可行性 → QA 確認驗收標準
-- **Sprint Execution**：Developer 依 TDD 實作 → QA 雙階段審查（Spec Compliance + Code Quality）
-- **Architecture Decision**：Architect 提案 → QA 扮演 Decision Challenger 挑戰 → ADR 記錄決策
-- **Sprint Review**：自動觸發驗收 → Retrospective Analytics 展示趨勢 → Action Items 轉為 GitHub Issues
-- **Hard Gate**：框架文件修改前 Preflight Check、儀式完整性稽核、Sprint 外變更偵測
+- 連續 9 個 Sprint 完成率 100%，Velocity 歷史：8→5→5→4→6→8→7→6→5
+- 30+ Stories 交付，3 個 ADR（架構決策紀錄）
+- 19 個 Retro Action Items（17 已關閉，平均 1.1 Sprint 內關閉）
+- 8 個自動化驗證腳本 + GitHub Actions CI Pipeline
 
-產出：
-- `docs/adr/` — 架構決策紀錄（ADR-001 ~ ADR-003）
-- `docs/sprints/` — Sprint 規劃與執行紀錄（sprint_1 ~ sprint_9）
-- `docs/km/Retrospective_Log.md` — 每次犯的錯都記下來，不重複犯
-- `docs/km/Metrics_Log.md` — Velocity 趨勢與完成率追蹤
-- `docs/km/ROLE_BALANCE_CASES.md` — [真實制衡案例記錄](docs/km/ROLE_BALANCE_CASES.md)（角色制衡的實際發生場景）
-- `docs/prd/PRODUCT_BACKLOG.md` — RICE 評分排序的 Backlog
+### 開發流程實證
+
+| 流程 | 角色協作 |
+|------|----------|
+| **Product Discovery** | PO 分析需求 → Architect 評估可行性 → QA 確認驗收標準 |
+| **Sprint Execution** | Developer 依 TDD 實作 → QA 雙階段審查（Spec Compliance + Code Quality） |
+| **Architecture Decision** | Architect 提案 → QA 扮演 Decision Challenger 挑戰 → ADR 記錄決策 |
+| **Sprint Review** | 自動觸發驗收 → Retrospective Analytics 展示趨勢 → Action Items 轉為 GitHub Issues |
+| **Hard Gate** | 框架文件修改前 Preflight Check、儀式完整性稽核、Sprint 外變更偵測 |
+
+### 產出文件
+
+| 文件 | 說明 |
+|------|------|
+| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-003） |
+| `docs/sprints/` | Sprint 規劃與執行紀錄（sprint_1 ~ sprint_9） |
+| `docs/km/Retrospective_Log.md` | 每次犯的錯都記下來，不重複犯 |
+| `docs/km/Metrics_Log.md` | Velocity 趨勢與完成率追蹤 |
+| `docs/km/ROLE_BALANCE_CASES.md` | [真實制衡案例記錄](docs/km/ROLE_BALANCE_CASES.md) |
+| `docs/prd/PRODUCT_BACKLOG.md` | RICE 評分排序的 Backlog |
 
 ---
 
