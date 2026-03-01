@@ -14,7 +14,7 @@
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
 | US-19：Token 成本透明化 | M | 2 | 待開始 |
-| Retro #16：Sprint 文件即時 commit + push | S | 1 | 待開始 |
+| Retro #16：Sprint 文件即時 commit + push | S | 1 | 完成 |
 | US-T09：孤兒文件清理規範 | M | 2 | 待開始 |
 
 **計畫 Velocity**：5 points（3 Stories）

@@ -21,7 +21,7 @@ US-19 回應使用者明確要求：先有 token 用量數據，才能做有依�
 | Story | 任務 | 負責 | 狀態 | QA Review |
 |---|---|---|---|---|
 | US-19：Token 成本透明化 | Metrics_Log.md Token 表格 + sprint-review 整合 + 手動模板 | Developer + Architect | 待開始 | Spec: — / Code: — |
-| Retro #16：Sprint 文件即時 commit + push | sprint-planning / execution / review 三個 SKILL.md commit 規範 | Developer | 待開始 | Spec: — / Code: — |
+| Retro #16：Sprint 文件即時 commit + push | sprint-planning / execution / review 三個 SKILL.md commit 規範 | Developer | 完成 | Spec: PASS / Code: PASS |
 | US-T09：孤兒文件清理規範 | 孤兒判斷規則 + validate-orphans.sh + CI 整合 | Developer | 待開始 | Spec: — / Code: — |
 
 ---
