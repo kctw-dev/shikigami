@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 11 Review — US-25、US-S02 完成歸檔）
+**最後更新**：2026-03-08（Sprint 12 Planning — US-24 AC3/AC4 排入量測）
 **管理者**：Product Owner
 
 ---
@@ -23,9 +23,18 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | US-25：Scrum Master 零讀取架構（主 session context 瘦身） | 45.0 | Must | M | Issue #12 | Done (Sprint 11) |
-| 2 | US-24：Subagent Token 成本優化（成本 + 速度） | 36.0 | Should | L | Sprint 10 Retro | 待選 |
+| 2 | US-24：Subagent Token 成本優化（成本 + 速度） | 36.0 | Should | L | Sprint 10 Retro | 部分進行中（AC3/AC4 在 Sprint 12；AC1/AC2 暫緩） |
 | 3 | Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | — | Must | S | Sprint 10 Retro | Done (Sprint 11) |
 | 4 | US-S02：Standup 健康快篩框架 Repo 誤判修正 | 18.0 | Should | S | Standup 回饋 | Done (Sprint 11) |
+
+### Sprint 12 — 新增 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | Retro #21：Sprint Planning QA 精化 — AC 路徑驗證步驟 | — | Must | S | Sprint 11 Retro | Sprint 12 進行中 |
+| 2 | Retro #22：US-25 AC4 量測 — cache_read_input_tokens < 41.6M | — | Must | S | Sprint 11 Retro | Sprint 12 進行中 |
+| 3 | Issue #23：health-check SKILL.md 零讀取架構對齊 | — | Must | S | Sprint 11 Issue | Sprint 12 進行中 |
+| 4 | US-24 AC3/AC4：Subagent Token 成本優化量測 | — | Should | S | Sprint 10 Retro (AC 子集) | Sprint 12 進行中 |
 
 ---
 
@@ -96,8 +105,14 @@ Sprint 10 實測數據：108M tokens / $234 / 957 API calls。Planning 佔 81%�
 | **RICE Score** | **36.0** |
 
 **MoSCoW**：Should
-**Size**：L / **Points**：3
+**Size**：L / **Points**：3（Architect 調降 AC3/AC4 子集為 S/1pt，排入 Sprint 12）
 **備注**：AC2 的模型指定可能需要 ADR（是否屬於技術選型），Sprint Planning 時由 Architect 判斷
+
+**Sprint 12 排程說明**：
+- **AC3/AC4（量測）**：排入 Sprint 12，Size S / 1pt。Architect 確認為純量測，無 ADR 需求，Hard Gate PASS。
+- **AC1（檔案傳遞模式）**：Sprint 11 US-25 已實現等效架構，暫緩獨立執行，後續視量測結果決定是否補實作。
+- **AC2（輕量模型指定）**：暫緩，待 AC3/AC4 量測結果確認優化空間後再排期。
+- **基準值**：Sprint 10 Planning token = 87M（Metrics_Log.md 分環節記錄）；Sprint 12 Planning 總 token 需 < 43.5M（降幅 >= 50%）。
 
 ---
 

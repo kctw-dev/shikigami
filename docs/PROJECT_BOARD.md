@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-01（Sprint 11 Review 完成）
-**當前 Sprint**：Sprint 11（Review 完成）
+**最後更新**：2026-03-08（Sprint 12 Planning 完成）
+**當前 Sprint**：Sprint 12（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 11](sprints/sprint_11.md) → 本看板
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 12](sprints/sprint_12.md) → 本看板
+
+---
+
+## Sprint 12 — 進行中
+
+**Sprint Goal**：修正 health-check 架構對齊、完成 US-25 AC4 零讀取效果量測、強化 QA 路徑驗證，讓 M5 穩定化的架構完整性與流程品質收斂
+**QA Review**：Hard Gate（Must）— 已升級（連續 2 Sprint QA 關鍵字觸發）
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #21：Sprint Planning QA 精化 — AC 路徑驗證步驟 | S | 1 | 待開始 |
+| Retro #22：US-25 AC4 量測 — cache_read_input_tokens < 41.6M | S | 1 | 待開始 |
+| Issue #23：health-check SKILL.md 零讀取架構對齊 | S | 1 | 待開始 |
+| US-24 AC3/AC4：Subagent Token 成本優化量測 | S | 1 | 待開始 |
+
+**計畫 Velocity**：4 points（4 Stories）
 
 ---
 
