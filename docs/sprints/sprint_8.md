@@ -22,7 +22,7 @@ Retro #14 恢復 Sprint 7 跳過的 QA 雙階段審查。US-21 從歷史 Sprint 
 |---|---|---|---|---|
 | Retro #14：恢復 QA 雙階段審查 | sprint-execution SKILL.md Hard Gate 語言強化 + sprint_8.md QA Review 欄位新增 | Developer | 完成 | Spec: PASS / Code: PASS |
 | US-21：真實制衡案例文件 | 新建 `docs/km/ROLE_BALANCE_CASES.md`（4+ 案例）+ README 連結 + sprint-review 提示 | Developer | 完成 | Spec: PASS / Code: PASS |
-| US-18：Sprint Execution Issue 回覆自動化 | sprint-execution SKILL.md 新增 Issue 快掃子步驟 + label 狀態追蹤機制 | Developer + Architect | 待開始 | Spec: — / Code: — |
+| US-18：Sprint Execution Issue 回覆自動化 | sprint-execution SKILL.md 新增 Issue 快掃子步驟 + label 狀態追蹤機制 | Developer + Architect | 完成 | Spec: PASS / Code: PASS |
 | US-20：輕量 Bypass 機制 | scrum-master SKILL.md 新增 Bypass 定義 + Hard Gate 豁免條款 | Developer + Architect | 待開始 | Spec: — / Code: — |
 
 ---
