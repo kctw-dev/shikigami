@@ -19,8 +19,8 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。主要由 **Product Own
 
 - [ ] **執行框架健康檢查**（invoke shikigami:health-check）— 完整 4 項檢查（必要文件 + 孤兒 Story + ADR 一致性 + Retro 逾期）。CRITICAL 標注警告但不阻塞 Planning 流程
 - [ ] **PO subagent** 掃描 GitHub open issues（`gh issue list --state open`），對未分類 issues 執行 Triage（invoke shikigami:issue-management Triage），將 bug/feature-request 透過 Backlog Bridge 納入 Backlog
-- [ ] **PO subagent** 讀取 `docs/prd/PRODUCT_BACKLOG.md` 與 `docs/PROJECT_BOARD.md`，掌握目前 Backlog 狀態與專案進度
-- [ ] **PO subagent** 從 Backlog 頂部（依優先級排序）選取符合 Sprint Goal 的 Stories
+- [ ] **PO subagent** 讀取 `docs/prd/PRODUCT_BACKLOG.md`、`docs/PROJECT_BOARD.md` 與 `docs/prd/ROADMAP.md`，掌握 Backlog 狀態、專案進度與當前里程碑
+- [ ] **PO subagent** 從 Backlog 頂部（依優先級排序）選取符合 Sprint Goal 與 ROADMAP 里程碑的 Stories
 - [ ] **檢查選入的 Story 是否標注「需要 ADR」** — 若標注需要 ADR，則該 ADR 必須已建立且狀態為 Accepted，方可進入 Sprint
 - [ ] **Architect subagent** 評估每個 Story 的技術工時（T-shirt size: S / M / L）
 - [ ] **QA subagent** 確認每個 Story 的驗收標準（Acceptance Criteria）可被測試
@@ -78,7 +78,7 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
 
 **派遣說明**：
 
-1. **PO（第一輪）**：先掃描 GitHub open issues 進行 Triage（question/invalid 直接回覆 + close，bug/feature-request 走 Backlog Bridge 納入 Backlog）。然後讀取 Backlog 與 Project Board，根據優先級與 Sprint Goal 初步選取 Stories。此階段 PO 需明確定義本次 Sprint 要達成的目標。
+1. **PO（第一輪）**：先掃描 GitHub open issues 進行 Triage（question/invalid 直接回覆 + close，bug/feature-request 走 Backlog Bridge 納入 Backlog）。然後讀取 Backlog、Project Board 與 ROADMAP.md，根據優先級、Sprint Goal 與當前里程碑初步選取 Stories。此階段 PO 需明確定義本次 Sprint 要達成的目標。
 2. **Architect**：對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若發現 Hard Gate 問題，該 Story 退回 Backlog。
 3. **QA**：逐一確認剩餘 Stories 的 Acceptance Criteria 是否明確且可被自動化測試驗證。若驗收標準模糊，退回 PO 補充後重新評估。
 4. **PO（第二輪）**：根據 Architect 與 QA 的回饋，最終確認 Sprint Backlog，建立 `docs/sprints/sprint_N.md`，並更新 `docs/PROJECT_BOARD.md` 與 `docs/prd/PRODUCT_BACKLOG.md`。
