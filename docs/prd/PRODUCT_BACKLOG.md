@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 8 Planning 完成）
+**最後更新**：2026-03-01（Sprint 8 Review 完成）
 **管理者**：Product Owner
 
 ---
@@ -11,9 +11,9 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-21：真實制衡案例文件 | 25.3 | Should | S | Issue #12-3 | In Sprint 8 |
-| 2 | US-18：Sprint Execution Issue 回覆自動化 | 23.8 | Should | M | Issue #9 | In Sprint 8 |
-| 3 | US-20：輕量 Bypass 機制 | 20.25 | Should | M | Issue #12-2 | In Sprint 8 |
+| 1 | US-21：真實制衡案例文件 | 25.3 | Should | S | Issue #12-3 | Done (Sprint 8) |
+| 2 | US-18：Sprint Execution Issue 回覆自動化 | 23.8 | Should | M | Issue #9 | Done (Sprint 8) |
+| 3 | US-20：輕量 Bypass 機制 | 20.25 | Should | M | Issue #12-2 | Done (Sprint 8) |
 | 4 | US-19：Token 成本透明化 | 11.2 | Could | M | Issue #12-1 | 待選 |
 | 5 | US-22：Retrospective 驅動角色權重自動調整 | 6.6 | Could | L | Issue #12-4 | 待選 |
 

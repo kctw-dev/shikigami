@@ -614,3 +614,84 @@ As a Developer, I want all structural validation scripts to run automatically on
 **RICE**：24.0
 **MoSCoW**：Should
 **Size**：M
+
+---
+
+## Sprint 8（2026-03-01）
+
+**Sprint Goal**：修復 Sprint Execution Issue 回覆缺口，恢復 QA 雙階段審查，建立制衡案例文件庫，引入輕量 Bypass 機制
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| US-21：真實制衡案例文件 | 25.3 | Should | — | Done |
+| US-18：Sprint Execution Issue 回覆自動化 | 23.8 | Should | — | Done |
+| US-20：輕量 Bypass 機制 | 20.25 | Should | — | Done |
+
+> 備注：Retro #14（恢復 QA 雙階段審查）為 Retro Action Item，不是 Backlog Story，不歸入此表。
+
+---
+
+### US-21：真實制衡案例文件
+
+**標題**：在 docs/ 收錄真實的角色制衡案例
+
+**User Story**
+As a new user, I want to read documented real-world examples of role-based checks and balances within Shikigami, so that I can understand how the framework prevents groupthink and trust that the multi-agent governance model delivers meaningful quality gates.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 文件建立 | `docs/km/ROLE_BALANCE_CASES.md` 存在；含至少 4 個案例，每個案例含 5 個必填欄位 |
+| AC2 | [靜態] | 類型覆蓋 | 每個案例含「制衡類型」欄位，4 個案例覆蓋至少 3 種不同類型 |
+| AC3 | [靜態] | README 引用 | `README.md` 實戰驗證區段新增指向 `docs/km/ROLE_BALANCE_CASES.md` 的連結 |
+| AC4 | [靜態] | Sprint Review 提示 | `skills/sprint-review/SKILL.md` 執行檢查清單新增制衡案例記錄提示 |
+
+**RICE**：25.3
+**MoSCoW**：Should
+**Size**：S
+
+---
+
+### US-18：Sprint Execution Issue 回覆自動化
+
+**標題**：Sprint Execution 每個 Story 開始前自動掃描並回覆 Open Issues
+
+**User Story**
+As a Product Owner, I want open GitHub issues to be automatically scanned and acknowledged at the start of each story in sprint execution, so that external collaborators receive timely responses.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 流程整合 | sprint-execution SKILL.md 第 3 節流程圖新增「Issue 快掃」子步驟 |
+| AC2 | [靜態] | 降級指引 | 含 `gh issue list` 指令；含降級指引文字 |
+| AC3 | [靜態] | 回覆觸發規則 | 定義觸發條件三項 + 回覆流程（PO 草稿 → QA 審核 → 依專案等級發布） |
+| AC4 | [靜態] | 防重複機制 | 定義 `sprint-N-replied` label 防重複 |
+
+**RICE**：23.8
+**MoSCoW**：Should
+**Size**：M
+
+---
+
+### US-20：輕量 Bypass 機制
+
+**標題**：低複雜度任務自動跳過 Scrum 儀式，直接執行
+
+**User Story**
+As a Scrum Master, I want a lightweight bypass mode for simple, well-defined tasks, so that the framework does not impose full Scrum ceremony overhead when the task complexity clearly does not warrant it.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | Bypass 觸發條件 | scrum-master SKILL.md 定義 3 項觸發條件 |
+| AC2 | [靜態] | Bypass 流程定義 | 跳過/保留清單明確定義 |
+| AC3 | [靜態] | 保護清單 | 3 項禁止 Bypass 情況 + 拒絕格式範例 |
+| AC4 | [靜態] | 稽核追蹤 | `[BYPASS]` 標注 + 40% 上限 |
+| AC5 | [靜態] | Hard Gate 豁免 | sprint-execution SKILL.md Hard Gate 豁免子句 |
+
+**RICE**：20.25
+**MoSCoW**：Should
+**Size**：M

@@ -270,5 +270,42 @@
 
 | # | Action | Owner | 驗收方式 | 狀態 |
 |---|--------|-------|----------|------|
-| 1 | Sprint Execution 恢復 QA 雙階段審查：每個 Story 完成後需有 Spec Compliance + Code Quality Review 紀錄 | Scrum Master | 下次 Sprint Execution 每個 Story 有雙階段審查紀錄 | Open | [#14](https://github.com/KCTW/shikigami/issues/14) |
-| 2 | Issue #12 外部回饋拆解進 Backlog：4 個建議各自評估，至少 1 個轉為 Backlog Story | PO | 下次 Sprint Planning 前 Issue #12 至少 1 個建議進 Backlog | Open | [#15](https://github.com/KCTW/shikigami/issues/15) |
+| 1 | Sprint Execution 恢復 QA 雙階段審查：每個 Story 完成後需有 Spec Compliance + Code Quality Review 紀錄 | Scrum Master | 下次 Sprint Execution 每個 Story 有雙階段審查紀錄 | Closed（Sprint 8） | [#14](https://github.com/KCTW/shikigami/issues/14) |
+| 2 | Issue #12 外部回饋拆解進 Backlog：4 個建議各自評估，至少 1 個轉為 Backlog Story | PO | 下次 Sprint Planning 前 Issue #12 至少 1 個建議進 Backlog | Closed（Sprint 8） | [#15](https://github.com/KCTW/shikigami/issues/15) |
+
+---
+
+## Sprint 8 — 2026-03-01
+
+**Sprint Goal**：修復 Sprint Execution Issue 回覆缺口，恢復 QA 雙階段審查，建立制衡案例文件庫，引入輕量 Bypass 機制
+**結果**：Goal 達成。全部 4 個 Stories 完成交付。
+
+### 交付成果
+
+| Story | Size | 狀態 | 驗收 |
+|-------|------|------|------|
+| Retro #14：恢復 QA 雙階段審查 | S | Done | AC 全通過（2/2）— sprint-execution SKILL.md Hard Gate 語言強化 + sprint_8.md QA Review 欄位；Issue #14 CLOSED |
+| US-21：真實制衡案例文件 | S | Done | AC 全通過（4/4）— ROLE_BALANCE_CASES.md 5 案例 + README 連結 + sprint-review 提示 |
+| US-18：Sprint Execution Issue 回覆自動化 | M | Done | AC 全通過（4/4）— sprint-execution SKILL.md Issue 快掃步驟 + label 防重複機制 + Decision Note |
+| US-20：輕量 Bypass 機制 | M | Done | AC 全通過（5/5）— scrum-master SKILL.md §10 Bypass 機制 + sprint-execution Hard Gate 豁免子句 |
+
+**Velocity**：6 points（2S + 2M = 1+1+2+2）
+
+### Good（保持做的事）
+
+- **QA 雙階段審查恢復且全數通過**：Sprint 7 跳過的品質門禁在 Sprint 8 完全恢復，4 個 Story 全部經 Spec Compliance + Code Quality 雙審查。QA 發現 3 個品質問題（格式不符、enum 語義矛盾、保護清單措辭不完整），全部即時修正後 Re-Review PASS
+- **完成率連續 8 個 Sprint 100%**：6pt 全數交付，團隊節奏穩定
+- **Sprint 7 Retro Action Items 全部清零**：#14 和 #15 兩個 GitHub Issues 均在 Sprint 8 關閉，Retro 追蹤機制連續 8 個 Sprint 無逾期 Item
+- **外部回饋系統性處理**：Issue #9 和 #12 的建議透過 Backlog Bridge 轉為 5 個 User Stories（US-18~22），其中 3 個在本 Sprint 交付
+- **Bypass 與 Hard Gate 的衝突被正確預見與處理**：Sprint Planning 時 QA 識別出 Retro #14 與 US-20 的潛在衝突，執行順序設計正確（先恢復 Hard Gate，再加豁免條款）
+
+### Problem（需改進的事）
+
+- **Sprint Review Token 消耗不透明**：完整走 Analytics + PO Demo + Stakeholder + Retro + 文件更新的流程，使用者無法得知各步驟的 token 消耗量，難以判斷成本是否合理。需要先有 token 透明化數據，才能做出有依據的優化決策
+- **制衡類型 enum 與 AC 規格不一致**：AC2 定義的列舉值為 `Architect-上調估點`，但實際案例是下調。QA 在 Code Quality Review 才發現，PO 在 AC 撰寫時應更仔細考慮語義覆蓋
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | 狀態 |
+|---|--------|-------|----------|------|
+| 1 | US-19 Token 成本透明化優先排入 Sprint 9：使用者明確要求先掌握 token 用量變化數據，再決定是否需要流程優化 | PO | Sprint 9 Planning 時 US-19 納入 Sprint Backlog | Open | [#17](https://github.com/KCTW/shikigami/issues/17) |

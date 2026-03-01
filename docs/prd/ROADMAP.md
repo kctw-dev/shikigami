@@ -157,9 +157,9 @@ Sprint Review 時自動產出：
 | shikigami:dispel | 解咒模式 — Legacy 系統考古分析 Skill | Sprint 7 ✅ |
 | US-T05 | 交叉引用驗證腳本 | Sprint 7 ✅ |
 | US-T07 | CI Pipeline — GitHub Actions 自動化驗證 | Sprint 7 ✅ |
-| US-21 | 真實制衡案例文件 | Sprint 8（計畫） |
-| US-18 | Sprint Execution Issue 回覆自動化 | Sprint 8（計畫） |
-| US-20 | 輕量 Bypass 機制 | Sprint 8（計畫） |
+| US-21 | 真實制衡案例文件 | Sprint 8 ✅ |
+| US-18 | Sprint Execution Issue 回覆自動化 | Sprint 8 ✅ |
+| US-20 | 輕量 Bypass 機制 | Sprint 8 ✅ |
 | US-15 | 完整安裝流程驗證（全新環境測試） | TBD |
 | US-16 | 使用者文件完善（Tutorial + Troubleshooting） | TBD |
 | US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | TBD |
