@@ -60,6 +60,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint N（示範） | 12K | 20K | 10K | 42K | 29% / 48% / 23% |
 | Sprint 10 | 87M | 10M | 11M | 108M | 81% / 9% / 10% |
 | Sprint 11 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
+| Sprint 12 | 8761K | N/A | N/A | N/A（Planning only） | N/A（待補） |
 
 ---
 
