@@ -1,25 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-08
-**當前 Sprint**：Sprint 5（進行中）
+**最後更新**：2026-03-01
+**當前 Sprint**：Sprint 5（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 5](sprints/sprint_5.md) → 本看板
 
 ---
 
-## Sprint 5 — 進行中
+## Sprint 5 — 完成
 
-**Sprint Goal**：完成 v0.3.0 Tech Debt Registry，並同步建立 ADR-002 解鎖測試框架擴展路徑
-**週期**：2026-03-08 ~ 2026-03-15
+**Sprint Goal**：完成 v0.3.0 Tech Debt Registry，並同步建立 ADR-002 解鎖測試框架擴展路徑，並修復 16 項框架監控缺口
+**結果**：Goal 達成（4/4 Stories PASS）。Velocity 6 points，完成率 100%。
+**Stakeholder 驗收**：接受
 
-| Story | Size | Points | 狀態 | 備注 |
-|-------|------|--------|------|------|
-| ADR-002：測試框架技術選型 | S | 1 | 完成 | 純 Bash + 共享函式庫 |
-| US-10：Tech Debt Registry | M | 2 | 完成 | Registry + Developer prompt + DoD 自檢 |
-| US-T01：Skill 完整性驗證 | S | 1 | 完成 | validate-skills.sh + 共享函式庫 |
-| US-FIX-01：修復審計發現 | M | 2 | 完成 | 5 commits, 13 項修復 |
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| ADR-002：測試框架技術選型 | S | 1 | 完成 |
+| US-10：Tech Debt Registry | M | 2 | 完成 |
+| US-T01：Skill 完整性驗證 | S | 1 | 完成 |
+| US-FIX-01：修復審計發現 | M | 2 | 完成 |
 
-**計畫 Velocity**：6 points（4 Stories）
+**實際 Velocity**：6 points（4 Stories）
 
 ---
 

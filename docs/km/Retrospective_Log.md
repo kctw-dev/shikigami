@@ -153,3 +153,41 @@
 |---|--------|-------|----------|------|
 | 1 | 框架工作計點機制：Sprint 5 Planning 評估是否為框架強化工作建立獨立計點類型（Framework Task），無論採用與否決策必須明文化 | PO + Architect | Sprint 5 Planning 結束前決策記錄於文件 | Closed（Sprint 5 Planning） |
 | 2 | Metrics_Log 更新列入 DoD：在全局 DoD 定義新增「Metrics_Log.md 本 Sprint 數據已更新」 | PO | Sprint 5 Planning QA Health Check 確認 DoD 含此條目 | Closed（Sprint 5 Planning） |
+
+---
+
+## Sprint 5 — 2026-03-01
+
+**Sprint Goal**：完成 v0.3.0 Tech Debt Registry，並同步建立 ADR-002 解鎖測試框架擴展路徑，並修復 16 項框架監控缺口
+**結果**：Goal 達成。全部 4 個 Stories 完成交付。
+
+### 交付成果
+
+| Story | Size | 狀態 | 驗收 |
+|-------|------|------|------|
+| ADR-002：測試框架技術選型 | S | Done | AC 全通過（4/4）— 純 Bash + 共享函式庫，排除 BATS/ShellSpec |
+| US-FIX-01：修復審計發現 | M | Done | AC 全通過（5/5）— 13 項框架文件修復，DoD 統一為 7 層 |
+| US-10：Tech Debt Registry | M | Done | AC 全通過（7/7）— Registry + Developer prompt + DoD 自檢 + Grooming 流程 |
+| US-T01：Skill 完整性驗證 | S | Done | AC 全通過（5/5）— TDD Red-Green-Refactor，16 skills 全通過 |
+
+**Velocity**：6 points（2S + 2M = 1+2+2+1）
+
+### Good（保持做的事）
+
+- **Velocity 回升至歷史新高（4→6），完成率連續 5 個 Sprint 100%**：Sprint 5 計畫 6 points 全數交付，打破 Sprint 4 的下降趨勢。證明團隊在計畫超載（~1.4 Sprint 容量）的情況下仍能全數完成
+- **ADR Hard Gate 機制運作良好**：ADR-002 先行完成，US-T01 在其後啟動，依賴鏈正確解鎖。零等待浪費
+- **QA 雙階段審查穩定運作（第 2 個 Sprint）**：每個 Story 經 Spec Compliance + Code Quality 雙審查，US-T01 的 3 項 Low 發現即時修復後再次通過。品質閘門持續有效
+- **共享函式庫（validate-helpers.sh）建立**：ADR-002 的關鍵產出，消除未來 9 個驗證腳本的重複實作風險。架構決策已實際落地
+
+### Problem（需改進的事）
+
+- **DoD 層數分歧（7 vs 8）**：US-10 新增技術債層（第 8 層）至 sprint-execution SKILL.md，但未同步更新 scrum-master SKILL.md，導致兩份 DoD 定義不一致。Stakeholder 在 Review 指出應同步
+- **QA Code Quality Review false positive 率偏高**：US-FIX-01 的 Code Quality Review 3 項發現中有 2 項為 false positive（QA 讀取過時資料、將既存問題歸入當前 Story），需要改善 QA 對「本次變更範圍」的界定
+- **Sprint 5 Planning 未納入 QA 審計資料的 GitHub Issues 掃描步驟**：Planning Skill 已更新（AC-A4）但實際 Sprint 5 Planning 執行時未觸發 Issue 掃描（因 checklist 在 Planning 完成後才更新）。這是時序問題，下個 Sprint 不會再發生
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | 狀態 |
+|---|--------|-------|----------|------|
+| 1 | DoD 第 8 層同步：scrum-master SKILL.md 補入「技術債」層，與 sprint-execution SKILL.md 對齊 | Developer | scrum-master SKILL.md DoD 包含技術債行 | Open | [#7](https://github.com/KCTW/shikigami/issues/7) |
+| 2 | QA Review 範圍界定：quality-reviewer-prompt.md 新增「僅審查本次 Story 變更範圍，既存問題不計入 FAIL」指引 | QA | quality-reviewer-prompt.md 含範圍界定條款 | Open | [#8](https://github.com/KCTW/shikigami/issues/8) |

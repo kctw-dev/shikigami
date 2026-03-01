@@ -79,7 +79,7 @@ Sprint Review 時自動產出：
 | Story | 功能 | Sprint |
 |---|---|---|
 | US-09 | Retrospective Analytics — 問題趨勢分析與模式辨識 | Sprint 4 ✅ |
-| US-10 | Tech Debt Registry — 技術債追蹤與自動排入 Backlog | Sprint 5+ |
+| US-10 | Tech Debt Registry — 技術債追蹤與自動排入 Backlog | Sprint 5 ✅ |
 | US-11 | Decision Knowledge Base — ADR 查詢與決策影響追蹤 | Sprint 5+ |
 
 ### US-09：Retrospective Analytics
@@ -184,5 +184,5 @@ Issue Mgmt            │ Onboard  │ Metrics ✅│ Retro    │ Tech Debt │
 專案等級              │ Health   │           │ Analytic✅│ ADR KB    │ 整合     │ Metrics  │ 多平台調查       │ 上架
 ADR-001               │ Check    │           │          │           │          │ 通知     │ 使用者文件       │
 ──────────────────────┴──────────┴───────────┴──────────┴───────────┴──────────┴──────────┴──────────────────┴─────
-已交付 ✅              已交付 ✅               進行中（1/3）           規劃中                 規劃中            遠期
+已交付 ✅              已交付 ✅               進行中（2/3）           規劃中                 規劃中            遠期
 ```

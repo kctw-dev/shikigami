@@ -384,3 +384,96 @@ As a Developer, I want to verify that each command correctly delegates to an exi
 **MoSCoW**：Should
 **Size**：S
 **TDD**：Red-Green-Refactor，5 test cases，16 assertions
+
+---
+
+## Sprint 5（2026-03-01）
+
+**Sprint Goal**：完成 v0.3.0 Tech Debt Registry，並同步建立 ADR-002 解鎖測試框架擴展路徑，並修復 16 項框架監控缺口
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| ADR-002：測試框架技術選型 | 90.0 | Must | Accepted | Done |
+| US-10：Tech Debt Registry | 19.4 | Must | — | Done |
+| US-T01：Skill 完整性驗證 | 54.0 | Must | ADR-002 | Done |
+| US-FIX-01：修復審計發現 | 90.0 | Must | — | Done |
+
+---
+
+### ADR-002：測試框架技術選型
+
+**標題**：測試框架技術選型決策
+
+**Acceptance Criteria**
+- AC1：建立 `docs/adr/ADR-002.md`；格式與 ADR-001 一致
+- AC2：至少列出 2 個技術選項，每個選項含優缺點分析
+- AC3：Decision 區段含選定工具名稱、選擇理由、排除方案說明
+- AC4：包含「實作方式」區段，說明目錄結構或命名規範
+
+**RICE**：90.0
+**MoSCoW**：Must（Hard Gate for US-T01）
+**Size**：S
+
+---
+
+### US-10：Tech Debt Registry
+
+**標題**：技術債追蹤與系統化管理
+
+**User Story**
+As a Developer, I want a structured Tech Debt Registry that captures and tracks technical debt across Sprints, so that the team can make informed decisions about when to address shortcuts and prevent debt accumulation from degrading system quality.
+
+**Acceptance Criteria**
+- AC1：Registry 格式定義（ID/描述/引入 Story/解決 Story/嚴重度/建議解法/RICE/狀態 + 趨勢判定規則）
+- AC2：Developer Prompt 整合（標記格式 + Registry 更新指引 + SKILL.md DoD 引用）
+- AC3：Grooming 觸發（掃描 Registry，標記逾期未解決項目）
+- AC4：Story 關聯欄位（「引入 Story」與「解決 Story」）
+- AC5：取捷徑場景觸發（3 種場景 + [TECH-DEBT] 標記格式）
+- AC6：Grooming 報告輸出（Active 清單、解決清單、變化量、趨勢判定）
+- AC7：趨勢判定規則（連續 2 次增加/減少/不變/資料不足）
+
+**RICE**：19.4
+**MoSCoW**：Must
+**Size**：M
+
+---
+
+### US-T01：Skill 完整性驗證
+
+**標題**：Skill 目錄結構與 frontmatter 驗證腳本
+
+**User Story**
+As a Developer, I want a script that verifies every skill directory has a valid SKILL.md with required frontmatter, so that I can catch missing or malformed skill definitions before pushing.
+
+**Acceptance Criteria**
+- AC1：掃描 `skills/` 下所有直接子目錄（depth=1），輸出目錄清單，數量與實際一致
+- AC2：驗證每個 SKILL.md frontmatter 包含 `name` 和 `description` 欄位
+- AC3：驗證 `name` 值與目錄名稱一致（大小寫敏感完全字串比對）
+- AC4：空目錄報錯，不靜默略過
+- AC5：exit code 0 = 通過，非 0 = 失敗
+
+**RICE**：54.0
+**MoSCoW**：Must
+**ADR**：ADR-002
+**Size**：S
+**TDD**：Red-Green-Refactor，共享函式庫 + 主腳本
+
+---
+
+### US-FIX-01：修復審計發現
+
+**標題**：修復 QA 審計 16 項框架監控缺口（13 項文件修正）
+
+**User Story**
+As a Developer, I want framework documents (DoD, standup, health-check, sprint-planning, sprint-review) to be consistent and complete, so that monitoring gaps don't allow defects to slip through undetected.
+
+**Acceptance Criteria**
+- AC-A1：DoD 統一為 7 層（功能、測試、安全、文件、設定、度量、反回歸）
+- AC-A2：standup 新增 GitHub Issues 掃描區塊
+- AC-A3：health-check 掃描清單新增 ROADMAP.md 與 Metrics_Log.md
+- AC-A4：sprint-planning 新增 ROADMAP 讀取步驟
+- AC-A5：sprint-review 產出文件含 ROADMAP + Issue close 步驟
+
+**RICE**：90.0
+**MoSCoW**：Must
+**Size**：M
