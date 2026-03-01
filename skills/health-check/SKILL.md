@@ -130,12 +130,31 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 
 ## 4. 執行方式
 
-此 Skill 由 Scrum Master（主 Agent）直接執行，不需要派遣 Subagent。執行時：
+此 Skill 採用 **Subagent 委派模式**。主 session（Scrum Master）不直接呼叫 Read、Glob、Grep 工具，所有檔案讀取與診斷邏輯均由 Health Check Subagent 負責執行。
 
-1. 依序讀取相關文件（使用 Read、Glob、Grep 工具）
-2. 對每個文件進行對應的檢查邏輯
-3. 彙整結果，按上述格式輸出報告
+### 4.1 正常執行流程
+
+1. 主 session 派遣一個 **Health Check Subagent**，並提供以下指令：
+   - 依序執行 §2 定義的 4 項診斷檢查
+   - 使用 Read、Glob、Grep 工具讀取所有必要文件
+   - 依照 §3 定義的格式產出完整報告字串（含 Overall Status 標題、4 個子檢查區塊、各自的 PASS/FAIL/WARN/OVERDUE 判定標籤）
+2. Subagent 完成後，將完整報告字串回傳給主 session
+3. 主 session 直接輸出 Subagent 回傳的報告，不再對內容做任何修改
 4. 若 Overall Status 為 CRITICAL，建議使用者優先修復後再繼續開發
+
+### 4.2 Subagent 失敗處理（零讀取原則）
+
+若 Subagent 執行失敗（包含 timeout、工具呼叫錯誤、無回應等情形），主 session **不得**嘗試降級改為直接讀取檔案。應立即輸出以下固定內容：
+
+```
+## 框架健康報告
+
+**Overall Status**: UNKNOWN
+
+health-check subagent 執行失敗，診斷結果不可用，請重試或手動執行。
+```
+
+主 session 在任何情況下均不呼叫 Read、Glob、Grep 工具，以維持零讀取架構原則。
 
 ---
 
