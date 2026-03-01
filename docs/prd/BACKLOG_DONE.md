@@ -866,3 +866,55 @@ As a Scrum Master, I want Sprint Planning to automatically read Retrospective tr
 **MoSCoW**：Could
 **Size**：L
 **ADR**：ADR-004（Accepted）
+
+---
+
+## Sprint 12（2026-03-01）
+
+**Sprint Goal**：修正 health-check 架構對齊、完成 US-25 AC4 零讀取效果量測、強化 QA 路徑驗證，讓 M5 穩定化的架構完整性與流程品質收斂
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| US-24 AC3/AC4：Subagent Token 成本優化量測 | —（子集） | Should | — | Done（部分；AC1/AC2 暫緩） |
+
+> 備注：Retro #21（Sprint Planning QA 精化）、Retro #22（US-25 AC4 量測）、Issue #23（health-check SKILL.md 零讀取架構對齊）為 Retro Action Items / GitHub Issue，非 Backlog 原生 Story，不帶 RICE 評分，以交付摘要歸檔。
+
+---
+
+### Retro #21：Sprint Planning QA 精化 — AC 路徑驗證步驟
+
+**來源**：Sprint 11 Retro Action Item #21（[Issue #21](https://github.com/KCTW/shikigami/issues/21)）
+**交付摘要**：`skills/sprint-planning/SKILL.md` §6 QA 條目新增路徑驗證規則；若 Story AC 含具體檔案路徑，QA 需執行 Glob/ls 存在性確認，回報 Path verification: PASS / FAIL / N/A。
+**驗收結果**：AC 全通過（3/3）；Issue #21 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### Retro #22：US-25 AC4 量測
+
+**來源**：Sprint 11 Retro Action Item #22（[Issue #22](https://github.com/KCTW/shikigami/issues/22)）
+**交付摘要**：Sprint 12 Review 從 JSONL 提取 `cache_read_input_tokens` 加總 = 41.93M，相較 Sprint 10 基準 104M 降幅 59.7%（門檻 41.6M，差距 0.3%）；Stakeholder 裁定接受。
+**驗收結果**：邊緣 FAIL，Stakeholder 裁定接受；Issue #22 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### Issue #23：health-check SKILL.md 零讀取架構對齊
+
+**來源**：GitHub Issue #23
+**交付摘要**：`skills/health-check/SKILL.md` §4 改寫為 Subagent 委派模式；主 session 不直接呼叫 Read/Glob/Grep；Subagent 失敗時輸出 Overall Status: UNKNOWN，不降級讀取，維持零讀取架構。
+**驗收結果**：AC 全通過（3/3）；Issue #23 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### US-24 AC3/AC4：Subagent Token 成本優化量測
+
+**標題**：Sprint 12 Planning API call 數量與 token 降幅量測（US-24 的 AC3/AC4 子集）
+
+**交付摘要**
+- AC3 PASS：Sprint 12 Planning message 物件數 = 123（< 200 門檻）
+- AC4 PASS：Sprint 12 Planning token = 8.76M vs Sprint 10 基準 87M，降幅 89.9%（> 50% 門檻）
+
+**備注**：US-24 AC1（檔案傳遞模式）與 AC2（輕量模型指定）暫緩，US-24 未從 PRODUCT_BACKLOG.md 移除。本條目僅記錄 AC3/AC4 的部分交付。
+**Size（子集）**：S / **Points**：1
