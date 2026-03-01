@@ -8,6 +8,20 @@
 
 ---
 
+## 版號策略
+
+**版號凍結在 v0.3.x**。每個 Sprint 完成後 patch bump（v0.3.2, v0.3.3...），直到達成 v1.0.0 條件。
+
+| 版號 | 含義 |
+|------|------|
+| v0.1.0 ~ v0.3.0 | 已交付的歷史里程碑（git tag 已存在） |
+| v0.3.x | 後續 Sprint 增量交付（patch bump） |
+| v1.0.0 | 外部使用者可穩定使用（下一個 minor/major bump） |
+
+後續的「M4 外部整合」「M5 穩定化」為**內部里程碑名稱**，不對應 git tag 版號。
+
+---
+
 ## v0.1.0 核心框架 — 已交付
 
 **主題**：建立 AI Agent Scrum Team 基礎能力
@@ -118,46 +132,21 @@ Sprint Review 時自動產出：
 
 ---
 
-## v0.4.0 外部整合 — 規劃中
+## M4 外部整合 — 規劃中（內部里程碑）
 
 **主題**：與真實開發工具鏈整合，從「指引框架」進化為「執行框架」
 
-**目標**：CI/CD 整合、DORA Metrics、通知機制
+**目標**：CI/CD 狀態感知、DORA Metrics、通知機制
 
 | Story | 功能 | Sprint |
 |---|---|---|
-| US-12 | GitHub Actions 整合 — CI/CD 狀態感知 | Sprint 5 |
-| US-13 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率 | Sprint 5–6 |
-| US-14 | Notification Templates — PR/Deploy/Review 事件通知模板 | Sprint 6 |
-
-### US-12：GitHub Actions 整合
-
-- Sprint Execution 時自動檢查 CI 狀態（`gh run list`）
-- Quality Gate 納入 CI 結果作為通過條件
-- 部署就緒檢查讀取最新 CI 結果
-- 測試覆蓋率從 CI artifacts 取得（取代手動檢查）
-
-### US-13：DORA Metrics
-
-四大軟體交付效能指標：
-- **Deployment Frequency**：多久部署一次（從 git tag 歷史計算）
-- **Lead Time for Changes**：從 commit 到 deploy 的時間
-- **MTTR**：服務中斷到恢復的時間
-- **Change Failure Rate**：部署後需 hotfix/rollback 的比例
-
-### US-14：Notification Templates
-
-為不同事件提供結構化通知模板：
-- Sprint 開始/結束摘要
-- PR 建立/合併通知
-- 部署完成通知
-- Security Review 發現問題通知
-
-**完成條件**：CI 狀態自動納入 Quality Gate、DORA Metrics 可計算並趨勢分析、通知模板覆蓋主要事件
+| US-12 | GitHub Actions 整合 — CI/CD 狀態感知 | TBD |
+| US-13 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率 | TBD |
+| US-14 | Notification Templates — PR/Deploy/Review 事件通知模板 | TBD |
 
 ---
 
-## v0.5.0 穩定化 — 進行中（Sprint 7+）
+## M5 穩定化 — 進行中（內部里程碑，Sprint 7+）
 
 **主題**：準備正式發布，品質與文件達到公開標準
 
@@ -168,13 +157,14 @@ Sprint Review 時自動產出：
 | shikigami:dispel | 解咒模式 — Legacy 系統考古分析 Skill | Sprint 7 ✅ |
 | US-T05 | 交叉引用驗證腳本 | Sprint 7 ✅ |
 | US-T07 | CI Pipeline — GitHub Actions 自動化驗證 | Sprint 7 ✅ |
+| US-21 | 真實制衡案例文件 | Sprint 8（計畫） |
+| US-18 | Sprint Execution Issue 回覆自動化 | Sprint 8（計畫） |
+| US-20 | 輕量 Bypass 機制 | Sprint 8（計畫） |
 | US-15 | 完整安裝流程驗證（全新環境測試） | TBD |
 | US-16 | 使用者文件完善（Tutorial + Troubleshooting） | TBD |
 | US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | TBD |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
-
-> **備注**：Sprint 7 啟動 v0.5.0 穩定化，交付解咒模式（dispel Skill）、交叉引用驗證、CI Pipeline。Sprint 6 Retro 技術債（#10 狀態回寫、#11 KM 歸檔）同步清零。
 
 ---
 
@@ -184,19 +174,26 @@ Sprint Review 時自動產出：
 
 **目標**：上架 Claude Code 官方 Marketplace
 
-**前提**：v0.5.0 完成 + 外部使用者回饋正面 + Issue #5 達成
+**前提**：M5 穩定化完成 + 外部使用者回饋正面 + Issue #5 達成
 
 ---
 
 ## 路線圖視覺摘要
 
 ```
-v0.1.0 核心框架        v0.2.0 自我感知        v0.3.0 知識沉澱        v0.4.0 外部整合       v0.5.0 穩定化    v1.0.0
-Sprint 1              Sprint 2–3  Sprint 4    Sprint 4   Sprint 5+   Sprint 6+  Sprint 7+  Sprint 8+        TBD
-──────────────────────┬──────────┬───────────┬──────────┬───────────┬──────────┬──────────┬──────────────────┬─────
-Issue Mgmt            │ Onboard  │ Metrics ✅│ Retro    │ Tech Debt │ CI/CD    │ DORA     │ 安裝驗證         │ 官方
-專案等級              │ Health   │           │ Analytic✅│ ADR KB    │ 整合     │ Metrics  │ 多平台調查       │ 上架
-ADR-001               │ Check    │           │          │           │          │ 通知     │ 使用者文件       │
-──────────────────────┴──────────┴───────────┴──────────┴───────────┴──────────┴──────────┴──────────────────┴─────
-已交付 ✅              已交付 ✅               已交付 ✅               規劃中                 進行中            遠期
+v0.1.0 核心框架        v0.2.0 自我感知        v0.3.0 知識沉澱
+Sprint 1              Sprint 2–3             Sprint 4–6            版號凍結 v0.3.x
+──────────────────────┬──────────────────────┬─────────────────────┬──────────────────
+Issue Mgmt            │ Onboard + Health     │ Retro Analytics     │
+專案等級 + ADR-001    │ Check + Metrics      │ Tech Debt + ADR KB  │
+──────────────────────┴──────────────────────┴─────────────────────┘
+已交付 ✅              已交付 ✅               已交付 ✅
+
+                        M5 穩定化（進行中）                          v1.0.0
+                        Sprint 7+                                    TBD
+                        ────────────────────────────────────────────┬─────
+                        dispel + CI + 制衡案例 + Issue 回覆 +       │ 官方
+                        Bypass + 安裝驗證 + 多平台 + 使用者文件     │ 上架
+                        ────────────────────────────────────────────┴─────
+                        v0.3.x patch bump                            v1.0.0
 ```

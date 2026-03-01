@@ -1,9 +1,24 @@
 # Project Board
 
 **最後更新**：2026-03-01
-**當前 Sprint**：Sprint 7（完成）
+**當前 Sprint**：Sprint 8（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 7](sprints/sprint_7.md) → 本看板
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 8](sprints/sprint_8.md) → 本看板
+
+---
+
+## Sprint 8 — 進行中
+
+**Sprint Goal**：修復 Sprint Execution Issue 回覆缺口，恢復 QA 雙階段審查，建立制衡案例文件庫，引入輕量 Bypass 機制
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #14：恢復 QA 雙階段審查 | S | 1 | 待開始 |
+| US-21：真實制衡案例文件 | S | 1 | 待開始 |
+| US-18：Sprint Execution Issue 回覆自動化 | M | 2 | 待開始 |
+| US-20：輕量 Bypass 機制 | M | 2 | 待開始 |
+
+**計畫 Velocity**：6 points（4 Stories）
 
 ---
 
