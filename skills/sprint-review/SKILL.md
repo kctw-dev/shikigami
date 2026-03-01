@@ -271,7 +271,7 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 - [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag）
 - [ ] Sprint Metrics 計算並追加至 `docs/km/Metrics_Log.md`（見下方計算指引）
 - [ ] 是否有本 Sprint 值得記錄的角色制衡案例？若有，更新 `docs/km/ROLE_BALANCE_CASES.md`
-- [ ] **產出文件（`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`）完成最後修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件，不適用於 Knowledge Management 文件，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
+- [ ] **產出文件（`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`）完成最後修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件；`Retrospective_Log.md` 與 `Metrics_Log.md` 雖位於 `docs/km/` 路徑，但屬 Sprint 狀態文件，適用本規範。其他 Knowledge Management 文件如 `ROLE_BALANCE_CASES.md`、`Tech_Debt_Registry.md` 等不適用，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
   ```bash
   git add docs/PROJECT_BOARD.md docs/km/Retrospective_Log.md docs/km/Metrics_Log.md
   git commit -m "docs: Sprint N Review — 更新看板、Retro 記錄與 Metrics"
