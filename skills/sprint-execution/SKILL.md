@@ -27,6 +27,11 @@ Sprint 執行的核心 Skill。從 Sprint Backlog 逐個取出 Story，透過 **
 ## 3. 執行流程
 
 ```
+Issue 快掃（gh issue list --state open --limit 10）
+  |-- gh 失敗 --> 靜默略過，繼續下一步（不阻塞）
+  +-- 成功 --> 篩出需回覆的 issue → PO 草稿 → QA 審核 → 發布
+  |
+  v
 Sprint Backlog 中取出 Story
   |
   v
