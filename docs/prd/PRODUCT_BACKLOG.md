@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（新增 US-25 Scrum Master 零讀取架構）
+**最後更新**：2026-03-01（Sprint 11 Planning — US-25、Retro #20、US-S02 排入 Sprint）
 **管理者**：Product Owner
 
 ---
@@ -22,9 +22,10 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-25：Scrum Master 零讀取架構（主 session context 瘦身） | 45.0 | Must | M | Issue #12 | 待選 |
+| 1 | US-25：Scrum Master 零讀取架構（主 session context 瘦身） | 45.0 | Must | M | Issue #12 | In Sprint 11 |
 | 2 | US-24：Subagent Token 成本優化（成本 + 速度） | 36.0 | Should | L | Sprint 10 Retro | 待選 |
-| 3 | Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | — | Must | S | Sprint 10 Retro | 待選 |
+| 3 | Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | — | Must | S | Sprint 10 Retro | In Sprint 11 |
+| 4 | US-S02：Standup 健康快篩框架 Repo 誤判修正 | 18.0 | Should | S | Standup 回饋 | In Sprint 11 |
 
 ---
 
@@ -97,6 +98,40 @@ Sprint 10 實測數據：108M tokens / $234 / 957 API calls。Planning 佔 81%�
 **MoSCoW**：Should
 **Size**：L / **Points**：3
 **備注**：AC2 的模型指定可能需要 ADR（是否屬於技術選型），Sprint Planning 時由 Architect 判斷
+
+---
+
+### US-S02：Standup 健康快篩框架 Repo 誤判修正
+
+**標題**：健康快篩在框架 Repo 本身執行時跳過 CLAUDE.md 檢查
+
+**User Story**
+As a framework developer working in the shikigami repo itself, I want the standup health check to recognize it's running in the framework repo (not a consumer project) and skip the CLAUDE.md existence check, so that I don't get false positive CRITICAL alerts every standup.
+
+**背景**
+`CLAUDE.md` 是 `/onboarding` 為消費端專案產生的設定檔。shikigami 框架 repo 本身不需要此檔案，但 standup 健康快篩一律檢查導致每次報告 CRITICAL，掩蓋真正的健康問題。偵測方式：`plugin.json` 存在 → 框架 repo → 跳過 CLAUDE.md 檢查。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 框架 Repo 偵測 | `commands/standup.md`「區塊零：健康快篩」的「檢查 1」新增前置判斷：若 `./plugin.json` 存在，跳過 `CLAUDE.md` 檢查，標記為 PASS 並附加「（框架 Repo，CLAUDE.md 檢查略過）」 |
+| AC2 | [動態] | 消費端不受影響 | 在無 `plugin.json` 的專案中執行 standup，CLAUDE.md 缺失時仍出現 CRITICAL |
+| AC3 | [動態] | 框架端正向驗證 | 在含 `plugin.json` 且缺少 `CLAUDE.md` 的 repo 中執行 standup，輸出不含「CLAUDE.md 缺失」，快篩為 HEALTHY（若無其他 FAIL） |
+
+**RICE 評分**
+
+| 維度 | 分數 |
+|------|------|
+| Reach | 5 |
+| Impact | 1 |
+| Confidence | 90% |
+| Effort | 0.25 人週 |
+| **RICE Score** | **18.0** |
+
+**MoSCoW**：Should
+**Size**：S / **Points**：1
+**來源**：Standup 回饋（2026-03-01）
 
 ---
 
