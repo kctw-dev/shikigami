@@ -17,7 +17,7 @@
 | Retro #11：PLUGIN_DEV_NOTES.md 歸入 KM | S | 1 | 完成 |
 | shikigami:dispel 解咒模式 | M | 2 | 完成 |
 | US-T05：交叉引用驗證 | S | 1 | 完成 |
-| US-T07：CI Pipeline | M | 2 | 待開始（前置：US-T05） |
+| US-T07：CI Pipeline | M | 2 | 完成 |
 
 **計畫 Velocity**：7 points（5 Stories）
 

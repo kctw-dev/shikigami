@@ -24,7 +24,7 @@ Retro #10 和 #11 清除 Sprint 6 遺留的狀態回寫與檔案歸檔問題。s
 | Retro #11：PLUGIN_DEV_NOTES.md 歸入 KM | `docs/PLUGIN_DEV_NOTES.md` 移至 `docs/km/`，更新全倉庫引用路徑 | Developer | 完成 |
 | shikigami:dispel 解咒模式 | 新建 `skills/dispel/SKILL.md`（六角色分析框架）+ `commands/dispel.md` + scrum-master 路由更新 | Developer + Architect | 完成 |
 | US-T05：交叉引用驗證 | 新建 `scripts/validate-xrefs.sh`，掃描所有 .md 的 shikigami:xxx 引用並驗證對應 skill 存在 | Developer + QA | 完成 |
-| US-T07：CI Pipeline | 新建 `.github/workflows/validate.yml`，自動執行所有驗證腳本 | Developer + QA | 待開始（前置：US-T05） |
+| US-T07：CI Pipeline | 新建 `.github/workflows/validate.yml`，自動執行所有驗證腳本 | Developer + QA | 完成 |
 
 ---
 
