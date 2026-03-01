@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 10 Review 完成）
+**最後更新**：2026-03-01（新增 US-25 Scrum Master 零讀取架構）
 **管理者**：Product Owner
 
 ---
@@ -18,12 +18,50 @@
 | 5 | US-22：Retrospective 驅動角色權重自動調整 | 6.6 | Could | L | Issue #12-4 | Done (Sprint 10) |
 | 6 | US-23：Token 成本分環節記錄 | 33.6 | Must | M | Retro #18 | Done (Sprint 10) |
 
-### Sprint 10 Retro — 新增 Stories
+### Sprint 10 後 — 新增 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-24：Subagent Token 成本優化（成本 + 速度） | 36.0 | Should | L | Sprint 10 Retro | 待選 |
-| 2 | Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | — | Must | S | Sprint 10 Retro | 待選 |
+| 1 | US-25：Scrum Master 零讀取架構（主 session context 瘦身） | 45.0 | Must | M | Issue #12 | 待選 |
+| 2 | US-24：Subagent Token 成本優化（成本 + 速度） | 36.0 | Should | L | Sprint 10 Retro | 待選 |
+| 3 | Retro #20：SKILL.md token 記錄指引更新為 JSONL 提取 | — | Must | S | Sprint 10 Retro | 待選 |
+
+---
+
+### US-25：Scrum Master 零讀取架構（主 session context 瘦身）
+
+**標題**：主 session 不直接讀取大檔案，全部委託 Subagent 處理並回傳摘要
+
+**User Story**
+As a framework user, I want the Scrum Master (main session) to never read large files directly but instead delegate all file reading to subagents who return concise summaries, so that the main session's context stays lean and each API call's cache read overhead is minimized.
+
+**背景**
+Sprint 10 實測：957 API calls、104M cache read tokens。根因是主 session 直接讀取 PRODUCT_BACKLOG.md（355 行）、ROADMAP.md、PROJECT_BOARD.md 等大檔案，內容進入對話歷史後每次 API call 都重傳。Subagent 本身已有獨立乾淨 context，但主 session 作為 orchestrator 卻累積了所有讀取結果。解法：Scrum Master 改為「純調度者」，所有檔案讀取由 subagent 執行，主 session 僅接收結構化摘要（一句話級別）。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | sprint-planning 零讀取 | `skills/sprint-planning/SKILL.md` 修改 Scrum Master 調度指引：主 session 不使用 Read tool 讀取 PRODUCT_BACKLOG、ROADMAP、PROJECT_BOARD 等檔案；改為在 subagent prompt 中指定檔案路徑，由 subagent 自行讀取並回傳結構化摘要（Story 清單 + 估點 + AC 確認結果） |
+| AC2 | [靜態] | sprint-execution 零讀取 | `skills/sprint-execution/SKILL.md` 修改：Developer / QA / Security subagent 的派遣 prompt 指定需讀取的檔案路徑，主 session 不預讀 Story 內容；subagent 回傳格式限定為狀態 + 結論（PASS/FAIL + 一句話摘要） |
+| AC3 | [靜態] | sprint-review 零讀取 | `skills/sprint-review/SKILL.md` 修改：Retro Analytics、PO Demo、Stakeholder 確認等步驟均由 subagent 讀取所需檔案；主 session 不直接讀取 Retrospective_Log、Metrics_Log、sprint_N.md |
+| AC4 | [動態] | context 瘦身驗證 | 下一個 Sprint 的主 session cache read tokens 較 Sprint 10（104M）下降 60% 以上 |
+
+**RICE 評分**
+
+| 維度 | 分數 |
+|------|------|
+| Reach | 10 |
+| Impact | 3 |
+| Confidence | 75% |
+| Effort | 0.5 人週 |
+| **RICE Score** | **45.0** |
+
+**MoSCoW**：Must
+**Size**：M / **Points**：2
+**對應 Issue**：#12（狀態外化架構）
+**設計原則**：SM 只需知道做決策的最小資訊。所有資料的讀取、過濾、摘要都是 Subagent 的職責，SM 不碰原始資料。
+**備注**：與 US-24 AC1（檔案傳遞模式）有重疊。US-25 聚焦「主 session 不讀檔」的架構改變；US-24 的 AC2（模型分級）暫緩、AC3/AC4（call 數量與成本驗證）可作為 US-25 的後續驗證指標。需 ADR-003 Checklist（修改 3 個 SKILL.md）。
 
 ---
 
