@@ -115,7 +115,7 @@ As a framework developer working in the shikigami repo itself, I want the standu
 
 | # | 類型 | 條件 | 通過標準 |
 |---|------|------|----------|
-| AC1 | [靜態] | 框架 Repo 偵測 | `commands/standup.md`「區塊零：健康快篩」的「檢查 1」新增前置判斷：若 `./plugin.json` 存在，跳過 `CLAUDE.md` 檢查，標記為 PASS 並附加「（框架 Repo，CLAUDE.md 檢查略過）」 |
+| AC1 | [靜態] | 框架 Repo 偵測 | `commands/standup.md`「區塊零：健康快篩」的「檢查 1」新增前置判斷：若 `./.claude-plugin/plugin.json` 存在且非空，跳過 `CLAUDE.md` 檢查，標記為 PASS 並附加「（框架 Repo，CLAUDE.md 檢查略過）」 |
 | AC2 | [動態] | 消費端不受影響 | 在無 `plugin.json` 的專案中執行 standup，CLAUDE.md 缺失時仍出現 CRITICAL |
 | AC3 | [動態] | 框架端正向驗證 | 在含 `plugin.json` 且缺少 `CLAUDE.md` 的 repo 中執行 standup，輸出不含「CLAUDE.md 缺失」，快篩為 HEALTHY（若無其他 FAIL） |
 

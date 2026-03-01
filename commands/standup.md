@@ -13,20 +13,20 @@ disable-model-invocation: true
 
 **前置判斷（框架 Repo 偵測）**：
 
-若 `./plugin.json` 存在於專案根目錄，代表當前處於框架開發 Repo（非消費端專案）。此時 `CLAUDE.md` 為非必要文件：
+若 `./.claude-plugin/plugin.json` 存在且非空，代表當前處於框架開發 Repo（非消費端專案）。此時 `CLAUDE.md` 為非必要文件：
 - 跳過 `CLAUDE.md` 存在性檢查
 - 將 CLAUDE.md 檢查結果標記為 PASS
 - 輸出附加說明：「（框架 Repo，CLAUDE.md 檢查略過）」
 - 繼續檢查其餘 2 個核心文件（PROJECT_BOARD.md、PRODUCT_BACKLOG.md）
 
-若 `./plugin.json` 不存在，依原有邏輯執行全部 3 個核心文件檢查，行為不變。
+若 `./.claude-plugin/plugin.json` 不存在，依原有邏輯執行全部 3 個核心文件檢查，行為不變。
 
-掃描以下 3 個核心文件是否存在且非空：
+掃描以下 3 個核心文件是否存在且非空（若已觸發框架 Repo 前置判斷，CLAUDE.md 行略過）：
 - `./CLAUDE.md`
 - `docs/PROJECT_BOARD.md`
 - `docs/prd/PRODUCT_BACKLOG.md`
 
-判定規則：任一文件不存在或為空（0 bytes）→ FAIL；全部存在且有內容 → PASS。
+判定規則：任一文件不存在或為空（0 bytes）→ FAIL；全部存在且有內容 → PASS。框架 Repo 情境下，CLAUDE.md 不存在視為 PASS，不計入 FAIL 條件。
 
 **檢查 4：Retro Action Items 逾期偵測**
 
