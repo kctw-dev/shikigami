@@ -23,11 +23,13 @@ Sprint Review 的目的是驗收本 Sprint 交付的成果，確認是否符合�
 ### 步驟
 
 1. **PO Subagent 展示 Demo 結果**
+   - PO subagent prompt 中指定 `docs/sprints/sprint_N.md` 完整路徑，由 **PO subagent 自行讀取** Sprint 成果內容；**主 session 不直接讀取 sprint_N.md**
    - 針對每個已完成的 User Story，展示可運行的功能
    - Demo 應基於實際程式碼執行結果，而非文件描述
    - 逐一對照 Acceptance Criteria 確認通過狀態
 
 2. **Stakeholder Subagent 確認商業期待**
+   - Stakeholder subagent prompt 中指定 `docs/sprints/sprint_N.md` 完整路徑，由 **Stakeholder subagent 自行讀取** Sprint 成果；**主 session 不直接讀取 sprint_N.md**
    - 檢視 Demo 結果是否符合原始商業需求
    - 確認交付物是否達到預期的商業價值
    - 提出回饋意見或調整方向
@@ -54,7 +56,7 @@ Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定�
 
    **觸發時機**：Retrospective 開始時第一步執行，**報告展示完畢前不得開始收集 Good / Problem / Action**。
 
-   **指令**：讀取 `docs/km/Retrospective_Log.md`，依下列規則分析並輸出完整報告。
+   **指令**：派遣 Analytics subagent，在 prompt 中指定 `docs/km/Retrospective_Log.md` 完整路徑，由 **Analytics subagent 自行讀取**該檔案，依下列規則分析並回傳完整報告。**主 session 不直接讀取 Retrospective_Log.md**，僅接收 subagent 回傳的分析報告。
 
    #### 前置檢查
 
@@ -284,11 +286,11 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 
 ### Sprint Metrics 計算指引
 
-Sprint Review 結束時，依序執行以下計算並將結果追加至 `docs/km/Metrics_Log.md`。
+Sprint Review 結束時，派遣 Metrics subagent 執行以下計算並將結果追加至 `docs/km/Metrics_Log.md`。**主 session 不直接讀取 sprint_N.md 或 Metrics_Log.md**，所有讀取與計算均由 Metrics subagent 負責，subagent 回傳計算結果後由主 session 確認並指示 subagent 寫入。
 
 #### 步驟 1：讀取本 Sprint 資料
 
-讀取 `docs/sprints/sprint_N.md`（N 為本 Sprint 編號），收集交付成果表格。
+Metrics subagent 自行讀取 `docs/sprints/sprint_N.md`（N 為本 Sprint 編號），收集交付成果表格。
 
 #### 步驟 2：Velocity 計算
 
@@ -311,7 +313,7 @@ Sprint Review 結束時，依序執行以下計算並將結果追加至 `docs/km
 
 #### 步驟 4：趨勢分析
 
-讀取 `docs/km/Metrics_Log.md` 取得歷史 Velocity 資料：
+Metrics subagent 自行讀取 `docs/km/Metrics_Log.md` 取得歷史 Velocity 資料：
 
 - **Sprint 1–2（資料不足）**：輸出「資料不足」，不進行趨勢判斷
 - **Sprint 3+（啟用趨勢）**：取最近三筆 Velocity，依下列優先順序判定：
@@ -322,9 +324,9 @@ Sprint Review 結束時，依序執行以下計算並將結果追加至 `docs/km
 
 #### 步驟 5：歷史回溯（首次建立或檔案為空時）
 
-若 `docs/km/Metrics_Log.md` 不存在或內容為空（無任何資料列），則：
+若 `docs/km/Metrics_Log.md` 不存在或內容為空（無任何資料列），Metrics subagent 執行以下操作：
 
-1. 掃描 `docs/sprints/` 目錄下所有 `sprint_N.md`（依 N 升序）
+1. 掃描 `docs/sprints/` 目錄下所有 `sprint_N.md`（依 N 升序），由 Metrics subagent 自行讀取各 sprint 檔案
 2. 對每個 sprint 檔案執行步驟 2–3，計算歷史 Velocity 與完成率
 3. 依序寫入 Metrics_Log.md 表格，趨勢欄填入「資料不足」（Sprint 1–2）或依步驟 4 計算
 
@@ -346,11 +348,11 @@ Sprint Review 結束時，依序執行以下計算並將結果追加至 `docs/km
 
 ### Token 成本摘要指引
 
-Sprint Review 結束時，依下列步驟產出 Token 成本摘要。
+Sprint Review 結束時，派遣 Metrics subagent 依下列步驟產出 Token 成本摘要。**主 session 不直接讀取 Metrics_Log.md**，由 subagent 讀取並回傳摘要。
 
 #### 步驟 1：讀取 Token 表格
 
-開啟 `docs/km/Metrics_Log.md`，找到「Token 成本記錄」區塊的表格。
+Metrics subagent 自行讀取 `docs/km/Metrics_Log.md`，找到「Token 成本記錄」區塊的表格。
 
 #### 步驟 2：Fallback 判斷
 
