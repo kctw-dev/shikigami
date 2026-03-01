@@ -23,7 +23,7 @@
 
 - `QA-推翻設計`：QA Engineer 在審查階段發現問題，推翻或要求修改設計/實作
 - `PO-退回`：Product Owner 退回 Story 或需求，要求重新規劃
-- `Architect-上調估點`：Architect 對 Story 估點進行修正（上調或下調）
+- `Architect-調整估點`：Architect 對 Story 估點進行校正（上調或下調），修正 PO 的初始估算
 - `Security-阻擋`：Security Engineer 因安全疑慮阻擋功能實作或部署
 - `Hard-Gate-攔截`：框架 Hard Gate 機制攔截流程，強制補完前置條件
 
@@ -62,7 +62,7 @@
 | **Sprint 來源** | Sprint 4 |
 | **情境描述** | PO 規劃 US-08（Sprint Metrics）時估為 M（2 points），Architect 實際評估技術內容後認為只需在 sprint-review SKILL.md 加入計算指引，複雜度低於預期。 |
 | **制衡角色** | Architect → PO |
-| **制衡類型** | `Architect-上調估點` |
+| **制衡類型** | `Architect-調整估點` |
 | **決策結果** | Architect 將 US-08 從 M 重新估為 S（1 point），釋放出的容量讓 Sprint 4 能額外納入 US-T06（Command 路由驗證）。 |
 | **後續影響** | Sprint 4 以 4 points（原規劃更高）完成 3 個 Story，完成率 100%。Architect 估點校正成為持續的品質機制。 |
 
@@ -100,7 +100,7 @@
 |----------|----------|----------|
 | `Hard-Gate-攔截` | 2 | 案例 1、案例 5 |
 | `QA-推翻設計` | 2 | 案例 2、案例 4 |
-| `Architect-上調估點` | 1 | 案例 3 |
+| `Architect-調整估點` | 1 | 案例 3 |
 
 覆蓋制衡類型：3 種（共 5 種可能類型）
 
