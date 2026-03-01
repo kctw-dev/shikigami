@@ -19,13 +19,15 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 
 ### 檢查 1：必要文件完整性
 
-掃描以下 3 個核心文件：
+掃描以下 5 個核心文件：
 
 | 文件 | 路徑 | 說明 |
 |------|------|------|
 | CLAUDE.md | `./CLAUDE.md`（專案根目錄） | 框架啟動設定 |
 | PROJECT_BOARD | `docs/PROJECT_BOARD.md` | Sprint 進度看板 |
 | PRODUCT_BACKLOG | `docs/prd/PRODUCT_BACKLOG.md` | 產品待辦清單 |
+| ROADMAP | `docs/prd/ROADMAP.md` | 版本里程碑規劃 |
+| Metrics_Log | `docs/km/Metrics_Log.md` | Sprint 度量紀錄 |
 
 **判定規則**：
 - 文件不存在 → FAIL
@@ -36,6 +38,13 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 - CLAUDE.md 缺失：「請從 `templates/CLAUDE.md.template` 複製並填入專案資訊」
 - PROJECT_BOARD 缺失：「請執行 `/sprint` 建立 Sprint」
 - PRODUCT_BACKLOG 缺失：「請執行 Product Discovery 建立 Backlog」
+- ROADMAP 缺失：「請建立 `docs/prd/ROADMAP.md` 定義版本里程碑」
+- Metrics_Log 缺失：「將在下次 Sprint Review 時由 Metrics 計算自動建立」
+
+**ROADMAP 版號同步檢查**（僅在 ROADMAP PASS 時執行）：
+- 讀取 ROADMAP.md 中標示為「進行中」的版本號
+- 讀取 `.claude-plugin/plugin.json` 的 `version` 欄位
+- 兩者一致 → PASS；不一致 → WARN（「ROADMAP 版本 {X} 與 plugin.json 版本 {Y} 不同步」）
 
 ### 檢查 2：孤兒 Story 偵測
 
