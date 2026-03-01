@@ -1,9 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-01（Sprint 12 Review 完成）
-**當前 Sprint**：Sprint 12（完成）
+**最後更新**：2026-03-01（Sprint 13 Planning 完成）
+**當前 Sprint**：Sprint 13（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 12](sprints/sprint_12.md) → 本看板
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 13](sprints/sprint_13.md) → 本看板
+
+---
+
+## Sprint 13 — 進行中
+
+**Sprint Goal**：清零 Sprint 12 Retro 流程缺口，建立 Sprint Planning 平行派工正式規範，為 M5 外部發布排除最後的流程控制風險
+**結果**：進行中
+**Stakeholder 驗收**：待確認
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #26：PO Demo 應讀取 repo 源碼而非 plugin cache | S | 1 | 待開始 |
+| Retro #27：Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | S | 1 | 待開始 |
+| Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量 | S | 1 | 待開始 |
+| Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | S | 1 | 待開始 |
+
+**計畫 Velocity**：4 points（4 Stories）
 
 ---
 
