@@ -82,33 +82,35 @@ preflight_check() {
 # JSON 輔助：檢查頂層 key 是否存在於 JSON 檔案
 # 參數：$1 = 檔案路徑，$2 = key 名稱
 # 回傳：0 = 存在，1 = 不存在
-# 實作：僅比對行首有雙引號包住的 key，避免巢狀值干擾
+# 限制：假設 JSON 使用 2-space 縮排，頂層 key 恰好縮排 2 個空格
+#        key 名稱必須為純英數字（不含 regex 特殊字元）
 # ---------------------------------------------------------------------------
 json_has_key() {
   local filepath="$1"
   local key="$2"
-  grep -qE "^\s*\"${key}\"\s*:" "$filepath"
+  grep -qE "^  \"${key}\"\s*:" "$filepath"
 }
 
 # ---------------------------------------------------------------------------
 # JSON 輔助：提取頂層 key 的字串值
 # 參數：$1 = 檔案路徑，$2 = key 名稱
 # 輸出：key 對應的字串值（去除雙引號），若非字串值則輸出空字串
+# 限制：僅適用於字串值欄位，物件/陣列值行為未定義；假設 2-space 縮排
 # ---------------------------------------------------------------------------
 json_get_string_value() {
   local filepath="$1"
   local key="$2"
-  grep -E "^\s*\"${key}\"\s*:" "$filepath" \
+  grep -E "^  \"${key}\"\s*:" "$filepath" \
     | head -1 \
-    | sed -E "s/^\s*\"${key}\"\s*:\s*\"([^\"]*)\".*/\1/" \
+    | sed -E "s/^  \"${key}\"\s*:\s*\"([^\"]*)\".*/\1/" \
     || true
 }
 
 # ---------------------------------------------------------------------------
 # JSON 輔助：取出所有頂層 key（僅取第一層，排除巢狀物件/陣列內的 key）
 # 輸出：每行一個 key 名稱
-# 實作說明：掃描 JSON 頂層縮排層次（以 2 個空格或 4 個空格為首的行視為頂層）
-# 採用行縮排深度 0 或 1 的方式：只取 "key": 在第 1 縮排層的行（depth=1 indent）
+# 限制：假設 JSON 使用 2-space 縮排（頂層 key 恰好縮排 2 個空格）
+#        若 JSON 使用 tab 或 4-space 縮排，本函式回傳空字串，AC4 將被跳過
 # ---------------------------------------------------------------------------
 json_get_top_level_keys() {
   local filepath="$1"
@@ -153,7 +155,7 @@ validate_marketplace_required_fields() {
   done
 
   # 驗證 plugins 陣列欄位
-  if grep -qE '^\s*"plugins"\s*:\s*\[' "$MARKETPLACE_JSON"; then
+  if grep -qE '^  "plugins"\s*:\s*\[' "$MARKETPLACE_JSON"; then
     print_pass "marketplace.json：包含必填欄位「plugins」（陣列格式）"
   else
     print_error "marketplace.json：缺少必填欄位「plugins」（需為陣列格式）"
