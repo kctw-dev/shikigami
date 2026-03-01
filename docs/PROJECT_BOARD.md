@@ -16,7 +16,7 @@
 |-------|------|--------|------|------|
 | ADR-002：測試框架技術選型 | S | 1 | 完成 | 純 Bash + 共享函式庫 |
 | US-10：Tech Debt Registry | M | 2 | 完成 | Registry + Developer prompt + DoD 自檢 |
-| US-T01：Skill 完整性驗證 | S | 1 | 進行中 | ADR-002 已解鎖 |
+| US-T01：Skill 完整性驗證 | S | 1 | 完成 | validate-skills.sh + 共享函式庫 |
 | US-FIX-01：修復審計發現 | M | 2 | 完成 | 5 commits, 13 項修復 |
 
 **計畫 Velocity**：6 points（4 Stories）
