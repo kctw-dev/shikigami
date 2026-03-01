@@ -27,6 +27,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。主要由 **Product Own
 - [ ] 上個 Sprint 的 **Retro Action Items** 自動列入 Backlog（若有未完成項目）
 - [ ] **PO subagent** 建立 `docs/sprints/sprint_N.md`（N 為遞增的 Sprint 編號）
 - [ ] 更新 `docs/PROJECT_BOARD.md`，反映新 Sprint 的 Stories 配置
+- [ ] **完成 `docs/PROJECT_BOARD.md` 或 `docs/sprints/sprint_N.md` 修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件，範圍見下方說明）
 
 ---
 
@@ -61,6 +62,18 @@ Sprint Planning 完成後，必須產出或更新以下文件：
 | `docs/sprints/sprint_N.md` | 新建。包含 Sprint Goal、選入的 Stories 清單、T-shirt size 估算、驗收標準摘要 |
 | `docs/PROJECT_BOARD.md` | 更新。反映新 Sprint 的 Stories 配置，將選入的 Stories 移至「Sprint Backlog」欄位 |
 | `docs/prd/PRODUCT_BACKLOG.md` | 更新。已選入的 Story 標記狀態為 `In Sprint` 或對應的狀態標記 |
+
+### Commit + Push 規範
+
+完成上述任一 Sprint 狀態文件修改後，**立即執行**：
+
+```bash
+git add docs/PROJECT_BOARD.md docs/sprints/sprint_N.md
+git commit -m "docs: Sprint N Planning — 更新看板與 Sprint 文件"
+git push
+```
+
+> **範圍限制**：此即時 commit + push 規範**僅適用於 Sprint 狀態文件**（`PROJECT_BOARD.md`、`docs/sprints/sprint_N.md`、`docs/km/Metrics_Log.md`、`docs/km/Retrospective_Log.md`）。Knowledge Management 文件（ADR、SDD、PRODUCT_BACKLOG.md、ROADMAP.md 等）**不在此規範範圍內**，避免觸發 ADR-003 Out-of-Sprint Hard Gate。
 
 ---
 
