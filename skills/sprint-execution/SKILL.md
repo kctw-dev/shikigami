@@ -96,6 +96,7 @@ Sprint Backlog 還有 Story？
 | 設定 | 無硬編碼金鑰，配置透過環境變數管理 | [ ] |
 | 度量 | Metrics_Log.md 本 Sprint 數據已更新（Velocity、完成率、趨勢） | [ ] |
 | 反回歸 | 既有測試全部仍然通過 | [ ] |
+| 技術債 | 取捷徑情況已用 `[TECH-DEBT]` 標記，並更新 `docs/km/Tech_Debt_Registry.md`（詳見 `developer-prompt.md` 的「Tech Debt 管理」區段） | [ ] |
 
 ---
 
