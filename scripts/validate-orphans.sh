@@ -7,7 +7,7 @@
 #
 # AC1：孤兒定義 — docs/ 下的 .md 文件未被任何其他 .md 文件以相對路徑引用
 #       且不在豁免清單中
-# AC2：輸出格式 — WARNING: <file_path>: 孤兒文件（無任何 .md 引用）
+# AC2：輸出格式 — WARNING: <file_path>: 孤兒文件（無任何 .md 引用）  [直接 echo，不使用 print_warning]
 #       exit code 均為 0（warning 不影響 CI pass/fail）
 # AC3：處置說明 — 見 skills/health-check/SKILL.md 第 6 節
 #
@@ -99,13 +99,14 @@ is_referenced() {
   local filename
   filename=$(basename "$filepath")
 
-  # 搜尋所有 .md 文件中是否有對此文件名的相對路徑引用
-  # 引用格式範例：
+  # 搜尋所有 .md 文件中是否有對此文件名的 Markdown link 引用
+  # 只匹配真實的 Markdown 相對路徑引用格式：
+  #   [text](filename.md)
   #   [text](./filename.md)
   #   [text](../dir/filename.md)
   #   [text](dir/filename.md)
-  #   [text](filename.md)
-  if grep -rl --include="*.md" "${filename}" . 2>/dev/null \
+  # 排除純文字敘述、程式碼區塊中的路徑字串
+  if grep -rlE --include="*.md" "\]\([^)]*${filename}\)" . 2>/dev/null \
       | grep -v "^\./${filepath}$" \
       | grep -v "^\\./.git/" \
       | grep -q .; then
@@ -141,7 +142,7 @@ scan_and_detect_orphans() {
 
   # 輸出孤兒警告
   for orphan in "${orphan_list[@]+"${orphan_list[@]}"}"; do
-    print_warning "${orphan}: 孤兒文件（無任何 .md 引用）"
+    echo "WARNING: ${orphan}: 孤兒文件（無任何 .md 引用）"
     WARNING_COUNT=$((WARNING_COUNT + 1))
   done
 }
