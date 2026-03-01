@@ -12,7 +12,7 @@ Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專
 
 **不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
 
-**當前版本：v0.3.1**（17 Skills / 7 Agents / 4 Commands）— 本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，連續 7 個 Sprint 完成率 100%。
+**當前版本：v0.3.3**（17 Skills / 7 Agents / 4 Commands）— 本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，連續 9 個 Sprint 完成率 100%。
 
 ---
 
@@ -245,19 +245,19 @@ shikigami.project_level: medium
 
 ## 實戰驗證
 
-Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，目前已完成 7 個 Sprint，交付 3 個版本：
+Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum Team 自治開發，目前已完成 9 個 Sprint，交付 3 個版本 + 穩定化持續中：
 
 | 版本 | 主題 | Sprint | 交付內容 |
 |------|------|--------|----------|
 | v0.1.0 | 核心框架 | Sprint 1 | 16 Skills + 7 Agents + 3 Commands + Issue Management |
 | v0.2.0 | 自我感知 | Sprint 2–4 | Onboarding + Health Check + Sprint Metrics |
 | v0.3.0 | 知識沉澱 | Sprint 4–6 | Retrospective Analytics + Tech Debt Registry + 5 驗證腳本 + Hard Gate 機制 |
-| v0.5.0 | 穩定化 | Sprint 7+ | dispel 解咒模式 + 交叉引用驗證 + CI Pipeline（進行中） |
+| v0.3.x | 穩定化 | Sprint 7–9 | dispel 解咒模式 + CI Pipeline + 制衡案例 + Issue 回覆自動化 + Bypass 機制 + Token 成本透明化 + 孤兒文件偵測 |
 
-**累積數據**（截至 Sprint 7）：
-- 連續 7 個 Sprint 完成率 100%，Velocity 穩定（8→7，±20% 內）
-- 3 個 ADR（架構決策紀錄）、16 個 Retro Action Items（14 已關閉）
-- 7 個自動化驗證腳本（Skill / Command / Version / Agent / JSON Schema / Cross-Reference / CI Pipeline）
+**累積數據**（截至 Sprint 9）：
+- 連續 9 個 Sprint 完成率 100%，Velocity 穩定（歷史：8→5→5→4→6→8→7→6→5）
+- 3 個 ADR（架構決策紀錄）、19 個 Retro Action Items（17 已關閉）
+- 8 個自動化驗證腳本（Skill / Command / Version / Agent / JSON Schema / Cross-Reference / Orphan / CI Pipeline）
 
 **開發流程實證**：
 - **Product Discovery**：PO 分析需求 → Architect 評估可行性 → QA 確認驗收標準
@@ -268,7 +268,7 @@ Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum
 
 產出：
 - `docs/adr/` — 架構決策紀錄（ADR-001 ~ ADR-003）
-- `docs/sprints/` — Sprint 規劃與執行紀錄（sprint_1 ~ sprint_7）
+- `docs/sprints/` — Sprint 規劃與執行紀錄（sprint_1 ~ sprint_9）
 - `docs/km/Retrospective_Log.md` — 每次犯的錯都記下來，不重複犯
 - `docs/km/Metrics_Log.md` — Velocity 趨勢與完成率追蹤
 - `docs/km/ROLE_BALANCE_CASES.md` — [真實制衡案例記錄](docs/km/ROLE_BALANCE_CASES.md)（角色制衡的實際發生場景）
