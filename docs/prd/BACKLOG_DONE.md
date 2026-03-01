@@ -477,3 +477,82 @@ As a Developer, I want framework documents (DoD, standup, health-check, sprint-p
 **RICE**：90.0
 **MoSCoW**：Must
 **Size**：M
+
+---
+
+## Sprint 6（2026-03-01）
+
+**Sprint Goal**：建立 Hard Gate Checklist 機制（US-FIX-02），擴展測試框架覆蓋（US-T02、US-T03），並清零 Sprint 5 Retro 技術債
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| US-T02：Agent 完整性驗證 | 54.0 | Must | ADR-002 | Done |
+| US-T03：JSON Schema 驗證 | 25.7 | Must | ADR-002 | Done |
+| US-FIX-02：Hard Gate Checklist 機制 | 27.0 | Must | ADR-003 | Done |
+
+> 備注：Retro #7 和 Retro #8 為 Retro Action Items，不是 Backlog Stories，不歸入此表。
+
+---
+
+### US-T02：Agent 完整性驗證
+
+**標題**：Agent 目錄 frontmatter 驗證腳本
+
+**User Story**
+As a Developer, I want a script that verifies every agent file has correct frontmatter fields, so that plugin installation doesn't fail silently.
+
+**Acceptance Criteria**
+- AC1：掃描 `agents/` 下所有 `.md` 檔案，輸出清單，數量與目錄實際 `.md` 檔案數一致
+- AC2：驗證 frontmatter 包含 `name`、`description`、`model` 三個欄位；任一缺失則 ERROR
+- AC3：驗證 `model` 值為合法值之一：`sonnet`、`haiku`、`opus`（hardcode，大小寫敏感完全比對）
+- AC4：驗證 `description` 欄位存在且非空字串；空字串或僅含空白字元則 ERROR
+- AC5：exit code 0 = 全部通過，非 0 = 存在至少一個 ERROR
+
+**RICE**：54.0
+**MoSCoW**：Must
+**ADR**：ADR-002
+**Size**：S
+**TDD**：Red-Green-Refactor，validate-agents.sh + shared library
+
+---
+
+### US-T03：JSON Schema 驗證
+
+**標題**：plugin.json / marketplace.json Schema 驗證腳本
+
+**User Story**
+As a Developer, I want automated validation of plugin.json and marketplace.json, so that malformed manifests are caught before users try to install.
+
+**Acceptance Criteria**
+- AC1：驗證 `plugin.json` 包含必填欄位：`name`、`version`、`description`、`author`；任一缺失則 ERROR
+- AC2：驗證 `marketplace.json` 包含必填欄位：`name`、`plugins` 陣列；任一缺失則 ERROR
+- AC3：驗證 `version` 格式符合 semver（`major.minor.patch`，三段純數字）
+- AC4：`plugin.json` 允許欄位白名單（10 欄位）；白名單以外觸發 WARNING（非 ERROR），不影響 exit code
+- AC5：exit code 0 = 無 ERROR；非 0 = 存在至少一個 ERROR
+
+**RICE**：25.7
+**MoSCoW**：Must
+**ADR**：ADR-002
+**Size**：M（Architect 上調）
+
+---
+
+### US-FIX-02：Hard Gate Checklist 機制
+
+**標題**：Framework Document Change / Out-of-Sprint Change / Ceremony Integrity 三重 Hard Gate
+
+**User Story**
+As a Scrum Master, I want structural Hard Gate checklists at framework document changes, out-of-sprint changes, and ceremony completion, so that process compliance is enforced by mechanism rather than by memory.
+
+**Acceptance Criteria**
+- AC-B1：ADR-003 狀態為 Accepted（前置條件）
+- AC-B2：Preflight Check 區段，4 項二元 checklist
+- AC-B3：Framework Document Change Audit 與 ADR-003 完全對應
+- AC-B4a：Out-of-Sprint Change 偵測邏輯（正常路徑）
+- AC-B4b：緊急例外路徑（`[EMERGENCY]` + 48hr 稽核）
+- AC-B5：Ceremony Integrity Audit（Planning 4 項 + Review 5 項）
+
+**RICE**：27.0
+**MoSCoW**：Must
+**ADR**：ADR-003
+**Size**：L

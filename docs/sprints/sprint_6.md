@@ -1,7 +1,7 @@
 # Sprint 6
 
 > 週期：2026-03-01 ~ 2026-03-08
-> 狀態：進行中
+> 狀態：完成
 > 專案等級：low（完全自治）
 
 ---
@@ -20,10 +20,10 @@ Retro #7 和 #8 清除 Sprint 5 遺留的 DoD 不一致與 QA 審查範圍模糊
 
 | Story | 任務 | 負責 | 狀態 |
 |---|---|---|---|
-| Retro #7：DoD 第 8 層同步 | `skills/scrum-master/SKILL.md` 第 8 節 DoD 補入「技術債」層（第 8 層），與 `skills/sprint-execution/SKILL.md` 對齊，兩份文件 DoD 表格內容完全一致 | Developer | 待開始 |
-| Retro #8：QA Review 範圍界定 | `skills/sprint-execution/quality-reviewer-prompt.md` 新增「僅審查本次 Story 變更範圍，既存問題不計入 FAIL」指引；問題分類標注改為「應分類」 | QA | 待開始 |
-| US-T02：Agent 完整性驗證 | 新建 Agent 完整性驗證腳本（建議 `scripts/validate-agents.sh`），掃描 `agents/` 下所有 `.md` 檔案，驗證 frontmatter 合規（含 model hardcode whitelist） | Developer + QA | 待開始 |
-| US-T03：JSON Schema 驗證 | 新建 JSON Schema 驗證腳本（建議 `scripts/validate-json.sh`），驗證 `plugin.json` 與 `marketplace.json` 必填欄位、version semver 格式、plugin.json 欄位白名單 | Developer + QA | 待開始 |
+| Retro #7：DoD 第 8 層同步 | `skills/scrum-master/SKILL.md` 第 8 節 DoD 補入「技術債」層（第 8 層），與 `skills/sprint-execution/SKILL.md` 對齊，兩份文件 DoD 表格內容完全一致 | Developer | 完成 |
+| Retro #8：QA Review 範圍界定 | `skills/sprint-execution/quality-reviewer-prompt.md` 新增「僅審查本次 Story 變更範圍，既存問題不計入 FAIL」指引；問題分類標注改為「應分類」 | QA | 完成 |
+| US-T02：Agent 完整性驗證 | 新建 Agent 完整性驗證腳本（建議 `scripts/validate-agents.sh`），掃描 `agents/` 下所有 `.md` 檔案，驗證 frontmatter 合規（含 model hardcode whitelist） | Developer + QA | 完成 |
+| US-T03：JSON Schema 驗證 | 新建 JSON Schema 驗證腳本（建議 `scripts/validate-json.sh`），驗證 `plugin.json` 與 `marketplace.json` 必填欄位、version semver 格式、plugin.json 欄位白名單 | Developer + QA | 完成 |
 | US-FIX-02：Hard Gate Checklist 機制 | `skills/scrum-master/SKILL.md` 新增 Preflight Check 區段與三個 Hard Gate（Framework Document Change、Out-of-Sprint Change、Ceremony Integrity），與 ADR-003 實作方式一致 | Developer + QA | 待開始（前置：ADR-003 Accepted） |
 
 ---
@@ -213,8 +213,8 @@ As a Scrum Master, I want structural Hard Gate checklists at framework document 
 
 | # | Action（原始） | 本 Sprint 處理方式 | 狀態 |
 |---|---------------|-------------------|------|
-| Sprint 5 #1（Issue #7） | DoD 第 8 層同步：scrum-master SKILL.md 補入技術債層 | Retro #7 納入 Sprint 6，作為獨立 1pt Story 交付 | Sprint 6 執行中 |
-| Sprint 5 #2（Issue #8） | QA Review 範圍界定：quality-reviewer-prompt.md 新增範圍界定條款 | Retro #8 納入 Sprint 6，作為獨立 1pt Story 交付 | Sprint 6 執行中 |
+| Sprint 5 #1（Issue #7） | DoD 第 8 層同步：scrum-master SKILL.md 補入技術債層 | Retro #7 納入 Sprint 6，作為獨立 1pt Story 交付 | Done |
+| Sprint 5 #2（Issue #8） | QA Review 範圍界定：quality-reviewer-prompt.md 新增範圍界定條款 | Retro #8 納入 Sprint 6，作為獨立 1pt Story 交付 | Done |
 
 ---
 

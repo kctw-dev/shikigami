@@ -70,17 +70,24 @@ Sprint Review 時自動產出：
 
 ---
 
-## v0.3.0 知識沉澱 — 規劃中
+## v0.3.0 知識沉澱 — 已交付（Sprint 4–6）
 
 **主題**：框架從過去的經驗中學習，讓每個 Sprint 比上一個更好
 
-**目標**：Retrospective 趨勢自動分析，Tech Debt 系統化管理，決策知識庫可查詢
+**目標**：Retrospective 趨勢自動分析，Tech Debt 系統化管理，品質保障體系機制化
 
 | Story | 功能 | Sprint |
 |---|---|---|
 | US-09 | Retrospective Analytics — 問題趨勢分析與模式辨識 | Sprint 4 ✅ |
 | US-10 | Tech Debt Registry — 技術債追蹤與自動排入 Backlog | Sprint 5 ✅ |
-| US-11 | Decision Knowledge Base — ADR 查詢與決策影響追蹤 | Sprint 5+ |
+| ADR-002 | 測試框架技術選型（Pure Bash + shared library） | Sprint 5 ✅ |
+| ADR-003 | SQA 審計閘介入模型（3 Hard Gate + 1 Soft Gate） | Sprint 5 ✅ |
+| US-T01 | Skill 完整性驗證 | Sprint 5 ✅ |
+| US-FIX-01 | 修復審計發現（16 項框架監控缺口） | Sprint 5 ✅ |
+| US-T02 | Agent 完整性驗證 | Sprint 6 ✅ |
+| US-T03 | JSON Schema 驗證 | Sprint 6 ✅ |
+| US-FIX-02 | Hard Gate Checklist 機制 | Sprint 6 ✅ |
+| US-11 | Decision Knowledge Base — ADR 查詢與決策影響追蹤 | 延後至 v0.4.0+ |
 
 ### US-09：Retrospective Analytics
 
@@ -105,7 +112,9 @@ Sprint Review 時自動產出：
 - ADR 影響追蹤：這個決策影響了哪些 Story、哪些檔案
 - 決策失效偵測：如果後續 Sprint 因為某決策出問題，標記 ADR 為 `Superseded`
 
-**完成條件**：Retrospective 趨勢分析能回溯全部歷史、Tech Debt 有完整生命週期、ADR 可被語意查詢
+**完成條件**：Retrospective 趨勢分析能回溯全部歷史、Tech Debt 有完整生命週期、品質保障機制化（5 驗證腳本 + 3 Hard Gate）
+
+> **備注**：v0.3.0 核心目標全部交付完成。US-11 Decision Knowledge Base 從未被列為 v0.3.0 Must 條件，延後至 v0.4.0+ 不影響里程碑結案。品質保障體系（ADR-002/003 + US-T01~T03 + US-FIX-01~02）為 Sprint 5–6 的額外產出，超出原定規劃。
 
 ---
 
@@ -184,5 +193,5 @@ Issue Mgmt            │ Onboard  │ Metrics ✅│ Retro    │ Tech Debt │
 專案等級              │ Health   │           │ Analytic✅│ ADR KB    │ 整合     │ Metrics  │ 多平台調查       │ 上架
 ADR-001               │ Check    │           │          │           │          │ 通知     │ 使用者文件       │
 ──────────────────────┴──────────┴───────────┴──────────┴───────────┴──────────┴──────────┴──────────────────┴─────
-已交付 ✅              已交付 ✅               進行中（2/3）           規劃中                 規劃中            遠期
+已交付 ✅              已交付 ✅               已交付 ✅               規劃中                 規劃中            遠期
 ```

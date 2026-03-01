@@ -1,15 +1,17 @@
 # Project Board
 
 **最後更新**：2026-03-01
-**當前 Sprint**：Sprint 6（進行中）
+**當前 Sprint**：Sprint 6（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 6](sprints/sprint_6.md) → 本看板
 
 ---
 
-## Sprint 6 — 進行中
+## Sprint 6 — 完成
 
 **Sprint Goal**：建立 Hard Gate Checklist 機制（US-FIX-02），擴展測試框架覆蓋（US-T02、US-T03），並清零 Sprint 5 Retro 技術債
+**結果**：Goal 達成（5/5 Stories PASS）。Velocity 8 points，完成率 100%。
+**Stakeholder 驗收**：接受，v0.3.0 里程碑結案
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
@@ -19,7 +21,7 @@
 | US-T03：JSON Schema 驗證 | M | 2 | 完成 |
 | US-FIX-02：Hard Gate Checklist 機制 | L | 3 | 完成 |
 
-**計畫 Velocity**：8 points（5 Stories）
+**實際 Velocity**：8 points（5 Stories）
 
 ---
 

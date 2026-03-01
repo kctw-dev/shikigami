@@ -189,5 +189,46 @@
 
 | # | Action | Owner | 驗收方式 | 狀態 |
 |---|--------|-------|----------|------|
-| 1 | DoD 第 8 層同步：scrum-master SKILL.md 補入「技術債」層，與 sprint-execution SKILL.md 對齊 | Developer | scrum-master SKILL.md DoD 包含技術債行 | Open | [#7](https://github.com/KCTW/shikigami/issues/7) |
-| 2 | QA Review 範圍界定：quality-reviewer-prompt.md 新增「僅審查本次 Story 變更範圍，既存問題不計入 FAIL」指引 | QA | quality-reviewer-prompt.md 含範圍界定條款 | Open | [#8](https://github.com/KCTW/shikigami/issues/8) |
+| 1 | DoD 第 8 層同步：scrum-master SKILL.md 補入「技術債」層，與 sprint-execution SKILL.md 對齊 | Developer | scrum-master SKILL.md DoD 包含技術債行 | Closed（Sprint 6） | [#7](https://github.com/KCTW/shikigami/issues/7) |
+| 2 | QA Review 範圍界定：quality-reviewer-prompt.md 新增「僅審查本次 Story 變更範圍，既存問題不計入 FAIL」指引 | QA | quality-reviewer-prompt.md 含範圍界定條款 | Closed（Sprint 6） | [#8](https://github.com/KCTW/shikigami/issues/8) |
+
+---
+
+## Sprint 6 — 2026-03-01
+
+**Sprint Goal**：建立 Hard Gate Checklist 機制（US-FIX-02），擴展測試框架覆蓋（US-T02、US-T03），並清零 Sprint 5 Retro 技術債
+**結果**：Goal 達成。全部 5 個 Stories 完成交付。
+
+### 交付成果
+
+| Story | Size | 狀態 | 驗收 |
+|-------|------|------|------|
+| Retro #7：DoD 第 8 層同步 | S | Done | AC 全通過（2/2）— scrum-master SKILL.md 第 8 層「技術債」補入，兩份 DoD 8 層逐行一致；Issue #7 CLOSED |
+| Retro #8：QA Review 範圍界定 | S | Done | AC 全通過（2/2）— quality-reviewer-prompt.md 新增「審查範圍界定」4 項條款，使用「應分類」；Issue #8 CLOSED |
+| US-T02：Agent 完整性驗證 | S | Done | AC 全通過（5/5）— TDD Red-Green-Refactor，validate-agents.sh 35 項檢查全通過，7 個 Agent 合規 |
+| US-T03：JSON Schema 驗證 | M | Done | AC 全通過（5/5）— TDD Red-Green-Refactor，validate-json.sh 15 項檢查全通過，plugin.json / marketplace.json 合規 |
+| US-FIX-02：Hard Gate Checklist 機制 | L | Done | AC 全通過（6/6）— scrum-master SKILL.md §9 含 3 個 Hard Gate（9.1/9.2/9.3）、觸發條件、結果判定、Bootstrap 豁免條款 |
+
+**Velocity**：8 points（2S + 1S + 1S + 1M + 1L = 1+1+1+2+3）
+
+### Good（保持做的事）
+
+- **Velocity 創歷史新高（8pt），完成率連續 6 個 Sprint 100%**：含 1 個 L Story（US-FIX-02），證明團隊可處理結構性複雜任務且不犧牲交付品質
+- **Sprint 5 Retro Action Items 全部清零**：#7 和 #8 兩個 GitHub Issues 均在 Sprint 6 關閉，Retro 追蹤機制連續 6 個 Sprint 無逾期 Item
+- **ADR 先行 → 實作跟進的依賴鏈管理無阻塞**：ADR-003（Sprint 5）→ US-FIX-02（Sprint 6），一個 Sprint 內從決策到落地，零等待浪費
+- **測試框架覆蓋持續擴展**：5 支驗證腳本（skills, commands, version, agents, json）+ 共享函式庫，ADR-002 架構決策持續兌現
+- **Bootstrap 自我引用風險被正確識別與處理**：QA Code Quality Review 發現 US-FIX-02 修改的文件即是定義規則的文件，Developer 以豁免條款解決，證明雙階段審查對邊界情境有效
+- **Retro #8 審查範圍界定即時生效**：Sprint 6 的 3 個 Code Quality Review 中，QA 正確區分「本次變更」與「既存問題」，false positive 率歸零
+
+### Problem（需改進的事）
+
+- **sprint_N.md Sprint Backlog 狀態未同步更新**：Sprint Execution 更新 PROJECT_BOARD.md 時未回頭更新 sprint_6.md 的狀態欄（仍為「待開始」），造成兩份文件不一致。PROJECT_BOARD 是看板真相來源，sprint_N.md 是 Sprint 規劃文件，兩者狀態理應同步
+- **知識文件散落風險**：PLUGIN_DEV_NOTES.md 位於 docs/ 根目錄而非 docs/km/，使用者提出應歸入知識管理目錄。框架無自動偵測知識散落的機制
+- **US-T03 AC4 whitelist 規格與實際不一致**：PO 在 Sprint Planning 定義 8 個白名單欄位，但 Developer 實作時發現 plugin.json 實際使用 10 個欄位（多了 repository、keywords），需臨場擴充。根因是 AC 撰寫時未完整對照實際 JSON 檔案
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | 狀態 |
+|---|--------|-------|----------|------|
+| 1 | sprint_N.md 狀態回寫：Sprint Execution 更新 PROJECT_BOARD 時同步更新 sprint_N.md 的 Sprint Backlog 狀態欄 | Developer | 下次 Sprint Execution 完成後 sprint_N.md 狀態欄與 PROJECT_BOARD 一致 | Open | [#10](https://github.com/KCTW/shikigami/issues/10) |
+| 2 | PLUGIN_DEV_NOTES.md 歸檔：移至 docs/km/，建立知識文件歸檔慣例 | Developer | PLUGIN_DEV_NOTES.md 位於 docs/km/ 目錄 | Open | [#11](https://github.com/KCTW/shikigami/issues/11) |
