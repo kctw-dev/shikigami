@@ -64,13 +64,45 @@ Sprint Backlog 還有 Story？
 
 ### 步驟詳解
 
-1. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。
-2. **派遣 Developer subagent**：使用 `developer-prompt.md` 作為 prompt，注入 Story 的 Acceptance Criteria、相關 ADR、設計文件。
-3. **Developer 實作**：遵循 TDD（Red → Green → Refactor），每個小步驟一個 commit，完成後執行自我審查 checklist。
-4. **Spec Compliance Review**：派遣 QA subagent 使用 `spec-reviewer-prompt.md`，獨立驗證實作是否符合所有 Acceptance Criteria。
-5. **Code Quality Review**：派遣 QA subagent 使用 `quality-reviewer-prompt.md`，評估代碼品質、SOLID 原則、測試品質。
-6. **安全審查（條件觸發）**：若 Story 涉及外部輸入、API 端點、配置變更，派遣 Security subagent 進行安全審查。
-7. **更新看板與同步 Sprint 文件**：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。接著檢查終止條件：Sprint Backlog 中仍有待辦 Story → 取出下一個 Story 繼續執行；Sprint Backlog 已清空（所有 Story 完成）→ **立即 invoke shikigami:sprint-review**，不詢問使用者、不跳回「下一個 Story」流程。
+1. **Issue 快掃**：在取出 Story 之前，執行 GitHub Issue 快速掃描，處理社群或使用者的待回覆問題。
+
+   **執行指令：**
+   ```bash
+   gh issue list --state open --limit 10
+   ```
+
+   **降級指引：** gh 指令失敗（網路問題、權限不足、非 GitHub 倉庫等）時靜默略過，不阻塞 Story 執行。
+
+   **觸發條件（同時滿足以下三項才對該 issue 執行回覆）：**
+   - **(a)** issue 不含 `in-backlog` label（已排入 backlog 的 issue 由開發流程處理，不需額外回覆）
+   - **(b)** issue 不含 `sprint-N-replied` label（N 為當前 Sprint 編號），避免本 Sprint 內重複回覆
+   - **(c)** open issue 超過 5 個時，僅處理最舊的前 5 個（依 issue 編號升冪排序取前五）
+
+   **回覆流程：**
+   1. 派遣 PO subagent 針對每個符合觸發條件的 issue 起草回覆內容
+   2. 派遣 QA subagent 審核草稿內容（語氣、正確性、是否承諾不必要的功能）
+   3. QA 通過後，依專案等級發布回覆：
+      - 公開專案：直接 `gh issue comment` 發布
+      - 私有 / 敏感專案：回覆前請 User 確認
+
+   **防重複機制：** 回覆成功後，立即為該 issue 加上 `sprint-N-replied` label（N 替換為當前 Sprint 編號，例如 Sprint 8 → `sprint-8-replied`）。下次快掃時篩除含此 label 的 issue，確保每個 Sprint 週期內不重複回覆同一 issue。
+
+   > **Decision Note — 為何採用 GitHub Label 追蹤狀態**
+   >
+   > 備選方案包含：(1) 本地狀態檔、(2) commit message 標記、(3) GitHub Label。
+   > 採用 Label 的理由：
+   > - **持久化**：label 存於 GitHub，跨 subagent、跨 session 均可查詢，無需共享本地狀態
+   > - **可靜態驗證**：`gh issue list --label sprint-N-replied` 可直接驗證，無需額外解析
+   > - **原生支援**：gh CLI 原生 `--label` 篩選，指令簡單、無副作用
+   > - **低成本**：不需要引入新的基礎設施或 ADR，符合 YAGNI 原則
+
+2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。
+3. **派遣 Developer subagent**：使用 `developer-prompt.md` 作為 prompt，注入 Story 的 Acceptance Criteria、相關 ADR、設計文件。
+4. **Developer 實作**：遵循 TDD（Red → Green → Refactor），每個小步驟一個 commit，完成後執行自我審查 checklist。
+5. **Spec Compliance Review**：派遣 QA subagent 使用 `spec-reviewer-prompt.md`，獨立驗證實作是否符合所有 Acceptance Criteria。
+6. **Code Quality Review**：派遣 QA subagent 使用 `quality-reviewer-prompt.md`，評估代碼品質、SOLID 原則、測試品質。
+7. **安全審查（條件觸發）**：若 Story 涉及外部輸入、API 端點、配置變更，派遣 Security subagent 進行安全審查。
+8. **更新看板與同步 Sprint 文件**：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。接著檢查終止條件：Sprint Backlog 中仍有待辦 Story → 取出下一個 Story 繼續執行；Sprint Backlog 已清空（所有 Story 完成）→ **立即 invoke shikigami:sprint-review**，不詢問使用者、不跳回「下一個 Story」流程。
 
 ---
 
