@@ -13,7 +13,7 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| Retro #10：sprint_N.md 狀態回寫機制 | S | 1 | 待開始 |
+| Retro #10：sprint_N.md 狀態回寫機制 | S | 1 | 完成 |
 | Retro #11：PLUGIN_DEV_NOTES.md 歸入 KM | S | 1 | 完成 |
 | shikigami:dispel 解咒模式 | M | 2 | 待開始 |
 | US-T05：交叉引用驗證 | S | 1 | 待開始 |

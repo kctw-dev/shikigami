@@ -24,7 +24,7 @@ Retro #7 和 #8 清除 Sprint 5 遺留的 DoD 不一致與 QA 審查範圍模糊
 | Retro #8：QA Review 範圍界定 | `skills/sprint-execution/quality-reviewer-prompt.md` 新增「僅審查本次 Story 變更範圍，既存問題不計入 FAIL」指引；問題分類標注改為「應分類」 | QA | 完成 |
 | US-T02：Agent 完整性驗證 | 新建 Agent 完整性驗證腳本（建議 `scripts/validate-agents.sh`），掃描 `agents/` 下所有 `.md` 檔案，驗證 frontmatter 合規（含 model hardcode whitelist） | Developer + QA | 完成 |
 | US-T03：JSON Schema 驗證 | 新建 JSON Schema 驗證腳本（建議 `scripts/validate-json.sh`），驗證 `plugin.json` 與 `marketplace.json` 必填欄位、version semver 格式、plugin.json 欄位白名單 | Developer + QA | 完成 |
-| US-FIX-02：Hard Gate Checklist 機制 | `skills/scrum-master/SKILL.md` 新增 Preflight Check 區段與三個 Hard Gate（Framework Document Change、Out-of-Sprint Change、Ceremony Integrity），與 ADR-003 實作方式一致 | Developer + QA | 待開始（前置：ADR-003 Accepted） |
+| US-FIX-02：Hard Gate Checklist 機制 | `skills/scrum-master/SKILL.md` 新增 Preflight Check 區段與三個 Hard Gate（Framework Document Change、Out-of-Sprint Change、Ceremony Integrity），與 ADR-003 實作方式一致 | Developer + QA | 完成 |
 
 ---
 
