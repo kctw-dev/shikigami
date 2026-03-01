@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 6 Review 完成，v0.3.0 結案）
+**最後更新**：2026-03-01（Sprint 7 Planning 完成）
 **管理者**：Product Owner
 
 ---
@@ -13,12 +13,12 @@
 
 ### 測試框架 — 候選 Stories
 
-| 排序 | Story | RICE | MoSCoW | Size | ADR |
-|------|-------|------|--------|------|-----|
-| 1 | US-T05：交叉引用驗證 | 25.6 | Should | M | — |
-| 2 | US-T07：CI Pipeline | 24.0 | Should | M | — |
-| 3 | US-T09：孤兒文件清理規範 | 16.7 | Could | S | — |
-| 4 | US-T08：Intent Routing 測試 | 6.0 | Could | L | — |
+| 排序 | Story | RICE | MoSCoW | Size | ADR | 狀態 |
+|------|-------|------|--------|------|-----|------|
+| 1 | US-T05：交叉引用驗證 | 25.6 | Should | S | — | In Sprint 7 |
+| 2 | US-T07：CI Pipeline | 24.0 | Should | M | — | In Sprint 7 |
+| 3 | US-T09：孤兒文件清理規範 | 16.7 | Could | S | — | 待選 |
+| 4 | US-T08：Intent Routing 測試 | 6.0 | Could | L | — | 待選 |
 
 ---
 

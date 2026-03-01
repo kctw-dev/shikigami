@@ -1,9 +1,25 @@
 # Project Board
 
 **最後更新**：2026-03-01
-**當前 Sprint**：Sprint 6（完成）
+**當前 Sprint**：Sprint 7（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 6](sprints/sprint_6.md) → 本看板
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 7](sprints/sprint_7.md) → 本看板
+
+---
+
+## Sprint 7 — 進行中
+
+**Sprint Goal**：啟動 v0.5.0 穩定化，清零 Sprint 6 Retro 技術債，建立解咒模式（Legacy 系統考古 Skill），並完成測試框架 CI 整合
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #10：sprint_N.md 狀態回寫機制 | S | 1 | 待開始 |
+| Retro #11：PLUGIN_DEV_NOTES.md 歸入 KM | S | 1 | 待開始 |
+| shikigami:dispel 解咒模式 | M | 2 | 待開始 |
+| US-T05：交叉引用驗證 | S | 1 | 待開始 |
+| US-T07：CI Pipeline | M | 2 | 待開始（前置：US-T05） |
+
+**計畫 Velocity**：7 points（5 Stories）
 
 ---
 
