@@ -115,6 +115,8 @@ Sprint Backlog 還有 Story？
 > 歷史案例：Sprint 7 因跳過此步驟列為 Retro Problem（Issue #14），導致品質門禁失效。
 </HARD-GATE>
 
+> **Bypass 豁免：** 標記為 `[BYPASS]` 的 Story 豁免雙階段審查（Spec Compliance + Code Quality）。豁免條件與 `skills/scrum-master/SKILL.md` §10.3 Bypass 保護清單對齊——涉及 Framework Document Change、外部 API、安全相關的 Story 不得適用豁免，即使標注 `[QUICK]` 亦然。
+
 <HARD-GATE>
 所有功能實作必須遵循 TDD：先寫失敗測試 → 最小實作讓測試通過 → 重構。
 例外：標注為 [SPIKE] 的探索性任務可豁免，但進入正式開發時必須補測試。
