@@ -1,7 +1,86 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 5 Review 完成）
+**最後更新**：2026-03-01（Sprint 6 Planning 完成）
 **管理者**：Product Owner
+
+---
+
+## 進行中 Stories（Sprint 6）
+
+| Story | Size | Points | ADR |
+|-------|------|--------|-----|
+| Retro #7：DoD 第 8 層同步 | S | 1 | — |
+| Retro #8：QA Review 範圍界定 | S | 1 | — |
+| US-T02：Agent 完整性驗證 | S | 1 | ADR-002 |
+| US-T03：JSON Schema 驗證 | M | 2 | ADR-002 |
+| US-FIX-02：Hard Gate Checklist 機制 | L | 3 | ADR-003 |
+
+> 各 Story 完整 AC 見 `docs/sprints/sprint_6.md`。以下為 QA 修訂後的正式 AC 版本。
+
+### Retro #7：DoD 第 8 層同步
+
+**GitHub Issue**：#7
+
+**Acceptance Criteria**
+- AC1：`skills/scrum-master/SKILL.md` 第 8 節 DoD 表格新增「技術債」層，內容與 `skills/sprint-execution/SKILL.md` 對應行完全一致
+- AC2：兩份文件 DoD 表格層數相同（8 層），逐行完全一致
+
+### Retro #8：QA Review 範圍界定
+
+**GitHub Issue**：#8
+
+**Acceptance Criteria**
+- AC1：`skills/sprint-execution/quality-reviewer-prompt.md` 新增「審查範圍界定」條款：僅審查本次 Story 變更範圍，既存問題不計入 FAIL，應分類為觀察記錄
+- AC2：範圍界定條款使用「應分類」而非「可列」
+
+### US-T02：Agent 完整性驗證
+
+**User Story**
+As a Developer, I want a script that verifies every agent file has correct frontmatter fields, so that plugin installation doesn't fail silently.
+
+**Acceptance Criteria**（QA 修訂後版本）
+- AC1：掃描 `agents/` 下所有 `.md` 檔案，輸出清單，數量與目錄實際 `.md` 檔案數一致
+- AC2：驗證 frontmatter 包含 `name`、`description`、`model` 三個欄位；任一缺失則 ERROR
+- AC3：驗證 `model` 值為合法值之一：`sonnet`、`haiku`、`opus`（hardcode，大小寫敏感完全比對）
+- AC4：驗證 `description` 欄位存在且非空字串；空字串或僅含空白字元則 ERROR
+- AC5：exit code 0 = 全部通過，非 0 = 存在至少一個 ERROR
+
+**RICE**：54.0 / **MoSCoW**：Must / **ADR**：ADR-002
+
+### US-T03：JSON Schema 驗證
+
+**User Story**
+As a Developer, I want automated validation of plugin.json and marketplace.json, so that malformed manifests are caught before users try to install.
+
+**Acceptance Criteria**（QA 修訂後版本）
+- AC1：驗證 `plugin.json` 包含必填欄位：`name`、`version`、`description`、`author`；任一缺失則 ERROR
+- AC2：驗證 `marketplace.json` 包含必填欄位：`name`、`plugins` 陣列；任一缺失則 ERROR
+- AC3：驗證 `version` 格式符合 semver（`major.minor.patch`，三段純數字，以 `.` 分隔）
+- AC4：定義 `plugin.json` 允許欄位白名單：`name`、`version`、`description`、`author`、`homepage`、`license`、`tags`、`minVersion`；白名單以外的欄位觸發 WARNING（非 ERROR），不影響 exit code
+- AC5：exit code 0 = 無 ERROR；非 0 = 存在至少一個 ERROR；WARNING 不影響 exit code
+
+> **AC4 決策說明**：原 AC4「不包含多餘路徑欄位」定義模糊。改為 whitelist approach，額外欄位降級為 WARNING 避免 false positive。
+
+**RICE**：25.7 / **MoSCoW**：Must / **ADR**：ADR-002 / **Size**：M（Architect 上調）
+
+### US-FIX-02：Hard Gate Checklist 機制
+
+**User Story**
+As a Scrum Master, I want structural Hard Gate checklists at framework document changes, out-of-sprint changes, and ceremony completion, so that process compliance is enforced by mechanism rather than by memory.
+
+**前置條件**：ADR-003（已完成，Accepted）
+
+**Acceptance Criteria**（QA 修訂後版本）
+- AC-B1：ADR-003 狀態為 Accepted（前置條件）
+- AC-B2：`skills/scrum-master/SKILL.md` 新增 Preflight Check 區段，4 項二元 checklist：(1) 修改對應 Story ID (2) 修改範圍在 AC 涵蓋內 (3) 修改前已讀取目標文件 (4) 修改後執行 health-check
+- AC-B3：Framework Document Change Audit 與 ADR-003 觸發條件、checklist 內容、Pass/Fail 判定完全對應
+- AC-B4a：Out-of-Sprint Change 偵測邏輯 — 正常路徑須對應 Story ID，無則先建緊急 Story
+- AC-B4b：緊急例外路徑 — `[EMERGENCY]` 標注 + 48hr 稽核 + Sprint Review 追蹤
+- AC-B5：Ceremony Integrity Audit — Sprint Planning 4 項 + Sprint Review 5 項獨立 checklist
+
+> **AC-B4 拆分說明**：原 AC-B4 混合偵測邏輯與例外路徑，拆分為 B4a（正常路徑）與 B4b（緊急例外），便於獨立驗證。
+
+**RICE**：27.0 / **MoSCoW**：Must / **ADR**：ADR-003 / **Size**：L / **Points**：3
 
 ---
 
@@ -15,75 +94,10 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | ADR |
 |------|-------|------|--------|------|-----|
-| 1 | US-T02：Agent 完整性驗證 | 54.0 | Must | S | ADR-002 |
-| 3 | US-T03：JSON Schema 驗證 | 36.0 | Must | S | ADR-002 |
-| 4 | US-T05：交叉引用驗證 | 25.6 | Should | M | — |
-| 5 | US-T07：CI Pipeline | 24.0 | Should | M | — |
-| 6 | US-T09：孤兒文件清理規範 | 16.7 | Could | S | — |
-| 7 | US-T08：Intent Routing 測試 | 6.0 | Could | L | — |
-
-> US-T01 詳情見「進行中 Stories（Sprint 5）」區段（含 QA 修正後版本 AC）。
-
-### 框架品質 — 候選 Stories
-
-| 排序 | Story | RICE | MoSCoW | Size | ADR |
-|------|-------|------|--------|------|-----|
-| 1 | US-FIX-02：Hard Gate Checklist 機制 | 27.0 | Must | L | ADR-003 |
-
----
-
-### US-FIX-02：Hard Gate Checklist 機制
-
-**User Story**
-As a Scrum Master, I want structural Hard Gate checklists at framework document changes, out-of-sprint changes, and ceremony completion, so that process compliance is enforced by mechanism rather than by memory.
-
-**前置條件**：ADR-003（已完成，Accepted）
-
-**Acceptance Criteria**
-- AC-B1：ADR-003 狀態為 Accepted（前置條件）
-- AC-B2：`skills/scrum-master/SKILL.md` 新增 Preflight Check 區段：框架文件（skills/、commands/、agents/）修改前自動觸發 4 項二元 checklist
-- AC-B3：Framework Document Change Audit 實作為 Hard Gate，checklist 內容與 ADR-003 實作方式一致
-- AC-B4：Out-of-Sprint Change Audit 實作為 Hard Gate，含緊急例外路徑（[EMERGENCY] 標注 + 48hr 事後稽核）
-- AC-B5：Ceremony Integrity Audit 實作為 Hard Gate，Sprint Planning 與 Sprint Review 各有獨立 checklist
-
-**RICE**：Reach 10 × Impact 3 × Confidence 90% ÷ Effort 1.0 = **27.0**
-**MoSCoW**：Must
-**ADR**：ADR-003
-**Size**：L / **Points**：3
-
----
-
-### US-T02：Agent 完整性驗證
-
-**User Story**
-As a Developer, I want a script that verifies every agent file has correct frontmatter fields, so that plugin installation doesn't fail silently.
-
-**Acceptance Criteria**
-- AC1：掃描 `agents/` 下所有 `.md` 檔案
-- AC2：驗證 frontmatter 包含 `name`、`description`、`model` 三個欄位
-- AC3：驗證 `model` 值為合法值（`sonnet`、`haiku`、`opus`）
-- AC4：驗證 `description` 欄位存在且非空
-
-**RICE**：Reach 10 × Impact 3 × Confidence 90% ÷ Effort 0.5 = **54.0**
-**MoSCoW**：Must
-**ADR**：ADR-002
-
----
-
-### US-T03：JSON Schema 驗證
-
-**User Story**
-As a Developer, I want automated validation of plugin.json and marketplace.json, so that malformed manifests are caught before users try to install.
-
-**Acceptance Criteria**
-- AC1：驗證 `plugin.json` 包含必填欄位：`name`、`version`、`description`、`author`
-- AC2：驗證 `marketplace.json` 包含必填欄位：`name`、`plugins` 陣列
-- AC3：驗證 `version` 格式符合 semver
-- AC4：驗證 `plugin.json` 不包含多餘路徑欄位
-
-**RICE**：Reach 10 × Impact 2 × Confidence 90% ÷ Effort 0.5 = **36.0**
-**MoSCoW**：Must
-**ADR**：ADR-002
+| 1 | US-T05：交叉引用驗證 | 25.6 | Should | M | — |
+| 2 | US-T07：CI Pipeline | 24.0 | Should | M | — |
+| 3 | US-T09：孤兒文件清理規範 | 16.7 | Could | S | — |
+| 4 | US-T08：Intent Routing 測試 | 6.0 | Could | L | — |
 
 ---
 

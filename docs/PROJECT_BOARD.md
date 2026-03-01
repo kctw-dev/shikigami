@@ -1,9 +1,25 @@
 # Project Board
 
 **最後更新**：2026-03-01
-**當前 Sprint**：Sprint 5（完成）
+**當前 Sprint**：Sprint 6（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 5](sprints/sprint_5.md) → 本看板
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 6](sprints/sprint_6.md) → 本看板
+
+---
+
+## Sprint 6 — 進行中
+
+**Sprint Goal**：建立 Hard Gate Checklist 機制（US-FIX-02），擴展測試框架覆蓋（US-T02、US-T03），並清零 Sprint 5 Retro 技術債
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #7：DoD 第 8 層同步 | S | 1 | 待開始 |
+| Retro #8：QA Review 範圍界定 | S | 1 | 待開始 |
+| US-T02：Agent 完整性驗證 | S | 1 | 待開始 |
+| US-T03：JSON Schema 驗證 | M | 2 | 待開始 |
+| US-FIX-02：Hard Gate Checklist 機制 | L | 3 | 待開始 |
+
+**計畫 Velocity**：8 points（5 Stories）
 
 ---
 
