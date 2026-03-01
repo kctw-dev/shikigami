@@ -1,12 +1,20 @@
 {
   "name": "shikigami",
   "description": "AI Agent Scrum Team：7 個專業角色 × Subagent 驅動 × Scrum 流程自動化",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "KCTW"
   },
   "homepage": "https://github.com/KCTW/shikigami",
   "repository": "https://github.com/KCTW/shikigami",
   "license": "MIT",
-  "keywords": ["scrum", "agents", "team", "tdd", "quality", "security", "architecture"]
+  "keywords": [
+    "scrum",
+    "agents",
+    "team",
+    "tdd",
+    "quality",
+    "security",
+    "architecture"
+  ]
 }
