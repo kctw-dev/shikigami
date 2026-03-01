@@ -17,7 +17,7 @@
 | Retro #8：QA Review 範圍界定 | S | 1 | 完成 |
 | US-T02：Agent 完整性驗證 | S | 1 | 完成 |
 | US-T03：JSON Schema 驗證 | M | 2 | 完成 |
-| US-FIX-02：Hard Gate Checklist 機制 | L | 3 | 待開始 |
+| US-FIX-02：Hard Gate Checklist 機制 | L | 3 | 完成 |
 
 **計畫 Velocity**：8 points（5 Stories）
 

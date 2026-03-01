@@ -235,6 +235,8 @@ shikigami.project_level: medium
 
 框架文件修改、Sprint 外變更、儀式完整性的品質稽核機制。依 ADR-003（分級介入模式）實作。
 
+> **ADR-003 場景覆蓋說明**：ADR-003 定義四個稽核場景，其中三個 Hard Gate 於本節實作（9.1–9.3）。第四個場景 Story Completion DoD Audit 為 Soft Gate，已委由 `quality-gate` Skill 處理，不在本節重複定義。
+
 ### 9.1 Preflight Check：Framework Document Change Audit
 
 <HARD-GATE>
@@ -257,6 +259,8 @@ shikigami.project_level: medium
 - 任一 Fail → 阻塞，修復後重新稽核
 
 **規格來源**：ADR-003「Framework Document Change Audit」
+
+> **Bootstrap 豁免**：本規則自 Sprint 6（US-FIX-02）引入。引入本身的框架文件修改不適用回溯稽核，但後續對本文件的修改須遵循上述 checklist。
 
 ### 9.2 Out-of-Sprint Change Audit
 
