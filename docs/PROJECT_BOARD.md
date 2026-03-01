@@ -16,7 +16,7 @@
 | Retro #14：恢復 QA 雙階段審查 | S | 1 | 完成 |
 | US-21：真實制衡案例文件 | S | 1 | 完成 |
 | US-18：Sprint Execution Issue 回覆自動化 | M | 2 | 完成 |
-| US-20：輕量 Bypass 機制 | M | 2 | 待開始 |
+| US-20：輕量 Bypass 機制 | M | 2 | 完成 |
 
 **計畫 Velocity**：6 points（4 Stories）
 
