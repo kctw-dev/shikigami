@@ -18,6 +18,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。主要由 **Product Own
 以下步驟必須逐項建立 task 完成，不可跳過：
 
 - [ ] **執行框架健康檢查**（invoke shikigami:health-check）— 完整 4 項檢查（必要文件 + 孤兒 Story + ADR 一致性 + Retro 逾期）。CRITICAL 標注警告但不阻塞 Planning 流程
+- [ ] **角色權重調整檢查**（US-22 / ADR-004）— 讀取 `docs/km/Retrospective_Log.md`，依關鍵字比對演算法判斷是否觸發調整；結果寫入 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊（詳見 §7）
 - [ ] **PO subagent** 掃描 GitHub open issues（`gh issue list --state open`），對未分類 issues 執行 Triage（invoke shikigami:issue-management Triage），將 bug/feature-request 透過 Backlog Bridge 納入 Backlog
 - [ ] **PO subagent** 讀取 `docs/prd/PRODUCT_BACKLOG.md`、`docs/PROJECT_BOARD.md` 與 `docs/prd/ROADMAP.md`，掌握 Backlog 狀態、專案進度與當前里程碑
 - [ ] **PO subagent** 從 Backlog 頂部（依優先級排序）選取符合 Sprint Goal 與 ROADMAP 里程碑的 Stories
@@ -83,16 +84,88 @@ git push
 Sprint Planning 的 Subagent 調度遵循以下固定順序：
 
 ```
-0. 健康檢查 → invoke shikigami:health-check（完整 4 項）
-1. PO       → 分析 Backlog、選取 Stories、定義 Sprint Goal
-2. Architect → 技術評估、ADR 檢查
-3. QA       → 驗收標準確認
-4. PO       → 產出 Sprint 文件
+0.   健康檢查       → invoke shikigami:health-check（完整 4 項）
+0.5. 角色權重調整   → 讀取 Retrospective_Log.md，執行關鍵字比對，輸出調整結果至 sprint_N.md（詳見 §7）
+1.   PO             → 分析 Backlog、選取 Stories、定義 Sprint Goal
+2.   Architect      → 技術評估、ADR 檢查
+3.   QA             → 驗收標準確認
+4.   PO             → 產出 Sprint 文件
 ```
 
 **派遣說明**：
 
+0.5. **角色權重調整檢查**：健康檢查完成後立即執行。讀取 `docs/km/Retrospective_Log.md`，統計已完成 Sprint 記錄數量。若少於 3 個則輸出「歷史資料不足 3 個 Sprint，跳過權重調整」；否則對 QA 領域執行關鍵字清單比對，判斷是否觸發升級或放寬。結果（無論調整與否）均持久化至 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊。完整規則詳見 §7。
 1. **PO（第一輪）**：先掃描 GitHub open issues 進行 Triage（question/invalid 直接回覆 + close，bug/feature-request 走 Backlog Bridge 納入 Backlog）。然後讀取 Backlog、Project Board 與 ROADMAP.md，根據優先級、Sprint Goal 與當前里程碑初步選取 Stories。此階段 PO 需明確定義本次 Sprint 要達成的目標。
 2. **Architect**：對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若發現 Hard Gate 問題，該 Story 退回 Backlog。
 3. **QA**：逐一確認剩餘 Stories 的 Acceptance Criteria 是否明確且可被自動化測試驗證。若驗收標準模糊，退回 PO 補充後重新評估。
 4. **PO（第二輪）**：根據 Architect 與 QA 的回饋，最終確認 Sprint Backlog，建立 `docs/sprints/sprint_N.md`，並更新 `docs/PROJECT_BOARD.md` 與 `docs/prd/PRODUCT_BACKLOG.md`。
+
+---
+
+## 7. 角色權重調整檢查（US-22 / ADR-004）
+
+### 觸發時機
+
+Sprint Planning 開始時，「健康檢查」完成後、「PO 第一輪」開始前執行。
+
+### 執行步驟
+
+1. 讀取 `docs/km/Retrospective_Log.md`
+2. 計算 Sprint 記錄數量：
+   - 少於 3 個 Sprint 記錄 → 輸出「歷史資料不足 3 個 Sprint，跳過權重調整」→ 寫入 sprint_N.md「## 權重調整記錄」→ 結束
+3. 對每個監控領域執行比對：
+
+#### QA 領域
+
+**關鍵字清單**（ADR-004）：
+
+```yaml
+qa_keywords: ["QA", "審查", "Review", "Code Quality", "Spec Compliance", "雙階段", "品質"]
+```
+
+**比對規則**：
+- 提取最近 2 個已完成 Sprint 的 `### Problem` 區塊
+- 對每個 Problem 條列，檢查是否包含清單中任一關鍵字（大小寫不敏感）
+- 連續 2 Sprint 均至少有一條 Problem 包含關鍵字 → 觸發 QA 升級
+- 任一 Sprint 的 Problem 區塊不含任何清單關鍵字 → 連續計數歸零
+
+**觸發後調整**：
+
+| 條件 | 調整 |
+|------|------|
+| 連續 2 Sprint 有 QA 相關 Problem | QA Review 從 Should 升為 Hard Gate（Must，不可 Bypass） |
+| 連續 2 Sprint 無任何 Problem（所有領域） | Bypass 門檻從 S 放寬至 M |
+
+### 輸出格式
+
+**有調整時**（持久化至 sprint_N.md「## 權重調整記錄」）：
+
+```
+## 權重調整記錄
+
+- 觸發條件：Sprint N-1（[匹配的 Problem 文字]，關鍵字：[關鍵字]）與 Sprint N（[匹配的 Problem 文字]，關鍵字：[關鍵字]）連續出現 QA 相關 Problem
+- 調整項目：QA Review 升為 Hard Gate（Must），Bypass 不適用 QA 相關審查
+- 生效 Sprint：Sprint N+1
+```
+
+**無調整時**（持久化至 sprint_N.md「## 權重調整記錄」）：
+
+```
+## 權重調整記錄
+
+歷史趨勢穩定，無需調整
+```
+
+**資料不足時**（持久化至 sprint_N.md「## 權重調整記錄」）：
+
+```
+## 權重調整記錄
+
+歷史資料不足 3 個 Sprint，跳過權重調整
+```
+
+### 關鍵字清單更新機制
+
+更新時機：Sprint Review 的 Retrospective 環節。
+更新觸發：Retrospective 記錄的 Problem 未被現有關鍵字捕捉時。
+更新流程：SQA 識別漏判 → 提議新關鍵字 → Architect 確認 → 更新本節清單。
