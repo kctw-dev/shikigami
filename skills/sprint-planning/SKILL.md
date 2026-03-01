@@ -20,8 +20,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。主要由 **Product Own
 - [ ] **執行框架健康檢查**（invoke shikigami:health-check）— 完整 4 項檢查（必要文件 + 孤兒 Story + ADR 一致性 + Retro 逾期）。CRITICAL 標注警告但不阻塞 Planning 流程
 - [ ] **角色權重調整檢查**（US-22 / ADR-004）— 讀取 `docs/km/Retrospective_Log.md`，依關鍵字比對演算法判斷是否觸發調整；結果寫入 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊（詳見 §7）
 - [ ] **PO subagent** 掃描 GitHub open issues（`gh issue list --state open`），對未分類 issues 執行 Triage（invoke shikigami:issue-management Triage），將 bug/feature-request 透過 Backlog Bridge 納入 Backlog
-- [ ] **PO subagent** 讀取 `docs/prd/PRODUCT_BACKLOG.md`、`docs/PROJECT_BOARD.md` 與 `docs/prd/ROADMAP.md`，掌握 Backlog 狀態、專案進度與當前里程碑
-- [ ] **PO subagent** 從 Backlog 頂部（依優先級排序）選取符合 Sprint Goal 與 ROADMAP 里程碑的 Stories
+- [ ] **PO subagent** 自行讀取 `docs/prd/PRODUCT_BACKLOG.md`、`docs/PROJECT_BOARD.md` 與 `docs/prd/ROADMAP.md`，從 Backlog 頂部（依優先級排序）選取符合 Sprint Goal 與 ROADMAP 里程碑的 Stories，並回傳結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果）。**主 session 不讀取上述三個檔案，僅接收 subagent 回傳的摘要表格。**
 - [ ] **檢查選入的 Story 是否標注「需要 ADR」** — 若標注需要 ADR，則該 ADR 必須已建立且狀態為 Accepted，方可進入 Sprint
 - [ ] **Architect subagent** 評估每個 Story 的技術工時（T-shirt size: S / M / L）
 - [ ] **QA subagent** 確認每個 Story 的驗收標準（Acceptance Criteria）可被測試
@@ -97,10 +96,23 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
 **派遣說明**：
 
 0.5. **角色權重調整檢查**：健康檢查完成後立即執行。讀取 `docs/km/Retrospective_Log.md`，統計已完成 Sprint 記錄數量。若少於 3 個則輸出「歷史資料不足 3 個 Sprint，跳過權重調整」；否則對 QA 領域執行關鍵字清單比對，判斷是否觸發升級或放寬。結果（無論調整與否）均持久化至 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊。完整規則詳見 §7。
-1. **PO（第一輪）**：先掃描 GitHub open issues 進行 Triage（question/invalid 直接回覆 + close，bug/feature-request 走 Backlog Bridge 納入 Backlog）。然後讀取 Backlog、Project Board 與 ROADMAP.md，根據優先級、Sprint Goal 與當前里程碑初步選取 Stories。此階段 PO 需明確定義本次 Sprint 要達成的目標。
+1. **PO（第一輪）**：先掃描 GitHub open issues 進行 Triage（question/invalid 直接回覆 + close，bug/feature-request 走 Backlog Bridge 納入 Backlog）。然後由 PO subagent 自行讀取以下三個檔案，根據優先級、Sprint Goal 與當前里程碑初步選取 Stories，並回傳結構化摘要表格，**主 session 不直接讀取這些檔案**：
+   - `docs/prd/PRODUCT_BACKLOG.md`（Backlog 狀態與優先級）
+   - `docs/PROJECT_BOARD.md`（專案進度與看板狀態）
+   - `docs/prd/ROADMAP.md`（當前里程碑目標）
+
+   PO subagent 回傳格式（Markdown 表格）：
+
+   ```markdown
+   | Story ID | 標題 | 估點 | AC 確認結果 |
+   |----------|------|------|------------|
+   | US-XX    | ...  | M    | PASS / 待確認 |
+   ```
+
+   此階段 PO 需明確定義本次 Sprint 要達成的目標。
 2. **Architect**：對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若發現 Hard Gate 問題，該 Story 退回 Backlog。
 3. **QA**：逐一確認剩餘 Stories 的 Acceptance Criteria 是否明確且可被自動化測試驗證。若驗收標準模糊，退回 PO 補充後重新評估。
-4. **PO（第二輪）**：根據 Architect 與 QA 的回饋，最終確認 Sprint Backlog，建立 `docs/sprints/sprint_N.md`，並更新 `docs/PROJECT_BOARD.md` 與 `docs/prd/PRODUCT_BACKLOG.md`。
+4. **PO（第二輪）**：根據 Architect 與 QA 的回饋，最終確認 Sprint Backlog，建立 `docs/sprints/sprint_N.md`，並由 PO subagent 更新 `docs/PROJECT_BOARD.md` 與 `docs/prd/PRODUCT_BACKLOG.md`。PO subagent 回傳最終 Sprint Backlog 結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果），**主 session 不直接讀取 PRODUCT_BACKLOG.md 或 PROJECT_BOARD.md，僅接收 subagent 回傳的摘要**。
 
 ---
 
