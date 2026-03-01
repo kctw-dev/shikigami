@@ -20,10 +20,10 @@ Retro #26 修正 PO Demo 應讀取 repo 源碼而非 plugin cache。Retro #27 �
 
 | Story | 任務 | 負責 | 狀態 | QA Review | 平行組 |
 |---|---|---|---|---|---|
-| Retro #26：PO Demo 應讀取 repo 源碼而非 plugin cache | `skills/sprint-review/SKILL.md` §2 Step 1 明確指定讀取 repo 源碼路徑，禁止依賴 plugin cache | Developer | 待開始 | 待審 | Phase 1（平行） |
-| Retro #27：Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | `skills/sprint-execution/SKILL.md` Step 8 限定 Developer 可更新欄位範圍 | Developer | 待開始 | 待審 | Phase 1（平行） |
-| Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量 | `skills/sprint-planning/SKILL.md` §6 Step 1 新增獨立性評估欄位 | Developer | 待開始 | 待審 | Phase 1（平行） |
-| Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | `skills/sprint-planning/SKILL.md` §6 Step 2 新增平行分群建議輸出項目 | Developer | 待開始 | 待審 | Phase 2（#25 後） |
+| Retro #26：PO Demo 應讀取 repo 源碼而非 plugin cache | `skills/sprint-review/SKILL.md` §2 Step 1 明確指定讀取 repo 源碼路徑，禁止依賴 plugin cache | Developer | 完成 | PASS | Phase 1（平行） |
+| Retro #27：Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | `skills/sprint-execution/SKILL.md` Step 8 限定 Developer 可更新欄位範圍 | Developer | 完成 | PASS | Phase 1（平行） |
+| Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量 | `skills/sprint-planning/SKILL.md` §6 Step 1 新增獨立性評估欄位 | Developer | 完成 | PASS | Phase 1（平行） |
+| Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | `skills/sprint-planning/SKILL.md` §6 Step 2 新增平行分群建議輸出項目 | Developer | 完成 | PASS | Phase 2（#25 後） |
 
 ---
 

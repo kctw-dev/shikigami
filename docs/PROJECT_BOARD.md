@@ -15,10 +15,10 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| Retro #26：PO Demo 應讀取 repo 源碼而非 plugin cache | S | 1 | 待開始 |
-| Retro #27：Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | S | 1 | 待開始 |
-| Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量 | S | 1 | 待開始 |
-| Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | S | 1 | 待開始 |
+| Retro #26：PO Demo 應讀取 repo 源碼而非 plugin cache | S | 1 | 完成 |
+| Retro #27：Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | S | 1 | 完成 |
+| Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量 | S | 1 | 完成 |
+| Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | S | 1 | 完成 |
 
 **計畫 Velocity**：4 points（4 Stories）
 
