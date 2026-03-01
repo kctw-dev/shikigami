@@ -104,12 +104,12 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
    PO subagent 回傳格式（Markdown 表格）：
 
    ```markdown
-   | Story ID | 標題 | 估點 | AC 確認結果 |
-   |----------|------|------|------------|
-   | US-XX    | ...  | M    | PASS / 待確認 |
+   | Story ID | 標題 | 估點 | AC 確認結果 | 獨立性評估 |
+   |----------|------|------|------------|-----------|
+   | US-XX    | ...  | M    | PASS / 待確認 | 獨立 / 與 US-YY 衝突（同修改 path/to/file） |
    ```
 
-   此階段 PO 需明確定義本次 Sprint 要達成的目標。
+   此階段 PO 需明確定義本次 Sprint 要達成的目標，並評估各 Story 間的檔案修改獨立性：逐一列出每個 Story 預計修改的主要檔案，判斷哪些 Story 修改不同檔案（可平行執行），哪些 Story 修改相同檔案（有衝突，需順序執行）。「獨立性評估」欄位填入「獨立」或「與 US-XX 衝突（同修改 path/to/file）」，供 Architect 後續規劃平行派工分群使用。
 2. **Architect**：對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若發現 Hard Gate 問題，該 Story 退回 Backlog。
 3. **QA**：逐一確認剩餘 Stories 的 Acceptance Criteria 是否明確且可被自動化測試驗證。若驗收標準模糊，退回 PO 補充後重新評估。
 
