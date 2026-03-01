@@ -271,6 +271,7 @@ Shikigami 用自己開發自己。本框架從 Sprint 1 起即由 AI Agent Scrum
 - `docs/sprints/` — Sprint 規劃與執行紀錄（sprint_1 ~ sprint_7）
 - `docs/km/Retrospective_Log.md` — 每次犯的錯都記下來，不重複犯
 - `docs/km/Metrics_Log.md` — Velocity 趨勢與完成率追蹤
+- `docs/km/ROLE_BALANCE_CASES.md` — [真實制衡案例記錄](docs/km/ROLE_BALANCE_CASES.md)（角色制衡的實際發生場景）
 - `docs/prd/PRODUCT_BACKLOG.md` — RICE 評分排序的 Backlog
 
 ---
