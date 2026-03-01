@@ -32,7 +32,7 @@ Sprint 整體 Token 消耗記錄，與 Velocity 記錄粒度對齊（Sprint 為�
 
 | Sprint 編號 | 輸入 token | 輸出 token | 估算成本 (USD) | 資料來源 |
 |------------|-----------|-----------|--------------|---------|
-| Sprint 10 | N/A | N/A | N/A | 不可用 |
+| Sprint 10 | 107M | 266K | $234.10 | Claude Code JSONL |
 
 ---
 
@@ -56,7 +56,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 編號 | Planning token | Execution token | Review token | 合計 token | 佔比（Planning / Execution / Review） |
 |------------|---------------|-----------------|-------------|-----------|--------------------------------------|
 | Sprint N（示範） | 12K | 20K | 10K | 42K | 29% / 48% / 23% |
-| Sprint 10 | N/A | N/A | N/A | N/A | N/A |
+| Sprint 10 | 87M | 10M | 11M | 108M | 81% / 9% / 10% |
 
 ---
 

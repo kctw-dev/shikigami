@@ -374,8 +374,13 @@
 
 ### Problem（需改進的事）
 
-- **Token 記錄機制完備但數據仍全為 N/A**：Sprint 8 提出 Token 不透明、Sprint 9 建立記錄機制（US-19）、Sprint 10 建立分環節記錄（US-23），但三個 Sprint 累計 token 表格仍無任何實際數值。根因是 Claude Code 環境中 API token 計數器不可程式化存取，AC4 降級處理設計正確運作，但使用者對「成本可觀測性」的原始需求尚未能實質滿足
+- **Token 數據來源延遲發現**：Sprint Execution 完成後直接走 AC4 降級路徑填 N/A，未嘗試從 Claude Code session JSONL（`~/.claude/projects/` 下的 `.jsonl` 檔案）提取 `message.usage` 欄位。使用者在 Review 質疑後才發現數據一直存在於 JSONL 中。根因：降級路徑設計太容易觸發，變成預設路徑而非 fallback；開發團隊缺乏對 Claude Code 內部資料結構的探索意識
+- **Token 提取方法未整合至 SKILL.md**：發現 JSONL 資料來源後，三個 SKILL.md（sprint-planning / sprint-execution / sprint-review）的 token 記錄指引仍寫「若 Token 資料不可得」，需更新為優先從 JSONL 提取
 
 ### Action Items
 
-本 Sprint 無新增 Action Item。Token N/A 問題已有 AC4 降級機制正確處理，無框架內可行動的改善項目。Sprint 9 的 2 個 Open Action Items（#18、#19）已在本 Sprint 關閉。
+| # | Action | Owner | 驗收方式 | 狀態 | Issue |
+|---|--------|-------|----------|------|-------|
+| 1 | 更新三個 SKILL.md 的 token 記錄指引：優先從 `~/.claude/projects/` JSONL 提取 `message.usage`，解析失敗才走 N/A 降級 | Developer | sprint-planning/execution/review SKILL.md 含 JSONL 提取指引 | Open | [#20](https://github.com/KCTW/shikigami/issues/20) |
+
+> Sprint 9 的 2 個 Open Action Items（#18、#19）已在本 Sprint 關閉。
