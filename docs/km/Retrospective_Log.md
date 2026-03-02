@@ -1,6 +1,6 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–13）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–14）
 
 ---
 
@@ -130,25 +130,3 @@
 | 1 | GETTING_STARTED.md 補上 ToC 目錄 | Developer | `docs/tutorial/GETTING_STARTED.md` 包含 7 步驟錨點目錄，與 TROUBLESHOOTING.md 格式對齊 | #37 | Closed（Sprint 16） |
 | 2 | Token JSONL 提取機制需重新調查 session 格式變化 | Architect | Token 成本分環節記錄表格至少有一個 Sprint 的 Planning/Execution/Review 為非 N/A | #38 | Closed（Sprint 16） |
 
----
-
-## Sprint 14 — 2026-03-02
-
-### 參與角色
-PO、Architect、QA Engineer、Developer、Stakeholder
-
-### Good
-1. **連續 14 個 Sprint 完成率 100%** — 團隊交付節奏持續穩定
-2. **QA Hard Gate（Must）首次執行，品質門檻正確運作** — ADR-004 觸發後首個 Sprint，雙階段審查無 Bypass，US-15/US-16 因 AC 不完整被正確退回
-3. **Sprint 13 Retro Action Items 全數清零** — #29 和 #30 均在 Sprint 14 首輪完成
-4. **Phase 1 全平行策略成功** — 兩個 Story 修改不同檔案，零合併衝突
-
-### Problem
-1. **Sprint 14 Velocity 僅 2 points（歷史最低）** — 原因是 Backlog 中無符合 QA Hard Gate 要求的候選 Story 可補足容量。品質優先決策正確，但 Velocity 下降反映 Backlog 健康度不足（US-15/US-16 無正式 AC）
-2. **US-15/US-16 在 PRODUCT_BACKLOG.md 無正式條目** — ROADMAP 列出但 Backlog 未建立完整 Story（含 AC），PO 需在下次 Planning 前完成精化
-
-### Action Items
-
-| # | Action | Owner | 驗收方式 | Issue | 狀態 |
-|---|--------|-------|----------|-------|------|
-| 1 | US-15/US-16 Backlog 精化：PO 在下次 Sprint Planning 前，為 US-15 和 US-16 在 PRODUCT_BACKLOG.md 建立完整 Story 條目（含 AC 表格），使其符合 QA Hard Gate 要求 | PO | 下次 Sprint Planning 時 QA 確認 AC 可測試性為 PASS | [#31](https://github.com/KCTW/shikigami/issues/31) | Closed（Sprint 15 Planning — US-15/US-16 AC 精化完成，QA 確認可測試性 PASS，已選入 Sprint 15） |

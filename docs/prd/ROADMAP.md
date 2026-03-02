@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-02（Sprint 17 Review — US-29 歸檔機制完成）
+> 最後更新：2026-03-02（Sprint 19 Review — Retro #53/#54、US-30、US-36 完成）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -187,6 +187,10 @@ Sprint Review 時自動產出：
 | US-29 | PROJECT_BOARD 與 Retrospective_Log 歷史歸檔機制 | Sprint 17 ✅ |
 | ADR-005 | Schedule Skill 技術決策（cron + flock + allowedTools + OAuth + 回滾） | Sprint 18 ✅ |
 | US-35 | Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule） | Sprint 18 ✅ |
+| Retro #53 | schedule skill — skill name 字元白名單驗證（注入防護） | Sprint 19 ✅ |
+| Retro #54 | schedule skill — 模板品質強化（set -euo pipefail + 備份安全） | Sprint 19 ✅ |
+| US-30 | PO subagent 多輪派遣 Story 內容偏離修正機制（drift 保護） | Sprint 19 ✅ |
+| US-36 | Planning + Execution 序列排程 — 序列群組鎖避免平行衝突 | Sprint 19 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
 

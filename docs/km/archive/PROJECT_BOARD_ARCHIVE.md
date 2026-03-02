@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-02（Sprint 17 US-29 首次歸檔）
-**歸檔範圍**：Sprint 1–13（共 13 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17
+**最後更新**：2026-03-02（Sprint 14 歸檔）
+**歸檔範圍**：Sprint 1–14（共 14 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 14–17）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 15–19）
 
 ---
 
@@ -204,6 +204,21 @@
 | Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | S | 1 | 完成 |
 
 **實際 Velocity**：4 points（4 Stories）
+
+---
+
+## Sprint 14 — 完成
+
+**Sprint Goal**：清零 Sprint 13 Retro Action Items，收窄 Retro #29 修改範圍至 sprint-execution SKILL.md，完成 sprint-review 硬編碼版本號修正，確保框架指引文件在 M5 穩定化階段維持長期可維護性。
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。
+**Stakeholder 驗收**：接受
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #29：Issue 快掃觸發條件排除 retro-action label（收窄至 sprint-execution SKILL.md） | S | 1 | 完成 |
+| Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | S | 1 | 完成 |
+
+**實際 Velocity**：2 points（2 Stories）
 
 ---
 

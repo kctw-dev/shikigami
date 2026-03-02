@@ -1181,3 +1181,90 @@ As a framework user, I want to set up automated Sprint execution scheduling with
 **MoSCoW**：Should
 **Size**：L / **Points**：3
 **ADR**：ADR-005（Accepted）
+
+---
+
+## Sprint 19（2026-03-02）
+
+**Sprint Goal**：強化 schedule skill 安全性，修正 PO drift 保護缺口，建立序列群組鎖機制
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| Retro #53：schedule skill — skill name 字元白名單驗證 | — | Must | — | Done |
+| Retro #54：schedule skill — 模板品質強化 | — | Must | — | Done |
+| US-30：PO subagent 多輪派遣 Story 內容偏離修正機制 | 25.6 | Should | — | Done |
+| US-36：Planning + Execution 序列排程 — 避免平行衝突 | 待定 | Should | — | Done |
+
+---
+
+### Retro #53：schedule skill — skill name 字元白名單驗證
+
+**來源**：Sprint 18 Retro Action Item #53（[Issue #53](https://github.com/KCTW/shikigami/issues/53)）
+
+**交付摘要**：`skills/schedule/SKILL.md` 新增 skill name 字元白名單驗證規則，僅允許小寫字母、數字與連字號（`[a-z0-9-]`）；不符合規則時阻擋排程設定並輸出明確錯誤訊息，防止注入類風險。
+
+**Acceptance Criteria**
+- AC1：SKILL.md 定義 skill name 白名單格式（`^[a-z0-9-]+$`）
+- AC2：Pre-flight 檢查新增白名單驗證步驟；不符合時輸出 ERROR 並拒絕繼續
+- AC3：測試案例覆蓋合法名稱與非法名稱（含空格、大寫、特殊字元等邊界案例）
+
+**驗收結果**：AC 全通過；Issue #53 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### Retro #54：schedule skill — 模板品質強化
+
+**來源**：Sprint 18 Retro Action Item #54（[Issue #54](https://github.com/KCTW/shikigami/issues/54)）
+
+**交付摘要**：`templates/schedule_cron.sh.tmpl` 新增 `set -euo pipefail` 嚴格模式與備份安全機制；確保腳本在非零 exit 時立即終止，避免靜默錯誤；備份操作使用原子性步驟，防止備份失敗留下損壞狀態。
+
+**Acceptance Criteria**
+- AC1：模板新增 `set -euo pipefail` 於腳本頭部
+- AC2：備份流程新增完整性驗證步驟；備份失敗時阻擋後續操作並回滾
+- AC3：相關測試案例更新覆蓋新增的嚴格模式行為
+
+**驗收結果**：AC 全通過；Issue #54 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### US-30：PO subagent 多輪派遣 Story 內容偏離修正機制
+
+**標題**：防止 PO subagent 在多輪派遣間發生 Story 內容偏離
+
+**User Story**
+As a Scrum Master, I want the PO subagent to include a consistency check when dispatched across multiple rounds, so that Story acceptance criteria and scope remain stable and do not drift between planning rounds due to context divergence.
+
+**Acceptance Criteria**
+- AC1：`skills/sprint-planning/SKILL.md` PO subagent 派遣 prompt 新增「偏離偵測」指引：PO subagent 於第二輪起須比對本輪輸出與前輪存檔，若 AC 變動 > 20% 標記 DRIFT WARNING
+- AC2：DRIFT WARNING 觸發時輸出差異摘要（變動欄位 + 前後值），主 session 決定是否接受變更或重派
+- AC3：偏離偵測邏輯記錄於 sprint_N.md PO 輪次區塊，保留比對記錄
+
+**RICE 評分**：25.6
+**MoSCoW**：Should
+**Size**：S / **Points**：1
+**來源**：Sprint 17 Retro / Issue #48（對應 Retro #48）
+
+**驗收結果**：AC 全通過；Issue #48 CLOSED
+
+---
+
+### US-36：Planning + Execution 序列排程 — 避免平行衝突
+
+**標題**：在 schedule skill 中實作序列群組鎖，確保 Planning 與 Execution 不會同時執行
+
+**User Story**
+As a framework user using automated scheduling, I want Planning and Execution phases to be locked sequentially so they cannot run concurrently, preventing file conflicts and state corruption that would occur if both phases write to sprint documents simultaneously.
+
+**Acceptance Criteria**
+- AC1：`skills/schedule/SKILL.md` 定義「序列群組」概念：Planning 與 Execution 屬同一群組，同群組內同時只允許一個排程執行
+- AC2：腳本生成邏輯新增群組鎖機制（lockfile 或 flock group key），同群組第二個排程啟動時輸出 SKIPPED 並記錄原因
+- AC3：`--dry-run` 模式顯示群組鎖狀態（當前是否有同群組排程執行中）
+- AC4：相關測試案例覆蓋群組鎖衝突偵測與 SKIPPED 路徑
+
+**MoSCoW**：Should
+**Size**：M / **Points**：2
+**來源**：GitHub Issue #50
+
+**驗收結果**：AC 全通過；Issue #50 CLOSED

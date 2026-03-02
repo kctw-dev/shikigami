@@ -105,8 +105,8 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | US-35（Issue #46）：Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule） | 待定 | Should | L | GitHub Issue #46 / Stakeholder 優先 | Done（Sprint 18） |
-| 2 | US-30（Issue #48）：PO subagent 多輪派遣時 Story 內容偏離修正機制 | 25.6 | Should | S | Sprint 17 Retro / Issue #48 | In Sprint 19 |
-| 3 | US-31（Issue #47）：/shoot 短衝模式 | 待定 | Should | 待定 | Sprint 17 Retro / Issue #47 | Backlog（退回原因：4 項設計決策未完成，待 Refinement） |
+| 2 | US-30（Issue #48）：PO subagent 多輪派遣時 Story 內容偏離修正機制 | 25.6 | Should | S | Sprint 17 Retro / Issue #48 | Done（Sprint 19） |
+| 3 | US-31（Issue #47）：/shoot 短衝模式 | 待定 | Should | M | Sprint 17 Retro / Issue #47 | Backlog（退回原因：4 項設計決策未完成，待 Refinement；Stakeholder 調整方案：Size 由 L 調降為 M） |
 | 4 | US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | 24.0 | Should | M | GitHub Issue #40 | Backlog（退回原因：Sprint 18 重新規劃，待後續排期） |
 | 5 | US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | 25.2 | Should | S | GitHub Issue #33 | Backlog（退回原因：Sprint 18 重新規劃，待後續排期） |
 | 6 | US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | 50.4 | Should | S | GitHub Issue #32 | Backlog（退回原因：Sprint 18 重新規劃，待後續排期） |
@@ -115,14 +115,14 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | Retro #53（Issue #53）：schedule skill — skill name 字元白名單驗證 | — | Must | S | Sprint 18 Retro / Issue #53 | In Sprint 19 |
-| 2 | Retro #54（Issue #54）：schedule skill — 模板品質強化（set -euo pipefail + 備份安全） | — | Must | S | Sprint 18 Retro / Issue #54 | In Sprint 19 |
+| 1 | Retro #53（Issue #53）：schedule skill — skill name 字元白名單驗證 | — | Must | S | Sprint 18 Retro / Issue #53 | Done（Sprint 19） |
+| 2 | Retro #54（Issue #54）：schedule skill — 模板品質強化（set -euo pipefail + 備份安全） | — | Must | S | Sprint 18 Retro / Issue #54 | Done（Sprint 19） |
 
 ### Sprint 19 — 新增 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-36（Issue #50）：Planning + Execution 序列排程 — 避免平行衝突 | 待定 | Should | M | GitHub Issue #50 | In Sprint 19 |
+| 1 | US-36（Issue #50）：Planning + Execution 序列排程 — 避免平行衝突 | 待定 | Should | M | GitHub Issue #50 | Done（Sprint 19） |
 
 ### Sprint 17 後 — 候選 Stories
 
