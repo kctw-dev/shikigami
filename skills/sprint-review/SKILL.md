@@ -87,6 +87,43 @@ Sprint Review 的目的是驗收本 Sprint 交付的成果，確認是否符合�
 
 ---
 
+## 2.5 Sprint 外完成項目掃描（/shoot 短衝記錄）
+
+Sprint Review 進行時，掃描 `docs/km/Shoot_Log.md` 取得本 Sprint 期間的短衝記錄，列入「Sprint 外完成項目」區塊。
+
+### 掃描步驟
+
+1. 檢查 `docs/km/Shoot_Log.md` 是否存在
+2. 若存在，篩選本 Sprint 期間（依日期欄位）且結果為 `PASS` 的記錄
+3. 列出所有符合條件的短衝記錄
+
+### 輸出格式
+
+**有短衝記錄時**：
+
+```markdown
+## Sprint 外完成項目（/shoot 短衝記錄）
+
+| 日期 | 來源 | 標題 | commit hash |
+|------|------|------|-------------|
+| YYYY-MM-DD | direct | 修復登入頁面 CORS 問題 | abc1234 |
+| YYYY-MM-DD | #42 | 更新文件錯字 | def5678 |
+```
+
+**無短衝記錄時**：
+
+```
+本 Sprint 無短衝記錄
+```
+
+### 計入規則
+
+- 短衝記錄**不計入 Velocity**（不影響 Sprint Points 統計）
+- 短衝記錄僅作為「Sprint 外完成項目」附加呈現
+- `docs/km/Shoot_Log.md` 不存在時，直接輸出「本 Sprint 無短衝記錄」，不視為錯誤
+
+---
+
 ## 3. Sprint Retrospective 流程
 
 Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定具體行動。
