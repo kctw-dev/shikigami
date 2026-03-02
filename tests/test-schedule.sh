@@ -228,6 +228,12 @@ if [ -f "$TEMPLATE" ]; then
 
   # 2.15 含 shikigami-schedule-generated 標記（版本追蹤）
   assert_contains "$TMPL_CONTENT" "shikigami-schedule-generated" "模板含 shikigami-schedule-generated 標記"
+
+  # 2.16 START log 含 GROUP_LOG 變數（US-36 Defect 2 修正）
+  assert_contains "$TMPL_CONTENT" "GROUP_LOG" "模板 START log 含 GROUP_LOG 變數（US-36 Defect 2）"
+
+  # 2.17 模板預設設定 GROUP_LOG="group=none"（無 group 時記錄 group=none）
+  assert_contains "$TMPL_CONTENT" 'GROUP_LOG="group=none"' "模板預設 GROUP_LOG=group=none（無 group 情境）"
 else
   fail "模板內容測試跳過（檔案不存在）"
 fi
@@ -848,9 +854,127 @@ if [ -f "$TEMPLATE" ]; then
   # 18.4 回歸腳本仍含 unset ANTHROPIC_API_KEY
   assert_file_contains "$TMP_REGRESSION" "unset ANTHROPIC_API_KEY" "AC6 回歸：無 --sequential-group 腳本仍含 unset ANTHROPIC_API_KEY"
 
+  # 18.5 回歸腳本含 GROUP_LOG 預設值 group=none（US-36 Defect 2 修正，無 group 時 START log 仍含 group 欄位）
+  assert_file_contains "$TMP_REGRESSION" 'GROUP_LOG="group=none"' "AC6 回歸：無 --sequential-group 腳本含 GROUP_LOG=group=none"
+
   rm -f "$TMP_REGRESSION"
 else
   fail "模板不存在，AC6 回歸測試跳過"
+fi
+
+# ---------------------------------------------------------------------------
+# 區段 19：US-36 Issue #50 — group-name 白名單驗證（Defect 1）
+# ---------------------------------------------------------------------------
+echo ""
+echo "=== 區段 19：group-name 白名單驗證（US-36 Defect 1） ==="
+
+# 定義 validate_group_name 函式（對應 SKILL.md §4 規格）
+validate_group_name() {
+  local name="$1"
+  if [[ ! "$name" =~ ^[a-z0-9][a-z0-9-]{0,63}$ ]]; then
+    echo "[FAIL] group name 不合法：'${name}'"
+    echo "[INFO] 允許字元：小寫英文、數字、連字號（不可開頭為連字號，最長 64 字元）"
+    return 1
+  fi
+}
+
+# 19.1 合法 group name 通過
+validate_group_name "sprint-cycle" >/dev/null 2>&1
+assert_exit_code 0 $? "group name 'sprint-cycle' 通過驗證（合法）"
+
+validate_group_name "release-v2" >/dev/null 2>&1
+assert_exit_code 0 $? "group name 'release-v2' 通過驗證（含數字合法）"
+
+validate_group_name "a" >/dev/null 2>&1
+assert_exit_code 0 $? "group name 'a' 通過驗證（單字元合法）"
+
+validate_group_name "group1" >/dev/null 2>&1
+assert_exit_code 0 $? "group name 'group1' 通過驗證（合法）"
+
+# 19.2 特殊字元拒絕
+validate_group_name "my_group" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 'my_group' 拒絕（底線為非法字元）"
+
+validate_group_name "my@group" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 'my@group' 拒絕（@ 為非法字元）"
+
+validate_group_name "my.group" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 'my.group' 拒絕（. 為非法字元）"
+
+validate_group_name "my*group" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 'my*group' 拒絕（* 為非法字元）"
+
+validate_group_name 'group$name' >/dev/null 2>&1
+assert_exit_code 1 $? "group name 含 \$ 字元拒絕（非法字元）"
+
+validate_group_name "group;rm -rf /" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 含分號注入嘗試拒絕"
+
+# 19.3 路徑分隔符號拒絕
+validate_group_name "sprint/cycle" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 'sprint/cycle' 拒絕（路徑分隔符 / 不合法）"
+
+validate_group_name "../../../etc/passwd" >/dev/null 2>&1
+assert_exit_code 1 $? "group name '../../../etc/passwd' 拒絕（路徑穿越攻擊）"
+
+validate_group_name "group\\name" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 含反斜線拒絕（路徑分隔符）"
+
+# 19.4 大寫字母拒絕
+validate_group_name "SprintCycle" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 'SprintCycle' 拒絕（含大寫字母）"
+
+validate_group_name "GROUP" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 'GROUP' 拒絕（全大寫不合法）"
+
+validate_group_name "Sprint-Cycle" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 'Sprint-Cycle' 拒絕（含大寫字母）"
+
+# 19.5 空字串拒絕
+validate_group_name "" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 空字串拒絕"
+
+validate_group_name " " >/dev/null 2>&1
+assert_exit_code 1 $? "group name ' ' 拒絕（單空格不合法）"
+
+validate_group_name "group name" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 含空格拒絕（注入嘗試）"
+
+# 19.6 開頭連字號拒絕
+validate_group_name "-group" >/dev/null 2>&1
+assert_exit_code 1 $? "group name '-group' 拒絕（不可以連字號開頭）"
+
+validate_group_name "--group" >/dev/null 2>&1
+assert_exit_code 1 $? "group name '--group' 拒絕（雙連字號開頭不合法）"
+
+# 19.7 邊界值分析：恰好 64 字元（最大合法長度）應通過
+GROUP_64=$(printf 'a%.0s' {1..64})
+validate_group_name "$GROUP_64" >/dev/null 2>&1
+assert_exit_code 0 $? "group name 恰好 64 字元通過驗證（最大合法長度）"
+
+# 19.8 邊界值分析：恰好 65 字元（最小非法長度）應拒絕
+GROUP_65=$(printf 'a%.0s' {1..65})
+validate_group_name "$GROUP_65" >/dev/null 2>&1
+assert_exit_code 1 $? "group name 恰好 65 字元拒絕（超過最大合法長度 64 字元）"
+
+# 19.9 錯誤訊息格式驗證
+GROUP_ERROR_OUTPUT=$(validate_group_name "Invalid-Group" 2>&1)
+assert_contains "$GROUP_ERROR_OUTPUT" "[FAIL]" "非法 group name 輸出含 [FAIL] 標記"
+assert_contains "$GROUP_ERROR_OUTPUT" "[INFO]" "非法 group name 輸出含 [INFO] 說明"
+
+# 19.10 SKILL.md §4 Pre-flight 含 group-name 白名單驗證項目（靜態驗證）
+if [ -f "$SKILL_MD" ]; then
+  # SKILL.md §4 含 group name 驗證列（0.5 列）
+  if grep -A 40 "## 4\." "$SKILL_MD" | head -45 | grep -qF "group name"; then
+    pass "SKILL.md §4 Pre-flight 含 group name 白名單驗證列"
+  else
+    fail "SKILL.md §4 Pre-flight 含 group name 白名單驗證列 (expected to find 'group name' in §4 section)"
+  fi
+
+  # SKILL.md 含 validate_group_name 函式定義
+  assert_file_contains "$SKILL_MD" "validate_group_name" "SKILL.md 含 validate_group_name 函式定義"
+else
+  fail "SKILL.md 不存在，group-name 靜態驗證跳過"
 fi
 
 # ---------------------------------------------------------------------------
