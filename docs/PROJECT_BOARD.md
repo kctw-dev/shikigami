@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 19 Review — Goal 達成，4/4 Stories PASS）
-**當前 Sprint**：Sprint 19（完成）
+**最後更新**：2026-03-02（Sprint 20 Planning — 進行中）
+**當前 Sprint**：Sprint 20（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 19](sprints/sprint_19.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 20](sprints/sprint_20.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 20 — 進行中
+
+**Sprint Goal**：清零 Sprint 19 Retro Action Items（#56、#57），交付 /shoot 短衝模式（US-31）
+**期間**：2026-03-02 ~ 2026-03-08
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #56（Issue #56）：修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗 | S | 1 | 待開始 |
+| Retro #57（Issue #57）：Developer subagent 狀態更新衝突防護 | S | 1 | 待開始 |
+| US-31（Issue #47）：/shoot 短衝模式 | L | 3 | 待開始 |
+
+**計畫 Velocity**：5 points（3 Stories）
 
 ---
 
