@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-01（Sprint 13 Review）
+> 最後更新：2026-03-02（Sprint 14 Review）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -175,6 +175,8 @@ Sprint Review 時自動產出：
 | Retro #27 | Developer Board 更新範圍限制（防止越權標記 Sprint 完成） | Sprint 13 ✅ |
 | Retro #25 | PO Sprint Planning 納入平行派工可行性考量 | Sprint 13 ✅ |
 | Retro #24 | Architect Sprint Planning 包含平行派工策略 | Sprint 13 ✅ |
+| Retro #29 | Issue 快掃觸發條件排除 retro-action label（sprint-execution SKILL.md） | Sprint 14 ✅ |
+| Retro #30 | sprint-review SKILL.md 禁止項硬編碼版本號修正 | Sprint 14 ✅ |
 | US-15 | 完整安裝流程驗證（全新環境測試） | TBD |
 | US-16 | 使用者文件完善（Tutorial + Troubleshooting） | TBD |
 | US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | TBD |

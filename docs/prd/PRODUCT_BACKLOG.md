@@ -49,8 +49,8 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | Retro #29：Issue 快掃觸發條件排除 retro-action label（收窄至 sprint-execution SKILL.md） | — | Must | S | Sprint 13 Retro | In Sprint 14 |
-| 2 | Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | — | Must | S | Sprint 13 Retro | In Sprint 14 |
+| 1 | Retro #29：Issue 快掃觸發條件排除 retro-action label（收窄至 sprint-execution SKILL.md） | — | Must | S | Sprint 13 Retro | Done (Sprint 14) |
+| 2 | Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | — | Must | S | Sprint 13 Retro | Done (Sprint 14) |
 
 ---
 

@@ -967,3 +967,32 @@ As a Scrum Master, I want Sprint Planning to automatically read Retrospective tr
 **交付摘要**：`skills/sprint-planning/SKILL.md` §6 Step 2 Architect 區段新增「平行分群建議」正式輸出項目，含 Phase 1/Phase 2 分組表格、檔案衝突分析表格、分群規則。
 **驗收結果**：AC 全通過（2/2）；Issue #24 CLOSED
 **Size**：S / **Points**：1
+
+---
+
+## Sprint 14（2026-03-02）
+
+**Sprint Goal**：清零 Sprint 13 Retro Action Items，收窄 Retro #29 修改範圍至 sprint-execution SKILL.md，完成 sprint-review 硬編碼版本號修正，確保框架指引文件在 M5 穩定化階段維持長期可維護性。
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| Retro #29：Issue 快掃觸發條件排除 retro-action label | — | Must | — | Done |
+| Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | — | Must | — | Done |
+
+---
+
+### Retro #29：Issue 快掃觸發條件排除 retro-action label
+
+**來源**：Sprint 13 Retro Action Item #29（[Issue #29](https://github.com/KCTW/shikigami/issues/29)）
+**交付摘要**：`skills/sprint-execution/SKILL.md` 的 Issue 快掃觸發條件 (a) 新增排除 `retro-action` label 規則，防止內部追蹤 issue 被誤判為社群使用者問題。修改範圍收窄至 sprint-execution SKILL.md（不含 standup.md）。
+**驗收結果**：AC 通過；Issue #29 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正
+
+**來源**：Sprint 13 Retro Action Item #30（[Issue #30](https://github.com/KCTW/shikigami/issues/30)）
+**交付摘要**：`skills/sprint-review/SKILL.md` 禁止項說明中移除硬編碼版本號 `v0.3.5`，改為版本無關的描述（「目前已安裝版本」或「plugin cache 中的版本」），確保指引文件長期可維護性。
+**驗收結果**：AC 通過；Issue #30 CLOSED
+**Size**：S / **Points**：1
