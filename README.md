@@ -53,6 +53,17 @@ Scrum Master 會觸發 `onboarding`，引導你建立專案的 `CLAUDE.md` 與�
 
 ---
 
+## 文件導覽
+
+安裝完成後，以下文件幫助你快速上手：
+
+| 文件 | 用途 |
+|------|------|
+| [入門教學](docs/tutorial/GETTING_STARTED.md) | 從安裝到第一個 Sprint 的完整端對端步驟指引，含指令範例與預期輸出摘要 |
+| [Troubleshooting 指南](docs/tutorial/TROUBLESHOOTING.md) | 6 個常見失敗情境排查指南，含症狀描述、根因說明與解決步驟 |
+
+---
+
 ## 怎麼用？
 
 用自然語言說你要做什麼，Scrum Master 會自動調度。也可以用 Slash Commands 直接觸發流程：`/sprint`（Sprint 規劃）、`/standup`（每日站立會議）、`/review`（Sprint 回顧）、`/dispel`（Legacy 系統考古）。
