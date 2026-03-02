@@ -996,3 +996,78 @@ As a Scrum Master, I want Sprint Planning to automatically read Retrospective tr
 **交付摘要**：`skills/sprint-review/SKILL.md` 禁止項說明中移除硬編碼版本號 `v0.3.5`，改為版本無關的描述（「目前已安裝版本」或「plugin cache 中的版本」），確保指引文件長期可維護性。
 **驗收結果**：AC 通過；Issue #30 CLOSED
 **Size**：S / **Points**：1
+
+---
+
+## Sprint 15（2026-03-02）
+
+**Sprint Goal**：完成 M5 穩定化核心工作，建立完整安裝流程驗證機制與外部使用者導向文件體系，讓外部使用者能順利安裝並走完第一個 Sprint。
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| US-15：完整安裝流程驗證（全新環境測試） | 28.0 | Must | — | Done |
+| US-16：使用者文件完善（Tutorial + Troubleshooting） | 22.5 | Must | — | Done |
+
+---
+
+### US-15：完整安裝流程驗證（全新環境測試）
+
+**標題**：在全新環境中執行 README 安裝步驟，建立可重複的驗證報告
+
+**User Story**
+As an external user, I want the installation flow to be verified in a clean environment and documented in a reproducible checklist, so that I can confidently follow the README and get a working Shikigami setup without hidden assumptions or undocumented prerequisites.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 建立安裝驗證 Checklist | 新建 `docs/km/INSTALL_VERIFICATION.md`；包含逐步 Checklist（每步驟含：指令/動作描述、預期輸出、PASS/FAIL 欄位、備注欄位）；涵蓋全部安裝步驟 |
+| AC2 | [動態] | 全新環境實際執行 | 依照 README 安裝步驟在無任何 Shikigami 預設前提的環境中逐步執行，將每步驟結果填入 AC1 Checklist；最終 Checklist 所有步驟標記 PASS |
+| AC3 | [靜態] | 驗證報告完整性 | 包含：(a) 測試環境規格、(b) 至少 5 個驗證場景、(c) 測試日期與執行者、(d) 發現問題清單 |
+| AC4 | [靜態] | README 對齊 | 若 AC2 執行中發現 README 有任何錯誤、缺漏、過時描述，須同步修正 `README.md` 對應段落 |
+
+**RICE 評分**
+
+| 維度 | 分數 |
+|------|------|
+| Reach | 10 |
+| Impact | 2 |
+| Confidence | 70% |
+| Effort | 0.5 人週 |
+| **RICE Score** | **28.0** |
+
+**MoSCoW**：Must
+**Size**：M / **Points**：2
+**對應 ROADMAP**：M5 穩定化（US-15，Sprint 15）
+
+---
+
+### US-16：使用者文件完善（Tutorial + Troubleshooting）
+
+**標題**：建立 Tutorial 與 Troubleshooting 文件，讓外部使用者能端對端上手
+
+**User Story**
+As an external user who has installed Shikigami, I want a step-by-step tutorial covering installation to first Sprint, and a troubleshooting guide for common failure scenarios, so that I can get productive without needing to read all the internal documentation or ask questions in issues.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | Tutorial 文件建立 | 新建 `docs/tutorial/GETTING_STARTED.md`；覆蓋「安裝 → 第一個 Sprint」完整端對端路徑，包含 7 個步驟，每個步驟含指令範例與預期輸出摘要 |
+| AC2 | [靜態] | Troubleshooting 文件建立 | 新建 `docs/tutorial/TROUBLESHOOTING.md`；至少涵蓋 6 個常見失敗情境，每個情境包含：情境描述、症狀、根因說明、解決步驟 |
+| AC3 | [靜態] | README 文件導覽區段 | `README.md` 新增「## 文件導覽」區段（位置：在 Installation 之後，Features 之前） |
+| AC4 | [靜態] | 文件可發現性 | `docs/tutorial/` 目錄下建立 `README.md`（或 `INDEX.md`）；`docs/PROJECT_BOARD.md` 工件導覽區段新增 Tutorial 連結 |
+
+**RICE 評分**
+
+| 維度 | 分數 |
+|------|------|
+| Reach | 10 |
+| Impact | 3 |
+| Confidence | 75% |
+| Effort | 1.0 人週 |
+| **RICE Score** | **22.5** |
+
+**MoSCoW**：Must
+**Size**：M / **Points**：2
+**對應 ROADMAP**：M5 穩定化（US-16，Sprint 15）

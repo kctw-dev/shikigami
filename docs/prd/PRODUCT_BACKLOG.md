@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-02（Sprint 15 Planning — US-15/US-16 選入 Sprint 15）
+**最後更新**：2026-03-02（Sprint 15 Review — US-15/US-16 完成；Retro #37/#38 新增）
 **管理者**：Product Owner
 
 ---
@@ -52,12 +52,19 @@
 | 1 | Retro #29：Issue 快掃觸發條件排除 retro-action label（收窄至 sprint-execution SKILL.md） | — | Must | S | Sprint 13 Retro | Done (Sprint 14) |
 | 2 | Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | — | Must | S | Sprint 13 Retro | Done (Sprint 14) |
 
-### Sprint 15 — 進行中
+### Sprint 15 — 已完成
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-15：完整安裝流程驗證（全新環境測試） | 28.0 | Must | M | ROADMAP M5 | In Sprint 15 |
-| 2 | US-16：使用者文件完善（Tutorial + Troubleshooting） | 22.5 | Must | M | ROADMAP M5 | In Sprint 15 |
+| 1 | US-15：完整安裝流程驗證（全新環境測試） | 28.0 | Must | M | ROADMAP M5 | Done (Sprint 15) |
+| 2 | US-16：使用者文件完善（Tutorial + Troubleshooting） | 22.5 | Must | M | ROADMAP M5 | Done (Sprint 15) |
+
+### Sprint 15 Retro — 新增 Action Items
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | Retro #37：GETTING_STARTED.md 補上 ToC 目錄 | — | Should | S | Sprint 15 Retro | 待選 |
+| 2 | Retro #38：Token JSONL 提取機制需重新調查 | — | Should | S | Sprint 15 Retro | 待選 |
 
 ---
 

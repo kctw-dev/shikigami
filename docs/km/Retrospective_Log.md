@@ -2,6 +2,31 @@
 
 ---
 
+## Sprint 15 — 2026-03-02
+
+**參與角色**：PO、Architect、Developer、QA、Stakeholder、SRE
+
+### Good
+
+1. 連續 15 個 Sprint 維持 100% 完成率，Velocity 從 Sprint 14 的 2pt 回升至 4pt，確認品質優先策略不影響長期交付能力
+2. 首次交付面向外部使用者的完整文件套件（Tutorial + Troubleshooting + 安裝驗證），M5 穩定化使用者就緒目標正式達成
+3. Issue 快掃回覆 5 個 open issues（#3, #4, #5, #32, #33），QA 審核發現 2 個事實錯誤（#5 前提條件層級混淆、#33 路徑描述不精確）並修正後發布，品質門禁延伸至社群互動
+4. QA 雙階段審查完整執行（Hard Gate Must），兩個 M-size Story 共 4 次審查（2 Spec + 2 Quality）全 PASS
+
+### Problem
+
+1. Token JSONL 提取持續失敗（連續 Sprint 14/15 均 N/A），Sprint 10 建立的 JSONL 提取機制在新 session 格式下完全失效，Token 成本分環節記錄表格累計 3 個 Sprint 無法自動填入
+2. Code Quality Review 發現 2 個 Important 問題（GETTING_STARTED.md 缺 ToC、TROUBLESHOOTING.md 歷史問題標題定性模糊）未於本 Sprint 修復，PASS 門檻內但品質標準應更嚴
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| 1 | GETTING_STARTED.md 補上 ToC 目錄 | Developer | `docs/tutorial/GETTING_STARTED.md` 包含 7 步驟錨點目錄，與 TROUBLESHOOTING.md 格式對齊 | #37 | Open |
+| 2 | Token JSONL 提取機制需重新調查 session 格式變化 | Architect | Token 成本分環節記錄表格至少有一個 Sprint 的 Planning/Execution/Review 為非 N/A | #38 | Open |
+
+---
+
 ## Sprint 1 — 2026-02-28
 
 **Sprint Goal**：建立 Issue Management Skill 基礎 + 專案等級自治框架
