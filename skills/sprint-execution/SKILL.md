@@ -130,7 +130,7 @@ Sprint Backlog 還有 Story？
    以上 Sprint 級別欄位僅由 **sprint-review** Skill 負責更新，Developer 不得觸碰。
    </HARD-GATE>
 
-   **記錄本次 Execution 環節 Token 消耗**：所有 Story 完成後（即 Sprint Backlog 清空時），將本 Execution 環節累計 Token 消耗記錄至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格（對應 Execution token 欄）：
+   **記錄本次 Execution 環節 Token 消耗** *(慢想模式限定)*：所有 Story 完成後（即 Sprint Backlog 清空時），將本 Execution 環節累計 Token 消耗記錄至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格（對應 Execution token 欄）：
    - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens` 與 `output_tokens`，加總後填入 Metrics_Log.md 對應欄位。
    - **次選（降級方法）**：若 JSONL 檔案不存在、路徑不可存取、或 `message.usage` 欄位解析失敗，則各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
 

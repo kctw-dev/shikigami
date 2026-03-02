@@ -347,7 +347,7 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 - [ ] 已完成 Story 從 `PRODUCT_BACKLOG.md` 移至 `BACKLOG_DONE.md`，按 Sprint 歸檔
 - [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步；版本 Tag 與里程碑對齊確認完成，見「ROADMAP 更新操作指引」）
 - [ ] **Token 成本摘要**（見下方子節）
-- [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格**（對應 Review token 欄）：
+- [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格** *(慢想模式限定)*（對應 Review token 欄）：
   - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens` 與 `output_tokens`，加總後填入 Metrics_Log.md 對應欄位。
   - **次選（降級方法）**：若 JSONL 檔案不存在、路徑不可存取、或 `message.usage` 欄位解析失敗，則各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
 - [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag）
