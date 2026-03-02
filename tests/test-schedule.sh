@@ -69,7 +69,7 @@ assert_contains() {
   local haystack="$1"
   local needle="$2"
   local label="$3"
-  if echo "$haystack" | grep -qF "$needle"; then
+  if echo "$haystack" | grep -qF -- "$needle"; then
     pass "$label"
   else
     fail "$label (expected to find '${needle}')"
@@ -80,7 +80,7 @@ assert_not_contains() {
   local haystack="$1"
   local needle="$2"
   local label="$3"
-  if ! echo "$haystack" | grep -qF "$needle"; then
+  if ! echo "$haystack" | grep -qF -- "$needle"; then
     pass "$label"
   else
     fail "$label (expected NOT to find '${needle}')"
