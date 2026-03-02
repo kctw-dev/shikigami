@@ -241,6 +241,16 @@ Sprint Backlog 還有 Story？
 
 ---
 
+### L-size Story 審查增強
+
+**觸發條件**：Story Size = L（3 points）時自動啟用增強審查，以下 checklist 項目為額外必要通過條件。
+
+- [ ] **Architect 設計審查**：L-size Story 實作開始前，Architect 必須確認設計方向（介面定義、模組邊界、資料流），避免大型 Story 因設計問題在後期返工。Developer subagent 需在 prompt 中包含 Architect 確認的設計摘要，方可開始 TDD 循環。
+- [ ] **分階段驗收**：將 Story 的 Acceptance Criteria 分為至少 2 個驗收批次（例如：核心路徑為第一批，邊界條件與錯誤處理為第二批），每批 AC 通過 Spec Compliance Review 後，再繼續下一批實作。若任一批次不通過，僅需針對該批次修復，不影響已通過批次。
+- [ ] **額外回歸測試掃描**：L-size Story 完成後，除執行新增測試外，必須執行既有測試套件的完整掃描，確認無回歸失敗。掃描結果須明確記錄於 Story 完成 commit message（格式：`全部 N 項測試通過，無回歸`）。
+
+---
+
 ## 7. 安全審查觸發條件
 
 以下情況自動觸發 Security subagent：
