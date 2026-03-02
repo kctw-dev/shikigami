@@ -79,3 +79,89 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 編號 | Planning token | Execution token | Review token | 合計 token | 佔比（Planning / Execution / Review） |
 |------------|---------------|-----------------|-------------|-----------|--------------------------------------|
 | Sprint N | 12K | 20K | 10K | 42K | 29% / 48% / 23% |
+
+---
+
+## Token JSONL 調查記錄
+
+**調查日期**：2026-03-02
+
+**執行者**：Developer Subagent（AI Agent，Retro #38 Sprint 16）
+
+### 調查步驟結果（AC1）
+
+**步驟 a — 列出 project 目錄**
+
+執行 `ls ~/.claude/projects/`，輸出如下：
+
+```
+-home-kevin
+-home-kevin-george
+-home-kevin-kagemusha
+-home-kevin-kinun
+-home-kevin-onmyodo
+-home-kevin-seven-bala
+-home-kevin-shikigami
+```
+
+shikigami 專案對應目錄：`~/.claude/projects/-home-kevin-shikigami/`
+
+目錄下包含 8 個 JSONL 檔案，命名格式：`<session-uuid>.jsonl`
+
+**步驟 b — 讀取最新 JSONL 的 `message.usage` 欄位**
+
+最新 JSONL（依修改時間排序）：
+`~/.claude/projects/-home-kevin-shikigami/7b27788f-a884-4323-870f-9cce6719abc2.jsonl`
+
+讀取結果：
+
+- 操作狀態：**成功**
+- 檔案共 800 條 JSONL 記錄，其中 210 條含 `message.usage` 欄位
+- `message.usage` 欄位結構如下：
+
+```json
+{
+  "input_tokens": 1,
+  "cache_creation_input_tokens": 198,
+  "cache_read_input_tokens": 162314,
+  "output_tokens": 746,
+  "server_tool_use": {
+    "web_search_requests": 0,
+    "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+    "ephemeral_1h_input_tokens": 198,
+    "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "",
+  "iterations": [],
+  "speed": "standard"
+}
+```
+
+**步驟 c — 分支判定**：**分支 A（可存取）**
+
+- JSONL 路徑格式：`~/.claude/projects/<project-slug>/<session-uuid>.jsonl`
+- `message.usage` 欄位：僅存在於 `type` 為 assistant 回應的記錄中（含 `requestId` 的條目）
+- 提取 token 需加總所有含 `message.usage` 條目的 `input_tokens` 與 `output_tokens`
+
+### 結論
+
+**分支 A：可提取**
+
+- JSONL 路徑可存取，無權限限制（檔案屬主為當前使用者）
+- `message.usage` 欄位存在且可正常解析
+
+### 對應 SKILL.md 更新策略
+
+**分支 A 一致確認：無需更新**
+
+三個 SKILL.md 現有的主要方法描述（`skills/sprint-planning/SKILL.md`、`skills/sprint-execution/SKILL.md`、`skills/sprint-review/SKILL.md`）均已正確指向：
+
+- 路徑：`~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案
+- 欄位：`message.usage` 的 `input_tokens` 與 `output_tokens`
+
+與實際可存取的 JSONL 結構完全一致，無需修改。
+
+**ADR-003 適用性**：不適用（分支 A 一致，SKILL.md 無需修改；豁免理由已記錄）
