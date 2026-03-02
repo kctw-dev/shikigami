@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 17 Review 完成）
-**當前 Sprint**：Sprint 17（完成）
+**最後更新**：2026-03-02（Sprint 18 Planning 完成）
+**當前 Sprint**：Sprint 18（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 17](sprints/sprint_17.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 18](sprints/sprint_18.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 18 — 進行中
+
+**Sprint Goal**：框架工程化品質提升 — 修正 PO subagent 跨輪次偏離風險、強化 parallel-dispatch 自動衝突防護、補齊 Onboarding 缺口
+**期間**：2026-03-02 ~ 2026-03-08
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-30（Issue #48）：PO subagent 多輪派遣時 Story 內容偏離修正機制 | S | 1 | 進行中 |
+| US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | M | 2 | 進行中 |
+| US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | S | 1 | 進行中 |
+| US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | S | 1 | 進行中 |
+
+**計畫 Velocity**：5 points（4 Stories）
 
 ---
 

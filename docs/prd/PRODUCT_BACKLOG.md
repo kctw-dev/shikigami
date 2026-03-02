@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-02（Sprint 17 Review 完成 — 3/3 Stories Done）
+**最後更新**：2026-03-02（Sprint 18 Planning 完成 — 4 Stories 選入 Sprint）
 **管理者**：Product Owner
 
 ---
@@ -97,8 +97,18 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | Retro #47：短衝模式設計與實作 | 待定 | Should | 待定 | Sprint 17 Retro / Issue #47 | 候選 |
-| 2 | Retro #48：PO subagent 跨輪次一致性檢查 | 待定 | Should | 待定 | Sprint 17 Retro / Issue #48 | 候選 |
+| 1 | Retro #47：短衝模式設計與實作 | 待定 | Should | 待定 | Sprint 17 Retro / Issue #47 | Backlog（退回原因：4 項設計決策未完成，待 Refinement） |
+| 2 | Retro #48：PO subagent 跨輪次一致性檢查 | 25.6 | Should | S | Sprint 17 Retro / Issue #48 | In Sprint（Sprint 18，對應 US-30） |
+
+### Sprint 18 — 新增 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-30（Issue #48）：PO subagent 多輪派遣時 Story 內容偏離修正機制 | 25.6 | Should | S | Sprint 17 Retro / Issue #48 | In Sprint |
+| 2 | US-31（Issue #47）：/shoot 短衝模式 | 待定 | Should | 待定 | Sprint 17 Retro / Issue #47 | Backlog（退回原因：4 項設計決策未完成，待 Refinement） |
+| 3 | US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | 24.0 | Should | M | GitHub Issue #40 | In Sprint |
+| 4 | US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | 25.2 | Should | S | GitHub Issue #33 | In Sprint |
+| 5 | US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | 50.4 | Should | S | GitHub Issue #32 | In Sprint |
 
 ### Sprint 17 後 — 候選 Stories
 
