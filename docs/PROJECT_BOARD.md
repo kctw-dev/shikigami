@@ -14,8 +14,8 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| Retro #41：Token 記錄指引更新 — 三個 SKILL.md 納入 cache tokens 加總計算 | S | 1 | 待開發 |
-| Retro #42：OpenCode POC 可行性調查佔位入 Backlog | S | 1 | 待開發 |
+| Retro #41：Token 記錄指引更新 — 三個 SKILL.md 納入 cache tokens 加總計算 | S | 1 | 完成 |
+| Retro #42：OpenCode POC 可行性調查佔位入 Backlog | S | 1 | 完成 |
 | US-29（Issue #44）：PROJECT_BOARD.md 與 Retrospective_Log.md 歷史歸檔機制 | M | 2 | 待開發 |
 
 ---
