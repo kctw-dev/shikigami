@@ -15,8 +15,8 @@
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
 | Retro #53（Issue #53）：schedule skill — skill name 字元白名單驗證 | S | 1 | 待執行 |
-| Retro #54（Issue #54）：schedule skill — 模板品質強化（set -euo pipefail + 備份安全） | S | 1 | 待執行 |
-| US-30（Issue #48）：PO subagent 多輪派遣時 Story 內容偏離修正機制 | S | 1 | 待執行 |
+| Retro #54（Issue #54）：schedule skill — 模板品質強化（set -euo pipefail + 備份安全） | S | 1 | 完成 |
+| US-30（Issue #48）：PO subagent 多輪派遣時 Story 內容偏離修正機制 | S | 1 | 完成 |
 | US-36（Issue #50）：Planning + Execution 序列排程 — 避免平行衝突 | M | 2 | 待執行 |
 
 **計畫 Velocity**：5 points（4 Stories）
