@@ -14,7 +14,7 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-35（Issue #46）：Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule） | L | 3 | 進行中 |
+| US-35（Issue #46）：Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule） | L | 3 | 完成 |
 
 **計畫 Velocity**：3 points（1 Story）
 
