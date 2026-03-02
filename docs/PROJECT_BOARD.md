@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 21 Review — 完成）
-**當前 Sprint**：Sprint 21（完成）
+**最後更新**：2026-03-02（Sprint 22 Planning Round 2 — US-33、US-37、US-38、US-39 選入 Sprint 22）
+**當前 Sprint**：Sprint 22（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 21](sprints/sprint_21.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 22](sprints/sprint_22.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 22 — 進行中
+
+**Sprint Goal**：強化框架安全性與排程智能化
+**期間**：2026-03-16 ~ 2026-03-22
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | S | 1 | 待辦 |
+| US-37（Issue #55）：防範 Issue 提示注入攻擊 | S | 1 | 待辦 |
+| US-38（Issue #51）：排程模式下 Velocity 自動調小 — 僅選 S size Stories | S | 1 | 待辦 |
+| US-39（Issue #45）：Sprint Execution context overflow — Story 生命週期封裝為 subagent | L | 3 | 待辦 |
+
+**Sprint 容量**：6 Points（4 Stories）
 
 ---
 
