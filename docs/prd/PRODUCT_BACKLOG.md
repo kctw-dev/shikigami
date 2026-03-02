@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-01（Sprint 13 Review 完成）
+**最後更新**：2026-03-02（Sprint 14 Planning 完成）
 **管理者**：Product Owner
 
 ---
@@ -44,6 +44,13 @@
 | 2 | Retro #27：Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | — | Must | S | Sprint 12 Retro | Done (Sprint 13) |
 | 3 | Retro #25：PO Sprint Planning Story 選取應納入平行派工可行性考量 | — | Must | S | Sprint 12 Retro | Done (Sprint 13) |
 | 4 | Retro #24：Architect Sprint Planning 評估應包含平行派工策略 | — | Must | S | Sprint 12 Retro | Done (Sprint 13) |
+
+### Sprint 14 — 新增 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | Retro #29：Issue 快掃觸發條件排除 retro-action label（收窄至 sprint-execution SKILL.md） | — | Must | S | Sprint 13 Retro | In Sprint 14 |
+| 2 | Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | — | Must | S | Sprint 13 Retro | In Sprint 14 |
 
 ---
 

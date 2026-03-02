@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-01（Sprint 13 Review 完成）
-**當前 Sprint**：Sprint 13（進行中）
+**最後更新**：2026-03-02（Sprint 14 Planning 完成）
+**當前 Sprint**：Sprint 14（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 13](sprints/sprint_13.md) → 本看板
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 14](sprints/sprint_14.md) → 本看板
+
+---
+
+## Sprint 14 — 進行中
+
+**Sprint Goal**：清零 Sprint 13 Retro Action Items，收窄 Retro #29 修改範圍至 sprint-execution SKILL.md，完成 sprint-review 硬編碼版本號修正，確保框架指引文件在 M5 穩定化階段維持長期可維護性。
+**期間**：2026-03-02 ~ 2026-03-08
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #29：Issue 快掃觸發條件排除 retro-action label（收窄至 sprint-execution SKILL.md） | S | 1 | 待開發 |
+| Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | S | 1 | 待開發 |
+
+**計畫 Velocity**：2 points（2 Stories）
 
 ---
 
