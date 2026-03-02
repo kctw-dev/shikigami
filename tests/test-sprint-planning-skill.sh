@@ -133,6 +133,26 @@ test_tc09_alert_format_deviation_list() {
 }
 
 # ---------------------------------------------------------------------------
+# TC-10：機器可解析告警關鍵字 [DRIFT-ALERT] 存在
+# ---------------------------------------------------------------------------
+test_tc10_drift_alert_keyword_exists() {
+  assert_file_contains \
+    "[DRIFT-ALERT]" \
+    "$SKILL_FILE" \
+    "TC-10：機器可解析告警關鍵字 [DRIFT-ALERT] 存在"
+}
+
+# ---------------------------------------------------------------------------
+# TC-11：空表格邊緣案例備註存在
+# ---------------------------------------------------------------------------
+test_tc11_empty_round1_edge_case_note() {
+  assert_file_contains \
+    "Round 1 回傳空表格" \
+    "$SKILL_FILE" \
+    "TC-11：空表格邊緣案例備註（Round 1 回傳空表格）存在"
+}
+
+# ---------------------------------------------------------------------------
 # 執行所有測試
 # ---------------------------------------------------------------------------
 echo "=============================="
@@ -149,6 +169,8 @@ test_tc06_alert_path_qa_alert
 test_tc07_alert_path_po_redispatch
 test_tc08_no_silent_acceptance
 test_tc09_alert_format_deviation_list
+test_tc10_drift_alert_keyword_exists
+test_tc11_empty_round1_edge_case_note
 
 echo ""
 echo "=============================="

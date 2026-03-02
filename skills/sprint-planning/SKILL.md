@@ -183,6 +183,8 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
    | 2 | 標題被改寫 | Round 2 回傳的 Story 標題與 Round 1 回傳的標題不完全相同（任何文字變動均算） |
    | 3 | AC 被新增/刪除 | Round 2 回傳的 Story AC 條目數量或內容與 Round 1 不同（新增或刪除任一 AC） |
 
+   > **備註**：若 Round 1 回傳空表格（0 個 Story），Round 2 亦須回傳空表格；Round 2 新增任何 Story 均視為偏離類型 1，觸發 DRIFT-ALERT。
+
    **告警處理路徑**：
 
    - 偵測到偏離時，QA 告警並要求 PO 重新派遣，不靜默接受
