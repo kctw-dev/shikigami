@@ -202,7 +202,8 @@ CRON_ENTRY="$CRON_EXPR $PROJECT_DIR/scripts/${SCRIPT_TOKEN}_cron.sh"
 **回滾順序（原子性）**：先還原 crontab 快照，再刪除生成的腳本。先還原 crontab 是為了防止在回滾窗口期觸發損毀腳本。
 
 ```bash
-CRONTAB_BACKUP="/tmp/shikigami-crontab-backup-$(date +%s).bak"
+CRONTAB_BACKUP=$(mktemp /tmp/shikigami-crontab-backup-XXXXXX.bak)
+chmod 600 "$CRONTAB_BACKUP"
 SCRIPT_GENERATED=false
 
 rollback() {
@@ -218,7 +219,7 @@ rollback() {
 }
 
 # 建立快照
-crontab -l 2>/dev/null > "$CRONTAB_BACKUP" || touch "$CRONTAB_BACKUP"
+crontab -l 2>/dev/null > "$CRONTAB_BACKUP" || true
 trap rollback ERR
 ```
 
