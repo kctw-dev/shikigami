@@ -146,6 +146,51 @@ LOCK_FILE="/tmp/shikigami-schedule-${PROJECT_HASH}-${SKILL_NAME}.lock"
 - 格式固定，方便排查：`ls /tmp/shikigami-schedule-*.lock` 可一次列出所有 Skill 的鎖狀態
 - 加入 project-hash：同一台 VM 上多個專案排程相同 Skill 時不會互搶鎖
 
+### 跨 Skill 序列鎖子節（US-36）
+
+#### 背景
+
+Schedule Skill 的 skill-level lock 只能防止同一 Skill 的多個執行個體並行——但當 Planning 與 Execution 兩個不同 Skill 同時觸發時，兩者會讀寫相同的共享檔案（如 `sprint_N.md`），產生讀寫競態條件。需要一個跨 Skill 的互斥機制。
+
+#### 決策
+
+引入 **group-level lock（群組鎖）**，透過 `--sequential-group <group-name>` 參數將多個 Skill 綁定至同一群組，共享一把群組鎖，確保群組內的 Skill 序列執行。
+
+**group 鎖檔案命名規範**：
+
+```
+/tmp/shikigami-group-<project-hash>-<group-name>.lock
+```
+
+其中 `<project-hash>` 與 skill-level lock 相同（專案目錄路徑 MD5 前 8 碼）；`<group-name>` 為使用者指定的群組名稱：
+
+```bash
+GROUP_LOCK_FILE="/tmp/shikigami-group-${PROJECT_HASH}-${GROUP_NAME}.lock"
+```
+
+**鎖取得順序**（group lock 先於 skill lock）：
+
+```
+1. 嘗試 group lock（exec 201）— 若失敗則 SKIPPED，exit 0
+2. 嘗試 skill lock（exec 200）— 若失敗則 SKIPPED，exit 0
+3. 執行 Skill
+```
+
+group lock 優先於 skill lock 的理由：group lock 是更高層級的資源保護，必須在低層級的 Skill 互斥之前建立。若順序顛倒，可能導致 Skill 取得 skill lock 後，因 group lock 失敗而 SKIPPED，造成 skill lock 被持有而 Skill 未實際執行（group lock 不持有但 skill lock 持有的不一致狀態）。
+
+**條件啟用**：group lock 僅在指定 `--sequential-group` 時啟用。未指定時腳本不含 group lock 邏輯，與 Sprint 18 行為完全相同（零破壞性變更）。
+
+**鎖格式一覽**：
+
+| 鎖類型 | 路徑格式 | fd | 保護範圍 |
+|--------|----------|----|----------|
+| skill-level lock | `/tmp/shikigami-schedule-<hash>-<skill-name>.lock` | 200 | 防止同 Skill 並行執行 |
+| group-level lock | `/tmp/shikigami-group-<hash>-<group-name>.lock` | 201 | 防止同群組跨 Skill 並行執行 |
+
+**Pre-flight group 衝突偵測**：
+
+部署時若指定 `--sequential-group`，Pre-flight 額外檢查同群組是否已有執行中的排程（lock file 存在且被持有）。衝突時阻擋部署，要求使用者先移除衝突的 Skill 排程，防止在設計層面引入並行衝突。
+
 ---
 
 ## 決策域三：allowedTools 白名單權限模型
