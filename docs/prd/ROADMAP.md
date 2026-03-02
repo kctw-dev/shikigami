@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-02（Sprint 15 Review — US-15/US-16 完成）
+> 最後更新：2026-03-02（Sprint 16 Review — US-17/US-28 完成）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -179,7 +179,10 @@ Sprint Review 時自動產出：
 | Retro #30 | sprint-review SKILL.md 禁止項硬編碼版本號修正 | Sprint 14 ✅ |
 | US-15 | 完整安裝流程驗證（全新環境測試） | Sprint 15 ✅ |
 | US-16 | 使用者文件完善（Tutorial + Troubleshooting） | Sprint 15 ✅ |
-| US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | TBD（調查完成，Sprint 16） |
+| US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | Sprint 16 ✅ |
+| Issue #34 | sprint-execution SKILL.md doc-only 執行保護 | Sprint 16 ✅ |
+| Issue #36 | sprint-review SKILL.md 覆蓋缺口修正 | Sprint 16 ✅ |
+| US-28 | 快思/慢想雙模式 — Sprint Planning & Standup 精簡化 | Sprint 16 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
 

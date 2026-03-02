@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-02（Sprint 15 Review — US-15/US-16 完成；Retro #37/#38 新增）
+**最後更新**：2026-03-02（Sprint 16 Planning — Retro #37/#38 選入 Sprint；US-17/US-26/US-27 正式條目建立）
 **管理者**：Product Owner
 
 ---
@@ -63,8 +63,22 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | Retro #37：GETTING_STARTED.md 補上 ToC 目錄 | — | Should | S | Sprint 15 Retro | 待選 |
-| 2 | Retro #38：Token JSONL 提取機制需重新調查 | — | Should | S | Sprint 15 Retro | 待選 |
+| 1 | Retro #37：GETTING_STARTED.md 補上 ToC 目錄 | — | Should | S | Sprint 15 Retro | Done（Sprint 16） |
+| 2 | Retro #38：Token JSONL 提取機制需重新調查 | — | Should | S | Sprint 15 Retro | Done（Sprint 16） |
+
+### Sprint 16 — 新增 Stories（GitHub Issues 升格）
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-26（Issue #36）：sprint-review SKILL.md 覆蓋缺口修正 | — | Must | S | GitHub Issue #36 | Done（Sprint 16） |
+| 2 | US-27（Issue #34）：sprint-execution SKILL.md 跳過 doc-only Story 執行保護 | — | Must | S | GitHub Issue #34 | Done（Sprint 16） |
+| 3 | US-28（Issue #39）：快思/慢想雙模式 — Sprint Planning & Standup 精簡化 | — | Should | M | GitHub Issue #39 | Done（Sprint 16） |
+
+### Sprint 16 — US-17 選入
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-17：多平台調查（Cursor / OpenCode / Codex 可行性） | 18.0 | Should | M | ROADMAP M5 | Done（Sprint 16） |
 
 ---
 
@@ -538,6 +552,126 @@ As a Product Owner, I want a defined policy for handling orphan artifacts, so th
 | **high** | 自動執行 | 人工確認後執行 | 重要產品、公開 repo |
 
 **原則**：團隊自治優先。預設 medium — QA subagent 取代人工確認閘，確保品質不阻塞工作流程。
+
+---
+
+---
+
+### US-17：多平台調查（Cursor / OpenCode / Codex 可行性）
+
+**標題**：調查 Cursor、OpenCode、Codex CLI 三個平台對 Shikigami 的整合可行性
+
+**User Story**
+As a Product Owner, I want a structured feasibility investigation of running Shikigami on Cursor, OpenCode, and Codex CLI platforms, so that I can make an informed prioritization decision about which platforms to support and in what order.
+
+**背景**
+ROADMAP M5 完成條件之一是 Issues #3 #4 有明確結論。Issues #3/#4 來自外部使用者詢問 Shikigami 是否能在 Cursor 和其他 AI 輔助開發環境中使用。本 Story 透過結構化調查四個核心維度（SKILL.md 載入機制、Subagent 派遣支援、權限模型、整合可行性評分），產出可供 PO 做優先排序決策的調查報告。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | Cursor 可行性分析 | 針對 Cursor 平台，從以下四個維度完成結構化分析並記錄於調查報告中：(a) SKILL.md 載入機制；(b) Subagent 派遣支援；(c) 權限模型；(d) 整合可行性評分（1–5 分，附評分理由） |
+| AC2 | [靜態] | OpenCode 可行性分析 | 針對 OpenCode 平台，從相同四個維度完成結構化分析：(a) SKILL.md 載入機制；(b) Subagent 派遣支援；(c) 權限模型；(d) 整合可行性評分（1–5 分，附評分理由） |
+| AC3 | [靜態] | Codex CLI 可行性分析 | 針對 Codex CLI 平台，從相同四個維度完成結構化分析：(a) SKILL.md 載入機制；(b) Subagent 派遣支援；(c) 權限模型；(d) 整合可行性評分（1–5 分，附評分理由） |
+| AC4 | [靜態] | 後續行動建議 | 調查報告末尾包含「後續行動建議」區塊：(a) 三個平台優先排序（1st / 2nd / 3rd）及理由；(b) 最優先平台已知阻礙事項清單；(c) 下一步具體行動 |
+| AC5 | [靜態] | 調查報告建立與 M5 標注 | 建立 `docs/km/MULTI_PLATFORM_SURVEY.md`；文件標頭含調查日期、執行者、Issues #3 #4 open 狀態確認；ROADMAP.md M5 區塊 US-17 標注「（調查完成，Sprint 16）」 |
+
+**RICE 評分**
+
+| 維度 | 分數 |
+|------|------|
+| Reach | 6 |
+| Impact | 3 |
+| Confidence | 75% |
+| Effort | 0.75 人週 |
+| **RICE Score** | **18.0** |
+
+**MoSCoW**：Should
+**Size**：M / **Points**：2
+**對應 ROADMAP**：M5 穩定化（US-17，Sprint 16）
+**依賴**：Issues #3、#4 仍為 open（前置確認）
+**狀態**：Done（Sprint 16）
+
+---
+
+### US-26（Issue #36）：sprint-review SKILL.md 覆蓋缺口修正
+
+**標題**：審查並補全 sprint-review SKILL.md 的工件覆蓋清單與步驟指引
+
+**User Story**
+As a Scrum Master running sprint review, I want sprint-review SKILL.md to correctly define all required review artifacts and steps without coverage gaps, so that sprint review execution is complete and consistent every Sprint.
+
+**背景**
+Sprint 15 Review 過程中發現 sprint-review SKILL.md 在工件產出步驟（Retrospective_Log 更新、Metrics_Log 更新、PROJECT_BOARD 更新、sprint_N.md 狀態回寫、ROADMAP 更新）的描述存在不一致或缺漏。本 Story 系統性審查並補全所有缺口，確保 Sprint Review 每次執行的工件覆蓋一致。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 覆蓋缺口識別 | 讀取 `skills/sprint-review/SKILL.md` 當前版本，逐節比對五項工件指引是否完整；發現缺口或描述不一致處列出清單 |
+| AC2 | [靜態] | 缺口補全 | 針對 AC1 識別的每個缺口，補入完整指引（操作步驟、目標路徑、必要輸出格式）；若無缺口，輸出「覆蓋完整，無需修改」 |
+| AC3 | [靜態] | ADR-003 Checklist 通過 | 修改 `skills/sprint-review/SKILL.md` 前確認 ADR-003 Checklist 四項條件全部通過 |
+
+**MoSCoW**：Must
+**Size**：S / **Points**：1
+**來源**：GitHub Issue #36
+**ADR-003**：適用（修改 skills/sprint-review/SKILL.md）
+**狀態**：Done（Sprint 16）
+
+---
+
+### US-27（Issue #34）：sprint-execution SKILL.md 跳過 doc-only Story 執行保護
+
+**標題**：在 sprint-execution SKILL.md 建立 doc-only Story 識別規則與執行分支保護
+
+**User Story**
+As a Developer subagent, I want sprint-execution SKILL.md to clearly define that Stories marked as doc-only should skip code execution steps, so that I never accidentally run commands or modify non-documentation files when executing a documentation-only Story.
+
+**背景**
+目前 sprint-execution SKILL.md 沒有區分「文件修改型 Story」與「程式碼執行型 Story」的執行路徑。文件型 Story（如 Retro #37、US-16）在執行時可能觸發不必要的 bash 指令或修改非目標檔案，造成越權風險。本 Story 建立明確的 doc-only 識別規則與執行分支，防止此類越權行為。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | doc-only 標記定義 | `skills/sprint-execution/SKILL.md` 新增「doc-only Story 識別規則」段落，定義識別條件 |
+| AC2 | [靜態] | 跳過邏輯與判定機制 | 新增執行分支：識別為 doc-only 時跳過 bash 執行等步驟；含負面案例排除清單（至少 2 個排除情境） |
+| AC3 | [靜態] | 可觀察驗收指標 | SKILL.md 修改後，doc-only 識別規則段落明確包含正向識別條件、負面案例排除清單、執行分支說明三項；QA 可透過靜態審查驗證 |
+| AC4 | [靜態] | ADR-003 Checklist 通過 | 修改 `skills/sprint-execution/SKILL.md` 前確認 ADR-003 Checklist 四項條件全部通過 |
+
+**MoSCoW**：Must
+**Size**：S / **Points**：1
+**來源**：GitHub Issue #34
+**ADR-003**：適用（修改 skills/sprint-execution/SKILL.md）
+**狀態**：Done（Sprint 16）
+
+---
+
+### US-28（Issue #39）：快思/慢想雙模式 — Sprint Planning & Standup 預設精簡化
+
+**標題**：為 Sprint Planning 和 Standup 導入快思/慢想雙模式，預設精簡化日常流程
+
+**User Story**
+As a framework user, I want Sprint Planning and Daily Standup to default to a streamlined "fast thinking" mode that skips non-essential diagnostics, so that daily iteration is faster and less token-intensive, while retaining a "deep" mode for thorough checks when needed.
+
+**背景**
+Issue #39 提出：日常使用 Shikigami 執行 Sprint Planning 和 Standup 時，完整健康檢查、Token 測量、權重調整每次都跑過於繁重。引入快思（預設，跳過非核心步驟）/ 慢想（`--deep`，完整流程）雙模式。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | sprint-planning SKILL.md 快思模式定義 | `skills/sprint-planning/SKILL.md` 新增「快思/慢想模式」區塊：快思跳過健康檢查 + Token 測量 + 權重調整，直接進入 PO→Architect→QA→建 Sprint 文件；慢想維持完整流程 |
+| AC2 | [靜態] | standup command 快思模式定義 | `commands/standup.md` 新增快思/慢想分支：快思精簡為 Git 同步 + Sprint 進度；慢想維持完整流程 |
+| AC3 | [靜態] | 模式觸發方式文件化 | 兩個文件均記載：預設快思，`--deep` 或「完整檢查」切換慢想 |
+| AC4 | [靜態] | ADR-003 Checklist 通過 | 修改 skills/sprint-planning/SKILL.md + commands/standup.md 前確認 ADR-003 Checklist 通過 |
+
+**MoSCoW**：Should
+**Size**：M / **Points**：2
+**來源**：GitHub Issue #39
+**ADR-003**：適用（修改 skills/sprint-planning/SKILL.md + commands/standup.md）
+**狀態**：Done（Sprint 16）
 
 ---
 

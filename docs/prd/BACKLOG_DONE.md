@@ -1071,3 +1071,18 @@ As an external user who has installed Shikigami, I want a step-by-step tutorial 
 **MoSCoW**：Must
 **Size**：M / **Points**：2
 **對應 ROADMAP**：M5 穩定化（US-16，Sprint 15）
+
+---
+
+## Sprint 16（2026-03-02）
+
+**Sprint Goal**：清零 Sprint 15 Retro Action Items，完成 US-17 多平台可行性調查，修正 SKILL.md 越權執行風險，更新 sprint-review 覆蓋缺口，導入快思/慢想雙模式精簡化，鞏固 M5 穩定化最後一哩路。
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| Retro #37：GETTING_STARTED.md 補上 ToC 目錄 | — | Should | — | Done |
+| US-17：多平台調查（Cursor / OpenCode / Codex 可行性） | 18.0 | Should | — | Done |
+| Issue #34：sprint-execution SKILL.md doc-only Story 執行保護 | — | Must | — | Done |
+| Issue #36：sprint-review SKILL.md 覆蓋缺口修正 | — | Must | — | Done |
+| Retro #38：Token JSONL 提取機制調查 | — | Should | — | Done |
+| US-28：快思/慢想雙模式 — Sprint Planning & Standup 精簡化 | — | Should | — | Done |

@@ -1,6 +1,9 @@
 # Sprint 16
 
+**狀態**：完成
 **Sprint Goal**：清零 Sprint 15 Retro Action Items，完成 US-17 多平台可行性調查，修正文件類 SKILL.md 越權執行風險（Issue #34），更新 sprint-review SKILL.md 覆蓋缺口（Issue #36），導入快思/慢想雙模式精簡化（Issue #39），鞏固 M5 穩定化最後一哩路。
+**結果**：Goal 達成（6/6 Stories PASS）。Velocity 8 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-02 ~ 2026-03-08
 
 ---

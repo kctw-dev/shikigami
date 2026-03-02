@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 16 Planning 完成）
-**當前 Sprint**：Sprint 16（進行中）
+**最後更新**：2026-03-02（Sprint 16 Review 完成）
+**當前 Sprint**：Sprint 16（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 16](sprints/sprint_16.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 16 — 進行中
+## Sprint 16 — 完成
 
 **Sprint Goal**：清零 Sprint 15 Retro Action Items，完成 US-17 多平台可行性調查，修正文件類 SKILL.md 越權執行風險（Issue #34），更新 sprint-review SKILL.md 覆蓋缺口（Issue #36），導入快思/慢想雙模式精簡化（Issue #39），鞏固 M5 穩定化最後一哩路。
+**結果**：Goal 達成（6/6 Stories PASS）。Velocity 8 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-02 ~ 2026-03-08
 
 | Story | Size | Points | 狀態 |
@@ -21,7 +23,7 @@
 | Retro #38：Token JSONL 提取機制調查與 SKILL.md 主要方法更新 | S | 1 | 完成 |
 | US-28：快思/慢想雙模式 — Sprint Planning & Standup 精簡化 | M | 2 | 完成 |
 
-**計畫 Velocity**：8 points（6 Stories）
+**實際 Velocity**：8 points（6 Stories）
 
 ---
 
