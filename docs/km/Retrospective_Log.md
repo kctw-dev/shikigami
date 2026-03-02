@@ -1,6 +1,34 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–15）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–16）
+
+---
+
+## Sprint 21 — 2026-03-02
+
+**參與角色**：PO、Architect、Developer、QA、Stakeholder
+
+### Good
+
+1. 完成率 100% 連續 21 個 Sprint 維持（Sprint 1-21 全數達成）
+2. Phase 1 全平行派遣（3 Stories 零衝突）— Architect 分群準確，所有 Story 修改不同檔案
+3. Sprint 20 Retro Action Item #58 即時清零（1 Sprint 關閉速度），維持 Action Items 高效追蹤
+4. 測試覆蓋持續擴展 — Sprint 21 新增 39 個測試（9 lsize + 15 conflict-detection + 15 setup-labels），品質門禁穩固
+5. US-34 setup-labels.sh 為新用戶 Onboarding 補齊最後一塊拼圖，減少手動 Label 配置時間
+
+### Problem
+
+1. Code Quality Review 發現多個測試腳本缺少 `-e` flag（`set -uo pipefail` 而非 `set -euo pipefail`），測試基礎設施防禦性撰寫仍有改善空間
+2. US-32 告警格式僅示範 2 個 Story 同時衝突，未說明 3+ Story 同時衝突同一檔案時的格式擴展規則（Code Quality Medium 建議）
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| — | 無新增 Action Items | — | — | — | — |
+
+> Problem 1 屬 Low 嚴重度改善建議，不建立 Action Item，後續 Sprint 遇到時順手修正即可。
+> Problem 2 屬 Medium 建議但影響範圍有限（3+ Story 同時衝突罕見），納入 Backlog 候選而非強制 Action。
 
 ---
 
@@ -25,7 +53,7 @@
 
 | # | Action | Owner | 驗收方式 | Issue | 狀態 |
 |---|--------|-------|----------|-------|------|
-| 1 | L-size Story SKILL.md 規格品質強化 — QA 增加示例一致性檢查項 | QA | QA Code Quality Review Checklist 新增示例一致性檢查項，L-size Story 強制多輪審查 | #58 | Open |
+| 1 | L-size Story SKILL.md 規格品質強化 — QA 增加示例一致性檢查項 | QA | QA Code Quality Review Checklist 新增示例一致性檢查項，L-size Story 強制多輪審查 | #58 | Closed（Sprint 21） |
 
 > Problem 2 不建立新 Issue（此為長期結構性問題，快思模式設計即跳過 Token 記錄，非 Action Item）
 
@@ -106,29 +134,4 @@
 | 1 | 短衝模式設計與實作 — 建立跳過 Sprint 儀式但保留 QA + Architect 審查的快速執行路徑 | Architect | SKILL.md 新增短衝模式定義，含觸發條件、保留項目、文件產出規範 | #47 | Open |
 | 2 | PO subagent 跨輪次一致性檢查 — 防止 PO Round 2 混淆或改寫 Round 1 已通過的 Story 內容 | QA | sprint-planning SKILL.md 新增 PO Round 2 輸入驗證步驟 | #48 | Open |
 
----
-
-## Sprint 16 — 2026-03-02
-
-**參與角色**：PO、Architect、Developer、QA、Stakeholder、SRE
-
-### Good
-
-1. 連續 16 個 Sprint 完成率 100%（6/6 Stories, 8/8 Points, Velocity 8pt），為歷史最高產出 Sprint 之一
-2. QA Hard Gate（Must）全面執行，6 個 Story 共 12 次審查（6 Spec + 6 Quality）全 PASS，Sprint 14 觸發的 QA 升級機制運作正常
-3. Sprint 15 Retro Action Items 全部清零（#37 ToC 補充 + #38 Token JSONL 調查），平均關閉速度維持 1 個 Sprint
-4. Phase 1 平行派遣（Retro #37 + US-17）零衝突成功，Phase 2 序列執行（4 個 ADR-003 觸發 Story）亦全部順利
-5. 快思/慢想雙模式（US-28）成功導入 sprint-planning SKILL.md 與 standup command，為日常迭代效率提升奠定結構基礎
-
-### Problem
-
-1. Token 記錄 cache tokens 處理不明確：JSONL 中 `input_tokens` 僅 292，但 `cache_read_input_tokens` 達 25M，現有三個 SKILL.md 的 token 提取指引僅提及 `input_tokens` + `output_tokens`，導致 Execution token 記錄數值失真
-2. Sprint 16 Velocity 8pt 大幅超過近 3 Sprint 平均 3.3pt（242%），雖全部完成但需觀察是否為一次性高產出而非可持續節奏
-
-### Action Items
-
-| # | Action | Owner | 驗收方式 | Issue | 狀態 |
-|---|--------|-------|----------|-------|------|
-| 1 | Token 記錄指引更新：三個 SKILL.md 的 token 提取指引需納入 cache_read_input_tokens + cache_creation_input_tokens 加總計算 | Architect | 三個 SKILL.md 的主要方法描述明確包含 cache tokens 加總規則 | #41 | Closed（Sprint 17） |
-| 2 | Sprint 17 Planning 依 US-17 結論評估 OpenCode POC 優先排入 Backlog | PO | Sprint 17 Planning 時 PO 確認是否排入，並記錄決策理由 | #42 | Closed（Sprint 17） |
 

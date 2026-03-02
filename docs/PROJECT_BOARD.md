@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 21 Planning Round 2 — 完成）
-**當前 Sprint**：Sprint 21（進行中）
+**最後更新**：2026-03-02（Sprint 21 Review — 完成）
+**當前 Sprint**：Sprint 21（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 21](sprints/sprint_21.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 21 — 進行中
+## Sprint 21 — 完成
 
 **Sprint Goal**：清零 Sprint 20 Retro Action Item（#58）+ parallel-dispatch 衝突偵測（US-32）+ Onboarding Labels 補完（US-34）
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-09 ~ 2026-03-15
 
 | Story | Size | Points | 狀態 |
@@ -18,7 +20,7 @@
 | US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | M | 2 | 完成 |
 | US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | S | 1 | 完成 |
 
-**Sprint 容量**：4 Points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
 
 ---
 
@@ -89,24 +91,4 @@
 
 ---
 
-## Sprint 16 — 完成
-
-**Sprint Goal**：清零 Sprint 15 Retro Action Items，完成 US-17 多平台可行性調查，修正文件類 SKILL.md 越權執行風險（Issue #34），更新 sprint-review SKILL.md 覆蓋缺口（Issue #36），導入快思/慢想雙模式精簡化（Issue #39），鞏固 M5 穩定化最後一哩路。
-**結果**：Goal 達成（6/6 Stories PASS）。Velocity 8 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-02 ~ 2026-03-08
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| Retro #37：GETTING_STARTED.md 補上 ToC 目錄 | S | 1 | 完成 |
-| US-17：多平台調查（Cursor / OpenCode / Codex 可行性） | M | 2 | 完成 |
-| Issue #34：sprint-execution SKILL.md 跳過 doc-only Story 執行保護 | S | 1 | 完成 |
-| Issue #36：sprint-review SKILL.md 覆蓋缺口修正 | S | 1 | 完成 |
-| Retro #38：Token JSONL 提取機制調查與 SKILL.md 主要方法更新 | S | 1 | 完成 |
-| US-28：快思/慢想雙模式 — Sprint Planning & Standup 精簡化 | M | 2 | 完成 |
-
-**實際 Velocity**：8 points（6 Stories）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–15）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–16）

@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-02（Sprint 20 Review — Retro #56/#57、US-31 完成）
+> 最後更新：2026-03-02（Sprint 21 Review — Retro #58、US-32、US-34 完成）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -194,6 +194,9 @@ Sprint Review 時自動產出：
 | Retro #56 | test-schedule.sh assert_contains SIGPIPE 非確定性失敗修復 | Sprint 20 ✅ |
 | Retro #57 | Developer subagent 狀態更新衝突防護 | Sprint 20 ✅ |
 | US-31 | /shoot 短衝模式 — 單一任務快速執行（跳過 Sprint 儀式） | Sprint 20 ✅ |
+| Retro #58 | L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | Sprint 21 ✅ |
+| US-32 | parallel-dispatch 同檔案衝突偵測與自動序列化 | Sprint 21 ✅ |
+| US-34 | Onboarding 預建常用 GitHub Labels | Sprint 21 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
 

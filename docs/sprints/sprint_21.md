@@ -1,6 +1,6 @@
 # Sprint 21
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-09 ~ 2026-03-15
 **Sprint Goal**：清零 Sprint 20 Retro Action Item（#58）+ parallel-dispatch 衝突偵測（US-32）+ Onboarding Labels 補完（US-34）
 **總計**：3 Stories / 4 Points

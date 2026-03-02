@@ -1341,3 +1341,15 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 **MoSCoW**：Should
 **Size**：L / **Points**：3
 **來源**：Sprint 17 Retro / Issue #47
+
+---
+
+## Sprint 21（2026-03-02）
+
+**Sprint Goal**：清零 Sprint 20 Retro Action Item（#58）+ parallel-dispatch 衝突偵測（US-32）+ Onboarding Labels 補完（US-34）
+
+| Story | Size | Points | 完成狀態 |
+|-------|------|--------|----------|
+| Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | S | 1 | Done |
+| US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | M | 2 | Done |
+| US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | S | 1 | Done |

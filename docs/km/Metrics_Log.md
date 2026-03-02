@@ -31,6 +31,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 18 | 2026-03-02 | 3 points | 100% | 穩定 | 1 Story（1L），Sprint Goal 達成；S17→S18 微降（4→3，-25%，±20% 內偏高但方向一致穩定）；Schedule Skill 交付，ADR-005 先行解鎖 |
 | Sprint 19 | 2026-03-02 | 5 points | 100% | 不規則 | 4 Stories（3S+1M），Sprint Goal 達成；S18→S19 回升（3→5，+67%）；近三期（S17=4, S18=3, S19=5）方向不一致（先降後升），且 S19 超出均值 ±20% 區間（4±0.8 = 3.2–4.8）→ 不規則；PO drift 保護 + 序列群組鎖 + schedule whitelist/template 強化 |
 | Sprint 20 | 2026-03-02 | 5 points | 100% | 穩定 | 3 Stories（2S+1L），Sprint Goal 達成；S19→S20 持平（5→5，0%）；穩定（3→5→5，最近兩個 Sprint 均為 5pt）；/shoot 短衝模式交付 + Retro Actions 清零 |
+| Sprint 21 | 2026-03-02 | 4 points | 100% | 穩定 | 3 Stories（2S+1M），Sprint Goal 達成；S20→S21 微降（5→4，-20%，±20% 內）；穩定（5→5→4，波動在容許範圍內）；parallel-dispatch 衝突偵測 + Onboarding Labels + Retro #58 清零 |
 
 ---
 
