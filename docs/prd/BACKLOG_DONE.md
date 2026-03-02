@@ -1137,3 +1137,47 @@ As a Product Owner, I want a formal archiving mechanism for PROJECT_BOARD.md and
 **RICE**：18.0
 **MoSCoW**：Should
 **Size**：M / **Points**：2
+
+---
+
+## Sprint 18（2026-03-02）
+
+**Sprint Goal**：建立 Schedule Skill — 實現 Sprint 自動排程執行能力
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| US-35（Issue #46）：Sprint 排程執行 + 權限 bypass 機制 | 待定 | Should | ADR-005 | Done |
+
+---
+
+### US-35（Issue #46）：Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule）
+
+**標題**：一行指令完成 Sprint 自動排程設定
+
+**User Story**
+As a framework user, I want to set up automated Sprint execution scheduling with a single command, so that Sprint cycles can run continuously without manual intervention, with proper permission bypass and pre/post QA gates ensuring safe and reliable automation.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 一行指令完成設定 | `/schedule <skill> --interval <duration>` 完成排程設定，支援 1m/5m/15m/1h |
+| AC2 | [靜態] | Pre-flight 阻擋 | 6 項環境檢測，未通過則阻擋 |
+| AC3 | [靜態] | 腳本生成 | `scripts/<skill-name>_cron.sh` 含 flock + allowedTools + unset ANTHROPIC_API_KEY |
+| AC4 | [靜態] | 冪等 crontab | 重複執行不產生重複 entry |
+| AC5 | [靜態] | Post-deploy 自動回滾 | 4 項驗證 + 原子性回滾 |
+| AC6 | [靜態] | --remove 移除 | 冪等移除，不存在時警告但 exit 0 |
+| AC7 | [靜態] | --dry-run | 只執行 Pre-flight，不部署 |
+| AC8 | [靜態] | Log 機制 | `logs/schedule-<skill>.log`，START/SKIPPED/END 格式 |
+| AC9 | [靜態] | docs 說明 | SKILL.md 記載完整使用方式 |
+
+**交付摘要**：
+- `skills/schedule/SKILL.md`（14 節完整文件）
+- `templates/schedule_cron.sh.tmpl`（flock + OAuth + Log 模板）
+- `tests/test-schedule.sh`（74 項測試全 PASS）
+- `docs/adr/ADR-005-schedule-skill-technical-decisions.md`（5 決策域）
+
+**驗收結果**：AC1-AC9 全通過（9/9）；測試 74/74 PASS
+**MoSCoW**：Should
+**Size**：L / **Points**：3
+**ADR**：ADR-005（Accepted）

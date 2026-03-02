@@ -104,7 +104,7 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-35（Issue #46）：Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule） | 待定 | Should | L | GitHub Issue #46 / Stakeholder 優先 | In Sprint |
+| 1 | US-35（Issue #46）：Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule） | 待定 | Should | L | GitHub Issue #46 / Stakeholder 優先 | Done（Sprint 18） |
 | 2 | US-30（Issue #48）：PO subagent 多輪派遣時 Story 內容偏離修正機制 | 25.6 | Should | S | Sprint 17 Retro / Issue #48 | Backlog（退回原因：Sprint 18 重新規劃，待後續排期） |
 | 3 | US-31（Issue #47）：/shoot 短衝模式 | 待定 | Should | 待定 | Sprint 17 Retro / Issue #47 | Backlog（退回原因：4 項設計決策未完成，待 Refinement） |
 | 4 | US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | 24.0 | Should | M | GitHub Issue #40 | Backlog（退回原因：Sprint 18 重新規劃，待後續排期） |

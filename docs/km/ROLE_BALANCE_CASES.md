@@ -102,7 +102,33 @@
 | `QA-推翻設計` | 2 | 案例 2、案例 4 |
 | `Architect-調整估點` | 1 | 案例 3 |
 
-覆蓋制衡類型：3 種（共 5 種可能類型）
+覆蓋制衡類型：4 種（共 5 種可能類型）
+
+---
+
+## 案例 6：Stakeholder 發現 ADR-005 多專案鎖檔案撞名風險
+
+| 欄位 | 內容 |
+|------|------|
+| **Sprint 來源** | Sprint 18 |
+| **情境描述** | ADR-005 Schedule Skill 設計中，flock 鎖檔案命名為 `/tmp/shikigami-schedule-<skill-name>.lock`。Architect 設計、QA Decision Challenge、Developer 實作均未發現同一 VM 上多個 Shikigami 專案排程同一 skill 時鎖名會衝突的問題。Stakeholder 在 ADR Review 時直接指出此風險。 |
+| **制衡角色** | Stakeholder → Architect + QA |
+| **制衡類型** | `Stakeholder-修正設計` |
+| **決策結果** | ADR-005 修訂：鎖名加入 project-hash，改為 `/tmp/shikigami-schedule-${PROJECT_HASH}-${SKILL_NAME}.lock`，其中 `PROJECT_HASH=$(echo "$PROJECT_DIR" \| md5sum \| cut -c1-8)`。修訂記錄持久化至 ADR-005「Stakeholder Review 修訂記錄」區塊。 |
+| **後續影響** | 新增制衡類型「Stakeholder-修正設計」，證明 Stakeholder 在 ADR 審查中的價值。後續 ADR 應主動邀請 Stakeholder Review 多環境場景。 |
+
+---
+
+### 制衡類型覆蓋表（更新後）
+
+| 類型 | 次數 | 案例 |
+|----------|----------|----------|
+| `Hard-Gate-攔截` | 2 | 案例 1、案例 5 |
+| `QA-推翻設計` | 2 | 案例 2、案例 4 |
+| `Architect-調整估點` | 1 | 案例 3 |
+| `Stakeholder-修正設計` | 1 | 案例 6 |
+
+覆蓋制衡類型：4 種（共 5 種可能類型）
 
 ---
 

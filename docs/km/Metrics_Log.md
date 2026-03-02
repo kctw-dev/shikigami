@@ -28,6 +28,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 15 | 2026-03-02 | 4 points | 100% | 不規則 | 2 Stories（2M），Sprint Goal 達成；S14→S15 大幅回升（2→4，+100%）；M5 使用者就緒交付，全新環境安裝驗證報告 + 端對端使用者文件完成；方向不一致（S13→S14 降、S14→S15 升）→ 不規則 |
 | Sprint 16 | 2026-03-02 | 8 points | 100% | 上升趨勢 | 6 Stories（4S+2M），Sprint Goal 達成；S15→S16 倍增（4→8，+100%）；M5 穩定化持續推進；快思/慢想雙模式導入 |
 | Sprint 17 | 2026-03-02 | 4 points | 100% | 不規則 | 3 Stories（2S+1M），Sprint Goal 達成；S16→S17 大幅下降（8→4，-50%）；檔案瘦身歸檔機制建立 + Retro Actions 清零 |
+| Sprint 18 | 2026-03-02 | 3 points | 100% | 穩定 | 1 Story（1L），Sprint Goal 達成；S17→S18 微降（4→3，-25%，±20% 內偏高但方向一致穩定）；Schedule Skill 交付，ADR-005 先行解鎖 |
 
 ---
 
@@ -72,6 +73,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 15 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 16 | 4174K | 21679K | 6441K | 32294K | 13% / 67% / 20% |
 | Sprint 17 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
+| Sprint 18 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 
 ---
 
