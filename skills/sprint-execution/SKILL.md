@@ -130,6 +130,25 @@ Sprint Backlog 還有 Story？
    以上 Sprint 級別欄位僅由 **sprint-review** Skill 負責更新，Developer 不得觸碰。
    </HARD-GATE>
 
+   ### 狀態更新衝突防護
+
+   Developer subagent 在更新 sprint_N.md 的 Story 狀態欄之前，**必須先執行 read-then-compare 檢查**：
+
+   1. 讀取目前檔案，先讀取目前檔案中該 Story 的狀態值（read-then-compare）
+   2. 比對讀取到的值是否符合預期值（即本次更新前應存在的值）
+   3. 若當前值**不符合預期**（例如已被其他 subagent 或主 session 標記為「完成」或「FAIL」），則：
+      - 輸出精確字串：`[CONFLICT] 狀態衝突，跳過覆蓋：{story_id} 當前值={actual}，預期值={expected}`
+      - 不執行任何檔案寫入（放棄寫入，不得靜默覆蓋）
+   4. 若當前值符合預期，則繼續執行狀態更新
+
+   **衝突發生時的三個可觀察指示：**
+
+   | 指示 | 說明 |
+   |------|------|
+   | (a) 輸出精確字串 | subagent 輸出含 `[CONFLICT] 狀態衝突，跳過覆蓋：{story_id} 當前值={actual}，預期值={expected}` |
+   | (b) 不執行任何檔案寫入 | subagent 偵測到衝突後，不對 sprint_N.md 執行任何 Edit 或 Write 操作 |
+   | (c) 主 session log 可識別 | 主 session 接收 subagent 回傳輸出時，可從 log 中找到 `[CONFLICT]` 關鍵字，識別衝突事件 |
+
    **記錄本次 Execution 環節 Token 消耗** *(慢想模式限定)*：所有 Story 完成後（即 Sprint Backlog 清空時），將本 Execution 環節累計 Token 消耗記錄至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格（對應 Execution token 欄）：
    - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens`、`cache_read_input_tokens`、`cache_creation_input_tokens` 與 `output_tokens`，依下列公式加總後填入 Metrics_Log.md 對應欄位：
      - **有效 input tokens = input_tokens + cache_read_input_tokens + cache_creation_input_tokens**
