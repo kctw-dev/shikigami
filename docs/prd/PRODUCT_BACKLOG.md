@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-02（Sprint 17 Planning — Retro #41/#42 選入 Sprint；US-29 正式條目建立；OpenCode POC 佔位候選新增）
+**最後更新**：2026-03-02（Sprint 17 Planning — Retro #41/#42 選入 Sprint；US-29 正式條目建立；OpenCode POC 佔位候選新增；Retro #42 執行完成 — 佔位條目確認符合 AC2 規格）
 **管理者**：Product Owner
 
 ---
@@ -85,7 +85,7 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #41：Token 記錄指引更新 — 三個 SKILL.md 納入 cache tokens 加總計算 | — | Must | S | Sprint 16 Retro / Issue #41 | In Sprint 17 |
-| 2 | Retro #42：OpenCode POC 可行性調查佔位入 Backlog | — | Could | S | Sprint 16 Retro / Issue #3 | In Sprint 17 |
+| 2 | Retro #42：OpenCode POC 可行性調查佔位入 Backlog | — | Could | S | Sprint 16 Retro / Issue #3 | Done（Sprint 17） |
 
 ### Sprint 17 — 新增 Stories
 
