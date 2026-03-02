@@ -533,6 +533,126 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# 區段 12：Retro #53 — skill name 白名單驗證（AC1 + AC2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "=== 區段 12：skill name 白名單驗證（Retro #53） ==="
+
+# 定義 validate_skill_name 函式（對應 SKILL.md §4 規格）
+validate_skill_name() {
+  local name="$1"
+  if [[ ! "$name" =~ ^[a-z0-9][a-z0-9-]{0,63}$ ]]; then
+    echo "[FAIL] skill name 不合法：'${name}'"
+    echo "[INFO] 允許字元：小寫英文、數字、連字號（不可開頭為連字號，最長 64 字元）"
+    return 1
+  fi
+}
+
+# 12.1 合法 skill name 通過
+validate_skill_name "sprint-execution" >/dev/null 2>&1
+assert_exit_code 0 $? "skill name 'sprint-execution' 通過驗證（合法）"
+
+validate_skill_name "backlog-management" >/dev/null 2>&1
+assert_exit_code 0 $? "skill name 'backlog-management' 通過驗證（合法）"
+
+validate_skill_name "a" >/dev/null 2>&1
+assert_exit_code 0 $? "skill name 'a' 通過驗證（單字元合法）"
+
+validate_skill_name "schedule" >/dev/null 2>&1
+assert_exit_code 0 $? "skill name 'schedule' 通過驗證（合法）"
+
+validate_skill_name "my-skill-v2" >/dev/null 2>&1
+assert_exit_code 0 $? "skill name 'my-skill-v2' 通過驗證（含數字合法）"
+
+# 12.2 特殊字元拒絕
+validate_skill_name "my_skill" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 'my_skill' 拒絕（底線為非法字元）"
+
+validate_skill_name "my@skill" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 'my@skill' 拒絕（@ 為非法字元）"
+
+validate_skill_name "my!skill" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 'my!skill' 拒絕（! 為非法字元）"
+
+validate_skill_name "my.skill" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 'my.skill' 拒絕（. 為非法字元）"
+
+validate_skill_name "my*skill" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 'my*skill' 拒絕（* 為非法字元）"
+
+# 12.3 空格拒絕
+validate_skill_name "my skill" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 'my skill' 拒絕（空格為非法字元）"
+
+validate_skill_name " " >/dev/null 2>&1
+assert_exit_code 1 $? "skill name ' ' 拒絕（單空格不合法）"
+
+validate_skill_name "my-skill name" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 含空格拒絕"
+
+# 12.4 大寫字母拒絕
+validate_skill_name "MySkill" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 'MySkill' 拒絕（大寫字母不合法）"
+
+validate_skill_name "SKILL" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 'SKILL' 拒絕（全大寫不合法）"
+
+validate_skill_name "Sprint-Execution" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 'Sprint-Execution' 拒絕（含大寫字母）"
+
+# 12.5 路徑分隔符號拒絕
+validate_skill_name "skills/schedule" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 'skills/schedule' 拒絕（路徑分隔符 / 不合法）"
+
+validate_skill_name "../../../etc/passwd" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name '../../../etc/passwd' 拒絕（路徑穿越攻擊）"
+
+validate_skill_name "skill\\name" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 含反斜線拒絕（路徑分隔符）"
+
+# 12.6 開頭連字號拒絕
+validate_skill_name "-skill" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name '-skill' 拒絕（不可以連字號開頭）"
+
+validate_skill_name "--skill" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name '--skill' 拒絕（雙連字號開頭不合法）"
+
+# 12.7 空字串拒絕
+validate_skill_name "" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 空字串拒絕"
+
+# 12.8 其他非法輸入
+validate_skill_name 'skill$name' >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 含 \$ 字元拒絕（非法字元）"
+
+validate_skill_name "skill;rm -rf /" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 含分號注入嘗試拒絕"
+
+validate_skill_name "skill name" >/dev/null 2>&1
+assert_exit_code 1 $? "skill name 含空格（注入嘗試）拒絕"
+
+# 12.9 錯誤訊息格式驗證
+ERROR_OUTPUT=$(validate_skill_name "Invalid-Name" 2>&1)
+assert_contains "$ERROR_OUTPUT" "[FAIL]" "非法 skill name 輸出含 [FAIL] 標記"
+assert_contains "$ERROR_OUTPUT" "[INFO]" "非法 skill name 輸出含 [INFO] 說明"
+
+# 12.10 SKILL.md §4 Pre-flight 含白名單驗證項目（AC1 靜態驗證）
+if [ -f "$SKILL_MD" ]; then
+  SKILL_CONTENT=$(cat "$SKILL_MD")
+
+  # 含白名單正則表達式
+  assert_contains "$SKILL_CONTENT" "^[a-z0-9][a-z0-9-]{0,63}\$" "SKILL.md Pre-flight 含 skill name 白名單 regex"
+
+  # 含 validate_skill_name 函式定義
+  assert_contains "$SKILL_CONTENT" "validate_skill_name" "SKILL.md 含 validate_skill_name 函式"
+
+  # 含白名單驗證的 Pre-flight 說明（阻擋非法輸入）
+  assert_contains "$SKILL_CONTENT" "skill name" "SKILL.md Pre-flight 含 skill name 驗證說明"
+else
+  fail "SKILL.md 不存在，AC1 靜態驗證跳過"
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""
