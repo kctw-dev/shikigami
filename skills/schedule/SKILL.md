@@ -274,12 +274,13 @@ claude -p "/schedule sprint-execution --remove"
 claude -p "/schedule sprint-execution --dry-run"
 ```
 
-**執行內容**：只執行 Pre-flight 檢測（第 4 節全部 6 項），不部署任何檔案、不生成腳本、不修改 crontab。
+**執行內容**：只執行 Pre-flight 檢測（第 4 節全部 7 項），不部署任何檔案、不生成腳本、不修改 crontab。
 
 **輸出範例**：
 
 ```
 ── QA Pre-flight ──────────────────────
+  [PASS] skill name 字元白名單通過
   [PASS] claude CLI 可用
   [PASS] flock 可用
   [PASS] OAuth 認證有效（非無效 API key）
@@ -329,6 +330,7 @@ grep "exit: [^0]" logs/schedule-sprint-execution.log
 
 ```
 ── QA Pre-flight ──────────────────────
+  [PASS] skill name 字元白名單通過
   [PASS] claude CLI 可用
   [PASS] flock 可用
   [PASS] OAuth 認證有效（非無效 API key）
