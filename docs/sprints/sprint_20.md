@@ -13,7 +13,7 @@
 |----------|------|------|--------|------|
 | Retro #56（Issue #56） | 修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗 | S | 1 | 完成 |
 | Retro #57（Issue #57） | Developer subagent 狀態更新衝突防護 | S | 1 | 完成 |
-| US-31（Issue #47） | /shoot 短衝模式 | L | 3 | 進行中 |
+| US-31（Issue #47） | /shoot 短衝模式 | L | 3 | 完成 |
 
 **Sprint 容量**：5 Points
 
