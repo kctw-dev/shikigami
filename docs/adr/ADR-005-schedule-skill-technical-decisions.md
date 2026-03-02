@@ -88,7 +88,7 @@ Unix 標準排程工具，透過 `crontab` 管理週期性任務。
 使用 `flock` 命令搭配鎖檔案建立排他鎖。
 
 ```bash
-flock -n /tmp/shikigami-schedule-<skill-name>.lock claude --skill ...
+flock -n /tmp/shikigami-schedule-<project-hash>-<skill-name>.lock claude --skill ...
 ```
 
 - 優點：進程死亡時 OS 自動釋放鎖，不殘留孤兒鎖；`-n`（non-blocking）模式在鎖被佔用時立即返回，而非等待；Linux 與 macOS 均原生支援；實作簡潔，一行完成
@@ -132,11 +132,19 @@ flock -n /tmp/shikigami-schedule-<skill-name>.lock claude --skill ...
 **鎖檔案命名規範**：
 
 ```
-/tmp/shikigami-schedule-<skill-name>.lock
+/tmp/shikigami-schedule-<project-hash>-<skill-name>.lock
+```
+
+其中 `<project-hash>` 為專案目錄路徑的 MD5 前 8 碼，確保同一台機器上不同專案的鎖不會撞名：
+
+```bash
+PROJECT_HASH=$(echo "$PROJECT_DIR" | md5sum | cut -c1-8)
+LOCK_FILE="/tmp/shikigami-schedule-${PROJECT_HASH}-${SKILL_NAME}.lock"
 ```
 
 - 路徑使用 `/tmp/`：重開機自動清除，不汙染使用者 home 目錄
 - 格式固定，方便排查：`ls /tmp/shikigami-schedule-*.lock` 可一次列出所有 Skill 的鎖狀態
+- 加入 project-hash：同一台 VM 上多個專案排程相同 Skill 時不會互搶鎖
 
 ---
 
