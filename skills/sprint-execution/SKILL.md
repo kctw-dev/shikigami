@@ -131,7 +131,9 @@ Sprint Backlog 還有 Story？
    </HARD-GATE>
 
    **記錄本次 Execution 環節 Token 消耗** *(慢想模式限定)*：所有 Story 完成後（即 Sprint Backlog 清空時），將本 Execution 環節累計 Token 消耗記錄至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格（對應 Execution token 欄）：
-   - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens` 與 `output_tokens`，加總後填入 Metrics_Log.md 對應欄位。
+   - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens`、`cache_read_input_tokens`、`cache_creation_input_tokens` 與 `output_tokens`，依下列公式加總後填入 Metrics_Log.md 對應欄位：
+     - **有效 input tokens = input_tokens + cache_read_input_tokens + cache_creation_input_tokens**
+     - **output tokens = output_tokens**
    - **次選（降級方法）**：若 JSONL 檔案不存在、路徑不可存取、或 `message.usage` 欄位解析失敗，則各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
 
    **更新完成後，立即執行 git commit + git push**（本步驟僅 commit `PROJECT_BOARD.md` 與 `sprint_N.md`；`Metrics_Log.md` 與 `Retrospective_Log.md` 由 sprint-review 負責 commit。其他 Knowledge Management 文件不適用本規範，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
