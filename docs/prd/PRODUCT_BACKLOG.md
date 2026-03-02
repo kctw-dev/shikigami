@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-02（Sprint 14 Planning 完成）
+**最後更新**：2026-03-02（Sprint 15 Planning — US-15/US-16 選入 Sprint 15）
 **管理者**：Product Owner
 
 ---
@@ -51,6 +51,87 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #29：Issue 快掃觸發條件排除 retro-action label（收窄至 sprint-execution SKILL.md） | — | Must | S | Sprint 13 Retro | Done (Sprint 14) |
 | 2 | Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | — | Must | S | Sprint 13 Retro | Done (Sprint 14) |
+
+### Sprint 15 — 進行中
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-15：完整安裝流程驗證（全新環境測試） | 28.0 | Must | M | ROADMAP M5 | In Sprint 15 |
+| 2 | US-16：使用者文件完善（Tutorial + Troubleshooting） | 22.5 | Must | M | ROADMAP M5 | In Sprint 15 |
+
+---
+
+### US-15：完整安裝流程驗證（全新環境測試）
+
+**標題**：在全新環境中執行 README 安裝步驟，建立可重複的驗證報告
+
+**User Story**
+As an external user, I want the installation flow to be verified in a clean environment and documented in a reproducible checklist, so that I can confidently follow the README and get a working Shikigami setup without hidden assumptions or undocumented prerequisites.
+
+**背景**
+ROADMAP M5 穩定化目標「外部使用者能順利安裝、使用、回報問題」的前提是安裝流程已被系統性驗證。目前 README 安裝步驟未經全新環境測試，潛在的環境假設（Node 版本、git 設定、Claude Code CLI 版本）可能讓外部使用者碰壁。本 Story 建立驗證基準，為 US-16 Tutorial 提供真實測試數據來源。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 建立安裝驗證 Checklist | 新建 `docs/km/INSTALL_VERIFICATION.md`；包含逐步 Checklist（每步驟含：指令/動作描述、預期輸出、PASS/FAIL 欄位、備注欄位）；涵蓋全部安裝步驟：環境前提確認 → Clone → Claude Code CLI 設定 → Plugin 掛載 → 首次 `shikigami:standup` 確認 |
+| AC2 | [動態] | 全新環境實際執行 | 依照 README 安裝步驟在無任何 Shikigami 預設前提的環境中逐步執行，將每步驟結果填入 AC1 Checklist；任何步驟失敗須記錄失敗原因與修正動作（不可略過），最終 Checklist 所有步驟標記 PASS |
+| AC3 | [靜態] | 驗證報告完整性 | `INSTALL_VERIFICATION.md` 包含：(a) 測試環境規格（OS、Node 版本、Claude Code CLI 版本、git 版本）；(b) 至少 5 個驗證場景（含：環境前提、Clone、CLI 設定、Plugin 掛載、首次執行各 1 個）；(c) 測試日期與執行者（可為 AI Agent）；(d) 發現問題清單（若為空則明確標記「無發現問題」） |
+| AC4 | [靜態] | README 對齊 | 若 AC2 執行中發現 README 有任何錯誤、缺漏、過時描述，須同步修正 `README.md` 對應段落，修正內容列入 AC3 「發現問題清單」 |
+
+**RICE 評分**
+
+| 維度 | 分數 |
+|------|------|
+| Reach | 10 |
+| Impact | 2 |
+| Confidence | 70% |
+| Effort | 0.5 人週 |
+| **RICE Score** | **28.0** |
+
+**MoSCoW**：Must
+**Size**：M / **Points**：2
+**對應 ROADMAP**：M5 穩定化（US-15，Sprint 15）
+**依賴**：無前置 Story（獨立可執行）
+**備注**：AC2 為動態 AC，需實際執行；若測試環境限制無法完整執行，可由 Architect 降級為「文件審查模式」（僅審查 README 步驟合理性），但需在執行前說明降級原因。
+
+---
+
+### US-16：使用者文件完善（Tutorial + Troubleshooting）
+
+**標題**：建立 Tutorial 與 Troubleshooting 文件，讓外部使用者能端對端上手
+
+**User Story**
+As an external user who has installed Shikigami, I want a step-by-step tutorial covering installation to first Sprint, and a troubleshooting guide for common failure scenarios, so that I can get productive without needing to read all the internal documentation or ask questions in issues.
+
+**背景**
+ROADMAP M5 完成條件「至少 1 位外部使用者完成安裝並走完一個 Sprint」的阻塞點在於缺乏使用者導向的文件。目前 docs/ 的文件以框架內部運作為主，缺乏外部使用者視角的 Tutorial（「我第一次該怎麼做？」）與 Troubleshooting（「卡住了怎麼辦？」）。本 Story 建立這兩份文件，並在 README 加入導覽入口。US-15 的驗證報告可作為 Troubleshooting 場景的輸入來源。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | Tutorial 文件建立 | 新建 `docs/tutorial/GETTING_STARTED.md`；覆蓋「安裝 → 第一個 Sprint」完整端對端路徑，包含步驟：(1) 前置條件確認、(2) 安裝 Shikigami、(3) 初始化專案（`shikigami:onboarding`）、(4) 定義第一個 User Story、(5) 執行 Sprint Planning、(6) 執行 Sprint Execution（至少 1 個 Story）、(7) 執行 Sprint Review；每個步驟含指令範例與預期輸出摘要 |
+| AC2 | [靜態] | Troubleshooting 文件建立 | 新建 `docs/tutorial/TROUBLESHOOTING.md`；至少涵蓋 6 個常見失敗情境，每個情境包含：情境描述、症狀（錯誤訊息或異常行為）、根因說明、解決步驟；涵蓋情境類型：(a) Claude Code CLI 未認證、(b) GitHub CLI 未認證、(c) Plugin 掛載失敗、(d) Standup 健康快篩 CRITICAL、(e) Sprint Planning QA Hard Gate 失敗、(f) 任意 1 個來自 US-15 驗證報告的發現問題 |
+| AC3 | [靜態] | README 文件導覽區段 | `README.md` 新增「## 文件導覽」區段（位置：在 Installation 之後，Features 之前）；包含：(1) Tutorial 連結 → `docs/tutorial/GETTING_STARTED.md`、(2) Troubleshooting 連結 → `docs/tutorial/TROUBLESHOOTING.md`、(3) 一句話摘要說明各文件用途；區段格式使用 Markdown 表格或清單 |
+| AC4 | [靜態] | 文件可發現性 | `docs/tutorial/` 目錄下建立 `README.md`（或 `INDEX.md`），列出目錄內所有文件與用途，作為 Tutorial 目錄的導覽起點；`docs/PROJECT_BOARD.md` 工件導覽區段新增 Tutorial 連結 |
+
+**RICE 評分**
+
+| 維度 | 分數 |
+|------|------|
+| Reach | 10 |
+| Impact | 3 |
+| Confidence | 75% |
+| Effort | 1.0 人週 |
+| **RICE Score** | **22.5** |
+
+**MoSCoW**：Must
+**Size**：M / **Points**：2
+**對應 ROADMAP**：M5 穩定化（US-16，Sprint 15）
+**依賴**：US-15 AC2/AC3（Troubleshooting AC2(f) 需引用 US-15 驗證報告發現）；若 US-15 未在同 Sprint 完成，AC2(f) 降級為「任意 1 個安裝常見問題」，不阻塞 US-16 整體交付
+**備注**：AC1~AC4 全為靜態 AC，QA 可透過文件審查通過 Hard Gate，無需動態執行環境。
 
 ---
 

@@ -66,6 +66,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 12 | 8761K | 486K | N/A | N/A（Review 進行中，無法精確切分） | N/A（Review token 進行中無法精確切分，合計待補） |
 | Sprint 13 | 5450K | 4242K | 5804K | 15496K | 35% / 27% / 38% |
 | Sprint 14 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
+| Sprint 15 | N/A | — | — | N/A | N/A（Planning token 不可用，Execution/Review 待補） |
 
 ---
 

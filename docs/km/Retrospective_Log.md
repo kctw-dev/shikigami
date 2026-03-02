@@ -527,4 +527,4 @@ PO、Architect、QA Engineer、Developer、Stakeholder
 
 | # | Action | Owner | 驗收方式 | Issue | 狀態 |
 |---|--------|-------|----------|-------|------|
-| 1 | US-15/US-16 Backlog 精化：PO 在下次 Sprint Planning 前，為 US-15 和 US-16 在 PRODUCT_BACKLOG.md 建立完整 Story 條目（含 AC 表格），使其符合 QA Hard Gate 要求 | PO | 下次 Sprint Planning 時 QA 確認 AC 可測試性為 PASS | [#31](https://github.com/KCTW/shikigami/issues/31) | Open |
+| 1 | US-15/US-16 Backlog 精化：PO 在下次 Sprint Planning 前，為 US-15 和 US-16 在 PRODUCT_BACKLOG.md 建立完整 Story 條目（含 AC 表格），使其符合 QA Hard Gate 要求 | PO | 下次 Sprint Planning 時 QA 確認 AC 可測試性為 PASS | [#31](https://github.com/KCTW/shikigami/issues/31) | Closed（Sprint 15 Planning — US-15/US-16 AC 精化完成，QA 確認可測試性 PASS，已選入 Sprint 15） |

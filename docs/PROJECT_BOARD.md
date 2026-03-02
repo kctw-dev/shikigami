@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 14 Review 完成）
-**當前 Sprint**：Sprint 14（已完成）
+**最後更新**：2026-03-02（Sprint 15 Planning 完成）
+**當前 Sprint**：Sprint 15（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 14](sprints/sprint_14.md) → 本看板
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 15](sprints/sprint_15.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 15 — 進行中
+
+**Sprint Goal**：完成 M5 穩定化的使用者就緒工作 — 建立可重複的全新環境安裝驗證報告，並交付端對端使用者文件（Tutorial + Troubleshooting），讓外部使用者能獨立完成安裝並走完第一個 Sprint。
+**期間**：2026-03-02 ~ 2026-03-08
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-15：完整安裝流程驗證（全新環境測試） | M | 2 | 進行中 |
+| US-16：使用者文件完善（Tutorial + Troubleshooting） | M | 2 | 進行中 |
+
+**計畫 Velocity**：4 points（2 Stories）
 
 ---
 
