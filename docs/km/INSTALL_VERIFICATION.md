@@ -95,7 +95,7 @@
 |---|---------|-------|---------|---------|
 | P1 | README「快速開始」未說明「需先安裝 Claude Code CLI」的前置條件 | 中 | README.md — 快速開始 > 安裝區段 | 新增前置條件說明（Prerequisites 區段） |
 | P2 | README「快速開始」未說明「需先完成 Claude Code 帳號認證」的前置條件 | 中 | README.md — 快速開始 > 安裝區段 | 在 Plugin 安裝步驟前新增「確認 Claude Code 已認證」說明 |
-| P3 | README 版本號顯示「v0.3.3」，但 package.json / 版本追蹤顯示可能已更新 | 低 | README.md — 標題下方版本標籤 | 確認並同步最新版本號（需對照 package.json） |
+| P3 | README 版本號顯示「v0.3.3」，但 plugin.json 版本為 0.3.8，版本號過時 | 低 | README.md — 標題下方版本標籤（第 15 行） | 將版本號從 v0.3.3 更新為 v0.3.8（已修正） |
 
 **發現問題總數**：3 個（中 × 2，低 × 1）
 

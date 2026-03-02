@@ -12,11 +12,19 @@ Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專
 
 這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 9 個 Sprint 完成率 100%，交付 30+ Stories，QA 雙階段審查攔截了每個 Sprint 的品質問題。
 
-**當前版本：v0.3.3**（17 Skills / 7 Agents / 4 Commands）
+**當前版本：v0.3.8**（17 Skills / 7 Agents / 4 Commands）
 
 ---
 
 ## 快速開始
+
+### 前置條件
+
+在安裝 Shikigami 前，請確認以下條件已滿足：
+
+1. **已安裝 Claude Code CLI** — 參閱 [Claude Code 官方文件](https://docs.anthropic.com/en/docs/claude-code) 完成安裝
+2. **已完成 Claude Code 帳號認證** — 開啟 Claude Code 確認可正常對話（無 401 認證錯誤）
+3. **網路連線正常** — 安裝過程需存取 Claude Code marketplace
 
 ### 安裝（Claude Code）
 
