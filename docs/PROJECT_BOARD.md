@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 17 Planning 完成）
-**當前 Sprint**：Sprint 17（進行中）
+**最後更新**：2026-03-02（Sprint 17 Review 完成）
+**當前 Sprint**：Sprint 17（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 17](sprints/sprint_17.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 17 — 進行中
+## Sprint 17 — 完成
 
 **Sprint Goal**：檔案瘦身優先 — 建立 PROJECT_BOARD 與 Retrospective_Log 歷史歸檔機制（US-29），清零 Sprint 16 Retro Action Items（Retro #41 Token 記錄指引 cache tokens 修正、Retro #42 OpenCode POC 佔位候選入 Backlog），確保效能可觀測性與知識管理基礎就緒。
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-02 ~ 2026-03-08
 
 | Story | Size | Points | 狀態 |
@@ -17,6 +19,8 @@
 | Retro #41：Token 記錄指引更新 — 三個 SKILL.md 納入 cache tokens 加總計算 | S | 1 | 完成 |
 | Retro #42：OpenCode POC 可行性調查佔位入 Backlog | S | 1 | 完成 |
 | US-29（Issue #44）：PROJECT_BOARD.md 與 Retrospective_Log.md 歷史歸檔機制 | M | 2 | 完成 |
+
+**實際 Velocity**：4 points（3 Stories）
 
 ---
 

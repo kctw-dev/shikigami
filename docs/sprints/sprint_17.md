@@ -1,6 +1,6 @@
 # Sprint 17
 
-**狀態**：進行中
+**狀態**：完成
 **Sprint Goal**：檔案瘦身優先 — 建立 PROJECT_BOARD 與 Retrospective_Log 歷史歸檔機制（US-29），清零 Sprint 16 Retro Action Items（Retro #41 Token 記錄指引 cache tokens 修正、Retro #42 OpenCode POC 佔位候選入 Backlog），確保效能可觀測性與知識管理基礎就緒。
 **期間**：2026-03-02 ~ 2026-03-08
 

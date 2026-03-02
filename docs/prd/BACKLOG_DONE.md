@@ -1086,3 +1086,54 @@ As an external user who has installed Shikigami, I want a step-by-step tutorial 
 | Issue #36：sprint-review SKILL.md 覆蓋缺口修正 | — | Must | — | Done |
 | Retro #38：Token JSONL 提取機制調查 | — | Should | — | Done |
 | US-28：快思/慢想雙模式 — Sprint Planning & Standup 精簡化 | — | Should | — | Done |
+
+---
+
+## Sprint 17（2026-03-02）
+
+**Sprint Goal**：檔案瘦身優先 — 建立歷史歸檔機制，清零 Sprint 16 Retro Action Items，確保效能可觀測性與知識管理基礎就緒
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| Retro #41：Token 記錄指引更新 — 三個 SKILL.md 納入 cache tokens 加總計算 | — | Must | ADR-003 | Done |
+| Retro #42：OpenCode POC 可行性調查佔位入 Backlog | — | Could | — | Done |
+| US-29（Issue #44）：PROJECT_BOARD 與 Retrospective_Log 歷史歸檔機制 | 18.0 | Should | — | Done |
+
+---
+
+### Retro #41：Token 記錄指引更新 — cache tokens 加總
+
+**來源**：Sprint 16 Retro Action Item #41（[Issue #41](https://github.com/KCTW/shikigami/issues/41)）
+**交付摘要**：三個 SKILL.md（sprint-planning、sprint-execution、sprint-review）的 token 提取指引新增 `cache_read_input_tokens` + `cache_creation_input_tokens` 加總規則，計算公式：有效 input tokens = input_tokens + cache_read_input_tokens + cache_creation_input_tokens。
+**驗收結果**：AC 全通過（5/5）；Issue #41 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### Retro #42：OpenCode POC 可行性調查佔位入 Backlog
+
+**來源**：Sprint 16 Retro Action Item #42（[Issue #42](https://github.com/KCTW/shikigami/issues/42)）
+**交付摘要**：`docs/prd/PRODUCT_BACKLOG.md` 新增 OpenCode POC 候選條目，MoSCoW: Could，Size: 待定，狀態: 候選。
+**驗收結果**：AC 全通過（3/3）；Issue #42 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### US-29（Issue #44）：PROJECT_BOARD 與 Retrospective_Log 歷史歸檔機制
+
+**標題**：建立歷史記錄歸檔機制，確保主文件保持精簡
+
+**User Story**
+As a Product Owner, I want a formal archiving mechanism for PROJECT_BOARD.md and Retrospective_Log.md historical records, so that these files stay lean and don't grow unboundedly, while historical data remains accessible via archive files.
+
+**交付摘要**：
+- 建立 `docs/km/archive/` 目錄，含 `PROJECT_BOARD_ARCHIVE.md`（Sprint 1–13）、`RETRO_ARCHIVE.md`（Sprint 1–13）、`README.md`（目錄索引）
+- PROJECT_BOARD.md 從 266 行縮減至 73 行（保留 Sprint 14–17）
+- Retrospective_Log.md 從 582 行縮減至 77 行（保留 Sprint 14–16）
+- 主文件底部新增歸檔連結
+- sprint-review SKILL.md 新增 §6 歸檔觸發檢查步驟
+
+**驗收結果**：AC 全通過（5/5）；Issue #44 CLOSED
+**RICE**：18.0
+**MoSCoW**：Should
+**Size**：M / **Points**：2

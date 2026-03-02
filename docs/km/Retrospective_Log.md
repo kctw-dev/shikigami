@@ -4,6 +4,31 @@
 
 ---
 
+## Sprint 17 — 2026-03-02
+
+**參與角色**：PO、Architect、Developer、QA、Stakeholder
+
+### Good
+
+1. 檔案瘦身效果顯著 — PROJECT_BOARD.md 從 266 行縮減至 73 行（-72%），Retrospective_Log.md 從 582 行縮減至 77 行（-87%），US-29 歸檔機制成功建立
+2. Phase 1 平行派遣（Retro #41 + Retro #42）零衝突成功，Phase 2 US-29 歸檔作業順利完成
+3. QA 雙階段審查全面執行，3 個 Story 共 6 次審查（3 Spec + 3 Quality）全 PASS
+4. Sprint 16 Retro Action Items 全數清零（#41 Token cache 修正 + #42 OpenCode POC 佔位），平均關閉速度維持 1 個 Sprint
+
+### Problem
+
+1. PO Round 2 subagent 混淆 Retro #41 Story 內容（「Token cache tokens 加總計算」→「Sprint Review SKILL.md 歷史 Sprint 紀錄截斷修正」），需主 session 人工介入修正，暴露 PO subagent 跨輪次一致性風險
+2. Sprint 儀式過重：Stakeholder 反映小任務不需完整 Planning/Review/Retro/Metrics 流程，希望有「短衝模式」快速執行
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| 1 | 短衝模式設計與實作 — 建立跳過 Sprint 儀式但保留 QA + Architect 審查的快速執行路徑 | Architect | SKILL.md 新增短衝模式定義，含觸發條件、保留項目、文件產出規範 | #47 | Open |
+| 2 | PO subagent 跨輪次一致性檢查 — 防止 PO Round 2 混淆或改寫 Round 1 已通過的 Story 內容 | QA | sprint-planning SKILL.md 新增 PO Round 2 輸入驗證步驟 | #48 | Open |
+
+---
+
 ## Sprint 16 — 2026-03-02
 
 **參與角色**：PO、Architect、Developer、QA、Stakeholder、SRE
@@ -25,8 +50,8 @@
 
 | # | Action | Owner | 驗收方式 | Issue | 狀態 |
 |---|--------|-------|----------|-------|------|
-| 1 | Token 記錄指引更新：三個 SKILL.md 的 token 提取指引需納入 cache_read_input_tokens + cache_creation_input_tokens 加總計算 | Architect | 三個 SKILL.md 的主要方法描述明確包含 cache tokens 加總規則 | #41 | Open |
-| 2 | Sprint 17 Planning 依 US-17 結論評估 OpenCode POC 優先排入 Backlog | PO | Sprint 17 Planning 時 PO 確認是否排入，並記錄決策理由 | #42 | Open |
+| 1 | Token 記錄指引更新：三個 SKILL.md 的 token 提取指引需納入 cache_read_input_tokens + cache_creation_input_tokens 加總計算 | Architect | 三個 SKILL.md 的主要方法描述明確包含 cache tokens 加總規則 | #41 | Closed（Sprint 17） |
+| 2 | Sprint 17 Planning 依 US-17 結論評估 OpenCode POC 優先排入 Backlog | PO | Sprint 17 Planning 時 PO 確認是否排入，並記錄決策理由 | #42 | Closed（Sprint 17） |
 
 ---
 

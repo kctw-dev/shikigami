@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-02（Sprint 17 Planning — Retro #41/#42 選入 Sprint；US-29 正式條目建立；OpenCode POC 佔位候選新增；Retro #42 執行完成 — 佔位條目確認符合 AC2 規格）
+**最後更新**：2026-03-02（Sprint 17 Review 完成 — 3/3 Stories Done）
 **管理者**：Product Owner
 
 ---
@@ -84,21 +84,29 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | Retro #41：Token 記錄指引更新 — 三個 SKILL.md 納入 cache tokens 加總計算 | — | Must | S | Sprint 16 Retro / Issue #41 | In Sprint 17 |
+| 1 | Retro #41：Token 記錄指引更新 — 三個 SKILL.md 納入 cache tokens 加總計算 | — | Must | S | Sprint 16 Retro / Issue #41 | Done（Sprint 17） |
 | 2 | Retro #42：OpenCode POC 可行性調查佔位入 Backlog | — | Could | S | Sprint 16 Retro / Issue #3 | Done（Sprint 17） |
 
 ### Sprint 17 — 新增 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-29（Issue #44）：PROJECT_BOARD.md 與 Retrospective_Log.md 歷史歸檔機制 | 18.0 | Should | M | GitHub Issue #44 | In Sprint 17 |
+| 1 | US-29（Issue #44）：PROJECT_BOARD.md 與 Retrospective_Log.md 歷史歸檔機制 | 18.0 | Should | M | GitHub Issue #44 | Done（Sprint 17） |
+
+### Sprint 17 Retro — 新增 Action Items
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | Retro #47：短衝模式設計與實作 | 待定 | Should | 待定 | Sprint 17 Retro / Issue #47 | 候選 |
+| 2 | Retro #48：PO subagent 跨輪次一致性檢查 | 待定 | Should | 待定 | Sprint 17 Retro / Issue #48 | 候選 |
 
 ### Sprint 17 後 — 候選 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | OpenCode POC 可行性調查 | 待定 | Could | 待定 | Retro #42 / Issue #3 | 候選 |
-| 2 | Architect/QA 框架開發領域專家知識強化 | 待定 | Should | 待定 | Stakeholder 需求 | 候選 |
+| 1 | Issue #46：Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule） | 待定 | Should | L | GitHub Issue #46 / Stakeholder 優先 | 候選（優先） |
+| 2 | OpenCode POC 可行性調查 | 待定 | Could | 待定 | Retro #42 / Issue #3 | 候選 |
+| 3 | Architect/QA 框架開發領域專家知識強化 | 待定 | Should | 待定 | Stakeholder 需求 | 候選 |
 
 ---
 
