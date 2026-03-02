@@ -13,12 +13,31 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。主要由 **Product Own
 
 ---
 
+## 1.1 快思/慢想模式
+
+Sprint Planning 支援兩種執行模式：
+
+### 快思模式（預設）
+
+- **觸發方式**：直接執行 Sprint Planning（無需任何額外參數）
+- **跳過項目**：完整健康檢查、Token 消耗測量、角色權重調整檢查
+- **執行流程**：PO 選 Stories → Architect 技術評估 → QA 驗收標準確認 → 建立 Sprint 文件
+
+### 慢想模式
+
+- **觸發方式**：使用者傳入 `--deep` 參數或說「完整檢查」
+- **執行流程**：健康檢查 → 角色權重調整 → PO 選 Stories → Architect 技術評估 → QA 驗收標準確認 → 建立 Sprint 文件 → Token 消耗記錄
+
+---
+
 ## 2. 流程 Checklist
+
+> **模式選擇**：預設為**快思模式**，跳過前 3 項（健康檢查、權重調整、Token 記錄），直接從 PO 選 Stories 開始。使用者傳入 `--deep` 或說「完整檢查」時切換至**慢想模式**，執行完整流程。
 
 以下步驟必須逐項建立 task 完成，不可跳過：
 
-- [ ] **執行框架健康檢查**（invoke shikigami:health-check）— 完整 4 項檢查（必要文件 + 孤兒 Story + ADR 一致性 + Retro 逾期）。CRITICAL 標注警告但不阻塞 Planning 流程
-- [ ] **角色權重調整檢查**（US-22 / ADR-004）— 讀取 `docs/km/Retrospective_Log.md`，依關鍵字比對演算法判斷是否觸發調整；結果寫入 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊（詳見 §7）
+- [ ] **執行框架健康檢查**（invoke shikigami:health-check）— 完整 4 項檢查（必要文件 + 孤兒 Story + ADR 一致性 + Retro 逾期）。CRITICAL 標注警告但不阻塞 Planning 流程 *(慢想模式限定)*
+- [ ] **角色權重調整檢查**（US-22 / ADR-004）— 讀取 `docs/km/Retrospective_Log.md`，依關鍵字比對演算法判斷是否觸發調整；結果寫入 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊（詳見 §7） *(慢想模式限定)*
 - [ ] **PO subagent** 掃描 GitHub open issues（`gh issue list --state open`），對未分類 issues 執行 Triage（invoke shikigami:issue-management Triage），將 bug/feature-request 透過 Backlog Bridge 納入 Backlog
 - [ ] **PO subagent** 自行讀取 `docs/prd/PRODUCT_BACKLOG.md`、`docs/PROJECT_BOARD.md` 與 `docs/prd/ROADMAP.md`，從 Backlog 頂部（依優先級排序）選取符合 Sprint Goal 與 ROADMAP 里程碑的 Stories，並回傳結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果）。**主 session 不讀取上述三個檔案，僅接收 subagent 回傳的摘要表格。**
 - [ ] **檢查選入的 Story 是否標注「需要 ADR」** — 若標注需要 ADR，則該 ADR 必須已建立且狀態為 Accepted，方可進入 Sprint
@@ -27,7 +46,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。主要由 **Product Own
 - [ ] 上個 Sprint 的 **Retro Action Items** 自動列入 Backlog（若有未完成項目）
 - [ ] **PO subagent** 建立 `docs/sprints/sprint_N.md`（N 為遞增的 Sprint 編號）
 - [ ] 更新 `docs/PROJECT_BOARD.md`，反映新 Sprint 的 Stories 配置
-- [ ] **記錄本次 Planning 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格**（對應 Planning token 欄）：
+- [ ] **記錄本次 Planning 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格**（對應 Planning token 欄） *(慢想模式限定)*：
   - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens` 與 `output_tokens`，加總後填入 Metrics_Log.md 對應欄位。
   - **次選（降級方法）**：若 JSONL 檔案不存在、路徑不可存取、或 `message.usage` 欄位解析失敗，則各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
 - [ ] **完成 `docs/PROJECT_BOARD.md` 或 `docs/sprints/sprint_N.md` 修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件，格式與範圍見 §5 Commit + Push 規範）
@@ -85,8 +104,8 @@ git push
 Sprint Planning 的 Subagent 調度遵循以下固定順序：
 
 ```
-0.   健康檢查       → invoke shikigami:health-check（完整 4 項）
-0.5. 角色權重調整   → 讀取 Retrospective_Log.md，執行關鍵字比對，輸出調整結果至 sprint_N.md（詳見 §7）
+0.   健康檢查       → invoke shikigami:health-check（完整 4 項）【慢想模式限定】
+0.5. 角色權重調整   → 讀取 Retrospective_Log.md，執行關鍵字比對，輸出調整結果至 sprint_N.md（詳見 §7）【慢想模式限定】
 1.   PO             → 分析 Backlog、選取 Stories、定義 Sprint Goal
 2.   Architect      → 技術評估、ADR 檢查
 3.   QA             → 驗收標準確認
