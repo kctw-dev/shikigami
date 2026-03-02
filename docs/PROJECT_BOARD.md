@@ -14,9 +14,9 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | S | 1 | 待執行 |
-| US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | M | 2 | 待執行 |
-| US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | S | 1 | 待執行 |
+| Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | S | 1 | 完成 |
+| US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | M | 2 | 完成 |
+| US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | S | 1 | 完成 |
 
 **Sprint 容量**：4 Points（3 Stories）
 
