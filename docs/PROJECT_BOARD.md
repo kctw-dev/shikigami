@@ -9,7 +9,7 @@
 
 ## Sprint 16 — 進行中
 
-**Sprint Goal**：清零 Sprint 15 Retro Action Items，完成 US-17 多平台可行性調查，修正文件類 SKILL.md 越權執行風險（Issue #34），更新 sprint-review SKILL.md 覆蓋缺口（Issue #36），鞏固 M5 穩定化最後一哩路。
+**Sprint Goal**：清零 Sprint 15 Retro Action Items，完成 US-17 多平台可行性調查，修正文件類 SKILL.md 越權執行風險（Issue #34），更新 sprint-review SKILL.md 覆蓋缺口（Issue #36），導入快思/慢想雙模式精簡化（Issue #39），鞏固 M5 穩定化最後一哩路。
 **期間**：2026-03-02 ~ 2026-03-08
 
 | Story | Size | Points | 狀態 |
@@ -19,8 +19,9 @@
 | Issue #34：sprint-execution SKILL.md 跳過 doc-only Story 執行保護 | S | 1 | 待開始 |
 | Issue #36：sprint-review SKILL.md 覆蓋缺口修正 | S | 1 | 待開始 |
 | Retro #38：Token JSONL 提取機制調查與 SKILL.md 主要方法更新 | S | 1 | 待開始 |
+| US-28：快思/慢想雙模式 — Sprint Planning & Standup 精簡化 | M | 2 | 待開始 |
 
-**計畫 Velocity**：6 points（5 Stories）
+**計畫 Velocity**：8 points（6 Stories）
 
 ---
 

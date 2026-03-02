@@ -10,9 +10,9 @@
 
 Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：QA 審你的代碼並挑戰架構決策，Security 審外部輸入，SRE 從維運角度評估部署可行性。**不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
 
-這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 9 個 Sprint 完成率 100%，交付 30+ Stories，QA 雙階段審查攔截了每個 Sprint 的品質問題。
+這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 15 個 Sprint 完成率 100%，交付 56 Stories，QA 雙階段審查攔截了每個 Sprint 的品質問題。
 
-**當前版本：v0.3.8**（17 Skills / 7 Agents / 4 Commands）
+**當前版本：v0.3.9**（17 Skills / 7 Agents / 4 Commands）
 
 ---
 
@@ -264,13 +264,12 @@ Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發
 | v0.1.0 | 核心框架 | Sprint 1 | 16 Skills + 7 Agents + 3 Commands + Issue Management |
 | v0.2.0 | 自我感知 | Sprint 2–4 | Onboarding + Health Check + Sprint Metrics |
 | v0.3.0 | 知識沉澱 | Sprint 4–6 | Retrospective Analytics + Tech Debt Registry + 5 驗證腳本 + Hard Gate 機制 |
-| v0.3.x | 穩定化 | Sprint 7–9 | dispel 解咒模式 + CI Pipeline + 制衡案例 + Issue 回覆自動化 + Bypass 機制 + Token 成本透明化 + 孤兒文件偵測 |
+| v0.3.x | 穩定化 | Sprint 7–15 | dispel 解咒模式 + CI Pipeline + 制衡案例 + Issue 回覆自動化 + Bypass 機制 + Token 成本透明化 + 孤兒文件偵測 + 零讀取架構 + 角色權重自動調整 + 使用者文件（Tutorial + Troubleshooting） |
 
-### 累積數據（截至 Sprint 9）
+### 累積數據（截至 Sprint 15）
 
-- 連續 9 個 Sprint 完成率 100%，Velocity 歷史：8→5→5→4→6→8→7→6→5
-- 30+ Stories 交付，3 個 ADR（架構決策紀錄）
-- 19 個 Retro Action Items（17 已關閉，平均 1.1 Sprint 內關閉）
+- 連續 15 個 Sprint 完成率 100%，Velocity 歷史：8→5→5→4→6→8→7→6→5→6→4→4→4→2→4
+- 56 Stories 交付，4 個 ADR（架構決策紀錄）
 - 8 個自動化驗證腳本 + GitHub Actions CI Pipeline
 
 ### 開發流程實證
@@ -287,8 +286,8 @@ Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發
 
 | 文件 | 說明 |
 |------|------|
-| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-003） |
-| `docs/sprints/` | Sprint 規劃與執行紀錄（sprint_1 ~ sprint_9） |
+| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-004） |
+| `docs/sprints/` | Sprint 規劃與執行紀錄（sprint_1 ~ sprint_15） |
 | `docs/km/Retrospective_Log.md` | 每次犯的錯都記下來，不重複犯 |
 | `docs/km/Metrics_Log.md` | Velocity 趨勢與完成率追蹤 |
 | `docs/km/ROLE_BALANCE_CASES.md` | [真實制衡案例記錄](docs/km/ROLE_BALANCE_CASES.md) |

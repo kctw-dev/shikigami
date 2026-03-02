@@ -1,6 +1,6 @@
 # Sprint 16
 
-**Sprint Goal**：清零 Sprint 15 Retro Action Items，完成 US-17 多平台可行性調查，修正文件類 SKILL.md 越權執行風險（Issue #34），更新 sprint-review SKILL.md 覆蓋缺口（Issue #36），鞏固 M5 穩定化最後一哩路。
+**Sprint Goal**：清零 Sprint 15 Retro Action Items，完成 US-17 多平台可行性調查，修正文件類 SKILL.md 越權執行風險（Issue #34），更新 sprint-review SKILL.md 覆蓋缺口（Issue #36），導入快思/慢想雙模式精簡化（Issue #39），鞏固 M5 穩定化最後一哩路。
 **期間**：2026-03-02 ~ 2026-03-08
 
 ---
@@ -14,8 +14,9 @@
 | Issue #34 | sprint-execution SKILL.md 跳過 doc-only Story 執行保護 | S | 1 | 待開始 |
 | Issue #36 | sprint-review SKILL.md 覆蓋缺口修正 | S | 1 | 待開始 |
 | Retro #38 | Token JSONL 提取機制調查與 SKILL.md 主要方法更新 | S | 1 | 待開始 |
+| US-28 | 快思/慢想雙模式 — Sprint Planning & Standup 預設精簡化 | M | 2 | 待開始 |
 
-**總計：5 Stories / 6 Points**
+**總計：6 Stories / 8 Points**
 
 ---
 
@@ -123,6 +124,28 @@ As an Architect, I want to investigate the current session JSONL format for toke
 
 ---
 
+### US-28（Issue #39）：快思/慢想雙模式 — Sprint Planning & Standup 預設精簡化
+
+**User Story**
+As a framework user, I want Sprint Planning and Daily Standup to default to a streamlined "fast thinking" mode that skips non-essential diagnostics, so that daily iteration is faster and less token-intensive, while retaining a "deep" mode for thorough checks when needed.
+
+**QA 狀態**：待 QA 審查
+
+**背景**：Issue #39 提出日常 Planning/Standup 每次跑完整健康檢查 + Token 測量 + 權重調整過於繁重。引入快思（預設）/慢想（`--deep`）雙模式，快思跳過非核心步驟直接進入選 Stories 流程。
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | sprint-planning SKILL.md 快思模式定義 | `skills/sprint-planning/SKILL.md` 新增「快思/慢想模式」區塊：(a) 快思模式（預設）跳過完整健康檢查、Token 消耗測量、角色權重調整檢查，直接進入 PO 選 Stories → Architect 評估 → QA 驗收 → 建立 Sprint 文件；(b) 慢想模式（`--deep`）維持現有完整流程；(c) 模式選擇邏輯明確標注於 §2 流程 Checklist 開頭 |
+| AC2 | [靜態] | standup command 快思模式定義 | `commands/standup.md` 新增快思/慢想分支：(a) 快思模式（預設）精簡為 Git 同步 + Sprint 進度，跳過 Issues 深度掃描與完整健康檢查；(b) 慢想模式（`--deep`）維持現有完整流程 |
+| AC3 | [靜態] | 模式觸發方式文件化 | sprint-planning SKILL.md 與 commands/standup.md 均明確記載觸發方式：預設為快思，使用者傳入 `--deep` 參數或說「完整檢查」時切換至慢想模式 |
+| AC4 | [靜態] | ADR-003 Checklist 通過 | 修改 `skills/sprint-planning/SKILL.md` 與 `commands/standup.md`，需在執行前確認 ADR-003 Checklist 四項條件全部通過 |
+
+**MoSCoW**：Should / **Size**：M / **Points**：2
+**依賴**：無（獨立可執行，但建議在 Issue #34 之後執行以避免 SKILL.md 衝突）
+**ADR-003**：適用（修改 `skills/sprint-planning/SKILL.md` + `commands/standup.md`）
+
+---
+
 ## 權重調整記錄
 
 - **觸發歷史**：Sprint 14 Problem 含 QA 相關關鍵字（「QA Code Quality Review 發現 Retro #26 硬編碼版本號」）；Sprint 15 Problem 含 QA 相關關鍵字（「Code Quality Review 發現 2 個 Important 問題未於本 Sprint 修復」）→ 連續 2 個 Sprint 出現 QA 相關 Problem，觸發升級門檻
@@ -152,8 +175,9 @@ As an Architect, I want to investigate the current session JSONL format for toke
 | 2-1 | Issue #34 | `skills/sprint-execution/SKILL.md` | ADR-003 適用，需序列處理 |
 | 2-2 | Issue #36 | `skills/sprint-review/SKILL.md` | ADR-003 適用，依賴 #34 完成後確認 ADR-003 流程無障礙 |
 | 2-3 | Retro #38 | 三個 SKILL.md（條件適用）+ `docs/km/Metrics_Log.md` | 依賴 Issue #34/#36 完成後執行（避免 SKILL.md 同時修改衝突） |
+| 2-4 | US-28 | `skills/sprint-planning/SKILL.md` + `commands/standup.md` | 依賴 Retro #38 完成後執行（sprint-planning SKILL.md 可能被 Retro #38 修改） |
 
-**序列理由**：Issue #34 修改 sprint-execution SKILL.md，Retro #38 的分支 B 也可能修改三個 SKILL.md（含 sprint-execution）；Issue #36 修改 sprint-review SKILL.md，Retro #38 亦可能修改同一檔案。為避免合併衝突，Phase 2 採序列執行。
+**序列理由**：Issue #34 修改 sprint-execution SKILL.md，Retro #38 的分支 B 也可能修改三個 SKILL.md（含 sprint-execution）；Issue #36 修改 sprint-review SKILL.md，Retro #38 亦可能修改同一檔案；US-28 修改 sprint-planning SKILL.md，Retro #38 亦可能修改同一檔案。為避免合併衝突，Phase 2 採序列執行。
 
 ---
 
@@ -161,20 +185,21 @@ As an Architect, I want to investigate the current session JSONL format for toke
 
 | 指標 | 數值 |
 |------|------|
-| 計畫 Stories | 5 |
-| 計畫 Points | 6（3S + 1M + 1S = 1+2+1+1+1） |
+| 計畫 Stories | 6 |
+| 計畫 Points | 8（4S + 2M = 1+2+1+1+1+2） |
 | 近 3 Sprint 平均 Velocity | 3.3pt（Sprint 13: 4、Sprint 14: 2、Sprint 15: 4） |
 | Sprint 15 Velocity | 4pt |
-| 緩衝率 | 182%（高於歷史平均，但 5 個 Story 均為 QA Hard Gate 通過，含 2 個 PASS + 3 個 NEEDS_REVISION 已修訂） |
+| 緩衝率 | 242%（高於歷史平均，但 6 個 Story 均為 QA Hard Gate 通過或待審查，含 2 個 PASS + 3 個 NEEDS_REVISION 已修訂 + 1 個新增） |
 
 **容量決策說明**：
-Sprint 16 選入 5 Stories（6 points），高於近 3 Sprint 平均 Velocity（3.3pt）。選入理由：
-1. QA Hard Gate 已通過（2 個 PASS，3 個 NEEDS_REVISION 已由 PO Round 2 修訂 AC）
-2. 5 個 Story 均為 S 或 M size，無 L 或 XL 高風險 Story
+Sprint 16 選入 6 Stories（8 points），高於近 3 Sprint 平均 Velocity（3.3pt）。選入理由：
+1. QA Hard Gate 已通過（2 個 PASS，3 個 NEEDS_REVISION 已由 PO Round 2 修訂 AC，1 個新增待 QA 審查）
+2. 6 個 Story 均為 S 或 M size，無 L 或 XL 高風險 Story
 3. Retro #37（S/1pt）為純文件補充，風險極低
 4. Issue #34/#36 為 ADR-003 觸發 Story，但均為 S size，執行風險可控
 5. Retro #38 調查型 Story，結論為分支 A 無需修改時可快速完成
 6. US-17 為調查型 Story，不涉及框架文件修改，ADR-003 不適用
+7. US-28（Issue #39）為流程精簡化 Story，修改範圍明確（sprint-planning SKILL.md + standup.md），M size 合理
 
 ---
 
@@ -187,6 +212,7 @@ Sprint 16 選入 5 Stories（6 points），高於近 3 Sprint 平均 Velocity（
 | Issue #34 | 修改 `skills/sprint-execution/SKILL.md` | 適用 |
 | Retro #37 | 修改 `docs/tutorial/GETTING_STARTED.md`（非 skills/commands/agents/） | 不適用 |
 | US-17 | 建立 `docs/km/MULTI_PLATFORM_SURVEY.md`、標注 ROADMAP.md（非 skills/ 下 .md） | 不適用 |
+| US-28 | 修改 `skills/sprint-planning/SKILL.md` + `commands/standup.md` | 適用 |
 
 ---
 
