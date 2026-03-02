@@ -179,7 +179,7 @@ Sprint Review 時自動產出：
 | Retro #30 | sprint-review SKILL.md 禁止項硬編碼版本號修正 | Sprint 14 ✅ |
 | US-15 | 完整安裝流程驗證（全新環境測試） | Sprint 15 ✅ |
 | US-16 | 使用者文件完善（Tutorial + Troubleshooting） | Sprint 15 ✅ |
-| US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | TBD |
+| US-17 | 多平台調查（Cursor / OpenCode / Codex 可行性） | TBD（調查完成，Sprint 16） |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
 
