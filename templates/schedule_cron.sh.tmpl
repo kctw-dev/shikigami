@@ -1,0 +1,59 @@
+#!/bin/bash
+# shikigami-schedule-generated
+# skill: {{SKILL_NAME}}
+# interval: {{INTERVAL}}
+# cron: {{CRON_EXPR}}
+# project-dir: {{PROJECT_DIR}}
+# requiredTools-hash: {{REQUIRED_TOOLS_HASH}}
+# generated-at: {{TIMESTAMP}}
+#
+# WARNING: 此檔案由 shikigami:schedule 自動生成
+#          手動修改將在下次執行 /schedule 時被覆蓋
+#          如需調整工具權限，請修改 SKILL.md frontmatter 的 requiredTools
+#          並重新執行 /schedule {{SKILL_NAME}} --interval {{INTERVAL}}
+
+set -uo pipefail
+
+# ---------------------------------------------------------------------------
+# 設定
+# ---------------------------------------------------------------------------
+SKILL_NAME="{{SKILL_NAME}}"
+PROJECT_DIR="{{PROJECT_DIR}}"
+LOCK_FILE="/tmp/shikigami-schedule-{{PROJECT_HASH}}-{{SKILL_NAME}}.lock"
+LOG_FILE="${PROJECT_DIR}/logs/schedule-{{SKILL_NAME}}.log"
+
+# ---------------------------------------------------------------------------
+# 確保 log 目錄存在
+# ---------------------------------------------------------------------------
+mkdir -p "${PROJECT_DIR}/logs"
+
+# ---------------------------------------------------------------------------
+# 互斥鎖：使用 flock（進程死亡時 OS 自動釋放，不殘留孤兒鎖）
+# flock -n：non-blocking，拿不到鎖立即返回（SKIPPED，前一個還在執行）
+# ---------------------------------------------------------------------------
+exec 200>"${LOCK_FILE}"
+if ! flock -n 200; then
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] SKIPPED — previous run still active (lock: ${LOCK_FILE})" >> "${LOG_FILE}"
+  exit 0
+fi
+
+# ---------------------------------------------------------------------------
+# 安全設定：強制 OAuth 認證路徑
+# unset ANTHROPIC_API_KEY 確保 claude CLI 使用 ~/.claude/ OAuth，
+# 避免 API Key 明文出現在排程環境（ADR-005 決策域四）
+# ---------------------------------------------------------------------------
+unset ANTHROPIC_API_KEY
+
+# ---------------------------------------------------------------------------
+# 執行
+# ---------------------------------------------------------------------------
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] START — skill=${SKILL_NAME} interval={{INTERVAL}}" >> "${LOG_FILE}"
+
+cd "${PROJECT_DIR}" && claude -p "/{{SKILL_NAME}}" \
+  --allowedTools "{{ALLOWED_TOOLS}}" \
+  >> "${LOG_FILE}" 2>&1
+
+EXIT_CODE=$?
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] END (exit: ${EXIT_CODE})" >> "${LOG_FILE}"
+
+exit "${EXIT_CODE}"

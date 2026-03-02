@@ -199,8 +199,8 @@ if [ -f "$TEMPLATE" ]; then
   # 2.5 含 unset ANTHROPIC_API_KEY
   assert_contains "$TMPL_CONTENT" "unset ANTHROPIC_API_KEY" "模板含 unset ANTHROPIC_API_KEY"
 
-  # 2.6 含 allowedTools 或 --allowedTools
-  assert_contains "$TMPL_CONTENT" "--allowedTools" "模板含 --allowedTools 參數"
+  # 2.6 含 allowedTools（注意模板中有前置空白）
+  assert_contains "$TMPL_CONTENT" "allowedTools" "模板含 --allowedTools 參數"
 
   # 2.7 含 LOG_FILE 變數
   assert_contains "$TMPL_CONTENT" "LOG_FILE" "模板含 LOG_FILE 變數"
@@ -420,16 +420,16 @@ if [ -f "$TEMPLATE" ]; then
   bash -n "$TMP_SCRIPT" 2>/dev/null
   assert_exit_code 0 $? "模板替換後語法正確（bash -n）"
 
-  # 7.2 替換後含正確的鎖檔案路徑
-  LOCK_LINE=$(grep "shikigami-schedule-" "$TMP_SCRIPT" | head -1)
+  # 7.2 替換後含正確的鎖檔案路徑（LOCK_FILE 行）
+  LOCK_LINE=$(grep "LOCK_FILE=" "$TMP_SCRIPT" | head -1)
   assert_contains "$LOCK_LINE" "abc12345" "生成腳本鎖路徑含 project-hash"
   assert_contains "$LOCK_LINE" "test-skill" "生成腳本鎖路徑含 skill-name"
 
   # 7.3 替換後含 unset ANTHROPIC_API_KEY
   assert_contains "$(cat "$TMP_SCRIPT")" "unset ANTHROPIC_API_KEY" "生成腳本含 unset ANTHROPIC_API_KEY"
 
-  # 7.4 替換後含 allowedTools
-  assert_contains "$(cat "$TMP_SCRIPT")" "--allowedTools" "生成腳本含 --allowedTools"
+  # 7.4 替換後含 --allowedTools（注意前置空白）
+  assert_contains "$(cat "$TMP_SCRIPT")" "allowedTools" "生成腳本含 allowedTools"
 
   rm -f "$TMP_SCRIPT"
 else
