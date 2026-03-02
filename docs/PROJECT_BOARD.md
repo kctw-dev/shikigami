@@ -14,8 +14,8 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| Retro #29：Issue 快掃觸發條件排除 retro-action label（收窄至 sprint-execution SKILL.md） | S | 1 | 待開發 |
-| Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | S | 1 | 待開發 |
+| Retro #29：Issue 快掃觸發條件排除 retro-action label（收窄至 sprint-execution SKILL.md） | S | 1 | 完成 |
+| Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | S | 1 | 完成 |
 
 **計畫 Velocity**：2 points（2 Stories）
 
