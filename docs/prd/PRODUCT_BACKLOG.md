@@ -84,7 +84,7 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | Retro #41：Sprint Review SKILL.md 歷史 Sprint 紀錄截斷修正 | — | Must | S | Sprint 16 Retro | In Sprint 17 |
+| 1 | Retro #41：Token 記錄指引更新 — 三個 SKILL.md 納入 cache tokens 加總計算 | — | Must | S | Sprint 16 Retro / Issue #41 | In Sprint 17 |
 | 2 | Retro #42：OpenCode POC 可行性調查佔位入 Backlog | — | Could | S | Sprint 16 Retro / Issue #3 | In Sprint 17 |
 
 ### Sprint 17 — 新增 Stories
@@ -98,6 +98,7 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | OpenCode POC 可行性調查 | 待定 | Could | 待定 | Retro #42 / Issue #3 | 候選 |
+| 2 | Architect/QA 框架開發領域專家知識強化 | 待定 | Should | 待定 | Stakeholder 需求 | 候選 |
 
 ---
 
