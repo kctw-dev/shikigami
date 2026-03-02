@@ -85,12 +85,33 @@ requiredTools:
 
 | # | 檢查項目 | 驗證方式 | 失敗處理 |
 |---|----------|----------|----------|
+| 0 | skill name 字元白名單 | 正則 `^[a-z0-9][a-z0-9-]{0,63}$` 驗證 skill name | 阻擋，輸出 `[FAIL] skill name 不合法` 錯誤訊息，不生成任何檔案 |
 | 1 | claude CLI 存在 | `which claude` | 阻擋，提示安裝 |
 | 2 | flock 可用性 | `which flock` | macOS 提示 `brew install util-linux`；若不存在則阻擋 |
 | 3 | OAuth 認證有效 | `unset ANTHROPIC_API_KEY && claude auth status` | 阻擋，提示 `claude auth login` |
 | 4 | 專案目錄可寫 | `test -w $PROJECT_DIR` | 阻擋，提示確認目錄權限 |
 | 5 | 目標 Skill 已註冊 | 檢查 `skills/<skill-name>/SKILL.md` 存在 | 阻擋，列出可用 Skill 清單 |
 | 6 | 無重複排程 | `crontab -l \| grep <skill-name>_cron.sh` | 警告並阻擋，提示先執行 `--remove` |
+
+**skill name 白名單驗證（Retro #53）**：
+
+```bash
+validate_skill_name() {
+  local name="$1"
+  if [[ ! "$name" =~ ^[a-z0-9][a-z0-9-]{0,63}$ ]]; then
+    echo "[FAIL] skill name 不合法：'${name}'"
+    echo "[INFO] 允許字元：小寫英文、數字、連字號（不可開頭為連字號，最長 64 字元）"
+    return 1
+  fi
+}
+```
+
+**驗證規則說明**：
+- 允許：小寫英文字母（`a-z`）、數字（`0-9`）、連字號（`-`）
+- 不允許：大寫字母、底線、空格、路徑分隔符（`/`、`\`）、特殊字元、空字串
+- 首字元必須為小寫英文或數字（不可為連字號）
+- 最大長度 64 字元（含首字元）
+- 非法輸入時 Pre-flight 立即阻擋，不生成任何檔案
 
 **認證驗證實作（ADR-005 決策域四）**：
 
