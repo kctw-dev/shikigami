@@ -76,6 +76,66 @@
 
 ---
 
+## 同檔案衝突偵測與自動序列化
+
+在 parallel-dispatch 場景下，Developer subagent 開始實作前，**必須**執行同檔案衝突偵測，確保不與其他平行 Story 產生檔案層級競態。
+
+### 偵測邏輯（AC1）
+
+**輸入**：
+- (a) 本 Story 預計修改的檔案清單
+- (b) 其他平行 Story 的修改檔案清單（來源：Sprint Planning 的 Architect 平行分群建議）
+
+**輸出**：衝突檔案列表（兩份清單的交集）
+
+**偵測時機**：Developer subagent 開始實作前，查閱 Sprint Planning 文件，取得所有平行 Story 的目標檔案清單，與本 Story 的目標檔案清單進行比對。
+
+---
+
+### (a) 衝突偵測觸發條件
+
+當**兩個以上 Story 的修改檔案清單存在交集**時，即為衝突。
+
+判斷步驟：
+1. 列出本 Story 預計修改的所有檔案路徑
+2. 列出同一 Phase 中其他平行 Story 預計修改的所有檔案路徑
+3. 若任意兩組清單的交集不為空，即觸發衝突偵測流程
+
+---
+
+### (b) 序列化切換指引
+
+衝突時，Developer subagent 須暫停實作該衝突檔案，切換為序列化執行模式：
+
+1. **識別衝突**：列出所有衝突檔案與涉及的 Story ID
+2. **確認執行順序**：依 Sprint Backlog 中 Story 的排序，排序較前者為先行 Story
+3. **先完成非衝突修改**：針對本 Story 的非衝突檔案，繼續正常實作
+4. **等待依賴 Story 完成**：先行 Story 實作完成後，再修改衝突檔案
+
+> 等待依賴 Story 完成後，方可對衝突檔案進行修改，確保不覆蓋先行 Story 的變更。
+
+---
+
+### (c) 使用者告警格式定義
+
+偵測到衝突時，Developer subagent 須輸出以下標準化告警：
+
+```
+[FILE-CONFLICT] 偵測到同檔案衝突
+- 衝突檔案：{file_path}
+- 涉及 Stories：{story_id_1}, {story_id_2}
+- 建議執行順序：{story_id_1}（先）→ {story_id_2}（後）
+- 原因：{story_id_1} 在 Sprint Backlog 中排序較前
+```
+
+---
+
+### 無衝突場景（回歸相容）
+
+若所有平行 Story 的修改檔案清單**無交集**，Developer subagent 不輸出任何告警，行為與現行版本完全一致。
+
+---
+
 ## 限制（你不能做的事）
 
 - **不能改變架構決策**：架構方向由 Architect 決定，記錄在 ADR 中。如果你認為架構有問題，回報給 Scrum Master 升級至 Architect，不要自行修改。
