@@ -670,21 +670,34 @@ echo "=== 區段 13：US-36 AC1 — 序列鎖使用說明 ==="
 
 ADR_MD="${PROJECT_DIR}/docs/adr/ADR-005-schedule-skill-technical-decisions.md"
 
-if [ -f "$SKILL_MD" ]; then
-  SKILL_CONTENT=$(cat "$SKILL_MD")
+# 直接以 grep 讀取檔案（避免 bash 大型 echo 管線的緩衝問題）
+assert_file_contains() {
+  local file_path="$1"
+  local needle="$2"
+  local label="$3"
+  if grep -qF -- "$needle" "$file_path" 2>/dev/null; then
+    pass "$label"
+  else
+    fail "$label (expected to find '${needle}' in ${file_path})"
+  fi
+}
 
+if [ -f "$SKILL_MD" ]; then
   # 13.1 SKILL.md 含 --sequential-group 觸發語法
-  assert_contains "$SKILL_CONTENT" "--sequential-group" "SKILL.md 含 --sequential-group 觸發語法（AC1）"
+  assert_file_contains "$SKILL_MD" "--sequential-group" "SKILL.md 含 --sequential-group 觸發語法（AC1）"
 
   # 13.2 SKILL.md 含序列鎖 group 綁定說明
-  assert_contains "$SKILL_CONTENT" "序列鎖" "SKILL.md 含「序列鎖」術語說明（AC1）"
+  assert_file_contains "$SKILL_MD" "序列鎖" "SKILL.md 含「序列鎖」術語說明（AC1）"
 
   # 13.3 SKILL.md 含 group 鎖行為描述（同群組內序列執行）
-  assert_contains "$SKILL_CONTENT" "sprint-cycle" "SKILL.md 含 sprint-cycle 群組範例（AC1）"
+  assert_file_contains "$SKILL_MD" "sprint-cycle" "SKILL.md 含 sprint-cycle 群組範例（AC1）"
 
   # 13.4 SKILL.md §2 語法表含 --sequential-group 參數說明
-  SYNTAX_SECTION=$(echo "$SKILL_CONTENT" | grep -A 30 "## 2\." | head -35)
-  assert_contains "$SYNTAX_SECTION" "sequential-group" "SKILL.md §2 觸發語法含 sequential-group 參數（AC1）"
+  if grep -A 30 "## 2\." "$SKILL_MD" | head -35 | grep -qF "sequential-group"; then
+    pass "SKILL.md §2 觸發語法含 sequential-group 參數（AC1）"
+  else
+    fail "SKILL.md §2 觸發語法含 sequential-group 參數（AC1） (expected to find 'sequential-group' in §2 section)"
+  fi
 else
   fail "SKILL.md 不存在，US-36 AC1 測試跳過"
 fi
@@ -696,28 +709,26 @@ echo ""
 echo "=== 區段 14：US-36 AC2 — 模板 group-level flock 驗證 ==="
 
 if [ -f "$TEMPLATE" ]; then
-  TMPL_CONTENT=$(cat "$TEMPLATE")
-
   # 14.1 模板含 GROUP_LOCK_FILE 變數定義
-  assert_contains "$TMPL_CONTENT" "GROUP_LOCK_FILE" "模板含 GROUP_LOCK_FILE 定義（AC2）"
+  assert_file_contains "$TEMPLATE" "GROUP_LOCK_FILE" "模板含 GROUP_LOCK_FILE 定義（AC2）"
 
   # 14.2 group 鎖路徑使用 /tmp/shikigami-group- 前綴
-  assert_contains "$TMPL_CONTENT" "/tmp/shikigami-group-" "模板 group 鎖路徑使用 /tmp/shikigami-group- 前綴（AC2）"
+  assert_file_contains "$TEMPLATE" "/tmp/shikigami-group-" "模板 group 鎖路徑使用 /tmp/shikigami-group- 前綴（AC2）"
 
   # 14.3 模板含 GROUP_NAME 佔位符
-  assert_contains "$TMPL_CONTENT" "GROUP_NAME" "模板含 GROUP_NAME 佔位符（AC2）"
+  assert_file_contains "$TEMPLATE" "GROUP_NAME" "模板含 GROUP_NAME 佔位符（AC2）"
 
   # 14.4 模板含 exec 201 fd（group 鎖 fd）
-  assert_contains "$TMPL_CONTENT" "exec 201>" "模板含 exec 201>（group 鎖 file descriptor）（AC2）"
+  assert_file_contains "$TEMPLATE" "exec 201>" "模板含 exec 201>（group 鎖 file descriptor）（AC2）"
 
   # 14.5 模板含 flock -n 201（group 鎖嘗試）
-  assert_contains "$TMPL_CONTENT" "flock -n 201" "模板含 flock -n 201（group 鎖 non-blocking 嘗試）（AC2）"
+  assert_file_contains "$TEMPLATE" "flock -n 201" "模板含 flock -n 201（group 鎖 non-blocking 嘗試）（AC2）"
 
   # 14.6 模板含 SKIPPED group 訊息（group 取鎖失敗時）
-  assert_contains "$TMPL_CONTENT" "group" "模板 SKIPPED 訊息含 group 資訊（AC2）"
+  assert_file_contains "$TEMPLATE" "group" "模板 SKIPPED 訊息含 group 資訊（AC2）"
 
   # 14.7 模板含條件區塊標記 {{#IF_GROUP}} 或 {{/IF_GROUP}}
-  assert_contains "$TMPL_CONTENT" "IF_GROUP" "模板含 IF_GROUP 條件區塊標記（AC2）"
+  assert_file_contains "$TEMPLATE" "IF_GROUP" "模板含 IF_GROUP 條件區塊標記（AC2）"
 
   # 14.8 group 鎖在 skill 鎖（exec 200）之前定義
   GROUP_LOCK_POS=$(grep -n "exec 201>" "$TEMPLATE" | head -1 | cut -d: -f1)
@@ -742,14 +753,16 @@ echo ""
 echo "=== 區段 15：US-36 AC3 — Pre-flight group 衝突偵測 ==="
 
 if [ -f "$SKILL_MD" ]; then
-  SKILL_CONTENT=$(cat "$SKILL_MD")
-
   # 15.1 SKILL.md §4 Pre-flight 表格含 group 衝突偵測列
-  PREFLIGHT_SECTION=$(echo "$SKILL_CONTENT" | grep -A 30 "## 4\." | head -35)
-  assert_contains "$PREFLIGHT_SECTION" "group" "SKILL.md §4 Pre-flight 含 group 衝突偵測（AC3）"
+  # 使用直接 grep 從檔案讀取，確保穩定性
+  if grep -A 30 "## 4\." "$SKILL_MD" | head -35 | grep -qF "group"; then
+    pass "SKILL.md §4 Pre-flight 含 group 衝突偵測（AC3）"
+  else
+    fail "SKILL.md §4 Pre-flight 含 group 衝突偵測（AC3） (expected to find 'group' in §4 section)"
+  fi
 
   # 15.2 SKILL.md 說明 group 衝突時阻擋部署
-  assert_contains "$SKILL_CONTENT" "group 衝突" "SKILL.md 含 group 衝突阻擋說明（AC3）"
+  assert_file_contains "$SKILL_MD" "group 衝突" "SKILL.md 含 group 衝突阻擋說明（AC3）"
 else
   fail "SKILL.md 不存在，US-36 AC3 測試跳過"
 fi
@@ -761,14 +774,15 @@ echo ""
 echo "=== 區段 16：US-36 AC4 — Log 格式 group 欄位 ==="
 
 if [ -f "$SKILL_MD" ]; then
-  SKILL_CONTENT=$(cat "$SKILL_MD")
-
   # 16.1 SKILL.md §10 log 格式範例含 group= 欄位
-  LOG_SECTION=$(echo "$SKILL_CONTENT" | grep -A 20 "## 10\." | head -25)
-  assert_contains "$LOG_SECTION" "group=" "SKILL.md §10 log 格式含 group= 欄位（AC4）"
+  if grep -A 20 "## 10\." "$SKILL_MD" | head -25 | grep -qF "group="; then
+    pass "SKILL.md §10 log 格式含 group= 欄位（AC4）"
+  else
+    fail "SKILL.md §10 log 格式含 group= 欄位（AC4） (expected to find 'group=' in §10 section)"
+  fi
 
   # 16.2 SKILL.md 說明無 group 時記錄 none
-  assert_contains "$SKILL_CONTENT" "group=none" "SKILL.md log 含 group=none（無 group 時記錄）（AC4）"
+  assert_file_contains "$SKILL_MD" "group=none" "SKILL.md log 含 group=none（無 group 時記錄）（AC4）"
 else
   fail "SKILL.md 不存在，US-36 AC4 測試跳過"
 fi
@@ -780,16 +794,14 @@ echo ""
 echo "=== 區段 17：US-36 AC5 — ADR-005 序列鎖子節 ==="
 
 if [ -f "$ADR_MD" ]; then
-  ADR_CONTENT=$(cat "$ADR_MD")
-
   # 17.1 ADR-005 含「跨 Skill 序列鎖」子節標題
-  assert_contains "$ADR_CONTENT" "跨 Skill 序列鎖" "ADR-005 決策域二含「跨 Skill 序列鎖」子節（AC5）"
+  assert_file_contains "$ADR_MD" "跨 Skill 序列鎖" "ADR-005 決策域二含「跨 Skill 序列鎖」子節（AC5）"
 
   # 17.2 ADR-005 含 group lock 路徑格式說明
-  assert_contains "$ADR_CONTENT" "shikigami-group-" "ADR-005 含 group lock 路徑格式（AC5）"
+  assert_file_contains "$ADR_MD" "shikigami-group-" "ADR-005 含 group lock 路徑格式（AC5）"
 
   # 17.3 ADR-005 含 GROUP_NAME 說明
-  assert_contains "$ADR_CONTENT" "group-name" "ADR-005 含 group-name 命名說明（AC5）"
+  assert_file_contains "$ADR_MD" "group-name" "ADR-005 含 group-name 命名說明（AC5）"
 else
   fail "ADR-005 不存在，US-36 AC5 測試跳過"
 fi
@@ -824,14 +836,17 @@ if [ -f "$TEMPLATE" ]; then
   assert_exit_code 0 $? "AC6 回歸：無 --sequential-group 時腳本語法正確（bash -n）"
 
   # 18.2 回歸腳本不含 GROUP_LOCK_FILE（無 group 時不應有 group 鎖）
-  REGRESSION_CONTENT=$(cat "$TMP_REGRESSION")
-  assert_not_contains "$REGRESSION_CONTENT" "GROUP_LOCK_FILE" "AC6 回歸：無 --sequential-group 腳本不含 GROUP_LOCK_FILE"
+  if grep -qF "GROUP_LOCK_FILE" "$TMP_REGRESSION" 2>/dev/null; then
+    fail "AC6 回歸：無 --sequential-group 腳本不含 GROUP_LOCK_FILE (expected NOT to find 'GROUP_LOCK_FILE')"
+  else
+    pass "AC6 回歸：無 --sequential-group 腳本不含 GROUP_LOCK_FILE"
+  fi
 
   # 18.3 回歸腳本仍含 skill 級 flock（exec 200）
-  assert_contains "$REGRESSION_CONTENT" "exec 200>" "AC6 回歸：無 --sequential-group 腳本仍含 skill 級 flock（exec 200）"
+  assert_file_contains "$TMP_REGRESSION" "exec 200>" "AC6 回歸：無 --sequential-group 腳本仍含 skill 級 flock（exec 200）"
 
   # 18.4 回歸腳本仍含 unset ANTHROPIC_API_KEY
-  assert_contains "$REGRESSION_CONTENT" "unset ANTHROPIC_API_KEY" "AC6 回歸：無 --sequential-group 腳本仍含 unset ANTHROPIC_API_KEY"
+  assert_file_contains "$TMP_REGRESSION" "unset ANTHROPIC_API_KEY" "AC6 回歸：無 --sequential-group 腳本仍含 unset ANTHROPIC_API_KEY"
 
   rm -f "$TMP_REGRESSION"
 else
