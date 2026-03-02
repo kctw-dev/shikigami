@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-02（Sprint 20 Review — Retro #56/57、US-31 完成）
+**最後更新**：2026-03-02（Sprint 21 Planning Round 2 — Retro #58、US-32、US-34 選入 Sprint 21）
 **管理者**：Product Owner
 
 ---
@@ -107,9 +107,9 @@
 | 1 | US-35（Issue #46）：Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule） | 待定 | Should | L | GitHub Issue #46 / Stakeholder 優先 | Done（Sprint 18） |
 | 2 | US-30（Issue #48）：PO subagent 多輪派遣時 Story 內容偏離修正機制 | 25.6 | Should | S | Sprint 17 Retro / Issue #48 | Done（Sprint 19） |
 | 3 | US-31（Issue #47）：/shoot 短衝模式 | 待定 | Should | L | Sprint 17 Retro / Issue #47 | Done（Sprint 20） |
-| 4 | US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | 24.0 | Should | M | GitHub Issue #40 | Backlog（退回原因：Sprint 18 重新規劃，待後續排期） |
+| 4 | US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | 24.0 | Should | M | GitHub Issue #40 | In Sprint（Sprint 21） |
 | 5 | US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | 25.2 | Should | S | GitHub Issue #33 | Backlog（退回原因：Sprint 18 重新規劃，待後續排期） |
-| 6 | US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | 50.4 | Should | S | GitHub Issue #32 | Backlog（退回原因：Sprint 18 重新規劃，待後續排期） |
+| 6 | US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | 50.4 | Should | S | GitHub Issue #32 | In Sprint（Sprint 21） |
 
 ### Sprint 18 Retro — 新增 Action Items
 
@@ -130,6 +130,12 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #56（Issue #56）：修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗 | — | Must | S | Sprint 19 Retro / Issue #56 | Done（Sprint 20） |
 | 2 | Retro #57（Issue #57）：Developer subagent 狀態更新衝突防護 | — | Must | S | Sprint 19 Retro / Issue #57 | Done（Sprint 20） |
+
+### Sprint 20 Retro — 新增 Action Items
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | In Sprint（Sprint 21） |
 
 ### Sprint 17 後 — 候選 Stories
 

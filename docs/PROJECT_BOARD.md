@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 20 Review — 完成）
-**當前 Sprint**：Sprint 20（完成）
+**最後更新**：2026-03-02（Sprint 21 Planning Round 2 — 完成）
+**當前 Sprint**：Sprint 21（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 20](sprints/sprint_20.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 21](sprints/sprint_21.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 21 — 進行中
+
+**Sprint Goal**：清零 Sprint 20 Retro Action Item（#58）+ parallel-dispatch 衝突偵測（US-32）+ Onboarding Labels 補完（US-34）
+**期間**：2026-03-09 ~ 2026-03-15
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | S | 1 | 待執行 |
+| US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | M | 2 | 待執行 |
+| US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | S | 1 | 待執行 |
+
+**Sprint 容量**：4 Points（3 Stories）
 
 ---
 
