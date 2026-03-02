@@ -41,10 +41,49 @@ Sprint Review 的目的是驗收本 Sprint 交付的成果，確認是否符合�
    - 記錄完成日期與 Sprint 編號
    - 更新 Sprint 統計數據（Velocity、完成率）
 
+   **輸出格式規範**：Done 欄位每筆 Story 需包含以下欄位：
+
+   ```markdown
+   | Story ID | 標題 | Sprint | 完成日期 | Points |
+   |----------|------|--------|----------|--------|
+   | US-XX    | 功能標題 | Sprint N | YYYY-MM-DD | X |
+   ```
+
+   **Sprint 統計欄位**（PROJECT_BOARD.md 頂部或底部統計區塊）更新格式：
+
+   ```markdown
+   ## Sprint N 統計
+   - Velocity：X points
+   - 完成率：X%（完成 Y / 計畫 Z）
+   - 日期：YYYY-MM-DD
+   ```
+
 4. **未達 DoD 的 Story 處理**
    - 未通過 Definition of Done 的 Story 移回 Backlog
    - 必須標注未達標的具體原因（例：測試未通過、安全驗證失敗、文件未更新）
    - PO Subagent 重新評估優先級，決定是否納入下個 Sprint
+
+5. **回寫 `docs/sprints/sprint_N.md` Story 最終狀態**
+   - 目標路徑：`docs/sprints/sprint_N.md`（N 為本 Sprint 編號）
+   - 將 Sprint Backlog 表格中每個 Story 的「狀態」欄更新為最終驗收結果
+
+   **操作步驟**：
+   1. 讀取 `docs/sprints/sprint_N.md` 的 Sprint Backlog 表格
+   2. 依 PO Subagent 驗收結果，逐一更新每筆 Story 的狀態欄：
+      - 通過驗收 → 狀態改為「完成」
+      - 未通過 DoD → 狀態改為「未完成」，並在備注欄補充未達標原因
+   3. 若 Sprint 備注欄不存在，在狀態欄括號內簡記原因，例如：「未完成（測試未通過）」
+
+   **必要輸出格式**（Sprint Backlog 表格更新後格式）：
+
+   ```markdown
+   | Story ID | 標題 | Size | Points | 狀態 |
+   |----------|------|------|--------|------|
+   | US-XX    | 功能標題 | S | 1 | 完成 |
+   | US-YY    | 另一功能 | M | 2 | 未完成（測試未通過） |
+   ```
+
+   **注意**：sprint_N.md 狀態回寫需在 PROJECT_BOARD.md 更新完成後執行，確保兩處狀態一致。
 
 ---
 
@@ -251,7 +290,41 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 | `docs/km/Metrics_Log.md` | 追加本 Sprint Velocity、完成率、趨勢分析記錄 |
 | `docs/prd/PRODUCT_BACKLOG.md` | 未完成 Story 回填至 Backlog，標注未達標原因與重新排序 |
 | `docs/prd/BACKLOG_DONE.md` | 已完成 Story 從 Backlog 移至此處，按 Sprint 歸檔，保留完整 RICE 評分與 AC |
-| `docs/prd/ROADMAP.md` | 更新版本里程碑狀態（進行中/已完成），反映本 Sprint 交付進度 |
+| `docs/sprints/sprint_N.md` | 回寫 Sprint Backlog 表格中各 Story 最終驗收狀態（完成 / 未完成）|
+| `docs/prd/ROADMAP.md` | 更新版本里程碑狀態（進行中/已完成），反映本 Sprint 交付進度；確認版本 Tag 與里程碑一致 |
+
+### ROADMAP 更新操作指引
+
+**目標路徑**：`docs/prd/ROADMAP.md`
+
+**操作步驟**：
+
+1. 讀取 `docs/prd/ROADMAP.md` 的版本里程碑區塊（通常格式為 `## MX — 版本描述`）
+2. 找到本 Sprint 對應的里程碑區塊（若有）
+3. 依本 Sprint 交付成果更新狀態：
+   - 本 Sprint 交付的 Story 條目，將狀態標注改為「已完成」或補充 Sprint 完成記錄
+   - 若里程碑下所有 Story 均已完成，將里程碑狀態改為「已完成（Sprint N）」
+   - 若里程碑仍有未完成項目，保持「進行中」並更新完成進度描述
+
+4. **版本 Tag 與 ROADMAP 里程碑對齊檢查**（必要步驟）：
+   - 確認 `deployment-readiness` 產生的版本 Tag（例：`v0.X.Y`）與 ROADMAP 里程碑版本號一致
+   - 若版本 Tag 對應里程碑首次達成（例：vX.0.0 的里程碑 MX 全部完成），在 ROADMAP 對應里程碑標注：「達成版本：vX.0.0（Sprint N）」
+   - 若版本 Tag 為 Patch 版本（vX.Y.Z，Z > 0），不需更新里程碑完成狀態，僅在對應里程碑的備注欄追加：「修訂記錄：vX.Y.Z（Sprint N）」
+
+**必要輸出格式**（里程碑狀態更新後格式）：
+
+```markdown
+## MX — 里程碑標題
+
+**狀態**：已完成（Sprint N）/ 進行中
+
+| Story ID | 標題 | 狀態 | 完成 Sprint |
+|----------|------|------|-------------|
+| US-XX    | 功能標題 | 已完成 | Sprint N |
+| US-YY    | 另一功能 | 進行中 | — |
+```
+
+若里程碑無表格格式，至少確保里程碑標題下方有狀態行與版本 Tag 對齊記錄。
 
 ---
 
@@ -263,7 +336,8 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 - [ ] Analytics 報告展示完畢後才開始收集 Good / Problem / Action
 - [ ] PO Subagent 已展示所有已完成 Story 的 Demo
 - [ ] Stakeholder Subagent 已確認商業期待符合度
-- [ ] 通過驗收的 Story 已移至 `PROJECT_BOARD.md` Done 欄位
+- [ ] 通過驗收的 Story 已移至 `PROJECT_BOARD.md` Done 欄位（含完成日期、Sprint 編號、Sprint 統計數據更新）
+- [ ] `docs/sprints/sprint_N.md` Sprint Backlog 表格中每筆 Story 的狀態欄已回寫最終驗收結果（完成 / 未完成，未完成者標注原因）
 - [ ] 未達 DoD 的 Story 已移回 Backlog 並標注原因
 - [ ] `Retrospective_Log.md` 已新增 Good / Problem / Action 記錄
 - [ ] 每個 Action Item 已建立為 GitHub Issue（`retro-action` label）
@@ -271,7 +345,7 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 - [ ] 連續兩個 Sprint 未關閉的 Action 已升級至 Stakeholder
 - [ ] `PRODUCT_BACKLOG.md` 已更新（未完成 Story 回填）
 - [ ] 已完成 Story 從 `PRODUCT_BACKLOG.md` 移至 `BACKLOG_DONE.md`，按 Sprint 歸檔
-- [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步）
+- [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步；版本 Tag 與里程碑對齊確認完成，見「ROADMAP 更新操作指引」）
 - [ ] **Token 成本摘要**（見下方子節）
 - [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格**（對應 Review token 欄）：
   - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens` 與 `output_tokens`，加總後填入 Metrics_Log.md 對應欄位。
@@ -279,9 +353,9 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 - [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag）
 - [ ] Sprint Metrics 計算並追加至 `docs/km/Metrics_Log.md`（見下方計算指引）
 - [ ] 是否有本 Sprint 值得記錄的角色制衡案例？若有，更新 `docs/km/ROLE_BALANCE_CASES.md`
-- [ ] **產出文件（`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`）完成最後修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件；`Retrospective_Log.md` 與 `Metrics_Log.md` 雖位於 `docs/km/` 路徑，但屬 Sprint 狀態文件，適用本規範。其他 Knowledge Management 文件如 `ROLE_BALANCE_CASES.md`、`Tech_Debt_Registry.md` 等不適用，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
+- [ ] **產出文件（`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`、`sprint_N.md`）完成最後修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件；`Retrospective_Log.md` 與 `Metrics_Log.md` 雖位於 `docs/km/` 路徑，但屬 Sprint 狀態文件，適用本規範；`sprint_N.md` 為 Sprint 執行記錄，亦適用本規範。其他 Knowledge Management 文件如 `ROLE_BALANCE_CASES.md`、`Tech_Debt_Registry.md` 等不適用，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
   ```bash
-  git add docs/PROJECT_BOARD.md docs/km/Retrospective_Log.md docs/km/Metrics_Log.md
+  git add docs/PROJECT_BOARD.md docs/km/Retrospective_Log.md docs/km/Metrics_Log.md docs/sprints/sprint_N.md
   git commit -m "docs: Sprint N Review — 更新看板、Retro 記錄與 Metrics"
   git push
   ```
