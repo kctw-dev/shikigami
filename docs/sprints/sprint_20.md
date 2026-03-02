@@ -11,9 +11,9 @@
 
 | Story ID | 標題 | Size | Points | 狀態 |
 |----------|------|------|--------|------|
-| Retro #56（Issue #56） | 修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗 | S | 1 | 待開始 |
-| Retro #57（Issue #57） | Developer subagent 狀態更新衝突防護 | S | 1 | 待開始 |
-| US-31（Issue #47） | /shoot 短衝模式 | L | 3 | 待開始 |
+| Retro #56（Issue #56） | 修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗 | S | 1 | 完成 |
+| Retro #57（Issue #57） | Developer subagent 狀態更新衝突防護 | S | 1 | 完成 |
+| US-31（Issue #47） | /shoot 短衝模式 | L | 3 | 進行中 |
 
 **Sprint 容量**：5 Points
 
