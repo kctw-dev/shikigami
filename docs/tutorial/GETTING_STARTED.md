@@ -6,6 +6,18 @@
 
 ---
 
+## 目錄
+
+1. [步驟 1：前置條件確認](#步驟-1前置條件確認)
+2. [步驟 2：安裝 Shikigami](#步驟-2安裝-shikigami)
+3. [步驟 3：初始化專案（`shikigami:onboarding`）](#步驟-3初始化專案shikigamionboarding)
+4. [步驟 4：定義第一個 User Story](#步驟-4定義第一個-user-story)
+5. [步驟 5：執行 Sprint Planning](#步驟-5執行-sprint-planning)
+6. [步驟 6：執行 Sprint Execution（至少 1 個 Story）](#步驟-6執行-sprint-execution至少-1-個-story)
+7. [步驟 7：執行 Sprint Review](#步驟-7執行-sprint-review)
+
+---
+
 ## 概覽
 
 本教學帶你走完 Shikigami 的完整上手路徑：
