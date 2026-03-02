@@ -27,6 +27,11 @@ LOG_FILE="${PROJECT_DIR}/logs/schedule-{{SKILL_NAME}}.log"
 # ---------------------------------------------------------------------------
 mkdir -p "${PROJECT_DIR}/logs"
 
+# ---------------------------------------------------------------------------
+# Group log 欄位：無 group 時預設 group=none
+# ---------------------------------------------------------------------------
+GROUP_LOG="group=none"
+
 {{#IF_GROUP}}
 # ---------------------------------------------------------------------------
 # Group 序列鎖：group-level flock（確保同群組內不平行執行）
@@ -39,6 +44,7 @@ if ! flock -n 201; then
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] SKIPPED — group '{{GROUP_NAME}}' locked by another skill (lock: ${GROUP_LOCK_FILE})" >> "${LOG_FILE}"
   exit 0
 fi
+GROUP_LOG="group={{GROUP_NAME}}"
 {{/IF_GROUP}}
 
 # ---------------------------------------------------------------------------
@@ -61,7 +67,7 @@ unset ANTHROPIC_API_KEY
 # ---------------------------------------------------------------------------
 # 執行
 # ---------------------------------------------------------------------------
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] START — skill=${SKILL_NAME} interval={{INTERVAL}}" >> "${LOG_FILE}"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] START — skill=${SKILL_NAME} interval={{INTERVAL}} ${GROUP_LOG}" >> "${LOG_FILE}"
 
 cd "${PROJECT_DIR}" && claude -p "/{{SKILL_NAME}}" \
   --allowedTools "{{ALLOWED_TOOLS}}" \
