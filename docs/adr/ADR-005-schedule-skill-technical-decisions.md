@@ -520,3 +520,17 @@ schedule 腳本的 Preflight 必須驗證：
 **反駁**：此挑戰精準指出了雜湊比對的條件性限制，但忽略了三個緩解層次。第一，`requiredTools` 的擴充在 Skill 演進時通常伴隨 AC 執行失敗——當 Skill 嘗試呼叫未在白名單中的工具時，claude CLI 會返回明確的工具拒絕錯誤，這個錯誤會出現在排程的執行日誌中，並非完全靜默。第二，雜湊比對是一個主動防護機制，覆蓋「使用者知道要更新但忘記觸發」的場景；執行日誌錯誤覆蓋「使用者不知道 Skill 已更新」的場景，兩者互補而非對立。第三，完全自動的偵測（如 inotify 監控 SKILL.md 變更後自動重新部署）屬於 YAGNI——在 MVP 階段引入檔案監控守護進程超出合理複雜度邊界。
 
 **結論**：同意 ADR-005 的決策方向，建議將「Skill 演進後需執行 `shikigami:schedule update`」明確記錄於 schedule SKILL.md 的使用指引中，並在 Sprint Review 的 DoD checklist 新增「排程 Skill 的 requiredTools 是否與最新 SKILL.md 同步」的確認項目。
+
+---
+
+## Stakeholder Review 修訂記錄
+
+### 修訂一：鎖檔案命名加入 project-hash（2026-03-02）
+
+**提出者**：Stakeholder
+
+**問題**：原始設計的鎖檔案命名為 `/tmp/shikigami-schedule-<skill-name>.lock`，僅以 Skill 名稱區分。若同一台 VM 上有多個 Shikigami 專案（例如 project-A 和 project-B）同時排程相同 Skill（如 `sprint-execution`），兩個專案會共用同一把鎖，導致其中一個被 flock 判定為「前一執行個體仍在跑」而 skip — 這是一個 Architect 與 QA 三輪審查均未識別的多租戶撞名缺陷。
+
+**修正**：鎖檔案命名改為 `/tmp/shikigami-schedule-<project-hash>-<skill-name>.lock`，其中 `<project-hash>` 為專案目錄路徑的 MD5 前 8 碼，確保不同專案的鎖互不干涉。
+
+**影響範圍**：決策域二（互斥鎖機制）的命名規範。決策本身（採用 flock）不變。
