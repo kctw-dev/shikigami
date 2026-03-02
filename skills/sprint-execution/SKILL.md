@@ -162,6 +162,34 @@ Sprint Backlog 還有 Story？
 例外：標注為 [SPIKE] 的探索性任務可豁免，但進入正式開發時必須補測試。
 </HARD-GATE>
 
+### doc-only Story 識別規則
+
+**正向識別條件（滿足以下任一條件即判定為 doc-only）：**
+
+- 條件 A：Story 對應的 CLAUDE.md 含有 `doc-only: true` 欄位
+- 條件 B：Story 的所有 AC 條目均為 `[靜態]` 類型，**且**所有目標檔案路徑均在 `docs/` 目錄下
+
+**執行分支（識別為 doc-only 時）：**
+
+| 步驟 | 一般路徑 | doc-only 路徑 |
+|------|---------|--------------|
+| Developer 實作 | TDD（Red → Green → Refactor） | **跳過**（TDD 豁免） |
+| 執行 bash 指令 | 可執行 bash 命令 | **跳過**（不執行任何 shell 命令） |
+| 修改 src/ 目錄 | 依需求修改 | **禁止**（僅允許修改 docs/ 下檔案） |
+| 修改 skills/ 目錄 | 依需求修改 | **禁止**（僅允許修改 docs/ 下檔案） |
+| Spec Compliance Review | 必須通過（HARD-GATE） | **維持**（必須通過，不豁免） |
+| Code Quality Review | 必須通過（HARD-GATE） | **維持**（必須通過，不豁免） |
+
+> **重要**：doc-only 豁免僅豁免 TDD 開發流程。雙階段 QA Review（Spec Compliance + Code Quality）維持必要，**不得跳過**。
+
+**負面案例排除清單（以下情況不適用 doc-only 路徑）：**
+
+1. **[動態] AC 排除**：Story 的 AC 含有 `[動態]` 類型且需執行 shell 命令，即使其他 AC 均為 [靜態]，整體 Story 仍走一般路徑
+2. **skills/ / commands/ / agents/ 路徑排除**：目標路徑含 `skills/`、`commands/`、`agents/` 目錄時，即使副檔名為 `.md`，**仍需執行 ADR-003 Checklist**，且不適用 doc-only 路徑（如本 Issue #34 本身即屬此類）
+3. **CLAUDE.md 不存在降級**：若 CLAUDE.md 不存在，條件 A 無法觸發，TDD 豁免不生效；此時須退回條件 B 判斷，若條件 B 亦不滿足，則走一般路徑
+
+**判定機制：** QA subagent 在 Sprint Planning 時確認，確認標準為「Story 所有 AC 引用路徑均為 `.md` 副檔名，且路徑均在 `docs/` 目錄下」。判定結果記錄於 `docs/sprints/sprint_N.md` 對應 Story 的備注欄或 QA 狀態欄。
+
 ---
 
 ## 5. DoD 自檢
