@@ -64,7 +64,7 @@ Sprint Backlog 還有 Story？
 
 ### 步驟詳解
 
-1. **Issue 快掃** *(慢想模式限定)*：在取出 Story 之前，執行 GitHub Issue 快速掃描，處理社群或使用者的待回覆問題。
+1. **Issue 快掃**：在取出 Story 之前，執行 GitHub Issue 快速掃描，處理社群或使用者的待回覆問題。
 
    **執行指令：**
    ```bash
