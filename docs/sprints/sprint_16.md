@@ -14,7 +14,7 @@
 | Issue #34 | sprint-execution SKILL.md 跳過 doc-only Story 執行保護 | S | 1 | 完成 |
 | Issue #36 | sprint-review SKILL.md 覆蓋缺口修正 | S | 1 | 完成 |
 | Retro #38 | Token JSONL 提取機制調查與 SKILL.md 主要方法更新 | S | 1 | 完成 |
-| US-28 | 快思/慢想雙模式 — Sprint Planning & Standup 預設精簡化 | M | 2 | 待開始 |
+| US-28 | 快思/慢想雙模式 — Sprint Planning & Standup 預設精簡化 | M | 2 | 完成 |
 
 **總計：6 Stories / 8 Points**
 
