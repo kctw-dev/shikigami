@@ -328,7 +328,40 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 
 ---
 
-## 6. 執行檢查清單
+## 6. 歸檔觸發檢查
+
+Sprint Review 完成、產出文件更新後，執行以下歸檔觸發檢查。
+
+### 觸發條件
+
+- `docs/PROJECT_BOARD.md` 中已完成的歷史 Sprint 區塊（不含當前進行中 Sprint）超過 **5 個**
+- 或 `docs/km/Retrospective_Log.md` 中的 Sprint 記錄（含歸檔連結行以外的記錄）超過 **5 個**
+
+滿足任一條件即觸發歸檔作業。
+
+### 歸檔規則
+
+- **保留範圍**：以當次 Sprint Review 為基準，保留**當前 Sprint + 最近 2 個 Sprint**的完整記錄
+- **移出範圍**：超出保留範圍的歷史 Sprint 記錄移至對應歸檔文件
+- **每次最多移動**：1 個最舊 Sprint，直到符合保留範圍（漸進歸檔）
+
+### 歸檔目標路徑
+
+| 文件 | 歸檔目標 |
+|------|----------|
+| `docs/PROJECT_BOARD.md` | `docs/km/archive/PROJECT_BOARD_ARCHIVE.md` |
+| `docs/km/Retrospective_Log.md` | `docs/km/archive/RETRO_ARCHIVE.md` |
+
+### 歸檔操作
+
+1. 從主文件剪下超出保留範圍的最舊 Sprint 完整區塊（保持原始格式不變）
+2. 附加至對應歸檔文件末尾
+3. 確認主文件底部有歸檔連結（`PROJECT_BOARD.md`）或頂部有歸檔連結（`Retrospective_Log.md`）
+4. 更新 `docs/km/archive/README.md` 的歸檔範圍欄位與最後更新日期
+
+---
+
+## 7. 執行檢查清單
 
 完成 Sprint Review & Retrospective 前，確認以下項目全部完成：
 
@@ -346,6 +379,7 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 - [ ] `PRODUCT_BACKLOG.md` 已更新（未完成 Story 回填）
 - [ ] 已完成 Story 從 `PRODUCT_BACKLOG.md` 移至 `BACKLOG_DONE.md`，按 Sprint 歸檔
 - [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步；版本 Tag 與里程碑對齊確認完成，見「ROADMAP 更新操作指引」）
+- [ ] **歸檔觸發檢查**（見 §6）：確認 `PROJECT_BOARD.md` 與 `Retrospective_Log.md` 歷史 Sprint 區塊是否超過 5 個；若觸發則執行漸進歸檔（移出最舊 1 個 Sprint 至 `docs/km/archive/`），並更新 `docs/km/archive/README.md`
 - [ ] **Token 成本摘要** *(慢想模式限定)*（見下方子節）
 - [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格** *(慢想模式限定)*（對應 Review token 欄）：
   - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens`、`cache_read_input_tokens`、`cache_creation_input_tokens` 與 `output_tokens`，依下列公式加總後填入 Metrics_Log.md 對應欄位：
