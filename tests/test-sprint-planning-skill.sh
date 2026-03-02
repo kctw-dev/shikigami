@@ -1,0 +1,161 @@
+#!/usr/bin/env bash
+# tests/test-sprint-planning-skill.sh
+# US-30：Sprint Planning SKILL.md 防漂移約束驗證 — 測試套件
+# 覆蓋 AC1（防漂移約束存在）/ AC2（偏離判定規則）/ AC3（告警處理路徑）
+
+set -uo pipefail
+
+# ---------------------------------------------------------------------------
+# 測試框架（輕量）
+# ---------------------------------------------------------------------------
+PASS_COUNT=0
+FAIL_COUNT=0
+
+pass() {
+  echo "PASS: $1"
+  PASS_COUNT=$((PASS_COUNT + 1))
+}
+
+fail() {
+  echo "FAIL: $1"
+  FAIL_COUNT=$((FAIL_COUNT + 1))
+}
+
+assert_file_contains() {
+  local needle="$1"
+  local filepath="$2"
+  local label="$3"
+  if grep -qF "$needle" "$filepath"; then
+    pass "$label"
+  else
+    fail "$label (檔案中找不到「$needle」)"
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# 目標檔案路徑
+# ---------------------------------------------------------------------------
+SKILL_FILE="$(cd "$(dirname "$0")/.." && pwd)/skills/sprint-planning/SKILL.md"
+
+# ---------------------------------------------------------------------------
+# TC-01：AC1 — 防漂移約束小節標題存在
+# ---------------------------------------------------------------------------
+test_tc01_drift_protection_section_exists() {
+  assert_file_contains \
+    "防漂移約束" \
+    "$SKILL_FILE" \
+    "TC-01：防漂移約束小節標題存在"
+}
+
+# ---------------------------------------------------------------------------
+# TC-02：AC1 — Round 2 Story 清單須與 Round 1 Story ID + 標題一致的約束說明存在
+# ---------------------------------------------------------------------------
+test_tc02_round_comparison_rule_exists() {
+  assert_file_contains \
+    "Round 2" \
+    "$SKILL_FILE" \
+    "TC-02：Round 2 比對規則說明存在"
+
+  assert_file_contains \
+    "Round 1" \
+    "$SKILL_FILE" \
+    "TC-02：Round 1 參照說明存在"
+}
+
+# ---------------------------------------------------------------------------
+# TC-03：AC2 — 偏離判定規則包含 Story ID 不符
+# ---------------------------------------------------------------------------
+test_tc03_deviation_rule_id_mismatch() {
+  assert_file_contains \
+    "Story ID 不符" \
+    "$SKILL_FILE" \
+    "TC-03：偏離判定規則包含「Story ID 不符」"
+}
+
+# ---------------------------------------------------------------------------
+# TC-04：AC2 — 偏離判定規則包含標題改寫
+# ---------------------------------------------------------------------------
+test_tc04_deviation_rule_title_rewrite() {
+  assert_file_contains \
+    "標題被改寫" \
+    "$SKILL_FILE" \
+    "TC-04：偏離判定規則包含「標題被改寫」"
+}
+
+# ---------------------------------------------------------------------------
+# TC-05：AC2 — 偏離判定規則包含 AC 新增/刪除
+# ---------------------------------------------------------------------------
+test_tc05_deviation_rule_ac_change() {
+  assert_file_contains \
+    "AC 被新增" \
+    "$SKILL_FILE" \
+    "TC-05：偏離判定規則包含「AC 被新增」"
+}
+
+# ---------------------------------------------------------------------------
+# TC-06：AC3 — 告警處理路徑：QA 告警說明存在
+# ---------------------------------------------------------------------------
+test_tc06_alert_path_qa_alert() {
+  assert_file_contains \
+    "QA 告警" \
+    "$SKILL_FILE" \
+    "TC-06：告警處理路徑包含「QA 告警」"
+}
+
+# ---------------------------------------------------------------------------
+# TC-07：AC3 — 告警處理路徑：要求 PO 重新派遣說明存在
+# ---------------------------------------------------------------------------
+test_tc07_alert_path_po_redispatch() {
+  assert_file_contains \
+    "PO 重新派遣" \
+    "$SKILL_FILE" \
+    "TC-07：告警處理路徑包含「PO 重新派遣」"
+}
+
+# ---------------------------------------------------------------------------
+# TC-08：AC3 — 不靜默接受的明確禁止說明存在
+# ---------------------------------------------------------------------------
+test_tc08_no_silent_acceptance() {
+  assert_file_contains \
+    "不靜默接受" \
+    "$SKILL_FILE" \
+    "TC-08：告警處理路徑包含「不靜默接受」"
+}
+
+# ---------------------------------------------------------------------------
+# TC-09：AC3 — 告警格式範例包含偏離項目清單
+# ---------------------------------------------------------------------------
+test_tc09_alert_format_deviation_list() {
+  assert_file_contains \
+    "偏離項目" \
+    "$SKILL_FILE" \
+    "TC-09：告警格式包含「偏離項目」清單說明"
+}
+
+# ---------------------------------------------------------------------------
+# 執行所有測試
+# ---------------------------------------------------------------------------
+echo "=============================="
+echo " US-30 Sprint Planning 防漂移約束 測試套件"
+echo "=============================="
+echo ""
+
+test_tc01_drift_protection_section_exists
+test_tc02_round_comparison_rule_exists
+test_tc03_deviation_rule_id_mismatch
+test_tc04_deviation_rule_title_rewrite
+test_tc05_deviation_rule_ac_change
+test_tc06_alert_path_qa_alert
+test_tc07_alert_path_po_redispatch
+test_tc08_no_silent_acceptance
+test_tc09_alert_format_deviation_list
+
+echo ""
+echo "=============================="
+echo " 結果：PASS=$PASS_COUNT  FAIL=$FAIL_COUNT"
+echo "=============================="
+
+if [ "$FAIL_COUNT" -gt 0 ]; then
+  exit 1
+fi
+exit 0
