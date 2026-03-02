@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-02（Sprint 14 歸檔）
-**歸檔範圍**：Sprint 1–14（共 14 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加
+**最後更新**：2026-03-02（Sprint 15 歸檔）
+**歸檔範圍**：Sprint 1–15（共 15 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 15–19）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 16–20）
 
 ---
 
@@ -219,6 +219,21 @@
 | Retro #30：sprint-review SKILL.md 禁止項硬編碼版本號修正 | S | 1 | 完成 |
 
 **實際 Velocity**：2 points（2 Stories）
+
+---
+
+## Sprint 15 — 完成
+
+**Sprint Goal**：完成 M5 穩定化的使用者就緒工作 — 建立可重複的全新環境安裝驗證報告，並交付端對端使用者文件（Tutorial + Troubleshooting），讓外部使用者能獨立完成安裝並走完第一個 Sprint。
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-15：完整安裝流程驗證（全新環境測試） | M | 2 | 完成 |
+| US-16：使用者文件完善（Tutorial + Troubleshooting） | M | 2 | 完成 |
+
+**實際 Velocity**：4 points（2 Stories）
 
 ---
 

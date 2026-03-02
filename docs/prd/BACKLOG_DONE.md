@@ -1268,3 +1268,76 @@ As a framework user using automated scheduling, I want Planning and Execution ph
 **來源**：GitHub Issue #50
 
 **驗收結果**：AC 全通過；Issue #50 CLOSED
+
+---
+
+## Sprint 20（2026-03-02）
+
+**Sprint Goal**：清零 Sprint 19 Retro Action Items（#56、#57），交付 /shoot 短衝模式（US-31）
+
+| Story | RICE | MoSCoW | ADR | 完成狀態 |
+|-------|------|--------|-----|----------|
+| Retro #56（Issue #56）：修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗 | — | Must | — | Done |
+| Retro #57（Issue #57）：Developer subagent 狀態更新衝突防護 | — | Must | — | Done |
+| US-31（Issue #47）：/shoot 短衝模式 | 待定 | Should | — | Done |
+
+---
+
+### Retro #56（Issue #56）：修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗
+
+**來源**：Sprint 19 Retro Action Item #56（[Issue #56](https://github.com/KCTW/shikigami/issues/56)）
+
+**交付摘要**：`assert_contains` 函式修正管線寫入競態問題，消除 SIGPIPE 非確定性失敗；連續執行 10 次零失敗驗證通過。
+
+**Acceptance Criteria**
+- AC1：SIGPIPE 根因修正
+- AC2：連續執行 10 次零失敗
+- AC3：無迴歸
+
+**驗收結果**：AC 全通過（3/3）；Issue #56 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### Retro #57（Issue #57）：Developer subagent 狀態更新衝突防護
+
+**來源**：Sprint 19 Retro Action Item #57（[Issue #57](https://github.com/KCTW/shikigami/issues/57)）
+
+**交付摘要**：`skills/sprint-execution/SKILL.md` 新增「狀態更新衝突防護」段落，定義 read-then-compare 偵測機制與 [CONFLICT] 輸出格式，防止 Developer subagent 靜默覆蓋主 session 已更新的狀態欄。
+
+**Acceptance Criteria**
+- AC1：衝突偵測機制定義
+- AC2：可觀察的衝突指示
+- AC3：衝突場景驗收
+
+**驗收結果**：AC 全通過（3/3）；Issue #57 CLOSED
+**Size**：S / **Points**：1
+
+---
+
+### US-31（Issue #47）：/shoot 短衝模式
+
+**標題**：單一任務快速執行，跳過完整 Sprint 儀式
+
+**User Story**
+As a framework user, I want a `/shoot` command that executes a single task without full Sprint ceremony, so that I can deliver small improvements quickly without the overhead of Planning, Review, and Retrospective.
+
+**Acceptance Criteria**
+- AC1：自動抓取模式（bug → retro-action → Backlog S-size 優先順序）
+- AC2：直接描述模式
+- AC3：GitHub Issue 模式
+- AC4：Backlog Story 模式
+- AC5：文件產出完整性（Shoot_Log.md + PROJECT_BOARD 短衝記錄）
+- AC6：瘦身歸檔（超過 20 筆時移出最舊記錄）
+- AC7：Sprint Review 連動（掃描 Shoot_Log.md）
+- AC8：Hard Gate 保留（QA + Architect 審查必須保留）
+
+**交付摘要**：
+- `skills/shoot/SKILL.md` 完整短衝模式定義
+- `tests/test-shoot.sh`（62 項測試）+ `tests/test-conflict-guard.sh`（12 項測試）全 PASS
+- 總計 238 個測試全綠
+
+**驗收結果**：AC1-AC8 全通過（8/8）；測試 74/74 PASS
+**MoSCoW**：Should
+**Size**：L / **Points**：3
+**來源**：Sprint 17 Retro / Issue #47

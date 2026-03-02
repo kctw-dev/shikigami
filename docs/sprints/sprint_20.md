@@ -1,6 +1,6 @@
 # Sprint 20
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-02 ~ 2026-03-08
 **Sprint Goal**：清零 Sprint 19 Retro Action Items（#56、#57），交付 /shoot 短衝模式（US-31）
 **總計**：3 Stories / 5 Points

@@ -1,6 +1,33 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–14）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–15）
+
+---
+
+## Sprint 20 — 2026-03-02
+
+**參與角色**：PO、Architect、Developer、QA、Security、Stakeholder
+
+### Good
+
+1. 完成率 100% 連續 20 個 Sprint 維持（Sprint 1-20 全數達成）
+2. Phase 平行派遣持續有效 — Retro #56 + Retro #57 平行無衝突
+3. US-31 /shoot 短衝模式從 Sprint 17 Retro 起跨 3 Sprint 終於完成交付，Stakeholder 滿意
+4. Sprint 19 Retro Action Items 全數清零（#56, #57 均在 Sprint 20 完成）
+5. 測試覆蓋持續擴展 — Sprint 20 新增 74 個測試（62 shoot + 12 conflict），總計 238 個測試
+
+### Problem
+
+1. US-31 Code Quality Review 識別 shoot SKILL.md 的 grep 示例與「大小寫不敏感」聲明矛盾、sprint-review §2.5 日期來源未明確 — L size Story 的規格品質仍需 QA 多輪捕捉
+2. 快思模式跳過 Token 記錄持續為 N/A — 成本可見性仍有盲區（延續 Sprint 18 Problem 趨勢）
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| 1 | L-size Story SKILL.md 規格品質強化 — QA 增加示例一致性檢查項 | QA | QA Code Quality Review Checklist 新增示例一致性檢查項，L-size Story 強制多輪審查 | #58 | Open |
+
+> Problem 2 不建立新 Issue（此為長期結構性問題，快思模式設計即跳過 Token 記錄，非 Action Item）
 
 ---
 
@@ -104,29 +131,4 @@
 |---|--------|-------|----------|-------|------|
 | 1 | Token 記錄指引更新：三個 SKILL.md 的 token 提取指引需納入 cache_read_input_tokens + cache_creation_input_tokens 加總計算 | Architect | 三個 SKILL.md 的主要方法描述明確包含 cache tokens 加總規則 | #41 | Closed（Sprint 17） |
 | 2 | Sprint 17 Planning 依 US-17 結論評估 OpenCode POC 優先排入 Backlog | PO | Sprint 17 Planning 時 PO 確認是否排入，並記錄決策理由 | #42 | Closed（Sprint 17） |
-
----
-
-## Sprint 15 — 2026-03-02
-
-**參與角色**：PO、Architect、Developer、QA、Stakeholder、SRE
-
-### Good
-
-1. 連續 15 個 Sprint 維持 100% 完成率，Velocity 從 Sprint 14 的 2pt 回升至 4pt，確認品質優先策略不影響長期交付能力
-2. 首次交付面向外部使用者的完整文件套件（Tutorial + Troubleshooting + 安裝驗證），M5 穩定化使用者就緒目標正式達成
-3. Issue 快掃回覆 5 個 open issues（#3, #4, #5, #32, #33），QA 審核發現 2 個事實錯誤（#5 前提條件層級混淆、#33 路徑描述不精確）並修正後發布，品質門禁延伸至社群互動
-4. QA 雙階段審查完整執行（Hard Gate Must），兩個 M-size Story 共 4 次審查（2 Spec + 2 Quality）全 PASS
-
-### Problem
-
-1. Token JSONL 提取持續失敗（連續 Sprint 14/15 均 N/A），Sprint 10 建立的 JSONL 提取機制在新 session 格式下完全失效，Token 成本分環節記錄表格累計 3 個 Sprint 無法自動填入
-2. Code Quality Review 發現 2 個 Important 問題（GETTING_STARTED.md 缺 ToC、TROUBLESHOOTING.md 歷史問題標題定性模糊）未於本 Sprint 修復，PASS 門檻內但品質標準應更嚴
-
-### Action Items
-
-| # | Action | Owner | 驗收方式 | Issue | 狀態 |
-|---|--------|-------|----------|-------|------|
-| 1 | GETTING_STARTED.md 補上 ToC 目錄 | Developer | `docs/tutorial/GETTING_STARTED.md` 包含 7 步驟錨點目錄，與 TROUBLESHOOTING.md 格式對齊 | #37 | Closed（Sprint 16） |
-| 2 | Token JSONL 提取機制需重新調查 session 格式變化 | Architect | Token 成本分環節記錄表格至少有一個 Sprint 的 Planning/Execution/Review 為非 N/A | #38 | Closed（Sprint 16） |
 

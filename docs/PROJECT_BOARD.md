@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 20 Planning — 進行中）
-**當前 Sprint**：Sprint 20（進行中）
+**最後更新**：2026-03-02（Sprint 20 Review — 完成）
+**當前 Sprint**：Sprint 20（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 20](sprints/sprint_20.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 20 — 進行中
+## Sprint 20 — 完成
 
 **Sprint Goal**：清零 Sprint 19 Retro Action Items（#56、#57），交付 /shoot 短衝模式（US-31）
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 5 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-02 ~ 2026-03-08
 
 | Story | Size | Points | 狀態 |
@@ -18,7 +20,7 @@
 | Retro #57（Issue #57）：Developer subagent 狀態更新衝突防護 | S | 1 | 完成 |
 | US-31（Issue #47）：/shoot 短衝模式 | L | 3 | 完成 |
 
-**計畫 Velocity**：5 points（3 Stories）
+**實際 Velocity**：5 points（3 Stories）
 
 ---
 
@@ -92,19 +94,4 @@
 
 ---
 
-## Sprint 15 — 完成
-
-**Sprint Goal**：完成 M5 穩定化的使用者就緒工作 — 建立可重複的全新環境安裝驗證報告，並交付端對端使用者文件（Tutorial + Troubleshooting），讓外部使用者能獨立完成安裝並走完第一個 Sprint。
-**結果**：Goal 達成（2/2 Stories PASS）。Velocity 4 points，完成率 100%。
-**Stakeholder 驗收**：接受
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-15：完整安裝流程驗證（全新環境測試） | M | 2 | 完成 |
-| US-16：使用者文件完善（Tutorial + Troubleshooting） | M | 2 | 完成 |
-
-**實際 Velocity**：4 points（2 Stories）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–14）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–15）
