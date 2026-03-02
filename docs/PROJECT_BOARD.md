@@ -1,9 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 15 Review 完成）
-**當前 Sprint**：Sprint 15（完成）
+**最後更新**：2026-03-02（Sprint 16 Planning 完成）
+**當前 Sprint**：Sprint 16（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 15](sprints/sprint_15.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 16](sprints/sprint_16.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 16 — 進行中
+
+**Sprint Goal**：清零 Sprint 15 Retro Action Items，完成 US-17 多平台可行性調查，修正文件類 SKILL.md 越權執行風險（Issue #34），更新 sprint-review SKILL.md 覆蓋缺口（Issue #36），鞏固 M5 穩定化最後一哩路。
+**期間**：2026-03-02 ~ 2026-03-08
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #37：GETTING_STARTED.md 補上 ToC 目錄 | S | 1 | 待開始 |
+| US-17：多平台調查（Cursor / OpenCode / Codex 可行性） | M | 2 | 待開始 |
+| Issue #34：sprint-execution SKILL.md 跳過 doc-only Story 執行保護 | S | 1 | 待開始 |
+| Issue #36：sprint-review SKILL.md 覆蓋缺口修正 | S | 1 | 待開始 |
+| Retro #38：Token JSONL 提取機制調查與 SKILL.md 主要方法更新 | S | 1 | 待開始 |
+
+**計畫 Velocity**：6 points（5 Stories）
 
 ---
 
