@@ -27,6 +27,20 @@ LOG_FILE="${PROJECT_DIR}/logs/schedule-{{SKILL_NAME}}.log"
 # ---------------------------------------------------------------------------
 mkdir -p "${PROJECT_DIR}/logs"
 
+{{#IF_GROUP}}
+# ---------------------------------------------------------------------------
+# Group 序列鎖：group-level flock（確保同群組內不平行執行）
+# 在 skill-level lock 之前取得，實現群組層級的互斥
+# flock -n：non-blocking，取不到鎖立即 SKIPPED（另一 Skill 在同群組執行中）
+# ---------------------------------------------------------------------------
+GROUP_LOCK_FILE="/tmp/shikigami-group-{{PROJECT_HASH}}-{{GROUP_NAME}}.lock"
+exec 201>"${GROUP_LOCK_FILE}"
+if ! flock -n 201; then
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] SKIPPED — group '{{GROUP_NAME}}' locked by another skill (lock: ${GROUP_LOCK_FILE})" >> "${LOG_FILE}"
+  exit 0
+fi
+{{/IF_GROUP}}
+
 # ---------------------------------------------------------------------------
 # 互斥鎖：使用 flock（進程死亡時 OS 自動釋放，不殘留孤兒鎖）
 # flock -n：non-blocking，拿不到鎖立即返回（SKIPPED，前一個還在執行）
