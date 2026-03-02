@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 18 Review — US-35 完成，Goal 達成）
-**當前 Sprint**：Sprint 18（完成）
+**最後更新**：2026-03-02（Sprint 19 Planning — 4 Stories / 5 Points 選入）
+**當前 Sprint**：Sprint 19（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 18](sprints/sprint_18.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 19](sprints/sprint_19.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 19 — 進行中
+
+**Sprint Goal**：Schedule Skill 品質鞏固 — 修補安全缺陷，實現序列排程保護，補完 PO 跨輪次一致性機制
+**期間**：2026-03-02 ~ 2026-03-08
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #53（Issue #53）：schedule skill — skill name 字元白名單驗證 | S | 1 | 待執行 |
+| Retro #54（Issue #54）：schedule skill — 模板品質強化（set -euo pipefail + 備份安全） | S | 1 | 待執行 |
+| US-30（Issue #48）：PO subagent 多輪派遣時 Story 內容偏離修正機制 | S | 1 | 待執行 |
+| US-36（Issue #50）：Planning + Execution 序列排程 — 避免平行衝突 | M | 2 | 待執行 |
+
+**計畫 Velocity**：5 points（4 Stories）
 
 ---
 
