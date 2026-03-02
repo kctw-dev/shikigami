@@ -23,6 +23,7 @@ requiredTools:
 
 ```
 /schedule <skill-name> --interval <duration>
+/schedule <skill-name> --interval <duration> --sequential-group <group-name>
 /schedule <skill-name> --remove
 /schedule <skill-name> --dry-run
 ```
@@ -33,6 +34,7 @@ requiredTools:
 |------|------|------|------|
 | `<skill-name>` | 是 | — | 要排程的 Skill 名稱（如 `sprint-execution`） |
 | `--interval` | 否 | `5m` | 執行間隔。僅接受 `1m` / `5m` / `15m` / `1h`，不接受 cron 表達式 |
+| `--sequential-group` | 否 | — | 將此 Skill 綁定至指定群組，同群組內的 Skill 序列執行，不平行觸發 |
 | `--remove` | 否 | — | 從 crontab 移除對應排程 entry |
 | `--dry-run` | 否 | — | 只執行 Pre-flight 檢測，不部署任何檔案 |
 
@@ -92,6 +94,32 @@ requiredTools:
 | 4 | 專案目錄可寫 | `test -w $PROJECT_DIR` | 阻擋，提示確認目錄權限 |
 | 5 | 目標 Skill 已註冊 | 檢查 `skills/<skill-name>/SKILL.md` 存在 | 阻擋，列出可用 Skill 清單 |
 | 6 | 無重複排程 | `crontab -l \| grep <skill-name>_cron.sh` | 警告並阻擋，提示先執行 `--remove` |
+| 7 | group 衝突偵測（有 `--sequential-group` 時） | 檢查 crontab 中是否已有同 group 的排程正在執行（lock file 存在且被持有） | 阻擋，輸出 `[FAIL] group 衝突：同群組 <group-name> 已有 Skill 排程中`，建議先 `--remove` 衝突 Skill |
+
+**group 衝突偵測實作（US-36 AC3）**：
+
+```bash
+preflight_check_group_conflict() {
+  local group_name="$1"
+  local project_hash="$2"
+  local group_lock="/tmp/shikigami-group-${project_hash}-${group_name}.lock"
+
+  # 若 group lock 檔案存在且被持有（flock -n 失敗），表示有衝突
+  if [[ -f "$group_lock" ]]; then
+    exec 202>"${group_lock}"
+    if ! flock -n 202; then
+      echo "[FAIL] group 衝突：同群組 '${group_name}' 已有 Skill 排程執行中"
+      echo "[INFO] 請先移除衝突的 Skill 排程後重新部署：/schedule <skill> --remove"
+      return 1
+    fi
+    # 釋放測試用 fd
+    exec 202>&-
+  fi
+  echo "[PASS] group '${group_name}' 無衝突"
+}
+```
+
+**注意**：group 衝突偵測僅在指定 `--sequential-group` 時執行（檢查 7），無 `--sequential-group` 時跳過此項。
 
 **skill name 白名單驗證（Retro #53）**：
 
@@ -191,6 +219,64 @@ LOCK_FILE="/tmp/shikigami-schedule-${PROJECT_HASH}-${SKILL_NAME}.lock"
 ```
 
 **設計理由**：同一台機器上的不同 Shikigami 專案排程相同 Skill 時，因 project-hash 不同而使用不同鎖，互不干涉（ADR-005 Stakeholder Review 修訂一）。
+
+---
+
+## 5.5 序列鎖（Sequential Group Lock）使用說明
+
+### 問題背景
+
+Planning 與 Execution 兩個 Skill 若同時觸發，會造成共享檔案（如 `sprint_N.md`）的讀寫衝突與競態條件。序列鎖機制透過 group 綁定，確保同群組內的 Skill 不會平行執行。
+
+### 觸發語法
+
+```bash
+# 將 sprint-planning 綁定至 sprint-cycle 群組
+/schedule sprint-planning --interval 1h --sequential-group sprint-cycle
+
+# 將 sprint-execution 綁定至同一群組
+/schedule sprint-execution --interval 1h --sequential-group sprint-cycle
+```
+
+### Group 綁定方式
+
+使用 `--sequential-group <group-name>` 將 Skill 加入指定群組。同一群組名稱的所有 Skill 共享一把群組鎖（group lock），任一時刻只有一個 Skill 能持有此鎖並執行。
+
+**group-name 命名規範**：與 skill-name 相同的白名單規則——小寫英文、數字、連字號，不可以連字號開頭，最長 64 字元。
+
+### 鎖行為描述
+
+| 情境 | 行為 |
+|------|------|
+| 群組無任何 Skill 執行中 | 取得 group lock，繼續執行 |
+| 同群組另一 Skill 正在執行（group lock 被佔用） | 立即退出（SKIPPED），不等待 |
+| 無 `--sequential-group` 參數 | 只使用 skill-level lock，行為與 Sprint 18 完全一致 |
+
+### 鎖檔案命名（ADR-005 決策域二）
+
+```
+/tmp/shikigami-group-<project-hash>-<group-name>.lock
+```
+
+Group lock 在 skill-level lock 之前取得，確保群組層級的互斥先於 Skill 層級的互斥：
+
+```
+1. 嘗試取得 group lock（/tmp/shikigami-group-<hash>-<group>.lock）
+   └── 失敗 → SKIPPED（log group lock 被佔用），exit 0
+2. 嘗試取得 skill lock（/tmp/shikigami-schedule-<hash>-<skill>.lock）
+   └── 失敗 → SKIPPED（log skill lock 被佔用），exit 0
+3. 執行 Skill
+```
+
+### 使用範例
+
+```bash
+# 設定 Planning + Execution 序列排程（同屬 sprint-cycle 群組）
+claude -p "/schedule sprint-planning --interval 1h --sequential-group sprint-cycle"
+claude -p "/schedule sprint-execution --interval 1h --sequential-group sprint-cycle"
+
+# 兩者不會平行執行：sprint-planning 執行中時，sprint-execution 觸發後會 SKIPPED
+```
 
 ---
 
@@ -307,9 +393,16 @@ Pre-flight 全部通過。dry-run 模式，不部署任何檔案。
 
 | 狀態 | 觸發時機 | 格式範例 |
 |------|----------|----------|
-| `START` | 取得 flock 鎖，開始執行 | `[2026-03-02 09:00:00] START — skill=sprint-execution interval=5m` |
+| `START` | 取得 flock 鎖，開始執行 | `[2026-03-02 09:00:00] START — skill=sprint-execution interval=5m group=sprint-cycle` |
+| `START`（無 group） | 取得 flock 鎖，開始執行（無 group 設定） | `[2026-03-02 09:00:00] START — skill=sprint-execution interval=5m group=none` |
 | `SKIPPED` | flock 被前一執行個體佔用（non-blocking 立即返回） | `[2026-03-02 09:05:00] SKIPPED — previous run still active (lock: /tmp/shikigami-schedule-abc12345-sprint-execution.lock)` |
 | `END` | 執行完成 | `[2026-03-02 09:03:42] END (exit: 0)` |
+
+**group 欄位說明（US-36 AC4）**：
+
+- 每次 `START` 記錄均包含 `group=<group-name>` 欄位
+- 無 `--sequential-group` 設定時記錄 `group=none`
+- SKIPPED 和 END 不需要額外的 group 欄位（已在對應 START 記錄中呈現）
 
 **查看 log**：
 
