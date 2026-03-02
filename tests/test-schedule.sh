@@ -485,6 +485,54 @@ if [ -f "$SKILL_MD" ]; then
 fi
 
 # ---------------------------------------------------------------------------
+# 區段 10：Retro #54 AC1 — 模板 set -euo pipefail 驗證
+# ---------------------------------------------------------------------------
+echo ""
+echo "=== 區段 10：模板 set -euo pipefail 驗證（Retro #54 AC1） ==="
+
+if [ -f "$TEMPLATE" ]; then
+  TMPL_CONTENT=$(cat "$TEMPLATE")
+
+  # 10.1 模板含 set -euo pipefail（包含 -e 旗標）
+  assert_contains "$TMPL_CONTENT" "set -euo pipefail" "模板含 set -euo pipefail（-e 旗標確保命令失敗立即中止）"
+
+  # 10.2 模板不使用舊的不安全寫法 set -uo pipefail（缺少 -e）
+  # 允許 set -uo pipefail 出現在注釋中，但不允許作為實際指令
+  if echo "$TMPL_CONTENT" | grep -qxF "set -uo pipefail"; then
+    fail "模板不應含單獨的 set -uo pipefail 行（應改為 set -euo pipefail）"
+  else
+    pass "模板不含不安全的 set -uo pipefail（確認已升級為 -euo）"
+  fi
+else
+  fail "模板不存在，AC1 測試跳過"
+fi
+
+# ---------------------------------------------------------------------------
+# 區段 11：Retro #54 AC2 — SKILL.md 備份安全機制驗證
+# ---------------------------------------------------------------------------
+echo ""
+echo "=== 區段 11：SKILL.md 備份安全機制（Retro #54 AC2） ==="
+
+if [ -f "$SKILL_MD" ]; then
+  SKILL_CONTENT=$(cat "$SKILL_MD")
+
+  # 11.1 SKILL.md 含 mktemp（用於安全備份路徑生成）
+  assert_contains "$SKILL_CONTENT" "mktemp" "SKILL.md 備份使用 mktemp 生成唯一臨時路徑"
+
+  # 11.2 SKILL.md 含 chmod 600（備份檔案權限保護）
+  assert_contains "$SKILL_CONTENT" "chmod 600" "SKILL.md 備份使用 chmod 600 保護檔案"
+
+  # 11.3 SKILL.md 不應再使用固定路徑 /tmp/shikigami-crontab-backup-$(date +%s).bak
+  if echo "$SKILL_CONTENT" | grep -qF 'shikigami-crontab-backup-$(date +%s).bak'; then
+    fail "SKILL.md 備份不應再使用固定路徑（競態條件風險），應改用 mktemp"
+  else
+    pass "SKILL.md 備份已移除固定路徑 date +%s 模式（競態條件已消除）"
+  fi
+else
+  fail "SKILL.md 不存在，AC2 測試跳過"
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""
