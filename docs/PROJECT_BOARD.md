@@ -15,7 +15,7 @@
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
 | US-15：完整安裝流程驗證（全新環境測試） | M | 2 | 完成 |
-| US-16：使用者文件完善（Tutorial + Troubleshooting） | M | 2 | 進行中 |
+| US-16：使用者文件完善（Tutorial + Troubleshooting） | M | 2 | 完成 |
 
 **計畫 Velocity**：4 points（2 Stories）
 

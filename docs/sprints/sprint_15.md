@@ -10,7 +10,7 @@
 | Story ID | 標題 | Size | Points | 狀態 |
 |----------|------|------|--------|------|
 | US-15 | 完整安裝流程驗證（全新環境測試） | M | 2 | 完成 |
-| US-16 | 使用者文件完善（Tutorial + Troubleshooting） | M | 2 | 待開始 |
+| US-16 | 使用者文件完善（Tutorial + Troubleshooting） | M | 2 | 完成 |
 
 **總計：2 Stories / 4 Points**
 
