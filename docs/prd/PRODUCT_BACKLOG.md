@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-02（Sprint 16 Planning — Retro #37/#38 選入 Sprint；US-17/US-26/US-27 正式條目建立）
+**最後更新**：2026-03-02（Sprint 17 Planning — Retro #41/#42 選入 Sprint；US-29 正式條目建立；OpenCode POC 佔位候選新增）
 **管理者**：Product Owner
 
 ---
@@ -79,6 +79,25 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | US-17：多平台調查（Cursor / OpenCode / Codex 可行性） | 18.0 | Should | M | ROADMAP M5 | Done（Sprint 16） |
+
+### Sprint 16 Retro — 新增 Action Items
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | Retro #41：Sprint Review SKILL.md 歷史 Sprint 紀錄截斷修正 | — | Must | S | Sprint 16 Retro | In Sprint 17 |
+| 2 | Retro #42：OpenCode POC 可行性調查佔位入 Backlog | — | Could | S | Sprint 16 Retro / Issue #3 | In Sprint 17 |
+
+### Sprint 17 — 新增 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-29（Issue #44）：PROJECT_BOARD.md 與 Retrospective_Log.md 歷史歸檔機制 | 18.0 | Should | M | GitHub Issue #44 | In Sprint 17 |
+
+### Sprint 17 後 — 候選 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | OpenCode POC 可行性調查 | 待定 | Could | 待定 | Retro #42 / Issue #3 | 候選 |
 
 ---
 
