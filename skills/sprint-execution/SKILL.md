@@ -74,7 +74,7 @@ Sprint Backlog 還有 Story？
    **降級指引：** gh 指令失敗（網路問題、權限不足、非 GitHub 倉庫等）時靜默略過，不阻塞 Story 執行。
 
    **觸發條件（同時滿足以下三項才對該 issue 執行回覆）：**
-   - **(a)** issue 不含 `in-backlog` label（已排入 backlog 的 issue 由開發流程處理，不需額外回覆）
+   - **(a)** issue 不含 `in-backlog` label 且不含 `retro-action` label（已排入 backlog 的 issue 由開發流程處理，retro action item 由 Retro 流程處理，兩者均不需額外回覆）
    - **(b)** issue 不含 `sprint-N-replied` label（N 為當前 Sprint 編號），避免本 Sprint 內重複回覆
    - **(c)** open issue 超過 5 個時，僅處理最舊的前 5 個（依 issue 編號升冪排序取前五）
 
