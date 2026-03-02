@@ -171,6 +171,37 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
    - 若 AC 不引用任何路徑：填 `N/A`，不需執行 Glob/ls。
 4. **PO（第二輪）**：根據 Architect 與 QA 的回饋，最終確認 Sprint Backlog，建立 `docs/sprints/sprint_N.md`，並由 PO subagent 更新 `docs/PROJECT_BOARD.md` 與 `docs/prd/PRODUCT_BACKLOG.md`。PO subagent 回傳最終 Sprint Backlog 結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果），**主 session 不直接讀取 PRODUCT_BACKLOG.md 或 PROJECT_BOARD.md，僅接收 subagent 回傳的摘要**。
 
+   ### 防漂移約束（Drift Protection）
+
+   **比對規則**：PO Round 2 回傳的 Story 清單，其 Story ID 與標題欄位必須與 Round 1 回傳的結構化摘要完全一致。任何欄位不符均視為偏離，不得靜默接受。
+
+   **偏離判定規則**：下列任一情形即為偏離：
+
+   | # | 偏離類型 | 判定條件 |
+   |---|----------|----------|
+   | 1 | Story ID 不符 | Round 2 清單中出現 Round 1 未選取的 Story ID，或缺少 Round 1 已選取的 Story ID |
+   | 2 | 標題被改寫 | Round 2 回傳的 Story 標題與 Round 1 回傳的標題不完全相同（任何文字變動均算） |
+   | 3 | AC 被新增/刪除 | Round 2 回傳的 Story AC 條目數量或內容與 Round 1 不同（新增或刪除任一 AC） |
+
+   **告警處理路徑**：
+
+   - 偵測到偏離時，QA 告警並要求 PO 重新派遣，不靜默接受
+   - QA 須列出所有偏離項目，明確指出每一個偏離的 Story ID 及偏離類型
+   - PO 重新派遣後，QA 重新執行比對，直至完全一致方可繼續後續流程
+
+   **告警格式範例**：
+
+   ```
+   [DRIFT-ALERT] PO Round 2 輸出偏離 Round 1，要求 PO 重新派遣。
+
+   偏離項目：
+   - US-XX：標題被改寫（Round 1：「原始標題」→ Round 2：「改寫後標題」）
+   - US-YY：AC 被刪除（Round 1 有 3 條 AC，Round 2 僅有 2 條）
+   - US-ZZ：Story ID 不符（Round 2 出現 Round 1 未選取的 ID）
+
+   請 PO 重新派遣，確保 Round 2 Story 清單與 Round 1 完全一致後再繼續。
+   ```
+
 ---
 
 ## 7. 角色權重調整檢查（US-22 / ADR-004）
