@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-04-13（Sprint 34 Review — US-66/68 全部完成，Issue #46 + #49 結案，修訂記錄：v0.18.0）
+> 最後更新：2026-04-20（Sprint 35 Review — ADR-010 原子性實作交付完成，5/5 Stories PASS，修訂記錄：v0.19.0）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.17.0**（Sprint 33）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.19.0**（Sprint 35）。
 
 | 版號 | 含義 |
 |------|------|
@@ -234,6 +234,12 @@ Sprint Review 時自動產出：
 | US-65 | US-T08（Intent Routing 測試）評估重開 — RICE 重新評分（2.0，No-Go，Deferred） | Sprint 33 ✅ |
 | US-66 | Issue #46 最終收尾 — 四條排程流程驗收條件逐項確認、缺口補齊，Issue #46 CLOSED | Sprint 34 ✅ |
 | US-68 | Issue #49 框架端主動修正評估 — workflow check 失敗根因分析、Issue #49 CLOSED | Sprint 34 ✅ |
+| ADR-010 | Backlog Source of Truth 遷移至 GitHub Issues 架構決策 | Sprint 34 外 ✅ |
+| US-69 | ADR-010 Label 基礎設施 — 14 個 labels 建立 + onboarding Pre-flight 更新 | Sprint 35 ✅ |
+| US-70 | backlog-intake SKILL.md 重大改寫 — Issue label + body template 兩層架構 | Sprint 35 ✅ |
+| US-71 | sprint-planning SKILL.md 修改 — PO Story 選取來源改為 gh issue list + 即時 RICE 排序 | Sprint 35 ✅ |
+| US-72 | backlog-management SKILL.md 修改 — Grooming 流程改為操作 GitHub Issues + 錯誤恢復掃描 | Sprint 35 ✅ |
+| US-73 | PRODUCT_BACKLOG.md DEPRECATED 標頭 + ADR-009「Superseded by ADR-010」標注 | Sprint 35 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 
