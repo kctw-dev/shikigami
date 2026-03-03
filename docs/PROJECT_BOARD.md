@@ -98,4 +98,12 @@
 
 ---
 
+## 短衝記錄
+
+| 日期 | 標題 | Issue/Story | commit hash |
+|------|------|-------------|-------------|
+| 2026-04-27 | 改善 sprint-N-replied label 機制為單一可重用 sprint-replied label | #66 | 7ce9c12 |
+
+---
+
 > 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–31）
