@@ -253,7 +253,7 @@ shikigami.project_level: medium
 
 **重點：它們會互相制衡。** 不是 7 個獨立助手，是一組有紀律的工程團隊。
 
-### 17 個 Skills
+### 21 個 Skills
 
 **Scrum 流程**
 
@@ -276,16 +276,20 @@ shikigami.project_level: medium
 | **deployment-readiness** | 部署準備、版本發布、環境配置、生產就緒檢查 |
 | **systematic-debugging** | Bug 排查、測試失敗分析、系統化除錯流程 |
 | **dispel** | Legacy 系統考古、不熟悉 codebase 分析、解咒模式 |
+| **architect** | Architect 角色知識框架、架構評估決策指引 |
+| **qa-engineer** | QA 角色知識框架、審查策略與 Story-Lifecycle 整合指引 |
 
 **工具整合**
 
 | Skill | 說明 |
 |---|---|
 | **git-workflow** | 分支隔離、Worktree 管理、開發完成後的合併/PR 流程 |
-| **parallel-dispatch** | 多個獨立任務的平行 Subagent 派遣 |
+| **parallel-dispatch** | 多個獨立任務的平行 Subagent 派遣，含同檔案衝突偵測與自動序列化 |
 | **issue-management** | GitHub Issue 管理、自動分類、回覆、Issue 轉 Backlog |
 | **health-check** | 框架自我診斷、結構完整性檢查、逾期 Action Items 偵測 |
 | **onboarding** | 新專案初始化、目錄結構建立、CLAUDE.md 生成引導 |
+| **schedule** | Sprint 自動排程執行、cron 腳本生成、序列排程保護 |
+| **shoot** | 短衝模式、單 Story 快速執行、不起 Sprint 的輕量交付 |
 
 ---
 
