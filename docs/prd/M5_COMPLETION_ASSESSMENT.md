@@ -53,8 +53,9 @@
 | 預期觸及方式 | GitHub README 訪客（repo 首頁曝光）→ 點擊 Issue #59 連結 → 完成安裝並走完 Sprint → 留言回饋 | 2026-03-03 | 0 |
 | 達成標準 | Issue #59 收到至少 1 則外部使用者留言，自述完成安裝並走完 Sprint（非本專案開發者） | 2026-03-03 | 0 |
 | 低摩擦路徑強化（US-61 Sprint 32）| README.md 新增「5 分鐘快速試用」5 步驟指引；GETTING_STARTED.md 修正 2 處高摩擦步驟（Claude Code CLI 安裝指令內嵌、gh auth 認證前置說明）；INSTALL_OPENCODE.md 修正 2 處高摩擦步驟（OpenCode 安裝一行指令內嵌、symlink 三行指令精簡為單行） | 2026-03-03 | 0 |
+| 主動觸及強化（US-64 Sprint 33）| README.md 新增 version badge 與 license badge（Shield.io 格式）；建立 `docs/km/OUTREACH_LOG.md` 推廣行動台帳（含歷史 6 筆行動記錄與分工說明） | 2026-03-03 | 0 |
 
-> **追蹤說明**：累積回饋數 >= 1 則條件 (a) 達成。每次 Sprint Review 時執行 `gh issue view 59 --comments` 確認是否有新回饋並更新此表格。
+> **追蹤說明**：累積回饋數 >= 1 則條件 (a) 達成。每次 Sprint Review 時執行 `gh issue view 59 --comments` 確認是否有新回饋並更新此表格。詳細推廣行動記錄見 `docs/km/OUTREACH_LOG.md`。
 
 ---
 
