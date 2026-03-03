@@ -44,14 +44,16 @@
 
 #### 招募行動記錄（US-53，Sprint 29）
 
-| 項目 | 內容 |
-|------|------|
-| 行動日期 | 2026-03-03 |
-| 管道 1 — README CTA | `README.md` 新增「Beta 使用者招募」區段（OpenCode 平台支援章節之後）；包含邀請文案、試用對象說明（Claude Code / OpenCode）、回饋 Issue 直連連結 |
-| 管道 2 — Beta Issue | GitHub Issue #59「Beta 回饋收集 — 請在此分享你的使用經驗」（已建立、已 pin、已套用 beta-feedback label）；包含結構化回饋模板（OS/版本、安裝結果、Sprint 完成度、問題描述、1-5 評分） |
-| 安裝指南觸及路徑 | Claude Code → `docs/tutorial/README.md`；OpenCode → `docs/INSTALL_OPENCODE.md`；兩者均已在 Beta 招募區段直連 |
-| 預期觸及方式 | GitHub README 訪客（repo 首頁曝光）→ 點擊 Issue #59 連結 → 完成安裝並走完 Sprint → 留言回饋 |
-| 達成標準 | Issue #59 收到至少 1 則外部使用者留言，自述完成安裝並走完 Sprint（非本專案開發者） |
+| 項目 | 內容 | 最後更新日期 | 累積回饋數 |
+|------|------|-------------|-----------|
+| 行動日期 | 2026-03-03 | 2026-03-03 | 0 |
+| 管道 1 — README CTA | `README.md` 新增「Beta 使用者招募」區段（OpenCode 平台支援章節之後）；包含邀請文案、試用對象說明（Claude Code / OpenCode）、回饋 Issue 直連連結 | 2026-03-03 | 0 |
+| 管道 2 — Beta Issue | GitHub Issue #59「Beta 回饋收集 — 請在此分享你的使用經驗」（已建立、已 pin、已套用 beta-feedback label）；包含結構化回饋模板（OS/版本、安裝結果、Sprint 完成度、問題描述、1-5 評分） | 2026-03-03 | 0 |
+| 安裝指南觸及路徑 | Claude Code → `docs/tutorial/README.md`；OpenCode → `docs/INSTALL_OPENCODE.md`；兩者均已在 Beta 招募區段直連 | 2026-03-03 | 0 |
+| 預期觸及方式 | GitHub README 訪客（repo 首頁曝光）→ 點擊 Issue #59 連結 → 完成安裝並走完 Sprint → 留言回饋 | 2026-03-03 | 0 |
+| 達成標準 | Issue #59 收到至少 1 則外部使用者留言，自述完成安裝並走完 Sprint（非本專案開發者） | 2026-03-03 | 0 |
+
+> **追蹤說明**：累積回饋數 >= 1 則條件 (a) 達成。每次 Sprint Review 時執行 `gh issue view 59 --comments` 確認是否有新回饋並更新此表格。
 
 ---
 
