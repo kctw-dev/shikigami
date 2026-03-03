@@ -114,6 +114,63 @@ Grooming 完成後，依照以下規則計算本次 Active 條目趨勢：
 
 ---
 
+### Grooming #2 — 2026-04-27（Sprint 36 前）
+
+**Active 條目**：1 筆
+**Resolved 條目**：0 筆（本次新增 0 筆解決）
+**Accepted 條目**：1 筆（TD-001，維持不變）
+**本次變化量**：0（相對 Grooming #1，Active 總數由 1 → 1）
+**趨勢判定**：穩定
+
+#### Active 條目清單
+
+- TD-002：PO subagent 輸出格式缺乏正式 JSON Schema 驗證，注入防護依賴 LLM 指令遵循能力（嚴重度：L）
+
+#### 本次解決條目
+
+（無）
+
+#### TD-002 重評（Sprint 36 前）
+
+**重評結論**：維持 Active / Won't（與 Grooming #1 裁定一致）
+
+**重評理由**：
+
+- ADR-010 遷移（Backlog source of truth → GitHub Issues）不影響 TD-002 的問題範疇
+  - TD-002 描述的是 PO subagent 輸出格式缺乏 JSON Schema 驗證，屬 ADR-006 防護層問題
+  - ADR-010 處理的是 Backlog 儲存介質，兩者無技術重疊
+- ADR-006 防護機制（XML 隔離標記 + 角色限制宣告）在 ADR-010 遷移後仍完整有效
+  - ADR-010 的 backlog-intake SKILL.md 改寫明確繼承 ADR-006（Prompt Injection Isolation Rule）
+  - 遷移前後防護機制一致，無退化
+- 嚴重度 L、MoSCoW Won't 的判定依據未發生變化：v1.0.0 前現有防護足夠，JSON Schema 正式驗證須經 ADR 流程，工程成本不符時程
+- 結論：維持 `Active / Won't`；v1.0.0 後可依使用者回饋重新評估
+
+#### ADR-010 遷移後新技術債掃描
+
+**掃描範圍**：ADR-010 Accepted（2026-03-03）至 Sprint 36 前（2026-04-27）期間，因遷移操作引入的技術一致性問題
+
+**掃描結論**：**無新增 Active 技術債**
+
+**掃描發現 — 已知殘留引用（不構成新技術債，作為觀察記錄）**：
+
+ADR-010 的受影響 SKILL.md 範疇明確限定為三個（backlog-intake、sprint-planning、backlog-management）。以下 Skills 未被納入 ADR-010 遷移範疇，仍存在對 `PRODUCT_BACKLOG.md` 的引用，屬已知殘留而非新引入：
+
+| SKILL.md | 引用類型 | 評估 |
+|----------|---------|------|
+| `skills/shoot/SKILL.md` | `/shoot US-XX` 仍從 `PRODUCT_BACKLOG.md` 讀取對應 Story | PRODUCT_BACKLOG.md 已降級為唯讀歷史快照，shoot Skill 讀取歷史 Stories 仍可運作；ADR-010 未列為受影響 Skill，此引用為已知遺留 |
+| `skills/sprint-review/SKILL.md` | §7 清單行 530-531 仍有 `PRODUCT_BACKLOG.md` 更新 checkbox | US-74 正在 Sprint 36 處理 sprint-review ADR-010 閉環，該 checkbox 屬 US-74 範疇（sprint-review Story 完成後 Issue 狀態回寫）；同 Sprint 持續改善中 |
+| `skills/health-check/SKILL.md` | 仍追蹤 `PRODUCT_BACKLOG.md` 存在性檢查 | PRODUCT_BACKLOG.md 仍實際存在（唯讀快照），health-check 不產生誤報；功能性無影響 |
+| `skills/schedule/SKILL.md` | 範例說明文字描述舊入庫目標 | 敘述性文字（範例說明），非執行路徑；不影響 Skill 實際行為 |
+| `skills/issue-management/SKILL.md` | 行 273 描述「追加草稿至 PRODUCT_BACKLOG.md」 | 描述性文字，issue-management 的核心流程不受影響 |
+
+**評估結論**：上述殘留引用均屬 ADR-010 遷移範疇明確排除的 Skills，或 Sprint 36 正在處理的項目（US-74），或敘述性文字而非執行路徑。嚴重度均為 L，短期不影響框架正常運行。不新增 Tech Debt 條目；建議在後續 Sprint 視需求排入遷移範疇擴展（尤其 `skills/shoot/SKILL.md`）。
+
+#### 逾期未解決警示（Active 超過 3 個 Sprint 未排入解決 Story）
+
+- **TD-002**：已 Active 約 14 個 Sprint（自 Sprint 22 引入，Grooming #1 在 Sprint 25 前裁定 Won't）。裁定理由有效，維持 Won't，不需強制排入解決 Story；下次重評時間點建議定於 v1.0.0 之後的首次 Grooming。
+
+---
+
 ## 維護指引
 
 1. **新增條目**：Developer 在 DoD 自檢時，若有取捷徑情況，依 `[TECH-DEBT]` 標記格式（見 `skills/sprint-execution/developer-prompt.md` 的 Tech Debt 區段）記錄，並於當次 Sprint 結束前新增至本 Registry。
