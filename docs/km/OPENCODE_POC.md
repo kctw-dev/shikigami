@@ -526,3 +526,225 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 | ADR-008 決策一引用 | 完成（§2 明確引用，含目錄結構定義） |
 | README.md OpenCode 章節新增 | 完成（連結至安裝指南） |
 | OPENCODE_POC.md Phase 3b 子章節 | 完成（本節） |
+
+---
+
+## 12. Phase 3c 完成記錄（US-51 執行結果）
+
+**執行日期**：2026-03-03
+**執行者**：AI Agent（Developer Subagent，Claude Sonnet 4.6）
+**Sprint**：Sprint 28
+**Story**：US-51
+**依賴**：US-49（Phase 3a，四角色移植完成）、US-50（Phase 3b，安裝指南完成）
+
+---
+
+### 12.1 Task Tool 參數對應分析（AC1）
+
+**分析目的**：系統性比較 Claude Code Agent tool 與 OpenCode Task tool 在參數層面的對應關係，為 Issue #3 結案評估提供技術依據。
+
+**分析依據**：
+- Claude Code Agent tool：Claude Code SDK 文件 — `Agent` tool 參數定義（`description`、`prompt`、`subagent_type`、`model`、`isolation`、`max_turns`、`run_in_background`、`resume`）
+- OpenCode Task tool：基於 OpenCode Agents 文件（https://opencode.ai/docs/agents/）靜態分析 + `.opencode/agents/developer.md` 設定檔格式推斷
+- ADR-008 決策三：Subagent 設定檔路徑策略與格式規範（「已知待確認項（Phase 2 範疇）」標注）
+
+**分析範圍聲明**：本分析為靜態文件分析，基於 OPENCODE_POC.md §3.2 既定方法論。OpenCode Task tool 的完整參數規格需在實機環境中對照 OpenCode v1.0.190+ 文件確認，本節提供基於現有文件的最佳推斷，並明確標注待確認項。
+
+---
+
+### 12.2 參數比較表（AC2）
+
+**圖例**：
+- **Supported（直接對應）**：Claude Code 與 OpenCode 具備相同或高度等效的參數，功能、語義均對應
+- **Equivalent（名稱/格式不同，功能相同）**：功能等效但命名或格式有差異，需確認實際參數名稱
+- **Unsupported（OpenCode 不支援）**：Claude Code 的特有參數，在 OpenCode 中無已知對應機制
+
+| # | Claude Code 參數 | 類型 | OpenCode 對應 | 狀態 | 來源依據 | 備注 |
+|---|----------------|------|-------------|------|---------|------|
+| P-1 | `description` | `string` | `description`（frontmatter 欄位）| **Supported** | ADR-008 決策三；`.opencode/agents/developer.md` frontmatter | Agent 設定檔的 `description` 作為派遣說明；Task tool 呼叫時傳入任務描述的欄位命名需實機確認 |
+| P-2 | `prompt` | `string` | 任務 prompt（Task tool 呼叫正文）| **Equivalent** | ADR-008 §決策三：「以 Task tool 傳入任務描述（prompt 欄位）」；OpenCode Agents 文件 | OpenCode Task tool 傳入 prompt 的具體參數名稱（可能為 `prompt`、`input`、或對話內容形式）**待實機確認** |
+| P-3 | `subagent_type` | `string` | Agent 名稱（frontmatter `name` 欄位）| **Equivalent** | `.opencode/agents/developer.md`：`name: developer`；OpenCode Agents 文件定義 `name` 作為 agent 識別符 | Claude Code 以 `subagent_type`（如 `"claude-code-subagent"`）識別 agent 類型；OpenCode 以 agent 設定檔的 `name` 識別（如 `developer`）；命名機制不同但功能等效 |
+| P-4 | `model` | `string` | `model`（frontmatter 欄位）| **Supported** | `.opencode/agents/architect.md`、`qa-engineer.md` 等均含 `model: sonnet` 欄位（US-49 AC2 格式規範） | OpenCode 在 agent 設定檔中指定模型（`model: sonnet`），非 Task tool 呼叫時動態傳入；模型綁定為靜態設定，不支援 per-call 動態切換 |
+| P-5 | `isolation` | `string` | 無已知對應 | **Unsupported** | OpenCode Agents 文件未記載 worktree 隔離模式設定；OpenCode Task tool 設計文件無此參數 | Claude Code `isolation` 支援 `"isolated"` worktree 模式；OpenCode 無等效的 per-task worktree 隔離機制（待實機確認是否有替代設定） |
+| P-6 | `max_turns` | `integer` | 無已知對應 | **Unsupported** | OpenCode Agents 文件未記載 max_turns 限制參數 | Claude Code 允許以 `max_turns` 限制 subagent 的最大 agentic 轉圈數；OpenCode 無等效靜態限制設定（可能透過模型設定或 session 設定控制，**待實機確認**） |
+| P-7 | `run_in_background` | `boolean` | 無已知對應 | **Unsupported** | OpenCode Agents 文件未記載背景執行模式 | Claude Code 允許 subagent 在背景執行（非阻塞）；OpenCode Task tool 目前文件未顯示此能力，預設為同步執行 |
+| P-8 | `resume` | `string` | 無已知對應 | **Unsupported** | OpenCode Agents 文件未記載 agent session 恢復機制 | Claude Code 支援以 agent ID 恢復先前的 subagent session；OpenCode 無等效的 session 恢復設定 |
+
+**參數對應摘要**：
+
+| 狀態 | 數量 | 參數 |
+|------|------|------|
+| Supported（直接支援） | 2 | P-1（description）、P-4（model）|
+| Equivalent（功能等效，格式不同）| 2 | P-2（prompt）、P-3（subagent_type）|
+| Unsupported（不支援）| 4 | P-5（isolation）、P-6（max_turns）、P-7（run_in_background）、P-8（resume）|
+
+**關鍵結論**：
+1. Shikigami 核心派遣工作流所需的參數（`description`、`prompt`、`subagent_type`、`model`）在 OpenCode 均有對應（Supported 或 Equivalent），**核心派遣功能可遷移**
+2. 不支援的 4 個參數（`isolation`、`max_turns`、`run_in_background`、`resume`）屬於進階控制機制，Shikigami 現有 SKILL.md 並未廣泛依賴這些參數，**影響等級評估為低**
+3. P-2（`prompt`）的 OpenCode 等效參數名稱為最高優先確認項，直接影響 Task tool 呼叫語法
+
+---
+
+### 12.3 Developer Dispatch 靜態分析記錄（AC3）
+
+**[PENDING-DYNAMIC] 動態驗證待實機 POC 執行**
+
+當前執行環境（Claude Code）無法直接存取 OpenCode 實機環境，本節依據 AC3 降級規範，提供基於設定檔分析的預期行為記錄。
+
+#### 12.3.1 分析對象
+
+**設定檔**：`.opencode/agents/developer.md`
+
+**當前設定狀態**（基於 Phase 2 US-48 產出）：
+
+```yaml
+---
+name: developer
+description: Senior full-stack developer implementing User Stories with TDD discipline, conflict detection, and tech debt management
+---
+```
+
+**Markdown 正文**：完整 Developer 角色 system prompt（含 TDD 流程、Commit 規範、設計原則、衝突偵測、Tech Debt 管理、DoD 自檢清單）
+
+#### 12.3.2 預期派遣行為分析
+
+基於 ADR-008 決策三（派遣方式說明）與 OpenCode Agents 文件靜態分析，預期 OpenCode 在收到 Developer subagent 派遣指令時的行為序列：
+
+**步驟 1：Agent 識別**
+- OpenCode 掃描 `.opencode/agents/` 目錄，以 frontmatter `name: developer` 識別設定檔
+- 識別依據：`name` 欄位為 OpenCode agent 識別符（OpenCode Agents 文件定義）
+- 預期結果：成功定位 `.opencode/agents/developer.md`
+
+**步驟 2：System Prompt 載入**
+- OpenCode 讀取 `.opencode/agents/developer.md` 的 Markdown 正文作為 subagent 的 system prompt
+- 載入方式：frontmatter 之後的全部 Markdown 內容
+- 預期結果：Developer 角色 prompt（TDD 流程、限制、DoD 清單等）正確注入 subagent context
+
+**步驟 3：模型選擇**
+- OpenCode 依 frontmatter `model` 欄位選擇執行模型
+- **注意**：`.opencode/agents/developer.md` 目前**未包含** `model` 欄位（Phase 2 US-48 建立時未加入）
+- 預期行為：使用 OpenCode 預設模型（通常為使用者 session 當前選擇的模型）
+- 與其他四個角色設定檔（US-49 建立，含 `model: sonnet`）存在格式不一致 — 此為已知差異，建議在後續 Sprint 中補齊
+
+**步驟 4：任務執行**
+- OpenCode 以注入的 Developer system prompt 啟動 subagent
+- 接收 Task tool 傳入的任務描述（`prompt` / 任務正文欄位，待確認）
+- Subagent 依 Developer prompt 定義的 TDD 流程執行任務
+
+#### 12.3.3 已知差異與風險評估
+
+| 項目 | 預期差異 | 風險等級 | 緩解建議 |
+|------|---------|---------|---------|
+| `model` 欄位缺失（developer.md）| 使用 session 預設模型，非明確指定 `sonnet` | 低 | 補齊 `model: sonnet` 欄位（Phase 3c DoD 外，建議下一 Sprint 修正）|
+| `prompt` 參數命名 | OpenCode Task tool 傳入 prompt 的參數名稱未確認 | 中 | 實機 POC 首要確認項（P-2）；預期為 `prompt` 或對話內容格式 |
+| `isolation` 不支援 | 無 worktree 隔離，所有 task 在同一 workspace 執行 | 低 | 現有 Shikigami SKILL.md 未使用 `isolation` 參數，無立即影響 |
+| Session 初始化機制 | OpenCode 無 Claude Code `SessionStart` hook 等效機制確認 | 中 | 按需初始化降級策略（使用者首次呼叫 Skill 時觸發），詳見 ADR-008 負面影響緩解策略 |
+
+#### 12.3.4 最小記錄標準（靜態降級版本）
+
+**文字敘述**（Narrative）：
+
+在 OpenCode 環境中，Developer subagent 的派遣預期如下：主框架（AGENTS.md / Scrum Master session）透過 OpenCode Task tool 呼叫，指定 `name: developer` 的 agent 設定，OpenCode 自動載入 `.opencode/agents/developer.md` 的 Markdown 正文作為 Developer 的 system prompt。Developer subagent 接收任務後，依其 prompt 中定義的 TDD 三步循環（Red → Green → Refactor）執行 Story 實作，完成後回傳結果至主 session。整個流程的核心語義與 Claude Code 平台的 Developer subagent 派遣流程等效，主要差異為 Task tool 參數命名可能不同（P-2 待確認）及缺少 worktree 隔離能力（P-5 不支援）。
+
+**結構化記錄**：
+
+```
+[DISPATCH-RECORD] Developer Subagent — OpenCode 靜態分析
+- 分析日期：2026-03-03
+- 執行環境：Claude Code（靜態分析，非實機 OpenCode 執行）
+- 設定檔：.opencode/agents/developer.md
+- Agent Name：developer
+- Model：未明確指定（使用 session 預設；建議補齊 model: sonnet 欄位）
+- System Prompt 來源：developer.md Markdown 正文（完整 Developer 角色 prompt）
+- 預期派遣結果：PASS（基於靜態分析）
+- 已確認項目：設定檔格式符合 ADR-008；name/description frontmatter 存在；正文內容完整
+- 待確認項目：P-2（prompt 參數名稱）、model 欄位補齊、SessionStart hook 等效機制
+- 動態驗證狀態：[PENDING-DYNAMIC] 待實機 POC 執行
+- 降級依據：Sprint 28 US-51 AC3「若不可用：基於設定檔分析記錄預期行為，標注 pending dynamic verification」
+```
+
+---
+
+### 12.4 Issue #3 結案評估（AC4）
+
+#### 12.4.1 ROADMAP.md M5 條件 (a) 定義（引用）
+
+引自 `docs/prd/ROADMAP.md` M5 穩定化章節：
+
+> **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
+
+M5 條件 (a)（引自 `docs/prd/M5_COMPLETION_ASSESSMENT.md` §條件 (a)）：
+
+> **至少 1 位外部使用者完成安裝並走完一個 Sprint**
+>
+> 本條件要求有外部使用者（非本專案開發者）在其自有環境中：
+> 1. 完成 Shikigami 的完整安裝流程
+> 2. 實際走完至少一個完整的 Sprint 週期（Sprint Planning → Daily Standup → Sprint Review → Retrospective）
+>
+> 接受標準：至少 1 位外部使用者在 GitHub Issue、Discussions、或其他可追蹤管道中，留有實際安裝並完成一個 Sprint 的回饋記錄。
+
+**Issue #3 與 M5 條件 (a) 的關聯**：Issue #3（支援 OpenCode / Codex 平台安裝）的結案，直接支援 M5 條件 (a) 的達成 — Issue #3 成功結案意味著外部使用者可透過 OpenCode 平台安裝並使用 Shikigami，為條件 (a) 提供可行的安裝路徑。
+
+#### 12.4.2 Issue #3 結案條件分析
+
+**Issue #3 定義**：支援 OpenCode / Codex 平台安裝（使外部使用者可在 OpenCode 環境中運行 Shikigami 完整工作流）
+
+**當前達成狀態評估**（截至 Sprint 28，2026-03-03）：
+
+| 達成條件 | 對應 Story | 狀態 | 說明 |
+|---------|-----------|------|------|
+| OpenCode 技術可行性確認 | US-45（Sprint 25） | 完成 | Go 決策，評分 4/5 |
+| 目錄適配（symlink）建立 | US-46（Sprint 26） | 完成 | `.opencode/skills` symlink；AGENTS.md 建立 |
+| 架構決策記錄 | US-47（Sprint 27）ADR-008 | 完成 | Accepted |
+| Developer 角色移植 | US-48（Sprint 27） | 完成 | `.opencode/agents/developer.md` |
+| 四角色移植（architect / product-owner / qa-engineer / security-engineer）| US-49（Sprint 28） | 完成 | 五角色模型完整 |
+| 安裝指南建立 | US-50（Sprint 28） | 完成 | `docs/INSTALL_OPENCODE.md`（§11）|
+| Task tool 參數分析記錄 | US-51（Sprint 28，本 Story）| 完成 | 本節 §12.2 |
+| 動態派遣實機驗證 | US-51 AC3（降級靜態）| [PENDING-DYNAMIC] | 無 OpenCode 實機環境，靜態分析已完成 |
+
+#### 12.4.3 達成路徑剩餘步驟
+
+**距 Issue #3 可結案，剩餘以下步驟**：
+
+**步驟 1（Critical）：Task tool 實機動態驗證**
+- 說明：在實際 OpenCode 環境中確認 P-2（`prompt` 參數命名）及 Developer subagent 派遣 Happy Path
+- 現況：本節 §12.3 已完成靜態分析，動態驗證標注為 [PENDING-DYNAMIC]
+- 達成方式：由具備 OpenCode 實機環境的貢獻者或 Beta 使用者執行，回報結果至 Issue #3
+- 阻礙：無 OpenCode 實機環境（當前 Sprint 28 執行環境限制）
+
+**步驟 2（Recommended）：developer.md 補齊 `model` 欄位**
+- 說明：`.opencode/agents/developer.md` 目前缺少 `model` 欄位（§12.3.2 步驟 3 發現），與其他四個角色設定檔格式不一致
+- 優先級：建議（非阻斷），補齊後五個 agent 設定檔格式一致，降低實機 POC 時的格式混淆風險
+- 估計工作量：S / 0.5pt（可納入下一 Sprint 維護工作）
+
+**步驟 3（M5 條件 (a) 層面）：至少 1 位外部使用者完成安裝並走完一個 Sprint**
+- 說明：Issue #3 的最終驗收不僅是「安裝指南存在」，而是「外部使用者實際完成安裝並使用」
+- 現況：M5 條件 (a) 截至 Sprint 28 仍未達成（引自 M5_COMPLETION_ASSESSMENT.md §條件 (a)）
+- 達成方式：發布 `docs/INSTALL_OPENCODE.md`（US-50，已完成）後，招募 Beta 使用者、在 README 引導使用者提交回饋；若有 OpenCode 實機環境，執行動態 Task tool 驗證
+
+#### 12.4.4 Issue #3 結案評估結論
+
+| 評估項目 | 結論 |
+|---------|------|
+| 技術實作完整性 | **高度完成**（Phase 1~3b 全部完成；五角色模型、symlink 適配、安裝指南均就緒）|
+| 技術驗證完整性 | **部分完成**（靜態驗證 PASS；動態實機驗證 [PENDING-DYNAMIC]）|
+| 外部使用者可用性 | **就緒待啟動**（安裝指南 `docs/INSTALL_OPENCODE.md` 已發布，等待外部使用者試用）|
+| M5 條件 (a) 達成 | **未達成**（尚無可驗證的外部使用者使用記錄）|
+| **Issue #3 可結案判定** | **接近可結案**（Critical 技術工作已完成；剩餘步驟 1 為動態驗證，取決於實機環境可用性）|
+
+**建議行動**：
+1. 在 Issue #3 評論中發布安裝指南連結（`docs/INSTALL_OPENCODE.md`），邀請外部使用者試用並回報
+2. 若有 OpenCode 實機環境，執行動態 Task tool 驗證，將結果回補至本節 §12.3
+3. 確認動態驗證通過後，正式關閉 Issue #3
+
+---
+
+### 12.5 Phase 3c 完成狀態
+
+| 項目 | 狀態 |
+|------|------|
+| Task tool 參數對應分析（AC1）| 完成（§12.1，8 個參數分析）|
+| 參數比較表（AC2）| 完成（§12.2，含 Supported / Equivalent / Unsupported 分類及來源依據）|
+| Developer dispatch 靜態分析記錄（AC3）| 完成（§12.3，[PENDING-DYNAMIC] 降級靜態）|
+| Issue #3 結案評估（AC4）| 完成（§12.4，剩餘步驟清單）|
+| 動態實機驗證 | [PENDING-DYNAMIC] 待實機 POC 執行 |
