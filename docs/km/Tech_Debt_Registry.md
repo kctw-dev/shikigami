@@ -12,11 +12,12 @@ Tech Debt Registry 是跨 Sprint 追蹤技術債的標準化紀錄文件。每�
 |------|------|
 | **ID** | 唯一識別碼，格式為 `TD-XXX`（三位數流水號） |
 | **描述** | 技術債的具體說明，包含問題所在位置與影響 |
-| **引入 Story** | 產生此技術債的 User Story ID（格式：`US-XX`） |
+| **引入 Story** | 產生此技術債的 User Story ID（格式：`US-XX`）及引入 Sprint（格式：`Sprint XX`） |
 | **解決 Story** | 預計或已解決此技術債的 User Story ID（未排入則填 `TBD`） |
 | **嚴重度** | `H`（高）/ `M`（中）/ `L`（低），定義見下方嚴重度基準 |
 | **建議解法** | 解決此技術債的具體行動方案或方向 |
 | **RICE** | 優先級分數 = (Reach × Impact × Confidence) ÷ Effort，用於排序解決順序 |
+| **MoSCoW** | `Must`（必要）/ `Should`（應該）/ `Could`（可以）/ `Won't`（暫不處理） |
 | **狀態** | `Active`（未解決）/ `Resolved`（已解決）/ `Accepted`（已知悉，暫不處理） |
 
 ### 嚴重度基準
@@ -46,10 +47,10 @@ Grooming 完成後，依照以下規則計算本次 Active 條目趨勢：
 
 ## Registry 表格
 
-| ID | 描述 | 引入 Story | 解決 Story | 嚴重度 | 建議解法 | RICE | 狀態 |
-|----|------|------------|------------|--------|----------|------|------|
-| TD-001 | [EXAMPLE] 使用者認證模組缺乏單元測試覆蓋，目前依賴端對端測試，重構風險高 | US-03 | TBD | H | 補充 unit test，覆蓋所有認證路徑與邊界條件；目標覆蓋率 > 80% | 7.5 | Active |
-| TD-002 | PO subagent 輸出格式缺乏正式 JSON Schema 驗證。ADR-006 採用 XML 隔離標記 + 角色限制宣告（選項 D）作為主要防護，但架構層面的輸出格式管控（JSON schema 結構化解析）尚未實作，注入防護仍依賴 LLM 指令遵循能力。詳見 ADR-006 Decision Challenge 段落。 | US-37 / ADR-006 | TBD | L | 為 PO subagent 輸出定義正式 JSON Schema（含 reply_draft、metadata 欄位）；主 session 以結構化解析取代直接使用 LLM 自由文字輸出；需透過 ADR 流程審批架構變更 | TBD | Active |
+| ID | 描述 | 引入 Story | 解決 Story | 嚴重度 | MoSCoW | 建議解法 | RICE | 狀態 |
+|----|------|------------|------------|--------|--------|----------|------|------|
+| TD-001 | [EXAMPLE] 使用者認證模組缺乏單元測試覆蓋，目前依賴端對端測試，重構風險高 | US-03 | TBD | H | Must | 補充 unit test，覆蓋所有認證路徑與邊界條件；目標覆蓋率 > 80% | 7.5 | Active |
+| TD-002 | PO subagent 輸出格式缺乏正式 JSON Schema 驗證。ADR-006 採用 XML 隔離標記 + 角色限制宣告（選項 D）作為主要防護，但架構層面的輸出格式管控（JSON schema 結構化解析）尚未實作，注入防護仍依賴 LLM 指令遵循能力。詳見 ADR-006 Decision Challenge 段落。 | US-37 / ADR-006（Sprint 22） | TBD | L | Could | 為 PO subagent 輸出定義正式 JSON Schema（含 reply_draft、metadata 欄位）；主 session 以結構化解析取代直接使用 LLM 自由文字輸出；需透過 ADR 流程審批架構變更 | TBD | Active |
 
 ---
 
