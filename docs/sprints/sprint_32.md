@@ -1,6 +1,6 @@
 # Sprint 32
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-30 ~ 2026-04-05
 **Sprint Goal**：完成 Issue #46 自動化排程框架的程式碼入庫 QA 閉環（子 Story #3），同步推進 M5 條件 (a) 外部使用者觸及強化與 Issue #35 Token Baseline 精確化，使排程 Sprint 週期具備端對端自動化能力
 **總計**：3 Stories / 4 Points

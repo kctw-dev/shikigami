@@ -1,24 +1,27 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 32 Planning 完成）
-**當前 Sprint**：Sprint 32（進行中）
+**最後更新**：2026-03-03（Sprint 32 Review 完成）
+**當前 Sprint**：Sprint 32（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 32](sprints/sprint_32.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 32 — 進行中
+## Sprint 32 — 完成
 
 **Sprint Goal**：完成 Issue #46 自動化排程框架的程式碼入庫 QA 閉環（子 Story #3），同步推進 M5 條件 (a) 外部使用者觸及強化與 Issue #35 Token Baseline 精確化，使排程 Sprint 週期具備端對端自動化能力
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-30 ~ 2026-04-05
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-60：Issue #46 子 Story #3 — 排程衝刺程式碼入庫 QA 自動化（schedule SKILL.md + scrum-master/sprint-review SKILL.md） | M | 2 | 已完成 |
-| US-61：M5 條件 (a) 外部使用者觸及強化 — Onboarding 低摩擦路徑最佳化（README + tutorial + M5 追蹤更新） | S | 1 | 已完成 |
-| US-62：Issue #35 — Token 追蹤 Baseline Snapshot 機制（Metrics_Log.md + sprint-planning/execution SKILL.md） | S | 1 | 已完成 |
+| US-60：Issue #46 子 Story #3 — 排程衝刺程式碼入庫 QA 自動化（schedule SKILL.md + scrum-master/sprint-review SKILL.md） | M | 2 | 完成 |
+| US-61：M5 條件 (a) 外部使用者觸及強化 — Onboarding 低摩擦路徑最佳化（README + tutorial + M5 追蹤更新） | S | 1 | 完成 |
+| US-62：Issue #35 — Token 追蹤 Baseline Snapshot 機制（Metrics_Log.md + sprint-planning/execution SKILL.md） | S | 1 | 完成 |
 
 **目標 Velocity**：4 points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
 
 ---
 
