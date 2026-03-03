@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-03（Sprint 22 Review — US-33、US-37、US-38、US-39 完成）
+> 最後更新：2026-03-29（Sprint 23 Review — US-40、Retro #59、Retro #60、Retro #61 完成）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -203,6 +203,10 @@ Sprint Review 時自動產出：
 | US-38 | 排程模式 Velocity 自動調小 — 僅選 S size Stories（HARD-GATE） | Sprint 22 ✅ |
 | ADR-007 | Story-Lifecycle Subagent — context overflow 解決方案架構決策 | Sprint 22 ✅ |
 | US-39 | Sprint Execution context overflow — Story 生命週期封裝為 subagent（ADR-007） | Sprint 22 ✅ |
+| US-40 | Story-Lifecycle Subagent 實作 — ADR-007 Phase 1（story-lifecycle-prompt.md + SKILL.md §3） | Sprint 23 ✅ |
+| Retro #59 | Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | Sprint 23 ✅ |
+| Retro #60 | TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | Sprint 23 ✅ |
+| Retro #61 | Onboarding SKILL.md stale reference 審查與修正 | Sprint 23 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
 

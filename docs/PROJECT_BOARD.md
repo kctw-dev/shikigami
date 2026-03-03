@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 23 Planning — US-40、Retro #59、Retro #60、Retro #61 選入）
-**當前 Sprint**：Sprint 23（進行中）
+**最後更新**：2026-03-29（Sprint 23 Review — 全 Stories 完成，Stakeholder 驗收通過）
+**當前 Sprint**：Sprint 23（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 23](sprints/sprint_23.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 23 — 進行中
+## Sprint 23 — 完成
 
 **Sprint Goal**：落實 ADR-007 首個實作里程碑，同步清零 Sprint 22 技術品質欠帳
+**結果**：Goal 達成（4/4 Stories PASS）。Velocity 5 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-23 ~ 2026-03-29
 
 | Story | Size | Points | 狀態 |
@@ -19,7 +21,7 @@
 | Retro #60（Issue #60）：TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | S | 1 | 完成 |
 | Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | S | 1 | 完成 |
 
-**Sprint 容量**：5 Points
+**實際 Velocity**：5 points（4 Stories）
 
 ---
 
@@ -93,19 +95,4 @@
 
 ---
 
-## Sprint 18 — 完成
-
-**Sprint Goal**：建立 Schedule Skill — 實現 Sprint 自動排程執行能力
-**結果**：Goal 達成（1/1 Stories PASS）。Velocity 3 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-02 ~ 2026-03-08
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-35（Issue #46）：Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule） | L | 3 | 完成 |
-
-**實際 Velocity**：3 points（1 Story）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–17）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–18）

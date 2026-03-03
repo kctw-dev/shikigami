@@ -137,14 +137,14 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
 
-### Sprint 23 — 進行中 Stories
+### Sprint 23 — 已完成 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-40：Story-Lifecycle Subagent 實作 — ADR-007 Phase 1 | 待定 | Must | M | ADR-007（Sprint 22） | In Sprint 23 |
-| 2 | Retro #59（Issue #59）：Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | — | Must | S | Sprint 22 Retro / Issue #59 | In Sprint 23 |
-| 3 | Retro #60（Issue #60）：TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | — | Should | S | Sprint 22 Retro / Issue #60 | In Sprint 23 |
-| 4 | Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | — | Should | S | Sprint 22 Retro / Issue #61 | In Sprint 23 |
+| 1 | US-40：Story-Lifecycle Subagent 實作 — ADR-007 Phase 1 | 待定 | Must | M | ADR-007（Sprint 22） | Done（Sprint 23） |
+| 2 | Retro #59（Issue #59）：Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | — | Must | S | Sprint 22 Retro / Issue #59 | Done（Sprint 23） |
+| 3 | Retro #60（Issue #60）：TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | — | Should | S | Sprint 22 Retro / Issue #60 | Done（Sprint 23） |
+| 4 | Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | — | Should | S | Sprint 22 Retro / Issue #61 | Done（Sprint 23） |
 
 ### Sprint 22 — 已完成 Stories
 
@@ -782,7 +782,7 @@ Sprint 22 完成 ADR-007（Story-Lifecycle Subagent — context overflow 解決�
 **Size**：M / **Points**：2
 **來源**：ADR-007（Sprint 22 決策）
 **ADR-003**：適用（修改 skills/sprint-execution/SKILL.md）
-**狀態**：In Sprint 23
+**狀態**：Done（Sprint 23）
 
 ---
 

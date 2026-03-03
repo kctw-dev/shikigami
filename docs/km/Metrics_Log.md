@@ -33,6 +33,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 20 | 2026-03-02 | 5 points | 100% | 穩定 | 3 Stories（2S+1L），Sprint Goal 達成；S19→S20 持平（5→5，0%）；穩定（3→5→5，最近兩個 Sprint 均為 5pt）；/shoot 短衝模式交付 + Retro Actions 清零 |
 | Sprint 21 | 2026-03-02 | 4 points | 100% | 穩定 | 3 Stories（2S+1M），Sprint Goal 達成；S20→S21 微降（5→4，-20%，±20% 內）；穩定（5→5→4，波動在容許範圍內）；parallel-dispatch 衝突偵測 + Onboarding Labels + Retro #58 清零 |
 | Sprint 22 | 2026-03-02 | 6 points | 100% | 不規則 | 4 Stories（3S+1L），Sprint Goal 達成；S21→S22 大幅回升（4→6，+50%）；雙 ADR 同 Sprint 交付（ADR-006, ADR-007）；框架安全性強化 |
+| Sprint 23 | 2026-03-29 | 5 points | 100% | 穩定 | 4 Stories（3S+1M），Sprint Goal 達成；S22→S23 微降（6→5，-16.7%，±20% 內）；穩定（4→6→5，均值 5.0，全部落於 ±20% 區間 4.0–6.0 內）；ADR-007 Phase 1 實作 + Retro Actions 清零 |
 
 ---
 
@@ -79,6 +80,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 17 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 18 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 19 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
+| Sprint 23 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 
 ---
 

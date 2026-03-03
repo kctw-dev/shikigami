@@ -1344,6 +1344,19 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 23（2026-03-29）
+
+**Sprint Goal**：落實 ADR-007 首個實作里程碑，同步清零 Sprint 22 技術品質欠帳
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-40：Story-Lifecycle Subagent 實作 — ADR-007 Phase 1 | M | 2 | Sprint 23 |
+| Retro #59（Issue #59）：Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | S | 1 | Sprint 23 |
+| Retro #60（Issue #60）：TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | S | 1 | Sprint 23 |
+| Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | S | 1 | Sprint 23 |
+
+---
+
 ## Sprint 22（2026-03-03）
 
 **Sprint Goal**：強化框架安全性與排程智能化

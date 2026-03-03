@@ -1,11 +1,11 @@
 # Retrospective Log 歷史歸檔
 
 **來源**：`docs/km/Retrospective_Log.md`
-**最後更新**：2026-03-03（Sprint 17 歸檔）
-**歸檔範圍**：Sprint 1–17（共 17 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔
+**最後更新**：2026-03-29（Sprint 18 歸檔）
+**歸檔範圍**：Sprint 1–18（共 18 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔
 
-> 主文件現況：[Retrospective_Log.md](../Retrospective_Log.md)（保留 Sprint 18–22）
+> 主文件現況：[Retrospective_Log.md](../Retrospective_Log.md)（保留 Sprint 19–23）
 
 ---
 
@@ -611,3 +611,29 @@ PO、Architect、QA Engineer、Developer、Stakeholder
 |---|--------|-------|----------|-------|------|
 | 1 | 短衝模式設計與實作 — 建立跳過 Sprint 儀式但保留 QA + Architect 審查的快速執行路徑 | Architect | SKILL.md 新增短衝模式定義，含觸發條件、保留項目、文件產出規範 | #47 | Open |
 | 2 | PO subagent 跨輪次一致性檢查 — 防止 PO Round 2 混淆或改寫 Round 1 已通過的 Story 內容 | QA | sprint-planning SKILL.md 新增 PO Round 2 輸入驗證步驟 | #48 | Open |
+
+---
+
+## Sprint 18 — 2026-03-02
+
+**參與角色**：PO、Architect、Developer、QA、Security、Stakeholder
+
+### Good
+
+1. 完成率 100%（連續 Sprint 15-18 四個 Sprint），US-35 全部 9 項 AC 通過驗收，74 項測試零失敗
+2. Stakeholder 即時發現 multi-project lock collision bug（ADR-005 鎖名撞名）並修正，角色制衡有效
+3. ADR-005 先行完成解鎖 Hard Gate 零阻塞，5 個技術決策域全部 Accepted
+4. 三階段 QA 審查（Spec Compliance + Code Quality + Security）全 PASS，Security Review 首次觸發運作正常
+
+### Problem
+
+1. Security Review 發現 skill name 缺少字元白名單驗證（中嚴重度），Developer 實作與 QA Code Quality Review 均未攔截此輸入驗證缺口
+2. Code Quality Review 發現 `set -uo pipefail` 缺少 `-e` flag，模板基礎品質有改善空間
+3. Token 記錄持續為 N/A（快思模式跳過 Token 測量），成本可見性仍為長尾問題
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| 1 | schedule skill — skill name 字元白名單驗證，Pre-flight 入口加入正則 `^[a-z0-9][a-z0-9-]{0,63}$` | Developer | 測試套件覆蓋非法字元場景 | #53 | Open |
+| 2 | schedule skill — 模板品質強化（`set -euo pipefail` + crontab 備份 `mktemp` + `chmod 600`） | Developer | 模板修正後測試套件驗證 | #54 | Open |

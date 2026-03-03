@@ -1,6 +1,33 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–17）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–18）
+
+---
+
+## Sprint 23 — 2026-03-29
+
+**參與角色**：PO、Architect、Developer、QA、Security、Stakeholder
+
+### Good
+
+1. 連續 23 個 Sprint 100% 完成率，Sprint Goal 達成（ADR-007 Phase 1 里程碑 + Sprint 22 品質欠帳清零）
+2. ADR-007 Phase 1 成功交付 — story-lifecycle-prompt.md（399 行完整架構文件）+ SKILL.md §3 ASCII flow diagram 全面重寫，介面契約 YAML schema 內嵌
+3. 4 Stories 全部 Phase 1 平行執行零衝突，Sprint 22 三項技術品質欠帳（cron 環境變數洩漏、Tech Debt 未登錄、Onboarding stale reference）同 Sprint 清零
+4. 56 個新測試（US-40: 34, Retro #59: 11, Retro #61: 11），全專案 220 tests PASS / 0 FAIL
+
+### Problem
+
+1. Retro #60 與 Retro #61 各有一次 Spec Compliance FAIL — TD-002 缺少 MoSCoW 分級欄位（#60）、AC3 審查總數未明確輸出（#61）；兩者均為 AC 規格細節遺漏，Developer 首次提交滿足功能需求但未精確符合文件格式要求
+2. sprint_23.md 中 Retro #60 AC1 路徑引用 `docs/km/TECH_DEBT.md` 與實際檔名 `docs/km/Tech_Debt_Registry.md` 不一致（Planning 階段 QA 未攔截路徑差異，Code Quality Review Low 發現）
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| — | 無新增 Action Items | — | — | — | — |
+
+> Problem 1 屬 Medium 嚴重度，已在 Sprint 執行過程中修復（Retro #60 commit eb47077、Retro #61 commit b20869f），無持續性問題。
+> Problem 2 屬 Low 嚴重度路徑命名差異，不影響功能；後續 Sprint Planning QA 可順手攔截。
 
 ---
 
@@ -113,28 +140,5 @@
 
 ---
 
-## Sprint 18 — 2026-03-02
-
-**參與角色**：PO、Architect、Developer、QA、Security、Stakeholder
-
-### Good
-
-1. 完成率 100%（連續 Sprint 15-18 四個 Sprint），US-35 全部 9 項 AC 通過驗收，74 項測試零失敗
-2. Stakeholder 即時發現 multi-project lock collision bug（ADR-005 鎖名撞名）並修正，角色制衡有效
-3. ADR-005 先行完成解鎖 Hard Gate 零阻塞，5 個技術決策域全部 Accepted
-4. 三階段 QA 審查（Spec Compliance + Code Quality + Security）全 PASS，Security Review 首次觸發運作正常
-
-### Problem
-
-1. Security Review 發現 skill name 缺少字元白名單驗證（中嚴重度），Developer 實作與 QA Code Quality Review 均未攔截此輸入驗證缺口
-2. Code Quality Review 發現 `set -uo pipefail` 缺少 `-e` flag，模板基礎品質有改善空間
-3. Token 記錄持續為 N/A（快思模式跳過 Token 測量），成本可見性仍為長尾問題
-
-### Action Items
-
-| # | Action | Owner | 驗收方式 | Issue | 狀態 |
-|---|--------|-------|----------|-------|------|
-| 1 | schedule skill — skill name 字元白名單驗證，Pre-flight 入口加入正則 `^[a-z0-9][a-z0-9-]{0,63}$` | Developer | 測試套件覆蓋非法字元場景 | #53 | Open |
-| 2 | schedule skill — 模板品質強化（`set -euo pipefail` + crontab 備份 `mktemp` + `chmod 600`） | Developer | 模板修正後測試套件驗證 | #54 | Open |
 
 

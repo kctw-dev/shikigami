@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-03（Sprint 17 歸檔）
-**歸檔範圍**：Sprint 1–17（共 17 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔
+**最後更新**：2026-03-29（Sprint 18 歸檔）
+**歸檔範圍**：Sprint 1–18（共 18 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 18–22）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 19–23）
 
 ---
 
@@ -271,6 +271,21 @@
 | US-29（Issue #44）：PROJECT_BOARD.md 與 Retrospective_Log.md 歷史歸檔機制 | M | 2 | 完成 |
 
 **實際 Velocity**：4 points（3 Stories）
+
+---
+
+## Sprint 18 — 完成
+
+**Sprint Goal**：建立 Schedule Skill — 實現 Sprint 自動排程執行能力
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 3 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-02 ~ 2026-03-08
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-35（Issue #46）：Sprint 排程執行 + 權限 bypass 機制（shikigami:schedule） | L | 3 | 完成 |
+
+**實際 Velocity**：3 points（1 Story）
 
 ---
 
