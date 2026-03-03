@@ -14,9 +14,9 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-43：M5 完成條件終審 + Issues #3/#4/#5 結論決策 | M | 2 | 待辦 |
-| US-44：Tech Debt Grooming Sprint 25 + TD-001 降級決策 | S | 1 | 待辦 |
-| US-45：OpenCode POC 可行性調查 | S | 1 | 待辦 |
+| US-43：M5 完成條件終審 + Issues #3/#4/#5 結論決策 | M | 2 | 完成 |
+| US-44：Tech Debt Grooming Sprint 25 + TD-001 降級決策 | S | 1 | 完成 |
+| US-45：OpenCode POC 可行性調查 | S | 1 | 完成 |
 
 **Sprint 容量**：4 Points（3 Stories）
 
