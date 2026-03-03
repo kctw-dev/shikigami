@@ -1,5 +1,8 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
+![Version](https://img.shields.io/badge/version-v0.13.0-blue?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
+
 > 7 個 AI 隊友，各司其職，互相制衡 — 讓你的 AI 開發工具擁有一整組有紀律的工程團隊。
 
 ---
