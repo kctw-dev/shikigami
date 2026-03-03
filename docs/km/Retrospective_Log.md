@@ -4,6 +4,26 @@
 
 ---
 
+## Sprint 36 — 2026-04-27
+
+### Good
+- 連續 36 個 Sprint 100% 完成率，ADR-010 生命週期閉環完成（3/3 Stories PASS），sprint-planning → sprint-execution → sprint-review 的 GitHub Issue 操作全程覆蓋，Backlog Source of Truth 遷移進入「全流程可用」狀態
+- 三路平行派遣（US-74 + US-75 + US-76 各操作不同資源）零衝突完成，Architect 分群策略連續九個 Sprint 有效（Sprint 28–36）
+- 外部抽樣審查 US-75（M-size，最大）CONFIRM，自審品質無偏差
+- Backlog 初始化建立 5 個 GitHub Issues（#61–#65），涵蓋 M4 Stories + Issue #12 剩餘 + Tech Debt 三個來源類別，後續 Sprint Planning 可直接基於 GitHub Issues 運作
+- Sprint 36 當場清理 11 個歷史 sprint-N-replied 垃圾 labels，即時回應使用者回饋
+
+### Problem
+- sprint-N-replied labels 累積造成 GitHub label 汙染：每個 Sprint 對每個 open Issue 建立新 label（如 sprint-10-replied, sprint-15-replied...），36 個 Sprint 後累積 12+ 個無用 labels，使用者明確反映為垃圾。根因：Issue 快掃防重複機制設計時未考慮 label 生命週期管理
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue |
+|---|--------|-------|----------|-------|
+| 1 | 改善 sprint-N-replied 機制：改用單一 `last-replied-sprint` label 取代每 Sprint 新增 label，並在 sprint-execution SKILL.md 更新對應邏輯 | Developer | 下 Sprint Issue 快掃時確認新機制運作，無新增 sprint-N-replied labels | #66 |
+
+---
+
 ## Sprint 35 — 2026-04-20
 
 ### Good

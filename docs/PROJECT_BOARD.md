@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-04-27（Sprint 36 Planning 完成）
-**當前 Sprint**：Sprint 36（進行中）
+**最後更新**：2026-04-27（Sprint 36 Review 完成）
+**當前 Sprint**：Sprint 36（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 36](sprints/sprint_36.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 36 — 進行中
+## Sprint 36 — 完成
 
 **Sprint Goal**：完成 ADR-010 生命週期閉環 — 補全 sprint-review Issue 狀態回寫、初始化 GitHub Issues Backlog，讓 Backlog Source of Truth 遷移進入「全流程可用」狀態
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-04-27 ~ 2026-05-03
 
 | Story | Size | Points | 狀態 |
@@ -19,6 +21,7 @@
 | US-76：Tech Debt Grooming Sprint 36 — TD-002 評估 + ADR-010 遷移後新技術債掃描 | S | 1 | 完成 |
 
 **目標 Velocity**：4 points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
 
 ---
 
@@ -95,22 +98,4 @@
 
 ---
 
-## Sprint 31 — 完成
-
-**Sprint Goal**：繼續推進 Issue #46 自動化排程框架第二子 Story — 建立排程衝刺 worktree 隔離執行指引，並補強 M5 外部使用者招募的回饋閉環機制，使排程驅動的 Sprint 週期進入可驗證階段
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-23 ~ 2026-03-29
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-57：Issue #46 子 Story #2 — 排程衝刺 worktree 隔離執行框架（schedule SKILL.md + scrum-master SKILL.md） | M | 2 | 完成 |
-| US-58：M5 Beta 回饋閉環強化 — Issue #59 追蹤機制與 README 招募文案精化 | S | 1 | 完成 |
-| US-59：Issue #52 — README 自動更新排程設定指引（schedule SKILL.md 使用範例） | S | 1 | 完成 |
-
-**目標 Velocity**：4 points（3 Stories）
-**實際 Velocity**：4 points（3 Stories）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–30）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–31）

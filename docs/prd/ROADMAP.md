@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-04-20（Sprint 35 Review — ADR-010 原子性實作交付完成，5/5 Stories PASS，修訂記錄：v0.19.0）
+> 最後更新：2026-04-27（Sprint 36 Review — ADR-010 生命週期閉環完成，3/3 Stories PASS，修訂記錄：v0.20.0）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.19.0**（Sprint 35）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.20.0**（Sprint 36）。
 
 | 版號 | 含義 |
 |------|------|
@@ -240,6 +240,9 @@ Sprint Review 時自動產出：
 | US-71 | sprint-planning SKILL.md 修改 — PO Story 選取來源改為 gh issue list + 即時 RICE 排序 | Sprint 35 ✅ |
 | US-72 | backlog-management SKILL.md 修改 — Grooming 流程改為操作 GitHub Issues + 錯誤恢復掃描 | Sprint 35 ✅ |
 | US-73 | PRODUCT_BACKLOG.md DEPRECATED 標頭 + ADR-009「Superseded by ADR-010」標注 | Sprint 35 ✅ |
+| US-74 | ADR-010 後置 — sprint-review SKILL.md Story 完成後 Issue 狀態回寫對齊 | Sprint 36 ✅ |
+| US-75 | ADR-010 Backlog 初始化 — 將現有候選 Stories 建立為 GitHub Issues | Sprint 36 ✅ |
+| US-76 | Tech Debt Grooming Sprint 36 — TD-002 評估 + ADR-010 遷移後新技術債掃描 | Sprint 36 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 

@@ -1,6 +1,6 @@
 # Sprint 36
 
-**狀態**：Planning 完成
+**狀態**：Review 完成
 **期間**：2026-04-27 ~ 2026-05-03
 **Sprint Goal**：完成 ADR-010 生命週期閉環 — 補全 sprint-review Issue 狀態回寫、初始化 GitHub Issues Backlog，讓 Backlog Source of Truth 遷移進入「全流程可用」狀態
 **總計**：3 Stories / 4 Points

@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-04-20（Sprint 30 歸檔）
-**歸檔範圍**：Sprint 1–30（共 30 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔
+**最後更新**：2026-04-27（Sprint 31 歸檔）
+**歸檔範圍**：Sprint 1–31（共 31 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 31–35）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 32–36）
 
 ---
 
@@ -500,6 +500,24 @@
 | US-54：互動 Session 自動偵測待審排程 PR + Scrum Master 提醒機制（Issue #46 子 Story #1） | S | 1 | 完成 |
 | US-55：README 準確性修正 — 版本號、Skill 數量、版本歷史對齊 | S | 1 | 完成 |
 | US-56：Deployment Readiness 版本 Tag 決策規則強化（Issue #36） | M | 2 | 完成 |
+
+**目標 Velocity**：4 points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
+
+---
+
+## Sprint 31 — 完成
+
+**Sprint Goal**：繼續推進 Issue #46 自動化排程框架第二子 Story — 建立排程衝刺 worktree 隔離執行指引，並補強 M5 外部使用者招募的回饋閉環機制，使排程驅動的 Sprint 週期進入可驗證階段
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-23 ~ 2026-03-29
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-57：Issue #46 子 Story #2 — 排程衝刺 worktree 隔離執行框架（schedule SKILL.md + scrum-master SKILL.md） | M | 2 | 完成 |
+| US-58：M5 Beta 回饋閉環強化 — Issue #59 追蹤機制與 README 招募文案精化 | S | 1 | 完成 |
+| US-59：Issue #52 — README 自動更新排程設定指引（schedule SKILL.md 使用範例） | S | 1 | 完成 |
 
 **目標 Velocity**：4 points（3 Stories）
 **實際 Velocity**：4 points（3 Stories）
