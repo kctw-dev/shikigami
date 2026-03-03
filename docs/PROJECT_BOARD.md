@@ -14,9 +14,9 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-63：Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-intake Skill） | M | 2 | 進行中 |
-| US-64：M5 條件 (a) 主動觸及強化 — 外部社群推廣文案製作（GitHub README badges + 技術文章草稿 + 主動 outreach 指引） | S | 1 | 進行中 |
-| US-65：US-T08（Intent Routing 測試）評估重開 — RICE 重新評分與 Sprint Planning 可行性確認 | S | 1 | 進行中 |
+| US-63：Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-intake Skill） | M | 2 | 已完成 |
+| US-64：M5 條件 (a) 主動觸及強化 — 外部社群推廣文案製作（GitHub README badges + 技術文章草稿 + 主動 outreach 指引） | S | 1 | 已完成 |
+| US-65：US-T08（Intent Routing 測試）評估重開 — RICE 重新評分與 Sprint Planning 可行性確認 | S | 1 | 已完成 |
 
 **目標 Velocity**：4 points（3 Stories）
 **實際 Velocity**：—
