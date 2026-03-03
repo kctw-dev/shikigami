@@ -14,8 +14,8 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-52：OpenCode Phase 4 — Issue #3 正式結案：動態驗證補完與 Issue 關閉 | M | 2 | 待開始 |
-| US-53：M5 Beta 使用者招募 — README 招募文案 + Issue 引導機制 | S | 1 | 待開始 |
+| US-52：OpenCode Phase 4 — Issue #3 正式結案：動態驗證補完與 Issue 關閉 | M | 2 | 完成 |
+| US-53：M5 Beta 使用者招募 — README 招募文案 + Issue 引導機制 | S | 1 | 完成 |
 
 **目標 Velocity**：3 points（2 Stories）
 
