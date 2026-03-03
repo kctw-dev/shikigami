@@ -14,7 +14,7 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-41：ADR-007 Phase 2 — 外部抽樣審查機制實作 | M | 3 | 待開始 |
+| US-41：ADR-007 Phase 2 — 外部抽樣審查機制實作 | M | 3 | 完成 |
 | US-42：Architect/QA 框架知識強化 — Story-Lifecycle 架構下角色決策指引 | S | 2 | 待開始 |
 
 ---
