@@ -392,3 +392,84 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 5. **Issue #3 結案**：完成 Phase 3 後關閉 Issue #3，連結安裝指南
 
 **Phase 3 預估**：S / 1pt（安裝指南建立）+ M / 2pt（剩餘角色移植 + 實機驗證）
+
+---
+
+## 10. Phase 3a 完成記錄（US-49 執行結果）
+
+**執行日期**：2026-03-03
+**執行者**：AI Agent（Developer Subagent，Claude Sonnet 4.6）
+**Sprint**：Sprint 28
+**Story**：US-49
+
+---
+
+### 10.1 四角色移植稽核結果（AC1-AC3）
+
+**移植範圍**：剩餘四個核心角色（Phase 2 US-48 僅移植 Developer，Phase 3a 補全其餘四角色）
+
+| 設定檔 | 角色 | 內容來源 | 狀態 |
+|--------|------|---------|------|
+| `.opencode/agents/architect.md` | Architect | `skills/architect/SKILL.md`（§1 估點策略、§2 ADR 需求判斷、§3 平行分群策略）| 完成 |
+| `.opencode/agents/product-owner.md` | Product Owner | `skills/sprint-planning/SKILL.md`（§6 Subagent 派遣順序 PO 段落、§4 Sprint 週期、§3 Hard Gate）| 完成 |
+| `.opencode/agents/qa-engineer.md` | QA Engineer | `skills/qa-engineer/SKILL.md`（§1 AC 驗證策略、§2 Spec Compliance、§3 Code Quality）+ `skills/sprint-execution/spec-reviewer-prompt.md` + `skills/sprint-execution/quality-reviewer-prompt.md` | 完成 |
+| `.opencode/agents/security-engineer.md` | Security Engineer | `skills/security-review/SKILL.md`（§2 OWASP Top 10、§3 DevSecOps、§4 Secrets Management、§6 升級觸發、§7 安全品質門禁）| 完成 |
+
+---
+
+### 10.2 格式規範符合性驗證
+
+所有四個設定檔均符合 ADR-008 決策三的格式規範：
+
+| 驗證項目 | 規範要求 | 實際狀態 | 結果 |
+|---------|---------|---------|------|
+| 設定檔路徑 | `.opencode/agents/<role>.md` | 四個檔案均位於 `.opencode/agents/` | PASS |
+| YAML frontmatter 存在 | 必填 `name` + `description` + `model` | 三欄位均填入 | PASS |
+| `name` 欄位格式 | 角色英文名稱（kebab-case）| `architect` / `product-owner` / `qa-engineer` / `security-engineer` | PASS |
+| `description` 欄位 | 角色職責一句話說明 | 各角色均有具體職責描述 | PASS |
+| `model` 欄位 | 模型指定 | 均設為 `sonnet` | PASS |
+| Markdown 正文 | 角色 system prompt 正文 | 各角色均有完整 prompt，含角色定義、職責、限制、參照文件 | PASS |
+
+---
+
+### 10.3 內容來源一致性確認（AC3）
+
+**Architect**：
+- 估點策略（S/M/L 邊界條件）直接提取自 `skills/architect/SKILL.md §1`
+- ADR 觸發判斷規則提取自 `skills/architect/SKILL.md §2`
+- 平行分群策略提取自 `skills/architect/SKILL.md §3`
+
+**Product Owner**：
+- PO 角色無獨立 `SKILL.md`，內容來源自 `skills/sprint-planning/SKILL.md §6`（Subagent 派遣順序中 PO 段落）
+- Round 1/Round 2 流程、防漂移約束、Backlog 管理規則均有對應來源
+- Scheduled Mode HARD-GATE 規則提取自 `skills/sprint-planning/SKILL.md §3.1`
+
+**QA Engineer**：
+- AC 驗證策略（靜態/動態識別）提取自 `skills/qa-engineer/SKILL.md §1`
+- Spec Compliance Review 決策提取自 `skills/qa-engineer/SKILL.md §2`
+- Code Quality Review 策略提取自 `skills/qa-engineer/SKILL.md §3`
+- `spec-reviewer-prompt.md` 與 `quality-reviewer-prompt.md` 作為補充參照，核心內容已整合至設定檔
+
+**Security Engineer**：
+- OWASP Top 10 檢查清單提取自 `skills/security-review/SKILL.md §2`
+- 輸入驗證審查提取自 `skills/security-review/SKILL.md §5`（步驟 3）
+- Secrets Management 提取自 `skills/security-review/SKILL.md §4`
+- 安全品質門禁（HARD-GATE）提取自 `skills/security-review/SKILL.md §7`
+
+---
+
+### 10.4 Scrum Master 角色說明
+
+依 Sprint 28 AC1 規範，Scrum Master 為主 session 編排者（非被派遣 subagent），不需建立 agent 設定檔。五角色模型中的 SM 角色由主 session（AGENTS.md 入口）直接承擔，透過 Task tool 按需派遣其他四個角色。
+
+---
+
+### 10.5 Phase 3a 完成狀態
+
+| 項目 | 狀態 |
+|------|------|
+| 四個 agent 設定檔建立 | 完成（architect / product-owner / qa-engineer / security-engineer） |
+| YAML frontmatter 格式符合 ADR-008 | PASS |
+| 內容來源可追溯至 SKILL.md | PASS |
+| AGENTS.md 更新（列出全部 5 個 agent）| 完成 |
+| 動態派遣驗證 | 待實機 POC（US-51 Phase 3c 範疇）|
