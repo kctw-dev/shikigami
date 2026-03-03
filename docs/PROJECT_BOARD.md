@@ -14,10 +14,10 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-40：Story-Lifecycle Subagent 實作 — ADR-007 Phase 1 | M | 2 | 待辦 |
-| Retro #59（Issue #59）：Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | S | 1 | 待辦 |
-| Retro #60（Issue #60）：TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | S | 1 | 待辦 |
-| Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | S | 1 | 待辦 |
+| US-40：Story-Lifecycle Subagent 實作 — ADR-007 Phase 1 | M | 2 | 完成 |
+| Retro #59（Issue #59）：Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | S | 1 | 完成 |
+| Retro #60（Issue #60）：TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | S | 1 | 完成 |
+| Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | S | 1 | 完成 |
 
 **Sprint 容量**：5 Points
 
