@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-03（Sprint 32 Review — US-60/61/62 全部完成，修訂記錄：v0.16.0）
+> 最後更新：2026-04-12（Sprint 33 Review — US-63/64/65 全部完成，修訂記錄：v0.17.0）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.16.0**（Sprint 32）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.17.0**（Sprint 33）。
 
 | 版號 | 含義 |
 |------|------|
@@ -229,6 +229,9 @@ Sprint Review 時自動產出：
 | US-60 | Issue #46 子 Story #3 — 排程衝刺程式碼入庫 QA 自動化（schedule + scrum-master/sprint-review SKILL.md） | Sprint 32 ✅ |
 | US-61 | M5 條件 (a) 外部使用者觸及強化 — Onboarding 低摩擦路徑最佳化（README + tutorial + M5 追蹤更新） | Sprint 32 ✅ |
 | US-62 | Issue #35 — Token 追蹤 Baseline Snapshot 機制（Metrics_Log.md + sprint-planning/execution SKILL.md） | Sprint 32 ✅ |
+| US-63 | Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-intake Skill） | Sprint 33 ✅ |
+| US-64 | M5 條件 (a) 主動觸及強化 — 外部社群推廣文案製作（GitHub README badges + 技術文章草稿 + 主動 outreach 指引） | Sprint 33 ✅ |
+| US-65 | US-T08（Intent Routing 測試）評估重開 — RICE 重新評分（2.0，No-Go，Deferred） | Sprint 33 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 

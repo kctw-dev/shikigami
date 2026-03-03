@@ -1344,6 +1344,16 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 33（2026-04-06 ~ 2026-04-12）
+
+| Story ID | 標題 | Size | Points | 狀態 |
+|----------|------|------|--------|------|
+| US-63 | Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-intake Skill） | M | 2 | Done |
+| US-64 | M5 條件 (a) 主動觸及強化 — 外部社群推廣文案製作（GitHub README badges + 技術文章草稿 + 主動 outreach 指引） | S | 1 | Done |
+| US-65 | US-T08（Intent Routing 測試）評估重開 — RICE 重新評分與 Sprint Planning 可行性確認 | S | 1 | Done |
+
+---
+
 ## Sprint 32（2026-03-03）
 
 **Sprint Goal**：完成排程衝刺程式碼入庫 QA 自動化（Issue #46 子 Story #3），強化 M5 條件 (a) 外部使用者觸及之 Onboarding 低摩擦路徑，並建立 Token 追蹤 Baseline Snapshot 機制
