@@ -36,9 +36,9 @@ Sprint Planning 支援兩種執行模式：
 
 以下步驟必須逐項建立 task 完成，不可跳過：
 
-- [ ] **執行框架健康檢查**（invoke shikigami:health-check）— 完整 4 項檢查（必要文件 + 孤兒 Story + ADR 一致性 + Retro 逾期）。CRITICAL 標注警告但不阻塞 Planning 流程 *(慢想模式限定)*
+- [ ] **執行框架健康檢查**（<!-- Claude Code -->invoke shikigami:health-check<!-- OpenCode -->使用 health-check skill<!-- /OpenCode -->）— 完整 4 項檢查（必要文件 + 孤兒 Story + ADR 一致性 + Retro 逾期）。CRITICAL 標注警告但不阻塞 Planning 流程 *(慢想模式限定)*
 - [ ] **角色權重調整檢查**（US-22 / ADR-004）— 讀取 `docs/km/Retrospective_Log.md`，依關鍵字比對演算法判斷是否觸發調整；結果寫入 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊（詳見 §7） *(慢想模式限定)*
-- [ ] **PO subagent** 掃描 GitHub open issues（`gh issue list --state open`），對未分類 issues 執行 Triage（invoke shikigami:issue-management Triage），將 bug/feature-request 透過 Backlog Bridge 納入 Backlog
+- [ ] **PO subagent** 掃描 GitHub open issues（`gh issue list --state open`），對未分類 issues 執行 Triage（<!-- Claude Code -->invoke shikigami:issue-management Triage<!-- OpenCode -->使用 issue-management skill 並傳入 Triage 任務<!-- /OpenCode -->），將 bug/feature-request 透過 Backlog Bridge 納入 Backlog
 - [ ] **PO subagent** 自行讀取 `docs/prd/PRODUCT_BACKLOG.md`、`docs/PROJECT_BOARD.md` 與 `docs/prd/ROADMAP.md`，從 Backlog 頂部（依優先級排序）選取符合 Sprint Goal 與 ROADMAP 里程碑的 Stories，並回傳結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果）。**主 session 不讀取上述三個檔案，僅接收 subagent 回傳的摘要表格。**
 - [ ] **檢查選入的 Story 是否標注「需要 ADR」** — 若標注需要 ADR，則該 ADR 必須已建立且狀態為 Accepted，方可進入 Sprint
 - [ ] **Architect subagent** 評估每個 Story 的技術工時（T-shirt size: S / M / L）
@@ -47,7 +47,7 @@ Sprint Planning 支援兩種執行模式：
 - [ ] **PO subagent** 建立 `docs/sprints/sprint_N.md`（N 為遞增的 Sprint 編號）
 - [ ] 更新 `docs/PROJECT_BOARD.md`，反映新 Sprint 的 Stories 配置
 - [ ] **記錄本次 Planning 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格**（對應 Planning token 欄） *(慢想模式限定)*：
-  - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens`、`cache_read_input_tokens`、`cache_creation_input_tokens` 與 `output_tokens`，依下列公式加總後填入 Metrics_Log.md 對應欄位：
+  - **主要方法（優先）**：<!-- Claude Code -->讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案<!-- OpenCode -->OpenCode session 資料路徑待 Phase 2 實機調查確認；暫時填「N/A」並輸出「Token 資料不可用，需手動補充」<!-- /OpenCode -->，提取所有 `message.usage` 欄位中的 `input_tokens`、`cache_read_input_tokens`、`cache_creation_input_tokens` 與 `output_tokens`，依下列公式加總後填入 Metrics_Log.md 對應欄位：
     - **有效 input tokens = input_tokens + cache_read_input_tokens + cache_creation_input_tokens**
     - **output tokens = output_tokens**
   - **次選（降級方法）**：若 JSONL 檔案不存在、路徑不可存取、或 `message.usage` 欄位解析失敗，則各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
@@ -78,7 +78,7 @@ Sprint Planning 支援兩種執行模式：
 | `SHIKIGAMI_SCHEDULED` | `true` | 排程模式（cron 觸發） |
 | `SHIKIGAMI_SCHEDULED` | 未設定或其他值 | 手動模式（非排程模式） |
 
-**設定方式**：由 `schedule` Skill 生成的 cron 腳本（`scripts/<skill>_cron.sh`）在執行 `claude -p "/sprint-planning"` 前自動注入 `SHIKIGAMI_SCHEDULED=true`，Sprint Planning 在執行期間讀取此環境變數以判斷當前模式。
+**設定方式**：由 `schedule` Skill 生成的 cron 腳本（`scripts/<skill>_cron.sh`）在執行 <!-- Claude Code -->`claude -p "/sprint-planning"`<!-- OpenCode -->`opencode sprint-planning`（OpenCode 平台等效指令，待實機確認）<!-- /OpenCode --> 前自動注入 `SHIKIGAMI_SCHEDULED=true`，Sprint Planning 在執行期間讀取此環境變數以判斷當前模式。
 
 偵測邏輯（虛擬碼）：
 
@@ -127,6 +127,7 @@ Sprint Planning 已中止。請改為手動執行 Sprint Planning 以選入 M/L 
 
 手動執行範例：
 
+<!-- Claude Code -->
 ```bash
 # 手動 Sprint Planning（非排程模式），M/L Stories 不受限
 claude -p "/sprint-planning"
@@ -134,6 +135,16 @@ claude -p "/sprint-planning"
 # 手動 + 完整檢查（慢想模式），M/L Stories 不受限
 claude -p "/sprint-planning --deep"
 ```
+<!-- OpenCode -->
+```bash
+# 手動 Sprint Planning（非排程模式），M/L Stories 不受限
+# OpenCode 等效指令待實機確認；預期為直接在 OpenCode 中呼叫 sprint-planning skill
+opencode sprint-planning
+
+# 手動 + 完整檢查（慢想模式），M/L Stories 不受限
+opencode sprint-planning --deep
+```
+<!-- /OpenCode -->
 
 ---
 
@@ -178,7 +189,7 @@ git push
 Sprint Planning 的 Subagent 調度遵循以下固定順序：
 
 ```
-0.   健康檢查       → invoke shikigami:health-check（完整 4 項）【慢想模式限定】
+0.   健康檢查       → <!-- Claude Code -->invoke shikigami:health-check<!-- OpenCode -->使用 health-check skill<!-- /OpenCode -->（完整 4 項）【慢想模式限定】
 0.5. 角色權重調整   → 讀取 Retrospective_Log.md，執行關鍵字比對，輸出調整結果至 sprint_N.md（詳見 §7）【慢想模式限定】
 1.   PO             → 分析 Backlog、選取 Stories、定義 Sprint Goal
 2.   Architect      → 技術評估、ADR 檢查
