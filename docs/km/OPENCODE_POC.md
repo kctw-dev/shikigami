@@ -717,7 +717,7 @@ M5 條件 (a)（引自 `docs/prd/M5_COMPLETION_ASSESSMENT.md` §條件 (a)）：
 | 四角色移植（architect / product-owner / qa-engineer / security-engineer）| US-49（Sprint 28） | 完成 | 五角色模型完整 |
 | 安裝指南建立 | US-50（Sprint 28） | 完成 | `docs/INSTALL_OPENCODE.md`（§11）|
 | Task tool 參數分析記錄 | US-51（Sprint 28，本 Story）| 完成 | 本節 §12.2 |
-| 動態派遣實機驗證 | US-51 AC3（降級靜態）| [PENDING-DYNAMIC] | 無 OpenCode 實機環境，靜態分析已完成 |
+| 動態派遣實機驗證 | US-51 AC3（降級靜態）→ US-52 AC1 更新 | [STATIC-CONFIRMED] | 靜態分析充分性聲明（§12.3，US-52）確認不構成結案阻礙 |
 
 #### 12.4.3 達成路徑剩餘步驟（Sprint 29 US-52 更新）
 
