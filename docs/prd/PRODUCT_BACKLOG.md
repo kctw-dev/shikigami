@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-03（Sprint 30 Review — US-54、US-55、US-56 完成，移至 BACKLOG_DONE.md）
+**最後更新**：2026-03-03（Sprint 31 Review — US-57、US-58、US-59 完成，移至 BACKLOG_DONE.md）
 **管理者**：Product Owner
 
 ---
@@ -137,13 +137,13 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
 
-### Sprint 31 — 進行中 Stories
+### Sprint 31 — 已完成 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-57：Issue #46 子 Story #2 — 排程衝刺 worktree 隔離執行框架（schedule SKILL.md + scrum-master SKILL.md） | 待定 | Should | M | GitHub Issue #46 子 Story #2 / Sprint 31 Planning | In Sprint |
-| 2 | US-58：M5 Beta 回饋閉環強化 — Issue #59 追蹤機制與 README 招募文案精化 | 待定 | Must | S | M5 條件 (a) 缺口 / Architect 建議（Sprint 31 Planning） | In Sprint |
-| 3 | US-59：Issue #52 — README 自動更新排程設定指引（schedule SKILL.md 使用範例） | 待定 | Should | S | GitHub Issue #52 / Architect 建議（Sprint 31 Planning） | In Sprint |
+| 1 | US-57：Issue #46 子 Story #2 — 排程衝刺 worktree 隔離執行框架（schedule SKILL.md + scrum-master SKILL.md） | 待定 | Should | M | GitHub Issue #46 子 Story #2 / Sprint 31 Planning | Done（Sprint 31） |
+| 2 | US-58：M5 Beta 回饋閉環強化 — Issue #59 追蹤機制與 README 招募文案精化 | 待定 | Must | S | M5 條件 (a) 缺口 / Architect 建議（Sprint 31 Planning） | Done（Sprint 31） |
+| 3 | US-59：Issue #52 — README 自動更新排程設定指引（schedule SKILL.md 使用範例） | 待定 | Should | S | GitHub Issue #52 / Architect 建議（Sprint 31 Planning） | Done（Sprint 31） |
 
 ### Sprint 30 — 已完成 Stories
 

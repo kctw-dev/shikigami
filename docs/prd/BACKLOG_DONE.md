@@ -1344,6 +1344,77 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 31（2026-03-03）
+
+**Sprint Goal**：完成排程衝刺 worktree 隔離執行框架（Issue #46 子 Story #2），同步強化 M5 Beta 回饋閉環（Issue #59 追蹤機制 + README 招募文案精化）與 README 自動更新排程設定指引（Issue #52），推進 M5 條件 (a) 外部使用者觸及
+
+| Story ID | 標題 | Size | Points | 完成日期 |
+|----------|------|------|--------|----------|
+| US-57 | Issue #46 子 Story #2 — 排程衝刺 worktree 隔離執行框架（schedule SKILL.md + scrum-master SKILL.md） | M | 2 | 2026-03-03 |
+| US-58 | M5 Beta 回饋閉環強化 — Issue #59 追蹤機制與 README 招募文案精化 | S | 1 | 2026-03-03 |
+| US-59 | Issue #52 — README 自動更新排程設定指引（schedule SKILL.md 使用範例） | S | 1 | 2026-03-03 |
+
+### US-57：Issue #46 子 Story #2 — 排程衝刺 worktree 隔離執行框架
+
+**來源**：GitHub Issue #46 子 Story #2 / Sprint 31 Planning
+**Size**：M / 2 Points
+**MoSCoW**：Should
+**RICE**：待定
+
+**User Story**
+As a Scrum Master using the scheduled sprint execution mode, I want each scheduled sprint to run inside an isolated git worktree, so that concurrent scheduled executions do not interfere with each other or with the main working tree, and failed runs can be inspected and cleaned up independently.
+
+**Acceptance Criteria**
+
+- AC1：`skills/schedule/SKILL.md` 新增 worktree 隔離執行框架說明，定義排程衝刺啟動時自動建立獨立 worktree 的流程
+- AC2：`skills/scrum-master/SKILL.md` 新增排程模式下 worktree 生命週期管理指引（建立、執行、清理）
+- AC3：worktree 命名規則與路徑隔離策略有明確定義（防止同一 Sprint 多次觸發時路徑衝突）
+- AC4：Issue #46 對應此子 Story 部分留言說明交付內容並關閉對應任務項
+
+**驗收結果**：AC1–AC4 全通過（4/4）
+
+---
+
+### US-58：M5 Beta 回饋閉環強化
+
+**來源**：M5 條件 (a) 缺口 / Architect 建議（Sprint 31 Planning）
+**Size**：S / 1 Point
+**MoSCoW**：Must
+**RICE**：待定
+
+**User Story**
+As a Product Owner managing the M5 Beta program, I want Issue #59 to have a structured tracking mechanism and the README Beta recruitment copy to be refined, so that potential external users can clearly understand how to participate and their feedback is systematically captured.
+
+**Acceptance Criteria**
+
+- AC1：GitHub Issue #59 建立追蹤機制（label、milestone 或 checklist），確保回饋收集有明確入口
+- AC2：`README.md` Beta 招募文案精化，使邀請語氣更明確、參與流程更清晰（步驟與聯絡方式可見）
+- AC3：精化後的 README 文案不產生新的平台宣稱矛盾（與現有 M5 文件一致）
+
+**驗收結果**：AC1–AC3 全通過（3/3）
+
+---
+
+### US-59：Issue #52 — README 自動更新排程設定指引
+
+**來源**：GitHub Issue #52 / Architect 建議（Sprint 31 Planning）
+**Size**：S / 1 Point
+**MoSCoW**：Should
+**RICE**：待定
+
+**User Story**
+As an external user who has installed Shikigami and wants to use the scheduled sprint feature, I want the README to contain clear setup instructions for the auto-update schedule with concrete examples from schedule SKILL.md, so that I can configure scheduled execution without needing to read internal documentation.
+
+**Acceptance Criteria**
+
+- AC1：`README.md` 新增「排程設定」說明區段，涵蓋 `shikigami:schedule` 基本使用範例
+- AC2：說明內容與 `skills/schedule/SKILL.md` 現有指引一致，無過時或矛盾描述
+- AC3：GitHub Issue #52 留言說明交付內容並關閉
+
+**驗收結果**：AC1–AC3 全通過（3/3）
+
+---
+
 ## Sprint 30（2026-03-03）
 
 **Sprint Goal**：以 Issue #46 排程 PR 偵測為最高優先，同步修正 README 準確性並強化版本 Tag 策略，確保框架在開源延後期間的自我一致性與維護品質
