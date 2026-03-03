@@ -435,3 +435,80 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 | 發現需要架構決策 | 暫停，觸發 `architecture-decision` → ADR 定案後回到 sprint-execution |
 | 所有 Story 完成 | 觸發 `sprint-review` 進行驗收與回顧 |
 | 發現安全問題 | 觸發 `security-review` 進行深度安全審查 |
+
+---
+
+## 9. ADR-007 Phase 2 靜態驗收清單
+
+<!-- ADR-007 Phase 2 實作 — Sprint 24 / US-41 AC5 -->
+<!-- 供 QA 逐項核對 Phase 2 所有新增機制是否正確寫入文件 -->
+
+以下清單供 QA Engineer 在 Sprint Review 時逐項靜態核對，確認 Phase 2 外部抽樣審查機制文件化完整。
+
+### (a) 基礎 sampling rate 30% 設定值
+
+| 核對項目 | 文件位置 | 識別關鍵字 |
+|---------|---------|-----------|
+| 30% 基礎抽樣率設定值存在且可識別 | `skills/sprint-execution/story-lifecycle-prompt.md` §AC3「基礎抽樣率」小節 | `基礎抽樣率：30%（取上整）` |
+
+- [ ] 30% 設定值在文件中存在
+- [ ] 設定值位於可識別的獨立段落（「基礎抽樣率」標題下）
+- [ ] 取上整（ceiling）計算說明存在
+
+### (b) TC-1 至 TC-4 各有獨立可識別段落
+
+| 觸發條件 | 文件位置 | 識別標題 |
+|---------|---------|---------|
+| TC-1：L-size Story → 100% | `skills/sprint-execution/story-lifecycle-prompt.md` §AC3 | `#### TC-1：L-size Story 全量觸發` |
+| TC-2：安全相關 AC → 100% | `skills/sprint-execution/story-lifecycle-prompt.md` §AC3 | `#### TC-2：安全相關 AC 全量觸發` |
+| TC-3：前次 Sprint Review 自審品質問題 → 100% | `skills/sprint-execution/story-lifecycle-prompt.md` §AC3 | `#### TC-3：前次 Sprint Review 自審品質問題全量觸發` |
+| TC-4：連續 2 次 self-review FAIL → 強制 | `skills/sprint-execution/story-lifecycle-prompt.md` §AC3 | `#### TC-4：連續 2 次 self-review FAIL 強制觸發` |
+
+- [ ] TC-1 有獨立可識別段落（含判斷規則）
+- [ ] TC-2 有獨立可識別段落（含判斷規則）
+- [ ] TC-3 有獨立可識別段落（含判斷規則）
+- [ ] TC-4 有獨立可識別段落（含判斷規則）
+- [ ] 觸發條件優先順序（TC-1 → TC-4 依序評估）已文件化
+
+### (c) CONFIRM 路徑有明確步驟列表
+
+| 核對項目 | 文件位置 | 識別標題 |
+|---------|---------|---------|
+| CONFIRM 路徑步驟列表 | `skills/sprint-execution/SKILL.md` §4.1 | `### 4.1 CONFIRM 路徑` |
+
+- [ ] CONFIRM 路徑有獨立可識別標題（§4.1）
+- [ ] CONFIRM 路徑步驟列表存在（有序步驟，非散文）
+- [ ] 步驟包含：記錄抽樣結果 → 更新指標 → 繼續下一 Story
+
+### (d) DISPUTE 路徑有明確步驟列表
+
+| 核對項目 | 文件位置 | 識別標題 |
+|---------|---------|---------|
+| DISPUTE 路徑步驟列表 | `skills/sprint-execution/SKILL.md` §4.2 | `### 4.2 DISPUTE 路徑` |
+
+- [ ] DISPUTE 路徑有獨立可識別標題（§4.2）
+- [ ] 步驟列表包含：**回退** Story 狀態（步驟 2）
+- [ ] 步驟列表包含：**傳入缺陷清單**給 Story-Lifecycle subagent（步驟 3）
+- [ ] 步驟列表包含：強制**第二輪外部抽樣**審查（步驟 5）
+
+### (e) Circuit Breaker 觸發條件已文件化
+
+| 核對項目 | 文件位置 | 識別標題 |
+|---------|---------|---------|
+| Circuit Breaker 觸發條件 | `skills/sprint-execution/SKILL.md` §4.3 | `### 4.3 Circuit Breaker 機制（自動降級規則）` |
+
+- [ ] Circuit Breaker 觸發條件有獨立可識別段落（§4.3「觸發條件」小節）
+- [ ] 連續 3 Sprint 閾值已明確寫入（`連續 **3 個 Sprint**`）
+- [ ] DISPUTE 率 20% 閾值已明確寫入（`超過 **20%**`）
+- [ ] 觸發後動作（Architect 通知 + 全量外部抽樣升級）已說明
+
+### (f) Circuit Breaker 重置條件已文件化
+
+| 核對項目 | 文件位置 | 識別標題 |
+|---------|---------|---------|
+| Circuit Breaker 重置條件 | `skills/sprint-execution/SKILL.md` §4.3 | `#### 重置條件` 小節 |
+
+- [ ] 重置條件有獨立可識別段落（§4.3「重置條件」小節）
+- [ ] 滾動 3 Sprint 窗口機制已說明
+- [ ] Architect 手動重置條件已說明（含重置記錄格式）
+- [ ] 重置記錄格式存在（`[Circuit Breaker 重置]` 關鍵字）
