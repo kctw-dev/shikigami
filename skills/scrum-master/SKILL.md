@@ -127,6 +127,7 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 | Story 實作完成 | `invoke shikigami:quality-gate` |
 | quality-gate 發現安全問題 | `invoke shikigami:security-review` |
 | 升級鏈走完仍無解 | `invoke shikigami:escalation` |
+| 偵測到 `SHIKIGAMI_SCHEDULED=1` 環境變數且 Skill 為 `sprint-execution` | worktree 隔離執行模式（見 schedule SKILL.md §5.7），不觸發互動式提醒 |
 
 **原則**：Scrum Master 不只是被動路由器，也是**主動的流程守門員**。當偵測到流程轉折點時，自動推進到下一個環節，不等使用者提醒。
 
