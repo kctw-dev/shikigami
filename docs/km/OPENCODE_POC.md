@@ -159,3 +159,96 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 - [OpenCode 官方 Skills 文件](https://opencode.ai/docs/skills/)
 - [OpenCode 官方 Agents 文件](https://opencode.ai/docs/agents/)
 - [OpenCode 官方 Permissions 文件](https://opencode.ai/docs/permissions/)
+
+---
+
+## Phase 1 完成記錄
+
+**執行日期**：2026-03-03
+**執行者**：AI Agent（Developer Subagent，Claude Sonnet 4.6）
+**Sprint**：Sprint 26
+**Story**：US-46
+
+---
+
+### (a) 目錄適配結果摘要
+
+**執行內容**：
+
+1. 建立 `.opencode/` 目錄於 repo 根目錄
+2. 以 symlink 將 `.opencode/skills` 指向 `../skills`，使 OpenCode 搜尋路徑 `.opencode/skills/*/SKILL.md` 可解析現有所有 17 個 SKILL.md
+
+**結構差異審查結論**：
+
+| 審查項目 | Shikigami 現狀 | OpenCode 規範 | 差異 |
+|---------|--------------|--------------|------|
+| Skills 目錄路徑 | `skills/*/SKILL.md` | `.opencode/skills/*/SKILL.md` 或 `skills/*/SKILL.md` | 無差異（symlink 適配完成） |
+| SKILL.md frontmatter | `name` + `description` 欄位 | `name` + `description` 欄位 | 無差異 |
+| 文件格式 | 純 Markdown | 純 Markdown | 無差異 |
+| 載入機制 | On-demand | On-demand | 無差異 |
+
+**結論**：結構相容，symlink 適配已完成，無需修改現有 `skills/` 內容。
+
+**新增產出**：
+- `.opencode/skills` → `../skills`（symlink，git 追蹤）
+- `AGENTS.md`（OpenCode 平台入口，類比 `CLAUDE.md`）
+
+---
+
+### (b) SKILL.md 相容性評估結果
+
+**審查範圍**：`skills/sprint-planning/SKILL.md`（作為代表性 SKILL.md 進行靜態審查）
+
+**格式相容性**：PASS — frontmatter 格式（`name`、`description`）、Markdown 結構、HARD-GATE 區塊均符合 OpenCode Skills 規範。
+
+**Claude Code 特有 API 殘留項清單**：
+
+| # | 行號 | 殘留項 | 類型 | 影響層級 | 修正方案 |
+|---|------|--------|------|----------|---------|
+| R-1 | 39 | `invoke shikigami:health-check` | 平台調用語法 | 說明性，不影響 OpenCode 運行 | Phase 2 時替換為 OpenCode skill invocation 語法 |
+| R-2 | 41 | `invoke shikigami:issue-management Triage` | 平台調用語法 | 說明性，不影響 OpenCode 運行 | Phase 2 時替換為 OpenCode skill invocation 語法 |
+| R-3 | 50 | `~/.claude/projects/` JSONL 路徑 | Claude Code 特有路徑 | 功能性殘留（慢想模式 Token 記錄） | OpenCode 中走降級路徑（填 N/A），Phase 2 調查 OpenCode session 資料路徑 |
+| R-4 | 81 | `claude -p "/sprint-planning"` | Claude Code CLI 指令 | 說明性範例 | Phase 2 時補充 OpenCode 對應指令說明 |
+| R-5 | 132 | `claude -p "/sprint-planning"` | Claude Code CLI 指令（程式碼區塊） | 說明性範例 | Phase 2 時補充 OpenCode 對應指令說明 |
+| R-6 | 135 | `claude -p "/sprint-planning --deep"` | Claude Code CLI 指令（程式碼區塊） | 說明性範例 | Phase 2 時補充 OpenCode 對應指令說明 |
+| R-7 | 181 | `invoke shikigami:health-check`（流程圖） | 平台調用語法 | 說明性，不影響 OpenCode 運行 | Phase 2 時替換為 OpenCode skill invocation 語法 |
+
+**殘留項分類**：
+- 說明性殘留（R-1、R-2、R-4、R-5、R-6、R-7）：6 項。這些是流程說明文字或 CLI 指令範例，不影響 OpenCode 的 SKILL.md 載入與執行。
+- 功能性殘留（R-3）：1 項。`~/.claude/projects/` 路徑在 OpenCode 中不存在，但 SKILL.md 已內建降級機制（填 N/A），不會導致執行失敗。
+
+**靜態相容性驗證結論**：`skills/sprint-planning/SKILL.md` 在 OpenCode 中可靜態載入，格式相容。所有功能性殘留均已有降級路徑。說明性殘留不影響運行，建議在 Phase 2 實機 POC 時一併更新。
+
+---
+
+### (c) AC4 動態驗證標注說明
+
+本 Story（US-46）的驗證範圍為靜態相容性審查，不包含實機 OpenCode 執行驗證。
+
+**標注**：完整 Happy Path 動態驗證（`skills/sprint-planning/SKILL.md` 在 OpenCode 中完整執行 Sprint Planning 流程）待 Phase 2 實機 POC Sprint 執行，不計入本 Story DoD。
+
+**動態驗證的遺留阻礙**：
+
+| 阻礙 | 說明 | 預計在 Phase |
+|------|------|------------|
+| Task tool 參數格式確認 | OpenCode Task tool 與 Claude Code 參數欄位命名差異尚未實機驗證 | Phase 2 |
+| SessionStart hook 等效性 | OpenCode session 生命週期事件機制尚未調查 | Phase 2 |
+| 實機 OpenCode 環境 | 本 Phase 1 執行者（Claude Code 環境）無法直接測試 OpenCode | Phase 2 |
+
+---
+
+### (d) 建議下一步
+
+**建議行動**：補建 ADR-008（OpenCode 平台整合策略），並啟動 Phase 2 POC Sprint。
+
+**ADR-008 草稿範圍建議**：
+- 決策問題：Shikigami 是否正式採用 OpenCode 作為第二支援平台？
+- 選項：(A) 完整整合（Phase 2 + Phase 3）、(B) 部分整合（僅 SKILL.md 載入，不支援 subagent 派遣）、(C) 暫停整合
+- 評估依據：Phase 1 靜態驗證結果（本節）+ Phase 2 實機 POC 結果
+
+**Phase 2 建議範圍**（Story B，L / 3pt）：
+- 調查 OpenCode SessionStart hook 等效機制（B-2）
+- 建立五個自訂 subagent 設定（PO / Architect / QA / Developer / SM）
+- 確認 Task tool 參數格式並修正差異（B-3）
+- 實機驗證 `skills/sprint-planning/SKILL.md` Happy Path
+- 更新所有 SKILL.md 中的 Claude Code 特有 API 殘留（R-1 ~ R-7）
