@@ -10,7 +10,7 @@ This file is the OpenCode entry point for the Shikigami framework (analogous to 
 
 Shikigami is a **plugin framework** that injects 7 specialized roles (Shikigami) into your AI development tool. They form a **mutual governance network**: QA reviews your code and challenges architectural decisions, Security reviews external inputs, SRE evaluates deployment feasibility. Use natural language to describe what you want — the Scrum Master automatically dispatches the appropriate roles.
 
-**Current version: v0.3.11** (17 Skills / 7 Agents / 4 Commands)
+**Current version: v0.3.11** (21 Skills / 7 Agents / 4 Commands)
 
 ---
 
@@ -25,7 +25,7 @@ OpenCode scans the following paths to discover SKILL.md files:
 skills/*/SKILL.md              ← fallback (git worktree)
 ```
 
-All 17 Shikigami Skills are accessible under `.opencode/skills/`:
+All 21 Shikigami Skills are accessible under `.opencode/skills/`:
 
 ```
 .opencode/skills/
@@ -45,7 +45,11 @@ All 17 Shikigami Skills are accessible under `.opencode/skills/`:
 ├── parallel-dispatch/SKILL.md
 ├── issue-management/SKILL.md
 ├── health-check/SKILL.md
-└── onboarding/SKILL.md
+├── onboarding/SKILL.md
+├── architect/SKILL.md
+├── qa-engineer/SKILL.md
+├── schedule/SKILL.md
+└── shoot/SKILL.md
 ```
 
 ---

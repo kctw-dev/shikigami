@@ -162,7 +162,7 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 
 ---
 
-## Phase 1 完成記錄
+## 8. Phase 1 完成記錄（US-46 執行結果）
 
 **執行日期**：2026-03-03
 **執行者**：AI Agent（Developer Subagent，Claude Sonnet 4.6）
@@ -171,7 +171,7 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 
 ---
 
-### (a) 目錄適配結果摘要
+### 8.1 目錄適配結果摘要
 
 **執行內容**：
 
@@ -195,7 +195,7 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 
 ---
 
-### (b) SKILL.md 相容性評估結果
+### 8.2 SKILL.md 相容性評估結果
 
 **審查範圍**：`skills/sprint-planning/SKILL.md`（作為代表性 SKILL.md 進行靜態審查）
 
@@ -221,7 +221,7 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 
 ---
 
-### (c) AC4 動態驗證標注說明
+### 8.3 AC4 動態驗證標注說明
 
 本 Story（US-46）的驗證範圍為靜態相容性審查，不包含實機 OpenCode 執行驗證。
 
@@ -237,7 +237,7 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 
 ---
 
-### (d) 建議下一步
+### 8.4 建議下一步
 
 **建議行動**：補建 ADR-008（OpenCode 平台整合策略），並啟動 Phase 2 POC Sprint。
 
