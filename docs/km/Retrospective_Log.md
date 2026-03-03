@@ -1,6 +1,24 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–28）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–29）
+
+---
+
+## Sprint 34 — 2026-04-13
+
+### Good
+- 連續 34 個 Sprint 100% 完成率，Issue #46（四條排程流程）與 Issue #49（CI 失敗根因）同 Sprint 結案，兩個長期追蹤 Issue 正式關閉
+- Sprint 外交付：ADR-010（Backlog Source of Truth 遷移至 GitHub Issues）Accepted + README v0.17.0 資料同步，展現 Sprint 間隙的增量交付能力
+- 全平行執行（US-66 + US-68 Phase 1 only），Architect 分群策略連續七個 Sprint 有效（Sprint 28–34），零檔案衝突
+
+### Problem
+- ADR-009 設計方向與使用者原始產品願景偏離（使用者意圖 Backlog 以 GitHub Issues 為 source of truth，ADR-009 實作了反向流程：Issues → .md）。Sprint 34 期間由使用者指出，已透過 ADR-010 修正方向。此為「需求確認不足」類型問題，非框架 bug
+
+### Action Items
+
+本 Sprint 無新增 Action Items。
+
+> Problem 已透過 ADR-010（Accepted）在 Sprint 34 期間解決，Backlog Source of Truth 遷移路線圖已定義，無需跨 Sprint 追蹤。
 
 ---
 
@@ -69,19 +87,4 @@
 
 本 Sprint 無新增 Action Items。
 
----
-
-## Sprint 29 — 2026-03-03
-
-### Good
-- 連續 29 個 Sprint 100% 完成率，Issue #3 從 Sprint 16 US-17 調查至 Sprint 29 US-52 正式結案，六階段完整收尾
-- Beta 招募機制上線（README CTA + Issue #59），M5 條件 (a) 從被動等待轉為主動招募
-- US-52 與 US-53 完全平行執行，零檔案衝突，交付效率高
-
-### Problem
-- 無顯著問題（Sprint 29 為收尾型 Sprint，Story 數量少，複雜度低）
-
-### Action Items
-
-本 Sprint 無新增 Action Items。
 

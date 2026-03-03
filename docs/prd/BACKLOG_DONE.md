@@ -1344,6 +1344,47 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 34（2026-04-13 ~ 2026-04-19）
+
+**Sprint Goal**：Issue #46 自動化排程框架收尾結案 + Issue #49 CI 失敗根因修正
+
+| Story ID | 標題 | Size | Points | 狀態 |
+|----------|------|------|--------|------|
+| US-66 | Issue #46 最終收尾 — 四條排程流程驗收條件逐項確認、缺口補齊，close Issue #46 | S | 1 | Done |
+| US-68 | Issue #49 框架端主動修正評估 — workflow check 失敗根因分析（根因已確認：Sprint 33 commit 順序問題，非框架 bug） | S | 1 | Done |
+
+### US-66：Issue #46 最終收尾
+
+**來源**：GitHub Issue #46 最終結案
+**Size**：S / 1 Point
+**MoSCoW**：Must
+**QA doc-only 判定**：Yes
+
+**User Story**
+As a Product Owner tracking Issue #46 completion, I want the four-flow acceptance conditions of the automated scheduling framework verified against the original 12 ACs, gaps documented, and Issue #46 closed, so that the framework's scheduling capability is formally marked as delivered.
+
+**交付摘要**：逐項比對 Issue #46 原始 12 條 AC 與四條排程流程產出的覆蓋對照表，所有 AC 確認為 Covered。Issue #46 以詳細 comment 關閉。
+
+**驗收結果**：AC1–AC4 全通過（4/4）；Issue #46 CLOSED
+
+---
+
+### US-68：Issue #49 框架端主動修正評估
+
+**來源**：GitHub Issue #49 / CI 失敗調查
+**Size**：S / 1 Point
+**MoSCoW**：Must
+**QA doc-only 判定**：Yes
+
+**User Story**
+As a Developer maintaining framework CI health, I want the root cause of Issue #49 workflow check failure confirmed, documented as a comment on Issue #49, and the issue closed if the root cause is a development process concern rather than a framework bug.
+
+**交付摘要**：根因確認為 Sprint 33 commit 順序問題（Planning 文件引用 backlog-intake 10 分鐘早於 SKILL.md 建立）。根因分析報告以 comment 發布至 Issue #49，走 AC4 路徑關閉 Issue。
+
+**驗收結果**：AC1 PASS、AC2 PASS、AC4 PASS（AC3 互斥分支跳過）；Issue #49 CLOSED
+
+---
+
 ## Sprint 33（2026-04-06 ~ 2026-04-12）
 
 | Story ID | 標題 | Size | Points | 狀態 |

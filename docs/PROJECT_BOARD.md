@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-04-13（Sprint 34 Planning 完成）
-**當前 Sprint**：Sprint 34（進行中）
+**最後更新**：2026-04-13（Sprint 34 Review 完成）
+**當前 Sprint**：Sprint 34（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 34](sprints/sprint_34.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 34 — 進行中
+## Sprint 34 — 完成
 
 **Sprint Goal**：Issue #46 自動化排程框架收尾結案 + Issue #49 CI 失敗根因修正
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-04-13 ~ 2026-04-19
 
 | Story | Size | Points | 狀態 |
@@ -18,6 +20,7 @@
 | US-68：Issue #49 框架端主動修正評估 — workflow check 失敗根因分析（根因已確認：Sprint 33 commit 順序問題，非框架 bug） | S | 1 | 完成 |
 
 **目標 Velocity**：2 points（2 Stories）
+**實際 Velocity**：2 points（2 Stories）
 
 ---
 
@@ -93,21 +96,4 @@
 
 ---
 
-## Sprint 29 — 完成
-
-**Sprint Goal**：以 Issue #3 正式結案為里程碑，完成 OpenCode 平台動態驗證（US-52）與 M5 條件 (a) 外部使用者觸及的具體招募行動（US-53），使 M5 最後一個開放條件進入可達成狀態
-**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-09 ~ 2026-03-15
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-52：OpenCode Phase 4 — Issue #3 正式結案：動態驗證補完與 Issue 關閉 | M | 2 | 完成 |
-| US-53：M5 Beta 使用者招募 — README 招募文案 + Issue 引導機制 | S | 1 | 完成 |
-
-**目標 Velocity**：3 points（2 Stories）
-**實際 Velocity**：3 points（2 Stories）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–28）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–29）

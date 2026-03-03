@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-04-12（Sprint 33 Review — US-63/64/65 全部完成，修訂記錄：v0.17.0）
+> 最後更新：2026-04-13（Sprint 34 Review — US-66/68 全部完成，Issue #46 + #49 結案，修訂記錄：v0.18.0）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -232,6 +232,8 @@ Sprint Review 時自動產出：
 | US-63 | Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-intake Skill） | Sprint 33 ✅ |
 | US-64 | M5 條件 (a) 主動觸及強化 — 外部社群推廣文案製作（GitHub README badges + 技術文章草稿 + 主動 outreach 指引） | Sprint 33 ✅ |
 | US-65 | US-T08（Intent Routing 測試）評估重開 — RICE 重新評分（2.0，No-Go，Deferred） | Sprint 33 ✅ |
+| US-66 | Issue #46 最終收尾 — 四條排程流程驗收條件逐項確認、缺口補齊，Issue #46 CLOSED | Sprint 34 ✅ |
+| US-68 | Issue #49 框架端主動修正評估 — workflow check 失敗根因分析、Issue #49 CLOSED | Sprint 34 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 
