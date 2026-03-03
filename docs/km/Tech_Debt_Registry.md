@@ -49,6 +49,7 @@ Grooming 完成後，依照以下規則計算本次 Active 條目趨勢：
 | ID | 描述 | 引入 Story | 解決 Story | 嚴重度 | 建議解法 | RICE | 狀態 |
 |----|------|------------|------------|--------|----------|------|------|
 | TD-001 | [EXAMPLE] 使用者認證模組缺乏單元測試覆蓋，目前依賴端對端測試，重構風險高 | US-03 | TBD | H | 補充 unit test，覆蓋所有認證路徑與邊界條件；目標覆蓋率 > 80% | 7.5 | Active |
+| TD-002 | PO subagent 輸出格式缺乏正式 JSON Schema 驗證。ADR-006 採用 XML 隔離標記 + 角色限制宣告（選項 D）作為主要防護，但架構層面的輸出格式管控（JSON schema 結構化解析）尚未實作，注入防護仍依賴 LLM 指令遵循能力。詳見 ADR-006 Decision Challenge 段落。 | US-37 / ADR-006 | TBD | L | 為 PO subagent 輸出定義正式 JSON Schema（含 reply_draft、metadata 欄位）；主 session 以結構化解析取代直接使用 LLM 自由文字輸出；需透過 ADR 流程審批架構變更 | TBD | Active |
 
 ---
 
