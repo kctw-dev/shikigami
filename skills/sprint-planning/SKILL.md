@@ -45,7 +45,7 @@ Sprint Planning 支援兩種執行模式：
 - [ ] **執行框架健康檢查**（<!-- Claude Code -->invoke shikigami:health-check<!-- OpenCode -->使用 health-check skill<!-- /OpenCode -->）— 完整 4 項檢查（必要文件 + 孤兒 Story + ADR 一致性 + Retro 逾期）。CRITICAL 標注警告但不阻塞 Planning 流程 *(慢想模式限定)*
 - [ ] **角色權重調整檢查**（US-22 / ADR-004）— 讀取 `docs/km/Retrospective_Log.md`，依關鍵字比對演算法判斷是否觸發調整；結果寫入 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊（詳見 §7） *(慢想模式限定)*
 - [ ] **PO subagent** 掃描 GitHub open issues（`gh issue list --state open`），對未分類 issues 執行 Triage（<!-- Claude Code -->invoke shikigami:issue-management Triage<!-- OpenCode -->使用 issue-management skill 並傳入 Triage 任務<!-- /OpenCode -->），將 bug/feature-request 透過 Backlog Bridge 納入 Backlog
-- [ ] **PO subagent** 自行讀取 `docs/prd/PRODUCT_BACKLOG.md`、`docs/PROJECT_BOARD.md` 與 `docs/prd/ROADMAP.md`，從 Backlog 頂部（依優先級排序）選取符合 Sprint Goal 與 ROADMAP 里程碑的 Stories，並回傳結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果）。**主 session 不讀取上述三個檔案，僅接收 subagent 回傳的摘要表格。**
+- [ ] **PO subagent** 執行 `gh issue list --label "type: backlog-item" --label "status: backlog" --state open --json number,title,body,labels --limit 200` 取得 Backlog Issues，並自行讀取 `docs/PROJECT_BOARD.md` 與 `docs/prd/ROADMAP.md`，根據即時排序（MoSCoW tier 優先，同 tier 內 RICE Score 降序）從排序頂部選取符合 Sprint Goal 與 ROADMAP 里程碑的 Stories，並回傳結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果）。**主 session 不讀取上述文件，僅接收 subagent 回傳的摘要表格。**
 - [ ] **檢查選入的 Story 是否標注「需要 ADR」** — 若標注需要 ADR，則該 ADR 必須已建立且狀態為 Accepted，方可進入 Sprint
 - [ ] **Architect subagent** 評估每個 Story 的技術工時（T-shirt size: S / M / L）
 - [ ] **QA subagent** 確認每個 Story 的驗收標準（Acceptance Criteria）可被測試
@@ -170,11 +170,11 @@ opencode sprint-planning --deep
 
 Sprint Planning 完成後，必須產出或更新以下文件：
 
-| 文件 | 說明 |
-|------|------|
+| 文件 / 操作 | 說明 |
+|------------|------|
 | `docs/sprints/sprint_N.md` | 新建。包含 Sprint Goal、選入的 Stories 清單、T-shirt size 估算、驗收標準摘要 |
 | `docs/PROJECT_BOARD.md` | 更新。反映新 Sprint 的 Stories 配置，將選入的 Stories 移至「Sprint Backlog」欄位 |
-| `docs/prd/PRODUCT_BACKLOG.md` | 更新。已選入的 Story 標記狀態為 `In Sprint` 或對應的狀態標記 |
+| GitHub Issues labels/milestone | 為選入的 Issues 套用 `status: in-sprint` label（移除 `status: backlog`）並設定對應的 Sprint Milestone（`gh issue edit <number> --milestone "Sprint N" --add-label "status: in-sprint" --remove-label "status: backlog"`） |
 
 ### Commit + Push 規範
 
@@ -206,10 +206,18 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
 **派遣說明**：
 
 0.5. **角色權重調整檢查**：健康檢查完成後立即執行。讀取 `docs/km/Retrospective_Log.md`，統計已完成 Sprint 記錄數量。若少於 3 個則輸出「歷史資料不足 3 個 Sprint，跳過權重調整」；否則對 QA 領域執行關鍵字清單比對，判斷是否觸發升級或放寬。結果（無論調整與否）均持久化至 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊。完整規則詳見 §7。
-1. **PO（第一輪）**：先掃描 GitHub open issues 進行 Triage（question/invalid 直接回覆 + close，bug/feature-request 走 Backlog Bridge 納入 Backlog）。然後由 PO subagent 自行讀取以下三個檔案，根據優先級、Sprint Goal 與當前里程碑初步選取 Stories，並回傳結構化摘要表格，**主 session 不直接讀取這些檔案**：
-   - `docs/prd/PRODUCT_BACKLOG.md`（Backlog 狀態與優先級）
+1. **PO（第一輪）**：先掃描 GitHub open issues 進行 Triage（question/invalid 直接回覆 + close，bug/feature-request 走 Backlog Bridge 納入 Backlog）。然後由 PO subagent 執行以下步驟選取 Stories，**主 session 不直接讀取這些資源**：
+
+   **資料來源（PO subagent 讀取）**：
+   - `gh issue list --label "type: backlog-item" --label "status: backlog" --state open --json number,title,body,labels --limit 200`（Backlog Issues）
    - `docs/PROJECT_BOARD.md`（專案進度與看板狀態）
    - `docs/prd/ROADMAP.md`（當前里程碑目標）
+
+   **即時排序計算步驟（PO subagent 執行）**：
+   1. 從 `gh issue list` 回傳的每個 Issue body，以正則表達式提取 RICE Score 數值（格式：`\*\*RICE Score\*\* \| \*\*(\d+(?:\.\d+)?)\*\*`）；提取失敗時以 RICE Score = 0 計算並記錄警告
+   2. 從 Issue labels 提取 MoSCoW tier：`priority: must` → tier 1、`priority: should` → tier 2、`priority: could` → tier 3；無 priority label 時以 tier 3 計算
+   3. 排序規則：先依 MoSCoW tier 升序（tier 1 最優先），同 tier 內依 RICE Score 降序
+   4. 從排序結果頂部選取符合 Sprint Goal、當前里程碑目標（ROADMAP.md）與 Sprint 容量的 Stories
 
    PO subagent 回傳格式（Markdown 表格）：
 
@@ -258,7 +266,7 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
      - `Path verification: N/A` — AC 未引用任何具體路徑
    - 若結果為 `FAIL`：QA 標記該 Story 為 `NEEDS_REVISION`，Story 退回 PO 修正路徑後重新提交。
    - 若 AC 不引用任何路徑：填 `N/A`，不需執行 Glob/ls。
-4. **PO（第二輪）**：根據 Architect 與 QA 的回饋，最終確認 Sprint Backlog，建立 `docs/sprints/sprint_N.md`，並由 PO subagent 更新 `docs/PROJECT_BOARD.md` 與 `docs/prd/PRODUCT_BACKLOG.md`。PO subagent 回傳最終 Sprint Backlog 結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果），**主 session 不直接讀取 PRODUCT_BACKLOG.md 或 PROJECT_BOARD.md，僅接收 subagent 回傳的摘要**。
+4. **PO（第二輪）**：根據 Architect 與 QA 的回饋，最終確認 Sprint Backlog，建立 `docs/sprints/sprint_N.md`，並由 PO subagent 更新 `docs/PROJECT_BOARD.md`。PO subagent 同時為所有選入的 Issues 執行以下 GitHub 操作：套用 `status: in-sprint` label（移除 `status: backlog`）並設定對應的 Sprint Milestone。PO subagent 回傳最終 Sprint Backlog 結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果），**主 session 不直接讀取 PROJECT_BOARD.md，僅接收 subagent 回傳的摘要**。
 
    ### 防漂移約束（Drift Protection）
 
