@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-04-12（Sprint 33 Review — US-63/US-64/US-65 全部完成）
+**最後更新**：2026-04-13（Sprint 34 Planning Round 2 — US-66/US-68 進入 Sprint）
 **管理者**：Product Owner
 
 ---

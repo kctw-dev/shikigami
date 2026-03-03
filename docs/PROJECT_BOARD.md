@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-04-06（Sprint 33 Review 完成）
-**當前 Sprint**：Sprint 33（完成）
+**最後更新**：2026-04-13（Sprint 34 Planning 完成）
+**當前 Sprint**：Sprint 34（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 33](sprints/sprint_33.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 34](sprints/sprint_34.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 34 — 進行中
+
+**Sprint Goal**：Issue #46 自動化排程框架收尾結案 + Issue #49 CI 失敗根因修正
+**期間**：2026-04-13 ~ 2026-04-19
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-66：Issue #46 最終收尾 — 四條排程流程驗收條件逐項確認、缺口補齊，close Issue #46 | S | 1 | 進行中 |
+| US-68：Issue #49 框架端主動修正評估 — workflow check 失敗根因分析（根因已確認：Sprint 33 commit 順序問題，非框架 bug） | S | 1 | 進行中 |
+
+**目標 Velocity**：2 points（2 Stories）
 
 ---
 
