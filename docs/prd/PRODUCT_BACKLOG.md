@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-04-06（Sprint 33 Planning — US-63、US-64、US-65 選入 Sprint）
+**最後更新**：2026-04-06（Sprint 33 US-65 Done — US-T08 RICE 重新評分，No-Go，Deferred）
 **管理者**：Product Owner
 
 ---
@@ -143,7 +143,7 @@
 |------|-------|------|--------|------|------|------|
 | 1 | US-63：Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-intake Skill） | 待定 | Should | M | GitHub Issue #46 子 Story #4 / Sprint 33 Planning | In Sprint |
 | 2 | US-64：M5 條件 (a) 主動觸及強化 — 外部社群推廣文案製作（GitHub README badges + 技術文章草稿 + 主動 outreach 指引） | 待定 | Should | S | M5 條件 (a) 外部使用者觸及 / Sprint 33 Planning | In Sprint |
-| 3 | US-65：US-T08（Intent Routing 測試）評估重開 — RICE 重新評分與 Sprint Planning 可行性確認 | 待定 | Could | S | PRODUCT_BACKLOG.md 測試框架候選 / Sprint 33 Planning | In Sprint |
+| 3 | US-65：US-T08（Intent Routing 測試）評估重開 — RICE 重新評分與 Sprint Planning 可行性確認 | — | Could | S | PRODUCT_BACKLOG.md 測試框架候選 / Sprint 33 Planning | Done（Sprint 33） |
 
 ### Sprint 32 — 已完成 Stories
 
@@ -436,7 +436,7 @@ As a framework developer working in the shikigami repo itself, I want the standu
 | 1 | US-T05：交叉引用驗證 | 25.6 | Should | S | — | Done (Sprint 7) |
 | 2 | US-T07：CI Pipeline | 24.0 | Should | M | — | Done (Sprint 7) |
 | 3 | US-T09：孤兒文件清理規範 | 16.7 | Could | M | — | Done (Sprint 9) |
-| 4 | US-T08：Intent Routing 測試 | 6.0 | Could | L | — | 待選 |
+| 4 | US-T08：Intent Routing 測試 | ~~6.0~~ → 2.0 | Could | L | — | Deferred（RICE 2.0，No-Go，US-65，2026-04-06） |
 
 ---
 
@@ -680,6 +680,47 @@ As a Developer, I want a test suite that verifies scrum-master correctly routes 
 
 **RICE**：Reach 10 × Impact 3 × Confidence 60% ÷ Effort 3.0 = **6.0**
 **MoSCoW**：Could（L1/L2 穩定後再做）
+
+---
+
+#### RICE 重新評分（US-65，2026-04-06）
+
+**評估背景**：Sprint 33 US-65 觸發重評，考量自原始評分以來的環境變化。
+
+**變化因素分析**
+
+| 因素 | 原始假設 | 現況 | 影響方向 |
+|------|----------|------|----------|
+| Skills 數量 | 14 個（AC1 明確寫「覆蓋所有 14 個 skill」） | 21 個 SKILL.md（+50%） | Effort 上升 |
+| Mock feasibility | 未評估 | 現有 10 個 scripts/ 驗證腳本全為靜態結構驗證（validate-skills.sh、validate-xrefs.sh 等），無 LLM prompt mock 層，無法複用於 intent routing 動態評估 | Effort 上升、Confidence 下降 |
+| Scripts 覆蓋率 | 未評估 | 0% 覆蓋 intent routing 動態評估；需從零建立 LLM mock 框架 | Effort 上升 |
+| Intent routing 問題頻率 | 假設為高優先 | 過去 20+ Sprint 無任何 intent routing 相關 Retro Problem | Impact 下降 |
+
+**重新計算 RICE**
+
+| 維度 | 原始分數 | 重新評分 | 調整理由 |
+|------|----------|----------|----------|
+| Reach | 10 | 10 | 不變，仍影響所有使用者的 scrum-master 路由體驗 |
+| Impact | 3 | 2 | 過去 20+ Sprint 無 intent routing 問題出現於 Retro，實際 Impact 偏低 |
+| Confidence | 60% | 50% | 21 Skills mock 框架複雜度高於預期；LLM prompt 評估天生具不確定性 |
+| Effort | 3.0 人週 | 5.0 人週 | 21 Skills（較原 14 多 50%）需至少 30+ 測試案例；需從零建立 LLM mock 層；CI 整合複雜度高 |
+| **RICE Score** | **6.0** | **2.0** | Reach 10 × Impact 2 × Confidence 0.50 ÷ Effort 5.0 |
+
+**Go/No-Go 決策：No-Go（Deferred）**
+
+RICE 從 6.0 降至 2.0，遠低於目前 Backlog 優先門檻。具體理由：
+
+1. **Skills 膨脹導致 Effort 不成比例上升**：21 個 Skills（原 14 個）使 AC1 所需測試案例從 20 個增至 30+ 個，且每新增 Skill 都需維護路由測試，長期維護成本高。
+2. **Mock 框架需從零建立**：現有 10 個驗證腳本全為靜態文件驗證，無任何 LLM prompt mock 基礎設施。建立隔離的 intent routing 測試環境（AC3 離線 mock 模式）屬高難度工程，且與既有 CI Pipeline（US-T07）整合路徑不清晰。
+3. **實際需求信號薄弱**：Sprint 8 至 Sprint 33 共 25+ Sprint，無任何 intent routing 誤判出現於 Retrospective 或 Issue，表示此風險尚未成為真實問題。
+4. **機會成本高**：5.0 人週 Effort 可完成 5 個 S-size 高 RICE 功能 Stories；在 M5 外部使用者觸及目標完成前，投入優先級更高的 Stories 效益更大。
+
+**建議重啟條件**：若未來出現以下任一情況，可重新評估：
+- 累計 3+ 個 Sprint 出現 intent routing 誤判 Problem
+- 建立通用 LLM mock 框架的 ADR 被接受（降低 AC3 的 Effort）
+- Skills 數量穩定且無新增預期
+
+**狀態更新**：`待選` → `Deferred`（RICE 2.0，No-Go，US-65 評估，2026-04-06）
 
 ---
 
