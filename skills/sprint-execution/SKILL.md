@@ -15,11 +15,11 @@ Sprint 執行的核心 Skill。從 Sprint Backlog 逐個取出 Story，透過 **
 
 ## 2. 核心原則
 
-**Fresh subagent per story + 雙階段審查 = 高品質、快速迭代**
+**Story-Lifecycle Subagent 封裝 = context 隔離 + 自審閉環 + 高品質迭代**（ADR-007 選項 B）
 
-- **隔離性**：每個 Story 使用全新的 Developer subagent，避免上下文污染
-- **TDD 強制**：所有功能實作必須先寫測試再寫代碼
-- **雙階段審查**：Spec Compliance 確認做對了，Code Quality 確認做好了
+- **隔離性**：每個 Story 派遣一個全新的 Story-Lifecycle subagent，整個生命週期（Dev + Review + 修復循環）在 subagent 內部閉環，主 session 僅收摘要，避免 context overflow
+- **TDD 強制**：所有功能實作必須先寫測試再寫代碼（subagent 內部執行）
+- **三階段自審**：Spec Compliance → Code Quality → Security（條件觸發），由 Story-Lifecycle subagent 自審，補償機制見 ADR-007 §AC3
 - **小步快跑**：每個小步驟一個 commit，保持可追溯性
 
 ---
@@ -35,32 +35,47 @@ Issue 快掃（gh issue list --state open --limit 10）
 Sprint Backlog 中取出 Story
   |
   v
-派遣 Developer subagent（使用 developer-prompt.md）
+  ┌─────────────────────────────────────────────────────────────┐
+  │  派遣 Story-Lifecycle subagent（story-lifecycle-prompt.md）  │
+  │                                                             │
+  │  subagent 內部閉環：                                         │
+  │  ├─ 讀取 sprint_N.md（AC + 需求）                           │
+  │  ├─ TDD 開發（Red → Green → Refactor）                      │
+  │  ├─ Spec Compliance self-review                             │
+  │  │    |-- FAIL --> 修復循環（最多 3 次，內部閉環）            │
+  │  │    +-- PASS                                              │
+  │  ├─ Code Quality self-review                                │
+  │  │    |-- FAIL --> 修復循環（最多 3 次，內部閉環）            │
+  │  │    +-- PASS                                              │
+  │  └─ Security self-review（條件觸發）                         │
+  │       |-- FAIL / ESCALATE --> 升級主 session                │
+  │       +-- PASS / SKIP                                       │
+  └─────────────────────────────────────────────────────────────┘
   |
   v
-Developer 實作 + TDD + 自我審查
-  |
-  v
-派遣 QA subagent 做 Spec Compliance Review（使用 spec-reviewer-prompt.md）← 不可跳過（HARD-GATE）
-  |-- 不通過 --> Developer 修復 --> 重新審查
-  +-- 通過
+接收 Story-Lifecycle subagent 回傳
+  |-- ESCALATE --> 依升級類型處置（見下方升級表）
+  |-- FAIL     --> 記錄失敗原因，更新看板，繼續下一 Story
+  +-- PASS
         |
         v
-派遣 QA subagent 做 Code Quality Review（使用 quality-reviewer-prompt.md）← 不可跳過（HARD-GATE）
-  |-- 不通過 --> Developer 修復 --> 重新審查
-  +-- 通過
-        |
-        v
-如有安全相關 --> 派遣 Security subagent
-  |
-  v
-更新 PROJECT_BOARD
+更新 PROJECT_BOARD（Story 狀態 → 完成）
   |
   v
 Sprint Backlog 還有 Story？
   |-- YES --> 取出下一個 Story（回到頂端繼續）
   +-- NO（所有 Story 完成）--> 立即 invoke shikigami:sprint-review（不詢問使用者）
 ```
+
+**升級類型處置表（主 session 職責）：**
+
+| 升級類型 | 主 session 處置 |
+|----------|----------------|
+| DESIGN_ISSUE | 暫停 Sprint 執行，升級至 Architect 評估 |
+| CONTEXT_OVERFLOW | 觸發 ADR-007 §AC4 fallback 策略（Phase 2 實作） |
+| REQUIREMENT_AMBIGUITY | 暫停 Sprint 執行，升級至 PO 釐清 AC |
+| DEPENDENCY_MISSING | 暫停 Sprint 執行，解決依賴後重試 |
+| SECURITY_CRITICAL | 暫停 Sprint 執行，觸發 security-review Skill |
 
 ### 步驟詳解
 
@@ -121,16 +136,26 @@ Sprint Backlog 還有 Story？
    > - **原生支援**：gh CLI 原生 `--label` 篩選，指令簡單、無副作用
    > - **低成本**：不需要引入新的基礎設施或 ADR，符合 YAGNI 原則
 
-2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。**主 session 不讀取 Story 內容**，Story ID 與路徑傳入 subagent prompt，由 subagent 自行讀取。
-3. **派遣 Developer subagent**：使用 `developer-prompt.md` 作為 prompt，在 prompt 中指定以下檔案路徑由 **Developer subagent 自行讀取**，主 session 不預讀這些內容：
-   - `docs/sprints/sprint_N.md`（Story AC 與完整需求）
-   - 相關 ADR 路徑（如 `docs/adr/ADR-XXX.md`）
-   - 相關設計文件路徑（如 `docs/sdd/SDD-XXX.md`）
-4. **Developer 實作**：遵循 TDD（Red → Green → Refactor），每個小步驟一個 commit，完成後執行自我審查 checklist。
-5. **Spec Compliance Review**：派遣 QA subagent 使用 `spec-reviewer-prompt.md`，在 prompt 中指定 `docs/sprints/sprint_N.md` 路徑由 **QA subagent 自行讀取** Story AC，獨立驗證實作是否符合所有 Acceptance Criteria。QA subagent **回傳格式**：`PASS/FAIL + 一句話摘要`（例：`PASS — 所有 AC 均通過，測試覆蓋完整`）。
-6. **Code Quality Review**：派遣 QA subagent 使用 `quality-reviewer-prompt.md`，在 prompt 中指定需審查的代碼路徑由 **QA subagent 自行讀取**，評估代碼品質、SOLID 原則、測試品質。QA subagent **回傳格式**：`PASS/FAIL + 一句話摘要`（例：`FAIL — 發現 3 個硬編碼常數，需提取為命名常量`）。
-7. **安全審查（條件觸發）**：若 Story 涉及外部輸入、API 端點、配置變更，派遣 Security subagent 進行安全審查。在 prompt 中指定相關檔案路徑由 **Security subagent 自行讀取**。Security subagent **回傳格式**：`PASS/FAIL + 一句話摘要`（例：`PASS — 無外部輸入注入風險，配置透過環境變數管理`）。
-8. **更新看板與同步 Sprint 文件**：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。
+2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。**主 session 不讀取 Story 內容**，Story ID 與路徑傳入 subagent，由 subagent 自行讀取。
+3. **派遣 Story-Lifecycle subagent**：使用 `story-lifecycle-prompt.md` 作為 prompt，以 ADR-007 §AC2 介面契約格式傳入以下參數（主 session 不預讀這些內容，路徑由 **Story-Lifecycle subagent 自行讀取**）：
+   - `story_id`：Story 識別碼（如 `US-XX`）
+   - `sprint_file`：`docs/sprints/sprint_N.md`（Story AC 與完整需求）
+   - `project_board`：`docs/PROJECT_BOARD.md`
+   - `related_adrs`：相關 ADR 路徑清單（如 `docs/adr/ADR-XXX.md`）
+   - `related_sdds`：相關設計文件路徑清單（如 `docs/sdd/SDD-XXX.md`）
+   - `doc_only`：true / false（是否為 doc-only Story）
+   - `size`：Story Size（S/M/L）
+   - `bypass`：true / false（是否為 [BYPASS] Story）
+
+   > **backward compatibility**：`developer-prompt.md`、`spec-reviewer-prompt.md`、`quality-reviewer-prompt.md` 保留，供獨立使用或 ADR-007 Phase 2 外部抽樣審查時引用。
+
+4. **Story-Lifecycle subagent 執行**：subagent 在內部閉環執行 TDD 開發（Red → Green → Refactor）、Spec Compliance self-review、Code Quality self-review、Security self-review（條件觸發）、修復循環，最終回傳 PASS/FAIL/ESCALATE 結論與標準化摘要。主 session **不累積 QA 對話 context**。
+5. **接收回傳並處置**：依 Story-Lifecycle subagent 回傳結論處置：
+   - `PASS`：繼續步驟 6（看板更新）
+   - `FAIL`：記錄失敗原因，更新看板標記為失敗，繼續下一 Story
+   - `ESCALATE`：依升級類型表決定是否暫停 Sprint（見上方流程圖）
+6. **安全審查（條件觸發，主 session 層級）**：若 Story-Lifecycle subagent 回傳 `ESCALATE: SECURITY_CRITICAL`，主 session 暫停 Sprint 執行，觸發 `security-review` Skill 進行獨立深度安全審查。一般安全審查由 subagent 在 §7 Security self-review 內部處理。
+7. **更新看板與同步 Sprint 文件**：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。
 
    <HARD-GATE>
    **Developer 更新範圍限制（越權禁止）**
