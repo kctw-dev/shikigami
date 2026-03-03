@@ -41,6 +41,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 28 | 2026-03-02 | 4 points | 100% | 穩定 | Sprint Goal 達成，OpenCode Phase 3 完成 |
 | Sprint 29 | 2026-03-03 | 3 points | 100% | 下降趨勢 | Goal 達成，Issue #3 正式結案（Sprint 27=4, Sprint 28=4, Sprint 29=3 → 下降趨勢） |
 | Sprint 30 | 2026-03-03 | 4 points | 100% | 不規則 | Sprint Goal 達成（Sprint 28=4, Sprint 29=3, Sprint 30=4 → 先降後升，方向不一致） |
+| Sprint 31 | 2026-03-03 | 4 points | 100% | 穩定 | Sprint Goal 達成（Sprint 29=3, Sprint 30=4, Sprint 31=4 → S30→S31 持平 0%，±20% 內）；排程衝刺 worktree 隔離框架 + M5 Beta 回饋閉環強化 + README 排程設定指引交付 |
 
 ---
 

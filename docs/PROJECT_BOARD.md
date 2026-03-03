@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 31 Planning 完成）
-**當前 Sprint**：Sprint 31（進行中）
+**最後更新**：2026-03-03（Sprint 31 Review 完成）
+**當前 Sprint**：Sprint 31（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 31](sprints/sprint_31.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 31 — 進行中
+## Sprint 31 — 完成
 
 **Sprint Goal**：繼續推進 Issue #46 自動化排程框架第二子 Story — 建立排程衝刺 worktree 隔離執行指引，並補強 M5 外部使用者招募的回饋閉環機制，使排程驅動的 Sprint 週期進入可驗證階段
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-23 ~ 2026-03-29
 
 | Story | Size | Points | 狀態 |
@@ -19,6 +21,7 @@
 | US-59：Issue #52 — README 自動更新排程設定指引（schedule SKILL.md 使用範例） | S | 1 | 完成 |
 
 **目標 Velocity**：4 points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
 
 ---
 
