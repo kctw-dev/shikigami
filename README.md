@@ -305,11 +305,15 @@ Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發
 | v0.2.0 | 自我感知 | Sprint 2–4 | Onboarding + Health Check + Sprint Metrics |
 | v0.3.0 | 知識沉澱 | Sprint 4–6 | Retrospective Analytics + Tech Debt Registry + 5 驗證腳本 + Hard Gate 機制 |
 | v0.3.x | 穩定化 | Sprint 7–15 | dispel 解咒模式 + CI Pipeline + 制衡案例 + Issue 回覆自動化 + Bypass 機制 + Token 成本透明化 + 孤兒文件偵測 + 零讀取架構 + 角色權重自動調整 + 使用者文件（Tutorial + Troubleshooting） |
+| v0.5.x | 流程精煉 | Sprint 16–17 | 快思/慢想雙模式精簡化 + doc-only Story 執行保護 + 多平台可行性調查 + 歷史歸檔機制（PROJECT_BOARD + Retrospective_Log） |
+| v0.7.x | 自動化擴展 | Sprint 18–20 | schedule Skill（Sprint 自動排程執行）+ ADR-005 + shoot 短衝模式 + /shoot Command + 序列排程保護 + PO drift 修正 |
+| v0.9.x | 品質強化 | Sprint 21–24 | parallel-dispatch 同檔案衝突偵測 + Onboarding Labels + 提示注入防護（ADR-006）+ ADR-007 Story-Lifecycle Subagent + 外部抽樣審查機制 + Architect/QA 知識框架 Skill |
+| v0.13.0 | 多平台支援 | Sprint 25–29 | M5 完成條件終審 + OpenCode 平台整合（ADR-008）+ symlink 適配策略 + 五角色 Agent 移植 + INSTALL_OPENCODE.md 安裝指南 + Issue #3 正式結案 + Beta 使用者招募 |
 
-### 累積數據（截至 Sprint 15）
+### 累積數據（截至 Sprint 29）
 
-- 連續 15 個 Sprint 完成率 100%，Velocity 歷史：8→5→5→4→6→8→7→6→5→6→4→4→4→2→4
-- 56 Stories 交付，4 個 ADR（架構決策紀錄）
+- 連續 29 個 Sprint 完成率 100%，Velocity 歷史：8→5→5→4→6→8→7→6→5→6→4→4→4→2→4→8→4→3→5→5→4→6→5→5→4→2→4→4→3
+- 97 Stories 交付，8 個 ADR（架構決策紀錄）
 - 8 個自動化驗證腳本 + GitHub Actions CI Pipeline
 
 ### 開發流程實證
