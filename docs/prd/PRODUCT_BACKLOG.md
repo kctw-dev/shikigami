@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-03（Sprint 30 Planning — US-54、US-55、US-56 選入）
+**最後更新**：2026-03-03（Sprint 30 Review — US-54、US-55、US-56 完成，移至 BACKLOG_DONE.md）
 **管理者**：Product Owner
 
 ---
@@ -97,7 +97,7 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | Retro #47：短衝模式設計與實作 | 待定 | Should | 待定 | Sprint 17 Retro / Issue #47 | Backlog（退回原因：4 項設計決策未完成，待 Refinement） |
+| 1 | Retro #47：短衝模式設計與實作 | 待定 | Should | 待定 | Sprint 17 Retro / Issue #47 | [OVERDUE-SYNC] Issue #47 已關閉（CLOSED，2026-03-02），對應 US-31（Sprint 20 Done），Backlog 狀態未同步 — 應移除或標記 Done |
 | 2 | Retro #48：PO subagent 跨輪次一致性檢查 | 25.6 | Should | S | Sprint 17 Retro / Issue #48 | Backlog（對應 US-30，Sprint 18 重新規劃退回，待後續排期） |
 
 ### Sprint 18 — 新增 Stories
@@ -137,13 +137,13 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
 
-### Sprint 30 — 進行中 Stories
+### Sprint 30 — 已完成 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-54：互動 Session 自動偵測待審排程 PR + Scrum Master 提醒機制（Issue #46 子 Story #1） | 待定 | Should | S | GitHub Issue #46 / Sprint 30 Planning | In Sprint |
-| 2 | US-55：README 準確性修正 — 版本號、Skill 數量、版本歷史對齊 | 待定 | Must | S | Architect 建議（Sprint 30 Planning） | In Sprint |
-| 3 | US-56：Deployment Readiness 版本 Tag 決策規則強化（Issue #36） | 待定 | Must | M | GitHub Issue #36 / Architect 建議（Sprint 30 Planning） | In Sprint |
+| 1 | US-54：互動 Session 自動偵測待審排程 PR + Scrum Master 提醒機制（Issue #46 子 Story #1） | 待定 | Should | S | GitHub Issue #46 / Sprint 30 Planning | Done（Sprint 30） |
+| 2 | US-55：README 準確性修正 — 版本號、Skill 數量、版本歷史對齊 | 待定 | Must | S | Architect 建議（Sprint 30 Planning） | Done（Sprint 30） |
+| 3 | US-56：Deployment Readiness 版本 Tag 決策規則強化（Issue #36） | 待定 | Must | M | GitHub Issue #36 / Architect 建議（Sprint 30 Planning） | Done（Sprint 30） |
 
 ### Sprint 29 — 已完成 Stories
 

@@ -1344,6 +1344,78 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 30（2026-03-03）
+
+**Sprint Goal**：以 Issue #46 排程 PR 偵測為最高優先，同步修正 README 準確性並強化版本 Tag 策略，確保框架在開源延後期間的自我一致性與維護品質
+
+| Story ID | 標題 | Size | Points | 完成日期 |
+|----------|------|------|--------|----------|
+| US-54 | 互動 Session 自動偵測待審排程 PR + Scrum Master 提醒機制（Issue #46 子 Story #1） | S | 1 | 2026-03-03 |
+| US-55 | README 準確性修正 — 版本號、Skill 數量、版本歷史對齊 | S | 1 | 2026-03-03 |
+| US-56 | Deployment Readiness 版本 Tag 決策規則強化（Issue #36） | M | 2 | 2026-03-03 |
+
+### US-54：互動 Session 自動偵測待審排程 PR + Scrum Master 提醒機制
+
+**來源**：GitHub Issue #46 子 Story #1
+**Size**：S / 1 Point
+**MoSCoW**：Should
+
+**User Story**
+As a Scrum Master running an interactive session, I want the system to automatically detect pending scheduled PRs and remind me at session start, so that I never miss reviewing a queued scheduled execution PR and the team's Sprint cadence remains unblocked.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | scrum-master SKILL.md 新增 PR 偵測步驟 | `skills/scrum-master/SKILL.md` 互動 Session 啟動段落新增排程 PR 偵測步驟 |
+| AC2 | [靜態] | 有待審 PR 時的提醒格式 | 標準提醒區塊（PR 數量摘要 + 各 PR 編號/標題/建立時間 + 三選項） |
+| AC3 | [靜態] | label 標準化定義 | `skills/schedule/SKILL.md` 腳本生成模板補充 `scheduled` label |
+| AC4 | [靜態] | ADR-003 Checklist 通過 | 修改 skills/ 下 SKILL.md 前確認 ADR-003 四項條件 |
+
+---
+
+### US-55：README 準確性修正 — 版本號、Skill 數量、版本歷史對齊
+
+**來源**：Architect 建議（Sprint 30 Planning）
+**Size**：S / 1 Point
+**MoSCoW**：Must
+
+**User Story**
+As an external user reading the README, I want the version number, Skill count, version history, and Sprint streak to accurately reflect the current project state, so that I can trust the documentation and make informed decisions about adopting Shikigami.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 版本號更新 | `README.md` 版本號（v0.3.9→v0.13.0 或最新 plugin.json 版本）更新；版本號與 `plugin.json` version 一致 |
+| AC2 | [靜態] | Skill 數量與清單對齊 | 「17 個 Skills」→「21 個 Skills」（對齊 skills/ 目錄計數）；清單補入 schedule 與 shoot |
+| AC3 | [靜態] | 版本歷史表格對齊 | 版本歷史表格補充 Sprint 16-29 交付里程碑 |
+| AC4 | [靜態] | Sprint 連勝數更新 | 「連續 15 個 Sprint / 56 Stories / 4 ADR」更新為截至 Sprint 29 正確數值 |
+| AC5 | [靜態] | ADR-003 Not Triggered | README.md 為說明文件，ADR-003 不適用 |
+
+---
+
+### US-56：Deployment Readiness 版本 Tag 決策規則強化（Issue #36）
+
+**來源**：GitHub Issue #36 / Architect 建議（Sprint 30 Planning）
+**Size**：M / 2 Points
+**MoSCoW**：Must
+
+**User Story**
+As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to define clear version Tag decision rules including a PO Override mechanism, and sprint-review SKILL.md to verify ROADMAP milestone alignment before deployment, so that the team has deterministic governance over version tagging and avoids accidental or inconsistent releases.
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | 版本號選擇規則定義 | `skills/deployment-readiness/SKILL.md` 新增「版本 Tag 決策規則」段落 |
+| AC2 | [靜態] | sprint-review SKILL.md 整合 ROADMAP 對齊檢查 | sprint-review deployment-readiness 步驟前新增里程碑對齊子步驟 |
+| AC3 | [靜態] | 緊急覆蓋機制 | 定義 PO Override 機制，覆蓋行為標注 [PO-OVERRIDE] |
+| AC4 | [動態] | Issue #36 關閉 | GitHub Issue #36 留言說明解決內容並關閉 |
+| AC5 | [靜態] | ADR-003 Checklist 通過 | 修改兩個 SKILL.md 前通過 ADR-003 四項條件 |
+
+---
+
 ## Sprint 29（2026-03-03）
 
 **Sprint Goal**：以 Issue #3 正式結案為里程碑，完成 OpenCode 平台動態驗證（US-52）與 M5 條件 (a) 外部使用者觸及的具體招募行動（US-53），使 M5 最後一個開放條件進入可達成狀態

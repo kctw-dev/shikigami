@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-03（Sprint 29 US-52 — Issue #3 正式結案，修訂記錄：v0.12.1）
+> 最後更新：2026-03-03（Sprint 30 Review — US-54/55/56 全部完成，修訂記錄：v0.14.0）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.12.0**（Sprint 28）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.14.0**（Sprint 30）。
 
 | 版號 | 含義 |
 |------|------|
@@ -220,6 +220,9 @@ Sprint Review 時自動產出：
 | US-51 | OpenCode Phase 3c — Task Tool 參數分析與 Developer dispatch 驗證（Issue #3 接近可結案） | Sprint 28 ✅ |
 | US-52 | OpenCode Phase 4 — Issue #3 正式結案：動態驗證補完（[STATIC-CONFIRMED]）與 Issue 關閉 | Sprint 29 ✅ |
 | US-53 | M5 Beta 使用者招募 — README 招募文案 + Issue 引導機制（M5 條件 (a) 主動招募啟動） | Sprint 29 ✅ |
+| US-54 | 互動 Session 自動偵測待審排程 PR + Scrum Master 提醒機制（Issue #46 子 Story #1） | Sprint 30 ✅ |
+| US-55 | README 準確性修正 — 版本號、Skill 數量、版本歷史對齊 | Sprint 30 ✅ |
+| US-56 | Deployment Readiness 版本 Tag 決策規則強化 + PO Override 機制（Issue #36） | Sprint 30 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 
