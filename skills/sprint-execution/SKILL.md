@@ -59,6 +59,33 @@ Sprint Backlog 中取出 Story
   +-- PASS
         |
         v
+  ┌─────────────────────────────────────────────────────────────┐
+  │  外部抽樣審查決策（ADR-007 §AC3 Phase 2）                    │
+  │                                                             │
+  │  評估抽樣觸發條件（詳見 story-lifecycle-prompt.md §AC3）：   │
+  │    TC-1：L-size Story → 100% 全量                           │
+  │    TC-2：安全相關 AC → 100% 全量                            │
+  │    TC-3：前次 Sprint Review 自審品質問題 → 100% 全量         │
+  │    TC-4：連續 2 次 self-review FAIL → 100% 全量             │
+  │    其他：30% 基礎抽樣率（取上整）                            │
+  └─────────────────────────────────────────────────────────────┘
+        |
+        +-- 不觸發抽樣（未達 30% 門檻，且無 TC-1~TC-4）
+        |       |
+        |       v
+        |   更新 PROJECT_BOARD（Story 狀態 → 完成）
+        |
+        +-- 觸發外部抽樣審查
+                |
+                v
+          派遣獨立 QA subagent 執行外部抽樣審查
+          （使用 spec-reviewer-prompt.md 或 quality-reviewer-prompt.md）
+                |
+                |-- CONFIRM --> 記錄抽樣結果，更新 PROJECT_BOARD（Story 狀態 → 完成）
+                |
+                +-- DISPUTE --> 執行 DISPUTE 處理流程（見 §4 外部抽樣審查結果處理）
+  |
+  v
 更新 PROJECT_BOARD（Story 狀態 → 完成）
   |
   v
