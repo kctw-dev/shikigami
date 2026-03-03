@@ -103,6 +103,12 @@ Sprint Backlog 還有 Story？
 
 ### 步驟詳解
 
+0. **Execution 環節開始前（取出第一個 Story 之前）記錄 baseline snapshot 至 `docs/km/Metrics_Log.md` Token Baseline Snapshots 表格**：
+   1. 列出 `~/.claude/projects/-home-kevin-shikigami/` 目錄下所有 JSONL 檔案，找出最新（依修改時間排序）的 JSONL
+   2. 讀取該 JSONL，對所有含 `message.usage` 欄位的記錄加總 `input_tokens`（含 `cache_read_input_tokens` 與 `cache_creation_input_tokens`）與 `output_tokens`，得到當前累計值
+   3. 在 Metrics_Log.md「Token Baseline Snapshots」表格新增一列：Sprint 編號填入本 Sprint 編號，環節名稱填「Execution」，兩個累計 token 欄位填入步驟 2 計算所得值
+   4. 若 JSONL 不可存取，兩欄填「N/A」並輸出「Token Baseline 不可用，需手動補充」
+
 1. **Issue 快掃**：在取出 Story 之前，執行 GitHub Issue 快速掃描，處理社群或使用者的待回覆問題。
 
    **執行指令：**
