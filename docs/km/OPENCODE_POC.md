@@ -601,6 +601,7 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 ---
 name: developer
 description: Senior full-stack developer implementing User Stories with TDD discipline, conflict detection, and tech debt management
+model: sonnet
 ---
 ```
 
@@ -622,9 +623,8 @@ description: Senior full-stack developer implementing User Stories with TDD disc
 
 **步驟 3：模型選擇**
 - OpenCode 依 frontmatter `model` 欄位選擇執行模型
-- **注意**：`.opencode/agents/developer.md` 目前**未包含** `model` 欄位（Phase 2 US-48 建立時未加入）
-- 預期行為：使用 OpenCode 預設模型（通常為使用者 session 當前選擇的模型）
-- 與其他四個角色設定檔（US-49 建立，含 `model: sonnet`）存在格式不一致 — 此為已知差異，建議在後續 Sprint 中補齊
+- `developer.md` 已包含 `model: sonnet` 欄位（Sprint 28 fix commit e75dfa5 補齊），與其他四個角色設定檔格式一致
+- 預期行為：使用明確指定的 `sonnet` 模型
 
 **步驟 4：任務執行**
 - OpenCode 以注入的 Developer system prompt 啟動 subagent
@@ -635,7 +635,7 @@ description: Senior full-stack developer implementing User Stories with TDD disc
 
 | 項目 | 預期差異 | 風險等級 | 緩解建議 |
 |------|---------|---------|---------|
-| `model` 欄位缺失（developer.md）| 使用 session 預設模型，非明確指定 `sonnet` | 低 | 補齊 `model: sonnet` 欄位（Phase 3c DoD 外，建議下一 Sprint 修正）|
+| ~~`model` 欄位缺失~~（developer.md）| ~~已解決~~（fix commit e75dfa5 補齊 `model: sonnet`）| — | 已修正，五角色設定檔格式一致 |
 | `prompt` 參數命名 | OpenCode Task tool 傳入 prompt 的參數名稱未確認 | 中 | 實機 POC 首要確認項（P-2）；預期為 `prompt` 或對話內容格式 |
 | `isolation` 不支援 | 無 worktree 隔離，所有 task 在同一 workspace 執行 | 低 | 現有 Shikigami SKILL.md 未使用 `isolation` 參數，無立即影響 |
 | Session 初始化機制 | OpenCode 無 Claude Code `SessionStart` hook 等效機制確認 | 中 | 按需初始化降級策略（使用者首次呼叫 Skill 時觸發），詳見 ADR-008 負面影響緩解策略 |
@@ -654,11 +654,11 @@ description: Senior full-stack developer implementing User Stories with TDD disc
 - 執行環境：Claude Code（靜態分析，非實機 OpenCode 執行）
 - 設定檔：.opencode/agents/developer.md
 - Agent Name：developer
-- Model：未明確指定（使用 session 預設；建議補齊 model: sonnet 欄位）
+- Model：sonnet（fix commit e75dfa5 補齊）
 - System Prompt 來源：developer.md Markdown 正文（完整 Developer 角色 prompt）
 - 預期派遣結果：PASS（基於靜態分析）
 - 已確認項目：設定檔格式符合 ADR-008；name/description frontmatter 存在；正文內容完整
-- 待確認項目：P-2（prompt 參數名稱）、model 欄位補齊、SessionStart hook 等效機制
+- 待確認項目：P-2（prompt 參數名稱）、SessionStart hook 等效機制
 - 動態驗證狀態：[PENDING-DYNAMIC] 待實機 POC 執行
 - 降級依據：Sprint 28 US-51 AC3「若不可用：基於設定檔分析記錄預期行為，標注 pending dynamic verification」
 ```
@@ -712,10 +712,8 @@ M5 條件 (a)（引自 `docs/prd/M5_COMPLETION_ASSESSMENT.md` §條件 (a)）：
 - 達成方式：由具備 OpenCode 實機環境的貢獻者或 Beta 使用者執行，回報結果至 Issue #3
 - 阻礙：無 OpenCode 實機環境（當前 Sprint 28 執行環境限制）
 
-**步驟 2（Recommended）：developer.md 補齊 `model` 欄位**
-- 說明：`.opencode/agents/developer.md` 目前缺少 `model` 欄位（§12.3.2 步驟 3 發現），與其他四個角色設定檔格式不一致
-- 優先級：建議（非阻斷），補齊後五個 agent 設定檔格式一致，降低實機 POC 時的格式混淆風險
-- 估計工作量：S / 0.5pt（可納入下一 Sprint 維護工作）
+**~~步驟 2（Recommended）：developer.md 補齊 `model` 欄位~~** — **已完成**（fix commit e75dfa5，Sprint 28）
+- 說明：`.opencode/agents/developer.md` 已補齊 `model: sonnet` 欄位，五個 agent 設定檔格式一致
 
 **步驟 3（M5 條件 (a) 層面）：至少 1 位外部使用者完成安裝並走完一個 Sprint**
 - 說明：Issue #3 的最終驗收不僅是「安裝指南存在」，而是「外部使用者實際完成安裝並使用」
