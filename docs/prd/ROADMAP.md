@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-02（Sprint 28 Review — US-49、US-50、US-51 完成，M5 進度更新，修訂記錄：v0.12.0）
+> 最後更新：2026-03-03（Sprint 29 US-52 — Issue #3 正式結案，修訂記錄：v0.12.1）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -218,8 +218,9 @@ Sprint Review 時自動產出：
 | US-49 | OpenCode Phase 3a — 剩餘四個角色 Agent 移植（五角色模型完成） | Sprint 28 ✅ |
 | US-50 | OpenCode Phase 3b — INSTALL_OPENCODE.md 安裝指南（外部使用者就緒） | Sprint 28 ✅ |
 | US-51 | OpenCode Phase 3c — Task Tool 參數分析與 Developer dispatch 驗證（Issue #3 接近可結案） | Sprint 28 ✅ |
+| US-52 | OpenCode Phase 4 — Issue #3 正式結案：動態驗證補完（[STATIC-CONFIRMED]）與 Issue 關閉 | Sprint 29 ✅ |
 
-**完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
+**完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 
 ### 平台優先排序決策記錄（Sprint 25，2026-03-03）
 
@@ -227,7 +228,7 @@ Sprint Review 時自動產出：
 
 | 平台 | 評分 | 決策 | 理由摘要 |
 |------|------|------|----------|
-| **OpenCode** | 4/5 | 第一優先，規劃 POC（US-45） | SKILL.md 格式高度相容，原生 Task tool 類似 Claude Code，bash/gh CLI 無阻礙 |
+| **OpenCode** | 4/5 | 第一優先，**Issue #3 已結案（Sprint 29）** | SKILL.md 格式高度相容，原生 Task tool 類似 Claude Code，bash/gh CLI 無阻礙；完整安裝指南已發布 |
 | **Cursor** | 3/5 | 延後至 v2.5+ Task tool API 開放後（2026 Q2） | 程式化 Task tool API 尚未開放；Subagent 派遣不可程式化控制 |
 | **Codex CLI** | 2/5 | 延後，等待 OpenAI 官方 GitHub integration | gh CLI 預設無法使用（網路沙箱封鎖），為根本性阻礙 |
 
