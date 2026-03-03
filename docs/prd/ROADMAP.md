@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-30（Sprint 24 Review — US-41、US-42 完成）
+> 最後更新：2026-03-03（Sprint 25 US-43 — M5 完成條件終審 + 平台決策記錄 + v1.0.0 前提狀態更新）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -209,8 +209,21 @@ Sprint Review 時自動產出：
 | Retro #61 | Onboarding SKILL.md stale reference 審查與修正 | Sprint 23 ✅ |
 | US-41 | ADR-007 Phase 2 — 外部抽樣審查機制實作（CONFIRM/DISPUTE + Circuit Breaker） | Sprint 24 ✅ |
 | US-42 | Architect/QA 框架知識強化 — Story-Lifecycle 架構下角色決策指引 | Sprint 24 ✅ |
+| US-43 | M5 完成條件終審 + Issues #3/#4/#5 結論決策 | Sprint 25 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
+
+### 平台優先排序決策記錄（Sprint 25，2026-03-03）
+
+基於 US-17 多平台調查結論（`docs/km/MULTI_PLATFORM_SURVEY.md`，Sprint 16），Sprint 25 M5 終審時作出以下正式決策：
+
+| 平台 | 評分 | 決策 | 理由摘要 |
+|------|------|------|----------|
+| **OpenCode** | 4/5 | 第一優先，規劃 POC（US-45） | SKILL.md 格式高度相容，原生 Task tool 類似 Claude Code，bash/gh CLI 無阻礙 |
+| **Cursor** | 3/5 | 延後至 v2.5+ Task tool API 開放後（2026 Q2） | 程式化 Task tool API 尚未開放；Subagent 派遣不可程式化控制 |
+| **Codex CLI** | 2/5 | 延後，等待 OpenAI 官方 GitHub integration | gh CLI 預設無法使用（網路沙箱封鎖），為根本性阻礙 |
+
+> 決策依據：Issues #3/#4 各已在 Sprint 16 收到 US-17 調查結論評論；本決策記錄為 Sprint 25 M5 終審的正式補充。
 
 ---
 
@@ -221,6 +234,26 @@ Sprint Review 時自動產出：
 **目標**：上架 Claude Code 官方 Marketplace
 
 **前提**：M5 穩定化完成 + 外部使用者回饋正面 + Issue #5 達成
+
+### v1.0.0 前提狀態（Sprint 25 更新，2026-03-03）
+
+| 前提條件 | 狀態 | 說明 |
+|----------|------|------|
+| M5 穩定化完成 | 未達成 | M5 尚有 1 項未達成（見 `docs/prd/M5_COMPLETION_ASSESSMENT.md`） |
+| 外部使用者回饋正面 | 未達成 | 尚無可驗證的外部使用者實際使用記錄（M5 完成條件 (a) 缺口） |
+| Issue #5 達成（上架申請） | 延後 | 正式決策：等待 M5 全部完成條件達成後再評估上架時機（Sprint 25 M5 終審決定） |
+
+**v1.0.0 時間線評估**：目前仍為遠期目標。最關鍵的阻礙是取得第 1 位外部使用者的實際使用回饋。M5 在技術與文件層面已高度成熟，建議在下一個 Sprint 中安排外部使用者招募行動（Beta 測試邀請），以解除最後一個前置條件。
+
+**上架申請前置清單**（引自 Issue #5，Sprint 25 評估）：
+
+| 條件 | 狀態 |
+|------|------|
+| 版本至少 v0.5.0 | 達成（目前 v0.8.0） |
+| 安裝流程完整文件化 | 達成（US-15/16，Sprint 15） |
+| 至少 1 位外部使用者驗證回饋 | 未達成 |
+| README 中英文完整、無未驗證平台宣稱 | 待確認 |
+| plugin.json 符合官方 schema | 待驗證 |
 
 ---
 
