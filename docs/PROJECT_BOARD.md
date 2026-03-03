@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-30（Sprint 24 Review 完成）
-**當前 Sprint**：Sprint 24（完成）
+**最後更新**：2026-03-03（Sprint 25 Planning 完成）
+**當前 Sprint**：Sprint 25（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 24](sprints/sprint_24.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 25](sprints/sprint_25.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 25 — 進行中
+
+**Sprint Goal**：在 M5 穩定化收尾階段，執行 M5 完成條件終審、Tech Debt Registry 清理、及 OpenCode POC 可行性調查，為 v1.0.0 前置條件提供明確評估依據
+**期間**：2026-03-30 ~ 2026-04-05
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-43：M5 完成條件終審 + Issues #3/#4/#5 結論決策 | M | 2 | 待辦 |
+| US-44：Tech Debt Grooming Sprint 25 + TD-001 降級決策 | S | 1 | 待辦 |
+| US-45：OpenCode POC 可行性調查 | S | 1 | 待辦 |
+
+**Sprint 容量**：4 Points（3 Stories）
 
 ---
 

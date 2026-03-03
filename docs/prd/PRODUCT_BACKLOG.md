@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-30（Sprint 24 Planning — US-41、US-42 選入）
+**最後更新**：2026-03-03（Sprint 25 Planning — US-43、US-44、US-45 選入）
 **管理者**：Product Owner
 
 ---
@@ -137,6 +137,14 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
 
+### Sprint 25 — 進行中 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-43：M5 完成條件終審 + Issues #3/#4/#5 結論決策 | 待定 | Must | M | ROADMAP M5 / v1.0.0 前置條件 | In Sprint |
+| 2 | US-44：Tech Debt Grooming Sprint 25 + TD-001 降級決策 | 待定 | Should | S | Tech_Debt_Registry.md / Sprint 23 | In Sprint |
+| 3 | US-45：OpenCode POC 可行性調查 | 待定 | Could | S | Retro #42 / Issue #3 / US-17 後續行動 | In Sprint |
+
 ### Sprint 24 — 已完成 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
@@ -166,7 +174,7 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | OpenCode POC 可行性調查 | 待定 | Could | 待定 | Retro #42 / Issue #3 | 候選 |
+| 1 | OpenCode POC 可行性調查 | 待定 | Could | S | Retro #42 / Issue #3 | In Sprint（US-45，Sprint 25） |
 | 2 | Architect/QA 框架開發領域專家知識強化 | 待定 | Should | 待定 | Stakeholder 需求 | Done（Sprint 24，US-42） |
 
 ---
