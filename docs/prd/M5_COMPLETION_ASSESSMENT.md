@@ -52,6 +52,7 @@
 | 安裝指南觸及路徑 | Claude Code → `docs/tutorial/README.md`；OpenCode → `docs/INSTALL_OPENCODE.md`；兩者均已在 Beta 招募區段直連 | 2026-03-03 | 0 |
 | 預期觸及方式 | GitHub README 訪客（repo 首頁曝光）→ 點擊 Issue #59 連結 → 完成安裝並走完 Sprint → 留言回饋 | 2026-03-03 | 0 |
 | 達成標準 | Issue #59 收到至少 1 則外部使用者留言，自述完成安裝並走完 Sprint（非本專案開發者） | 2026-03-03 | 0 |
+| 低摩擦路徑強化（US-61 Sprint 32）| README.md 新增「5 分鐘快速試用」5 步驟指引；GETTING_STARTED.md 修正 2 處高摩擦步驟（Claude Code CLI 安裝指令內嵌、gh auth 認證前置說明）；INSTALL_OPENCODE.md 修正 2 處高摩擦步驟（OpenCode 安裝一行指令內嵌、symlink 三行指令精簡為單行） | 2026-03-03 | 0 |
 
 > **追蹤說明**：累積回饋數 >= 1 則條件 (a) 達成。每次 Sprint Review 時執行 `gh issue view 59 --comments` 確認是否有新回饋並更新此表格。
 
