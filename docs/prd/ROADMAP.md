@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-03（Sprint 26 Review — US-46 完成，M5 進度更新，修訂記錄：v0.10.0）
+> 最後更新：2026-03-15（Sprint 27 Review — US-47、US-48 完成，M5 進度更新，修訂記錄：v0.11.0）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.10.0**（Sprint 26）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.11.0**（Sprint 27）。
 
 | 版號 | 含義 |
 |------|------|
@@ -213,6 +213,8 @@ Sprint Review 時自動產出：
 | US-44 | Tech Debt Grooming Sprint 25 + TD-001 降級決策 | Sprint 25 ✅ |
 | US-45 | OpenCode POC 可行性調查（Go 決策，MVP 路徑定義） | Sprint 25 ✅ |
 | US-46 | OpenCode 目錄適配與 SKILL.md 載入驗證（Phase 1） | Sprint 26 ✅ |
+| US-47 | ADR-008: OpenCode 平台整合策略架構決策 | Sprint 27 ✅ |
+| US-48 | OpenCode Phase 2 — Subagent 角色移植與派遣驗證 | Sprint 27 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
 

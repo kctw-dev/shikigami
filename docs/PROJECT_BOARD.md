@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-09（Sprint 27 Planning 完成）
-**當前 Sprint**：Sprint 27（進行中）
+**最後更新**：2026-03-15（Sprint 27 Review 完成）
+**當前 Sprint**：Sprint 27（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 27](sprints/sprint_27.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 27 — 進行中
+## Sprint 27 — 完成
 
 **Sprint Goal**：完成 ADR-008 架構決策 + 啟動 OpenCode Phase 2，為 M5 條件 (a) 外部使用者觸及提供完整平台整合策略與首個角色移植驗證
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-09 ~ 2026-03-15
 
 | Story | Size | Points | 狀態 |
@@ -17,7 +19,7 @@
 | US-47：ADR-008: OpenCode 平台整合策略架構決策 | S | 1 | 完成 |
 | US-48：OpenCode Phase 2 — Subagent 角色移植與派遣驗證 | L | 3 | 完成 |
 
-**目標 Velocity**：4 points（2 Stories）
+**實際 Velocity**：4 points（2 Stories）
 
 ---
 
@@ -87,22 +89,4 @@
 
 ---
 
-## Sprint 22 — 完成
-
-**Sprint Goal**：強化框架安全性與排程智能化
-**結果**：Goal 達成（4/4 Stories PASS）。Velocity 6 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-16 ~ 2026-03-22
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | S | 1 | 完成 |
-| US-37（Issue #55）：防範 Issue 提示注入攻擊 | S | 1 | 完成 |
-| US-38（Issue #51）：排程模式下 Velocity 自動調小 — 僅選 S size Stories | S | 1 | 完成 |
-| US-39（Issue #45）：Sprint Execution context overflow — Story 生命週期封裝為 subagent | L | 3 | 完成 |
-
-**實際 Velocity**：6 points（4 Stories）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–21）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–22）

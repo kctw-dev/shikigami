@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-03（Sprint 21 歸檔）
-**歸檔範圍**：Sprint 1–21（共 21 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔
+**最後更新**：2026-03-15（Sprint 22 歸檔）
+**歸檔範圍**：Sprint 1–22（共 22 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 22–26）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 23–27）
 
 ---
 
@@ -350,3 +350,21 @@
 - [x] Story 2：Backlog Bridge 完整版
 - [x] Story 3：Issue Comment 強化
 - [x] Story 4：Issue Triage 強化 + triage-prompt.md
+
+---
+
+## Sprint 22 — 完成
+
+**Sprint Goal**：強化框架安全性與排程智能化
+**結果**：Goal 達成（4/4 Stories PASS）。Velocity 6 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-16 ~ 2026-03-22
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | S | 1 | 完成 |
+| US-37（Issue #55）：防範 Issue 提示注入攻擊 | S | 1 | 完成 |
+| US-38（Issue #51）：排程模式下 Velocity 自動調小 — 僅選 S size Stories | S | 1 | 完成 |
+| US-39（Issue #45）：Sprint Execution context overflow — Story 生命週期封裝為 subagent | L | 3 | 完成 |
+
+**實際 Velocity**：6 points（4 Stories）
