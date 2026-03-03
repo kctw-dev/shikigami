@@ -330,8 +330,8 @@ Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發
 
 | 文件 | 說明 |
 |------|------|
-| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-004） |
-| `docs/sprints/` | Sprint 規劃與執行紀錄（sprint_1 ~ sprint_15） |
+| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-008） |
+| `docs/sprints/` | Sprint 規劃與執行紀錄（sprint_1 ~ sprint_29） |
 | `docs/km/Retrospective_Log.md` | 每次犯的錯都記下來，不重複犯 |
 | `docs/km/Metrics_Log.md` | Velocity 趨勢與完成率追蹤 |
 | `docs/km/ROLE_BALANCE_CASES.md` | [真實制衡案例記錄](docs/km/ROLE_BALANCE_CASES.md) |
