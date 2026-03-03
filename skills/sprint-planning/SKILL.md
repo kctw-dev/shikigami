@@ -65,6 +65,78 @@ Sprint Planning 支援兩種執行模式：
 
 ---
 
+## 3.1 排程模式（Scheduled Mode）
+
+排程模式是指 Sprint Planning 由 cron 自動觸發（而非 Scrum Master 手動執行）的執行情境。排程執行缺乏人工介入，因此須限制選入較小的 Stories，以確保自動化執行在安全的 context 與時間邊界內完成。
+
+### 偵測機制（AC4）
+
+排程模式透過環境變數 `SHIKIGAMI_SCHEDULED` 偵測：
+
+| 環境變數 | 值 | 意義 |
+|----------|----|------|
+| `SHIKIGAMI_SCHEDULED` | `true` | 排程模式（cron 觸發） |
+| `SHIKIGAMI_SCHEDULED` | 未設定或其他值 | 手動模式（非排程模式） |
+
+**設定方式**：由 `schedule` Skill 生成的 cron 腳本（`scripts/<skill>_cron.sh`）在執行 `claude -p "/sprint-planning"` 前自動注入 `SHIKIGAMI_SCHEDULED=true`，Sprint Planning 在執行期間讀取此環境變數以判斷當前模式。
+
+偵測邏輯（虛擬碼）：
+
+```bash
+if [[ "${SHIKIGAMI_SCHEDULED:-}" == "true" ]]; then
+  # 排程模式：啟用 S-size 篩選 HARD-GATE
+  SCHEDULED_MODE=true
+else
+  # 手動模式：不啟用 S-size 篩選，保持原有行為
+  SCHEDULED_MODE=false
+fi
+```
+
+### S-size 篩選 HARD-GATE（AC1、AC2）
+
+<HARD-GATE>
+排程模式下，M/L Stories 不得選入 Sprint Backlog，僅 S size Stories 可納入。
+</HARD-GATE>
+
+**適用條件**：`SHIKIGAMI_SCHEDULED=true` 環境變數已設定。
+
+**規則說明**：
+
+- 排程執行環境無人工監督，M/L size Stories 可能因 context 超限或執行時間過長導致失敗
+- S size Stories 估點為 1，執行風險可控，適合全自動化流程
+- PO subagent 在排程模式下選取 Stories 時，必須先過濾非 S size Stories
+
+**違規處理**：若 PO subagent 在排程模式下選入 M 或 L size Stories，Sprint Planning **必須中止**，並輸出以下告警：
+
+```
+[SCHEDULED-MODE-GATE] 排程模式下僅允許 S size Stories。
+偵測到非 S size Story：
+- <Story ID>：<標題>（Size: <M 或 L>）
+
+Sprint Planning 已中止。請改為手動執行 Sprint Planning 以選入 M/L size Stories。
+```
+
+### 非排程模式不受影響（AC3）
+
+非排程模式（手動 Sprint Planning，`SHIKIGAMI_SCHEDULED` 未設定或非 `true`）的 Story 選取邏輯**不受影響**：
+
+- M/L Stories 仍可依原有流程（§6 Subagent 派遣順序）選入 Sprint Backlog
+- §2 流程 Checklist 所有步驟保持不變
+- §3 ADR Hard Gate 保持不變
+- 快思/慢想模式（§1.1）保持不變
+
+手動執行範例：
+
+```bash
+# 手動 Sprint Planning（非排程模式），M/L Stories 不受限
+claude -p "/sprint-planning"
+
+# 手動 + 完整檢查（慢想模式），M/L Stories 不受限
+claude -p "/sprint-planning --deep"
+```
+
+---
+
 ## 4. Sprint 週期
 
 **週期長度：1 週**

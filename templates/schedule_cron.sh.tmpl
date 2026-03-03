@@ -65,6 +65,13 @@ fi
 unset ANTHROPIC_API_KEY
 
 # ---------------------------------------------------------------------------
+# 排程模式標記（US-38 / sprint-planning SKILL.md §3.1）
+# SHIKIGAMI_SCHEDULED=true 告知 sprint-planning 目前為排程模式，
+# 啟用 S-size 篩選 HARD-GATE（M/L Stories 不得選入 Sprint Backlog）
+# ---------------------------------------------------------------------------
+export SHIKIGAMI_SCHEDULED=true
+
+# ---------------------------------------------------------------------------
 # 執行
 # ---------------------------------------------------------------------------
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] START — skill=${SKILL_NAME} interval={{INTERVAL}} ${GROUP_LOG}" >> "${LOG_FILE}"
