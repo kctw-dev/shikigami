@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-03（Sprint 27 歸檔）
-**歸檔範圍**：Sprint 1–27（共 27 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔
+**最後更新**：2026-04-06（Sprint 28 歸檔）
+**歸檔範圍**：Sprint 1–28（共 28 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 28–30）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 29–33）
 
 ---
 
@@ -450,3 +450,21 @@
 | US-48：OpenCode Phase 2 — Subagent 角色移植與派遣驗證 | L | 3 | 完成 |
 
 **實際 Velocity**：4 points（2 Stories）
+
+---
+
+## Sprint 28 — 完成
+
+**Sprint Goal**：完成 OpenCode 平台五角色 subagent 模型（US-49）與外部使用者安裝指南（US-50），同步推進 Task tool 動態驗證結論（US-51），使 Issue #3 進入可結案狀態
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-02 ~ 2026-03-08
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-49：OpenCode Phase 3a — 剩餘四個角色 Agent 移植 | S | 1 | 完成 |
+| US-50：OpenCode Phase 3b — INSTALL_OPENCODE.md 安裝指南 | S | 1 | 完成 |
+| US-51：OpenCode Phase 3c — Task Tool 參數確認與 Developer dispatch 動態驗證 | M | 2 | 完成 |
+
+**目標 Velocity**：4 points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
