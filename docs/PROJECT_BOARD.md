@@ -14,8 +14,8 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-66：Issue #46 最終收尾 — 四條排程流程驗收條件逐項確認、缺口補齊，close Issue #46 | S | 1 | 進行中 |
-| US-68：Issue #49 框架端主動修正評估 — workflow check 失敗根因分析（根因已確認：Sprint 33 commit 順序問題，非框架 bug） | S | 1 | 進行中 |
+| US-66：Issue #46 最終收尾 — 四條排程流程驗收條件逐項確認、缺口補齊，close Issue #46 | S | 1 | 完成 |
+| US-68：Issue #49 框架端主動修正評估 — workflow check 失敗根因分析（根因已確認：Sprint 33 commit 順序問題，非框架 bug） | S | 1 | 完成 |
 
 **目標 Velocity**：2 points（2 Stories）
 
