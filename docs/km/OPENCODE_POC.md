@@ -252,3 +252,143 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 - 確認 Task tool 參數格式並修正差異（B-3）
 - 實機驗證 `skills/sprint-planning/SKILL.md` Happy Path
 - 更新所有 SKILL.md 中的 Claude Code 特有 API 殘留（R-1 ~ R-7）
+
+---
+
+## 9. Phase 2 完成記錄（US-48 執行結果）
+
+**執行日期**：2026-03-03
+**執行者**：AI Agent（Developer Subagent，Claude Sonnet 4.6）
+**Sprint**：Sprint 27
+**Story**：US-48
+**依賴**：US-47（ADR-008 Accepted，2026-03-03）
+
+---
+
+### 9.1 Subagent 設定檔審查結果（AC1）
+
+**審查對象**：`skills/sprint-execution/` 下的現有 subagent prompt 檔案
+
+| 現有檔案 | 對應角色 | 發現差異 |
+|---------|---------|---------|
+| `developer-prompt.md` | Developer | 無 YAML frontmatter；路徑不符 ADR-008 規範 |
+| `spec-reviewer-prompt.md` | QA Engineer（Spec Compliance 子角色） | 無 YAML frontmatter；路徑不符 ADR-008 規範 |
+| `quality-reviewer-prompt.md` | QA Engineer（Code Quality 子角色） | 無 YAML frontmatter；路徑不符 ADR-008 規範 |
+| `story-lifecycle-prompt.md` | 複合角色（封裝 Developer + Reviewer）| 無 YAML frontmatter；ADR-008 五角色模型中無直接對應 |
+
+**相容性差異清單（OpenCode ADR-008 格式 vs. 現有檔案）**：
+
+| 差異維度 | ADR-008 規範 | 現有檔案現狀 | 差異等級 |
+|---------|-------------|------------|---------|
+| 設定檔路徑 | `.opencode/agents/<role>.md` | `skills/sprint-execution/*-prompt.md` | 必須修正 |
+| 檔案格式 | YAML frontmatter（`name` + `description`）+ Markdown 正文 | 純 Markdown，無 frontmatter | 必須修正 |
+| 檔案命名 | `developer.md`, `architect.md`, `qa-engineer.md`, `product-owner.md`, `scrum-master.md` | `developer-prompt.md`, `spec-reviewer-prompt.md` 等 | 必須修正 |
+| 角色對應 | 五角色：PO / Architect / QA / Developer / SM | 四個 prompt 檔，其中兩個為 QA 子角色，一個為複合角色 | 需整合規劃 |
+| Markdown 正文內容 | 角色 system prompt 說明（可直接移植） | 完整角色 prompt 說明（格式相容） | 無差異（可直接移植） |
+
+**審查結論**：現有 prompt 檔案的 **Markdown 正文內容** 可直接移植至 OpenCode subagent 格式，主要工作為：(1) 建立 `.opencode/agents/` 目錄；(2) 新增 YAML frontmatter；(3) 依 ADR-008 角色命名規範重新命名。Phase 2（US-48）僅移植 Developer 角色作為首個驗證案例。
+
+---
+
+### 9.2 Developer 角色移植結果（AC2）
+
+**來源檔案**：`skills/sprint-execution/developer-prompt.md`
+**目標檔案**：`.opencode/agents/developer.md`（已建立）
+
+**移植內容摘要**：
+
+| 欄位 | 值 |
+|------|---|
+| `name` | `developer` |
+| `description` | `Senior full-stack developer implementing User Stories with TDD discipline, conflict detection, and tech debt management` |
+| 正文來源 | `skills/sprint-execution/developer-prompt.md` 完整內容 |
+
+**移植差異清單**：
+
+| 項目 | 來源（Claude Code 格式）| 目標（OpenCode 格式）| 處置方式 |
+|------|----------------------|---------------------|---------|
+| 檔案路徑 | `skills/sprint-execution/developer-prompt.md` | `.opencode/agents/developer.md` | 新建（不刪除原檔） |
+| YAML frontmatter | 無 | 新增 `name` + `description` | 新增 |
+| 正文內容 | 原有 Markdown | 原封不動移植 | 完整保留 |
+| 角色 system prompt | Claude Code subagent 派遣格式 | OpenCode subagent 格式（frontmatter 包裝）| 格式轉換 |
+
+**關係說明**：`skills/sprint-execution/developer-prompt.md` 保持不變（Claude Code 平台繼續使用），`.opencode/agents/developer.md` 作為 OpenCode 平台的獨立設定檔。兩者內容相同，僅格式包裝不同。
+
+---
+
+### 9.3 殘留項修正記錄（AC3）
+
+**修正範圍**：`skills/sprint-planning/SKILL.md`（Phase 1 識別的 R-1~R-7 全部位於此檔案）
+
+**修正方式**：雙平台標注（dual-platform annotation）—— 保留原 Claude Code 語法並以 HTML 注釋格式補充 OpenCode 對應說明：
+
+```
+<!-- Claude Code -->
+<原 Claude Code 語法>
+<!-- OpenCode -->
+<OpenCode 等效說明>
+<!-- /OpenCode -->
+```
+
+**各殘留項修正記錄**：
+
+| 殘留項 | 類型 | 位置（修正後行號）| 修正方式 | OpenCode 等效說明 |
+|--------|------|----------------|---------|----------------|
+| R-1 | 平台調用語法（health-check）| 行 39 | 雙平台標注 | `使用 health-check skill` |
+| R-2 | 平台調用語法（issue-management）| 行 41 | 雙平台標注 | `使用 issue-management skill 並傳入 Triage 任務` |
+| R-3 | Claude Code 特有路徑 | 行 50 | 雙平台標注 | `OpenCode session 資料路徑待 Phase 2 實機調查確認；暫時填「N/A」` |
+| R-4 | Claude Code CLI 指令 | 行 81 | 雙平台標注 | `` `opencode sprint-planning`（待實機確認）`` |
+| R-5 | Claude Code CLI 指令（程式碼區塊）| 行 132-133 | 雙平台標注（區塊）| `opencode sprint-planning` |
+| R-6 | Claude Code CLI 指令（程式碼區塊）| 行 135-136 | 雙平台標注（區塊）| `opencode sprint-planning --deep` |
+| R-7 | 平台調用語法（流程圖）| 行 192 | 雙平台標注 | `使用 health-check skill` |
+
+**不可接受的處置方式確認**：所有殘留項均保留原 Claude Code 語法（符合 ADR-008 「不允許在不提供替代說明的情況下直接刪除 Claude Code 語法」規範）。
+
+**修正結論**：R-1~R-7 全部 7 項殘留項已完成雙平台標注修正。Claude Code 平台使用者讀取 SKILL.md 時體驗不受影響（HTML 注釋在渲染時隱藏）；OpenCode 平台使用者可在原始碼層面查看等效說明。
+
+---
+
+### 9.4 AC4 靜態驗證結果
+
+**驗證對象**：`.opencode/agents/developer.md`
+
+**驗證項目**：
+
+| 驗證項目 | 規範要求（ADR-008 決策三）| 實際狀態 | 結果 |
+|---------|-------------------------|---------|------|
+| 設定檔路徑 | `.opencode/agents/developer.md` | `.opencode/agents/developer.md` | PASS |
+| YAML frontmatter 存在 | 必填 `name` + `description` | 已存在，兩欄位均填入 | PASS |
+| `name` 欄位格式 | 角色英文名稱 | `developer` | PASS |
+| `description` 欄位格式 | 角色職責一句話說明 | `Senior full-stack developer implementing...` | PASS |
+| Markdown 正文 | 角色 system prompt 正文 | 完整 Developer 角色 prompt | PASS |
+| 路徑一致性 | ADR-008 §決策一目錄結構 | `.opencode/agents/developer.md` 符合定義 | PASS |
+
+**靜態驗證結論**：`.opencode/agents/developer.md` 符合 OpenCode subagent 設定規範的所有靜態驗證項目（格式、必填欄位、路徑一致性）。
+
+**格式規範相容性確認**：YAML frontmatter（`name` + `description`）格式基於 OpenCode 官方 Agents 文件定義，靜態審查確認無明顯格式衝突。
+
+**[動態驗證標注]**：完整 Happy Path 動態驗證（Task tool 派遣 `.opencode/agents/developer.md` 作為 subagent system prompt，執行端對端流程）待實機 POC Sprint 執行。本 Story（US-48）不計入 DoD。待確認項目包含：Task tool 參數欄位命名（`description`、`prompt` 等）、subagent 派遣實際行為與 Claude Code 的差異。
+
+---
+
+### 9.5 建議下一步（Phase 3 範圍）
+
+**Phase 2 完成狀態**：
+
+| 項目 | 狀態 |
+|------|------|
+| ADR-008 架構決策 | 完成（Accepted） |
+| Developer 角色 prompt 移植 | 完成（`.opencode/agents/developer.md`） |
+| R-1~R-7 殘留項修正 | 完成（雙平台標注） |
+| 靜態格式驗證 | PASS |
+| 動態派遣驗證 | 待實機 POC |
+
+**Phase 3 建議範圍**（`docs/INSTALL_OPENCODE.md` + 剩餘角色移植）：
+
+1. **完成剩餘四個角色移植**：依 ADR-008 決策一，補建 `.opencode/agents/architect.md`、`.opencode/agents/qa-engineer.md`、`.opencode/agents/product-owner.md`、`.opencode/agents/scrum-master.md`
+2. **建立 OpenCode 安裝指南**：`docs/INSTALL_OPENCODE.md`，涵蓋前置需求（OpenCode 版本、模型選擇建議）、目錄設定步驟（symlink 建立說明）、模型選擇建議（緩解 B-1 模型行為差異風險）
+3. **更新 README.md**：新增 OpenCode 平台支援說明，標注 Phase 2 完成狀態
+4. **實機動態驗證**（待 Phase 3 實機環境）：對照 OpenCode 文件確認 Task tool 參數欄位命名（`description`、`prompt` 等）；在實機 OpenCode 環境中驗證 Developer subagent 派遣 Happy Path；確認 SessionStart hook 等效機制（B-2）
+5. **Issue #3 結案**：完成 Phase 3 後關閉 Issue #3，連結安裝指南
+
+**Phase 3 預估**：S / 1pt（安裝指南建立）+ M / 2pt（剩餘角色移植 + 實機驗證）
