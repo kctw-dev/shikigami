@@ -45,6 +45,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 32 | 2026-03-03 | 4 points | 100% | 穩定 | Sprint Goal 達成（Sprint 30=4, Sprint 31=4, Sprint 32=4 → 三期持平 0%，均值 4.0，±20% 區間 3.2–4.8 內）；排程 QA 自動化閉環 + Onboarding 低摩擦路徑最佳化 + Token Baseline Snapshot 機制交付 |
 | Sprint 33 | 2026-03-03 | 4 points | 100% | 穩定 | Sprint Goal 達成（Sprint 31=4, Sprint 32=4, Sprint 33=4 → 三期持平 0%，均值 4.0，±20% 區間 3.2–4.8 內）；Issue #46 四條流程全數到位 |
 | Sprint 34 | 2026-04-13 | 2 points | 100% | 下降趨勢 | Sprint Goal 達成（Sprint 32=4, Sprint 33=4, Sprint 34=2 → S33→S34 下降 50%）；Issue #46 + Issue #49 結案；低容量係因僅有 2 個 S-size 收尾 Story |
+| Sprint 35 | 2026-04-20 | 8 points | 100% | 不規則 | Sprint Goal 達成（5/5 PASS）；ADR-010 原子性實作交付完成；S33=4→S34=2→S35=8 方向不一致→不規則；Phase 2 三路平行壓縮有效 |
 
 ---
 
@@ -118,6 +119,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 34 | Planning | 1603890 | 6976 |
 | Sprint 34 | Execution | 11469595 | 30804 |
 | Sprint 35 | Planning | 24528953 | 58861 |
+| Sprint 35 | Execution | 28363151 | 66472 |
 
 ---
 

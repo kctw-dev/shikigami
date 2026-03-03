@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-04-20（Sprint 35 Planning 完成）
-**當前 Sprint**：Sprint 35（進行中）
+**最後更新**：2026-04-20（Sprint 35 Review 完成）
+**當前 Sprint**：Sprint 35（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 35](sprints/sprint_35.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 35 — 進行中
+## Sprint 35 — 完成
 
 **Sprint Goal**：ADR-010 原子性實作交付 — Backlog Source of Truth 從 PRODUCT_BACKLOG.md 遷移至 GitHub Issues，完成三個 SKILL.md 改寫 + DEPRECATED 標頭 + Label 基礎設施
+**結果**：Goal 達成（5/5 Stories PASS）。Velocity 8 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-04-20 ~ 2026-04-26
 
 | Story | Size | Points | 狀態 |
@@ -21,6 +23,7 @@
 | US-73：PRODUCT_BACKLOG.md DEPRECATED 標頭加入 + ADR-009 格式契約決策域「Superseded by ADR-010」標注 | S | 1 | 完成 |
 
 **目標 Velocity**：8 points（5 Stories）
+**實際 Velocity**：8 points（5 Stories）
 
 ---
 
@@ -95,22 +98,4 @@
 
 ---
 
-## Sprint 30 — 完成
-
-**Sprint Goal**：以 Issue #46 排程 PR 偵測為最高優先，同步修正 README 準確性並強化版本 Tag 策略，確保框架在開源延後期間的自我一致性與維護品質
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-16 ~ 2026-03-22
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-54：互動 Session 自動偵測待審排程 PR + Scrum Master 提醒機制（Issue #46 子 Story #1） | S | 1 | 完成 |
-| US-55：README 準確性修正 — 版本號、Skill 數量、版本歷史對齊 | S | 1 | 完成 |
-| US-56：Deployment Readiness 版本 Tag 決策規則強化（Issue #36） | M | 2 | 完成 |
-
-**目標 Velocity**：4 points（3 Stories）
-**實際 Velocity**：4 points（3 Stories）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–29）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–30）

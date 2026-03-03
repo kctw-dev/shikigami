@@ -1344,6 +1344,98 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 35（2026-04-20 ~ 2026-04-26）
+
+**Sprint Goal**：ADR-010 原子性實作交付 — Backlog Source of Truth 從 PRODUCT_BACKLOG.md 遷移至 GitHub Issues，完成三個 SKILL.md 改寫 + DEPRECATED 標頭 + Label 基礎設施
+
+| Story ID | 標題 | Size | Points | 狀態 |
+|----------|------|------|--------|------|
+| US-69 | ADR-010 Label 基礎設施 — 建立所有 ADR-010 定義 labels 並更新 onboarding Pre-flight | S | 1 | Done |
+| US-70 | `backlog-intake` SKILL.md 重大改寫 — 移除 PRODUCT_BACKLOG.md 寫入，改為 Issue label + body template 兩層架構 | M | 2 | Done |
+| US-71 | `sprint-planning` SKILL.md 修改 — PO Story 選取來源改為 `gh issue list` + 即時 MoSCoW/RICE 排序計算 | M | 2 | Done |
+| US-72 | `backlog-management` SKILL.md 修改 — Grooming 流程改為操作 GitHub Issues，加入 Pre-flight 錯誤恢復掃描 | M | 2 | Done |
+| US-73 | PRODUCT_BACKLOG.md DEPRECATED 標頭加入 + ADR-009 格式契約決策域「Superseded by ADR-010」標注 | S | 1 | Done |
+
+### US-69：ADR-010 Label 基礎設施
+
+**來源**：ADR-010 Label 基礎設施建立
+**Size**：S / 1 Point
+**MoSCoW**：Must
+**QA doc-only 判定**：No
+
+**User Story**
+As a Developer executing the ADR-010 migration, I want all ADR-010-defined labels created in the GitHub repository and the onboarding Pre-flight checklist updated to verify these labels exist, so that subsequent Sprint 35 Stories can operate on a verified label infrastructure.
+
+**交付摘要**：14 個 ADR-010 labels 全數建立（Original Issue 5 + Backlog Issue 3 + Priority 3 + Size 3），onboarding Pre-flight §2.1.2 新增 ADR-010 Labels 驗證步驟
+
+**驗收結果**：AC1–AC4 全通過（4/4）
+
+---
+
+### US-70：`backlog-intake` SKILL.md 重大改寫
+
+**來源**：ADR-010 backlog-intake 流程遷移
+**Size**：M / 2 Points
+**MoSCoW**：Must
+**QA doc-only 判定**：No
+
+**User Story**
+As a Product Owner running the backlog-intake workflow, I want the backlog-intake SKILL.md rewritten to remove all PRODUCT_BACKLOG.md write operations and instead output to GitHub Issues via label application and Issue body template filling, so that the Backlog source of truth is exclusively GitHub Issues per ADR-010.
+
+**交付摘要**：移除所有 PRODUCT_BACKLOG.md 寫入步驟，新增兩層 Issue 建立流程（原始 Issue + Backlog Issue），Issue body Story template 含 RICE 評分表格，冪等性保護以「來源：#N」body 掃描實作
+
+**驗收結果**：AC1–AC7 全通過（7/7），ADR-003 Checklist PASS
+
+---
+
+### US-71：`sprint-planning` SKILL.md 修改
+
+**來源**：ADR-010 sprint-planning 流程遷移
+**Size**：M / 2 Points
+**MoSCoW**：Must
+**QA doc-only 判定**：No
+
+**User Story**
+As a PO subagent running Sprint Planning, I want the sprint-planning SKILL.md updated so that Story selection uses `gh issue list` with label/milestone filtering and real-time MoSCoW/RICE sorting instead of reading PRODUCT_BACKLOG.md.
+
+**交付摘要**：§2 Step 4 來源替換為 gh issue list，§6 Step 1 PO 讀取來源移除 PRODUCT_BACKLOG.md，新增即時 RICE 排序計算邏輯，§6 Step 4 PO Round 2 改為套用 status: in-sprint label + Milestone
+
+**驗收結果**：AC1–AC6 全通過（6/6），ADR-003 Checklist PASS
+
+---
+
+### US-72：`backlog-management` SKILL.md 修改
+
+**來源**：ADR-010 backlog-management 流程遷移
+**Size**：M / 2 Points
+**MoSCoW**：Must
+**QA doc-only 判定**：No
+
+**User Story**
+As a Product Owner running Backlog Grooming, I want the backlog-management SKILL.md updated so that all Grooming operations work against GitHub Issues instead of PRODUCT_BACKLOG.md, and a Pre-flight error recovery scan is included.
+
+**交付摘要**：§2 Product Discovery 產出改為 GitHub Issues + 原始 labels，§3 Grooming 全部改為 gh issue list/edit 操作，新增 Pre-flight 錯誤恢復掃描（三場景），§6 PRODUCT_BACKLOG.md 降格為非核心產出
+
+**驗收結果**：AC1–AC5 全通過（5/5），ADR-003 Checklist PASS
+
+---
+
+### US-73：PRODUCT_BACKLOG.md DEPRECATED 標頭加入
+
+**來源**：ADR-010 原子性交付後置條件
+**Size**：S / 1 Point
+**MoSCoW**：Must
+**QA doc-only 判定**：Yes
+
+**User Story**
+As a Developer completing the ADR-010 atomic delivery, I want PRODUCT_BACKLOG.md marked with a DEPRECATED header and ADR-009's Format Contract decision domain annotated as "Superseded by ADR-010".
+
+**交付摘要**：PRODUCT_BACKLOG.md 頂部加入完整 DEPRECATED blockquote 標頭，ADR-009 決策域二加入「Superseded by ADR-010」標注
+
+**驗收結果**：AC1–AC4 全通過（4/4），原子性後置條件滿足（commit 時序位於 US-70/71/72 之後）
+
+---
+
 ## Sprint 34（2026-04-13 ~ 2026-04-19）
 
 **Sprint Goal**：Issue #46 自動化排程框架收尾結案 + Issue #49 CI 失敗根因修正

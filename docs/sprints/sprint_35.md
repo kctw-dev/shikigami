@@ -1,6 +1,6 @@
 # Sprint 35
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-04-20 ~ 2026-04-26
 **Sprint Goal**：ADR-010 原子性實作交付 — Backlog Source of Truth 從 PRODUCT_BACKLOG.md 遷移至 GitHub Issues，完成三個 SKILL.md 改寫 + DEPRECATED 標頭 + Label 基礎設施
 **總計**：5 Stories / 8 Points

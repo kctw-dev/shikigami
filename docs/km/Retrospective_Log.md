@@ -1,6 +1,23 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–29）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–30）
+
+---
+
+## Sprint 35 — 2026-04-20
+
+### Good
+- 連續 35 個 Sprint 100% 完成率，ADR-010 原子性實作交付完整達成（5/5 Stories PASS），Backlog Source of Truth 從 PRODUCT_BACKLOG.md 成功遷移至 GitHub Issues
+- Phase 2 三路平行派遣（US-70 + US-71 + US-72 各修改不同 SKILL.md）零衝突完成，Architect 分群策略連續八個 Sprint 有效（Sprint 28–35），8pt 容量以 3-way 平行壓縮為有效 ~4pt wall-clock
+- 原子性約束執行嚴謹：Phase 1（Label 基礎設施）→ Phase 2（三個 SKILL.md 改寫）→ Phase 3（DEPRECATED 標頭）的序列完全按設計執行，US-73 commit 時序位於 US-70/71/72 之後
+- Sprint 35 為歷次最高 Velocity（8 points），展示框架成熟後在架構遷移類任務的高效執行能力
+
+### Problem
+- 無顯著問題（Sprint 35 為架構遷移型 Sprint，Story 結構清晰、AC 明確，ADR-010 設計規範完善，交付順暢）
+
+### Action Items
+
+本 Sprint 無新增 Action Items。
 
 ---
 
@@ -72,19 +89,3 @@
 本 Sprint 無新增 Action Items。
 
 ---
-
-## Sprint 30 — 2026-03-03
-
-### Good
-- 連續 30 個 Sprint 100% 完成率，Issue #46 使用者最高優先回應有效，Sprint 30 三個 Story 全數通過雙階段 QA 審查
-- Phase 1 平行分群（US-54 + US-55）+ Phase 2 序列（US-56）零衝突，Architect 分群策略持續有效
-- US-56 新增版本 Tag 決策規則（含 PO Override 機制）並同步關閉 Issue #36，跨 Sprint Issue 清理積極
-
-### Problem
-- 無顯著問題（Sprint 30 為維護型 Sprint，Story 複雜度低，交付順暢）
-
-### Action Items
-
-本 Sprint 無新增 Action Items。
-
-
