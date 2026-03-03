@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 28 Review 完成）
-**當前 Sprint**：Sprint 28（完成）
+**最後更新**：2026-03-03（Sprint 29 Planning 完成）
+**當前 Sprint**：Sprint 29（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 28](sprints/sprint_28.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 29](sprints/sprint_29.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 29 — 進行中
+
+**Sprint Goal**：以 Issue #3 正式結案為里程碑，完成 OpenCode 平台動態驗證（US-52）與 M5 條件 (a) 外部使用者觸及的具體招募行動（US-53），使 M5 最後一個開放條件進入可達成狀態
+**期間**：2026-03-09 ~ 2026-03-15
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-52：OpenCode Phase 4 — Issue #3 正式結案：動態驗證補完與 Issue 關閉 | M | 2 | 待開始 |
+| US-53：M5 Beta 使用者招募 — README 招募文案 + Issue 引導機制 | S | 1 | 待開始 |
+
+**目標 Velocity**：3 points（2 Stories）
 
 ---
 
