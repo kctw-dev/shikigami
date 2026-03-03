@@ -1,6 +1,7 @@
 ---
 name: developer
 description: Senior full-stack developer implementing User Stories with TDD discipline, conflict detection, and tech debt management
+model: sonnet
 ---
 
 # Developer Subagent Prompt
