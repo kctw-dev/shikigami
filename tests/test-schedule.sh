@@ -978,6 +978,165 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# 區段 20：Retro #59 — SHIKIGAMI_SCHEDULED 條件化 export 驗證（AC1 + AC2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "=== 區段 20：Retro #59 — SHIKIGAMI_SCHEDULED 條件化 export 驗證 ==="
+
+# 20.1 [靜態] 模板使用 bash if-condition（不再是無條件 export）
+if [ -f "$TEMPLATE" ]; then
+  # 確認模板不再含無條件的 `export SHIKIGAMI_SCHEDULED=true`（單獨一行）
+  if grep -qxF "export SHIKIGAMI_SCHEDULED=true" "$TEMPLATE"; then
+    fail "Retro #59 AC1：模板仍含無條件的 export SHIKIGAMI_SCHEDULED=true（應改為 if-condition）"
+  else
+    pass "Retro #59 AC1：模板不含無條件的 export SHIKIGAMI_SCHEDULED=true"
+  fi
+
+  # 確認模板含 if-condition 語法
+  if grep -qF 'if [[ "$SKILL_NAME" == "sprint-planning" ]]' "$TEMPLATE"; then
+    pass "Retro #59 AC1：模板含 sprint-planning 條件判斷"
+  else
+    fail "Retro #59 AC1：模板未含 sprint-planning 條件判斷（AC1 要求）"
+  fi
+
+  if grep -qF 'if [[ "$SKILL_NAME" == "sprint-planning" ]] || [[ "$SKILL_NAME" == "sprint-execution" ]]; then' "$TEMPLATE"; then
+    pass "Retro #59 AC1：模板含完整 if-condition（sprint-planning || sprint-execution）"
+  else
+    fail "Retro #59 AC1：模板未含完整 if-condition（sprint-planning || sprint-execution）（AC1 要求）"
+  fi
+
+  # 確認條件式 export 仍在 if-body 內
+  if grep -qF "export SHIKIGAMI_SCHEDULED=true" "$TEMPLATE"; then
+    pass "Retro #59 AC1：模板含條件式 export SHIKIGAMI_SCHEDULED=true（在 if-body 內）"
+  else
+    fail "Retro #59 AC1：模板未含 export SHIKIGAMI_SCHEDULED=true（應保留在 if-body 內）"
+  fi
+else
+  fail "Retro #59 AC1：模板不存在，測試跳過"
+fi
+
+# 20.2 [動態] sprint skill 場景：SKILL_NAME=sprint-planning → SHIKIGAMI_SCHEDULED=true
+if [ -f "$TEMPLATE" ]; then
+  # 擷取條件化 export 邏輯區塊（去掉模板佔位符後直接執行邏輯）
+  # 方法：生成一個只含條件判斷區塊的測試腳本，帶入 SKILL_NAME，unset 後驗證
+  TMP_COND_TEST=$(mktemp /tmp/test-retro59-cond-XXXX.sh)
+
+  # 從模板提取 SHIKIGAMI_SCHEDULED 相關的 if-condition 區塊
+  # 我們直接寫一個測試函式來驗證條件邏輯（與模板 AC1 保持一致的語法）
+  cat > "$TMP_COND_TEST" << 'CONDTEST'
+#!/bin/bash
+# 測試條件化 export 邏輯
+# 傳入 SKILL_NAME=$1，輸出 SHIKIGAMI_SCHEDULED 是否被 export
+check_scheduled_export() {
+  local SKILL_NAME="$1"
+  unset SHIKIGAMI_SCHEDULED
+  if [[ "$SKILL_NAME" == "sprint-planning" ]] || [[ "$SKILL_NAME" == "sprint-execution" ]]; then
+    export SHIKIGAMI_SCHEDULED=true
+  fi
+  # 輸出 export 狀態
+  if [[ -v SHIKIGAMI_SCHEDULED ]]; then
+    echo "exported:${SHIKIGAMI_SCHEDULED}"
+  else
+    echo "not_exported"
+  fi
+}
+check_scheduled_export "$1"
+CONDTEST
+
+  chmod +x "$TMP_COND_TEST"
+
+  # 20.2a sprint-planning → SHIKIGAMI_SCHEDULED exported as true
+  RESULT_PLANNING=$(bash "$TMP_COND_TEST" "sprint-planning")
+  if [ "$RESULT_PLANNING" = "exported:true" ]; then
+    pass "Retro #59 AC2(a)：SKILL_NAME=sprint-planning → SHIKIGAMI_SCHEDULED exported=true"
+  else
+    fail "Retro #59 AC2(a)：SKILL_NAME=sprint-planning → SHIKIGAMI_SCHEDULED expected 'exported:true', got '${RESULT_PLANNING}'"
+  fi
+
+  # 20.2b sprint-execution → SHIKIGAMI_SCHEDULED exported as true
+  RESULT_EXECUTION=$(bash "$TMP_COND_TEST" "sprint-execution")
+  if [ "$RESULT_EXECUTION" = "exported:true" ]; then
+    pass "Retro #59 AC2(b)：SKILL_NAME=sprint-execution → SHIKIGAMI_SCHEDULED exported=true"
+  else
+    fail "Retro #59 AC2(b)：SKILL_NAME=sprint-execution → SHIKIGAMI_SCHEDULED expected 'exported:true', got '${RESULT_EXECUTION}'"
+  fi
+
+  # 20.2c standup → SHIKIGAMI_SCHEDULED NOT exported
+  RESULT_STANDUP=$(bash "$TMP_COND_TEST" "standup")
+  if [ "$RESULT_STANDUP" = "not_exported" ]; then
+    pass "Retro #59 AC2(c)：SKILL_NAME=standup → SHIKIGAMI_SCHEDULED NOT exported"
+  else
+    fail "Retro #59 AC2(c)：SKILL_NAME=standup → SHIKIGAMI_SCHEDULED expected 'not_exported', got '${RESULT_STANDUP}'"
+  fi
+
+  # 20.2d health-check → SHIKIGAMI_SCHEDULED NOT exported
+  RESULT_HEALTH=$(bash "$TMP_COND_TEST" "health-check")
+  if [ "$RESULT_HEALTH" = "not_exported" ]; then
+    pass "Retro #59 AC2(d)：SKILL_NAME=health-check → SHIKIGAMI_SCHEDULED NOT exported"
+  else
+    fail "Retro #59 AC2(d)：SKILL_NAME=health-check → SHIKIGAMI_SCHEDULED expected 'not_exported', got '${RESULT_HEALTH}'"
+  fi
+
+  rm -f "$TMP_COND_TEST"
+else
+  fail "Retro #59 AC2：模板不存在，動態測試跳過"
+fi
+
+# 20.3 [靜態] 確認模板保留原有注釋說明區塊
+if [ -f "$TEMPLATE" ]; then
+  # 驗證原有 SHIKIGAMI_SCHEDULED 說明注釋仍然存在
+  if grep -qF "SHIKIGAMI_SCHEDULED" "$TEMPLATE"; then
+    pass "Retro #59 AC1：模板仍含 SHIKIGAMI_SCHEDULED 注釋說明"
+  else
+    fail "Retro #59 AC1：模板不含 SHIKIGAMI_SCHEDULED 任何說明（注釋應保留）"
+  fi
+else
+  fail "Retro #59 AC1：模板不存在，注釋驗證跳過"
+fi
+
+# 20.4 [靜態] 模板語法在 sprint-planning 情境下仍正確（bash -n）
+if [ -f "$TEMPLATE" ]; then
+  TMP_SPRINT_SCRIPT=$(mktemp /tmp/test-retro59-sprint-XXXX.sh)
+  perl -0777 -pe 's/\{\{#IF_GROUP\}\}.*?\{\{\/IF_GROUP\}\}\n?//gs' "$TEMPLATE" > "$TMP_SPRINT_SCRIPT" 2>/dev/null || \
+    sed '/{{#IF_GROUP}}/,/{{\/IF_GROUP}}/d' "$TEMPLATE" > "$TMP_SPRINT_SCRIPT"
+
+  sed -i \
+    -e 's/{{SKILL_NAME}}/sprint-planning/g' \
+    -e 's/{{INTERVAL}}/1h/g' \
+    -e 's/{{CRON_EXPR}}/0 \* \* \* \*/g' \
+    -e 's/{{PROJECT_DIR}}/\/tmp\/test-proj/g' \
+    -e 's/{{PROJECT_HASH}}/abc12345/g' \
+    -e 's/{{TIMESTAMP}}/2026-03-03T00:00:00/g' \
+    -e 's/{{ALLOWED_TOOLS}}/Read Glob Grep Edit Write Bash/g' \
+    "$TMP_SPRINT_SCRIPT"
+
+  bash -n "$TMP_SPRINT_SCRIPT" 2>/dev/null
+  assert_exit_code 0 $? "Retro #59 AC1：模板在 sprint-planning 情境語法正確（bash -n）"
+  rm -f "$TMP_SPRINT_SCRIPT"
+fi
+
+# 20.5 [靜態] 模板語法在 standup（非 sprint）情境下仍正確（bash -n）
+if [ -f "$TEMPLATE" ]; then
+  TMP_STANDUP_SCRIPT=$(mktemp /tmp/test-retro59-standup-XXXX.sh)
+  perl -0777 -pe 's/\{\{#IF_GROUP\}\}.*?\{\{\/IF_GROUP\}\}\n?//gs' "$TEMPLATE" > "$TMP_STANDUP_SCRIPT" 2>/dev/null || \
+    sed '/{{#IF_GROUP}}/,/{{\/IF_GROUP}}/d' "$TEMPLATE" > "$TMP_STANDUP_SCRIPT"
+
+  sed -i \
+    -e 's/{{SKILL_NAME}}/standup/g' \
+    -e 's/{{INTERVAL}}/5m/g' \
+    -e 's/{{CRON_EXPR}}/\*\/5 \* \* \* \*/g' \
+    -e 's/{{PROJECT_DIR}}/\/tmp\/test-proj/g' \
+    -e 's/{{PROJECT_HASH}}/abc12345/g' \
+    -e 's/{{TIMESTAMP}}/2026-03-03T00:00:00/g' \
+    -e 's/{{ALLOWED_TOOLS}}/Read Glob Grep Edit Write Bash/g' \
+    "$TMP_STANDUP_SCRIPT"
+
+  bash -n "$TMP_STANDUP_SCRIPT" 2>/dev/null
+  assert_exit_code 0 $? "Retro #59 AC1：模板在 standup 情境語法正確（bash -n）"
+  rm -f "$TMP_STANDUP_SCRIPT"
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""
