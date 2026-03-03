@@ -315,6 +315,107 @@ claude -p "/schedule sprint-execution --interval 1h --sequential-group sprint-cy
 
 ---
 
+## 5.7 排程衝刺 worktree 隔離執行
+
+**關聯 Story**：US-57（Issue #46 子 Story #2）
+
+排程觸發 `sprint-execution` 時，必須在獨立 worktree 中執行，確保不與互動 Session 的工作樹衝突。
+
+### 步驟 (a)：worktree 建立規則
+
+排程腳本偵測到 `SHIKIGAMI_SCHEDULED=1` 環境變數且 Skill 為 `sprint-execution` 時，在執行前建立獨立 worktree：
+
+**路徑格式**：
+
+```
+.claude/worktrees/scheduled-<skill>-<YYYYMMDD-HHMMSS>
+```
+
+**範例**：
+
+```
+.claude/worktrees/scheduled-sprint-execution-20260303-090000
+```
+
+**建立指令**：
+
+```bash
+TIMESTAMP=$(date '+%Y%m%d-%H%M%S')
+WORKTREE_PATH="${PROJECT_DIR}/.claude/worktrees/scheduled-${SKILL_NAME}-${TIMESTAMP}"
+git worktree add "$WORKTREE_PATH" HEAD
+```
+
+timestamp 格式 `YYYYMMDD-HHMMSS` 確保每次觸發路徑唯一，不重複建立。
+
+### 步驟 (b)：commit + push 至 scheduled branch
+
+執行完成後，在 worktree 內 commit 所有變更並 push 至排程分支：
+
+**分支命名格式**：
+
+```
+scheduled/<skill>/<date>
+```
+
+**範例**：
+
+```
+scheduled/sprint-execution/20260303
+```
+
+**執行指令**：
+
+```bash
+BRANCH_NAME="scheduled/${SKILL_NAME}/$(date '+%Y%m%d')"
+cd "$WORKTREE_PATH"
+git checkout -b "$BRANCH_NAME"
+git add -A
+git commit -m "[SCHEDULED] ${SKILL_NAME} — $(date '+%Y-%m-%d %H:%M')"
+git push origin "$BRANCH_NAME"
+```
+
+push 完成後依 §5「排程 PR 建立規範」建立帶有 `--label "scheduled"` 的 PR。
+
+### 步驟 (c)：worktree 清除
+
+worktree 執行完成後（無論成功或失敗）必須清除，不保留殘留：
+
+```bash
+cleanup_worktree() {
+  if [[ -d "$WORKTREE_PATH" ]]; then
+    git worktree remove --force "$WORKTREE_PATH"
+    echo "[INFO] worktree 已清除：${WORKTREE_PATH}"
+  fi
+}
+
+# 無論成功或失敗均清除（trap 確保執行）
+trap cleanup_worktree EXIT
+```
+
+### 衝突防護規則
+
+| 規則 | 說明 |
+|------|------|
+| (a) 靜默模式 | 排程觸發時跳過 §5.3 互動式 PR 偵測提醒，僅寫入 `logs/<skill>_cron.log`；互動 Session 另有 §5.3 機制負責提醒 |
+| (b) timestamp 防重複 | worktree 路徑含 timestamp（格式 `YYYYMMDD-HHMMSS`）確保每次觸發建立不同路徑，不重複建立 |
+| (c) 失敗處理 | worktree 建立失敗時 exit 1 並寫入 log 錯誤記錄，不保留殘留 worktree |
+
+**失敗處理實作**：
+
+```bash
+setup_worktree() {
+  if ! git worktree add "$WORKTREE_PATH" HEAD 2>>"${LOG_FILE}"; then
+    echo "[ERROR] worktree 建立失敗：${WORKTREE_PATH}" | tee -a "${LOG_FILE}"
+    # 清除可能的殘留
+    git worktree remove --force "$WORKTREE_PATH" 2>/dev/null || true
+    exit 1
+  fi
+  echo "[INFO] worktree 建立成功：${WORKTREE_PATH}" >> "${LOG_FILE}"
+}
+```
+
+---
+
 ## 6. 冪等 crontab 寫入（AC4）
 
 移除含同名腳本的既有 entry 後重新寫入，確保多次執行不產生重複：
