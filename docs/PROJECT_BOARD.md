@@ -1,9 +1,26 @@
 # Project Board
 
-**最後更新**：2026-04-13（Sprint 34 Review 完成）
-**當前 Sprint**：Sprint 34（完成）
+**最後更新**：2026-04-20（Sprint 35 Planning 完成）
+**當前 Sprint**：Sprint 35（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 34](sprints/sprint_34.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 35](sprints/sprint_35.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 35 — 進行中
+
+**Sprint Goal**：ADR-010 原子性實作交付 — Backlog Source of Truth 從 PRODUCT_BACKLOG.md 遷移至 GitHub Issues，完成三個 SKILL.md 改寫 + DEPRECATED 標頭 + Label 基礎設施
+**期間**：2026-04-20 ~ 2026-04-26
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-69：ADR-010 Label 基礎設施 — 建立所有 ADR-010 定義 labels 並更新 onboarding Pre-flight | S | 1 | 待開始 |
+| US-70：`backlog-intake` SKILL.md 重大改寫 — 移除 PRODUCT_BACKLOG.md 寫入，改為 Issue label + body template 兩層架構 | M | 2 | 待開始 |
+| US-71：`sprint-planning` SKILL.md 修改 — PO Story 選取來源改為 `gh issue list` + 即時 MoSCoW/RICE 排序計算 | M | 2 | 待開始 |
+| US-72：`backlog-management` SKILL.md 修改 — Grooming 流程改為操作 GitHub Issues，加入 Pre-flight 錯誤恢復掃描 | M | 2 | 待開始 |
+| US-73：PRODUCT_BACKLOG.md DEPRECATED 標頭加入 + ADR-009 格式契約決策域「Superseded by ADR-010」標注 | S | 1 | 待開始 |
+
+**目標 Velocity**：8 points（5 Stories）
 
 ---
 
