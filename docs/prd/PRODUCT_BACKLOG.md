@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-03（Sprint 29 Planning — US-52、US-53 選入）
+**最後更新**：2026-03-03（Sprint 30 Planning — US-54、US-55、US-56 選入）
 **管理者**：Product Owner
 
 ---
@@ -136,6 +136,14 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
+
+### Sprint 30 — 進行中 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-54：互動 Session 自動偵測待審排程 PR + Scrum Master 提醒機制（Issue #46 子 Story #1） | 待定 | Should | S | GitHub Issue #46 / Sprint 30 Planning | In Sprint |
+| 2 | US-55：README 準確性修正 — 版本號、Skill 數量、版本歷史對齊 | 待定 | Must | S | Architect 建議（Sprint 30 Planning） | In Sprint |
+| 3 | US-56：Deployment Readiness 版本 Tag 決策規則強化（Issue #36） | 待定 | Must | M | GitHub Issue #36 / Architect 建議（Sprint 30 Planning） | In Sprint |
 
 ### Sprint 29 — 已完成 Stories
 

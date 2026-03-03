@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 29 Review 完成）
-**當前 Sprint**：Sprint 29（完成）
+**最後更新**：2026-03-03（Sprint 30 Planning 完成）
+**當前 Sprint**：Sprint 30（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 29](sprints/sprint_29.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 30](sprints/sprint_30.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 30 — 進行中
+
+**Sprint Goal**：以 Issue #46 排程 PR 偵測為最高優先，同步修正 README 準確性並強化版本 Tag 策略，確保框架在開源延後期間的自我一致性與維護品質
+**期間**：2026-03-16 ~ 2026-03-22
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-54：互動 Session 自動偵測待審排程 PR + Scrum Master 提醒機制（Issue #46 子 Story #1） | S | 1 | 待辦 |
+| US-55：README 準確性修正 — 版本號、Skill 數量、版本歷史對齊 | S | 1 | 待辦 |
+| US-56：Deployment Readiness 版本 Tag 決策規則強化（Issue #36） | M | 2 | 待辦 |
+
+**目標 Velocity**：4 points（3 Stories）
 
 ---
 
