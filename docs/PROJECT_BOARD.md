@@ -1,22 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 26 Planning 完成）
-**當前 Sprint**：Sprint 26（進行中）
+**最後更新**：2026-03-03（Sprint 26 Review 完成）
+**當前 Sprint**：Sprint 26（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 26](sprints/sprint_26.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 26 — 進行中
+## Sprint 26 — 完成
 
 **Sprint Goal**：啟動 OpenCode MVP Phase 1，完成目錄適配與 SKILL.md 載入驗證，為 M5 條件 (a) 的外部使用者觸及奠定平台基礎
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 2 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-03 ~ 2026-03-09
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-46：OpenCode 目錄適配與 SKILL.md 載入驗證（Phase 1） | M | 2 | 已完成 |
+| US-46：OpenCode 目錄適配與 SKILL.md 載入驗證（Phase 1） | M | 2 | 完成 |
 
-**Sprint 容量**：2 Points（1 Story）
+**實際 Velocity**：2 points（1 Story）
 
 ---
 
@@ -89,21 +91,4 @@
 
 ---
 
-## Sprint 21 — 完成
-
-**Sprint Goal**：清零 Sprint 20 Retro Action Item（#58）+ parallel-dispatch 衝突偵測（US-32）+ Onboarding Labels 補完（US-34）
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-09 ~ 2026-03-15
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | S | 1 | 完成 |
-| US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | M | 2 | 完成 |
-| US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | S | 1 | 完成 |
-
-**實際 Velocity**：4 points（3 Stories）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–20）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–21）

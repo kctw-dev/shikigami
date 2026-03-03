@@ -1,6 +1,6 @@
 # Sprint 26
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-03 ~ 2026-03-09
 **Sprint Goal**：啟動 OpenCode MVP Phase 1，完成目錄適配與 SKILL.md 載入驗證，為 M5 條件 (a) 的外部使用者觸及奠定平台基礎
 **總計**：1 Story / 2 Points

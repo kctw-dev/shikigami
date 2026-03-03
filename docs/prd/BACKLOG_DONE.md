@@ -1344,6 +1344,14 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 26（2026-03-03）
+
+| Story ID | 標題 | Size | Points | 完成 Sprint |
+|----------|------|------|--------|-------------|
+| US-46 | OpenCode 目錄適配與 SKILL.md 載入驗證（Phase 1） | M | 2 | Sprint 26 |
+
+---
+
 ## Sprint 25（2026-03-03）
 
 **Sprint Goal**：在 M5 穩定化收尾階段，執行 M5 完成條件終審、Tech Debt Registry 清理、及 OpenCode POC 可行性調查，為 v1.0.0 前置條件提供明確評估依據

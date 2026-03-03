@@ -137,11 +137,11 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
 
-### Sprint 26 — 進行中 Stories
+### Sprint 26 — 已完成 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-46：OpenCode 目錄適配與 SKILL.md 載入驗證（Phase 1） | 待定 | Must | M | US-45 OPENCODE_POC.md Go 決策 / M5 外部使用者觸及前提 | In Sprint |
+| 1 | US-46：OpenCode 目錄適配與 SKILL.md 載入驗證（Phase 1） | 待定 | Must | M | US-45 OPENCODE_POC.md Go 決策 / M5 外部使用者觸及前提 | Done（Sprint 26） |
 
 ### Sprint 25 — 已完成 Stories
 

@@ -1,11 +1,11 @@
 # Retrospective Log 歷史歸檔
 
 **來源**：`docs/km/Retrospective_Log.md`
-**最後更新**：2026-03-03（Sprint 20 歸檔）
-**歸檔範圍**：Sprint 1–20（共 20 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔
+**最後更新**：2026-03-03（Sprint 21 歸檔）
+**歸檔範圍**：Sprint 1–21（共 21 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔
 
-> 主文件現況：[Retrospective_Log.md](../Retrospective_Log.md)（保留 Sprint 21–25）
+> 主文件現況：[Retrospective_Log.md](../Retrospective_Log.md)（保留 Sprint 22–26）
 
 ---
 
@@ -690,3 +690,31 @@ PO、Architect、QA Engineer、Developer、Stakeholder
 | 1 | L-size Story SKILL.md 規格品質強化 — QA 增加示例一致性檢查項 | QA | QA Code Quality Review Checklist 新增示例一致性檢查項，L-size Story 強制多輪審查 | #58 | Closed（Sprint 21） |
 
 > Problem 2 不建立新 Issue（此為長期結構性問題，快思模式設計即跳過 Token 記錄，非 Action Item）
+
+---
+
+## Sprint 21 — 2026-03-02
+
+**參與角色**：PO、Architect、Developer、QA、Stakeholder
+
+### Good
+
+1. 完成率 100% 連續 21 個 Sprint 維持（Sprint 1-21 全數達成）
+2. Phase 1 全平行派遣（3 Stories 零衝突）— Architect 分群準確，所有 Story 修改不同檔案
+3. Sprint 20 Retro Action Item #58 即時清零（1 Sprint 關閉速度），維持 Action Items 高效追蹤
+4. 測試覆蓋持續擴展 — Sprint 21 新增 39 個測試（9 lsize + 15 conflict-detection + 15 setup-labels），品質門禁穩固
+5. US-34 setup-labels.sh 為新用戶 Onboarding 補齊最後一塊拼圖，減少手動 Label 配置時間
+
+### Problem
+
+1. Code Quality Review 發現多個測試腳本缺少 `-e` flag（`set -uo pipefail` 而非 `set -euo pipefail`），測試基礎設施防禦性撰寫仍有改善空間
+2. US-32 告警格式僅示範 2 個 Story 同時衝突，未說明 3+ Story 同時衝突同一檔案時的格式擴展規則（Code Quality Medium 建議）
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| — | 無新增 Action Items | — | — | — | — |
+
+> Problem 1 屬 Low 嚴重度改善建議，不建立 Action Item，後續 Sprint 遇到時順手修正即可。
+> Problem 2 屬 Medium 建議但影響範圍有限（3+ Story 同時衝突罕見），納入 Backlog 候選而非強制 Action。

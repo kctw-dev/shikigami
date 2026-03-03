@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-03（Sprint 20 歸檔）
-**歸檔範圍**：Sprint 1–20（共 20 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔
+**最後更新**：2026-03-03（Sprint 21 歸檔）
+**歸檔範圍**：Sprint 1–21（共 21 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 21–25）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 22–26）
 
 ---
 
@@ -321,6 +321,23 @@
 | US-31（Issue #47）：/shoot 短衝模式 | L | 3 | 完成 |
 
 **實際 Velocity**：5 points（3 Stories）
+
+---
+
+## Sprint 21 — 完成
+
+**Sprint Goal**：清零 Sprint 20 Retro Action Item（#58）+ parallel-dispatch 衝突偵測（US-32）+ Onboarding Labels 補完（US-34）
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-09 ~ 2026-03-15
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | S | 1 | 完成 |
+| US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | M | 2 | 完成 |
+| US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | S | 1 | 完成 |
+
+**實際 Velocity**：4 points（3 Stories）
 
 ---
 
