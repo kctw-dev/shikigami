@@ -53,6 +53,24 @@ Scrum Master 會觸發 `onboarding`，引導你建立專案的 `CLAUDE.md` 與�
 
 ---
 
+## OpenCode 平台支援
+
+Shikigami 支援在 **OpenCode** 平台上執行，讓非 Claude Code 訂閱者也能使用完整的 Shikigami 工作流。
+
+OpenCode 採用 symlink 適配策略（[ADR-008 決策一](docs/adr/ADR-008.md)），使 `.opencode/skills/` 指向現有的 `skills/` 目錄，實現零複製的雙平台共用，無內容漂移風險。
+
+**詳細安裝步驟請參閱：[docs/INSTALL_OPENCODE.md](docs/INSTALL_OPENCODE.md)**
+
+安裝指南涵蓋：
+- 前置需求（OpenCode 版本、git symlink 設定）
+- 目錄結構設定（symlink 適配驗證）
+- Agent 設定檔說明（5 個角色 `.opencode/agents/`）
+- 首次 Sprint 快速上手（sprint-planning / sprint-execution / sprint-review）
+- 模型選擇建議（推薦 Claude Sonnet / Claude Opus）
+- Troubleshooting（5 個常見問題）
+
+---
+
 ## 文件導覽
 
 安裝完成後，以下文件幫助你快速上手：
