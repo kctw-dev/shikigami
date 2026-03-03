@@ -11,9 +11,9 @@
 
 | Story ID | 標題 | Size | Points | QA doc-only 判定 | 狀態 |
 |----------|------|------|--------|-----------------|------|
-| US-74 | ADR-010 後置 — sprint-review SKILL.md Story 完成後 Issue 狀態回寫對齊 | S | 1 | Yes | 待執行 |
-| US-75 | ADR-010 Backlog 初始化 — 將現有候選 Stories 建立為 GitHub Issues | M | 2 | No | 待執行 |
-| US-76 | Tech Debt Grooming Sprint 36 — TD-002 評估 + ADR-010 遷移後新技術債掃描 | S | 1 | Yes | 待執行 |
+| US-74 | ADR-010 後置 — sprint-review SKILL.md Story 完成後 Issue 狀態回寫對齊 | S | 1 | Yes | 完成 |
+| US-75 | ADR-010 Backlog 初始化 — 將現有候選 Stories 建立為 GitHub Issues | M | 2 | No | 完成 |
+| US-76 | Tech Debt Grooming Sprint 36 — TD-002 評估 + ADR-010 遷移後新技術債掃描 | S | 1 | Yes | 完成 |
 
 **Sprint 容量**：4 Points
 
