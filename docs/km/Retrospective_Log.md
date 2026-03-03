@@ -4,6 +4,34 @@
 
 ---
 
+## Sprint 22 — 2026-03-03
+
+**參與角色**：PO、Architect、Developer、QA、Security、Stakeholder
+
+### Good
+
+1. 連續 22 個 Sprint 100% 完成率，Sprint 22 Velocity 6pt 為近 10 Sprint 最高
+2. ADR-006（Prompt Injection Protection）與 ADR-007（Story-Lifecycle Subagent）雙 ADR 同 Sprint 交付，首次在單一 Sprint 內完成兩個架構決策記錄
+3. 61 個新測試（US-33: 13, US-37: 17, US-38: 12, US-39: 19），測試覆蓋持續擴展
+4. 4 Stories 全部 Phase 1 平行執行零衝突，排程模式偵測端到端閉環驗證（cron template → SKILL.md HARD-GATE）
+
+### Problem
+
+1. US-33 Code Quality Review 發現 onboarding SKILL.md §2.3 仍寫「3 個核心範本」但實際已為 4 個（Medium，stale count），以及 BACKLOG_DONE.md template 使用「管理者」而非「擁有者」（Low，用語不一致）
+2. US-37 ADR-006 承諾的 JSON schema output validation TECH-DEBT 未登錄至 Tech_Debt_Registry.md（Medium，DoD 合規缺口）
+3. US-38 `export SHIKIGAMI_SCHEDULED=true` 在 cron template 中為無條件注入所有 Skill，未限定 sprint-planning（Medium，環境變數洩漏風險）
+4. #56 和 #57 連續 2 Sprint 未關閉，觸發 Stakeholder 升級（逾期 Action Items 處理延遲）
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| — | 無新增 Action Items | — | — | — | — |
+
+> 所有 Problem 均為 Low/Medium 嚴重度，可於後續 Sprint 正常 Story 執行中處理，不建立新 Action Item。已升級項目（#56, #57）已在 GitHub Issues 追蹤中。
+
+---
+
 ## Sprint 21 — 2026-03-02
 
 **參與角色**：PO、Architect、Developer、QA、Stakeholder

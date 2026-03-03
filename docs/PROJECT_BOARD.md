@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 22 Planning Round 2 — US-33、US-37、US-38、US-39 選入 Sprint 22）
-**當前 Sprint**：Sprint 22（進行中）
+**最後更新**：2026-03-03（Sprint 22 Review — US-33、US-37、US-38、US-39 全數完成）
+**當前 Sprint**：Sprint 22（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 22](sprints/sprint_22.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 22 — 進行中
+## Sprint 22 — 完成
 
 **Sprint Goal**：強化框架安全性與排程智能化
+**結果**：Goal 達成（4/4 Stories PASS）。Velocity 6 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-16 ~ 2026-03-22
 
 | Story | Size | Points | 狀態 |
@@ -19,7 +21,7 @@
 | US-38（Issue #51）：排程模式下 Velocity 自動調小 — 僅選 S size Stories | S | 1 | 完成 |
 | US-39（Issue #45）：Sprint Execution context overflow — Story 生命週期封裝為 subagent | L | 3 | 完成 |
 
-**Sprint 容量**：6 Points（4 Stories）
+**實際 Velocity**：6 points（4 Stories）
 
 ---
 

@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-02（Sprint 22 Planning Round 2 — US-33、US-37、US-38、US-39 選入 Sprint 22）
+**最後更新**：2026-03-03（Sprint 22 Review — US-33、US-37、US-38、US-39 全數完成）
 **管理者**：Product Owner
 
 ---
@@ -108,7 +108,7 @@
 | 2 | US-30（Issue #48）：PO subagent 多輪派遣時 Story 內容偏離修正機制 | 25.6 | Should | S | Sprint 17 Retro / Issue #48 | Done（Sprint 19） |
 | 3 | US-31（Issue #47）：/shoot 短衝模式 | 待定 | Should | L | Sprint 17 Retro / Issue #47 | Done（Sprint 20） |
 | 4 | US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | 24.0 | Should | M | GitHub Issue #40 | Done（Sprint 21） |
-| 5 | US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | 25.2 | Should | S | GitHub Issue #33 | In Sprint 22 |
+| 5 | US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | 25.2 | Should | S | GitHub Issue #33 | Done（Sprint 22） |
 | 6 | US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | 50.4 | Should | S | GitHub Issue #32 | Done（Sprint 21） |
 
 ### Sprint 18 Retro — 新增 Action Items
@@ -137,14 +137,14 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
 
-### Sprint 22 — 選入 Stories
+### Sprint 22 — 已完成 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | 25.2 | Should | S | GitHub Issue #33 | In Sprint 22 |
-| 2 | US-37（Issue #55）：防範 Issue 提示注入攻擊 | 待定 | Must | S | GitHub Issue #55 | In Sprint 22 |
-| 3 | US-38（Issue #51）：排程模式下 Velocity 自動調小 — 僅選 S size Stories | 待定 | Should | S | GitHub Issue #51 | In Sprint 22 |
-| 4 | US-39（Issue #45）：Sprint Execution context overflow — Story 生命週期封裝為 subagent | 待定 | Should | L | GitHub Issue #45 | In Sprint 22 |
+| 1 | US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | 25.2 | Should | S | GitHub Issue #33 | Done（Sprint 22） |
+| 2 | US-37（Issue #55）：防範 Issue 提示注入攻擊 | 待定 | Must | S | GitHub Issue #55 | Done（Sprint 22） |
+| 3 | US-38（Issue #51）：排程模式下 Velocity 自動調小 — 僅選 S size Stories | 待定 | Should | S | GitHub Issue #51 | Done（Sprint 22） |
+| 4 | US-39（Issue #45）：Sprint Execution context overflow — Story 生命週期封裝為 subagent | 待定 | Should | L | GitHub Issue #45 | Done（Sprint 22） |
 
 ### Sprint 17 後 — 候選 Stories
 

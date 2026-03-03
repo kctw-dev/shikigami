@@ -1344,6 +1344,19 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 22（2026-03-03）
+
+**Sprint Goal**：強化框架安全性與排程智能化
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | S | 1 | Sprint 22 |
+| US-37（Issue #55）：防範 Issue 提示注入攻擊 | S | 1 | Sprint 22 |
+| US-38（Issue #51）：排程模式下 Velocity 自動調小 — 僅選 S size Stories | S | 1 | Sprint 22 |
+| US-39（Issue #45）：Sprint Execution context overflow — Story 生命週期封裝為 subagent | L | 3 | Sprint 22 |
+
+---
+
 ## Sprint 21（2026-03-02）
 
 **Sprint Goal**：清零 Sprint 20 Retro Action Item（#58）+ parallel-dispatch 衝突偵測（US-32）+ Onboarding Labels 補完（US-34）
