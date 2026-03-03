@@ -1,3 +1,8 @@
+> **DEPRECATED**：自 ADR-010 起，PRODUCT_BACKLOG.md 降級為唯讀歷史快照。
+> Backlog 的 source of truth 已遷移至 GitHub Issues。
+> 請使用 `gh issue list --label "type: backlog-item" --label "status: backlog"` 查看當前 Backlog。
+> 本文件將不再被框架 Skills 寫入，保留作為歷史參考。
+
 # Product Backlog
 
 **最後更新**：2026-04-13（Sprint 34 Planning Round 2 — US-66/US-68 進入 Sprint）
