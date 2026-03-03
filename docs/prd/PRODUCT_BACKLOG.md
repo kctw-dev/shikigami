@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-03（Sprint 22 Review — US-33、US-37、US-38、US-39 全數完成）
+**最後更新**：2026-03-03（Sprint 23 Planning — US-40、Retro #59、Retro #60、Retro #61 選入）
 **管理者**：Product Owner
 
 ---
@@ -136,6 +136,15 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
+
+### Sprint 23 — 進行中 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-40：Story-Lifecycle Subagent 實作 — ADR-007 Phase 1 | 待定 | Must | M | ADR-007（Sprint 22） | In Sprint 23 |
+| 2 | Retro #59（Issue #59）：Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | — | Must | S | Sprint 22 Retro / Issue #59 | In Sprint 23 |
+| 3 | Retro #60（Issue #60）：TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | — | Should | S | Sprint 22 Retro / Issue #60 | In Sprint 23 |
+| 4 | Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | — | Should | S | Sprint 22 Retro / Issue #61 | In Sprint 23 |
 
 ### Sprint 22 — 已完成 Stories
 
@@ -745,6 +754,35 @@ Issue #39 提出：日常使用 Shikigami 執行 Sprint Planning 和 Standup 時
 **來源**：GitHub Issue #39
 **ADR-003**：適用（修改 skills/sprint-planning/SKILL.md + commands/standup.md）
 **狀態**：Done（Sprint 16）
+
+---
+
+---
+
+### US-40：Story-Lifecycle Subagent 實作 — ADR-007 Phase 1
+
+**標題**：實作 ADR-007 Phase 1 — story-lifecycle-prompt.md 與 SKILL.md §3 整合
+
+**User Story**
+As a Scrum Master running sprint execution, I want a Story-Lifecycle subagent prompt and SKILL.md integration defined for Phase 1, so that the ADR-007 architecture decision has a concrete first implementation milestone that validates the interface contract before full rollout.
+
+**背景**
+Sprint 22 完成 ADR-007（Story-Lifecycle Subagent — context overflow 解決方案架構決策）。本 Story 為 ADR-007 的首個實作里程碑（Phase 1），範圍限定為建立 `story-lifecycle-prompt.md` 與更新 `skills/sprint-execution/SKILL.md` §3，不含 AC3 sampling 機制（Phase 2 範圍）。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [靜態] | story-lifecycle-prompt.md 建立 | 新建 `skills/sprint-execution/story-lifecycle-prompt.md`；檔案存在且非空；內容包含 Story-Lifecycle subagent 的角色定義、輸入格式說明（Story ID、AC 清單、相關檔案路徑）、輸出格式說明（PASS/FAIL + 摘要 + 修改檔案清單 + commit SHA）、錯誤升級條件（escalation triggers） |
+| AC2 | [靜態] | SKILL.md §3 更新含 ASCII flow diagram | `skills/sprint-execution/SKILL.md` §3 更新為引用 story-lifecycle-prompt.md 的派遣步驟說明；§3 的 ASCII flow diagram 須同步更新以反映 Story-Lifecycle subagent 的新派遣路徑；flow diagram 中須明確顯示 subagent 派遣節點 |
+| AC3 | [靜態] | 介面契約內嵌 YAML schema | `story-lifecycle-prompt.md` 或 `SKILL.md` §3 須包含 ADR-007 §AC2 Phase 1 介面契約的 inline YAML schema copy，涵蓋 input schema 與 output schema；Phase 1 範圍不包含 §AC3（sampling）與 §AC4（fallback strategy）的完整實作，但 schema 須有對應欄位佔位 |
+| AC4 | [動態] | 現有測試套件驗證（或 N/A） | 若 `skills/sprint-execution/` 下存在測試套件，執行現有測試確認無回歸；若無測試套件，標記本 AC 為 N/A；不要求新建測試套件 |
+
+**MoSCoW**：Must
+**Size**：M / **Points**：2
+**來源**：ADR-007（Sprint 22 決策）
+**ADR-003**：適用（修改 skills/sprint-execution/SKILL.md）
+**狀態**：In Sprint 23
 
 ---
 

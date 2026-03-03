@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 22 Review — US-33、US-37、US-38、US-39 全數完成）
-**當前 Sprint**：Sprint 22（完成）
+**最後更新**：2026-03-03（Sprint 23 Planning — US-40、Retro #59、Retro #60、Retro #61 選入）
+**當前 Sprint**：Sprint 23（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 22](sprints/sprint_22.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 23](sprints/sprint_23.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 23 — 進行中
+
+**Sprint Goal**：落實 ADR-007 首個實作里程碑，同步清零 Sprint 22 技術品質欠帳
+**期間**：2026-03-23 ~ 2026-03-29
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-40：Story-Lifecycle Subagent 實作 — ADR-007 Phase 1 | M | 2 | 待辦 |
+| Retro #59（Issue #59）：Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | S | 1 | 待辦 |
+| Retro #60（Issue #60）：TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | S | 1 | 待辦 |
+| Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | S | 1 | 待辦 |
+
+**Sprint 容量**：5 Points
 
 ---
 
