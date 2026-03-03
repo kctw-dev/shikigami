@@ -25,10 +25,11 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
 
 執行步驟：
 1. 讀取框架根目錄，確認 `templates/` 目錄存在
-2. 確認以下 3 個範本文件皆存在：
+2. 確認以下 4 個範本文件皆存在：
    - `templates/PRODUCT_BACKLOG.md`
    - `templates/ROADMAP.md`
    - `templates/PROJECT_BOARD.md`
+   - `templates/BACKLOG_DONE.md`
 
 **判定規則**：
 - `templates/` 不存在 → **立即中止**，輸出錯誤：
@@ -73,6 +74,7 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
 | `templates/PRODUCT_BACKLOG.md` | `docs/prd/PRODUCT_BACKLOG.md` |
 | `templates/ROADMAP.md` | `docs/prd/ROADMAP.md` |
 | `templates/PROJECT_BOARD.md` | `docs/PROJECT_BOARD.md` |
+| `templates/BACKLOG_DONE.md` | `docs/prd/BACKLOG_DONE.md` |
 
 對每個文件：
 - 目的地不存在 → 複製，輸出：`[複製] templates/XXX.md → docs/.../XXX.md`
