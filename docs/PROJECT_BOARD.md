@@ -15,7 +15,7 @@
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
 | US-47：ADR-008: OpenCode 平台整合策略架構決策 | S | 1 | 完成 |
-| US-48：OpenCode Phase 2 — Subagent 角色移植與派遣驗證 | L | 3 | 進行中 |
+| US-48：OpenCode Phase 2 — Subagent 角色移植與派遣驗證 | L | 3 | 完成 |
 
 **目標 Velocity**：4 points（2 Stories）
 
