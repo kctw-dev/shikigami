@@ -647,3 +647,166 @@ ls /tmp/shikigami-schedule-*.lock
 | 排程執行 backlog-management | `/schedule backlog-management --interval 1h` |
 | 移除排程 | `/schedule sprint-execution --remove` |
 | 只檢測環境 | `/schedule sprint-execution --dry-run` |
+
+---
+
+## 15. 使用範例
+
+本節提供完整的 `/schedule` 指令使用範例，說明前提條件與預期結果，協助使用者快速設定自動化排程。
+
+---
+
+### 範例 (a)：README 統計自動更新排程
+
+**情境說明**
+
+專案 README 的徽章統計（Issue 數量、PR 狀態、Sprint 進度等）需要定期自動更新，避免資訊過時。透過 `readme-update` Skill（或同等功能 Skill）設定排程，每小時自動重新整理統計數據並 commit。
+
+**前提條件**
+
+在執行 `/schedule` 前，必須確認以下條件全部通過：
+
+| 條件 | 驗證指令 | 說明 |
+|------|----------|------|
+| OAuth 認證有效 | `claude auth status` | 排程腳本使用 OAuth 而非 API Key；token 無效時排程執行會失敗 |
+| 目標 Skill 已存在 | `ls skills/readme-update/SKILL.md` | Pre-flight 檢查 5 會驗證 `skills/<skill-name>/SKILL.md` 存在；Skill 不存在時阻擋部署 |
+| flock 指令可用 | `which flock` | 互斥鎖依賴 flock；macOS 需 `brew install util-linux` |
+| 專案目錄可寫 | `test -w $PWD && echo OK` | 腳本生成與 log 寫入皆需寫入權限 |
+
+**OAuth 認證確認步驟**：
+
+```bash
+# 確認 OAuth 狀態（應顯示 "Logged in" 而非 API Key）
+claude auth status
+
+# 若未登入，執行以下指令重新認證
+claude auth login
+```
+
+**完整 `/schedule` 指令語法**：
+
+```bash
+# 設定 README 自動更新排程（每小時執行一次）
+claude -p "/schedule readme-update --interval 1h"
+```
+
+**預期成功輸出**：
+
+```
+── QA Pre-flight ──────────────────────
+  [PASS] skill name 字元白名單通過
+  [PASS] claude CLI 可用
+  [PASS] flock 可用
+  [PASS] OAuth 認證有效（非無效 API key）
+  [PASS] 專案目錄存在且可寫
+  [PASS] /readme-update skill 已註冊
+  [PASS] 無衝突的排程已存在
+
+── 部署 ───────────────────────────────
+  ✓ 腳本已生成：scripts/readme_update_cron.sh
+  ✓ 執行權限已設定（chmod +x）
+  ✓ Log 目錄已確認：logs/
+  ✓ Crontab 已寫入
+
+✓ 排程啟用完成 — readme-update 每 1 小時執行
+
+── 摘要 ───────────────────────────────
+  腳本路徑：scripts/readme_update_cron.sh
+  Crontab 項目：0 * * * * /home/user/proj/scripts/readme_update_cron.sh
+  Log 路徑：logs/schedule-readme-update.log
+```
+
+**驗證排程已生效**：
+
+```bash
+# 確認 crontab 已寫入
+crontab -l | grep readme_update
+
+# 監控執行 log
+tail -f logs/schedule-readme-update.log
+```
+
+**移除排程（如需停止自動更新）**：
+
+```bash
+claude -p "/schedule readme-update --remove"
+```
+
+---
+
+### 範例 (b)：Daily Standup 自動排程
+
+**情境說明**
+
+每日 Standup 需在固定時間觸發 `daily-standup` Skill，自動整理昨日進度、今日計畫與阻礙事項，生成 standup report 並 commit 至版本控制。
+
+**前提條件**
+
+與範例 (a) 相同：OAuth 認證有效、目標 Skill `daily-standup` 已存在、flock 可用、專案目錄可寫。
+
+**Cron 時間設定說明**
+
+`/schedule` 支援四種固定 interval，對應 cron 表達式如下：
+
+| 參數 | Cron 表達式 | 適用情境 |
+|------|------------|---------|
+| `--interval 1m` | `* * * * *` | 高頻監控（不建議用於 standup） |
+| `--interval 5m` | `*/5 * * * *` | 快速迭代任務 |
+| `--interval 15m` | `*/15 * * * *` | 中頻任務 |
+| `--interval 1h` | `0 * * * *` | 低頻定期任務（適合 standup） |
+
+**注意**：`/schedule` 不接受原始 cron 表達式（如 `0 9 * * 1-5`）。若需精確指定每日 09:00 觸發，應選擇 `--interval 1h` 並在 Skill 內部加入時間條件判斷（如 `[ $(date +%H) -eq 9 ] || exit 0`）。
+
+**完整 `/schedule` 指令語法**：
+
+```bash
+# 設定 Daily Standup 每小時觸發排程
+claude -p "/schedule daily-standup --interval 1h"
+```
+
+**若需與 sprint-execution 序列執行（避免共享檔案衝突）**：
+
+```bash
+# 將 daily-standup 綁定至 sprint-cycle 群組，確保不與 sprint-execution 平行
+claude -p "/schedule daily-standup --interval 1h --sequential-group sprint-cycle"
+claude -p "/schedule sprint-execution --interval 1h --sequential-group sprint-cycle"
+```
+
+**預期成功輸出**：
+
+```
+── QA Pre-flight ──────────────────────
+  [PASS] skill name 字元白名單通過
+  [PASS] claude CLI 可用
+  [PASS] flock 可用
+  [PASS] OAuth 認證有效（非無效 API key）
+  [PASS] 專案目錄存在且可寫
+  [PASS] /daily-standup skill 已註冊
+  [PASS] 無衝突的排程已存在
+
+── 部署 ───────────────────────────────
+  ✓ 腳本已生成：scripts/daily_standup_cron.sh
+  ✓ 執行權限已設定（chmod +x）
+  ✓ Log 目錄已確認：logs/
+  ✓ Crontab 已寫入
+
+✓ 排程啟用完成 — daily-standup 每 1 小時執行
+
+── 摘要 ───────────────────────────────
+  腳本路徑：scripts/daily_standup_cron.sh
+  Crontab 項目：0 * * * * /home/user/proj/scripts/daily_standup_cron.sh
+  Log 路徑：logs/schedule-daily-standup.log
+```
+
+**驗證排程已生效**：
+
+```bash
+# 確認 crontab 已寫入
+crontab -l | grep daily_standup
+
+# 先以 dry-run 確認環境就緒（不部署任何檔案）
+claude -p "/schedule daily-standup --dry-run"
+
+# 監控執行 log
+tail -f logs/schedule-daily-standup.log
+```
