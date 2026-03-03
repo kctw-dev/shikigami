@@ -473,3 +473,56 @@ US-17 同時點出 OpenCode 的已知阻礙：模型行為差異、SessionStart 
 | 內容來源可追溯至 SKILL.md | PASS |
 | AGENTS.md 更新（列出全部 5 個 agent）| 完成 |
 | 動態派遣驗證 | 待實機 POC（US-51 Phase 3c 範疇）|
+
+---
+
+## 11. Phase 3b 完成記錄（US-50 執行結果）
+
+**執行日期**：2026-03-03
+**執行者**：AI Agent（Developer Subagent，Claude Sonnet 4.6）
+**Sprint**：Sprint 28
+**Story**：US-50
+
+---
+
+### 11.1 安裝指南建立結果（AC1/AC2）
+
+**產出檔案**：`docs/INSTALL_OPENCODE.md`
+
+**文件結構**：
+
+| 章節 | 內容摘要 |
+|------|---------|
+| §1 前置需求 | OpenCode 版本要求、git 設定、gh CLI（選用）、Windows symlink 設定 |
+| §2 目錄結構設定（Symlink 適配）| ADR-008 決策一引用、symlink 確認/建立步驟、OpenCode Skills 發現驗證 |
+| §3 Agent 設定檔說明 | 五角色設定檔一覽、格式說明、Task tool 派遣方式說明 |
+| §4 首次 Sprint 快速上手 | 專案初始化、Sprint Planning、Sprint Execution、Sprint Review 流程說明 |
+| §5 模型選擇建議 | 推薦 Claude Sonnet / Claude Opus（prompt 相容性最佳） |
+| §6 Troubleshooting | 5 個常見問題：Skills 發現失敗、subagent 派遣失敗、`claude -p` 語法殘留、`~/.claude/projects/` 路徑差異、Scrum Master 意圖辨識問題 |
+
+**ADR-008 引用確認**：`docs/INSTALL_OPENCODE.md §2` 明確引用 ADR-008 決策一，包含完整的目錄結構定義圖，說明 symlink 適配策略為唯一正式支援的目錄整合方式。
+
+---
+
+### 11.2 README.md 更新結果（AC3）
+
+**修改檔案**：`README.md`
+
+**新增章節**：「OpenCode 平台支援」（位於「快速開始」與「文件導覽」之間）
+
+**章節內容**：
+- 簡要說明 OpenCode 雙平台支援策略
+- 引用 ADR-008 決策一（symlink 適配）
+- 連結至 `docs/INSTALL_OPENCODE.md`
+- 列出安裝指南六個主要段落的摘要
+
+---
+
+### 11.3 Phase 3b 完成狀態
+
+| 項目 | 狀態 |
+|------|------|
+| `docs/INSTALL_OPENCODE.md` 建立 | 完成（6 個章節，423 行） |
+| ADR-008 決策一引用 | 完成（§2 明確引用，含目錄結構定義） |
+| README.md OpenCode 章節新增 | 完成（連結至安裝指南） |
+| OPENCODE_POC.md Phase 3b 子章節 | 完成（本節） |
