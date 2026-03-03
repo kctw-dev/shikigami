@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 25 Review 完成）
-**當前 Sprint**：Sprint 25（完成）
+**最後更新**：2026-03-03（Sprint 26 Planning 完成）
+**當前 Sprint**：Sprint 26（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 25](sprints/sprint_25.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 26](sprints/sprint_26.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 26 — 進行中
+
+**Sprint Goal**：啟動 OpenCode MVP Phase 1，完成目錄適配與 SKILL.md 載入驗證，為 M5 條件 (a) 的外部使用者觸及奠定平台基礎
+**期間**：2026-03-03 ~ 2026-03-09
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-46：OpenCode 目錄適配與 SKILL.md 載入驗證（Phase 1） | M | 2 | 待開始 |
+
+**Sprint 容量**：2 Points（1 Story）
 
 ---
 

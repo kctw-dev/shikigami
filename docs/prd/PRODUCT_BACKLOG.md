@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-03（Sprint 25 Planning — US-43、US-44、US-45 選入）
+**最後更新**：2026-03-03（Sprint 26 Planning — US-46 選入）
 **管理者**：Product Owner
 
 ---
@@ -136,6 +136,12 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
+
+### Sprint 26 — 進行中 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-46：OpenCode 目錄適配與 SKILL.md 載入驗證（Phase 1） | 待定 | Must | M | US-45 OPENCODE_POC.md Go 決策 / M5 外部使用者觸及前提 | In Sprint |
 
 ### Sprint 25 — 已完成 Stories
 
