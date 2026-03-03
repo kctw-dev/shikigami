@@ -118,9 +118,19 @@ Sprint Backlog 還有 Story？
 
    **降級指引：** gh 指令失敗（網路問題、權限不足、非 GitHub 倉庫等）時靜默略過，不阻塞 Story 執行。
 
+   **快掃前清除步驟：** 每次 Issue 快掃開始時，先批次移除所有 open issue 上的 `sprint-replied` label，確保本 Sprint 週期從乾淨狀態開始：
+
+   ```bash
+   # 取得所有含 sprint-replied label 的 open issue 編號，逐一移除 label
+   gh issue list --state open --label sprint-replied --json number -q '.[].number' \
+     | xargs -I{} gh issue edit {} --remove-label sprint-replied
+   ```
+
+   若無任何 issue 含此 label，指令靜默完成，不視為錯誤。
+
    **觸發條件（同時滿足以下三項才對該 issue 執行回覆）：**
    - **(a)** issue 不含 `in-backlog` label 且不含 `retro-action` label（已排入 backlog 的 issue 由開發流程處理，retro action item 由 Retro 流程處理，兩者均不需額外回覆）
-   - **(b)** issue 不含 `sprint-N-replied` label（N 為當前 Sprint 編號），避免本 Sprint 內重複回覆
+   - **(b)** issue 不含 `sprint-replied` label，避免本 Sprint 週期內重複回覆
    - **(c)** open issue 超過 5 個時，僅處理最舊的前 5 個（依 issue 編號升冪排序取前五）
 
    **回覆流程：**
@@ -155,16 +165,17 @@ Sprint Backlog 還有 Story？
       - 公開專案：直接 `gh issue comment` 發布
       - 私有 / 敏感專案：回覆前請 User 確認
 
-   **防重複機制：** 回覆成功後，立即為該 issue 加上 `sprint-N-replied` label（N 替換為當前 Sprint 編號，例如 Sprint 8 → `sprint-8-replied`）。下次快掃時篩除含此 label 的 issue，確保每個 Sprint 週期內不重複回覆同一 issue。
+   **防重複機制：** 回覆成功後，立即為該 issue 加上 `sprint-replied` label。下次快掃時篩除含此 label 的 issue；每個 Sprint 快掃開始前批次清除（見上方「快掃前清除步驟」），確保各 Sprint 週期獨立計算，不重複回覆。
 
    > **Decision Note — 為何採用 GitHub Label 追蹤狀態**
    >
    > 備選方案包含：(1) 本地狀態檔、(2) commit message 標記、(3) GitHub Label。
    > 採用 Label 的理由：
    > - **持久化**：label 存於 GitHub，跨 subagent、跨 session 均可查詢，無需共享本地狀態
-   > - **可靜態驗證**：`gh issue list --label sprint-N-replied` 可直接驗證，無需額外解析
+   > - **可靜態驗證**：`gh issue list --label sprint-replied` 可直接驗證，無需額外解析
    > - **原生支援**：gh CLI 原生 `--label` 篩選，指令簡單、無副作用
    > - **低成本**：不需要引入新的基礎設施或 ADR，符合 YAGNI 原則
+   > - **單一 label 設計**：使用固定名稱 `sprint-replied` 而非每 Sprint 建立新 label（如 `sprint-N-replied`），避免 label 垃圾堆積，降低 repository 管理成本
 
 2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。**主 session 不讀取 Story 內容**，Story ID 與路徑傳入 subagent，由 subagent 自行讀取。
 3. **派遣 Story-Lifecycle subagent**：使用 `story-lifecycle-prompt.md` 作為 prompt，以 ADR-007 §AC2 介面契約格式傳入以下參數（主 session 不預讀這些內容，路徑由 **Story-Lifecycle subagent 自行讀取**）：
