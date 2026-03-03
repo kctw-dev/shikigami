@@ -83,6 +83,53 @@ Shikigami 正在尋找第一批 Beta 使用者，歡迎試用並分享回饋，�
 
 完成安裝後留言即可。我們特別想了解：安裝是否順利、哪些步驟有卡關、Sprint 流程的實際感受。不需要長篇大論 — 一兩句話就很有幫助。
 
+### 5 分鐘快速試用
+
+想先確認 Shikigami 是否適合你？以下 5 步驟帶你從安裝到第一次執行：
+
+**步驟 1 — 安裝 Claude Code CLI**（若尚未安裝）
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+**步驟 2 — 安裝 Shikigami Plugin**（在 Claude Code 互動介面中輸入）
+
+```
+/plugin marketplace add KCTW/shikigami
+/plugin install shikigami
+```
+
+**步驟 3 — 開新 Session 並確認載入成功**
+
+重啟 Claude Code，在新 Session 中輸入：
+
+```
+你有 shikigami superpowers 嗎？
+```
+
+Claude 應確認 Shikigami Skills 已載入。
+
+**步驟 4 — 初始化你的專案**
+
+在你的專案目錄中對 Claude 說：
+
+```
+幫我初始化 Shikigami
+```
+
+Scrum Master 會建立 `CLAUDE.md` 與 `docs/` 目錄結構。
+
+**步驟 5 — 說你想做什麼**
+
+```
+我想加一個使用者登入功能
+```
+
+Shikigami 會自動調度 PO、Architect、QA 分析需求並建立 User Story。
+
+完成後，到 [Issue #59](https://github.com/KCTW/shikigami/issues/59) 留言分享你的體驗。
+
 ---
 
 ## 文件導覽
