@@ -278,6 +278,59 @@ Sprint Backlog 還有 Story？
 
 ---
 
+### 4.3 Circuit Breaker 機制（自動降級規則）
+
+<!-- ADR-007 Phase 2 實作 — Sprint 24 / US-41 AC4 -->
+<!-- 來源：docs/adr/ADR-007-story-lifecycle-subagent.md §AC3 機制回退 -->
+
+**定義**：當外部抽樣審查的 DISPUTE 率持續偏高，表示 Story-Lifecycle self-review 品質已出現系統性退化，需要框架自動觸發架構重評估。
+
+#### 觸發條件
+
+- **閾值**：連續 **3 個 Sprint** 的 DISPUTE 率均超過 **20%**
+- **DISPUTE 率計算方式**：當次 Sprint 外部抽樣中 DISPUTE 數 / 外部抽樣執行數
+  - 範例：Sprint 中抽樣 3 個 Story，2 個回傳 DISPUTE → DISPUTE 率 = 67%（超過 20%）
+  - 範例：Sprint 中抽樣 5 個 Story，1 個回傳 DISPUTE → DISPUTE 率 = 20%（不超過，恰好在閾值）
+  - 超過：DISPUTE 率 > 20%（嚴格大於，非大於等於）
+
+#### 觸發後動作
+
+當連續 3 個 Sprint DISPUTE 率均 > 20% 時，框架自動執行：
+
+1. 在 Sprint Review / Retrospective 文件中記錄「Circuit Breaker 已觸發」事件
+2. 通知 Architect：自審品質持續退化，需在**下一個 Sprint Planning 前**評估是否：
+   - 回退至部分封裝模式（ADR-007 選項 C）
+   - 引入其他補償機制（如提高基礎抽樣率至 50%、強制全量外部審查等）
+3. 在 Architect 完成評估並做出決策前，下一個 Sprint **自動升級為全量外部抽樣**（100%）
+
+#### 重置條件
+
+Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
+
+| 情境 | 計數行為 |
+|------|---------|
+| 當次 Sprint DISPUTE 率 > 20% | 計數 +1（或維持計數） |
+| 當次 Sprint DISPUTE 率 ≤ 20% | 滑動窗口更新；若最近 3 Sprint 中有任一 Sprint DISPUTE 率 ≤ 20%，則不觸發 Circuit Breaker |
+| Architect 完成架構重評估並實施改善措施 | 計數**手動重置為 0**，記錄重置事件於 Retrospective_Log.md |
+
+**重置記錄格式：**
+
+```
+[Circuit Breaker 重置] Sprint N — Architect 重評估完成，實施 {改善措施描述}，計數重置為 0
+```
+
+#### 品質指標記錄位置
+
+每個 Sprint Review 結束時，將以下指標更新至 `docs/km/Metrics_Log.md`：
+
+| 指標 | 說明 | 用途 |
+|------|------|------|
+| 自審通過率 | Story-Lifecycle self-review PASS 數 / 總 Story 數 | 監控 subagent 自審效能 |
+| 外部抽樣執行率 | 實際外部抽樣 Story 數 / 應抽樣 Story 數 | 驗證 30% 門檻是否落實 |
+| DISPUTE 率 | 外部抽樣中 DISPUTE 數 / 外部抽樣執行數 | Circuit Breaker 計數依據 |
+
+---
+
 ## 5. Hard Gates
 
 <HARD-GATE>
