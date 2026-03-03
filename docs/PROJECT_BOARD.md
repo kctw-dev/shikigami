@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 32 Review 完成）
-**當前 Sprint**：Sprint 32（完成）
+**最後更新**：2026-04-06（Sprint 33 Planning 完成）
+**當前 Sprint**：Sprint 33（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 32](sprints/sprint_32.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 33](sprints/sprint_33.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 33 — 進行中
+
+**Sprint Goal**：以 Issue #46 第四條流程「需求入庫自動化」為核心交付，同步啟動 M5 外部使用者觸及的主動推廣行動與 Backlog 精化
+**期間**：2026-04-06 ~ 2026-04-12
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-63：Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-intake Skill） | M | 2 | 進行中 |
+| US-64：M5 條件 (a) 主動觸及強化 — 外部社群推廣文案製作（GitHub README badges + 技術文章草稿 + 主動 outreach 指引） | S | 1 | 進行中 |
+| US-65：US-T08（Intent Routing 測試）評估重開 — RICE 重新評分與 Sprint Planning 可行性確認 | S | 1 | 進行中 |
+
+**目標 Velocity**：4 points（3 Stories）
+**實際 Velocity**：—
 
 ---
 
