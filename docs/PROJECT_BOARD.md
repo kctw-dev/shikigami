@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 29 Planning 完成）
-**當前 Sprint**：Sprint 29（進行中）
+**最後更新**：2026-03-03（Sprint 29 Review 完成）
+**當前 Sprint**：Sprint 29（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 29](sprints/sprint_29.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 29 — 進行中
+## Sprint 29 — 完成
 
 **Sprint Goal**：以 Issue #3 正式結案為里程碑，完成 OpenCode 平台動態驗證（US-52）與 M5 條件 (a) 外部使用者觸及的具體招募行動（US-53），使 M5 最後一個開放條件進入可達成狀態
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-09 ~ 2026-03-15
 
 | Story | Size | Points | 狀態 |
@@ -18,6 +20,7 @@
 | US-53：M5 Beta 使用者招募 — README 招募文案 + Issue 引導機制 | S | 1 | 完成 |
 
 **目標 Velocity**：3 points（2 Stories）
+**實際 Velocity**：3 points（2 Stories）
 
 ---
 
@@ -87,20 +90,4 @@
 
 ---
 
-## Sprint 24 — 完成
-
-**Sprint Goal**：在 ADR-007 Phase 1 架構基準上實作外部抽樣審查機制（Phase 2），完成「自審為主、抽檢為輔」品質保障層，並同步強化 Architect/QA 角色在 Story-Lifecycle 架構下的決策知識
-**結果**：Goal 達成（2/2 Stories PASS）。Velocity 5 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-30 ~ 2026-04-05
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-41：ADR-007 Phase 2 — 外部抽樣審查機制實作 | M | 3 | 完成 |
-| US-42：Architect/QA 框架知識強化 — Story-Lifecycle 架構下角色決策指引 | S | 2 | 完成 |
-
-**實際 Velocity**：5 points（2 Stories）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–23）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–24）

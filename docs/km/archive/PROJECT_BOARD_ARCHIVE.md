@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-02（Sprint 23 歸檔）
-**歸檔範圍**：Sprint 1–23（共 23 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔
+**最後更新**：2026-03-03（Sprint 24 歸檔）
+**歸檔範圍**：Sprint 1–24（共 24 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 24–28）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 25–29）
 
 ---
 
@@ -386,3 +386,19 @@
 | Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | S | 1 | 完成 |
 
 **實際 Velocity**：5 points（4 Stories）
+
+---
+
+## Sprint 24 — 完成
+
+**Sprint Goal**：在 ADR-007 Phase 1 架構基準上實作外部抽樣審查機制（Phase 2），完成「自審為主、抽檢為輔」品質保障層，並同步強化 Architect/QA 角色在 Story-Lifecycle 架構下的決策知識
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 5 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-30 ~ 2026-04-05
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-41：ADR-007 Phase 2 — 外部抽樣審查機制實作 | M | 3 | 完成 |
+| US-42：Architect/QA 框架知識強化 — Story-Lifecycle 架構下角色決策指引 | S | 2 | 完成 |
+
+**實際 Velocity**：5 points（2 Stories）

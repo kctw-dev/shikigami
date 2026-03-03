@@ -137,12 +137,12 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
 
-### Sprint 29 — 進行中 Stories
+### Sprint 29 — 已完成 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-52：OpenCode Phase 4 — Issue #3 正式結案：動態驗證補完與 Issue 關閉 | 待定 | Must | M | OPENCODE_POC.md §12 Phase 3c [PENDING-DYNAMIC] / Issue #3 結案評估 | In Sprint 29 |
-| 2 | US-53：M5 Beta 使用者招募 — README 招募文案 + Issue 引導機制 | 待定 | Must | S | M5 條件 (a) 外部使用者觸及 / Issue #3 結案後 Beta 招募啟動 | In Sprint 29 |
+| 1 | US-52：OpenCode Phase 4 — Issue #3 正式結案：動態驗證補完與 Issue 關閉 | 待定 | Must | M | OPENCODE_POC.md §12 Phase 3c [PENDING-DYNAMIC] / Issue #3 結案評估 | Done（Sprint 29） |
+| 2 | US-53：M5 Beta 使用者招募 — README 招募文案 + Issue 引導機制 | 待定 | Must | S | M5 條件 (a) 外部使用者觸及 / Issue #3 結案後 Beta 招募啟動 | Done（Sprint 29） |
 
 ### Sprint 28 — 已完成 Stories
 

@@ -39,6 +39,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 26 | 2026-03-03 | 2 points | 100% | 下降趨勢 | 1 Story（1M），Sprint Goal 達成；S25→S26 大幅下降（4→2，-50%）；下降趨勢（5→4→2，連續兩期下降）；OpenCode 目錄適配與 SKILL.md 載入驗證 Phase 1 完成 |
 | Sprint 27 | 2026-03-15 | 4 points | 100% | 不規則 | Goal 達成：ADR-008 + OpenCode Phase 2 |
 | Sprint 28 | 2026-03-02 | 4 points | 100% | 穩定 | Sprint Goal 達成，OpenCode Phase 3 完成 |
+| Sprint 29 | 2026-03-03 | 3 points | 100% | 下降趨勢 | Goal 達成，Issue #3 正式結案（Sprint 27=4, Sprint 28=4, Sprint 29=3 → 下降趨勢） |
 
 ---
 

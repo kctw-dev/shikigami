@@ -1,6 +1,22 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–23）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–24）
+
+---
+
+## Sprint 29 — 2026-03-03
+
+### Good
+- 連續 29 個 Sprint 100% 完成率，Issue #3 從 Sprint 16 US-17 調查至 Sprint 29 US-52 正式結案，六階段完整收尾
+- Beta 招募機制上線（README CTA + Issue #59），M5 條件 (a) 從被動等待轉為主動招募
+- US-52 與 US-53 完全平行執行，零檔案衝突，交付效率高
+
+### Problem
+- 無顯著問題（Sprint 29 為收尾型 Sprint，Story 數量少，複雜度低）
+
+### Action Items
+
+本 Sprint 無新增 Action Items。
 
 ---
 
@@ -101,31 +117,6 @@
 | — | 無新增 Action Items | — | — | — | — |
 
 > Problem 1 已在 Sprint 執行過程中由 Code Quality Review 攔截並修正（commit deb5a7d），ROADMAP.md 版號策略段落已更新至 v0.8.0。現有 QA 審查流程有效運作，無需新增 Action Item。
-
----
-
-## Sprint 24 — 2026-03-30
-
-**參與角色**：PO、Architect、Developer、QA、Stakeholder
-
-### Good
-
-1. 連續 24 個 Sprint 100% 完成率，Sprint Goal 達成（ADR-007 Phase 2 外部抽樣審查機制 + Architect/QA 角色決策指引雙線交付）
-2. ADR-007 Phase 2 外部抽樣審查機制一次到位 — SKILL.md §3 flow diagram + §4 CONFIRM/DISPUTE + §4.3 Circuit Breaker + story-lifecycle-prompt.md TC-1~TC-4 + §10 靜態驗收清單，5/5 AC 首次 Spec Compliance PASS
-3. US-41→US-42 嚴格序列執行零競態衝突，Architect 平行分群策略（同檔案依賴偵測）持續有效
-4. Retro Action Items 連續 4 Sprint 無新增（Sprint 21-24），全部 39 項歷史 Action Items 已關閉
-
-### Problem
-
-1. US-42 Code Quality Review 發現新建 SKILL.md 的「參照文件」區塊引用推測性 ADR 路徑名稱（ADR-003-framework-document-change.md → 實際 ADR-003.md；ADR-006-prompt-injection-isolation.md → 實際 -protection.md），共 4 個錯誤路徑被 Code Quality Review 攔截修正
-
-### Action Items
-
-| # | Action | Owner | 驗收方式 | Issue | 狀態 |
-|---|--------|-------|----------|-------|------|
-| — | 無新增 Action Items | — | — | — | — |
-
-> Problem 1 屬 Medium 嚴重度，已在 Sprint 執行過程中由 Code Quality Review 攔截並修正（commit 20946fd）。現有 QA 審查流程有效運作，無需新增 Action Item。
 
 ---
 

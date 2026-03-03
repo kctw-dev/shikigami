@@ -219,6 +219,7 @@ Sprint Review 時自動產出：
 | US-50 | OpenCode Phase 3b — INSTALL_OPENCODE.md 安裝指南（外部使用者就緒） | Sprint 28 ✅ |
 | US-51 | OpenCode Phase 3c — Task Tool 參數分析與 Developer dispatch 驗證（Issue #3 接近可結案） | Sprint 28 ✅ |
 | US-52 | OpenCode Phase 4 — Issue #3 正式結案：動態驗證補完（[STATIC-CONFIRMED]）與 Issue 關閉 | Sprint 29 ✅ |
+| US-53 | M5 Beta 使用者招募 — README 招募文案 + Issue 引導機制（M5 條件 (a) 主動招募啟動） | Sprint 29 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 
