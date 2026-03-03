@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-04-20（Sprint 35 Review 完成）
-**當前 Sprint**：Sprint 35（完成）
+**最後更新**：2026-04-27（Sprint 36 Planning 完成）
+**當前 Sprint**：Sprint 36（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 35](sprints/sprint_35.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 36](sprints/sprint_36.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 36 — 進行中
+
+**Sprint Goal**：完成 ADR-010 生命週期閉環 — 補全 sprint-review Issue 狀態回寫、初始化 GitHub Issues Backlog，讓 Backlog Source of Truth 遷移進入「全流程可用」狀態
+**期間**：2026-04-27 ~ 2026-05-03
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-74：ADR-010 後置 — sprint-review SKILL.md Story 完成後 Issue 狀態回寫對齊 | S | 1 | 待執行 |
+| US-75：ADR-010 Backlog 初始化 — 將現有候選 Stories 建立為 GitHub Issues | M | 2 | 待執行 |
+| US-76：Tech Debt Grooming Sprint 36 — TD-002 評估 + ADR-010 遷移後新技術債掃描 | S | 1 | 待執行 |
+
+**目標 Velocity**：4 points（3 Stories）
 
 ---
 

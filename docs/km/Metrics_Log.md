@@ -120,6 +120,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 34 | Execution | 11469595 | 30804 |
 | Sprint 35 | Planning | 24528953 | 58861 |
 | Sprint 35 | Execution | 28363151 | 66472 |
+| Sprint 36 | Planning | 1694535 | 4196 |
 
 ---
 
