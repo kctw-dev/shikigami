@@ -479,6 +479,7 @@ Sprint Review 完成、產出文件更新後，執行以下歸檔觸發檢查。
 - [ ] `PRODUCT_BACKLOG.md` 已更新（未完成 Story 回填）
 - [ ] 已完成 Story 從 `PRODUCT_BACKLOG.md` 移至 `BACKLOG_DONE.md`，按 Sprint 歸檔
 - [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步；版本 Tag 與里程碑對齊確認完成，見「ROADMAP 更新操作指引」）
+- [ ] **Beta 狀態檢查**：確認 Issue #59 是否有新的外部使用者回饋（`gh issue view 59 --comments`）；若有，更新 `docs/prd/M5_COMPLETION_ASSESSMENT.md` 條件 (a) 狀態（累積回饋數與最後更新日期）
 - [ ] **歸檔觸發檢查**（見 §6）：確認 `PROJECT_BOARD.md` 與 `Retrospective_Log.md` 歷史 Sprint 區塊是否超過 5 個；若觸發則執行漸進歸檔（移出最舊 1 個 Sprint 至 `docs/km/archive/`），並更新 `docs/km/archive/README.md`
 - [ ] **Token 成本摘要** *(慢想模式限定)*（見下方子節）
 - [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格** *(慢想模式限定)*（對應 Review token 欄）：
