@@ -433,6 +433,13 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 | 所有 Story 完成 | 觸發 `sprint-review` 進行驗收與回顧 |
 | 發現安全問題 | 觸發 `security-review` 進行深度安全審查 |
 
+### 角色決策指引
+
+Sprint Execution 中各角色的具體決策標準請參閱以下文件：
+
+- **Architect 決策指引**（估點策略、ADR 需求判斷、平行分群策略）：[`skills/architect/SKILL.md`](../architect/SKILL.md)
+- **QA Engineer 決策指引**（AC 驗證策略、Spec Compliance review 決策、Code Quality review 策略）：[`skills/qa-engineer/SKILL.md`](../qa-engineer/SKILL.md)
+
 ---
 
 ## 10. ADR-007 Phase 2 靜態驗收清單
