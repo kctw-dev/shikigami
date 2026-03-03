@@ -124,6 +124,53 @@ Sprint Review 進行時，掃描 `docs/km/Shoot_Log.md` 取得本 Sprint 期間�
 
 ---
 
+## 2.6 Story Issue 狀態回寫（ADR-010 生命週期閉環）
+
+Story 驗收判定完成後，須依判定結果回寫對應 GitHub Issue 的狀態。此步驟在 §2 步驟 5（回寫 sprint_N.md 狀態）**之後**、§3 Retrospective **之前**執行。
+
+### 前提
+
+本節適用於以 GitHub Issue 形式管理的 Backlog Stories（ADR-010 體系）。Story 的 GitHub Issue 編號從 `docs/sprints/sprint_N.md` 中各 Story 的「Issue」欄位取得（或從 Issue 標題比對取得）。
+
+### 操作規則
+
+| 驗收判定 | Issue 操作 | 說明 |
+|---------|-----------|------|
+| Story PASS（已完成） | 套用 `done` label，然後關閉 Issue | 代表 Story 生命週期結束，Issue 天然追蹤完成狀態 |
+| Story FAIL（未完成） | Issue 保持 open，不執行任何關閉操作 | 未完成的 Story 回流 Backlog，Issue 維持 open 狀態等待下次 Sprint 選取 |
+
+### Story PASS — 操作步驟
+
+對每個驗收通過（PASS）的 Story，依序執行以下指令：
+
+```bash
+# 步驟 1：套用 done label 並移除 in-sprint label
+gh issue edit <issue-number> --add-label "done" --remove-label "status: in-sprint"
+
+# 步驟 2：關閉 Issue，留言記錄完成 Sprint
+gh issue close <issue-number> -c "Sprint N Review 驗收通過（PASS）。Story 已完成交付。"
+```
+
+### Story FAIL — 操作步驟
+
+對每個未通過驗收（FAIL）的 Story，Issue **保持 open**，執行以下操作：
+
+```bash
+# 移除 in-sprint label，回復 backlog 狀態（等待下次 Sprint 選取）
+gh issue edit <issue-number> --remove-label "status: in-sprint" --add-label "status: backlog"
+
+# 留言記錄未完成原因（保持 open 狀態）
+gh issue comment <issue-number> --body "Sprint N Review 驗收未通過（FAIL）：[未達標原因]。Issue 保持 open，等待下次 Sprint 選取。"
+```
+
+> **重要**：Story FAIL 時 Issue **不得關閉**。open 狀態確保此 Story 在下次 Sprint Planning 的 `gh issue list --label "status: backlog"` 查詢中可見，能被重新納入 Sprint。
+
+### 操作格式一致性
+
+label 操作格式與 `skills/sprint-planning/SKILL.md` §5 保持一致，均使用 `gh issue edit --add-label / --remove-label` 單行指令格式。
+
+---
+
 ## 3. Sprint Retrospective 流程
 
 Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定具體行動。
@@ -471,6 +518,10 @@ Sprint Review 完成、產出文件更新後，執行以下歸檔觸發檢查。
 - [ ] Stakeholder Subagent 已確認商業期待符合度
 - [ ] 通過驗收的 Story 已移至 `PROJECT_BOARD.md` Done 欄位（含完成日期、Sprint 編號、Sprint 統計數據更新）
 - [ ] `docs/sprints/sprint_N.md` Sprint Backlog 表格中每筆 Story 的狀態欄已回寫最終驗收結果（完成 / 未完成，未完成者標注原因）
+- [ ] **Story Issue 狀態回寫**（§2.6，ADR-010 生命週期閉環）：
+  - [ ] 每個 PASS Story：已執行 `gh issue edit <number> --add-label "done" --remove-label "status: in-sprint"` 套用 done label
+  - [ ] 每個 PASS Story：已執行 `gh issue close <number> -c "Sprint N Review 驗收通過（PASS）。Story 已完成交付。"` 關閉 Issue
+  - [ ] 每個 FAIL Story：Issue 保持 open，已執行 `gh issue edit <number> --remove-label "status: in-sprint" --add-label "status: backlog"` 回復 backlog 狀態，並留言記錄未完成原因
 - [ ] 未達 DoD 的 Story 已移回 Backlog 並標注原因
 - [ ] `Retrospective_Log.md` 已新增 Good / Problem / Action 記錄
 - [ ] 每個 Action Item 已建立為 GitHub Issue（`retro-action` label）
