@@ -11,7 +11,7 @@
 
 | Story ID | 標題 | Size | Points | 狀態 |
 |----------|------|------|--------|------|
-| US-46 | OpenCode 目錄適配與 SKILL.md 載入驗證（Phase 1） | M | 2 | 待開始 |
+| US-46 | OpenCode 目錄適配與 SKILL.md 載入驗證（Phase 1） | M | 2 | 完成 |
 
 **Sprint 容量**：2 Points
 
