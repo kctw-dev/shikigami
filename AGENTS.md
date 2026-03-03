@@ -82,6 +82,21 @@ In OpenCode, Skills are invoked by referencing their name. The Scrum Master SKIL
 
 OpenCode's native Task tool supports programmatic subagent dispatch. Shikigami's 5 core roles (PO / Architect / QA / Developer / SM) are dispatched via Task tool calls within SKILL.md orchestration logic.
 
+### OpenCode Agent Configs (Phase 3a — US-49)
+
+All 5 Shikigami core role subagents are configured under `.opencode/agents/`. Each file follows the ADR-008 Decision 3 format: YAML frontmatter (`name`, `description`, `model`) + Markdown body (role system prompt).
+
+```
+.opencode/agents/
+├── developer.md        ← Developer: TDD implementation, conflict detection, tech debt management
+├── architect.md        ← Architect: T-shirt sizing, ADR management, parallel grouping strategy
+├── product-owner.md    ← Product Owner: Backlog management, Sprint goal definition, story selection
+├── qa-engineer.md      ← QA Engineer: AC verification, Spec Compliance, Code Quality Review
+└── security-engineer.md ← Security Engineer: OWASP Top 10, vulnerability scanning, secrets audit
+```
+
+**Note**: Scrum Master is the primary session orchestrator (not a dispatched subagent), so no agent config file is required for the SM role.
+
 ### Known Compatibility Notes (Phase 1)
 
 The following items require verification in a live OpenCode environment (Phase 2 POC):
