@@ -68,8 +68,12 @@ unset ANTHROPIC_API_KEY
 # 排程模式標記（US-38 / sprint-planning SKILL.md §3.1）
 # SHIKIGAMI_SCHEDULED=true 告知 sprint-planning 目前為排程模式，
 # 啟用 S-size 篩選 HARD-GATE（M/L Stories 不得選入 Sprint Backlog）
+# 僅在 sprint 相關 skill（sprint-planning、sprint-execution）時才 export，
+# 避免環境變數洩漏至非 sprint skill 執行（Retro #59 Issue #59 修正）
 # ---------------------------------------------------------------------------
-export SHIKIGAMI_SCHEDULED=true
+if [[ "$SKILL_NAME" == "sprint-planning" ]] || [[ "$SKILL_NAME" == "sprint-execution" ]]; then
+  export SHIKIGAMI_SCHEDULED=true
+fi
 
 # ---------------------------------------------------------------------------
 # 執行
