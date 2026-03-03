@@ -365,6 +365,69 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 
 ---
 
+## 5.1 ROADMAP 里程碑對齊檢查
+
+本子節定義「觸發 deployment-readiness 前」必須執行的 ROADMAP 里程碑對齊檢查。此步驟的輸出決定 deployment-readiness 的版本 Tag 決策類型（Major bump 或 Minor bump）。
+
+### 執行時機
+
+執行時機：**產出文件更新完成後、觸發 deployment-readiness 前**。
+
+### 執行步驟
+
+1. **讀取 `docs/prd/ROADMAP.md`**，確認各里程碑當前狀態
+
+2. **逐一檢查活躍里程碑的完成狀態**：
+   - 找出狀態為「進行中」的里程碑
+   - 對照本 Sprint 交付的 Stories，確認這些 Stories 是否為該里程碑的最後缺口
+   - 若里程碑下的所有 Stories 均已標記完成，則該里程碑達成完成狀態
+
+3. **判斷是否有里程碑因本 Sprint 交付而完成**：
+
+   ```
+   里程碑完成？
+     ├── 否 → 版本 Tag 決策類型：Minor bump 候選
+     │         傳達給 deployment-readiness：「本 Sprint 無里程碑完成，建議 Minor bump」
+     └── 是 → 向 PO 確認里程碑完成
+               ├── PO 確認 → 版本 Tag 決策類型：Major bump 候選
+               │            傳達給 deployment-readiness：「里程碑 MX 完成，PO 確認，建議 Major bump」
+               └── PO 未確認 → 版本 Tag 決策類型：Minor bump 候選
+                              傳達給 deployment-readiness：「里程碑 MX 完成但 PO 未確認，建議 Minor bump」
+   ```
+
+4. **更新 `docs/prd/ROADMAP.md` 里程碑狀態**（若里程碑完成）：
+   - 將里程碑狀態改為「已完成（Sprint N）」
+   - 補充版本 Tag 對齊記錄（格式見 §5 ROADMAP 更新操作指引）
+
+5. **將對齊檢查結果附帶至 deployment-readiness 觸發指令**：
+   - 明確傳達「Major bump 候選」或「Minor bump 候選」判斷結果
+   - deployment-readiness 依此結果套用 `skills/deployment-readiness/SKILL.md` §4 版本 Tag 決策規則
+
+### 輸出格式
+
+執行里程碑對齊檢查後，輸出以下格式的摘要：
+
+```
+## ROADMAP 里程碑對齊檢查結果（Sprint N）
+
+檢查時間：YYYY-MM-DD
+活躍里程碑：MX — <里程碑標題>
+
+本 Sprint 交付 Stories：
+- US-XX（已完成）— 屬於 MX
+- US-YY（已完成）— 屬於 MX
+
+MX 完成狀態：
+- 已完成 Stories：N / 總計 M
+- 未完成 Stories：（若有，列出）
+- 里程碑完成：是 / 否
+
+版本 Tag 決策類型：Major bump 候選 / Minor bump 候選
+傳達給 deployment-readiness：<決策說明>
+```
+
+---
+
 ## 6. 歸檔觸發檢查
 
 Sprint Review 完成、產出文件更新後，執行以下歸檔觸發檢查。
@@ -423,7 +486,8 @@ Sprint Review 完成、產出文件更新後，執行以下歸檔觸發檢查。
     - **有效 input tokens = input_tokens + cache_read_input_tokens + cache_creation_input_tokens**
     - **output tokens = output_tokens**
   - **次選（降級方法）**：若 JSONL 檔案不存在、路徑不可存取、或 `message.usage` 欄位解析失敗，則各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
-- [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag）
+- [ ] **ROADMAP 里程碑對齊檢查**（見 §5.1）：在觸發 deployment-readiness 前，確認本 Sprint 交付是否使某個 ROADMAP 里程碑達成完成狀態，並將結果傳達給 deployment-readiness 作為版本 Tag 決策依據
+- [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag），並附帶 ROADMAP 里程碑對齊檢查結果（里程碑完成 → Major bump 候選；未完成 → Minor bump）
 - [ ] Sprint Metrics 計算並追加至 `docs/km/Metrics_Log.md`（見下方計算指引）
 - [ ] 是否有本 Sprint 值得記錄的角色制衡案例？若有，更新 `docs/km/ROLE_BALANCE_CASES.md`
 - [ ] **產出文件（`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`、`sprint_N.md`）完成最後修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件；`Retrospective_Log.md` 與 `Metrics_Log.md` 雖位於 `docs/km/` 路徑，但屬 Sprint 狀態文件，適用本規範；`sprint_N.md` 為 Sprint 執行記錄，亦適用本規範。其他 Knowledge Management 文件如 `ROLE_BALANCE_CASES.md`、`Tech_Debt_Registry.md` 等不適用，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
