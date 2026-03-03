@@ -120,7 +120,7 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 
 | 條件 | 自動觸發 |
 |------|----------|
-| 新 session 開始（使用者首次互動） | `invoke shikigami:standup`（Daily Standup — 健康快篩 + Git 同步 + Sprint 進度） |
+| 新 session 開始（使用者首次互動） | `invoke shikigami:standup`（Daily Standup — 健康快篩 + Git 同步 + Sprint 進度）+ 排程 PR 偵測（見 §5.3） |
 | Sprint 中所有 Story 標記完成 | `invoke shikigami:sprint-review` |
 | sprint-review 驗收通過 | `invoke shikigami:deployment-readiness`（版本 Tag + 部署就緒） |
 | sprint-review 完成且 Backlog 有待選 Story | `invoke shikigami:sprint-planning`（下一個 Sprint） |
@@ -129,6 +129,64 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 | 升級鏈走完仍無解 | `invoke shikigami:escalation` |
 
 **原則**：Scrum Master 不只是被動路由器，也是**主動的流程守門員**。當偵測到流程轉折點時，自動推進到下一個環節，不等使用者提醒。
+
+---
+
+### 5.3 互動 Session 啟動：排程 PR 偵測
+
+**觸發時機**：每次互動 Session 啟動（使用者首次互動），在 standup 完成後立即執行。
+
+**偵測指令**：
+
+```bash
+gh pr list --label "scheduled" --state open --json number,title,createdAt
+```
+
+**執行邏輯**：
+
+```
+Session 啟動
+  |
+  v
+執行 standup（健康快篩 + Git 同步 + Sprint 進度）
+  |
+  v
+偵測待審排程 PR（gh pr list --label "scheduled" --state open）
+  |-- 無待審 PR（空結果）→ 靜默通過，不顯示任何提醒
+  +-- 偵測到待審 PR
+        |
+        v
+      顯示標準提醒區塊（見下方格式）
+      等待使用者選擇操作選項
+```
+
+**無待審 PR 時**：靜默通過，不輸出任何訊息，不干擾正常流程。
+
+**偵測到待審 PR 時**，顯示以下標準提醒區塊：
+
+```
+[SCHEDULED-PR] 偵測到 N 個待審排程 PR
+
+| # | PR 編號 | 標題 | 建立時間 |
+|---|---------|------|----------|
+| 1 | #XX     | ...  | YYYY-MM-DD HH:MM |
+| 2 | #YY     | ...  | YYYY-MM-DD HH:MM |
+
+選項：
+1. 立即審核（逐一檢視並 merge/reject）
+2. 本次略過（下次 session 再提醒）
+3. 批次確認全部（全部 approve + merge）
+```
+
+**各選項行為說明**：
+
+| 選項 | 行為 |
+|------|------|
+| 1. 立即審核 | 逐一開啟各 PR，執行 `quality-gate` 檢視，由使用者決定 merge 或 reject |
+| 2. 本次略過 | 關閉提醒，繼續 session；下次 session 啟動時仍會偵測並再次提醒 |
+| 3. 批次確認全部 | 對所有列出的 PR 執行 `gh pr merge --merge`，完成後輸出批次結果摘要 |
+
+**規格來源**：US-54 AC1、AC2（Sprint 30）
 
 ---
 
