@@ -853,16 +853,13 @@ Issue #3 從提出到結案的完整 Story 交付鏈：
 
 ---
 
-### 13.5 Beta 招募啟動交叉引用（US-53）
+### 13.5 Beta 招募啟動（US-53 交叉引用）
 
-Issue #3 結案後，M5 條件 (a)「至少 1 位外部使用者完成安裝並走完一個 Sprint」的達成路徑由 US-53（Sprint 29）啟動：
+Issue #3 結案後，M5 條件 (a) 的招募路徑已由 US-53（Sprint 29）正式啟動：
 
-- US-53 AC1：README.md 新增「Beta 使用者招募」區段，邀請 Claude Code / OpenCode 使用者試用
-- US-53 AC2：GitHub Issue 回報引導機制（pre-filled template URL）
-- US-53 AC3：M5_COMPLETION_ASSESSMENT.md 招募行動記錄
-- US-53 AC4：本節交叉引用（OPENCODE_POC.md §13 ← US-53 實作後補充）
-
-> 本段落待 US-53 實作完成後由 US-53 執行者補充 README 連結與具體引導 URL。
+- **README.md Beta 招募區段**（US-53 AC1）：`README.md §Beta 使用者招募` 已新增，邀請 Claude Code / OpenCode 使用者依安裝指南試用並提交回饋（[README.md#beta-使用者招募](../../README.md#beta-使用者招募)）。
+- **GitHub Issue #59**（US-53 AC2）：[Beta 回饋收集 — 請在此分享你的使用經驗](https://github.com/KCTW/shikigami/issues/59) 已建立，作為外部使用者回饋收集管道（pre-filled template）。
+- **M5 條件 (a) 招募路徑確認**：以上兩項行動共同確認 M5 條件 (a) 招募路徑現已啟動（active）；外部使用者可透過 README 找到安裝指南並透過 Issue #59 提交回饋，達成條件所需的可追蹤回饋記錄機制已就緒。
 
 ---
 
