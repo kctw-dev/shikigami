@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-03（Sprint 26 Planning — US-46 選入）
+**最後更新**：2026-03-09（Sprint 27 Planning — US-47、US-48 選入）
 **管理者**：Product Owner
 
 ---
@@ -136,6 +136,13 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
+
+### Sprint 27 — 進行中 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-47：ADR-008: OpenCode 平台整合策略架構決策 | 待定 | Must | S | US-46 Phase 1 建議 / OPENCODE_POC.md §8.4 | In Sprint（Sprint 27） |
+| 2 | US-48：OpenCode Phase 2 — Subagent 角色移植與派遣驗證 | 待定 | Must | L | OPENCODE_POC.md Phase 2 定義 / M5 外部使用者觸及 | In Sprint（Sprint 27） |
 
 ### Sprint 26 — 已完成 Stories
 

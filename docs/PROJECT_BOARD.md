@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 26 Review 完成）
-**當前 Sprint**：Sprint 26（完成）
+**最後更新**：2026-03-09（Sprint 27 Planning 完成）
+**當前 Sprint**：Sprint 27（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 26](sprints/sprint_26.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 27](sprints/sprint_27.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 27 — 進行中
+
+**Sprint Goal**：完成 ADR-008 架構決策 + 啟動 OpenCode Phase 2，為 M5 條件 (a) 外部使用者觸及提供完整平台整合策略與首個角色移植驗證
+**期間**：2026-03-09 ~ 2026-03-15
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-47：ADR-008: OpenCode 平台整合策略架構決策 | S | 1 | 進行中 |
+| US-48：OpenCode Phase 2 — Subagent 角色移植與派遣驗證 | L | 3 | 進行中 |
+
+**目標 Velocity**：4 points（2 Stories）
 
 ---
 
