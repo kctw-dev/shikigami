@@ -36,6 +36,12 @@ Sprint Planning 支援兩種執行模式：
 
 以下步驟必須逐項建立 task 完成，不可跳過：
 
+- [ ] **Planning 環節開始前記錄 baseline snapshot 至 `docs/km/Metrics_Log.md` Token Baseline Snapshots 表格**：
+  1. 列出 `~/.claude/projects/-home-kevin-shikigami/` 目錄下所有 JSONL 檔案，找出最新（依修改時間排序）的 JSONL
+  2. 讀取該 JSONL，對所有含 `message.usage` 欄位的記錄加總 `input_tokens`（含 `cache_read_input_tokens` 與 `cache_creation_input_tokens`）與 `output_tokens`，得到當前累計值
+  3. 在 Metrics_Log.md「Token Baseline Snapshots」表格新增一列：Sprint 編號填入本 Sprint 編號，環節名稱填「Planning」，兩個累計 token 欄位填入步驟 2 計算所得值
+  4. 若 JSONL 不可存取，兩欄填「N/A」並輸出「Token Baseline 不可用，需手動補充」
+
 - [ ] **執行框架健康檢查**（<!-- Claude Code -->invoke shikigami:health-check<!-- OpenCode -->使用 health-check skill<!-- /OpenCode -->）— 完整 4 項檢查（必要文件 + 孤兒 Story + ADR 一致性 + Retro 逾期）。CRITICAL 標注警告但不阻塞 Planning 流程 *(慢想模式限定)*
 - [ ] **角色權重調整檢查**（US-22 / ADR-004）— 讀取 `docs/km/Retrospective_Log.md`，依關鍵字比對演算法判斷是否觸發調整；結果寫入 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊（詳見 §7） *(慢想模式限定)*
 - [ ] **PO subagent** 掃描 GitHub open issues（`gh issue list --state open`），對未分類 issues 執行 Triage（<!-- Claude Code -->invoke shikigami:issue-management Triage<!-- OpenCode -->使用 issue-management skill 並傳入 Triage 任務<!-- /OpenCode -->），將 bug/feature-request 透過 Backlog Bridge 納入 Backlog
