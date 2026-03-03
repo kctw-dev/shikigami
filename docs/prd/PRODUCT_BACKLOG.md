@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-03（Sprint 32 Planning — US-60、US-61、US-62 選入 Sprint）
+**最後更新**：2026-03-03（Sprint 32 Review — US-60、US-61、US-62 全部完成）
 **管理者**：Product Owner
 
 ---
@@ -137,13 +137,13 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
 
-### Sprint 32 — 進行中 Stories
+### Sprint 32 — 已完成 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-60：Issue #46 子 Story #3 — 排程衝刺程式碼入庫 QA 自動化（schedule SKILL.md + scrum-master/sprint-review SKILL.md） | 待定 | Should | M | GitHub Issue #46 子 Story #3 / Sprint 32 Planning | In Sprint |
-| 2 | US-61：M5 條件 (a) 外部使用者觸及強化 — Onboarding 低摩擦路徑最佳化（README + tutorial + M5 追蹤更新） | 待定 | Must | S | M5 條件 (a) 外部使用者觸及 / Architect 建議（Sprint 32 Planning） | In Sprint |
-| 3 | US-62：Issue #35 — Token 追蹤 Baseline Snapshot 機制（Metrics_Log.md + sprint-planning/execution SKILL.md） | 待定 | Should | S | GitHub Issue #35 / Sprint 32 Planning | In Sprint |
+| 1 | US-60：Issue #46 子 Story #3 — 排程衝刺程式碼入庫 QA 自動化（schedule SKILL.md + scrum-master/sprint-review SKILL.md） | 待定 | Should | M | GitHub Issue #46 子 Story #3 / Sprint 32 Planning | Done（Sprint 32） |
+| 2 | US-61：M5 條件 (a) 外部使用者觸及強化 — Onboarding 低摩擦路徑最佳化（README + tutorial + M5 追蹤更新） | 待定 | Must | S | M5 條件 (a) 外部使用者觸及 / Architect 建議（Sprint 32 Planning） | Done（Sprint 32） |
+| 3 | US-62：Issue #35 — Token 追蹤 Baseline Snapshot 機制（Metrics_Log.md + sprint-planning/execution SKILL.md） | 待定 | Should | S | GitHub Issue #35 / Sprint 32 Planning | Done（Sprint 32） |
 
 ### Sprint 31 — 已完成 Stories
 
