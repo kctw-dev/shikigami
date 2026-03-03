@@ -13,7 +13,7 @@
 |----------|------|------|--------|-----------------|------|
 | US-57 | Issue #46 子 Story #2 — 排程衝刺 worktree 隔離執行框架（schedule SKILL.md + scrum-master SKILL.md） | M | 2 | No | 完成 |
 | US-58 | M5 Beta 回饋閉環強化 — Issue #59 追蹤機制與 README 招募文案精化 | S | 1 | No | 完成 |
-| US-59 | Issue #52 — README 自動更新排程設定指引（schedule SKILL.md 使用範例） | S | 1 | No | 待開始 |
+| US-59 | Issue #52 — README 自動更新排程設定指引（schedule SKILL.md 使用範例） | S | 1 | No | 完成 |
 
 **Sprint 容量**：4 Points
 
