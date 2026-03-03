@@ -101,6 +101,52 @@ As a framework user following the Onboarding skill, I want all references in onb
 | AC2 | [靜態] | 審查範圍定義與 stale reference 修正 | 審查 `skills/onboarding/SKILL.md` 全文中的所有數字引用（numeric references：章節號碼、步驟編號、檔案計數等數字）與路徑引用（path references：檔案路徑如 `docs/`、`skills/`、`commands/` 開頭的路徑，以及 skill route 名稱如 `shikigami:standup`、`shikigami:health-check` 等）；識別並修正所有 stale reference；若發現 `/standup` 引用（如 `shikigami:standup` 或 `commands/standup.md`），Developer 須驗證其是否仍有效，無效則更新或移除 |
 | AC3 | [靜態] | 修正結果報告 | 在 Sprint 執行記錄或 commit message 中列出：(a) 審查的 numeric references 總數與 path references 總數；(b) 發現的 stale references 清單（每項含：原文、位置行號、修正後內容）；(c) 若無 stale reference，明確輸出「審查完成，無 stale reference 發現」 |
 
+**Retro #61 AC3 審查報告**（補登，修正 QA Issue #61 AC3(a) 缺漏）
+
+```
+Retro #61 審查報告 — skills/onboarding/SKILL.md 全文掃描結果
+
+(a) 審查總數
+    Numeric references 審查總數：7 個
+      1. 行 20：「5 個階段」（流程階段數）
+      2. 行 20：「第 2.4 節」（章節交叉引用）
+      3. 行 28：「4 個範本文件」（§2.1 templates 數量）
+      4. 行 51：「4 個核心目錄」（§2.2 目錄數量）
+      5. 行 68：「4 個核心範本」（§2.3 複製目標數量，原為 stale "3"，已修正）
+      6. 行 101：「3 個問題」（§2.4 問答流程問題數）
+      7. 行 132：「3 個回答」（§2.4 收到回答數）
+
+    Path references 審查總數：15 個
+      1.  templates/（目錄）
+      2.  templates/PRODUCT_BACKLOG.md
+      3.  templates/ROADMAP.md
+      4.  templates/PROJECT_BOARD.md
+      5.  templates/BACKLOG_DONE.md
+      6.  templates/CLAUDE.md.template
+      7.  docs/prd/
+      8.  docs/adr/
+      9.  docs/sprints/
+      10. docs/km/
+      11. docs/PROJECT_BOARD.md
+      12. shikigami:health-check
+      13. shikigami:sprint-planning
+      14. shikigami:architecture-decision
+      15. shikigami:backlog-management
+
+(b) Stale references 發現（共 1 個）
+    - 行 68：「將 3 個核心範本複製至 docs/prd/」
+      → 修正為：「將 4 個核心範本複製至 docs/prd/」
+      （原因：BACKLOG_DONE.md 於 Sprint 22 / US-33 新增至 templates/ 與 §2.3 table，
+              prose 數字 "3" 未同步更新，與 table 實際 4 列不一致）
+
+    /standup 引用驗證：SKILL.md 中出現「/standup」於行 152（
+    輸出清單步驟 "執行 /standup"）。此處為使用者引導文字，
+    非路徑引用，不觸發路徑有效性檢查。無 shikigami:standup 或
+    commands/standup.md 路徑引用存在。
+
+審查完成。除上述 stale reference（已於 commit fe7012c 修正）外，無其他 stale reference。
+```
+
 ---
 
 ## 平行分群（Architect 建議）
