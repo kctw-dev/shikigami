@@ -17,6 +17,7 @@ set -uo pipefail
 # ---------------------------------------------------------------------------
 readonly PLUGIN_JSON=".claude-plugin/plugin.json"
 readonly MARKETPLACE_JSON=".claude-plugin/marketplace.json"
+readonly GEMINI_EXTENSION_JSON="gemini-extension.json"
 
 # ---------------------------------------------------------------------------
 # 狀態追蹤
@@ -96,6 +97,30 @@ check_ac1_json_consistency() {
 }
 
 # ---------------------------------------------------------------------------
+# AC1b：比較 gemini-extension.json version vs plugin.json version
+# ---------------------------------------------------------------------------
+check_ac1b_gemini_consistency() {
+  print_section "AC1b：gemini-extension.json vs plugin.json 版號一致性"
+
+  if [ ! -f "$GEMINI_EXTENSION_JSON" ]; then
+    print_warning "找不到 $GEMINI_EXTENSION_JSON，跳過 Gemini Extension 版號檢查"
+    return
+  fi
+
+  local gemini_version
+  gemini_version=$(jq -r '.version' "$GEMINI_EXTENSION_JSON")
+
+  echo "  plugin.json            version: $PLUGIN_VERSION"
+  echo "  gemini-extension.json  version: $gemini_version"
+
+  if [ "$PLUGIN_VERSION" = "$gemini_version" ]; then
+    print_pass "plugin.json 與 gemini-extension.json 版號一致 ($PLUGIN_VERSION)"
+  else
+    print_fail "版號不一致：plugin.json=$PLUGIN_VERSION，gemini-extension.json=$gemini_version"
+  fi
+}
+
+# ---------------------------------------------------------------------------
 # AC2 + AC3：比較最新 semver git tag vs plugin.json version
 # ---------------------------------------------------------------------------
 check_ac2_git_tag_consistency() {
@@ -145,6 +170,9 @@ main() {
 
   # AC1：直接在目前 shell 執行，EXIT_CODE 與 PLUGIN_VERSION 可被修改
   check_ac1_json_consistency
+
+  # AC1b：gemini-extension.json vs plugin.json
+  check_ac1b_gemini_consistency
 
   # AC2 + AC3
   check_ac2_git_tag_consistency "$PLUGIN_VERSION"

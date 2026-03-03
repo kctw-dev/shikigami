@@ -33,3 +33,6 @@ jobs:
 
       - name: Validate Orphans
         run: bash scripts/validate-orphans.sh
+
+      - name: Validate Gemini Extension
+        run: bash scripts/validate-gemini.sh

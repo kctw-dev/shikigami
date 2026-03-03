@@ -9,3 +9,4 @@ node_modules/
 *.swp
 .DS_Store
 .claude/settings.local.json
+.gemini/settings.json

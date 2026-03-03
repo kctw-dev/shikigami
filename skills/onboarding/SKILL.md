@@ -127,17 +127,31 @@ gh label list --json name --limit 100
           如需重置，請手動刪除後重新執行。
   ```
 
-### 2.4 生成 CLAUDE.md
+### 2.4 生成專案配置文件（CLAUDE.md / GEMINI.md）
 
 **目的**：建立框架啟動設定文件，定義專案資訊與自治等級。
 
-**豁免不阻塞原則（框架根設定）**：`CLAUDE.md` 是框架的核心配置文件，決定整個 Scrum Team 的自治行為（包括 `shikigami.project_level`）。**任何專案等級皆需人工確認**，不可自動生成後跳過確認步驟。這是對不阻塞原則的明確豁免。
+**平台偵測**：依據執行環境自動判斷應生成哪個配置文件：
+
+```
+平台偵測：
+├── gemini-extension.json 在 plugin 根目錄存在 → Gemini CLI 環境
+│   └── 配置文件名 = GEMINI.md，範本 = templates/GEMINI.md.template
+├── .opencode/ 在 plugin 根目錄存在 → OpenCode 環境
+│   └── 配置文件名 = CLAUDE.md，範本 = templates/CLAUDE.md.template
+└── 預設 → Claude Code 環境
+    └── 配置文件名 = CLAUDE.md，範本 = templates/CLAUDE.md.template
+```
+
+> 以下流程中，`{CONFIG_FILE}` 代表偵測結果的配置文件名（`CLAUDE.md` 或 `GEMINI.md`），`{TEMPLATE}` 代表對應範本。
+
+**豁免不阻塞原則（框架根設定）**：`{CONFIG_FILE}` 是框架的核心配置文件，決定整個 Scrum Team 的自治行為（包括 `shikigami.project_level`）。**任何專案等級皆需人工確認**，不可自動生成後跳過確認步驟。這是對不阻塞原則的明確豁免。
 
 執行邏輯：
 
 ```
-CLAUDE.md 是否存在？
-├── 存在 → 輸出「[略過] CLAUDE.md 已存在，跳過生成」，繼續下一步
+{CONFIG_FILE} 是否存在？
+├── 存在 → 輸出「[略過] {CONFIG_FILE} 已存在，跳過生成」，繼續下一步
 └── 不存在 → 進入問答流程（使用 AskUserQuestion）
 ```
 
@@ -146,14 +160,14 @@ CLAUDE.md 是否存在？
 **問題 1 — 專案名稱**：
 ```
 你的專案名稱是什麼？
-（將填入 CLAUDE.md 的「專案資訊 → 專案名稱」欄位）
+（將填入 {CONFIG_FILE} 的「專案資訊 → 專案名稱」欄位）
 ```
 
 **問題 2 — 技術棧**：
 ```
 你的技術棧是什麼？
 （例如：FastAPI + PostgreSQL + pytest、Next.js + Prisma、純文件專案）
-（將填入 CLAUDE.md 的「專案資訊 → 技術棧」欄位）
+（將填入 {CONFIG_FILE} 的「專案資訊 → 技術棧」欄位）
 ```
 
 **問題 3 — 專案等級**：
@@ -172,12 +186,12 @@ CLAUDE.md 是否存在？
 請輸入 low / medium / high：
 ```
 
-收到 3 個回答後，依據 `templates/CLAUDE.md.template`，填入對應欄位生成 `CLAUDE.md`：
+收到 3 個回答後，依據 `{TEMPLATE}`，填入對應欄位生成 `{CONFIG_FILE}`：
 - 專案名稱 → `專案資訊 → 專案名稱`
 - 技術棧 → `專案資訊 → 技術棧`
 - 專案等級 → 在文件末尾新增：`shikigami.project_level: [使用者答案]`
 
-輸出：`[生成] CLAUDE.md（請確認內容後再繼續）`
+輸出：`[生成] {CONFIG_FILE}（請確認內容後再繼續）`
 
 ### 2.5 輸出下一步清單
 
@@ -188,9 +202,9 @@ CLAUDE.md 是否存在？
 
 以下是你的下一步：
 
-1. **確認 CLAUDE.md**
+1. **確認專案配置文件**
    確認專案名稱、技術棧、專案等級設定正確。
-   如需調整，直接編輯 CLAUDE.md。
+   如需調整，直接編輯 CLAUDE.md（Claude Code / OpenCode）或 GEMINI.md（Gemini CLI）。
 
 2. **執行 /standup**
    確認框架狀態健康，開始每日工作節奏。

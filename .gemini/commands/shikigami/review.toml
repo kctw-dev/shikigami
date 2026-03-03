@@ -1,0 +1,2 @@
+description = "執行 Sprint 回顧，產出 Review + Retrospective 紀錄"
+prompt = "Invoke the shikigami:sprint-review skill and follow it exactly as presented to you"

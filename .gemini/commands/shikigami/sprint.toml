@@ -1,0 +1,2 @@
+description = "啟動 Sprint 規劃流程，從 Backlog 選取 Stories 並建立 Sprint 計畫"
+prompt = "Invoke the shikigami:sprint-planning skill and follow it exactly as presented to you"

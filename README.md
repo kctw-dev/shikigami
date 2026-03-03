@@ -74,6 +74,28 @@ OpenCode 採用 symlink 適配策略（[ADR-008 決策一](docs/adr/ADR-008.md)�
 
 ---
 
+## Gemini CLI 平台支援
+
+Shikigami 支援在 **Gemini CLI** 平台上執行。Gemini CLI 的 extension 架構原生支援 `skills/*/SKILL.md` 格式，Skills 自動發現無需任何 symlink 適配——這是三個支援平台中最簡潔的整合方式。
+
+**安裝**：
+
+```
+gemini extensions install https://github.com/KCTW/shikigami
+```
+
+**詳細安裝步驟請參閱：[docs/INSTALL_GEMINI.md](docs/INSTALL_GEMINI.md)**
+
+安裝指南涵蓋：
+- 前置需求（Gemini CLI 版本）
+- 一行安裝指令
+- 目錄結構說明（原生 Skills 發現、TOML commands）
+- 首次 Sprint 快速上手
+- 模型選擇建議（推薦 Gemini 2.5 Pro）
+- Troubleshooting（6 個常見問題）
+
+---
+
 ## Beta 使用者招募
 
 > **[Beta 回饋收集 — 請在此留言分享你的使用經驗](https://github.com/KCTW/shikigami/issues/59)**
@@ -83,6 +105,7 @@ Shikigami 正在尋找第一批 Beta 使用者，歡迎試用並分享回饋，�
 **試用對象**：
 - **Claude Code 使用者**：依照 [docs/tutorial/README.md](docs/tutorial/README.md) 完成安裝，走完一個 Sprint 週期
 - **OpenCode 使用者**：依照 [docs/INSTALL_OPENCODE.md](docs/INSTALL_OPENCODE.md) 完成安裝（[OpenCode 安裝指南直連](docs/INSTALL_OPENCODE.md)），走完一個 Sprint 週期
+- **Gemini CLI 使用者**：依照 [docs/INSTALL_GEMINI.md](docs/INSTALL_GEMINI.md) 完成安裝，走完一個 Sprint 週期
 
 完成安裝後留言即可。我們特別想了解：安裝是否順利、哪些步驟有卡關、Sprint 流程的實際感受。不需要長篇大論 — 一兩句話就很有幫助。
 
