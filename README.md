@@ -10,9 +10,9 @@
 
 Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：QA 審你的代碼並挑戰架構決策，Security 審外部輸入，SRE 從維運角度評估部署可行性。**不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
 
-這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 15 個 Sprint 完成率 100%，交付 56 Stories，QA 雙階段審查攔截了每個 Sprint 的品質問題。
+這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 29 個 Sprint 完成率 100%，交付 97 Stories，QA 雙階段審查攔截了每個 Sprint 的品質問題。
 
-**當前版本：v0.3.9**（17 Skills / 7 Agents / 4 Commands）
+**當前版本：v0.13.0**（21 Skills / 7 Agents / 4 Commands）
 
 ---
 
