@@ -14,10 +14,10 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | S | 1 | 待辦 |
-| US-37（Issue #55）：防範 Issue 提示注入攻擊 | S | 1 | 待辦 |
-| US-38（Issue #51）：排程模式下 Velocity 自動調小 — 僅選 S size Stories | S | 1 | 待辦 |
-| US-39（Issue #45）：Sprint Execution context overflow — Story 生命週期封裝為 subagent | L | 3 | 待辦 |
+| US-33（Issue #33）：Onboarding 缺少 BACKLOG_DONE.md 模板 | S | 1 | 完成 |
+| US-37（Issue #55）：防範 Issue 提示注入攻擊 | S | 1 | 完成 |
+| US-38（Issue #51）：排程模式下 Velocity 自動調小 — 僅選 S size Stories | S | 1 | 完成 |
+| US-39（Issue #45）：Sprint Execution context overflow — Story 生命週期封裝為 subagent | L | 3 | 完成 |
 
 **Sprint 容量**：6 Points（4 Stories）
 
