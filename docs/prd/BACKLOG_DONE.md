@@ -1344,6 +1344,16 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 28
+
+| Story ID | 標題 | Size | Points | 完成日期 |
+|----------|------|------|--------|----------|
+| US-49 | OpenCode Phase 3a — 剩餘四個角色 Agent 移植 | S | 1 | 2026-03-02 |
+| US-50 | OpenCode Phase 3b — INSTALL_OPENCODE.md 安裝指南 | S | 1 | 2026-03-02 |
+| US-51 | OpenCode Phase 3c — Task Tool 參數確認與 Developer dispatch 動態驗證 | M | 2 | 2026-03-02 |
+
+---
+
 ## Sprint 27（2026-03-15）
 
 **Sprint Goal**：完成 ADR-008 架構決策 + 啟動 OpenCode Phase 2，為 M5 條件 (a) 外部使用者觸及提供完整平台整合策略與首個角色移植驗證

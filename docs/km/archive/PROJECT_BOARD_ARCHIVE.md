@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-15（Sprint 22 歸檔）
-**歸檔範圍**：Sprint 1–22（共 22 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔
+**最後更新**：2026-03-02（Sprint 23 歸檔）
+**歸檔範圍**：Sprint 1–23（共 23 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 23–27）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 24–28）
 
 ---
 
@@ -368,3 +368,21 @@
 | US-39（Issue #45）：Sprint Execution context overflow — Story 生命週期封裝為 subagent | L | 3 | 完成 |
 
 **實際 Velocity**：6 points（4 Stories）
+
+---
+
+## Sprint 23 — 完成
+
+**Sprint Goal**：落實 ADR-007 首個實作里程碑，同步清零 Sprint 22 技術品質欠帳
+**結果**：Goal 達成（4/4 Stories PASS）。Velocity 5 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-23 ~ 2026-03-29
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-40：Story-Lifecycle Subagent 實作 — ADR-007 Phase 1 | M | 2 | 完成 |
+| Retro #59（Issue #59）：Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | S | 1 | 完成 |
+| Retro #60（Issue #60）：TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | S | 1 | 完成 |
+| Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | S | 1 | 完成 |
+
+**實際 Velocity**：5 points（4 Stories）

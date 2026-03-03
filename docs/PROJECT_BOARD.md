@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-02（Sprint 28 Planning 完成）
-**當前 Sprint**：Sprint 28（進行中）
+**最後更新**：2026-03-02（Sprint 28 Review 完成）
+**當前 Sprint**：Sprint 28（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 28](sprints/sprint_28.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 28 — 進行中
+## Sprint 28 — 完成
 
 **Sprint Goal**：完成 OpenCode 平台五角色 subagent 模型（US-49）與外部使用者安裝指南（US-50），同步推進 Task tool 動態驗證結論（US-51），使 Issue #3 進入可結案狀態
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-02 ~ 2026-03-08
 
 | Story | Size | Points | 狀態 |
@@ -19,6 +21,7 @@
 | US-51：OpenCode Phase 3c — Task Tool 參數確認與 Developer dispatch 動態驗證 | M | 2 | 完成 |
 
 **目標 Velocity**：4 points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
 
 ---
 
@@ -86,22 +89,4 @@
 
 ---
 
-## Sprint 23 — 完成
-
-**Sprint Goal**：落實 ADR-007 首個實作里程碑，同步清零 Sprint 22 技術品質欠帳
-**結果**：Goal 達成（4/4 Stories PASS）。Velocity 5 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-23 ~ 2026-03-29
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-40：Story-Lifecycle Subagent 實作 — ADR-007 Phase 1 | M | 2 | 完成 |
-| Retro #59（Issue #59）：Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | S | 1 | 完成 |
-| Retro #60（Issue #60）：TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | S | 1 | 完成 |
-| Retro #61（Issue #61）：Onboarding SKILL.md stale reference 審查與修正 | S | 1 | 完成 |
-
-**實際 Velocity**：5 points（4 Stories）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–22）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–23）

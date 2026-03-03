@@ -1,6 +1,6 @@
 # Sprint 28
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-02 ~ 2026-03-08
 **Sprint Goal**：完成 OpenCode 平台五角色 subagent 模型（US-49）與外部使用者安裝指南（US-50），同步推進 Task tool 動態驗證結論（US-51），使 Issue #3 進入可結案狀態
 **總計**：3 Stories / 4 Points
