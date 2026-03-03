@@ -49,8 +49,8 @@ Grooming 完成後，依照以下規則計算本次 Active 條目趨勢：
 
 | ID | 描述 | 引入 Story | 解決 Story | 嚴重度 | MoSCoW | 建議解法 | RICE | 狀態 |
 |----|------|------------|------------|--------|--------|----------|------|------|
-| TD-001 | [EXAMPLE] 使用者認證模組缺乏單元測試覆蓋，目前依賴端對端測試，重構風險高 | US-03 | TBD | H | Must | 補充 unit test，覆蓋所有認證路徑與邊界條件；目標覆蓋率 > 80% | 7.5 | Active |
-| TD-002 | PO subagent 輸出格式缺乏正式 JSON Schema 驗證。ADR-006 採用 XML 隔離標記 + 角色限制宣告（選項 D）作為主要防護，但架構層面的輸出格式管控（JSON schema 結構化解析）尚未實作，注入防護仍依賴 LLM 指令遵循能力。詳見 ADR-006 Decision Challenge 段落。 | US-37 / ADR-006（Sprint 22） | TBD | L | Could | 為 PO subagent 輸出定義正式 JSON Schema（含 reply_draft、metadata 欄位）；主 session 以結構化解析取代直接使用 LLM 自由文字輸出；需透過 ADR 流程審批架構變更 | TBD | Active |
+| TD-001 | [EXAMPLE] 使用者認證模組缺乏單元測試覆蓋，目前依賴端對端測試，重構風險高 | US-03 | N/A | H | Won't | EXAMPLE 條目，非真實技術債 — Shikigami 無實際使用者認證模組 | 7.5 | Accepted |
+| TD-002 | PO subagent 輸出格式缺乏正式 JSON Schema 驗證。ADR-006 採用 XML 隔離標記 + 角色限制宣告（選項 D）作為主要防護，但架構層面的輸出格式管控（JSON schema 結構化解析）尚未實作，注入防護仍依賴 LLM 指令遵循能力。詳見 ADR-006 Decision Challenge 段落。 | US-37 / ADR-006（Sprint 22） | TBD | L | Won't | v1.0.0 前現有 ADR-006 防護（XML 隔離標記 + 角色限制宣告）已足夠；JSON Schema 正式驗證屬架構層級變更，須透過 ADR 流程，v1.0.0 後再評估 | TBD | Active |
 
 ---
 
@@ -77,6 +77,40 @@ Grooming 完成後，依照以下規則計算本次 Active 條目趨勢：
 #### 逾期未解決警示（Active 超過 3 個 Sprint 未排入解決 Story）
 - TD-XXX：已 Active {N} 個 Sprint，建議本 Sprint Planning 強制排入
 ```
+
+### Grooming #1 — 2026-03-30（Sprint 25）
+
+**Active 條目**：1 筆
+**Resolved 條目**：0 筆（本次新增 0 筆解決）
+**Accepted 條目**：1 筆（本次新增 1 筆裁定：TD-001）
+**本次變化量**：N/A（首次 Grooming，無前次資料可比較）
+**趨勢判定**：資料不足
+
+#### Active 條目清單
+
+- TD-002：PO subagent 輸出格式缺乏正式 JSON Schema 驗證，注入防護依賴 LLM 指令遵循能力（嚴重度：L）
+
+#### 本次解決條目
+
+（無）
+
+#### 本次裁定條目（Active → Accepted）
+
+- TD-001：[EXAMPLE] 使用者認證模組缺乏單元測試覆蓋。裁定理由：TD-001 標注 [EXAMPLE]，調查確認 docs/ 全域搜尋無 US-03 實際 Story 存在、Shikigami 專案亦無使用者認證模組，判定為非真實技術債。狀態更新為 Accepted，MoSCoW 更新為 Won't。
+
+#### TD-002 MoSCoW 重評（Sprint 25）
+
+**重評結論**：MoSCoW 由 `Could` 更新為 `Won't`
+
+**理由**：
+- ADR-006（Sprint 22）已採用 XML 隔離標記 + 角色限制宣告（選項 D）作為主要防護機制
+- 現有防護在 v1.0.0 前屬於足夠的風險控制水準（嚴重度 L）
+- JSON Schema 正式驗證屬架構層級變更，須經 ADR 流程審批，工程成本不符 v1.0.0 前時程
+- 結論：v1.0.0 前不需解決，列為 Won't；v1.0.0 後可依使用者回饋重新評估優先級
+
+#### 逾期未解決警示（Active 超過 3 個 Sprint 未排入解決 Story）
+
+（無 — 首次 Grooming，TD-002 引入自 Sprint 22，已知悉並裁定暫不處理）
 
 ---
 
