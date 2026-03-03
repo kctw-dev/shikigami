@@ -71,6 +71,24 @@ OpenCode 採用 symlink 適配策略（[ADR-008 決策一](docs/adr/ADR-008.md)�
 
 ---
 
+## Beta 使用者招募
+
+Shikigami 正在尋找第一批 Beta 使用者。如果你是 AI 輔助開發的實踐者，歡迎你試用並分享回饋，幫助我們驗證真實場景下的使用體驗。
+
+**試用對象**：
+- **Claude Code 使用者**：依照 [docs/tutorial/README.md](docs/tutorial/README.md) 完成安裝，走完一個 Sprint 週期
+- **OpenCode 使用者**：依照 [docs/INSTALL_OPENCODE.md](docs/INSTALL_OPENCODE.md) 完成安裝，走完一個 Sprint 週期
+
+**回饋方式**：
+
+完成首個 Sprint 後，請至以下 Issue 留言分享你的使用經驗：
+
+> **[Beta 回饋收集 — 請在此分享你的使用經驗](https://github.com/KCTW/shikigami/issues/59)**
+
+我們特別想了解：安裝是否順利、哪些步驟有卡關、Sprint 流程的實際感受。不需要長篇大論 — 一兩句話就很有幫助。
+
+---
+
 ## 文件導覽
 
 安裝完成後，以下文件幫助你快速上手：
