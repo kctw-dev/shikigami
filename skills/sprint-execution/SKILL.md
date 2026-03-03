@@ -85,10 +85,7 @@ Sprint Backlog 中取出 Story
                 |
                 +-- DISPUTE --> 執行 DISPUTE 處理流程（見 §4 外部抽樣審查結果處理）
   |
-  v
-更新 PROJECT_BOARD（Story 狀態 → 完成）
-  |
-  v
+  v（不觸發抽樣 / CONFIRM 完成後匯合）
 Sprint Backlog 還有 Story？
   |-- YES --> 取出下一個 Story（回到頂端繼續）
   +-- NO（所有 Story 完成）--> 立即 invoke shikigami:sprint-review（不詢問使用者）
@@ -181,7 +178,7 @@ Sprint Backlog 還有 Story？
    - `PASS`：繼續步驟 6（看板更新）
    - `FAIL`：記錄失敗原因，更新看板標記為失敗，繼續下一 Story
    - `ESCALATE`：依升級類型表決定是否暫停 Sprint（見上方流程圖）
-6. **安全審查（條件觸發，主 session 層級）**：若 Story-Lifecycle subagent 回傳 `ESCALATE: SECURITY_CRITICAL`，主 session 暫停 Sprint 執行，觸發 `security-review` Skill 進行獨立深度安全審查。一般安全審查由 subagent 在 §7 Security self-review 內部處理。
+6. **安全審查（條件觸發，主 session 層級）**：若 Story-Lifecycle subagent 回傳 `ESCALATE: SECURITY_CRITICAL`，主 session 暫停 Sprint 執行，觸發 `security-review` Skill 進行獨立深度安全審查。一般安全審查由 subagent 在 `story-lifecycle-prompt.md` §7 Security self-review 內部處理。
 7. **更新看板與同步 Sprint 文件**：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。
 
    <HARD-GATE>

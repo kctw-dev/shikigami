@@ -406,8 +406,8 @@ summary: ""             # 必填：≤50 字的結果說明
 modified_files: []      # 必填：所有被修改的檔案清單（含變更描述）
 commit_sha: ""          # PASS 時必填；FAIL 時若有部分 commit 填最後 SHA，否則 N/A
 escalation: null        # 升級時必填：DESIGN_ISSUE | CONTEXT_OVERFLOW | REQUIREMENT_AMBIGUITY | DEPENDENCY_MISSING | SECURITY_CRITICAL
-# --- Phase 2 佔位欄位（Phase 1 不使用）---
-# sampling_triggered: false   # Phase 2 AC3：是否觸發外部抽樣審查
+# --- Phase 2 欄位（AC3 抽樣邏輯已實作，schema 啟用待後續版本）---
+# sampling_triggered: false   # Phase 2 AC3：是否觸發外部抽樣審查（邏輯已實作於 §AC3 章節）
 # batch_index: null           # Phase 2 AC4：M/L size 分批執行批次索引
 # total_batches: null         # Phase 2 AC4：總批次數
 ```
@@ -458,7 +458,7 @@ escalation: null        # 升級時必填：DESIGN_ISSUE | CONTEXT_OVERFLOW | RE
 | 升級類型 | 主 session 預設處置 |
 |----------|---------------------|
 | DESIGN_ISSUE | 暫停 Sprint 執行，升級至 Architect 評估 |
-| CONTEXT_OVERFLOW | 觸發 Phase 2 §AC4 fallback 策略（Phase 1 待實作） |
+| CONTEXT_OVERFLOW | 觸發 ADR-007 §AC4 fallback 策略（待後續 Sprint 實作） |
 | REQUIREMENT_AMBIGUITY | 暫停 Sprint 執行，升級至 PO 釐清 AC |
 | DEPENDENCY_MISSING | 暫停 Sprint 執行，解決依賴後重試 |
 | SECURITY_CRITICAL | 暫停 Sprint 執行，觸發 security-review Skill |
