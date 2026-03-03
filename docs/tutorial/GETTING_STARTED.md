@@ -50,7 +50,14 @@ claude 1.x.x
 ```
 
 如果出現「command not found」，請先安裝 Claude Code CLI：
-- 參閱 [Claude Code 官方文件](https://docs.anthropic.com/en/docs/claude-code)
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+安裝完成後重新執行 `claude --version` 確認。
+
+> **[修正理由 — 高摩擦步驟 #1]**：原文僅提供外部文件連結，使用者需離開本教學查閱外部文件才能繼續安裝。判定標準：步驟需要查詢外部文件。修正方式：將最常用的安裝指令直接內嵌，讓 90% 的使用者不需離開本頁即可完成安裝。需要進階設定（代理、企業環境等）的使用者仍可參閱 [Claude Code 官方文件](https://docs.anthropic.com/en/docs/claude-code)。
 
 ### 1.2 Claude Code 帳號已認證
 
@@ -178,7 +185,11 @@ ls CLAUDE.md docs/prd/PRODUCT_BACKLOG.md
 
 ## 步驟 3.5：設定 GitHub Labels
 
-Shikigami 使用 GitHub Labels 來追蹤 Issues 狀態。執行以下腳本自動建立所需 Labels：
+Shikigami 使用 GitHub Labels 來追蹤 Issues 狀態。
+
+**前置確認**：先確認 `gh` 已認證（`gh auth status`）。若尚未認證，執行 `gh auth login` 並跟隨提示完成。
+
+執行以下腳本自動建立所需 Labels：
 
 ```bash
 bash scripts/setup-labels.sh
@@ -189,7 +200,9 @@ bash scripts/setup-labels.sh
 Labels setup complete.
 ```
 
-> **注意**：此腳本需要 GitHub CLI（`gh`）已認證。腳本可重複執行（冪等），不會建立重複的 Labels。
+腳本可重複執行（冪等），不會建立重複的 Labels。
+
+> **[修正理由 — 高摩擦步驟 #2]**：原文未說明「gh 需要已認證」這個隱性前置條件，使用者執行腳本後才會遇到認證錯誤，需要中斷、查詢 `gh auth login` 用法、認證後再返回。判定標準：步驟有隱性外部依賴，導致執行失敗需查詢外部文件。修正方式：在步驟開頭直接提供認證確認與登入指令，避免中斷流程。
 
 ---
 

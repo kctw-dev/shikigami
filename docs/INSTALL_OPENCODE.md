@@ -27,9 +27,11 @@
 
 | 需求 | 說明 |
 |------|------|
-| **OpenCode** | 已安裝 OpenCode CLI（建議 v1.0.190 以上）。參閱 [OpenCode 官方文件](https://opencode.ai/docs/) 完成安裝。 |
+| **OpenCode** | 已安裝 OpenCode CLI（建議 v1.0.190 以上）。快速安裝：`curl -fsSL https://opencode.ai/install.sh \| sh`（詳見 [OpenCode 官方文件](https://opencode.ai/docs/)） |
 | **Git** | 已安裝 Git（v2.0 以上），且已完成基本 git 設定（`user.name`、`user.email`） |
 | **gh CLI**（選用） | 如需使用 `issue-management` 等 GitHub 整合功能，需安裝並認證 [GitHub CLI](https://cli.github.com/) |
+
+> **[修正理由 — 高摩擦步驟 #1]**：原文 OpenCode 安裝欄位僅提供外部文件連結，使用者需離開本指南查閱 OpenCode 官方文件才能取得安裝指令。判定標準：步驟需要查詢外部文件。修正方式：將最常用的一行安裝指令直接內嵌，讓使用者不需離開本頁即可安裝 OpenCode；保留外部文件連結供進階設定參考。
 
 ### 1.2 Shikigami 儲存庫
 
@@ -97,12 +99,10 @@ skills -> ../skills
 
 ### 2.2 手動建立 Symlink（僅在 symlink 缺失時執行）
 
-若 `ls -la .opencode/` 的輸出中沒有 `skills -> ../skills`，手動執行：
+若 `ls -la .opencode/` 的輸出中沒有 `skills -> ../skills`，在**專案根目錄**（非 `.opencode/` 目錄內）執行：
 
 ```bash
-cd .opencode
-ln -s ../skills skills
-cd ..
+ln -s ../skills .opencode/skills
 ```
 
 驗證：
@@ -111,6 +111,8 @@ cd ..
 ls .opencode/skills/sprint-planning/SKILL.md
 # 應輸出該檔案路徑，表示 symlink 正確解析
 ```
+
+> **[修正理由 — 高摩擦步驟 #2]**：原文使用三行指令序列（`cd .opencode` → `ln -s ../skills skills` → `cd ..`），超過 3 個子指令門檻，且 `cd` 指令若執行環境非專案根目錄時容易出錯。判定標準：步驟數超過 3 個子指令。修正方式：將三行指令合併為單一指令 `ln -s ../skills .opencode/skills`，並加上「在專案根目錄執行」的明確說明，減少路徑混淆風險。
 
 ### 2.3 驗證 OpenCode 可發現 Skills
 
@@ -305,10 +307,10 @@ ls -la .opencode/
 # 應看到 skills -> ../skills
 ```
 
-2. 若 symlink 不存在，手動建立：
+2. 若 symlink 不存在，手動建立（在專案根目錄執行）：
 
 ```bash
-cd .opencode && ln -s ../skills skills && cd ..
+ln -s ../skills .opencode/skills
 ```
 
 3. 確認 symlink 解析正確：
