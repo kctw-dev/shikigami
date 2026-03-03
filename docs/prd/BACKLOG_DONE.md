@@ -1344,6 +1344,18 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 25（2026-03-03）
+
+**Sprint Goal**：在 M5 穩定化收尾階段，執行 M5 完成條件終審、Tech Debt Registry 清理、及 OpenCode POC 可行性調查，為 v1.0.0 前置條件提供明確評估依據
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-43：M5 完成條件終審 + Issues #3/#4/#5 結論決策 | M | 2 | Sprint 25 |
+| US-44：Tech Debt Grooming Sprint 25 + TD-001 降級決策 | S | 1 | Sprint 25 |
+| US-45：OpenCode POC 可行性調查 | S | 1 | Sprint 25 |
+
+---
+
 ## Sprint 24（2026-03-30）
 
 **Sprint Goal**：在 ADR-007 Phase 1 架構基準上實作外部抽樣審查機制（Phase 2），完成「自審為主、抽檢為輔」品質保障層，並同步強化 Architect/QA 角色在 Story-Lifecycle 架構下的決策知識

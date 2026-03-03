@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-03（Sprint 25 US-43 — M5 完成條件終審 + 平台決策記錄 + v1.0.0 前提狀態更新）
+> 最後更新：2026-03-03（Sprint 25 Review — US-43/44/45 完成，M5 進度更新，修訂記錄：v0.9.0）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,12 +10,12 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.8.0**（Sprint 24）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.9.0**（Sprint 25）。
 
 | 版號 | 含義 |
 |------|------|
 | v0.1.0 ~ v0.3.0 | 已交付的歷史里程碑（M1–M4，git tag 已存在） |
-| v0.4.0 ~ v0.8.0 | M5 穩定化階段增量交付（minor bump per Sprint） |
+| v0.4.0 ~ v0.9.0 | M5 穩定化階段增量交付（minor bump per Sprint） |
 | v1.0.0 | 外部使用者可穩定使用（M5 全部完成條件達成後） |
 
 後續的「M4 外部整合」「M5 穩定化」為**內部里程碑名稱**，不對應 git tag 版號。
@@ -210,6 +210,8 @@ Sprint Review 時自動產出：
 | US-41 | ADR-007 Phase 2 — 外部抽樣審查機制實作（CONFIRM/DISPUTE + Circuit Breaker） | Sprint 24 ✅ |
 | US-42 | Architect/QA 框架知識強化 — Story-Lifecycle 架構下角色決策指引 | Sprint 24 ✅ |
 | US-43 | M5 完成條件終審 + Issues #3/#4/#5 結論決策 | Sprint 25 ✅ |
+| US-44 | Tech Debt Grooming Sprint 25 + TD-001 降級決策 | Sprint 25 ✅ |
+| US-45 | OpenCode POC 可行性調查（Go 決策，MVP 路徑定義） | Sprint 25 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
 

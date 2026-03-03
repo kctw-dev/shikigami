@@ -1,11 +1,11 @@
 # Retrospective Log 歷史歸檔
 
 **來源**：`docs/km/Retrospective_Log.md`
-**最後更新**：2026-03-30（Sprint 19 歸檔）
-**歸檔範圍**：Sprint 1–19（共 19 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔
+**最後更新**：2026-03-03（Sprint 20 歸檔）
+**歸檔範圍**：Sprint 1–20（共 20 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔
 
-> 主文件現況：[Retrospective_Log.md](../Retrospective_Log.md)（保留 Sprint 20–24）
+> 主文件現況：[Retrospective_Log.md](../Retrospective_Log.md)（保留 Sprint 21–25）
 
 ---
 
@@ -663,3 +663,30 @@ PO、Architect、QA Engineer、Developer、Stakeholder
 |---|--------|-------|----------|-------|------|
 | 1 | 修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗 | Developer | test-schedule.sh 連續執行 10 次零失敗 | #56 | Open |
 | 2 | Developer subagent 狀態更新衝突防護 — sprint-execution 主 session 狀態鎖機制 | Architect | Developer subagent 不再覆蓋主 session 已更新的狀態欄 | #57 | Open |
+
+---
+
+## Sprint 20 — 2026-03-02
+
+**參與角色**：PO、Architect、Developer、QA、Security、Stakeholder
+
+### Good
+
+1. 完成率 100% 連續 20 個 Sprint 維持（Sprint 1-20 全數達成）
+2. Phase 平行派遣持續有效 — Retro #56 + Retro #57 平行無衝突
+3. US-31 /shoot 短衝模式從 Sprint 17 Retro 起跨 3 Sprint 終於完成交付，Stakeholder 滿意
+4. Sprint 19 Retro Action Items 全數清零（#56, #57 均在 Sprint 20 完成）
+5. 測試覆蓋持續擴展 — Sprint 20 新增 74 個測試（62 shoot + 12 conflict），總計 238 個測試
+
+### Problem
+
+1. US-31 Code Quality Review 識別 shoot SKILL.md 的 grep 示例與「大小寫不敏感」聲明矛盾、sprint-review §2.5 日期來源未明確 — L size Story 的規格品質仍需 QA 多輪捕捉
+2. 快思模式跳過 Token 記錄持續為 N/A — 成本可見性仍有盲區（延續 Sprint 18 Problem 趨勢）
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| 1 | L-size Story SKILL.md 規格品質強化 — QA 增加示例一致性檢查項 | QA | QA Code Quality Review Checklist 新增示例一致性檢查項，L-size Story 強制多輪審查 | #58 | Closed（Sprint 21） |
+
+> Problem 2 不建立新 Issue（此為長期結構性問題，快思模式設計即跳過 Token 記錄，非 Action Item）

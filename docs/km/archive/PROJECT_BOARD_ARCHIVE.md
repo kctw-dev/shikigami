@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-30（Sprint 19 歸檔）
-**歸檔範圍**：Sprint 1–19（共 19 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔
+**最後更新**：2026-03-03（Sprint 20 歸檔）
+**歸檔範圍**：Sprint 1–20（共 20 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 20–24）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 21–25）
 
 ---
 
@@ -304,6 +304,23 @@
 | US-36（Issue #50）：Planning + Execution 序列排程 — 避免平行衝突 | M | 2 | 完成 |
 
 **實際 Velocity**：5 points（4 Stories）
+
+---
+
+## Sprint 20 — 完成
+
+**Sprint Goal**：清零 Sprint 19 Retro Action Items（#56、#57），交付 /shoot 短衝模式（US-31）
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 5 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-02 ~ 2026-03-08
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| Retro #56（Issue #56）：修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗 | S | 1 | 完成 |
+| Retro #57（Issue #57）：Developer subagent 狀態更新衝突防護 | S | 1 | 完成 |
+| US-31（Issue #47）：/shoot 短衝模式 | L | 3 | 完成 |
+
+**實際 Velocity**：5 points（3 Stories）
 
 ---
 
