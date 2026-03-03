@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-29（Sprint 23 Review — 全 Stories 完成，Stakeholder 驗收通過）
-**當前 Sprint**：Sprint 23（完成）
+**最後更新**：2026-03-30（Sprint 24 Planning — US-41、US-42 選入，Sprint 進行中）
+**當前 Sprint**：Sprint 24（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 23](sprints/sprint_23.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 24](sprints/sprint_24.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 24 — 進行中
+
+**Sprint Goal**：在 ADR-007 Phase 1 架構基準上實作外部抽樣審查機制（Phase 2），完成「自審為主、抽檢為輔」品質保障層，並同步強化 Architect/QA 角色在 Story-Lifecycle 架構下的決策知識
+**期間**：2026-03-30 ~ 2026-04-05
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-41：ADR-007 Phase 2 — 外部抽樣審查機制實作 | M | 3 | 待開始 |
+| US-42：Architect/QA 框架知識強化 — Story-Lifecycle 架構下角色決策指引 | S | 2 | 待開始 |
 
 ---
 
