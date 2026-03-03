@@ -218,6 +218,26 @@ Read Glob Grep Edit Write Bash
 
 MCP 工具（如 `mcp__github__*`）不納入預設白名單，必須在 Skill 的 SKILL.md 中明確聲明。
 
+### 排程 PR 建立規範（US-54 AC3）
+
+排程腳本執行完成後，若有需要建立 PR（例如 sprint-execution 產生變更），**必須**在 PR 建立指令中附加 `--label "scheduled"` label，以便 Scrum Master 在互動 Session 啟動時能夠偵測並提醒審核。
+
+**標準 PR 建立指令模板**：
+
+```bash
+gh pr create \
+  --title "[SCHEDULED] {{SKILL_NAME}} — $(date '+%Y-%m-%d %H:%M')" \
+  --body "自動排程執行結果（Skill: {{SKILL_NAME}}，Interval: {{INTERVAL}}）" \
+  --label "scheduled"
+```
+
+**規則**：
+- 所有由排程腳本（`*_cron.sh`）觸發的 PR 建立操作，必須帶有 `--label "scheduled"`
+- `scheduled` label 為固定必填，不得省略
+- label 不存在時先建立：`gh label create "scheduled" --color "#0075ca" --description "排程自動執行產生的 PR"`
+
+**設計理由**：`scheduled` label 是 Scrum Master §5.3 排程 PR 偵測的依據。若排程 PR 缺少此 label，偵測機制將無法找到待審 PR，破壞 Issue #46 的完整性。
+
 ### 鎖檔案命名（ADR-005 決策域二）
 
 鎖檔案路徑格式（含 project-hash，防止多專案撞名）：
