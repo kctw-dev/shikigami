@@ -14,9 +14,9 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-49：OpenCode Phase 3a — 剩餘四個角色 Agent 移植 | S | 1 | 進行中 |
-| US-50：OpenCode Phase 3b — INSTALL_OPENCODE.md 安裝指南 | S | 1 | 進行中 |
-| US-51：OpenCode Phase 3c — Task Tool 參數確認與 Developer dispatch 動態驗證 | M | 2 | 進行中 |
+| US-49：OpenCode Phase 3a — 剩餘四個角色 Agent 移植 | S | 1 | 完成 |
+| US-50：OpenCode Phase 3b — INSTALL_OPENCODE.md 安裝指南 | S | 1 | 完成 |
+| US-51：OpenCode Phase 3c — Task Tool 參數確認與 Developer dispatch 動態驗證 | M | 2 | 完成 |
 
 **目標 Velocity**：4 points（3 Stories）
 
