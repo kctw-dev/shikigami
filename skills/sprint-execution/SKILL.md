@@ -244,7 +244,41 @@ Sprint Backlog 還有 Story？
 
 ---
 
-## 4. Hard Gates
+## 4. 外部抽樣審查結果處理（CONFIRM / DISPUTE）
+
+<!-- ADR-007 Phase 2 實作 — Sprint 24 / US-41 AC3 -->
+<!-- 來源：docs/adr/ADR-007-story-lifecycle-subagent.md §AC3 DISPUTE 處理 -->
+
+主 session 接收外部抽樣審查 subagent 回傳結果後，依以下兩個路徑處理。
+
+---
+
+### 4.1 CONFIRM 路徑
+
+外部抽樣審查 subagent 回傳 **CONFIRM**（即確認 Story-Lifecycle subagent 自審結論正確）時，執行以下步驟：
+
+1. **記錄抽樣結果**：在 Sprint 執行記錄中記錄「{Story ID} 外部抽樣審查：CONFIRM」
+2. **更新品質指標**：Sprint Review 結束時，將「外部抽樣執行率」與「DISPUTE 率」更新至 `docs/km/Metrics_Log.md`
+3. **繼續下一個 Story**：標記當前 Story 為完成，取出 Sprint Backlog 中下一個待辦 Story 繼續執行
+
+---
+
+### 4.2 DISPUTE 路徑
+
+外部抽樣審查 subagent 回傳 **DISPUTE**（即發現自審結論有誤，存在自審未偵測到的缺陷）時，執行以下步驟：
+
+1. **記錄 DISPUTE 事件**：在 Sprint 執行記錄中記錄「{Story ID} 外部抽樣審查：DISPUTE」，標記為 Retrospective Problem
+2. **回退 Story 狀態**：將相關 Story 狀態從「進行中」回退至「待修復」（`docs/PROJECT_BOARD.md` 對應欄位更新）
+3. **傳入缺陷清單**：將外部抽樣審查 subagent 回傳的**具體缺陷清單**傳入 Story-Lifecycle subagent，要求修復（缺陷清單須完整，不得省略）
+4. **執行修復**：Story-Lifecycle subagent 接收缺陷清單後，在內部閉環修復所有列舉缺陷，修復完成後回傳 PASS 摘要
+5. **強制第二輪外部抽樣**：修復完成後，**不論是否達到 30% 抽樣門檻**，強制對該 Story 執行第二輪外部抽樣審查（無條件觸發）
+6. **第二輪結果處理**：
+   - 第二輪 CONFIRM → 執行 CONFIRM 路徑步驟（記錄結果，繼續下一 Story）
+   - 第二輪 DISPUTE → 暫停 Sprint 執行，升級至 Architect 評估（多次 DISPUTE 視為系統性設計問題）
+
+---
+
+## 5. Hard Gates
 
 <HARD-GATE>
 每個 Story 必須通過雙階段審查（Spec Compliance + Code Quality）才能標記為完成。
