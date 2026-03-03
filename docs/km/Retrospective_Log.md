@@ -1,6 +1,6 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–16）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–17）
 
 ---
 
@@ -136,30 +136,5 @@
 |---|--------|-------|----------|-------|------|
 | 1 | schedule skill — skill name 字元白名單驗證，Pre-flight 入口加入正則 `^[a-z0-9][a-z0-9-]{0,63}$` | Developer | 測試套件覆蓋非法字元場景 | #53 | Open |
 | 2 | schedule skill — 模板品質強化（`set -euo pipefail` + crontab 備份 `mktemp` + `chmod 600`） | Developer | 模板修正後測試套件驗證 | #54 | Open |
-
----
-
-## Sprint 17 — 2026-03-02
-
-**參與角色**：PO、Architect、Developer、QA、Stakeholder
-
-### Good
-
-1. 檔案瘦身效果顯著 — PROJECT_BOARD.md 從 266 行縮減至 73 行（-72%），Retrospective_Log.md 從 582 行縮減至 77 行（-87%），US-29 歸檔機制成功建立
-2. Phase 1 平行派遣（Retro #41 + Retro #42）零衝突成功，Phase 2 US-29 歸檔作業順利完成
-3. QA 雙階段審查全面執行，3 個 Story 共 6 次審查（3 Spec + 3 Quality）全 PASS
-4. Sprint 16 Retro Action Items 全數清零（#41 Token cache 修正 + #42 OpenCode POC 佔位），平均關閉速度維持 1 個 Sprint
-
-### Problem
-
-1. PO Round 2 subagent 混淆 Retro #41 Story 內容（「Token cache tokens 加總計算」→「Sprint Review SKILL.md 歷史 Sprint 紀錄截斷修正」），需主 session 人工介入修正，暴露 PO subagent 跨輪次一致性風險
-2. Sprint 儀式過重：Stakeholder 反映小任務不需完整 Planning/Review/Retro/Metrics 流程，希望有「短衝模式」快速執行
-
-### Action Items
-
-| # | Action | Owner | 驗收方式 | Issue | 狀態 |
-|---|--------|-------|----------|-------|------|
-| 1 | 短衝模式設計與實作 — 建立跳過 Sprint 儀式但保留 QA + Architect 審查的快速執行路徑 | Architect | SKILL.md 新增短衝模式定義，含觸發條件、保留項目、文件產出規範 | #47 | Open |
-| 2 | PO subagent 跨輪次一致性檢查 — 防止 PO Round 2 混淆或改寫 Round 1 已通過的 Story 內容 | QA | sprint-planning SKILL.md 新增 PO Round 2 輸入驗證步驟 | #48 | Open |
 
 
