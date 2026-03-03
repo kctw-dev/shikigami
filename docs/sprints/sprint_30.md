@@ -13,7 +13,7 @@
 |----------|------|------|--------|-----------------|------|
 | US-54 | 互動 Session 自動偵測待審排程 PR + Scrum Master 提醒機制（Issue #46 子 Story #1） | S | 1 | No | 完成 |
 | US-55 | README 準確性修正 — 版本號、Skill 數量、版本歷史對齊 | S | 1 | No | 完成 |
-| US-56 | Deployment Readiness 版本 Tag 決策規則強化（Issue #36） | M | 2 | No | 待辦 |
+| US-56 | Deployment Readiness 版本 Tag 決策規則強化（Issue #36） | M | 2 | No | 完成 |
 
 **Sprint 容量**：4 Points
 
