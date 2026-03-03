@@ -761,6 +761,118 @@ M5 條件 (a)（引自 `docs/prd/M5_COMPLETION_ASSESSMENT.md` §條件 (a)）：
 |------|------|
 | Task tool 參數對應分析（AC1）| 完成（§12.1，8 個參數分析）|
 | 參數比較表（AC2）| 完成（§12.2，含 Supported / Equivalent / Unsupported 分類及來源依據）|
-| Developer dispatch 靜態分析記錄（AC3）| 完成（§12.3，[PENDING-DYNAMIC] 降級靜態）|
-| Issue #3 結案評估（AC4）| 完成（§12.4，剩餘步驟清單）|
+| Developer dispatch 靜態分析記錄（AC3）| 完成（§12.3，[STATIC-CONFIRMED]，靜態分析充分性已宣告）|
+| Issue #3 結案評估（AC4）| 完成（§12.4，結案評估結論：已結案）|
 | 動態實機驗證 | [STATIC-CONFIRMED]（原 [PENDING-DYNAMIC]，Sprint 29 US-52 Phase 4 確認靜態充分）|
+
+---
+
+## 13. Phase 4 / Issue #3 結案記錄（US-52 執行結果）
+
+**執行日期**：2026-03-03
+**執行者**：AI Agent（Developer Subagent，Claude Sonnet 4.6）
+**Sprint**：Sprint 29
+**Story**：US-52
+**依賴**：US-51（Phase 3c，Task tool 參數分析完成）
+
+---
+
+### 13.1 結案日期與結案聲明
+
+**Issue #3 正式結案日期**：2026-03-03（Sprint 29）
+
+**結案聲明**：
+
+Issue #3「支援 OpenCode / Codex 平台安裝」已完成全部技術工作，並於 Sprint 29 US-52 正式結案。結案依據為：技術相容性驗證（靜態）、目錄適配實物確認、五角色 agent 設定檔完整建立、安裝指南發布、Task tool 參數系統性分析，以及 §12.3 靜態分析完整性聲明確認靜態分析充分支持結案。
+
+---
+
+### 13.2 達成條件確認清單（對照 §12.4.2）
+
+以下清單對照 §12.4.2「Issue #3 結案條件分析」，確認全部達成條件狀態：
+
+| # | 達成條件 | 對應 Story | 最終狀態 |
+|---|---------|-----------|---------|
+| C-1 | OpenCode 技術可行性確認（Go 決策，4/5 評分）| US-45（Sprint 25）| 完成 |
+| C-2 | 目錄適配（`.opencode/skills` symlink 建立）| US-46（Sprint 26）| 完成 |
+| C-3 | AGENTS.md 建立（OpenCode 平台入口）| US-46（Sprint 26）| 完成 |
+| C-4 | 架構決策記錄（ADR-008 Accepted）| US-47（Sprint 27）| 完成 |
+| C-5 | Developer 角色移植（`.opencode/agents/developer.md`）| US-48（Sprint 27）| 完成 |
+| C-6 | 四角色移植（architect / product-owner / qa-engineer / security-engineer）| US-49（Sprint 28）| 完成 |
+| C-7 | 安裝指南建立（`docs/INSTALL_OPENCODE.md`，6 章節）| US-50（Sprint 28）| 完成 |
+| C-8 | README.md OpenCode 平台支援章節新增 | US-50（Sprint 28）| 完成 |
+| C-9 | Task tool 參數對應分析（8 個參數，Supported/Equivalent/Unsupported）| US-51（Sprint 28）| 完成 |
+| C-10 | Developer dispatch 靜態分析記錄 | US-51（Sprint 28）| 完成（[STATIC-CONFIRMED]）|
+| C-11 | §12 [PENDING-DYNAMIC] → [STATIC-CONFIRMED] 更新與靜態充分性聲明 | US-52（Sprint 29）| 完成（本節）|
+| C-12 | Issue #3 GitHub 正式關閉 | US-52（Sprint 29）| 完成（gh issue close 3）|
+
+**結案前置阻礙評估**（引自 §12.4.3）：
+
+| 原步驟 | 原狀態（Sprint 28）| Sprint 29 更新 |
+|--------|------------------|--------------|
+| 步驟 1：Task tool 實機動態驗證（P-2 `prompt` 參數命名）| [PENDING-DYNAMIC] | 靜態充分性確認（§12.3），不構成結案阻礙 |
+| 步驟 2：developer.md `model` 欄位補齊 | 已完成（fix commit e75dfa5）| 已完成 |
+| 步驟 3：M5 條件 (a) 外部使用者招募 | 待啟動 | US-53（Sprint 29）啟動 Beta 招募行動 |
+
+---
+
+### 13.3 Issue #3 關閉行動摘要
+
+**關閉行動執行內容**：
+
+| 行動項目 | 執行方式 | 狀態 |
+|---------|---------|------|
+| 結案評論發布 | `gh issue comment 3` — 摘要 OpenCode 支援完整交付鏈、連結 §13 | 完成 |
+| Issue 正式關閉 | `gh issue close 3` | 完成 |
+| OPENCODE_POC.md §12 更新 | [PENDING-DYNAMIC] → [STATIC-CONFIRMED]，靜態充分性聲明 | 完成（US-52 AC1）|
+| OPENCODE_POC.md §13 建立 | 本節 | 完成（US-52 AC2）|
+| ROADMAP.md 更新 | Issue #3 狀態：「已結案（Sprint 29）」| 完成（US-52 AC4）|
+
+**關閉評論摘要**（發布至 GitHub Issue #3）：
+
+評論引用本文件（OPENCODE_POC.md §13），說明 OpenCode 平台支援從 US-17 調查到 Issue #3 正式結案的完整交付鏈，並連結安裝指南（`docs/INSTALL_OPENCODE.md`）。
+
+---
+
+### 13.4 完整交付鏈記錄
+
+Issue #3 從提出到結案的完整 Story 交付鏈：
+
+| Sprint | Story | 交付內容 | 里程碑意義 |
+|--------|-------|---------|----------|
+| Sprint 16 | US-17 | 多平台可行性調查，OpenCode 評分 4/5 | 確認 OpenCode 為第一優先平台 |
+| Sprint 25 | US-43 | M5 終審，OpenCode 正式納入 Issue #3 結案路徑 | Go/No-Go 決策前提確立 |
+| Sprint 25 | US-45 | OpenCode POC 可行性調查，**Go 決策** | 正式啟動 OpenCode 整合工作 |
+| Sprint 26 | US-46 | Phase 1：目錄適配（`.opencode/skills` symlink）+ AGENTS.md | 技術基礎就緒 |
+| Sprint 27 | US-47 | ADR-008：OpenCode 平台整合策略架構決策（Accepted）| 架構基礎確立 |
+| Sprint 27 | US-48 | Phase 2：Developer 角色移植（`.opencode/agents/developer.md`）| 核心角色完成 |
+| Sprint 28 | US-49 | Phase 3a：四角色移植（architect / product-owner / qa-engineer / security-engineer）| 五角色模型完整 |
+| Sprint 28 | US-50 | Phase 3b：安裝指南（`docs/INSTALL_OPENCODE.md`）+ README 更新 | 外部使用者就緒 |
+| Sprint 28 | US-51 | Phase 3c：Task tool 參數分析 + Developer dispatch 靜態驗證 | 技術驗證完整 |
+| Sprint 29 | **US-52** | **Phase 4：[STATIC-CONFIRMED] 更新 + §13 建立 + Issue #3 關閉** | **Issue #3 正式結案** |
+
+---
+
+### 13.5 Beta 招募啟動交叉引用（US-53）
+
+Issue #3 結案後，M5 條件 (a)「至少 1 位外部使用者完成安裝並走完一個 Sprint」的達成路徑由 US-53（Sprint 29）啟動：
+
+- US-53 AC1：README.md 新增「Beta 使用者招募」區段，邀請 Claude Code / OpenCode 使用者試用
+- US-53 AC2：GitHub Issue 回報引導機制（pre-filled template URL）
+- US-53 AC3：M5_COMPLETION_ASSESSMENT.md 招募行動記錄
+- US-53 AC4：本節交叉引用（OPENCODE_POC.md §13 ← US-53 實作後補充）
+
+> 本段落待 US-53 實作完成後由 US-53 執行者補充 README 連結與具體引導 URL。
+
+---
+
+### 13.6 Phase 4 完成狀態
+
+| 項目 | 狀態 |
+|------|------|
+| §12 [PENDING-DYNAMIC] → [STATIC-CONFIRMED] 更新 | 完成（US-52 AC1）|
+| §13 Phase 4 結案記錄建立 | 完成（US-52 AC2，本節）|
+| GitHub Issue #3 結案評論發布 | 完成（US-52 AC3）|
+| GitHub Issue #3 正式關閉（`gh issue close 3`）| 完成（US-52 AC3）|
+| ROADMAP.md Issue #3 狀態更新 | 完成（US-52 AC4）|
+| Issue #3 正式結案 | **完成**（2026-03-03，Sprint 29）|
