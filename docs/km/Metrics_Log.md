@@ -102,6 +102,19 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 
 ---
 
+## Token Baseline Snapshots
+
+各環節開始時的累計 token 快照，用於計算精確的分環節 token 差值。
+
+記錄時機：每個環節（Planning / Execution）開始前，從 JSONL 讀取當前累計值並填入。
+
+| Sprint 編號 | 環節名稱 | 環節開始時累計 input tokens | 環節開始時累計 output tokens |
+|------------|---------|--------------------------|---------------------------|
+| （示範）Sprint N | Planning | 123456 | 45678 |
+| （示範）Sprint N | Execution | 234567 | 56789 |
+
+---
+
 ## Token JSONL 調查記錄
 
 **調查日期**：2026-03-02
