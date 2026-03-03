@@ -1344,6 +1344,17 @@ As a framework user, I want a `/shoot` command that executes a single task witho
 
 ---
 
+## Sprint 24（2026-03-30）
+
+**Sprint Goal**：在 ADR-007 Phase 1 架構基準上實作外部抽樣審查機制（Phase 2），完成「自審為主、抽檢為輔」品質保障層，並同步強化 Architect/QA 角色在 Story-Lifecycle 架構下的決策知識
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-41：ADR-007 Phase 2 — 外部抽樣審查機制實作 | M | 3 | Sprint 24 |
+| US-42：Architect/QA 框架知識強化 — Story-Lifecycle 架構下角色決策指引 | S | 2 | Sprint 24 |
+
+---
+
 ## Sprint 23（2026-03-29）
 
 **Sprint Goal**：落實 ADR-007 首個實作里程碑，同步清零 Sprint 22 技術品質欠帳

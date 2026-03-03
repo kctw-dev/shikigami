@@ -137,12 +137,12 @@
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
 
-### Sprint 24 — 進行中 Stories
+### Sprint 24 — 已完成 Stories
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-41：ADR-007 Phase 2 — 外部抽樣審查機制實作 | 待定 | Must | M | ADR-007 Phase 2 | In Sprint 24 |
-| 2 | US-42：Architect/QA 框架知識強化 — Story-Lifecycle 架構下角色決策指引 | 待定 | Should | M→S | Stakeholder 需求 | In Sprint 24 |
+| 1 | US-41：ADR-007 Phase 2 — 外部抽樣審查機制實作 | 待定 | Must | M | ADR-007 Phase 2 | Done（Sprint 24） |
+| 2 | US-42：Architect/QA 框架知識強化 — Story-Lifecycle 架構下角色決策指引 | 待定 | Should | S | Stakeholder 需求 | Done（Sprint 24） |
 
 ### Sprint 23 — 已完成 Stories
 
@@ -167,7 +167,7 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | OpenCode POC 可行性調查 | 待定 | Could | 待定 | Retro #42 / Issue #3 | 候選 |
-| 2 | Architect/QA 框架開發領域專家知識強化 | 待定 | Should | 待定 | Stakeholder 需求 | In Sprint 24（US-42） |
+| 2 | Architect/QA 框架開發領域專家知識強化 | 待定 | Should | 待定 | Stakeholder 需求 | Done（Sprint 24，US-42） |
 
 ---
 

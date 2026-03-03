@@ -1,6 +1,31 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–18）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–19）
+
+---
+
+## Sprint 24 — 2026-03-30
+
+**參與角色**：PO、Architect、Developer、QA、Stakeholder
+
+### Good
+
+1. 連續 24 個 Sprint 100% 完成率，Sprint Goal 達成（ADR-007 Phase 2 外部抽樣審查機制 + Architect/QA 角色決策指引雙線交付）
+2. ADR-007 Phase 2 外部抽樣審查機制一次到位 — SKILL.md §3 flow diagram + §4 CONFIRM/DISPUTE + §4.3 Circuit Breaker + story-lifecycle-prompt.md TC-1~TC-4 + §10 靜態驗收清單，5/5 AC 首次 Spec Compliance PASS
+3. US-41→US-42 嚴格序列執行零競態衝突，Architect 平行分群策略（同檔案依賴偵測）持續有效
+4. Retro Action Items 連續 4 Sprint 無新增（Sprint 21-24），全部 39 項歷史 Action Items 已關閉
+
+### Problem
+
+1. US-42 Code Quality Review 發現新建 SKILL.md 的「參照文件」區塊引用推測性 ADR 路徑名稱（ADR-003-framework-document-change.md → 實際 ADR-003.md；ADR-006-prompt-injection-isolation.md → 實際 -protection.md），共 4 個錯誤路徑被 Code Quality Review 攔截修正
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| — | 無新增 Action Items | — | — | — | — |
+
+> Problem 1 屬 Medium 嚴重度，已在 Sprint 執行過程中由 Code Quality Review 攔截並修正（commit 20946fd）。現有 QA 審查流程有效運作，無需新增 Action Item。
 
 ---
 
@@ -111,32 +136,6 @@
 | 1 | L-size Story SKILL.md 規格品質強化 — QA 增加示例一致性檢查項 | QA | QA Code Quality Review Checklist 新增示例一致性檢查項，L-size Story 強制多輪審查 | #58 | Closed（Sprint 21） |
 
 > Problem 2 不建立新 Issue（此為長期結構性問題，快思模式設計即跳過 Token 記錄，非 Action Item）
-
----
-
-## Sprint 19 — 2026-03-02
-
-**參與角色**：PO、Architect、Developer、QA、Security、Stakeholder
-
-### Good
-
-1. 完成率 100%（連續 Sprint 15-19 五個 Sprint），4/4 Stories 全數 PASS
-2. Phase 1 平行派遣零衝突，Retro #54 + US-30 同時執行無檔案衝突
-3. QA Code Quality Review 有效攔截 US-30 空表格邊緣案例與 US-36 group-name 未驗證缺陷，回饋後快速修復
-4. Security Review 觸發正確（US-36 涉及外部輸入 + crontab 配置），全面通過
-5. 上 Sprint Retro Action Items 清零（#53、#54、#48 全部 Sprint 19 關閉）
-
-### Problem
-
-1. 測試基礎設施不穩定：`assert_contains` 使用 `echo $VAR | grep` 管道在大型變數下有 SIGPIPE 非確定性失敗（pre-existing，Sprint 19 新增區段改用 `assert_file_contains` 迴避但未修復根因）
-2. Developer subagent 修改 PROJECT_BOARD.md / sprint_19.md 狀態欄被覆蓋：主 session 更新狀態後 Developer commit 時檔案已變更導致狀態回退，需手動重新修正
-
-### Action Items
-
-| # | Action | Owner | 驗收方式 | Issue | 狀態 |
-|---|--------|-------|----------|-------|------|
-| 1 | 修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗 | Developer | test-schedule.sh 連續執行 10 次零失敗 | #56 | Open |
-| 2 | Developer subagent 狀態更新衝突防護 — sprint-execution 主 session 狀態鎖機制 | Architect | Developer subagent 不再覆蓋主 session 已更新的狀態欄 | #57 | Open |
 
 ---
 

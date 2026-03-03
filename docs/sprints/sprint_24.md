@@ -1,6 +1,6 @@
 # Sprint 24
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-30 ~ 2026-04-05
 **Sprint Goal**：在 ADR-007 Phase 1 架構基準上實作外部抽樣審查機制（Phase 2），完成「自審為主、抽檢為輔」品質保障層，並同步強化 Architect/QA 角色在 Story-Lifecycle 架構下的決策知識
 **總計**：2 Stories / 5 Points

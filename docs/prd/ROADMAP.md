@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-29（Sprint 23 Review — US-40、Retro #59、Retro #60、Retro #61 完成）
+> 最後更新：2026-03-30（Sprint 24 Review — US-41、US-42 完成）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -207,6 +207,8 @@ Sprint Review 時自動產出：
 | Retro #59 | Cron template SHIKIGAMI_SCHEDULED 條件化 export 修正 | Sprint 23 ✅ |
 | Retro #60 | TECH-DEBT Registry 補登 ADR-006 JSON Schema 技術債 (TD-002) | Sprint 23 ✅ |
 | Retro #61 | Onboarding SKILL.md stale reference 審查與修正 | Sprint 23 ✅ |
+| US-41 | ADR-007 Phase 2 — 外部抽樣審查機制實作（CONFIRM/DISPUTE + Circuit Breaker） | Sprint 24 ✅ |
+| US-42 | Architect/QA 框架知識強化 — Story-Lifecycle 架構下角色決策指引 | Sprint 24 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issues #3 #4 #5 有明確結論
 
