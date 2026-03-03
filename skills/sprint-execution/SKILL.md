@@ -433,7 +433,7 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 | 所有 Story 完成 | 觸發 `sprint-review` 進行驗收與回顧 |
 | 發現安全問題 | 觸發 `security-review` 進行深度安全審查 |
 
-### 角色決策指引
+### 9.1 角色決策指引
 
 Sprint Execution 中各角色的具體決策標準請參閱以下文件：
 

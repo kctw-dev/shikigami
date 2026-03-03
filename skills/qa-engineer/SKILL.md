@@ -205,7 +205,7 @@ Code Quality Review 的審查範圍與深度根據 Story 類型調整。
 | YAML frontmatter 格式 | 若文件包含 frontmatter，格式必須符合 YAML 規範 |
 | 文件內部一致性 | 文件內的交叉引用、路徑引用、版本號一致 |
 
-**重要邊界**：`skills/` 目錄下的 `.md` 文件（包含 SKILL.md）**不適用** doc-only 豁免規則（參照 sprint-execution/SKILL.md §5 負面案例排除清單），即使副檔名為 `.md` 也需執行完整 ADR-003 Checklist。
+**重要邊界**：`skills/` 目錄下的 `.md` 文件（包含 SKILL.md）**不適用** doc-only 豁免規則（參照 sprint-execution/SKILL.md §5 Hard Gates —「負面案例排除清單」子項目），即使副檔名為 `.md` 也需執行完整 ADR-003 Checklist。
 
 ### L-size Story 加強審查項目
 
@@ -248,8 +248,8 @@ Code Quality Review 的審查範圍與深度根據 Story 類型調整。
 
 ## 參照文件
 
-- **ADR-003**：`docs/adr/ADR-003-framework-document-change.md`（Framework Document Change，skills/ 路徑修改需執行 Checklist）
-- **ADR-006**：`docs/adr/ADR-006-prompt-injection-isolation.md`（Prompt Injection Isolation Rule，安全相關 AC 審查依據）
+- **ADR-003**：`docs/adr/ADR-003.md`（Framework Document Change，skills/ 路徑修改需執行 Checklist）
+- **ADR-006**：`docs/adr/ADR-006-prompt-injection-protection.md`（Prompt Injection Isolation Rule，安全相關 AC 審查依據）
 - **ADR-007**：`docs/adr/ADR-007-story-lifecycle-subagent.md`（Story-Lifecycle Subagent 封裝，外部抽樣審查機制定義）
 - **sprint-execution/SKILL.md**：`skills/sprint-execution/SKILL.md`（Sprint Execution 流程，含 §4 CONFIRM/DISPUTE 處理路徑）
 - **sprint-planning/SKILL.md**：`skills/sprint-planning/SKILL.md`（Sprint Planning 流程，含路徑驗證規則與防漂移約束）

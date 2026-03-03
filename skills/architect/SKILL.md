@@ -244,8 +244,8 @@ US-XX → US-YY（嚴格序列，不可平行）
 
 ## 參照文件
 
-- **ADR-003**：`docs/adr/ADR-003-framework-document-change.md`（Framework Document Change 流程）
-- **ADR-004**：`docs/adr/ADR-004-role-weight-adjustment.md`（角色權重調整機制）
+- **ADR-003**：`docs/adr/ADR-003.md`（Framework Document Change 流程）
+- **ADR-004**：`docs/adr/ADR-004.md`（角色權重調整機制）
 - **ADR-007**：`docs/adr/ADR-007-story-lifecycle-subagent.md`（Story-Lifecycle Subagent 封裝，含 L-size 分批策略）
 - **sprint-planning/SKILL.md**：`skills/sprint-planning/SKILL.md`（Sprint Planning 完整流程，含 Subagent 派遣順序）
 - **sprint-execution/SKILL.md**：`skills/sprint-execution/SKILL.md`（Sprint Execution 流程，含 DESIGN_ISSUE 升級處置）
