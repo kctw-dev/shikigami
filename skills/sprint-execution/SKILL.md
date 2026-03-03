@@ -377,7 +377,7 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 
 ---
 
-## 5. DoD 自檢
+## 6. DoD 自檢
 
 每個 Story 完成前，Developer 必須逐項檢查 Definition of Done：
 
@@ -394,7 +394,7 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 
 ---
 
-## 6. 審查失敗處理
+## 7. 審查失敗處理
 
 當任一審查階段不通過時：
 
@@ -415,7 +415,7 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 
 ---
 
-## 7. 安全審查觸發條件
+## 8. 安全審查觸發條件
 
 以下情況自動觸發 Security subagent：
 
@@ -427,7 +427,7 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 
 ---
 
-## 8. 與其他 Skill 的關係
+## 9. 與其他 Skill 的關係
 
 | 情境 | 觸發 |
 |------|------|
@@ -438,7 +438,7 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 
 ---
 
-## 9. ADR-007 Phase 2 靜態驗收清單
+## 10. ADR-007 Phase 2 靜態驗收清單
 
 <!-- ADR-007 Phase 2 實作 — Sprint 24 / US-41 AC5 -->
 <!-- 供 QA 逐項核對 Phase 2 所有新增機制是否正確寫入文件 -->

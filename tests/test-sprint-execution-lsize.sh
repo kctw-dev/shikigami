@@ -127,20 +127,22 @@ test_tc08_architect_review_exists() {
 }
 
 # ---------------------------------------------------------------------------
-# TC-09：AC1 — 新增子節位於 §6 之後、§7 之前（位置正確）
+# TC-09：AC1 — 新增子節位於「審查失敗處理」之後、「安全審查」之前（位置正確）
+# 使用標題文字比對而非節次編號，兼容節次重編號（US-41 Phase 2 後 §6→§7，§7→§8）
 # ---------------------------------------------------------------------------
 test_tc09_section_position_between_sec6_and_sec7() {
   local lsize_line
   lsize_line=$(grep -n "L-size Story 審查增強" "$SKILL_FILE" | head -1 | cut -d: -f1 || true)
-  local sec6_line
-  sec6_line=$(grep -n "^## 6\." "$SKILL_FILE" | head -1 | cut -d: -f1 || true)
-  local sec7_line
-  sec7_line=$(grep -n "^## 7\." "$SKILL_FILE" | head -1 | cut -d: -f1 || true)
-  if [ -n "$lsize_line" ] && [ -n "$sec6_line" ] && [ -n "$sec7_line" ] \
-     && [ "$lsize_line" -gt "$sec6_line" ] && [ "$lsize_line" -lt "$sec7_line" ]; then
-    pass "TC-09：L-size Story 審查增強子節位於 §6 之後、§7 之前（行 $sec6_line < $lsize_line < $sec7_line）"
+  # 使用章節標題而非節次編號：兼容新舊編號
+  local sec_review_line
+  sec_review_line=$(grep -n "^## [0-9]\+\. 審查失敗處理" "$SKILL_FILE" | head -1 | cut -d: -f1 || true)
+  local sec_security_line
+  sec_security_line=$(grep -n "^## [0-9]\+\. 安全審查觸發條件" "$SKILL_FILE" | head -1 | cut -d: -f1 || true)
+  if [ -n "$lsize_line" ] && [ -n "$sec_review_line" ] && [ -n "$sec_security_line" ] \
+     && [ "$lsize_line" -gt "$sec_review_line" ] && [ "$lsize_line" -lt "$sec_security_line" ]; then
+    pass "TC-09：L-size Story 審查增強子節位於「審查失敗處理」之後、「安全審查觸發條件」之前（行 $sec_review_line < $lsize_line < $sec_security_line）"
   else
-    fail "TC-09：L-size Story 審查增強子節位置不正確（sec6=$sec6_line, lsize=$lsize_line, sec7=$sec7_line）"
+    fail "TC-09：L-size Story 審查增強子節位置不正確（審查失敗處理=$sec_review_line, lsize=$lsize_line, 安全審查=$sec_security_line）"
   fi
 }
 
