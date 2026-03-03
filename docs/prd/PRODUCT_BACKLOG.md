@@ -1,6 +1,6 @@
 # Product Backlog
 
-**最後更新**：2026-03-09（Sprint 27 Planning — US-47、US-48 選入）
+**最後更新**：2026-03-02（Sprint 28 Planning — US-49、US-50、US-51 選入）
 **管理者**：Product Owner
 
 ---
@@ -136,6 +136,14 @@
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
 | 1 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | — | Must | S | Sprint 20 Retro / Issue #58 | Done（Sprint 21） |
+
+### Sprint 28 — 進行中 Stories
+
+| 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
+|------|-------|------|--------|------|------|------|
+| 1 | US-49：OpenCode Phase 3a — 剩餘四個角色 Agent 移植 | 待定 | Must | S | US-48 Phase 2 移植模式驗證 / OPENCODE_POC.md Phase 3 | In Sprint（Sprint 28） |
+| 2 | US-50：OpenCode Phase 3b — INSTALL_OPENCODE.md 安裝指南 | 待定 | Must | S | M5 條件 (a) 外部使用者觸及 / ADR-008 決策一 | In Sprint（Sprint 28） |
+| 3 | US-51：OpenCode Phase 3c — Task Tool 參數確認與 Developer dispatch 動態驗證 | 待定 | Must | M | US-48 Phase 2 完成 / Issue #3 結案評估需求 | In Sprint（Sprint 28） |
 
 ### Sprint 27 — 已完成 Stories
 

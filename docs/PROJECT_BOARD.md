@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-15（Sprint 27 Review 完成）
-**當前 Sprint**：Sprint 27（完成）
+**最後更新**：2026-03-02（Sprint 28 Planning 完成）
+**當前 Sprint**：Sprint 28（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 27](sprints/sprint_27.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 28](sprints/sprint_28.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 28 — 進行中
+
+**Sprint Goal**：完成 OpenCode 平台五角色 subagent 模型（US-49）與外部使用者安裝指南（US-50），同步推進 Task tool 動態驗證結論（US-51），使 Issue #3 進入可結案狀態
+**期間**：2026-03-02 ~ 2026-03-08
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-49：OpenCode Phase 3a — 剩餘四個角色 Agent 移植 | S | 1 | 進行中 |
+| US-50：OpenCode Phase 3b — INSTALL_OPENCODE.md 安裝指南 | S | 1 | 進行中 |
+| US-51：OpenCode Phase 3c — Task Tool 參數確認與 Developer dispatch 動態驗證 | M | 2 | 進行中 |
+
+**目標 Velocity**：4 points（3 Stories）
 
 ---
 
