@@ -207,13 +207,16 @@ check_schema_field "modified_files" "output: modified_files"
 check_schema_field "commit_sha" "output: commit_sha"
 check_schema_field "escalation" "output: escalation"
 
-# Phase 1 sampling placeholder（TODO marker）
-if [[ -f "${LIFECYCLE_PROMPT}" ]] && grep -q "TODO.*AC3.*sampling\|TODO.*sampling.*ADR-007" "${LIFECYCLE_PROMPT}"; then
-  pass "AC3: Phase 1 sampling TODO placeholder 存在（story-lifecycle-prompt.md）"
+# Phase 2 sampling 實作驗證（US-41 Phase 2 已實作，TODO placeholder 已被取代）
+# 驗證方式：Phase 2 實作後，story-lifecycle-prompt.md 應含 §AC3 章節
+if [[ -f "${LIFECYCLE_PROMPT}" ]] && grep -q "§AC3 外部抽樣審查觸發邏輯\|AC3.*外部抽樣審查觸發邏輯" "${LIFECYCLE_PROMPT}"; then
+  pass "AC3: Phase 2 外部抽樣審查觸發邏輯已實作（§AC3 章節存在於 story-lifecycle-prompt.md）"
+elif [[ -f "${LIFECYCLE_PROMPT}" ]] && grep -q "TODO.*AC3.*sampling\|TODO.*sampling.*ADR-007" "${LIFECYCLE_PROMPT}"; then
+  pass "AC3: Phase 1 sampling TODO placeholder 存在（story-lifecycle-prompt.md，Phase 2 尚未實作）"
 elif grep -q "TODO.*AC3.*sampling\|TODO.*sampling.*ADR-007" "${SKILL_MD}"; then
-  pass "AC3: Phase 1 sampling TODO placeholder 存在（SKILL.md）"
+  pass "AC3: Phase 1 sampling TODO placeholder 存在（SKILL.md，Phase 2 尚未實作）"
 else
-  fail "AC3: 缺少 Phase 1 sampling TODO placeholder"
+  fail "AC3: 缺少外部抽樣審查相關實作（Phase 2 §AC3 章節或 Phase 1 TODO placeholder）"
 fi
 
 echo ""
