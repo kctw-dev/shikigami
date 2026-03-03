@@ -35,6 +35,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 22 | 2026-03-02 | 6 points | 100% | 不規則 | 4 Stories（3S+1L），Sprint Goal 達成；S21→S22 大幅回升（4→6，+50%）；雙 ADR 同 Sprint 交付（ADR-006, ADR-007）；框架安全性強化 |
 | Sprint 23 | 2026-03-29 | 5 points | 100% | 穩定 | 4 Stories（3S+1M），Sprint Goal 達成；S22→S23 微降（6→5，-16.7%，±20% 內）；穩定（4→6→5，均值 5.0，全部落於 ±20% 區間 4.0–6.0 內）；ADR-007 Phase 1 實作 + Retro Actions 清零 |
 | Sprint 24 | 2026-03-30 | 5 points | 100% | 穩定 | 2 Stories（1S+1M），Sprint Goal 達成；S23→S24 持平（5→5，0%）；穩定（6→5→5，均值 5.33，全部落於 ±20% 區間 4.27–6.40 內）；ADR-007 Phase 2 外部抽樣審查機制交付 |
+| Sprint 25 | 2026-03-03 | 4 points | 100% | 穩定 | 3 Stories（2S+1M），Sprint Goal 達成；S24→S25 微降（5→4，-20%，±20% 內）；穩定（5→5→4，均值 4.67，全部落於 ±20% 區間 3.73–5.60 內）；M5 完成條件終審 + Tech Debt Grooming #1 + OpenCode POC 可行性調查；快思模式執行，Token 記錄 N/A |
 
 ---
 

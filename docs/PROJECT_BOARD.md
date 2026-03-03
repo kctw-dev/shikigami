@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-03（Sprint 25 Planning 完成）
-**當前 Sprint**：Sprint 25（進行中）
+**最後更新**：2026-03-03（Sprint 25 Review 完成）
+**當前 Sprint**：Sprint 25（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 25](sprints/sprint_25.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 25 — 進行中
+## Sprint 25 — 完成
 
 **Sprint Goal**：在 M5 穩定化收尾階段，執行 M5 完成條件終審、Tech Debt Registry 清理、及 OpenCode POC 可行性調查，為 v1.0.0 前置條件提供明確評估依據
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-30 ~ 2026-04-05
 
 | Story | Size | Points | 狀態 |
@@ -18,7 +20,7 @@
 | US-44：Tech Debt Grooming Sprint 25 + TD-001 降級決策 | S | 1 | 完成 |
 | US-45：OpenCode POC 可行性調查 | S | 1 | 完成 |
 
-**Sprint 容量**：4 Points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
 
 ---
 
@@ -91,21 +93,4 @@
 
 ---
 
-## Sprint 20 — 完成
-
-**Sprint Goal**：清零 Sprint 19 Retro Action Items（#56、#57），交付 /shoot 短衝模式（US-31）
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 5 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-02 ~ 2026-03-08
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| Retro #56（Issue #56）：修復 test-schedule.sh assert_contains SIGPIPE 非確定性失敗 | S | 1 | 完成 |
-| Retro #57（Issue #57）：Developer subagent 狀態更新衝突防護 | S | 1 | 完成 |
-| US-31（Issue #47）：/shoot 短衝模式 | L | 3 | 完成 |
-
-**實際 Velocity**：5 points（3 Stories）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–19）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–20）

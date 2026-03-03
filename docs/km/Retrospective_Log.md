@@ -1,6 +1,31 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–19）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–20）
+
+---
+
+## Sprint 25 — 2026-03-03
+
+**參與角色**：PO、Architect、Developer、QA、Stakeholder
+
+### Good
+
+1. 連續 25 個 Sprint 100% 完成率，Sprint Goal 達成（M5 完成條件終審 + Tech Debt Grooming #1 + OpenCode POC 三線交付）
+2. 三個 doc-only Stories 平行執行零衝突，平行分群策略持續有效
+3. M5 完成條件終審誠實標記 1 項未達成（外部使用者缺口 0%），未粉飾評估結果——條件 (b)(c) 已達成的判定有明確依據
+4. OpenCode POC Go 決策直接打通 M5 條件 (a) 解封路徑（Phase 3 DoD = 外部使用者完成安裝並走完一個 Sprint）
+
+### Problem
+
+1. US-43 Code Quality Review 發現 ROADMAP.md 版號策略段落 stale（寫「v0.3.x 凍結」而實際已到 v0.8.0），文件維護同步性仍有盲點——此為 AC 規格與文件一致性問題的長期趨勢延續（Sprint 3 至 Sprint 25 間反覆出現不同表現形式）
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue | 狀態 |
+|---|--------|-------|----------|-------|------|
+| — | 無新增 Action Items | — | — | — | — |
+
+> Problem 1 已在 Sprint 執行過程中由 Code Quality Review 攔截並修正（commit deb5a7d），ROADMAP.md 版號策略段落已更新至 v0.8.0。現有 QA 審查流程有效運作，無需新增 Action Item。
 
 ---
 
@@ -111,33 +136,5 @@
 > Problem 2 屬 Medium 建議但影響範圍有限（3+ Story 同時衝突罕見），納入 Backlog 候選而非強制 Action。
 
 ---
-
-## Sprint 20 — 2026-03-02
-
-**參與角色**：PO、Architect、Developer、QA、Security、Stakeholder
-
-### Good
-
-1. 完成率 100% 連續 20 個 Sprint 維持（Sprint 1-20 全數達成）
-2. Phase 平行派遣持續有效 — Retro #56 + Retro #57 平行無衝突
-3. US-31 /shoot 短衝模式從 Sprint 17 Retro 起跨 3 Sprint 終於完成交付，Stakeholder 滿意
-4. Sprint 19 Retro Action Items 全數清零（#56, #57 均在 Sprint 20 完成）
-5. 測試覆蓋持續擴展 — Sprint 20 新增 74 個測試（62 shoot + 12 conflict），總計 238 個測試
-
-### Problem
-
-1. US-31 Code Quality Review 識別 shoot SKILL.md 的 grep 示例與「大小寫不敏感」聲明矛盾、sprint-review §2.5 日期來源未明確 — L size Story 的規格品質仍需 QA 多輪捕捉
-2. 快思模式跳過 Token 記錄持續為 N/A — 成本可見性仍有盲區（延續 Sprint 18 Problem 趨勢）
-
-### Action Items
-
-| # | Action | Owner | 驗收方式 | Issue | 狀態 |
-|---|--------|-------|----------|-------|------|
-| 1 | L-size Story SKILL.md 規格品質強化 — QA 增加示例一致性檢查項 | QA | QA Code Quality Review Checklist 新增示例一致性檢查項，L-size Story 強制多輪審查 | #58 | Closed（Sprint 21） |
-
-> Problem 2 不建立新 Issue（此為長期結構性問題，快思模式設計即跳過 Token 記錄，非 Action Item）
-
----
-
 
 

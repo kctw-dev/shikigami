@@ -1,6 +1,6 @@
 # Sprint 25
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-30 ~ 2026-04-05
 **Sprint Goal**：在 M5 穩定化收尾階段，執行 M5 完成條件終審、Tech Debt Registry 清理、及 OpenCode POC 可行性調查，為 v1.0.0 前置條件提供明確評估依據
 **總計**：3 Stories / 4 Points
