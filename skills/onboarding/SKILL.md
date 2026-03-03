@@ -19,9 +19,11 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
 
 依序執行以下 5 個階段，每個階段完成後繼續下一個，不中途暫停詢問（AC4 CLAUDE.md 生成為框架設定豁免例外，見第 2.4 節）。
 
-### 2.1 前置檢查：templates/ 目錄驗證
+### 2.1 前置檢查：環境驗證（Pre-flight）
 
-**目的**：確認範本來源存在，若不存在則提前中止並給出明確錯誤。
+**目的**：確認執行環境就緒，包含範本來源與 ADR-010 定義的 GitHub labels 存在性。若任一項不符合則提前中止並給出明確錯誤。
+
+#### 2.1.1 templates/ 目錄驗證
 
 執行步驟：
 1. 讀取框架根目錄，確認 `templates/` 目錄存在
@@ -45,6 +47,47 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
   請確認 Shikigami 框架安裝完整。
   ```
 - 全部存在 → 繼續執行
+
+#### 2.1.2 ADR-010 GitHub Labels 驗證（Pre-flight）
+
+**目的**：確認 ADR-010 定義的 Backlog Issue 核心 labels 已建立於 GitHub repo。這些 labels 是 Backlog 管理流程的基礎設施，若缺失則後續 Sprint Planning 與 backlog-intake 流程將無法正常運作。
+
+執行步驟：
+```bash
+gh label list --json name --limit 100
+```
+
+驗證以下三個 **Backlog Issue 核心 labels** 是否存在（最低要求）：
+
+| Label | 語意 |
+|-------|------|
+| `type: backlog-item` | 識別為結構化 Story，區別於原始 Issue |
+| `status: backlog` | 尚未排入 Sprint 的待選 Story |
+| `status: in-sprint` | 已選入當前 Sprint |
+
+**完整 ADR-010 label 清單**（14 個，應全部存在）：
+
+| 類別 | Labels |
+|------|--------|
+| 原始 Issue labels | `feature-request`、`bug`、`question`、`triaged`、`backlog-linked` |
+| Backlog Issue labels | `type: backlog-item`、`status: backlog`、`status: in-sprint` |
+| 優先級 labels | `priority: must`、`priority: should`、`priority: could` |
+| Size labels | `size: S`、`size: M`、`size: L` |
+
+**判定規則**：
+- 三個核心 labels（`type: backlog-item`、`status: backlog`、`status: in-sprint`）任一缺失 → **發出警告**，輸出修復指令後繼續（不中止，Onboarding 本身仍可執行）：
+  ```
+  [警告] 以下 ADR-010 核心 labels 尚未建立：
+  - type: backlog-item  ← 缺失
+  這些 labels 是 Backlog 管理流程的必要基礎設施。
+  請執行以下指令建立缺失的 labels：
+    gh label create "type: backlog-item" --color "0052cc" --description "識別為結構化 Story，區別於原始 Issue" --force
+    gh label create "status: backlog" --color "1d76db" --description "尚未排入 Sprint 的待選 Story" --force
+    gh label create "status: in-sprint" --color "0e8a16" --description "已選入當前 Sprint" --force
+  或執行 US-69 的 Label 初始化腳本（建立全部 14 個 ADR-010 labels）：
+    # 參見 docs/adr/ADR-010.md §實作路線圖 步驟 1
+  ```
+- 全部存在 → 輸出：`[Pass] ADR-010 labels 驗證通過（14/14）`，繼續執行
 
 ### 2.2 建立文件目錄結構
 
