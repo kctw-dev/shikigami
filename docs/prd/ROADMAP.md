@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-05-25（Sprint 40 Review — US-13 DORA Metrics + TD-002 JSON Schema 驗證交付，2/2 Stories PASS）
+> 最後更新：2026-03-04（Sprint 41 US-84 — M4 里程碑正式收尾：US-14 完成標注、M4 結案評估記錄）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -132,7 +132,7 @@ Sprint Review 時自動產出：
 
 ---
 
-## M4 外部整合 — 規劃中（內部里程碑）
+## M4 外部整合 — 已達成 ✅（內部里程碑，Sprint 41 正式收尾）
 
 **主題**：與真實開發工具鏈整合，從「指引框架」進化為「執行框架」
 
@@ -143,7 +143,33 @@ Sprint Review 時自動產出：
 | ADR-011 | GitHub Actions 整合架構決策 — **ADR Accepted ✅**（Option A: Push-Based 事件觸發，Sprint 39 正式裁決） | Sprint 39 ✅ |
 | US-12 | GitHub Actions 整合 — CI/CD 狀態感知 | Sprint 39 ✅ |
 | US-13 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率 | Sprint 40 ✅ |
-| US-14 | Notification Templates — PR/Deploy/Review 事件通知模板 | TBD |
+| US-14 | Notification Templates — PR/Deploy/Review 事件通知模板 | Sprint 40 外 ✅ |
+
+### M4 結案評估（Sprint 41 正式收尾，2026-03-04）
+
+**M4 Goal 達成結果**：ACHIEVED — 全部 4 個 M4 交付項目已完成（ADR-011、US-12、US-13、US-14）
+
+**已完成 Stories 清單**：
+
+| Story | 標題 | Sprint | 狀態 |
+|-------|------|--------|------|
+| ADR-011 | GitHub Actions 整合架構決策（Push-Based 事件觸發，Option A） | Sprint 39 | 完成 ✅ |
+| US-12 | GitHub Actions 整合 — CI/CD 狀態感知與 Sprint Health Check 整合 | Sprint 39 | 完成 ✅ |
+| US-13 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率追蹤 | Sprint 40 | 完成 ✅ |
+| US-14 | Notification Templates — PR/Deploy/Review 事件通知模板 | Sprint 40 外（短衝） | 完成 ✅ |
+
+**實際 Velocity（M4 交付階段，Sprint 39–40）**：
+
+| Sprint | M4 貢獻 Stories | Points |
+|--------|-----------------|--------|
+| Sprint 39 | ADR-011（S, 1pt）+ US-12（M, 2pt） | 3 Points |
+| Sprint 40 | US-13（L, 3pt）+ TD-002（M, 2pt）※ | 5 Points |
+| Sprint 40 外 | US-14（S, 1pt，短衝執行） | 1 Point |
+| **M4 合計** | 4 個 M4 交付項目（不含 TD-002） | **7 Points** |
+
+> ※ TD-002 為 M4 期間順帶執行的技術債結案，非 M4 正式 Story。
+
+**M4 Goal 達成結論**：M4「外部整合」里程碑的三大目標（CI/CD 狀態感知、DORA Metrics、通知機制）全部完成。框架已從「指引框架」進化為具備 GitHub Actions 整合能力的「執行框架」，並建立了 DORA 工程效能度量基準線（首次 baseline 於 Sprint 40 建立）。
 
 ---
 
