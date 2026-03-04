@@ -35,26 +35,19 @@ Backlog Management 合併 **Product Discovery** 與 **Backlog Grooming** 兩個�
 
 ### Pre-flight 錯誤恢復掃描
 
-每次 Grooming 執行前，必須先完成以下三項 Pre-flight 掃描，偵測並修復可能的不一致狀態（對應 ADR-010 §錯誤恢復策略）：
+每次 Grooming 執行前，必須先完成以下兩項 Pre-flight 掃描，偵測並修復可能的不一致狀態（對應 ADR-010 §錯誤恢復策略）：
 
 - [ ] **場景一：Label 操作中斷後掃描**
   執行以下指令，偵測 label 狀態不一致的 Issues（例如同時持有 `status: backlog` 與 `status: in-sprint`，或缺少必要 label）：
   ```bash
-  gh issue list --label "type: backlog-item" --state open --json number,title,labels --limit 200
+  gh issue list --label "status: backlog" --state open --json number,title,labels --limit 200
   ```
   若偵測到不一致，以 `gh issue edit <number> --add-label "<label>"` / `--remove-label "<label>"` 自動修復至目標狀態。
 
-- [ ] **場景二：Backlog Issue 建立部分完成後掃描**
-  掃描所有 Backlog Issues 的 body 中「來源：#N」欄位，偵測已存在對應關係的原始 Issue，跳過重複建立：
-  ```bash
-  gh issue list --label "type: backlog-item" --state open --json number,body --limit 200
-  ```
-  若發現 body 包含「來源：#N」但原始 Issue #N 尚未套用 `backlog-linked` label，則補套用該 label。
-
-- [ ] **場景三：Sprint Planning milestone 中斷後掃描**
+- [ ] **場景二：Sprint Planning milestone 中斷後掃描**
   掃描 label 與 milestone 狀態不一致的 Issues（例如具有 `status: in-sprint` 但未關聯 milestone，或已關聯 milestone 但仍有 `status: backlog`）：
   ```bash
-  gh issue list --label "type: backlog-item" --state open --json number,title,labels,milestone --limit 200
+  gh issue list --label "status: backlog" --state open --json number,title,labels,milestone --limit 200
   ```
   若偵測到不一致，自動修復後再繼續 Grooming 主流程。
 
@@ -66,11 +59,11 @@ Backlog Management 合併 **Product Discovery** 與 **Backlog Grooming** 兩個�
 
 - [ ] **PO subagent** 以下列指令查看目前 Backlog：
   ```bash
-  gh issue list --label "type: backlog-item" --label "status: backlog" --state open \
+  gh issue list --label "status: backlog" --state open \
     --json number,title,body,labels --limit 200
   ```
 - [ ] 關閉過時或已不再適用的 Story Issue（`gh issue close <number>`）
-- [ ] 根據最新需求與回饋，新開 Backlog Issue 並套用 `type: backlog-item` + `status: backlog` labels
+- [ ] 根據最新需求與回饋，新開 Issue 並套用 `backlog-intake` label 以觸發自動入庫，或直接套用 `status: backlog` label 並編寫 Story template（User Story、Acceptance Criteria、RICE 評分）
 - [ ] 以 `gh issue edit <number>` 調整優先級 label（`priority: must` / `priority: should` / `priority: could`）並更新 Issue body 中的 RICE 分數
 - [ ] 確保每個 Backlog Issue body 有清楚的 Acceptance Criteria（驗收標準）
 
@@ -182,6 +175,6 @@ Backlog Management 完成後，必須確認以下產出狀態：
 
 **派遣說明**：
 
-1. **PO（分析階段）**：讀取 PRD 與產品相關文件，理解里程碑目標。同時透過 `gh issue list --label "type: backlog-item" --label "status: backlog" --state open` 盤點現有 Backlog Issues 與已知技術債，建立候選 Story 清單。
+1. **PO（分析階段）**：讀取 PRD 與產品相關文件，理解里程碑目標。同時透過 `gh issue list --label "status: backlog" --state open` 盤點現有 Backlog Issues 與已知技術債，建立候選 Story 清單。
 2. **PO + Architect（協作階段）**：PO 提出功能需求，Architect 評估技術可行性。雙方共同討論每個候選 Story 的實現方式與潛在風險。Architect 在此階段標注需要 ADR 的 Story。
 3. **PO（收斂階段）**：根據 Architect 的回饋，使用 RICE 框架為每個 Story 評分排序，以 `gh issue edit` 套用 MoSCoW priority labels（`priority: must/should/could`）並更新 Issue body 中的 RICE 評分表格。里程碑規劃更新至 ROADMAP.md。

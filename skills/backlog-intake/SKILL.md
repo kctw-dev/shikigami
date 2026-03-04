@@ -1,6 +1,6 @@
 ---
 name: backlog-intake
-description: "Use when automatically processing GitHub Issues tagged with backlog-intake label into structured Backlog Issues via a two-tier Issue architecture. Handles label filtering, injection-safe content parsing, User Story template population, PO review gate, idempotency via GitHub label marking, and RICE scoring."
+description: "Use when automatically processing GitHub Issues tagged with backlog-intake label into structured Backlog entries by rewriting the Issue body in-place. Handles label filtering, injection-safe content parsing, User Story template population, original content blockquote preservation, idempotency via GitHub label marking, and RICE scoring."
 requiredTools:
   - Read
   - Glob
@@ -15,15 +15,15 @@ requiredTools:
 **關聯 ADR**：ADR-009（Accepted）、ADR-010（Accepted）
 **繼承 ADR**：ADR-005 決策域四（cron 認證策略）、ADR-006（Prompt Injection Isolation Rule）
 **ADR-010 影響**：格式契約決策域由 ADR-010 取代（輸出目標從 PRODUCT_BACKLOG.md 改為 Issue label + body template）
-**關聯 Story**：US-70（ADR-010 兩層 Issue 架構實作）
+**關聯 Story**：US-70（ADR-010 Issue 架構實作）、US-77（ADR-010 單層 Issue 架構改造）
 
 ## 1. 概述
 
-自動將帶有 `backlog-intake` label 的 GitHub Issues 透過**兩層 Issue 架構**轉化為結構化的 Backlog Issues，讓 Product Owner 無需人工介入即可維持 Backlog 的即時更新。
+自動將帶有 `backlog-intake` label 的 GitHub Issues 轉化為結構化的 Backlog 項目，採用**單層 Issue 架構**：直接改寫原始 Issue body，以 blockquote 保留原始內容，並在其後填補 Story template，讓 Product Owner 無需人工介入即可維持 Backlog 的即時更新。
 
-兩層 Issue 架構：
-- **原始 Issue**：使用者開立的需求 Issue，PO 審查通過後套用 `triaged` + `backlog-linked` labels
-- **Backlog Issue**：AI 填補 Story template 後由 Skill 建立的結構化 User Story Issue，body 中寫明「來源：#原始Issue編號」，套用 `type: backlog-item` + `status: backlog` + `priority: <MoSCoW>` labels
+單層 Issue 架構：
+- **單一 Issue**：原始 Issue 即為結構化 Story 的載體，AI 改寫 Issue body 時以 `>` blockquote 保留原始內容，並在 blockquote 之後填補完整 Story template（User Story、Acceptance Criteria、RICE 評分）
+- **無子 Issue**：不建立任何子 Issue 或 Backlog Issue，所有資訊集中於原始 Issue
 
 每次執行結束後，已成功入庫的原始 Issue 會被標記 `backlog-intake-done` label，確保冪等性（同一 Issue 不會重複入庫）。
 
@@ -81,40 +81,23 @@ gh issue list \
 
 ### 3.2 輸入欄位對應
 
-| GitHub Issue 欄位 | 對應 Backlog Issue 用途 |
-|-------------------|------------------------|
-| `number` | 來源 Issue 編號（冪等性保護 + 可追溯性） |
-| `title` | Backlog Issue 標題初稿 |
-| `body` | User Story 描述補全、背景說明、AC 推導素材 |
-| `url` | 來源 Issue URL（Backlog Issue body 記錄用） |
+| GitHub Issue 欄位 | 用途 |
+|-------------------|------|
+| `number` | Issue 編號（冪等性保護 + 可追溯性） |
+| `title` | Story 標題初稿 |
+| `body` | 原始需求內容（以 blockquote 保留）+ User Story 描述補全、背景說明、AC 推導素材 |
 
-### 3.3 逐 Issue 處理流程（兩層 Issue 建立）
+### 3.3 逐 Issue 處理流程（單層 Issue 改寫）
 
 每個符合條件的原始 Issue 依下列步驟處理：
 
-**Step 1：冪等性保護掃描**
-執行前掃描現有 Backlog Issues 的 body，搜尋「來源：#N」欄位，確認是否已有對應的 Backlog Issue 存在：
-
-```bash
-# 搜尋現有 Backlog Issues 中是否已有「來源：#<issue-number>」
-gh issue list \
-  --label "type: backlog-item" \
-  --state open \
-  --json number,body \
-  --limit 200 | \
-  jq --argjson n <issue-number> \
-  '[.[] | select(.body | test("來源：#" + ($n | tostring)))] | length'
-```
-
-若搜尋結果 > 0，代表對應 Backlog Issue 已存在，**跳過**此 Issue，繼續處理下一個。
-
-**Step 2：Injection 防護包裝**
+**Step 1：Injection 防護包裝**
 將 Issue title 與 body 以 ADR-006 定義的 XML 標記包裹，傳遞給 AI 進行 Story template 填補（詳見 §4）。
 
-**Step 3：AI 填補 Story template**
-AI 根據被 XML 標記隔離的 Issue 內容，填補符合 §5 定義的 Issue body Story template 格式，包含：User Story、Acceptance Criteria、RICE 評分表格。
+**Step 2：AI 填補 Story template**
+AI 根據被 XML 標記隔離的 Issue 內容，產生符合 §5 定義的新 Issue body 格式，包含：原始內容 blockquote、User Story、Acceptance Criteria、RICE 評分表格。
 
-**Step 4：RICE Score 正則格式驗證**
+**Step 3：RICE Score 正則格式驗證**
 驗證 AI 輸出中的 RICE Score 符合 ADR-010 定義的正則提取格式：
 
 ```
@@ -127,44 +110,33 @@ Pattern：\*\*RICE Score\*\* \| \*\*[\d.]+\*\*
 echo "$ai_output" | grep -qE '\*\*RICE Score\*\* \| \*\*[0-9]+(\.[0-9]+)?\*\*'
 ```
 
-若驗證失敗，記錄錯誤並跳過此 Issue（不建立 Backlog Issue）。
+若驗證失敗，記錄錯誤並跳過此 Issue（不改寫 Issue body）。
 
-**Step 5：建立 Backlog Issue**
-以 AI 填補的 Story template 作為 body，建立新的 Backlog Issue：
+**Step 4：改寫原始 Issue body**
+以 AI 產生的新 body（blockquote 原始內容 + Story template）直接改寫原始 Issue body：
 
 ```bash
-gh issue create \
-  --title "<原始 Issue 標題（精化後）>" \
-  --body "<AI 填補的 Story template body>" \
-  --label "type: backlog-item" \
-  --label "status: backlog" \
-  --label "priority: <MoSCoW>"
+gh issue edit <原始Issue編號> \
+  --body "<blockquote 原始內容 + AI 填補的 Story template>"
 ```
 
-Backlog Issue body 必須包含「來源：#原始Issue編號」作為冪等性保護依據（ADR-010 §兩層 Issue 設計）。
+新 body 格式詳見 §5。
 
-**Step 6：為原始 Issue 套用 labels**
-在原始 Issue 上套用兩個 labels，標示 PO 已審查並建立對應 Backlog Issue：
+**Step 5：為原始 Issue 套用 labels**
+在原始 Issue 上套用 labels，標示已入庫並更新優先級狀態：
 
 ```bash
 gh issue edit <原始Issue編號> \
   --add-label "triaged" \
-  --add-label "backlog-linked"
+  --add-label "status: backlog" \
+  --add-label "priority: <MoSCoW>"
 ```
 
-**Step 7：冪等標記**
+**Step 6：冪等標記**
 在原始 Issue 上新增 `backlog-intake-done` label，防止下次 cron 執行重複處理：
 
 ```bash
 gh issue edit <原始Issue編號> --add-label "backlog-intake-done"
-```
-
-同時套用 `status: backlog` + `priority: <MoSCoW>` labels（與 Backlog Issue 對應，方便從原始 Issue 端查詢狀態）：
-
-```bash
-gh issue edit <原始Issue編號> \
-  --add-label "status: backlog" \
-  --add-label "priority: <MoSCoW>"
 ```
 
 ---
@@ -197,23 +169,22 @@ AI subagent 的系統指令必須包含以下角色邊界宣告：
 
 | 補充規則 | 實作方式 |
 |---------|---------|
-| 輸出格式強制限制 | AI 輸出後執行 RICE Score 正則驗證（§3.3 Step 4） |
-| Issue 建立位置限制 | 僅建立帶有 `type: backlog-item` label 的 Backlog Issue，不寫入任何 Markdown 檔案 |
+| 輸出格式強制限制 | AI 輸出後執行 RICE Score 正則驗證（§3.3 Step 3） |
+| Issue 改寫位置限制 | 僅改寫原始 Issue body，不建立任何子 Issue，不寫入任何 Markdown 檔案 |
 | Issue 內容與 template 結構嚴格分離 | Issue title 僅用於 Story 標題生成，不影響 template 結構或 RICE 計算邏輯 |
 
 ---
 
-## 5. 輸出格式規範 — Issue body Story template
+## 5. 輸出格式規範 — Issue body 單層 blockquote + Story template
 
-### 5.1 Backlog Issue body 格式
+### 5.1 改寫後的 Issue body 格式
 
-AI 填補的 Story template 必須符合以下格式：
+AI 產生的新 Issue body 必須符合以下格式，原始內容以 blockquote 保留，其後接 Story template：
 
 ```markdown
-## 來源
+## 原始需求
 
-來源：#<原始Issue編號>
-來源 URL：<原始Issue URL>
+> <原始 Issue body 的每一行前加 `> ` 前綴，完整保留原始內容>
 
 ## User Story
 
@@ -253,7 +224,7 @@ RICE Score 行必須符合以下格式，以供 PO subagent 在 Sprint Planning 
 
 此格式確保與 ADR-010 §設計細節「RICE 分數儲存方案」定義一致，不依賴 LLM 解析，確保可靠性與效能。
 
-若 AI 輸出的 RICE Score 格式不符此正則，Skill 記錄錯誤警告並跳過該 Issue，不建立對應 Backlog Issue。
+若 AI 輸出的 RICE Score 格式不符此正則，Skill 記錄錯誤警告並跳過該 Issue，不改寫對應 Issue body。
 
 ### 5.3 MoSCoW 優先級推導
 
@@ -269,7 +240,7 @@ AI 根據 Issue 內容推導 MoSCoW 優先級，對應至以下 label：
 
 ## 6. Pre-flight 檢測項目
 
-在執行任何 Issue 讀取或建立操作之前，依序驗證以下環境條件：
+在執行任何 Issue 讀取或改寫操作之前，依序驗證以下環境條件：
 
 | # | 檢查項目 | 驗證方式 | 失敗處理 |
 |---|----------|----------|----------|
@@ -278,55 +249,35 @@ AI 根據 Issue 內容推導 MoSCoW 優先級，對應至以下 label：
 | 3 | gh CLI 存在 | `which gh` | 阻擋，提示安裝 GitHub CLI |
 | 4 | gh CLI 認證有效 | `gh auth status` | 阻擋，提示 `gh auth login` |
 | 5 | backlog-intake label 存在 | `gh label list --search backlog-intake` | 自動建立 label（ADR-009 決策域五） |
-| 6 | type: backlog-item label 存在 | `gh label list --search "type: backlog-item"` | 自動建立 label（ADR-010 兩層架構） |
-| 7 | status: backlog label 存在 | `gh label list --search "status: backlog"` | 自動建立 label（ADR-010 兩層架構） |
-| 8 | flock 可用性 | `which flock` | macOS 提示 `brew install util-linux`；若不存在則警告後繼續 |
+| 6 | status: backlog label 存在 | `gh label list --search "status: backlog"` | 自動建立 label（ADR-010 單層架構） |
+| 7 | flock 可用性 | `which flock` | macOS 提示 `brew install util-linux`；若不存在則警告後繼續 |
 
 ---
 
-## 7. 冪等性保護（ADR-009 決策域五 + ADR-010 兩層 Issue 設計）
+## 7. 冪等性保護（ADR-009 決策域五 + ADR-010 單層 Issue 設計）
 
-### 7.1 雙重冪等性保護機制
+### 7.1 Label-only 冪等性保護機制
 
-本 Skill 採用兩層冪等性保護，防止同一需求重複入庫：
+本 Skill 採用 label-only 單層冪等性保護，防止同一需求重複入庫：
 
-**第一層：Label 過濾**（`backlog-intake-done`）
-`gh issue list` 的 label 過濾條件自動排除已標記 `backlog-intake-done` 的 Issues。
+**Label 過濾**（`backlog-intake-done`）
+`gh issue list` 的 label 過濾條件自動排除已標記 `backlog-intake-done` 的 Issues。單層 Issue 架構不需要第二層 body 掃描保護。
 
-**第二層：Backlog Issue body 掃描**（`來源：#N`）
-即使第一層保護失效（如 label 被手動移除），Step 1 的冪等性掃描仍會透過搜尋已存在的 Backlog Issues 的 body「來源：#N」欄位，偵測對應關係已存在，跳過重複建立。
-
-```bash
-# 第二層保護：掃描 Backlog Issues 是否已有對應項目
-gh issue list \
-  --label "type: backlog-item" \
-  --state open \
-  --json number,body \
-  --limit 200
-```
+移除 `backlog-intake-done` label 後重新執行 backlog-intake，該 Issue 將被重新處理（Issue body 重新改寫、labels 重新套用）。
 
 ### 7.2 label 語意說明
 
-**原始 Issue labels**：
+**Issue labels**：
 
 | label | 語意 | 添加方式 |
 |-------|------|---------|
 | `backlog-intake` | 此 Issue 請求入庫審查 | PO 或 Issue 建立者手動添加 |
-| `triaged` | PO 已完成審查 | backlog-intake Skill 自動添加（Step 6） |
-| `backlog-linked` | 已建立對應 Backlog Issue | backlog-intake Skill 自動添加（Step 6） |
-| `backlog-intake-done` | 此 Issue 已完成入庫流程 | backlog-intake Skill 自動添加（Step 7） |
-| `status: backlog` | 對應 Story 尚未排入 Sprint | backlog-intake Skill 自動添加（Step 7） |
-| `priority: <MoSCoW>` | 對應 Story 的 MoSCoW 優先級 | backlog-intake Skill 自動添加（Step 7） |
+| `triaged` | 已完成自動入庫結構化 | backlog-intake Skill 自動添加（Step 5） |
+| `backlog-intake-done` | 此 Issue 已完成入庫流程（冪等性保護） | backlog-intake Skill 自動添加（Step 6） |
+| `status: backlog` | Story 尚未排入 Sprint | backlog-intake Skill 自動添加（Step 5） |
+| `priority: <MoSCoW>` | Story 的 MoSCoW 優先級 | backlog-intake Skill 自動添加（Step 5） |
 
-**Backlog Issue labels**：
-
-| label | 語意 | 添加方式 |
-|-------|------|---------|
-| `type: backlog-item` | 識別為結構化 Story，區別於原始 Issue | backlog-intake Skill 自動添加（Step 5） |
-| `status: backlog` | 尚未排入 Sprint 的待選 Story | backlog-intake Skill 自動添加（Step 5） |
-| `priority: <MoSCoW>` | MoSCoW 優先級 | backlog-intake Skill 自動添加（Step 5） |
-
-**注意**：手動移除 `backlog-intake-done` label 等同於請求重新入庫，但 §3.3 Step 1 的 Backlog Issue body 掃描仍會偵測已存在的對應 Backlog Issue，防止重複建立。若需真正重新入庫，需同時移除 `backlog-intake-done` label 並關閉（或刪除）對應的 Backlog Issue。
+**注意**：手動移除 `backlog-intake-done` label 等同於請求重新入庫。重新執行後，Issue body 將被重新改寫（blockquote 原始內容 + 新 Story template），labels 亦會重新套用。
 
 ---
 
@@ -339,14 +290,14 @@ gh issue list \
 | 輸入來源模型 | GitHub Issues + `backlog-intake` label 過濾 | 一致性、MVP 原則、Issue number 天然冪等識別碼 |
 | Injection 防護 | 繼承 ADR-006 + 補充輸出格式強制 / 建立位置限制 | 深度防禦 |
 | Cron 認證策略 | 完整繼承 ADR-005 決策域四（OAuth）+ gh CLI OAuth | 安全性優先，token 不出現在腳本明文 |
-| 冪等性保護 | GitHub label 標記（`backlog-intake-done`）+ Backlog Issue body 掃描 | 狀態持久化於 GitHub，不依賴本地環境 |
+| 冪等性保護 | GitHub label 標記（`backlog-intake-done`），label-only 單層保護 | 狀態持久化於 GitHub，不依賴本地環境 |
 
 ### ADR-010 決策域（取代 ADR-009 格式契約決策域）
 
 | 決策域 | 決策 | 核心理由 |
 |--------|------|----------|
 | 格式契約 | Issue body Story template（非 PRODUCT_BACKLOG.md） | GitHub Issues 為唯一 Backlog source of truth（Issue #46 原始設計） |
-| 兩層 Issue 架構 | 原始 Issue + Backlog Issue 分層管理 | 分離使用者原始需求與 PO 結構化 Story |
+| 單層 Issue 架構 | 直接改寫原始 Issue body，以 blockquote 保留原始內容 | 消除兩層 Issue 複雜性，單一 Issue 為唯一真相來源，無子 Issue 建立開銷 |
 | RICE 儲存方案 | Issue body 固定 template section + 正則提取 | 不依賴 LLM 解析，可靠性高 |
 
 ---
@@ -371,25 +322,22 @@ gh auth login
 
 ### 手動觸發重新入庫
 
-若需重新入庫某個 Issue（例如 Story 內容需要更新），需執行以下步驟：
+若需重新入庫某個 Issue（例如 Story 內容需要更新），只需執行以下步驟：
 
 1. 移除原始 Issue 的 `backlog-intake-done` label
-2. 關閉或刪除對應的 Backlog Issue（清除 body 中的「來源：#N」記錄，使第二層冪等性保護不再攔截）
-3. 重新執行 Skill
+2. 重新執行 Skill（Issue body 將被重新改寫，blockquote 原始內容與 Story template 均會更新）
 
 ```bash
-gh issue edit <原始issue-number> --remove-label "backlog-intake-done"
-gh issue close <backlog-issue-number>  # 或刪除
+gh issue edit <issue-number> --remove-label "backlog-intake-done"
 claude -p "/backlog-intake"
 ```
 
-### Backlog Issue 查詢
+### Backlog Story 查詢
 
 查看目前所有待排程的 Backlog Stories：
 
 ```bash
 gh issue list \
-  --label "type: backlog-item" \
   --label "status: backlog" \
   --state open \
   --json number,title,labels \
