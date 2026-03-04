@@ -11,7 +11,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-13 | #62 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率追蹤 | L | 3 | Phase 1（平行） | 進行中 |
+| US-13 | #62 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率追蹤 | L | 3 | Phase 1（平行） | 完成 |
 | TD-002 | #65 | PO subagent 輸出格式 JSON Schema 正式驗證 | M | 2 | Phase 1（平行） | 進行中 |
 
 **Sprint 容量**：5 Points
@@ -73,11 +73,11 @@ As a Product Owner monitoring engineering health, I want DORA four key metrics (
 
 **Done 定義**
 
-- [ ] sprint-review SKILL.md 新增 DORA 計算子節（含四項指標定義、gh CLI 查詢指令、XML 包裹要求）
-- [ ] 趨勢判定演算法寫入 SKILL.md（含「資料不足」處理邏輯）
-- [ ] Metrics_Log.md 新增 DORA Metrics 表格段落（Sprint 40 baseline 快照）
-- [ ] ADR-006 合規性確認（`<dora_input>` XML 標記）
-- [ ] Issue #62 狀態回寫為已完成
+- [x] sprint-review SKILL.md 新增 DORA 計算子節（含四項指標定義、gh CLI 查詢指令、XML 包裹要求）
+- [x] 趨勢判定演算法寫入 SKILL.md（含「資料不足」處理邏輯）
+- [x] Metrics_Log.md 新增 DORA Metrics 表格段落（Sprint 40 baseline 快照）
+- [x] ADR-006 合規性確認（`<dora_input>` XML 標記）
+- [x] Issue #62 狀態回寫為已完成
 
 ---
 

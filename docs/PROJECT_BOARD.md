@@ -14,7 +14,7 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-13：DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率追蹤 | L | 3 | 進行中 |
+| US-13：DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率追蹤 | L | 3 | 完成 |
 | TD-002：PO subagent 輸出格式 JSON Schema 正式驗證 | M | 2 | 進行中 |
 
 **目標 Velocity**：5 points（2 Stories）
