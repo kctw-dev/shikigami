@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-04（Sprint 42 Review 完成）
-**當前 Sprint**：Sprint 42（完成）
+**最後更新**：2026-03-04（Sprint 43 Planning 完成）
+**當前 Sprint**：Sprint 43（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 42](sprints/sprint_42.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 43](sprints/sprint_43.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 43 — 進行中
+
+**Sprint Goal**：為 Backlog 下一個發展方向奠定決策基礎：精化 #69（開發不中斷）為可執行 Story，並執行 M5 外部觸及效果最終診斷，確認對外最後一哩是否有可改善空白。
+**期間**：2026-03-04 ~ 2026-03-10
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-90：Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | S | 1 | 待開始 |
+| US-91：M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | 待開始 |
+
+**目標 Velocity**：3 points（2 Stories）
 
 ---
 
