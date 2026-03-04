@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-04（Sprint 41 Review 完成）
-**當前 Sprint**：Sprint 41（完成）
+**最後更新**：2026-03-04（Sprint 42 Planning 完成）
+**當前 Sprint**：Sprint 42（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 41](sprints/sprint_41.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 42](sprints/sprint_42.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 42 — 進行中
+
+**Sprint Goal**：完善 Onboarding 自動化鏈路（GitHub Action 串接）並強化 Sprint 執行品質（Done 定義 checkbox 強化），同時在本 Sprint Review 中首次驗證 US-86 一致性審查機制的完整覆蓋率。
+**期間**：2026-03-04 ~ 2026-03-10
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-88：Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | 待開發 |
+| US-89：story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | S | 1 | 待開發 |
+
+**目標 Velocity**：3 points（2 Stories）
 
 ---
 
