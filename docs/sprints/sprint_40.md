@@ -12,7 +12,7 @@
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
 | US-13 | #62 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率追蹤 | L | 3 | Phase 1（平行） | 完成 |
-| TD-002 | #65 | PO subagent 輸出格式 JSON Schema 正式驗證 | M | 2 | Phase 1（平行） | 進行中 |
+| TD-002 | #65 | PO subagent 輸出格式 JSON Schema 正式驗證 | M | 2 | Phase 1（平行） | 完成 |
 
 **Sprint 容量**：5 Points
 
