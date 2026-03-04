@@ -11,8 +11,8 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-88 | #83 | Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | Phase 1（平行） | 待開發 |
-| US-89 | #84 | story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | S | 1 | Phase 1（平行） | 待開發 |
+| US-88 | #83 | Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | Phase 1（平行） | 進行中 |
+| US-89 | #84 | story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | S | 1 | Phase 1（平行） | 完成 |
 
 **Sprint 容量**：3 Points
 
@@ -67,13 +67,13 @@ As a new Shikigami user, I want the onboarding process to automatically detect, 
 
 **Done 定義**
 
-- [ ] onboarding SKILL.md 新增 Phase 2.6（GitHub Action 串接）
-- [ ] Runner 偵測邏輯使用 `gh api repos/{owner}/{repo}/actions/runners`
-- [ ] OAuth 驗證狀態確認使用 `claude auth status`
-- [ ] Workflow 存在性確認（`.github/workflows/backlog-intake.yml`）
-- [ ] 冪等性保護（已就緒時略過）
-- [ ] Onboarding 完成摘要更新
-- [ ] Issue #83 關閉
+- [x] onboarding SKILL.md 新增 Phase 2.6（GitHub Action 串接）
+- [x] Runner 偵測邏輯使用 `gh api repos/{owner}/{repo}/actions/runners`
+- [x] OAuth 驗證狀態確認使用 `claude auth status`
+- [x] Workflow 存在性確認（`.github/workflows/backlog-intake.yml`）
+- [x] 冪等性保護（已就緒時略過）
+- [x] Onboarding 完成摘要更新
+- [x] Issue #83 關閉
 
 ---
 
@@ -108,9 +108,9 @@ As a Developer subagent executing Sprint Stories, I want the Done Definition che
 
 **Done 定義**
 
-- [ ] story-lifecycle-prompt.md 新增「Done 定義 checkbox 更新」步驟
-- [ ] 觸發時機明確定義（雙階段審查後、狀態更新前）
-- [ ] Issue #84 關閉
+- [x] story-lifecycle-prompt.md 新增「Done 定義 checkbox 更新」步驟
+- [x] 觸發時機明確定義（雙階段審查後、狀態更新前）
+- [x] Issue #84 關閉
 
 ---
 

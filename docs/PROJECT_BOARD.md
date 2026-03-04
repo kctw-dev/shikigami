@@ -14,8 +14,8 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-88：Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | 待開發 |
-| US-89：story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | S | 1 | 待開發 |
+| US-88：Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | 進行中 |
+| US-89：story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | S | 1 | 完成 |
 
 **目標 Velocity**：3 points（2 Stories）
 
