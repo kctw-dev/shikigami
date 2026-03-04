@@ -11,7 +11,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-88 | #83 | Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | Phase 1（平行） | 進行中 |
+| US-88 | #83 | Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | Phase 1（平行） | 完成 |
 | US-89 | #84 | story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | S | 1 | Phase 1（平行） | 完成 |
 
 **Sprint 容量**：3 Points

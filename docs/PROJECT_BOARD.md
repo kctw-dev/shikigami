@@ -1,6 +1,6 @@
 # Project Board
 
-**最後更新**：2026-03-04（Sprint 42 Planning 完成）
+**最後更新**：2026-03-04（US-88 完成）
 **當前 Sprint**：Sprint 42（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 42](sprints/sprint_42.md) → 本看板 | [Tutorial](tutorial/README.md)
@@ -14,7 +14,7 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-88：Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | 進行中 |
+| US-88：Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | 完成 |
 | US-89：story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | S | 1 | 完成 |
 
 **目標 Velocity**：3 points（2 Stories）
