@@ -213,8 +213,63 @@ XML 標記增加少量 prompt token，對實際執行效能影響可忽略不計
 
 ---
 
+---
+
+## Addendum：JSON Schema 驗證決策（TD-002 補充）
+
+**補充日期**：2026-05-25
+**補充者**：Security Engineer（via TD-002 Sprint 40）
+**對應 Issue**：#65
+
+### 背景
+
+本 ADR 原始決策挑戰（§Decision Challenge）已識別 JSON Schema 輸出驗證為有意義的補充防護層，並標記為 TECH-DEBT 待後續實作。TD-002 完成此項技術債清償，本 Addendum 記錄正式設計決策。
+
+### JSON Schema 驗證決策
+
+**決策：在 PO subagent 輸出管道加入 JSON Schema 結構驗證層（選項 D 的第三層補強）**
+
+現有防護（Prompt Injection Isolation Rule）提供兩層軟性 prompt-level 控制：
+- **規則 1**：XML 資料隔離標記（語義層分離）
+- **規則 2**：角色限制宣告（操作邊界定義）
+
+JSON Schema 驗證作為**第三層架構防護**，在結構層面強制約束 PO subagent 的輸出格式，降低注入攻擊成功後的操作空間：
+
+| 防護層 | 機制 | 類型 | 位置 |
+|--------|------|------|------|
+| 第一層 | XML 隔離標記 | Prompt-level（軟性） | PO subagent prompt 建構時 |
+| 第二層 | 角色限制宣告 | Prompt-level（軟性） | PO subagent 系統指令 |
+| 第三層 | JSON Schema 驗證 | Architecture-level（結構） | PO subagent 輸出後、QA 審核前 |
+
+### Graceful Fallback 策略
+
+JSON Schema 驗證設計為**非阻斷性**架構層：
+
+1. **工具可用時**：執行完整 Schema 驗證（ajv / check-jsonschema / python3-jsonschema）
+2. **工具不可用時**：執行基本結構檢查（graceful fallback），輸出 `[SCHEMA-WARN]` 警告，**不阻斷 Sprint 執行**
+3. **Schema 驗證失敗時**：中止該 Issue 回覆，記錄人工審查佇列，輸出 `[SCHEMA-FAIL]`
+
+設計原則：驗證層失效不應比注入攻擊本身造成更大的業務損害（不可用性 > 安全事件風險時，選擇可用性）。
+
+### 驗證工件
+
+- **Schema 定義**：`schemas/po-subagent-output.schema.json`（JSON Schema Draft-07）
+  - 必要欄位：`reply`（string）、`tone`（enum）、`reviewed_by`（const）
+  - 可選欄位：`issue_number`（integer）、`warning`（string）
+- **驗證腳本**：`tests/validate-po-output.sh`（含工具存在性檢查與 graceful fallback）
+- **SKILL.md 整合**：`skills/sprint-execution/SKILL.md` §3 回覆流程（Schema 驗證失敗回退說明）
+
+### 非設計範圍
+
+- 自然語言回覆內容的語義審查：由 QA subagent 審核（第二道閘門）維持不變
+- Schema 欄位內容的惡意性判斷：超出結構驗證範疇，屬 QA subagent 職責
+- Developer subagent 或其他 subagent 的輸出驗證：超出本 ADR 範圍
+
+---
+
 ## 參考
 
 - OWASP Top 10 for LLM Applications — LLM01: Prompt Injection
 - Anthropic 官方文件：Prompt Injection Defense Patterns（XML 標記隔離建議）
 - ADR-003：SQA 稽核閘門介入模式（Framework Document Change Audit）
+- TD-002：PO subagent 輸出格式 JSON Schema 正式驗證（Issue #65，Sprint 40）
