@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-05-18（Sprint 39 Planning 完成）
-**當前 Sprint**：Sprint 39（進行中）
+**最後更新**：2026-05-18（Sprint 39 Review 完成）
+**當前 Sprint**：Sprint 39（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 39](sprints/sprint_39.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 39 — 進行中
+## Sprint 39 — 完成
 
 **Sprint Goal**：正式裁決 ADR-011（Proposed → Accepted），交付 M4 GitHub Actions 整合首個可執行 Story（US-12 CI/CD 狀態感知），讓外部工具鏈與 Shikigami Sprint 週期正式整合。
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-05-18 ~ 2026-05-24
 
 | Story | Size | Points | 狀態 |
@@ -18,6 +20,7 @@
 | US-12：GitHub Actions 整合 — CI/CD 狀態感知與 Sprint Health Check 整合 | M | 2 | 完成 |
 
 **目標 Velocity**：3 points（2 Stories）
+**實際 Velocity**：3 points（2 Stories）
 
 ---
 
@@ -95,23 +98,6 @@
 
 ---
 
-## Sprint 34 — 完成
-
-**Sprint Goal**：Issue #46 自動化排程框架收尾結案 + Issue #49 CI 失敗根因修正
-**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-04-13 ~ 2026-04-19
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-66：Issue #46 最終收尾 — 四條排程流程驗收條件逐項確認、缺口補齊，close Issue #46 | S | 1 | 完成 |
-| US-68：Issue #49 框架端主動修正評估 — workflow check 失敗根因分析（根因已確認：Sprint 33 commit 順序問題，非框架 bug） | S | 1 | 完成 |
-
-**目標 Velocity**：2 points（2 Stories）
-**實際 Velocity**：2 points（2 Stories）
-
----
-
 ## 短衝記錄
 
 | 日期 | 標題 | Issue/Story | commit hash |
@@ -121,4 +107,4 @@
 
 ---
 
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–33）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–34）

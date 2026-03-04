@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-05-11（Sprint 38 Review — ADR-011 起草 + Decision KB + PO 積壓量可視化，3/3 Stories PASS）
+> 最後更新：2026-05-18（Sprint 39 Review — ADR-011 正式裁決 Accepted + CI/CD 狀態感知交付，2/2 Stories PASS）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -141,7 +141,7 @@ Sprint Review 時自動產出：
 | Story | 功能 | Sprint |
 |---|---|---|
 | ADR-011 | GitHub Actions 整合架構決策 — **ADR Accepted ✅**（Option A: Push-Based 事件觸發，Sprint 39 正式裁決） | Sprint 39 ✅ |
-| US-12 | GitHub Actions 整合 — CI/CD 狀態感知 | Sprint 39（ADR-011 Accepted） |
+| US-12 | GitHub Actions 整合 — CI/CD 狀態感知 | Sprint 39 ✅ |
 | US-13 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率 | TBD |
 | US-14 | Notification Templates — PR/Deploy/Review 事件通知模板 | TBD |
 
