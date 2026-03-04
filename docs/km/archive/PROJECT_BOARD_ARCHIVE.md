@@ -1,8 +1,8 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-04（Sprint 37 歸檔）
-**歸檔範圍**：Sprint 1–37（共 37 個 Sprint）
+**最後更新**：2026-03-04（Sprint 38 歸檔）
+**歸檔範圍**：Sprint 1–38（共 38 個 Sprint）
 **歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔
 
 > 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 37–41）
@@ -627,6 +627,24 @@
 | US-77：單層 Issue 架構改造 — backlog-intake / backlog-management 棄用兩層 Issue，改為 blockquote 保留原始內容 | M | 2 | 完成 |
 | US-78：shoot skill US-XX 模式需適配 ADR-010 — 從 GitHub Issues 查詢 Story | S | 1 | 完成 |
 | US-80：backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段與 label 語意修正 | S | 1 | 完成 |
+
+**目標 Velocity**：4 points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
+
+---
+
+## Sprint 38 — 完成
+
+**Sprint Goal**：解封 M4 GitHub Actions 整合主線（ADR-011 起草）、交付 Decision Knowledge Base 初版，並回應 Stakeholder 對 PO 審查積壓量可視化的需求。
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-05-11 ~ 2026-05-17
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-81：ADR-011 起草 — GitHub Actions 整合架構決策 | S | 1 | 完成 |
+| US-11：Decision Knowledge Base — ADR 查詢與決策影響追蹤 | M | 2 | 完成 |
+| US-82：PO 審查積壓量可視化 — backlog-management 新增待審 Issues 計數與老齡警示 | S | 1 | 完成 |
 
 **目標 Velocity**：4 points（3 Stories）
 **實際 Velocity**：4 points（3 Stories）

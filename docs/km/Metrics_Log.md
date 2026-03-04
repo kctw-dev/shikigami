@@ -53,6 +53,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 40 | 2026-05-25 | 5 points | 100% | 不規則 | Sprint Goal 達成（2/2 PASS）；US-13（L/3pt）+ TD-002（M/2pt）；S38=4→S39=3→S40=5，S38→S39 下降 -25%，S39→S40 上升 +67%，方向不一致→不規則；外部抽樣 1/1 CONFIRM（TC-1 L-size 全量），DISPUTE 率 0% |
 | Sprint 41 | 2026-03-04 | 5 points | 100% | 穩定 | Sprint Goal 達成（4/4 PASS）；US-84（S/1pt）+ US-85（S/1pt）+ US-86（M/2pt）+ US-87（S/1pt）；S39=3→S40=5→S41=5，S40→S41 持平 0%→穩定；外部抽樣 2/2 CONFIRM，DISPUTE 率 0% |
 | Sprint 42 | 2026-03-04 | 3 points | 100% | 不規則 | Sprint Goal 達成（2/2 PASS）；US-88（M/2pt）+ US-89（S/1pt）；S40=5→S41=5→S42=3，S41→S42 下降 -40%（超出 ±20%），先平後降方向不一致→不規則；外部抽樣 1/1 CONFIRM，DISPUTE 率 0%；§1.5 一致性審查首次執行 PASS |
+| Sprint 43 | 2026-03-04 | 3 points | 100% | 不規則 | Sprint Goal 達成（2/2 PASS）；US-90（S/1pt）+ US-91（M/2pt）；S41=5→S42=3→S43=3，S42→S43 持平 0%，但 S41→S42 下降 -40%（超出 ±20%），方向不一致→不規則；外部抽樣 1/1 CONFIRM，DISPUTE 率 0%；§1.5 一致性審查 PASS（修正 1 項 ROADMAP 版本號） |
 
 ---
 
@@ -74,12 +75,15 @@ Sprint Review 時由 DORA subagent 計算四項 DORA 指標並追加快照。
 | Sprint 40 | 2026-05-31 | 資料不足 | 資料不足 | N/A | 資料不足 | 資料不足 |
 | Sprint 41 | 2026-03-04 | 1.00 次/天 | N/A | N/A | 75.0% | 資料不足 |
 | Sprint 42 | 2026-03-04 | 0.29 次/天 | N/A | N/A | 0% | 資料不足 |
+| Sprint 43 | 2026-03-04 | 1.57 次/天 | N/A | 13.7 小時 | 50.0% | 不規則 |
 
 > **Sprint 40 說明**：首次 DORA baseline 建立。趨勢判定需至 Sprint 42 才有完整數據（需至少 3 個 Sprint 記錄）。MTTR 填「N/A」表示本 Sprint 無已關閉的 bug label Issue 記錄。
 >
 > **Sprint 41 說明**：部署頻率 1.00 次/天（7 次成功 / 7 天）。變更失敗率 75.0%（21 失敗 / 28 總執行）偏高，主因為 backlog-intake workflow OAuth 認證除錯期間的連續失敗（非生產環境問題）。MTTR 填「N/A」（無 bug label Issue）。趨勢判定需至 Sprint 42（累積 3 個 Sprint）。
 >
 > **Sprint 42 說明**：部署頻率 0.29 次/天（2 次成功 Structural Validation / 7 天）。變更失敗率 0%（0 失敗 / 2 執行）。Sprint 42 全部工作集中於單日完成，Backlog Intake workflow 均為 skipped（無 label 觸發事件）不計入。趨勢判定：Sprint 40 為 baseline 無實際數值，有效數據僅 Sprint 41 + 42 共 2 個 Sprint，不足 3 個→資料不足。
+>
+> **Sprint 43 說明**：部署頻率 1.57 次/天（11 次成功 Structural Validation / 7 天）。變更失敗率 50.0%（11 失敗 / 22 總執行），失敗集中在 Sprint 41-42 遺留的連續 CI 除錯期間。MTTR 13.7 小時（2 個 closed bug Issues 平均修復時間）。趨勢判定：S41→S42→S43 部署頻率（1.00→0.29→1.57）與失敗率（75%→0%→50%）方向均不一致→不規則。
 
 ---
 

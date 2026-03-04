@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-04（Sprint 41 US-84 — M4 里程碑正式收尾：US-14 完成標注、M4 結案評估記錄）
+> 最後更新：2026-03-04（Sprint 43 Review — US-90/US-91 完成標注）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.25.0**（Sprint 42）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.26.0**（Sprint 42）。
 
 | 版號 | 含義 |
 |------|------|
@@ -284,6 +284,8 @@ Sprint Review 時自動產出：
 | US-87 | GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | Sprint 41 ✅ |
 | US-88 | Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | Sprint 42 ✅ |
 | US-89 | story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | Sprint 42 ✅ |
+| US-90 | Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | Sprint 43 ✅ |
+| US-91 | M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | Sprint 43 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 

@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-04（Sprint 43 Planning 完成）
-**當前 Sprint**：Sprint 43（進行中）
+**最後更新**：2026-03-04（Sprint 43 Review 完成）
+**當前 Sprint**：Sprint 43（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 43](sprints/sprint_43.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 43 — 進行中
+## Sprint 43 — 完成
 
 **Sprint Goal**：為 Backlog 下一個發展方向奠定決策基礎：精化 #69（開發不中斷）為可執行 Story，並執行 M5 外部觸及效果最終診斷，確認對外最後一哩是否有可改善空白。
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-04 ~ 2026-03-10
 
 | Story | Size | Points | 狀態 |
@@ -18,6 +20,7 @@
 | US-91：M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | 完成 |
 
 **目標 Velocity**：3 points（2 Stories）
+**實際 Velocity**：3 points（2 Stories）
 
 ---
 
@@ -91,24 +94,6 @@
 
 ---
 
-## Sprint 38 — 完成
-
-**Sprint Goal**：解封 M4 GitHub Actions 整合主線（ADR-011 起草）、交付 Decision Knowledge Base 初版，並回應 Stakeholder 對 PO 審查積壓量可視化的需求。
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-05-11 ~ 2026-05-17
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-81：ADR-011 起草 — GitHub Actions 整合架構決策 | S | 1 | 完成 |
-| US-11：Decision Knowledge Base — ADR 查詢與決策影響追蹤 | M | 2 | 完成 |
-| US-82：PO 審查積壓量可視化 — backlog-management 新增待審 Issues 計數與老齡警示 | S | 1 | 完成 |
-
-**目標 Velocity**：4 points（3 Stories）
-**實際 Velocity**：4 points（3 Stories）
-
----
-
 ## 短衝記錄
 
 | 日期 | 標題 | Issue/Story | commit hash |
@@ -118,4 +103,4 @@
 
 ---
 
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–37）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–38）

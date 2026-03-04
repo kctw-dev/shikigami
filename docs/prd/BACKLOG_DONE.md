@@ -1881,3 +1881,14 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 |-------|------|--------|------------|
 | US-88（Issue #83）：Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | Sprint 42 |
 | US-89（Issue #84）：story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | S | 1 | Sprint 42 |
+
+---
+
+## Sprint 43（2026-03-04）
+
+**Sprint Goal**：為 Backlog 下一個發展方向奠定決策基礎：精化 #69 為可執行 Story，並執行 M5 外部觸及效果最終診斷
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-90（Issue #69）：Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | S | 1 | Sprint 43 |
+| US-91（Issue #85）：M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | Sprint 43 |
