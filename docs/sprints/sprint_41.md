@@ -11,10 +11,10 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-84 | #79 | M4 里程碑正式收尾 — ROADMAP US-14 完成標注 + M4 結案評估 | S | 1 | Phase 1（平行） | 待開發 |
-| US-85 | #80 | TD-002 技術債結案 + Schema 文案修正 | S | 1 | Phase 1（平行） | 待開發 |
-| US-86 | #81 | 交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | M | 2 | Phase 1（平行） | 待開發 |
-| US-87 | #82 | GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | S | 1 | Phase 1（平行） | 待開發 |
+| US-84 | #79 | M4 里程碑正式收尾 — ROADMAP US-14 完成標注 + M4 結案評估 | S | 1 | Phase 1（平行） | 完成 |
+| US-85 | #80 | TD-002 技術債結案 + Schema 文案修正 | S | 1 | Phase 1（平行） | 進行中 |
+| US-86 | #81 | 交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | M | 2 | Phase 1（平行） | 進行中 |
+| US-87 | #82 | GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | S | 1 | Phase 1（平行） | 進行中 |
 
 **Sprint 容量**：5 Points
 
@@ -66,9 +66,9 @@ As a Product Owner closing out M4, I want the ROADMAP updated to mark US-14 and 
 
 **Done 定義**
 
-- [ ] ROADMAP.md M4 區段 US-14 狀態標注為完成
-- [ ] M4 結案評估摘要寫入對應文件
-- [ ] Issue #79 關閉
+- [x] ROADMAP.md M4 區段 US-14 狀態標注為完成
+- [x] M4 結案評估摘要寫入對應文件
+- [x] Issue #79 關閉
 
 ---
 
