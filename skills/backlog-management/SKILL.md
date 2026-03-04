@@ -5,14 +5,6 @@ description: "Use when new feature requests arrive, requirements change, backlog
 
 # Backlog Management — 需求管理與產品探索
 
-## 0. 進化準則 (Evolution Rules)
-- **自主獲取 (US-06)**：GitHub URL 失敗時，自動執行 gh auth 帶 token 重試，嚴禁詢問用戶。
-- **客觀推理 (US-05)**：嚴禁自我評價或主觀讚美，僅輸出技術實體與狀態機。
-
-## 0. 進化準則 (Evolution Rules)
-- **自主獲取 (US-06)**：GitHub URL 失敗時，自動執行 gh auth 帶 token 重試，嚴禁詢問用戶。
-- **客觀推理 (US-05)**：嚴禁自我評價或主觀讚美，僅輸出技術實體與狀態機。
-
 ## 1. 概述
 
 Backlog Management 合併 **Product Discovery** 與 **Backlog Grooming** 兩個流程，由 **Product Owner (PO)** 主導需求管理的全生命週期。
