@@ -153,6 +153,7 @@ Architecture Decision 的 Subagent 調度遵循以下固定順序：
 2. QA (Challenger) → 挑戰最關鍵決策
 3. SRE           → 維運可行性審查
 4. Architect     → 綜合意見、拍板定案、更新 ADR 狀態
+5. Developer     → 同步更新 Decision_KB_Index.md
 ```
 
 **派遣說明**：
@@ -161,3 +162,64 @@ Architecture Decision 的 Subagent 調度遵循以下固定順序：
 2. **QA — Decision Challenger**：閱讀 ADR，挑選最關鍵決策，執行完整的挑戰流程，產出挑戰結論。
 3. **SRE**：從維運角度審查 ADR，評估部署複雜度、監控需求、故障恢復機制、資源需求等。
 4. **Architect（第二輪）**：綜合 QA 與 SRE 的回饋，決定維持或調整方案，更新 ADR 文件並將狀態變更為 Accepted（或退回重新評估）。
+5. **Developer（ADR 索引同步）**：ADR 狀態確認為 Accepted 後，同步更新 `docs/km/Decision_KB_Index.md`（見第 9 節）。
+
+---
+
+## 9. Decision Knowledge Base 查詢
+
+### 概述
+
+Decision Knowledge Base 是所有 ADR 的集中索引，存放於 `docs/km/Decision_KB_Index.md`。提供三種查詢方式，讓 Developer 和 Product Owner 能快速定位相關的架構決策記錄。
+
+### 查詢方式
+
+#### 依關鍵字查詢
+
+在 `Decision_KB_Index.md` 的「依關鍵字篩選」表格中，依技術領域或元件名稱尋找相關 ADR。
+
+常用查詢範例：
+
+```
+查詢「Backlog」  → 找到 ADR-001、ADR-009、ADR-010
+查詢「注入防護」 → 找到 ADR-006
+查詢「排程」     → 找到 ADR-005
+查詢「Subagent」 → 找到 ADR-007
+```
+
+#### 依狀態查詢
+
+在 `Decision_KB_Index.md` 的「依狀態篩選」表格中，篩選特定狀態的 ADR：
+
+| 狀態 | 意義 | 查詢用途 |
+|------|------|---------|
+| **Accepted** | 正式採用，現行有效的架構決策 | 實作前確認設計依據 |
+| **Proposed** | 起草中，尚未完成審查流程 | 了解進行中的決策討論 |
+| **Deprecated** | 已被後續決策取代 | 追溯歷史決策演進脈絡 |
+
+#### 依日期查詢
+
+在 `Decision_KB_Index.md` 的「依日期篩選」表格中，找出特定時間段產出的 ADR。適用於回顧某個 Sprint 週期的架構決策。
+
+### 同步更新 Decision_KB_Index.md（ADR 建立流程步驟）
+
+當 ADR 狀態變更為 **Accepted** 後，必須執行以下更新步驟：
+
+```
+1. 讀取 Decision_KB_Index.md 當前版本（防止覆蓋衝突）
+2. 在「ADR 彙整表」新增一行：
+   - ADR 編號與檔案連結
+   - 標題
+   - 狀態（Accepted）
+   - 日期
+   - 關聯 Story / Issue
+3. 在「決策影響追蹤」區段新增條目：
+   - 核心決策摘要（一句話）
+   - 至少一筆影響路徑記錄（Skills 或文件路徑）
+4. 更新「依關鍵字篩選」表格（新增相關關鍵字）
+5. 更新「依狀態篩選」表格（將 ADR 加入 Accepted 列表）
+6. 更新「依日期篩選」表格
+7. 更新文件頂部「最後更新」日期
+```
+
+**注意**：本步驟屬於 ADR 建立流程的最終步驟，確保 Decision Knowledge Base 與 ADR 狀態保持同步。
