@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-04（Sprint 43 Review 完成）
-**當前 Sprint**：Sprint 43（完成）
+**最後更新**：2026-03-04（Sprint 44 Planning 完成）
+**當前 Sprint**：Sprint 44（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 43](sprints/sprint_43.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 44](sprints/sprint_44.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 44 — 進行中
+
+**Sprint Goal**：建立 API Key Rotation 架構基礎 — 起草 ADR-012，確認 ToS 合規性與 Key pool 設計方案，為 Sprint 45 US-A 實作提供可信的架構前提。
+**期間**：2026-03-04 ~ 2026-03-10
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-92：ADR-012 起草 — Claude API Key Rotation 認證輪流架構決策 | S | 1 | 待開始 |
+
+**目標 Velocity**：1 point（1 Story）
 
 ---
 
