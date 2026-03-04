@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-05-18（Sprint 34 歸檔）
-**歸檔範圍**：Sprint 1–34（共 34 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔
+**最後更新**：2026-05-25（Sprint 35 歸檔）
+**歸檔範圍**：Sprint 1–35（共 35 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 35–39）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 36–40）
 
 ---
 
@@ -574,3 +574,23 @@
 
 **目標 Velocity**：2 points（2 Stories）
 **實際 Velocity**：2 points（2 Stories）
+
+---
+
+## Sprint 35 — 完成
+
+**Sprint Goal**：ADR-010 原子性實作交付 — Backlog Source of Truth 從 PRODUCT_BACKLOG.md 遷移至 GitHub Issues，完成三個 SKILL.md 改寫 + DEPRECATED 標頭 + Label 基礎設施
+**結果**：Goal 達成（5/5 Stories PASS）。Velocity 8 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-04-20 ~ 2026-04-26
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-69：ADR-010 Label 基礎設施 — 建立所有 ADR-010 定義 labels 並更新 onboarding Pre-flight | S | 1 | 完成 |
+| US-70：`backlog-intake` SKILL.md 重大改寫 — 移除 PRODUCT_BACKLOG.md 寫入，改為 Issue label + body template 兩層架構 | M | 2 | 完成 |
+| US-71：`sprint-planning` SKILL.md 修改 — PO Story 選取來源改為 `gh issue list` + 即時 MoSCoW/RICE 排序計算 | M | 2 | 完成 |
+| US-72：`backlog-management` SKILL.md 修改 — Grooming 流程改為操作 GitHub Issues，加入 Pre-flight 錯誤恢復掃描 | M | 2 | 完成 |
+| US-73：PRODUCT_BACKLOG.md DEPRECATED 標頭加入 + ADR-009 格式契約決策域「Superseded by ADR-010」標注 | S | 1 | 完成 |
+
+**目標 Velocity**：8 points（5 Stories）
+**實際 Velocity**：8 points（5 Stories）

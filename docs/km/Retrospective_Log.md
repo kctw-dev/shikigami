@@ -1,6 +1,27 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–34）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–35）
+
+---
+
+## Sprint 40 — 2026-05-25
+
+### Good
+- 連續 40 個 Sprint 100% 完成率（2/2 Stories PASS），Sprint Goal 達成：M4 度量層 US-13 DORA Metrics 交付 + TD-002 技術債清償，工程效能可量化、PO subagent 輸出結構可驗證
+- Phase 1 全平行執行（US-13 + TD-002 檔案範圍零重疊），Architect 分群策略連續十二個 Sprint 有效（Sprint 28–40）
+- 外部抽樣審查 US-13（L-size，TC-1 全量觸發）CONFIRM，4 個 AC 全數通過，ADR-006/ADR-011 對齊完整驗證，自審品質無偏差
+- US-13 為首個 DORA Metrics baseline 建立，Sprint Review 自動化度量能力從 Velocity/完成率擴展至工程效能四項指標（部署頻率、變更前置時間、MTTR、變更失敗率）
+- TD-002 技術債清償：JSON Schema 驗證層三層 fallback 設計（ajv > check-jsonschema > python3），graceful degradation 無阻斷，ADR-006 Addendum 決策記錄完整
+
+### Problem
+- TD-002 Schema 中 `reviewed_by` 的 `const` 值為 `"QA"`，但 description 寫為「固定為 'PO subagent'」，語意不一致。PO Demo 與 Stakeholder 均觀察到此文案錯誤。非功能缺陷（Schema 可用性不受影響），但文件一致性存在缺口
+- 文件一致性問題連續第三個 Sprint 出現（Sprint 38：Decision_KB_Index 遺漏 ADR-011；Sprint 39：ADR-006 範圍未更新；Sprint 40：Schema description 不一致），根因收斂於「交付物內部文案一致性審查不足」
+
+### Action Items
+
+本 Sprint 無新增 Action Items。
+
+> Problem 為輕微文案錯誤（const 值與 description 不一致），可在下次涉及 `schemas/po-subagent-output.schema.json` 的 Story 中順帶修正，無需獨立追蹤。
 
 ---
 
@@ -81,20 +102,5 @@
 | 1 | 改善 sprint-N-replied 機制：改用單一 `last-replied-sprint` label 取代每 Sprint 新增 label，並在 sprint-execution SKILL.md 更新對應邏輯 | Developer | 下 Sprint Issue 快掃時確認新機制運作，無新增 sprint-N-replied labels | #66 |
 
 ---
-
-## Sprint 35 — 2026-04-20
-
-### Good
-- 連續 35 個 Sprint 100% 完成率，ADR-010 原子性實作交付完整達成（5/5 Stories PASS），Backlog Source of Truth 從 PRODUCT_BACKLOG.md 成功遷移至 GitHub Issues
-- Phase 2 三路平行派遣（US-70 + US-71 + US-72 各修改不同 SKILL.md）零衝突完成，Architect 分群策略連續八個 Sprint 有效（Sprint 28–35），8pt 容量以 3-way 平行壓縮為有效 ~4pt wall-clock
-- 原子性約束執行嚴謹：Phase 1（Label 基礎設施）→ Phase 2（三個 SKILL.md 改寫）→ Phase 3（DEPRECATED 標頭）的序列完全按設計執行，US-73 commit 時序位於 US-70/71/72 之後
-- Sprint 35 為歷次最高 Velocity（8 points），展示框架成熟後在架構遷移類任務的高效執行能力
-
-### Problem
-- 無顯著問題（Sprint 35 為架構遷移型 Sprint，Story 結構清晰、AC 明確，ADR-010 設計規範完善，交付順暢）
-
-### Action Items
-
-本 Sprint 無新增 Action Items。
 
 ---

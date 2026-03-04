@@ -1,6 +1,6 @@
 # Sprint 40
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-05-25 ~ 2026-05-31
 **Sprint Goal**：完成 M4 度量層 — US-13 DORA Metrics 交付，並清償 TD-002 技術債，讓工程效能可量化、PO subagent 輸出結構可驗證。
 **總計**：2 Stories / 5 Points

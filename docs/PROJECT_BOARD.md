@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-05-25（Sprint 40 Planning 完成）
-**當前 Sprint**：Sprint 40（進行中）
+**最後更新**：2026-05-25（Sprint 40 Review 完成）
+**當前 Sprint**：Sprint 40（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 40](sprints/sprint_40.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 40 — 進行中
+## Sprint 40 — 完成
 
 **Sprint Goal**：完成 M4 度量層 — US-13 DORA Metrics 交付，並清償 TD-002 技術債，讓工程效能可量化、PO subagent 輸出結構可驗證。
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 5 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-05-25 ~ 2026-05-31
 
 | Story | Size | Points | 狀態 |
@@ -18,6 +20,7 @@
 | TD-002：PO subagent 輸出格式 JSON Schema 正式驗證 | M | 2 | 完成 |
 
 **目標 Velocity**：5 points（2 Stories）
+**實際 Velocity**：5 points（2 Stories）
 
 ---
 
@@ -92,26 +95,6 @@
 
 ---
 
-## Sprint 35 — 完成
-
-**Sprint Goal**：ADR-010 原子性實作交付 — Backlog Source of Truth 從 PRODUCT_BACKLOG.md 遷移至 GitHub Issues，完成三個 SKILL.md 改寫 + DEPRECATED 標頭 + Label 基礎設施
-**結果**：Goal 達成（5/5 Stories PASS）。Velocity 8 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-04-20 ~ 2026-04-26
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-69：ADR-010 Label 基礎設施 — 建立所有 ADR-010 定義 labels 並更新 onboarding Pre-flight | S | 1 | 完成 |
-| US-70：`backlog-intake` SKILL.md 重大改寫 — 移除 PRODUCT_BACKLOG.md 寫入，改為 Issue label + body template 兩層架構 | M | 2 | 完成 |
-| US-71：`sprint-planning` SKILL.md 修改 — PO Story 選取來源改為 `gh issue list` + 即時 MoSCoW/RICE 排序計算 | M | 2 | 完成 |
-| US-72：`backlog-management` SKILL.md 修改 — Grooming 流程改為操作 GitHub Issues，加入 Pre-flight 錯誤恢復掃描 | M | 2 | 完成 |
-| US-73：PRODUCT_BACKLOG.md DEPRECATED 標頭加入 + ADR-009 格式契約決策域「Superseded by ADR-010」標注 | S | 1 | 完成 |
-
-**目標 Velocity**：8 points（5 Stories）
-**實際 Velocity**：8 points（5 Stories）
-
----
-
 ## 短衝記錄
 
 | 日期 | 標題 | Issue/Story | commit hash |
@@ -121,4 +104,4 @@
 
 ---
 
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–34）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–35）
