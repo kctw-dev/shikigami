@@ -1,7 +1,8 @@
 # ADR-011：GitHub Actions 整合架構決策
 
-**狀態**：Proposed
+**狀態**：Accepted
 **日期**：2026-05-11
+**裁決日期**：2026-05-18（Sprint 39 — US-83）
 **決策者**：Architect
 **關聯 Issue**：#46（feat: 自動化排程框架）、#76（ADR-011 起草）
 **關聯 Story**：US-81（ADR-011 起草 — Sprint 38）
@@ -224,11 +225,13 @@ gh run list --workflow=ci.yml --limit 5
 
 ## 決策
 
-**（Proposed）本 ADR 當前狀態為起草中（Proposed），尚待 Architect 正式裁決。**
+**（Accepted）正式採用 Option A：Push-Based 事件觸發（Webhook via GitHub Actions）。**
 
-**初步建議：採用 Option A（Push-Based 事件觸發）。**
+**裁決依據**：Architect 於 2026-05-18（Sprint 39，US-83）完成正式審核，確認 Option A 為 GitHub Actions 整合的核心架構模式。此決策自本日起生效，US-12 及後續相關 Stories 均應在此決策框架下實作。
 
-初步建議理由：
+**選定方案摘要**：以 GitHub Actions workflow 作為主要觸發器，監聽 `push`、`pull_request`、`workflow_run` 等事件；CI/CD 管線完成後自動執行 Shikigami QA Skills；透過 `gh issue comment` 將結果回寫至對應 GitHub Issue；認證策略採用 GITHUB_TOKEN 自動注入，符合最小權限原則與零硬編碼 Secrets 約束。
+
+**正式裁決理由**：
 
 ### 1. 符合 Issue #46 原始設計意圖
 
@@ -273,14 +276,14 @@ Option A 建立了清晰的「GitHub 事件 → GitHub Actions → Shikigami Ski
 
 ## 開放問題（待 US-12 實作階段解決）
 
-本 ADR 起草階段識別以下開放問題，留待 US-12 實作前正式解決：
+本 ADR 起草階段識別以下開放問題，已於裁決時（Sprint 39，US-83）完成初步處置：
 
-| # | 問題 | 優先級 |
-|---|------|--------|
-| OQ-1 | GitHub Actions runner 環境下 Claude Code 的安裝與認證方式（是否支援 `ANTHROPIC_API_KEY` secret 注入？） | 高 |
-| OQ-2 | Shikigami QA Skill 在 CI 環境下的執行模式（完整 Skill 執行 vs. 輕量化 CI-specific 子集） | 高 |
-| OQ-3 | CI 狀態回寫至 GitHub Issues 的格式規範（comment 格式、標籤更新範圍） | 中 |
-| OQ-4 | 多 PR 並行情境下的 CI 狀態追蹤（同時有多個 PR 在 CI 中，如何關聯至正確 Issue） | 中 |
+| # | 問題 | 優先級 | 處置說明 |
+|---|------|--------|---------|
+| OQ-1 | GitHub Actions runner 環境下 Claude Code 的安裝與認證方式（是否支援 `ANTHROPIC_API_KEY` secret 注入？） | 高 | **解決方案**：在 GitHub Actions workflow YAML 中透過 `secrets.ANTHROPIC_API_KEY` 注入環境變數，並於 US-12 實作前執行 spike 驗證 runner 環境下 `claude` CLI 可安裝性（`npm install -g @anthropic-ai/claude-code`）。若 runner 不支援，改用 `anthropic` Python SDK 作為輕量替代方案。 |
+| OQ-2 | Shikigami QA Skill 在 CI 環境下的執行模式（完整 Skill 執行 vs. 輕量化 CI-specific 子集） | 高 | **解決方案**：US-12 MVP 採用輕量化 CI-specific 子集模式，僅執行 CI 狀態感知與 Issue 回寫兩個步驟（非完整 sprint-execution 流程），以降低 CI 執行時間並避免 runner 環境配置複雜度。完整 Skill 執行模式留待 US-13+ 評估。 |
+| OQ-3 | CI 狀態回寫至 GitHub Issues 的格式規範（comment 格式、標籤更新範圍） | 中 | **初步規範**：comment 格式採用 Markdown 表格，包含 workflow 名稱、執行狀態（PASS/FAIL）、run URL 三欄；標籤更新範圍限制為對應 Story Issue（透過 PR body 或 commit message 中的 `Closes #N` 語法關聯）。詳細格式規範由 US-12 AC3 定義。 |
+| OQ-4 | 多 PR 並行情境下的 CI 狀態追蹤（同時有多個 PR 在 CI 中，如何關聯至正確 Issue） | 中 | **初步策略**：利用 GitHub Actions 內建的 `github.event.pull_request.number` 或 `github.event.number` context 變數精確關聯觸發事件的 PR；透過 PR body 中的 `Closes #N` 或 `Fixes #N` 語法解析對應 Issue。若無法自動關聯，回寫至 PR 本身（`gh pr comment`）而非 Issue，避免錯誤關聯。US-12 實作時需驗證此關聯邏輯的可靠性。 |
 
 ---
 

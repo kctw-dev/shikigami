@@ -140,8 +140,8 @@ Sprint Review 時自動產出：
 
 | Story | 功能 | Sprint |
 |---|---|---|
-| ADR-011 | GitHub Actions 整合架構決策 — **ADR 起草完成**（Sprint 38，Issue #76） | Sprint 38 ✅ |
-| US-12 | GitHub Actions 整合 — CI/CD 狀態感知 | TBD（ADR-011 Accepted 後） |
+| ADR-011 | GitHub Actions 整合架構決策 — **ADR Accepted ✅**（Option A: Push-Based 事件觸發，Sprint 39 正式裁決） | Sprint 39 ✅ |
+| US-12 | GitHub Actions 整合 — CI/CD 狀態感知 | Sprint 39（ADR-011 Accepted） |
 | US-13 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率 | TBD |
 | US-14 | Notification Templates — PR/Deploy/Review 事件通知模板 | TBD |
 
