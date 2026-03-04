@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-05-04（Sprint 37 Review 完成）
-**當前 Sprint**：Sprint 37（完成）
+**最後更新**：2026-05-11（Sprint 38 Planning 完成）
+**當前 Sprint**：Sprint 38（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 37](sprints/sprint_37.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 38](sprints/sprint_38.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 38 — 進行中
+
+**Sprint Goal**：解封 M4 GitHub Actions 整合主線（ADR-011 起草）、交付 Decision Knowledge Base 初版，並回應 Stakeholder 對 PO 審查積壓量可視化的需求。
+**期間**：2026-05-11 ~ 2026-05-17
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-81：ADR-011 起草 — GitHub Actions 整合架構決策 | S | 1 | 進行中 |
+| US-11：Decision Knowledge Base — ADR 查詢與決策影響追蹤 | M | 2 | 進行中 |
+| US-82：PO 審查積壓量可視化 — backlog-management 新增待審 Issues 計數與老齡警示 | S | 1 | 進行中 |
+
+**目標 Velocity**：4 points（3 Stories）
 
 ---
 
