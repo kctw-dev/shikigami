@@ -11,7 +11,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-83 | #78 | ADR-011 正式裁決 — GitHub Actions 整合架構決策 Proposed → Accepted | S | 1 | Phase 1（先行） | 待開始 |
+| US-83 | #78 | ADR-011 正式裁決 — GitHub Actions 整合架構決策 Proposed → Accepted | S | 1 | Phase 1（先行） | 完成 |
 | US-12 | #61 | GitHub Actions 整合 — CI/CD 狀態感知與 Sprint Health Check 整合 | M | 2 | Phase 2（依賴 US-83） | 待開始 |
 
 **Sprint 容量**：3 Points
