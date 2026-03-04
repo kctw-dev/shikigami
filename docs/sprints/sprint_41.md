@@ -3,7 +3,7 @@
 **狀態**：進行中
 **期間**：2026-03-04 ~ 2026-03-10
 **Sprint Goal**：M4 收尾與文件一致性強化 — 更新 ROADMAP M4 完成狀態、TD-002 技術債結案、建立交付物文案一致性審查機制回應 Sprint 38-40 連續 Retro Problem。
-**總計**：3 Stories / 4 Points
+**總計**：4 Stories / 5 Points
 
 ---
 
@@ -14,8 +14,9 @@
 | US-84 | #79 | M4 里程碑正式收尾 — ROADMAP US-14 完成標注 + M4 結案評估 | S | 1 | Phase 1（平行） | 待開發 |
 | US-85 | #80 | TD-002 技術債結案 + Schema 文案修正 | S | 1 | Phase 1（平行） | 待開發 |
 | US-86 | #81 | 交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | M | 2 | Phase 1（平行） | 待開發 |
+| US-87 | #82 | GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | S | 1 | Phase 1（平行） | 待開發 |
 
-**Sprint 容量**：4 Points
+**Sprint 容量**：5 Points
 
 ---
 
@@ -23,7 +24,7 @@
 
 | Phase | Stories | 說明 |
 |-------|---------|------|
-| Phase 1（全平行） | US-84、US-85、US-86 | 修改檔案不重疊：US-84 修改 docs/prd/ROADMAP.md；US-85 修改 docs/Tech_Debt_Registry.md + schemas/；US-86 修改 skills/ + docs/ |
+| Phase 1（全平行） | US-84、US-85、US-86、US-87 | 修改檔案不重疊：US-84 修改 docs/prd/ROADMAP.md；US-85 修改 docs/Tech_Debt_Registry.md + schemas/；US-86 修改 skills/；US-87 修改 .github/workflows/ |
 
 **平行可行性判定**：APPROVED — 三個 Story 的檔案修改路徑無交集，可同時執行。
 
@@ -150,12 +151,54 @@ As a Product Owner who observed documentation inconsistencies flagged in Sprint 
 
 ---
 
+### US-87：GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫
+
+**來源**：backlog-intake 自動化 — Issue #82
+**Size**：S / 1 Point
+**Owner**：Developer
+**QA doc-only 判定**：No（新增 .github/workflows/ YAML）
+**ADR 參考**：ADR-011（GitHub Actions 整合架構）
+
+**User Story**
+
+身為開發團隊成員，我希望在 Issue 被加上 backlog-intake label 的當下自動觸發需求入庫流程，以便消除手動執行步驟、縮短需求從提出到進入 Backlog 的等待時間。
+
+**Acceptance Criteria**
+
+| # | 類型 | 條件 | 通過標準 |
+|---|------|------|----------|
+| AC1 | [動態] | Workflow 觸發條件正確 | 當 Issue 被加上 `backlog-intake` label 時自動觸發，不因其他 label 誤觸 |
+| AC2 | [動態] | AI 填補 Story template | 呼叫 `anthropics/claude-code-action@v1`，成功填寫 Story template 回 Issue body |
+| AC3 | [靜態] | Labels 自動套用 | 執行完成後 Issue 自動套用 `auto-triaged`、`status: backlog`、`type: backlog-item`、`priority: <MoSCoW>`、`backlog-intake-done` |
+| AC4 | [靜態] | 冪等性保護 | 若 Issue 已有 `backlog-intake-done` label，Workflow 不觸發 |
+| AC5 | [靜態] | Issue #82 狀態回寫 | Issue #82 關閉並標注 status: done |
+
+**RICE 評分**
+
+| 因子 | 分數 | 說明 |
+|------|------|------|
+| Reach | 10 | 影響所有提出需求的貢獻者 |
+| Impact | 2 | 縮短需求入庫等待時間 |
+| Confidence | 0.8 | claude-code-action 已有前例，ADR-011 已定義架構 |
+| Effort | 1 | 建立一個 workflow YAML |
+| **RICE Score** | **16** | R×I×C/E |
+
+**Done 定義**
+
+- [ ] `.github/workflows/backlog-intake.yml` 建立並推送至 main
+- [ ] Workflow YAML 語法正確（通過 GitHub Actions 語法驗證）
+- [ ] ADR-011 架構對齊（Push-Based 事件觸發）
+- [ ] Issue #82 關閉
+
+---
+
 ## ADR 觸發清單
 
 | Story | ADR | 觸發原因 | 動作 |
 |-------|-----|----------|------|
 | US-85 | ADR-006 | TD-002 結案涉及 JSON Schema 驗證層文案確認 | 確認 ADR-006 Addendum 與 Schema 文案一致 |
 | US-86 | ADR-003 | 修改 skills/sprint-review SKILL.md（新增一致性審查子節） | 遵循 ADR-003 SKILL.md 修改規範 |
+| US-87 | ADR-011 | 新增 GitHub Actions workflow（backlog-intake 事件觸發） | 遵循 ADR-011 Push-Based 事件觸發架構 |
 
 ---
 
@@ -170,7 +213,7 @@ As a Product Owner who observed documentation inconsistencies flagged in Sprint 
 
 **Sprint Planning 決策記錄**
 
-- Sprint 41 選入 3 Stories（US-84 + US-85 + US-86），共 4 Points
+- Sprint 41 選入 4 Stories（US-84 + US-85 + US-86 + US-87），共 5 Points
 - 平行分群：Phase 1 全平行（檔案範圍無重疊）
 - US-84 doc-only 判定：Yes（僅修改 docs/prd/ROADMAP.md）
 - US-85 doc-only 判定：No（涉及 schemas/ 文案修正，ADR-006 適用）

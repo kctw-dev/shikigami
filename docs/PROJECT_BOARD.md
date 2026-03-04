@@ -17,8 +17,9 @@
 | US-84：M4 里程碑正式收尾 — ROADMAP US-14 完成標注 + M4 結案評估 | S | 1 | 待開發 |
 | US-85：TD-002 技術債結案 + Schema 文案修正 | S | 1 | 待開發 |
 | US-86：交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | M | 2 | 待開發 |
+| US-87：GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | S | 1 | 待開發 |
 
-**目標 Velocity**：4 points（3 Stories）
+**目標 Velocity**：5 points（4 Stories）
 
 ---
 
