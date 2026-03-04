@@ -21,8 +21,8 @@
     },
     "reviewed_by": {
       "type": "string",
-      "description": "起草者標記，固定為 'PO subagent'",
-      "const": "QA"
+      "description": "起草者標記，固定為 'PO subagent'（表示此輸出由 PO subagent 產生，待 QA subagent 審核）",
+      "const": "PO subagent"
     },
     "issue_number": {
       "type": "integer",

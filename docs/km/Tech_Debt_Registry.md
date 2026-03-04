@@ -50,7 +50,7 @@ Grooming 完成後，依照以下規則計算本次 Active 條目趨勢：
 | ID | 描述 | 引入 Story | 解決 Story | 嚴重度 | MoSCoW | 建議解法 | RICE | 狀態 |
 |----|------|------------|------------|--------|--------|----------|------|------|
 | TD-001 | [EXAMPLE] 使用者認證模組缺乏單元測試覆蓋，目前依賴端對端測試，重構風險高 | US-03 | N/A | H | Won't | EXAMPLE 條目，非真實技術債 — Shikigami 無實際使用者認證模組 | 7.5 | Accepted |
-| TD-002 | PO subagent 輸出格式缺乏正式 JSON Schema 驗證。ADR-006 採用 XML 隔離標記 + 角色限制宣告（選項 D）作為主要防護，但架構層面的輸出格式管控（JSON schema 結構化解析）尚未實作，注入防護仍依賴 LLM 指令遵循能力。詳見 ADR-006 Decision Challenge 段落。 | US-37 / ADR-006（Sprint 22） | TBD | L | Won't | v1.0.0 前現有 ADR-006 防護（XML 隔離標記 + 角色限制宣告）已足夠；JSON Schema 正式驗證屬架構層級變更，須透過 ADR 流程，v1.0.0 後再評估 | TBD | Active |
+| TD-002 | PO subagent 輸出格式缺乏正式 JSON Schema 驗證。ADR-006 採用 XML 隔離標記 + 角色限制宣告（選項 D）作為主要防護，但架構層面的輸出格式管控（JSON schema 結構化解析）尚未實作，注入防護仍依賴 LLM 指令遵循能力。詳見 ADR-006 Decision Challenge 段落。 | US-37 / ADR-006（Sprint 22） | US-85（Sprint 41） | L | Won't | Sprint 40 已由 TD-002 Story 完成 JSON Schema 正式驗證實作（schemas/po-subagent-output.schema.json + tests/validate-po-output.sh）；Sprint 41 US-85 完成 schema 文案修正（reviewed_by const 值一致性）與本條目結案。 | TBD | 已結案 |
 
 ---
 
@@ -168,6 +168,36 @@ ADR-010 的受影響 SKILL.md 範疇明確限定為三個（backlog-intake、spr
 #### 逾期未解決警示（Active 超過 3 個 Sprint 未排入解決 Story）
 
 - **TD-002**：已 Active 約 14 個 Sprint（自 Sprint 22 引入，Grooming #1 在 Sprint 25 前裁定 Won't）。裁定理由有效，維持 Won't，不需強制排入解決 Story；下次重評時間點建議定於 v1.0.0 之後的首次 Grooming。
+
+---
+
+### Grooming #3 — 2026-03-04（Sprint 41）
+
+**Active 條目**：0 筆
+**Resolved 條目**：0 筆
+**Accepted 條目**：1 筆（TD-001，維持不變）
+**已結案條目**：1 筆（本次新增 1 筆結案：TD-002）
+**本次變化量**：-1（相對 Grooming #2，Active 總數由 1 → 0）
+**趨勢判定**：減少中
+
+#### Active 條目清單
+
+（無 — 所有技術債均已結案或裁定）
+
+#### 本次解決條目
+
+（無新增 Resolved 條目）
+
+#### 本次結案條目（Active → 已結案）
+
+- **TD-002**：PO subagent 輸出格式缺乏正式 JSON Schema 驗證。
+  - **結案依據**：Sprint 40 已由 TD-002 Story 完成 JSON Schema 正式驗證實作（`schemas/po-subagent-output.schema.json` + `tests/validate-po-output.sh`），ADR-006 Addendum 正式記錄此架構決策。Sprint 41 US-85 完成 schema 文案修正（`reviewed_by` const 值由 `"QA"` 修正為 `"PO subagent"`，與欄位說明一致）。
+  - **結案 Sprint**：Sprint 41
+  - **結案 Story**：US-85
+
+#### 逾期未解決警示（Active 超過 3 個 Sprint 未排入解決 Story）
+
+（無 — Active 條目清空）
 
 ---
 
