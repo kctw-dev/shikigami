@@ -14,8 +14,8 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-90：Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | S | 1 | 待開始 |
-| US-91：M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | 待開始 |
+| US-90：Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | S | 1 | 完成 |
+| US-91：M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | 進行中 |
 
 **目標 Velocity**：3 points（2 Stories）
 

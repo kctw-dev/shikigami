@@ -11,8 +11,8 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-90 | #69 | Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | S | 1 | Phase 1（平行） | 待開始 |
-| US-91 | #85 | M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | Phase 1（平行） | 待開始 |
+| US-90 | #69 | Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | S | 1 | Phase 1（平行） | 進行中 |
+| US-91 | #85 | M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | Phase 1（平行） | 進行中 |
 
 **Sprint 容量**：3 Points
 
@@ -65,11 +65,11 @@ As a PO, I want to decompose Issue #69 into actionable Stories, so that the team
 
 **Done 定義**
 
-- [ ] 拆解 #69 為至少 2 個獨立子主題
-- [ ] 每個子主題 RICE 初評完成
-- [ ] ADR 前置需求判定完成
-- [ ] 至少 1 個精化 User Story draft 輸出
-- [ ] Issue #69 body 更新或新 Issue 建立
+- [x] 拆解 #69 為至少 2 個獨立子主題
+- [x] 每個子主題 RICE 初評完成
+- [x] ADR 前置需求判定完成
+- [x] 至少 1 個精化 User Story draft 輸出
+- [x] Issue #69 body 更新或新 Issue 建立
 
 ---
 
