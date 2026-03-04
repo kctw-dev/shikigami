@@ -4,6 +4,27 @@
 
 ---
 
+## Sprint 41 — 2026-03-04
+
+### Good
+- 連續 41 個 Sprint 100% 完成率（4/4 Stories PASS），Sprint Goal 達成：M4 正式收尾、TD-002 結案、交付物文案一致性審查機制建立、backlog-intake GitHub Action 自動觸發
+- Phase 1 四路全平行零衝突完成（US-84/85/86/87 檔案範圍零重疊），Architect 分群策略連續十三個 Sprint 有效（Sprint 28–41）
+- 外部抽樣審查 2/2 CONFIRM（US-85 + US-86），DISPUTE 率 0%，自審品質無偏差
+- US-86 正式建立「交付物文案一致性審查」機制（sprint-review SKILL.md §1.5），直接回應 Sprint 38-40 連續三個 Sprint 的 Retro Problem，根因得到系統性解決
+- M4「外部整合」里程碑正式收尾結案（US-84），ROADMAP 記錄完整，所有 M4 交付項目（ADR-011、US-12、US-13、US-14）狀態標注到位
+
+### Problem
+- US-85 與 US-87 的 Done 定義 checkbox 未由 Developer subagent 自動勾選（`- [ ]` 未更新為 `- [x]`），PO Demo 與 Stakeholder 均觀察到此格式性遺漏。非功能缺陷但反映 Developer subagent 完成 Story 後未執行 Done 定義 checkbox 更新步驟
+- gemini-extension.json 版本（0.20.2）與專案版本（v0.24.0）不一致，導致 CI Structural Validation workflow 失敗。US-87 subagent 在實作過程中修正（更新至 0.24.0），但暴露版本同步盲區
+
+### Action Items
+
+本 Sprint 無新增 Action Items。
+
+> Problem 1（Done checkbox 遺漏）已由 Sprint Review 補正（手動勾選），屬 Developer subagent 行為改進項，可在下次 story-lifecycle-prompt.md 維護時考慮新增「Done 定義 checkbox 自動勾選」提醒，無需獨立追蹤。Problem 2（版本不一致）已在 Sprint 執行中修正（commit 8445b84），且 US-86 新建的一致性審查機制（§1.5 審查類別 4：版本與里程碑一致性）可在未來 Sprint Review 前攔截同類問題。
+
+---
+
 ## Sprint 40 — 2026-05-25
 
 ### Good

@@ -275,6 +275,13 @@ Sprint Review 時自動產出：
 | US-80 | backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段與 label 語意修正 | Sprint 37 ✅ |
 | US-11 | Decision Knowledge Base — ADR 查詢與決策影響追蹤（Decision_KB_Index.md + architecture-decision SKILL.md 查詢區段） | Sprint 38 ✅ |
 | US-82 | PO 審查積壓量可視化 — backlog-management 新增待審 Issues 計數與老齡警示 | Sprint 38 ✅ |
+| US-83 | ADR-011 正式裁決 — GitHub Actions 整合架構決策 Proposed → Accepted | Sprint 39 ✅ |
+| US-12 | GitHub Actions 整合 — CI/CD 狀態感知與 Sprint Health Check 整合 | Sprint 39 ✅ |
+| US-13 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率追蹤 | Sprint 40 ✅ |
+| US-84 | M4 里程碑正式收尾 — ROADMAP US-14 完成標注 + M4 結案評估 | Sprint 41 ✅ |
+| US-85 | TD-002 技術債結案 + Schema 文案修正 | Sprint 41 ✅ |
+| US-86 | 交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | Sprint 41 ✅ |
+| US-87 | GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | Sprint 41 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 

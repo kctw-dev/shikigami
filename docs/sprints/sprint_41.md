@@ -104,9 +104,9 @@ As a Product Owner maintaining the Tech Debt Registry, I want TD-002 formally cl
 
 **Done 定義**
 
-- [ ] Tech_Debt_Registry.md TD-002 狀態更新為已結案（Sprint 41）
-- [ ] schemas/po-subagent-output.schema.json 文案修正完成
-- [ ] Issue #80 關閉
+- [x] Tech_Debt_Registry.md TD-002 狀態更新為已結案（Sprint 41）
+- [x] schemas/po-subagent-output.schema.json 文案修正完成
+- [x] Issue #80 關閉
 
 ---
 
@@ -185,10 +185,10 @@ As a Product Owner who observed documentation inconsistencies flagged in Sprint 
 
 **Done 定義**
 
-- [ ] `.github/workflows/backlog-intake.yml` 建立並推送至 main
-- [ ] Workflow YAML 語法正確（通過 GitHub Actions 語法驗證）
-- [ ] ADR-011 架構對齊（Push-Based 事件觸發）
-- [ ] Issue #82 關閉
+- [x] `.github/workflows/backlog-intake.yml` 建立並推送至 main
+- [x] Workflow YAML 語法正確（通過 GitHub Actions 語法驗證）
+- [x] ADR-011 架構對齊（Push-Based 事件觸發）
+- [x] Issue #82 關閉
 
 ---
 

@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-04（Sprint 41 US-87 完成 — GitHub Action backlog-intake 自動觸發）
-**當前 Sprint**：Sprint 41（進行中）
+**最後更新**：2026-03-04（Sprint 41 Review 完成）
+**當前 Sprint**：Sprint 41（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 41](sprints/sprint_41.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 41 — 進行中
+## Sprint 41 — 完成
 
 **Sprint Goal**：M4 收尾與文件一致性強化 — 更新 ROADMAP M4 完成狀態、TD-002 技術債結案、建立交付物文案一致性審查機制回應 Sprint 38-40 連續 Retro Problem。
+**結果**：Goal 達成（4/4 Stories PASS）。Velocity 5 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-04 ~ 2026-03-10
 
 | Story | Size | Points | 狀態 |
@@ -20,6 +22,7 @@
 | US-87：GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | S | 1 | 完成 |
 
 **目標 Velocity**：5 points（4 Stories）
+**實際 Velocity**：5 points（4 Stories）
 
 ---
 
@@ -93,24 +96,6 @@
 
 ---
 
-## Sprint 36 — 完成
-
-**Sprint Goal**：完成 ADR-010 生命週期閉環 — 補全 sprint-review Issue 狀態回寫、初始化 GitHub Issues Backlog，讓 Backlog Source of Truth 遷移進入「全流程可用」狀態
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-04-27 ~ 2026-05-03
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-74：ADR-010 後置 — sprint-review SKILL.md Story 完成後 Issue 狀態回寫對齊 | S | 1 | 完成 |
-| US-75：ADR-010 Backlog 初始化 — 將現有候選 Stories 建立為 GitHub Issues | M | 2 | 完成 |
-| US-76：Tech Debt Grooming Sprint 36 — TD-002 評估 + ADR-010 遷移後新技術債掃描 | S | 1 | 完成 |
-
-**目標 Velocity**：4 points（3 Stories）
-**實際 Velocity**：4 points（3 Stories）
-
----
-
 ## 短衝記錄
 
 | 日期 | 標題 | Issue/Story | commit hash |
@@ -120,4 +105,4 @@
 
 ---
 
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–35）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–36）
