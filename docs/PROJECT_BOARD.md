@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-05-11（Sprint 38 Review 完成）
-**當前 Sprint**：Sprint 38（完成）
+**最後更新**：2026-05-18（Sprint 39 Planning 完成）
+**當前 Sprint**：Sprint 39（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 38](sprints/sprint_38.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 39](sprints/sprint_39.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 39 — 進行中
+
+**Sprint Goal**：正式裁決 ADR-011（Proposed → Accepted），交付 M4 GitHub Actions 整合首個可執行 Story（US-12 CI/CD 狀態感知），讓外部工具鏈與 Shikigami Sprint 週期正式整合。
+**期間**：2026-05-18 ~ 2026-05-24
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-83：ADR-011 正式裁決 — GitHub Actions 整合架構決策 Proposed → Accepted | S | 1 | 待開始 |
+| US-12：GitHub Actions 整合 — CI/CD 狀態感知與 Sprint Health Check 整合 | M | 2 | 待開始 |
+
+**目標 Velocity**：3 points（2 Stories）
 
 ---
 
