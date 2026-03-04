@@ -1,6 +1,6 @@
 # Project Board
 
-**最後更新**：2026-03-04（Sprint 41 US-85 完成 — TD-002 技術債結案 + Schema 文案修正）
+**最後更新**：2026-03-04（Sprint 41 US-87 完成 — GitHub Action backlog-intake 自動觸發）
 **當前 Sprint**：Sprint 41（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 41](sprints/sprint_41.md) → 本看板 | [Tutorial](tutorial/README.md)
