@@ -1,7 +1,7 @@
 # Decision Knowledge Base Index
 
 **建立日期**：2026-05-11
-**最後更新**：2026-05-11
+**最後更新**：2026-05-11（修正：補收 ADR-011）
 **維護者**：Developer（手動維護，每次新增或更新 ADR 時同步更新本文件）
 **ADR 目錄**：`docs/adr/`
 
@@ -29,13 +29,14 @@
 | OpenCode / 平台整合 | ADR-008 |
 | backlog-intake / 需求入庫 | ADR-009 |
 | GitHub Issues / Source of Truth | ADR-010 |
+| GitHub Actions / CI/CD / 整合 | ADR-011 |
 
 #### 依狀態篩選
 
 | 狀態 | ADR 列表 |
 |------|---------|
 | **Accepted**（正式採用） | ADR-001、ADR-002、ADR-003、ADR-004、ADR-005、ADR-006、ADR-007、ADR-008、ADR-009、ADR-010 |
-| **Proposed**（起草中，待審查） | — |
+| **Proposed**（起草中，待審查） | ADR-011 |
 | **Deprecated**（已棄用） | — |
 
 #### 依日期篩選
@@ -46,6 +47,7 @@
 | 2026-03-01 | ADR-002、ADR-003、ADR-004 |
 | 2026-03-02 | ADR-005、ADR-006、ADR-007 |
 | 2026-03-03 | ADR-008、ADR-009、ADR-010 |
+| 2026-05-11 | ADR-011 |
 
 ---
 
@@ -63,6 +65,7 @@
 | [ADR-008](../adr/ADR-008.md) | OpenCode 平台整合策略（Symlink 適配） | Accepted | 2026-03-03 | Issue #3、US-46（Sprint 26）、US-47（Sprint 27） |
 | [ADR-009](../adr/ADR-009.md) | Backlog Intake 自動化技術決策 | Accepted | 2026-03-03 | Issue #46、US-63（Sprint 33） |
 | [ADR-010](../adr/ADR-010.md) | Backlog Source of Truth — GitHub Issues 優先策略 | Accepted | 2026-03-03 | Issue #46、US-69 ~ US-73（Sprint 35） |
+| [ADR-011](../adr/ADR-011-github-actions-integration.md) | GitHub Actions 整合架構決策 | Proposed | 2026-05-11 | Issue #46、Issue #76、US-81（Sprint 38） |
 
 ---
 
