@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/shikigami/schemas/po-subagent-output.schema.json",
+  "title": "PO Subagent Output Schema",
+  "description": "PO subagent 輸出格式的正式 JSON Schema 定義。用於驗證 sprint-execution §3 Issue 快掃流程中 PO subagent 生成的 Issue 回覆草稿結構。設計決策詳見 docs/adr/ADR-006-prompt-injection-protection.md Addendum。",
+  "type": "object",
+  "required": ["reply", "tone", "reviewed_by"],
+  "additionalProperties": false,
+  "properties": {
+    "reply": {
+      "type": "string",
+      "description": "PO subagent 起草的 GitHub Issue 回覆內容（純文字）",
+      "minLength": 1,
+      "maxLength": 10000
+    },
+    "tone": {
+      "type": "string",
+      "description": "回覆語氣標記，用於 QA subagent 審核",
+      "enum": ["friendly", "professional", "apologetic", "informational"],
+      "default": "friendly"
+    },
+    "reviewed_by": {
+      "type": "string",
+      "description": "起草者標記，固定為 'PO subagent'",
+      "const": "QA"
+    },
+    "issue_number": {
+      "type": "integer",
+      "description": "對應的 GitHub Issue 編號（可選，用於追蹤）",
+      "minimum": 1
+    },
+    "warning": {
+      "type": "string",
+      "description": "可選的警告訊息，例如偵測到潛在注入模式時附加說明"
+    }
+  },
+  "definitions": {
+    "injection_guard_note": {
+      "description": "安全說明：此 Schema 作為 ADR-006 Prompt Injection 防護的結構層驗證。PO subagent 的輸出必須通過本 Schema 驗證，確保輸出格式符合預期結構，作為 XML 隔離標記（規則 1）與角色限制宣告（規則 2）之外的第三層架構防護。"
+    }
+  }
+}
