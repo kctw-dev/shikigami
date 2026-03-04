@@ -13,7 +13,7 @@
 |----------|---------|------|------|--------|-------|------|
 | US-77 | #74 | 單層 Issue 架構改造 — backlog-intake / backlog-management 棄用兩層 Issue，改為 blockquote 保留原始內容 | M | 2 | Phase 1（可並行） | 完成 |
 | US-78 | #67 | shoot skill US-XX 模式需適配 ADR-010 — 從 GitHub Issues 查詢 Story | S | 1 | Phase 1（可並行） | 完成 |
-| US-80 | #75 | backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段與 label 語意修正 | S | 1 | Phase 2（US-77 之後） | 待開始 |
+| US-80 | #75 | backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段與 label 語意修正 | S | 1 | Phase 2（US-77 之後） | 完成 |
 
 **Sprint 容量**：4 Points
 
