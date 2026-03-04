@@ -123,14 +123,16 @@ gh issue edit <原始Issue編號> \
 新 body 格式詳見 §5。
 
 **Step 5：為原始 Issue 套用 labels**
-在原始 Issue 上套用 labels，標示已入庫並更新優先級狀態：
+在原始 Issue 上套用 labels，標示 AI 已完成自動入庫並更新優先級狀態：
 
 ```bash
 gh issue edit <原始Issue編號> \
-  --add-label "triaged" \
+  --add-label "auto-triaged" \
   --add-label "status: backlog" \
   --add-label "priority: <MoSCoW>"
 ```
+
+> `auto-triaged` 代表 AI 已完成自動結構化入庫，**尚待 PO 人工審查**（見 §8 PO Review Gate）。
 
 **Step 6：冪等標記**
 在原始 Issue 上新增 `backlog-intake-done` label，防止下次 cron 執行重複處理：
@@ -138,6 +140,27 @@ gh issue edit <原始Issue編號> \
 ```bash
 gh issue edit <原始Issue編號> --add-label "backlog-intake-done"
 ```
+
+**Step 7：PO Review 待辦提示**
+所有 Issue 入庫完成後，輸出以下格式的 PO Review 待辦清單，提醒 PO 執行人工審查：
+
+```
+=== PO Review Gate — 待審查 Issues ===
+
+以下 Issues 已完成 AI 自動入庫（auto-triaged），請 PO 審查後執行 label 替換：
+
+  - #<N1>：<Issue 標題> — <Issue URL>
+  - #<N2>：<Issue 標題> — <Issue URL>
+  ...
+
+審查通過後執行：
+  gh issue edit <N> --add-label 'triaged' --remove-label 'auto-triaged'
+
+詳見 §8 PO Review Gate。
+=====================================
+```
+
+若本次執行無成功入庫的 Issue，則不輸出此提示。
 
 ---
 
@@ -272,16 +295,68 @@ AI 根據 Issue 內容推導 MoSCoW 優先級，對應至以下 label：
 | label | 語意 | 添加方式 |
 |-------|------|---------|
 | `backlog-intake` | 此 Issue 請求入庫審查 | PO 或 Issue 建立者手動添加 |
-| `triaged` | 已完成自動入庫結構化 | backlog-intake Skill 自動添加（Step 5） |
+| `auto-triaged` | AI 自動入庫完成，待 PO 人工審查 | backlog-intake Skill 自動添加（Step 5） |
+| `triaged` | PO 已完成人工審查確認 | PO 手動執行 label 替換操作（見下方說明） |
 | `backlog-intake-done` | 此 Issue 已完成入庫流程（冪等性保護） | backlog-intake Skill 自動添加（Step 6） |
 | `status: backlog` | Story 尚未排入 Sprint | backlog-intake Skill 自動添加（Step 5） |
 | `priority: <MoSCoW>` | Story 的 MoSCoW 優先級 | backlog-intake Skill 自動添加（Step 5） |
+
+**PO 審查完成後的 label 替換操作**：
+
+PO 審查 AI 生成的 User Story、Acceptance Criteria 與 RICE 評分後，執行以下指令將 `auto-triaged` 替換為 `triaged`，表示人工審查已通過：
+
+```bash
+gh issue edit <N> --add-label 'triaged' --remove-label 'auto-triaged'
+```
 
 **注意**：手動移除 `backlog-intake-done` label 等同於請求重新入庫。重新執行後，Issue body 將被重新改寫（blockquote 原始內容 + 新 Story template），labels 亦會重新套用。
 
 ---
 
-## 8. ADR 技術決策摘要
+## 8. PO Review Gate
+
+### 8.1 機制說明
+
+backlog-intake Skill 完成 AI 自動入庫後，原始 Issue 被標記 `auto-triaged`，代表 **AI 已完成自動結構化，但尚未通過 PO 人工審查**。Issue 在取得 `triaged` label 之前，不應進入 Sprint Planning 排程。
+
+`auto-triaged` 與 `triaged` 的語意明確區分如下：
+
+| label | 代表狀態 | 負責人 |
+|-------|---------|--------|
+| `auto-triaged` | AI 自動入庫完成，待 PO 審查 | backlog-intake Skill（自動） |
+| `triaged` | PO 人工審查確認通過 | PO（手動） |
+
+### 8.2 PO 審查流程
+
+PO 收到 `auto-triaged` Issue 後，應完成以下審查：
+
+1. **審查 AI 生成的 User Story** — 角色、功能描述、業務價值是否準確反映原始需求
+2. **審查 Acceptance Criteria** — AC 條目是否完整、可測試、無歧義
+3. **審查 RICE 評分** — Reach / Impact / Confidence / Effort 各因子評估是否合理
+
+審查通過後，執行以下指令完成 PO 審查標記：
+
+```bash
+gh issue edit <N> --add-label 'triaged' --remove-label 'auto-triaged'
+```
+
+若審查發現問題，PO 應直接編輯 Issue body 修正內容，修正後再執行上述指令。
+
+### 8.3 查詢待審查 Issues
+
+PO 可執行以下指令查看所有待審查的 `auto-triaged` Issues：
+
+```bash
+gh issue list \
+  --label "auto-triaged" \
+  --state open \
+  --json number,title,url \
+  --limit 50
+```
+
+---
+
+## 9. ADR 技術決策摘要
 
 ### ADR-009 決策域（仍有效部分）
 
@@ -302,7 +377,7 @@ AI 根據 Issue 內容推導 MoSCoW 優先級，對應至以下 label：
 
 ---
 
-## 9. 維運注意事項
+## 10. 維運注意事項
 
 ### OAuth Token 過期
 
