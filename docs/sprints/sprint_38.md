@@ -13,7 +13,7 @@
 |----------|---------|------|------|--------|-------|------|
 | US-81 | #76 | ADR-011 起草 — GitHub Actions 整合架構決策 | S | 1 | Phase 1（可並行） | 進行中 |
 | US-11 | #64 | Decision Knowledge Base — ADR 查詢與決策影響追蹤 | M | 2 | Phase 1（可並行） | 進行中 |
-| US-82 | #77 | PO 審查積壓量可視化 — backlog-management 新增待審 Issues 計數與老齡警示 | S | 1 | Phase 1（可並行） | 進行中 |
+| US-82 | #77 | PO 審查積壓量可視化 — backlog-management 新增待審 Issues 計數與老齡警示 | S | 1 | Phase 1（可並行） | 完成 |
 
 **Sprint 容量**：4 Points
 
