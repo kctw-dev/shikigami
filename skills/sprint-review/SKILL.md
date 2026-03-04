@@ -16,6 +16,70 @@ Sprint Review + Retrospective 是 Sprint 的結束儀式，用於 **驗收成果
 
 ---
 
+## 1.5 交付物文案一致性審查（Sprint Review 前執行）
+
+<!-- US-86：回應 Sprint 38-40 連續 Retro Problem — Issue #81 -->
+<!-- ADR-003 合規：此子節依 ADR-003 Hard Gate 規範，於 Sprint 41 US-86 授權修改 -->
+
+### 根因說明與預防措施
+
+Sprint 38、39、40 連續三個 Retrospective 均發現「交付物文案不一致」問題，根因分析如下：
+
+- **根因**：各 Story 的 Sprint Review 文件、PROJECT_BOARD.md、sprint_N.md、ROADMAP.md 等多文件並行更新時，跨文件的術語（如 Story 狀態標注、Issue 連結、版本號）未經統一審查即提交，導致不同文件間出現不一致。
+- **預防措施**：在 Sprint Review 正式開始前（Demo 展示前），強制執行「交付物文案一致性審查」，確保所有交付物在展示前已達到跨文件一致性。
+
+### 審查觸發時機
+
+**執行時機**：Sprint Review 流程開始後、PO Subagent 展示 Demo 前（§2 步驟 1 之前）。此審查為 Done 定義的一部分，未通過審查前不得宣告 Sprint 完成。
+
+### 審查 Checklist
+
+執行主 session 依序完成以下審查項目：
+
+**一、跨文件術語一致性**
+
+- [ ] `docs/sprints/sprint_N.md` 中各 Story 的狀態標注（進行中 / 完成 / 未完成）與 `docs/PROJECT_BOARD.md` 中相同 Story 的狀態欄一致
+- [ ] `docs/prd/ROADMAP.md` 中里程碑描述的術語與 Sprint Backlog 中 Story 標題一致（例如：功能名稱、版本號描述不得有差異）
+- [ ] `docs/prd/PRODUCT_BACKLOG.md` 中已完成 Story 的狀態已移至 `docs/prd/BACKLOG_DONE.md`，兩文件間無重複或遺漏
+
+**二、狀態標注一致性**
+
+- [ ] Sprint Backlog 表格中每筆 Story 的「狀態」欄使用統一術語（「完成」、「進行中」、「未完成」三選一，不得混用「Done」、「PASS」等英文術語）
+- [ ] `docs/PROJECT_BOARD.md` 中 Sprint 進行中 / 完成的區塊劃分與實際 Sprint 狀態相符
+- [ ] 若有 Story 狀態為「未完成」，`docs/prd/PRODUCT_BACKLOG.md` 中已有對應的回填記錄（含未達標原因）
+
+**三、Issue 連結有效性**
+
+- [ ] `docs/sprints/sprint_N.md` Sprint Backlog 表格中各 Story 的 Issue # 欄位填寫完整（非空白）
+- [ ] 對應的 GitHub Issue 存在且狀態符合預期：進行中 Story 的 Issue 應為 open；完成 Story 的 Issue 應已執行 §2.6 關閉流程
+- [ ] Retrospective Log 中 Action Items 的 Issue 連結（若有）均指向存在的 GitHub Issue
+
+**四、版本與里程碑一致性**
+
+- [ ] `docs/prd/ROADMAP.md` 里程碑狀態與本 Sprint 交付進度相符（已完成里程碑已標注完成 Sprint）
+- [ ] 若本 Sprint 有版本 Tag 操作（deployment-readiness 執行後），版本號在 ROADMAP 與 `docs/PROJECT_BOARD.md` 中的描述一致
+
+### 審查結果記錄
+
+審查完成後，在主 session 中輸出以下格式的審查摘要：
+
+```
+## 交付物文案一致性審查結果（Sprint N）
+
+審查時間：YYYY-MM-DD
+審查狀態：PASS / FAIL
+
+不一致項目（若有）：
+- [文件路徑]：[具體不一致描述]
+
+修正動作（若有）：
+- [已執行的修正描述]
+```
+
+**FAIL 處理**：若發現任何不一致，立即修正後重新勾選對應項目，確認全部 PASS 後才進入 §2 Sprint Review 流程。
+
+---
+
 ## 2. Sprint Review 流程
 
 Sprint Review 的目的是驗收本 Sprint 交付的成果，確認是否符合商業期待。
@@ -607,6 +671,12 @@ Sprint Review 完成、產出文件更新後，執行以下歸檔觸發檢查。
 
 完成 Sprint Review & Retrospective 前，確認以下項目全部完成：
 
+- [ ] **交付物文案一致性審查**（§1.5，Sprint Review 前執行）：
+  - [ ] 跨文件術語一致性審查通過（sprint_N.md / PROJECT_BOARD.md 狀態欄一致）
+  - [ ] 狀態標注一致性審查通過（統一使用「完成 / 進行中 / 未完成」中文術語）
+  - [ ] Issue 連結有效性審查通過（Issue # 填寫完整、狀態符合預期）
+  - [ ] 版本與里程碑一致性審查通過（ROADMAP 里程碑狀態與交付進度相符）
+  - [ ] 審查結果摘要已輸出（PASS 或 FAIL + 修正說明）
 - [ ] Retrospective Analytics 報告已展示（四區塊完整：Good 趨勢、Problem 趨勢、Action 關閉速度、待關閉 Items）
 - [ ] Analytics 報告展示完畢後才開始收集 Good / Problem / Action
 - [ ] PO Subagent 已展示所有已完成 Story 的 Demo
