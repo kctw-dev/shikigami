@@ -1,6 +1,6 @@
 # Sprint 38
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-05-11 ~ 2026-05-17
 **Sprint Goal**：解封 M4 GitHub Actions 整合主線（ADR-011 起草）、交付 Decision Knowledge Base 初版，並回應 Stakeholder 對 PO 審查積壓量可視化的需求。
 **總計**：3 Stories / 4 Points

@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-05-04（Sprint 37 Review — 單層 Issue 架構改造 + PO Review Gate 交付，3/3 Stories PASS）
+> 最後更新：2026-05-11（Sprint 38 Review — ADR-011 起草 + Decision KB + PO 積壓量可視化，3/3 Stories PASS）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -140,7 +140,7 @@ Sprint Review 時自動產出：
 
 | Story | 功能 | Sprint |
 |---|---|---|
-| ADR-011 | GitHub Actions 整合架構決策 — **ADR 起草中**（Sprint 38，Issue #76） | Sprint 38（進行中） |
+| ADR-011 | GitHub Actions 整合架構決策 — **ADR 起草完成**（Sprint 38，Issue #76） | Sprint 38 ✅ |
 | US-12 | GitHub Actions 整合 — CI/CD 狀態感知 | TBD（ADR-011 Accepted 後） |
 | US-13 | DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率 | TBD |
 | US-14 | Notification Templates — PR/Deploy/Review 事件通知模板 | TBD |
@@ -247,6 +247,8 @@ Sprint Review 時自動產出：
 | US-77 | 單層 Issue 架構改造 — backlog-intake / backlog-management 棄用兩層 Issue，改為 blockquote 保留原始內容 | Sprint 37 ✅ |
 | US-78 | shoot skill US-XX 模式需適配 ADR-010 — 從 GitHub Issues 查詢 Story | Sprint 37 ✅ |
 | US-80 | backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段與 label 語意修正 | Sprint 37 ✅ |
+| US-11 | Decision Knowledge Base — ADR 查詢與決策影響追蹤（Decision_KB_Index.md + architecture-decision SKILL.md 查詢區段） | Sprint 38 ✅ |
+| US-82 | PO 審查積壓量可視化 — backlog-management 新增待審 Issues 計數與老齡警示 | Sprint 38 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 

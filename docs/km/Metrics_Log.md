@@ -48,6 +48,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 35 | 2026-04-20 | 8 points | 100% | 不規則 | Sprint Goal 達成（5/5 PASS）；ADR-010 原子性實作交付完成；S33=4→S34=2→S35=8 方向不一致→不規則；Phase 2 三路平行壓縮有效 |
 | Sprint 36 | 2026-04-27 | 4 points | 100% | 不規則 | Sprint Goal 達成（3/3 PASS）；ADR-010 生命週期閉環完成；S34=2→S35=8→S36=4 方向不一致（先升後降）→不規則；三路平行執行 + 外部抽樣 CONFIRM |
 | Sprint 37 | 2026-05-04 | 4 points | 100% | 不規則 | Sprint Goal 達成（3/3 PASS）；單層 Issue 架構改造 + PO Review Gate 交付；S35=8→S36=4→S37=4 先降後平→不規則；Phase 1 平行 + Phase 2 序列執行 |
+| Sprint 38 | 2026-05-11 | 4 points | 100% | 穩定 | Sprint Goal 達成（3/3 PASS）；ADR-011 起草 + Decision KB + PO 積壓量可視化；S36=4→S37=4→S38=4 三期持平 0%→穩定；US-11 外部抽樣 DISPUTE→修復→CONFIRM |
 
 ---
 
