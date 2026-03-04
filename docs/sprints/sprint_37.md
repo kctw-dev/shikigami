@@ -1,6 +1,6 @@
 # Sprint 37
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-05-04 ~ 2026-05-10
 **Sprint Goal**：完成 backlog-intake 單層 Issue 架構改造（#73/#72 合併交付）與 shoot US-XX ADR-010 適配，讓 Backlog 管理全工具鏈達到單層一致性與 PO 審查閉環。
 **總計**：3 Stories / 4 Points

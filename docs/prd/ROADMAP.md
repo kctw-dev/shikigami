@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-04-27（Sprint 36 Review — ADR-010 生命週期閉環完成，3/3 Stories PASS，修訂記錄：v0.20.0）
+> 最後更新：2026-05-04（Sprint 37 Review — 單層 Issue 架構改造 + PO Review Gate 交付，3/3 Stories PASS）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -243,6 +243,9 @@ Sprint Review 時自動產出：
 | US-74 | ADR-010 後置 — sprint-review SKILL.md Story 完成後 Issue 狀態回寫對齊 | Sprint 36 ✅ |
 | US-75 | ADR-010 Backlog 初始化 — 將現有候選 Stories 建立為 GitHub Issues | Sprint 36 ✅ |
 | US-76 | Tech Debt Grooming Sprint 36 — TD-002 評估 + ADR-010 遷移後新技術債掃描 | Sprint 36 ✅ |
+| US-77 | 單層 Issue 架構改造 — backlog-intake / backlog-management 棄用兩層 Issue，改為 blockquote 保留原始內容 | Sprint 37 ✅ |
+| US-78 | shoot skill US-XX 模式需適配 ADR-010 — 從 GitHub Issues 查詢 Story | Sprint 37 ✅ |
+| US-80 | backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段與 label 語意修正 | Sprint 37 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 

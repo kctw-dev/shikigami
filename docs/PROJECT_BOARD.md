@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-05-04（Sprint 37 Planning 完成）
-**當前 Sprint**：Sprint 37（進行中）
+**最後更新**：2026-05-04（Sprint 37 Review 完成）
+**當前 Sprint**：Sprint 37（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 37](sprints/sprint_37.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 37 — 進行中
+## Sprint 37 — 完成
 
 **Sprint Goal**：完成 backlog-intake 單層 Issue 架構改造（#73/#72 合併交付）與 shoot US-XX ADR-010 適配，讓 Backlog 管理全工具鏈達到單層一致性與 PO 審查閉環。
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-05-04 ~ 2026-05-10
 
 | Story | Size | Points | 狀態 |
@@ -19,6 +21,7 @@
 | US-80：backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段與 label 語意修正 | S | 1 | 完成 |
 
 **目標 Velocity**：4 points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
 
 ---
 
@@ -95,24 +98,6 @@
 
 ---
 
-## Sprint 32 — 完成
-
-**Sprint Goal**：完成 Issue #46 自動化排程框架的程式碼入庫 QA 閉環（子 Story #3），同步推進 M5 條件 (a) 外部使用者觸及強化與 Issue #35 Token Baseline 精確化，使排程 Sprint 週期具備端對端自動化能力
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-30 ~ 2026-04-05
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-60：Issue #46 子 Story #3 — 排程衝刺程式碼入庫 QA 自動化（schedule SKILL.md + scrum-master/sprint-review SKILL.md） | M | 2 | 完成 |
-| US-61：M5 條件 (a) 外部使用者觸及強化 — Onboarding 低摩擦路徑最佳化（README + tutorial + M5 追蹤更新） | S | 1 | 完成 |
-| US-62：Issue #35 — Token 追蹤 Baseline Snapshot 機制（Metrics_Log.md + sprint-planning/execution SKILL.md） | S | 1 | 完成 |
-
-**目標 Velocity**：4 points（3 Stories）
-**實際 Velocity**：4 points（3 Stories）
-
----
-
 ## 短衝記錄
 
 | 日期 | 標題 | Issue/Story | commit hash |
@@ -122,4 +107,4 @@
 
 ---
 
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–31）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–32）
