@@ -15,7 +15,7 @@
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
 | US-83：ADR-011 正式裁決 — GitHub Actions 整合架構決策 Proposed → Accepted | S | 1 | 完成 |
-| US-12：GitHub Actions 整合 — CI/CD 狀態感知與 Sprint Health Check 整合 | M | 2 | 待開始 |
+| US-12：GitHub Actions 整合 — CI/CD 狀態感知與 Sprint Health Check 整合 | M | 2 | 完成 |
 
 **目標 Velocity**：3 points（2 Stories）
 
