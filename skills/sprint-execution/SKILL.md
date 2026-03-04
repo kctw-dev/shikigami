@@ -171,6 +171,27 @@ Sprint Backlog 還有 Story？
       - 公開專案：直接 `gh issue comment` 發布
       - 私有 / 敏感專案：回覆前請 User 確認
 
+   **Schema 驗證失敗回退說明（TD-002 AC3）**
+
+   PO subagent 的 JSON 輸出在 QA 審核前須通過 `tests/validate-po-output.sh` Schema 驗證：
+
+   | 驗證結果 | 行為 | 警告訊息格式 |
+   |---------|------|------------|
+   | PASS | 繼續 QA 審核流程，正常發布 | 無 |
+   | FAIL（格式錯誤） | 中止該 Issue 回覆，記錄為人工審查佇列 | `[SCHEMA-FAIL] PO subagent 輸出不符合格式，已暫存待人工審查：Issue #{issue_number}` |
+   | WARN（工具不可用） | 執行 graceful fallback（基本結構檢查），不阻斷執行 | `[SCHEMA-WARN] JSON Schema 驗證工具不可用，執行基本檢查，建議安裝 check-jsonschema` |
+
+   **人工審查觸發條件**（以下任一情況觸發）：
+   - Schema 驗證失敗（FAIL）：PO subagent 輸出結構異常，可能為注入攻擊導致輸出偏離預期格式
+   - 連續 3 個 Sprint 驗證工具均不可用（WARN 累積）：建議由 Security Engineer 評估工具安裝
+
+   **回退路徑優先順序：**
+   1. 完整 Schema 驗證（ajv / check-jsonschema / python3-jsonschema 任一可用）
+   2. 基本結構檢查（graceful fallback — python3 內建 json 模組）
+   3. 最低限度驗證（確認為 JSON 物件格式）— 不阻斷執行但觸發人工審查
+
+   > **參考**：`schemas/po-subagent-output.schema.json`（AC1），`tests/validate-po-output.sh`（AC2），設計決策見 `docs/adr/ADR-006-prompt-injection-protection.md` Addendum
+
    **防重複機制：** 回覆成功後，立即為該 issue 加上 `sprint-replied` label。下次快掃時篩除含此 label 的 issue；每個 Sprint 快掃開始前批次清除（見上方「快掃前清除步驟」），確保各 Sprint 週期獨立計算，不重複回覆。
 
    > **Decision Note — 為何採用 GitHub Label 追蹤狀態**
