@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-05-18（Sprint 39 Review 完成）
-**當前 Sprint**：Sprint 39（完成）
+**最後更新**：2026-05-25（Sprint 40 Planning 完成）
+**當前 Sprint**：Sprint 40（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 39](sprints/sprint_39.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 40](sprints/sprint_40.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 40 — 進行中
+
+**Sprint Goal**：完成 M4 度量層 — US-13 DORA Metrics 交付，並清償 TD-002 技術債，讓工程效能可量化、PO subagent 輸出結構可驗證。
+**期間**：2026-05-25 ~ 2026-05-31
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-13：DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率追蹤 | L | 3 | 進行中 |
+| TD-002：PO subagent 輸出格式 JSON Schema 正式驗證 | M | 2 | 進行中 |
+
+**目標 Velocity**：5 points（2 Stories）
 
 ---
 
