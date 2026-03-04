@@ -13,8 +13,8 @@
 |----------|---------|------|------|--------|-------|------|
 | US-84 | #79 | M4 里程碑正式收尾 — ROADMAP US-14 完成標注 + M4 結案評估 | S | 1 | Phase 1（平行） | 完成 |
 | US-85 | #80 | TD-002 技術債結案 + Schema 文案修正 | S | 1 | Phase 1（平行） | 進行中 |
-| US-86 | #81 | 交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | M | 2 | Phase 1（平行） | 進行中 |
-| US-87 | #82 | GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | S | 1 | Phase 1（平行） | 進行中 |
+| US-86 | #81 | 交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | M | 2 | Phase 1（平行） | 完成 |
+| US-87 | #82 | GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | S | 1 | Phase 1（平行） | 完成 |
 
 **Sprint 容量**：5 Points
 
@@ -143,11 +143,11 @@ As a Product Owner who observed documentation inconsistencies flagged in Sprint 
 
 **Done 定義**
 
-- [ ] sprint-review SKILL.md 新增「交付物文案一致性審查」子節（含審查 Checklist）
-- [ ] 審查觸發時機明確定義（Sprint Review 前）
-- [ ] 根因說明與預防措施記錄於文件
-- [ ] ADR-003 合規性確認（修改 SKILL.md）
-- [ ] Issue #81 關閉
+- [x] sprint-review SKILL.md 新增「交付物文案一致性審查」子節（含審查 Checklist）
+- [x] 審查觸發時機明確定義（Sprint Review 前）
+- [x] 根因說明與預防措施記錄於文件
+- [x] ADR-003 合規性確認（修改 SKILL.md）
+- [x] Issue #81 關閉
 
 ---
 

@@ -1,6 +1,6 @@
 # Project Board
 
-**最後更新**：2026-03-04（Sprint 41 US-84 完成 — M4 里程碑正式收尾）
+**最後更新**：2026-03-04（Sprint 41 US-86 完成 — 交付物文案一致性審查機制）
 **當前 Sprint**：Sprint 41（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 41](sprints/sprint_41.md) → 本看板 | [Tutorial](tutorial/README.md)
@@ -16,8 +16,8 @@
 |-------|------|--------|------|
 | US-84：M4 里程碑正式收尾 — ROADMAP US-14 完成標注 + M4 結案評估 | S | 1 | 完成 |
 | US-85：TD-002 技術債結案 + Schema 文案修正 | S | 1 | 進行中 |
-| US-86：交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | M | 2 | 進行中 |
-| US-87：GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | S | 1 | 進行中 |
+| US-86：交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | M | 2 | 完成 |
+| US-87：GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | S | 1 | 完成 |
 
 **目標 Velocity**：5 points（4 Stories）
 
