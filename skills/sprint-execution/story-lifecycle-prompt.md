@@ -79,6 +79,11 @@ DoD 自檢（§8）
 commit + 取得 commit SHA
   |
   v
+【Done 定義 checkbox 更新】（§8.1）
+更新 sprint_N.md Done 定義：將對應 Story 的所有 `- [ ]` 更新為 `- [x]`
+觸發時機：Story 通過雙階段審查（Spec Compliance + Code Quality）後、PROJECT_BOARD 狀態更新前
+  |
+  v
 更新 PROJECT_BOARD（Story 狀態 → 完成）+ sprint_N.md 狀態欄
   |
   v
@@ -282,6 +287,35 @@ Security Self-Review — {story_id}
 | 設定 | 無硬編碼金鑰，配置透過環境變數管理 | [ ] |
 | 反回歸 | 既有測試全部仍然通過（0 regression） | [ ] |
 | 技術債 | 取捷徑情況已用 `[TECH-DEBT]` 標記，並更新 Registry（若無則 N/A） | [ ] |
+
+---
+
+## §8.1 Done 定義 Checkbox 更新（必要步驟）
+
+**觸發時機**：Story 通過雙階段審查（Spec Compliance + Code Quality self-review 均 PASS）後、`PROJECT_BOARD.md` 狀態更新為完成前。
+
+**執行步驟**：
+
+1. 讀取 `sprint_file`（如 `docs/sprints/sprint_N.md`）
+2. 找到當前 Story ID 對應的「Done 定義」區段
+3. 將該 Story Done 定義中的所有 `- [ ]` 更新為 `- [x]`
+4. 儲存修改
+
+**範例**：
+
+```markdown
+**Done 定義**（更新前）：
+- [ ] 功能 A 完成
+- [ ] 測試覆蓋率達標
+- [ ] Issue #XX 關閉
+
+**Done 定義**（更新後）：
+- [x] 功能 A 完成
+- [x] 測試覆蓋率達標
+- [x] Issue #XX 關閉
+```
+
+**注意**：此步驟為強制執行，不可省略。若忽略此步驟，Sprint Review 時需手動補正，產生額外 overhead。
 
 ---
 

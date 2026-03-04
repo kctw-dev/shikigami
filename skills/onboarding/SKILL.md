@@ -211,6 +211,129 @@ gh label list --json name --limit 100
 
 3. **Sprint Planning**
    執行 `/sprint` 開始第一個 Sprint，從 Product Backlog 選取 Stories。
+
+4. **GitHub Action 串接狀態**
+   {GITHUB_ACTION_STATUS}
+```
+
+> `{GITHUB_ACTION_STATUS}` 由 §2.6 執行結果填入，例如：
+> - `backlog-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）`
+> - `backlog-intake 待設定（見 §2.6 手動指引）`
+
+### 2.6 GitHub Action 串接（backlog-intake 自動化）
+
+**目的**：確認 GitHub Actions self-hosted runner 已就緒、OAuth 已認證、backlog-intake workflow 已存在，讓 Backlog 自動化管線在 Onboarding 後立即可用，無需手動配置。
+
+**安全邊界**：此階段僅執行「偵測與驗證」，不自動安裝 runner 或儲存認證憑證。所有安裝步驟均輸出為手動指引，由使用者決定是否執行。
+
+#### 2.6.1 冪等性檢查
+
+執行前先判斷是否已就緒，避免重複操作：
+
+**條件**：runner 已存在 **且** OAuth 已認證 **且** workflow 文件存在
+
+```
+若以上三個條件同時成立 → 輸出：
+  [略過] GitHub Action 串接已就緒
+  - Self-hosted runner：已連線
+  - OAuth 認證（claude auth status）：已認證
+  - .github/workflows/backlog-intake.yml：存在
+並跳至 §2.5 下一步清單，填入「backlog-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）」
+```
+
+若任一條件不成立，繼續執行 §2.6.2 ~ §2.6.4 各步驟。
+
+#### 2.6.2 Runner 偵測
+
+**目的**：確認 GitHub repo 已有 self-hosted runner 連線（backlog-intake workflow 需要 self-hosted runner 執行）。
+
+執行指令：
+
+```bash
+gh api repos/{owner}/{repo}/actions/runners
+```
+
+> `{owner}` 與 `{repo}` 從當前 git remote 自動解析（`git remote get-url origin`）。
+
+**判定規則**：
+
+```
+API 回傳結果中 total_count > 0 且至少一個 runner.status = "online"？
+├── 是 → 輸出：[Pass] Self-hosted runner 已就緒（{runner_name}，{runner_status}）
+└── 否 → 輸出警告與手動指引：
+
+  [警告] 未偵測到 online 狀態的 self-hosted runner。
+  backlog-intake workflow 需要 self-hosted runner 才能在本機執行 Claude Code。
+
+  手動安裝步驟：
+  1. 前往 GitHub repo 的 Settings → Actions → Runners → New self-hosted runner
+  2. 選擇對應平台（Linux / macOS / Windows）
+  3. 依據頁面指引下載並執行 runner 安裝腳本
+  4. 完成後重新執行 Onboarding 以驗證連線狀態
+
+  注意：runner 安裝需要 root / sudo 權限，請在適當環境執行。
+```
+
+#### 2.6.3 OAuth 驗證狀態確認
+
+**目的**：確認 Claude Code 已完成 OAuth 認證，backlog-intake workflow 的 claude CLI 呼叫才能正常執行。
+
+執行指令：
+
+```bash
+claude auth status
+```
+
+**判定規則**：
+
+```
+輸出包含認證成功標示（如 "Logged in" 或 "authenticated"）？
+├── 是 → 輸出：[Pass] Claude OAuth 認證已就緒
+└── 否 → 輸出警告與手動指引：
+
+  [警告] Claude OAuth 未認證。
+  backlog-intake workflow 在 runner 上執行時需要有效的 OAuth 認證。
+
+  手動認證步驟：
+  1. 在 runner 主機上執行：claude auth
+  2. 依據提示完成 OAuth 流程（瀏覽器授權）
+  3. 完成後執行 claude auth status 確認認證狀態
+  4. 重新執行 Onboarding 以驗證
+
+  安全提醒：憑證由 Claude Code 安全儲存，不儲存於任何明文文件或環境變數。
+```
+
+#### 2.6.4 Workflow 存在性確認
+
+**目的**：確認 `.github/workflows/backlog-intake.yml` 已存在於 repo，這是 backlog 自動化管線的觸發入口。
+
+執行方式：使用 Glob 工具確認 `.github/workflows/backlog-intake.yml` 是否存在。
+
+**判定規則**：
+
+```
+.github/workflows/backlog-intake.yml 存在？
+├── 是 → 輸出：[Pass] backlog-intake.yml workflow 已就緒
+└── 否 → 輸出警告：
+
+  [警告] .github/workflows/backlog-intake.yml 不存在。
+  此 workflow 文件是 backlog 自動化管線的觸發入口。
+
+  修復步驟：
+  此 workflow 由 US-87 相關步驟建立。請先完成以下其中一項：
+  - 執行 US-87 對應的 Sprint Story（建立 backlog-intake workflow）
+  - 或從 Shikigami 官方 repository 複製範本至 .github/workflows/backlog-intake.yml
+
+  完成後重新執行 Onboarding 以驗證。
+```
+
+#### 2.6.5 串接狀態摘要
+
+依據 §2.6.2 ~ §2.6.4 的各項結果，決定 §2.5 的 `{GITHUB_ACTION_STATUS}` 填入值：
+
+```
+全部 Pass → 填入：backlog-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）
+任一 Warning → 填入：backlog-intake 待設定（見 §2.6 手動指引）
 ```
 
 ---
