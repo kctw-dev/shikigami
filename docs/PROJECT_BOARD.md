@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-05-25（Sprint 40 Review 完成）
-**當前 Sprint**：Sprint 40（完成）
+**最後更新**：2026-03-04（Sprint 41 Planning 完成）
+**當前 Sprint**：Sprint 41（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 40](sprints/sprint_40.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 41](sprints/sprint_41.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 41 — 進行中
+
+**Sprint Goal**：M4 收尾與文件一致性強化 — 更新 ROADMAP M4 完成狀態、TD-002 技術債結案、建立交付物文案一致性審查機制回應 Sprint 38-40 連續 Retro Problem。
+**期間**：2026-03-04 ~ 2026-03-10
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-84：M4 里程碑正式收尾 — ROADMAP US-14 完成標注 + M4 結案評估 | S | 1 | 待開發 |
+| US-85：TD-002 技術債結案 + Schema 文案修正 | S | 1 | 待開發 |
+| US-86：交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | M | 2 | 待開發 |
+
+**目標 Velocity**：4 points（3 Stories）
 
 ---
 
