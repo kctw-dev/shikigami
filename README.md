@@ -1,6 +1,6 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.19.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.26.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
 > 7 個 AI 隊友，各司其職，互相制衡 — 讓你的 AI 開發工具擁有一整組有紀律的工程團隊。
@@ -13,9 +13,9 @@
 
 Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：QA 審你的代碼並挑戰架構決策，Security 審外部輸入，SRE 從維運角度評估部署可行性。**不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
 
-這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 33 個 Sprint 完成率 100%，交付 109 Stories，QA 雙階段審查攔截了每個 Sprint 的品質問題。
+這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 43 個 Sprint 完成率 100%，QA 雙階段審查攔截了每個 Sprint 的品質問題。
 
-**當前版本：v0.19.0**（22 Skills / 7 Agents / 4 Commands）
+**當前版本：v0.26.0**（22 Skills / 7 Agents / 4 Commands）
 
 ---
 
@@ -381,10 +381,10 @@ Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發
 | v0.13.0 | 多平台支援 | Sprint 25–29 | M5 完成條件終審 + OpenCode 平台整合（ADR-008）+ symlink 適配策略 + 五角色 Agent 移植 + INSTALL_OPENCODE.md 安裝指南 + Issue #3 正式結案 + Beta 使用者招募 |
 | v0.17.0 | 自動化閉環 | Sprint 30–33 | Issue #46 排程四條流程完成 + backlog-intake Skill + ADR-009 + M5 推廣行動 + Token Baseline Snapshot |
 
-### 累積數據（截至 Sprint 33）
+### 累積數據（截至 Sprint 42）
 
-- 連續 33 個 Sprint 完成率 100%，Velocity 歷史：8→5→5→4→6→8→7→6→5→6→4→4→4→2→4→8→4→3→5→5→4→6→5→5→4→2→4→4→3→4→4→4→4
-- 109 Stories 交付，9 個 ADR（架構決策紀錄）
+- 連續 42 個 Sprint 完成率 100%，Velocity 歷史：8→5→5→4→6→8→7→6→5→6→4→4→4→2→4→8→4→3→5→5→4→6→5→5→4→2→4→4→3→4→4→4→4→2→8→4→4→4→3→5→5→3
+- 9 個 ADR（架構決策紀錄）
 - 8 個自動化驗證腳本 + GitHub Actions CI Pipeline
 
 ### 開發流程實證

@@ -12,7 +12,7 @@
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
 | US-90 | #69 | Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | S | 1 | Phase 1（平行） | 進行中 |
-| US-91 | #85 | M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | Phase 1（平行） | 進行中 |
+| US-91 | #85 | M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | Phase 1（平行） | 完成 |
 
 **Sprint 容量**：3 Points
 
@@ -107,12 +107,12 @@ As a PO, I want to diagnose the current external user acquisition situation, so 
 
 **Done 定義**
 
-- [ ] Issue #59 回饋數確認並記錄
-- [ ] OUTREACH_LOG.md 審查完成
-- [ ] 端到端安裝路徑審查完成
-- [ ] 診斷報告輸出至 M5_COMPLETION_ASSESSMENT.md
-- [ ] doc-level 安裝阻力已修正（若有發現）
-- [ ] Issue #85 關閉
+- [x] Issue #59 回饋數確認並記錄
+- [x] OUTREACH_LOG.md 審查完成
+- [x] 端到端安裝路徑審查完成
+- [x] 診斷報告輸出至 M5_COMPLETION_ASSESSMENT.md
+- [x] doc-level 安裝阻力已修正（若有發現）
+- [x] Issue #85 關閉
 
 ---
 

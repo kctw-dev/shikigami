@@ -25,6 +25,6 @@
 
 ## 相關文件
 
-- [README.md（專案入口）](../../README.md) — 完整功能說明、7 個角色介紹、17 個 Skills
+- [README.md（專案入口）](../../README.md) — 完整功能說明、7 個角色介紹、22 個 Skills
 - [安裝驗證報告](../km/INSTALL_VERIFICATION.md) — 安裝流程系統性驗證記錄（US-15）
 - [Project Board](../PROJECT_BOARD.md) — Sprint 進度看板與工件導覽
