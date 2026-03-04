@@ -53,6 +53,27 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 
 ---
 
+## DORA Metrics 記錄
+
+Sprint Review 時由 DORA subagent 計算四項 DORA 指標並追加快照。
+
+計算規則：
+- **部署頻率**：Sprint 期間 GitHub Actions 成功執行次數 / Sprint 天數（7 天）
+- **變更前置時間**：PR 建立到合併的平均時間（小時）
+- **MTTR**：bug label Issue 從建立到關閉的平均時間（小時，近似值）；無 bug 記錄填「N/A」
+- **變更失敗率**：workflow 執行失敗次數 / 總執行次數 × 100%
+- **趨勢判定**：累積 Sprint < 3 填「資料不足」；累積 Sprint ≥ 3 依連升=改善中、連降=退步中、波動±20%=穩定判定
+
+資料來源（ADR-006 XML 包裹）：`gh run list`、`gh pr list --state merged`、`gh issue list --label bug --state closed`
+
+| Sprint | 日期 | 部署頻率 | 變更前置時間 | MTTR | 變更失敗率 | 趨勢判定 |
+|--------|------|---------|------------|------|-----------|---------|
+| Sprint 40 | 2026-05-31 | 資料不足 | 資料不足 | N/A | 資料不足 | 資料不足 |
+
+> **Sprint 40 說明**：首次 DORA baseline 建立。趨勢判定需至 Sprint 42 才有完整數據（需至少 3 個 Sprint 記錄）。MTTR 填「N/A」表示本 Sprint 無已關閉的 bug label Issue 記錄。
+
+---
+
 ## Token 成本記錄
 
 Sprint 整體 Token 消耗記錄，與 Velocity 記錄粒度對齊（Sprint 為單位）。
