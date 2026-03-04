@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-04（US-88 完成）
-**當前 Sprint**：Sprint 42（進行中）
+**最後更新**：2026-03-04（Sprint 42 Review 完成）
+**當前 Sprint**：Sprint 42（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 42](sprints/sprint_42.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 42 — 進行中
+## Sprint 42 — 完成
 
 **Sprint Goal**：完善 Onboarding 自動化鏈路（GitHub Action 串接）並強化 Sprint 執行品質（Done 定義 checkbox 強化），同時在本 Sprint Review 中首次驗證 US-86 一致性審查機制的完整覆蓋率。
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-04 ~ 2026-03-10
 
 | Story | Size | Points | 狀態 |
@@ -18,6 +20,7 @@
 | US-89：story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | S | 1 | 完成 |
 
 **目標 Velocity**：3 points（2 Stories）
+**實際 Velocity**：3 points（2 Stories）
 
 ---
 
@@ -92,24 +95,6 @@
 
 ---
 
-## Sprint 37 — 完成
-
-**Sprint Goal**：完成 backlog-intake 單層 Issue 架構改造（#73/#72 合併交付）與 shoot US-XX ADR-010 適配，讓 Backlog 管理全工具鏈達到單層一致性與 PO 審查閉環。
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-05-04 ~ 2026-05-10
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-77：單層 Issue 架構改造 — backlog-intake / backlog-management 棄用兩層 Issue，改為 blockquote 保留原始內容 | M | 2 | 完成 |
-| US-78：shoot skill US-XX 模式需適配 ADR-010 — 從 GitHub Issues 查詢 Story | S | 1 | 完成 |
-| US-80：backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段與 label 語意修正 | S | 1 | 完成 |
-
-**目標 Velocity**：4 points（3 Stories）
-**實際 Velocity**：4 points（3 Stories）
-
----
-
 ## 短衝記錄
 
 | 日期 | 標題 | Issue/Story | commit hash |
@@ -119,4 +104,4 @@
 
 ---
 
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–36）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–37）

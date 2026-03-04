@@ -1799,3 +1799,85 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 | Retro #58（Issue #58）：L-size Story QA checklist 強化 — SKILL.md 新增大型 Story 審查增強項 | S | 1 | Done |
 | US-32（Issue #40）：parallel-dispatch 應內建同檔案衝突偵測與自動序列化 | M | 2 | Done |
 | US-34（Issue #32）：Onboarding 應預建常用 GitHub Labels | S | 1 | Done |
+
+---
+
+## Sprint 36（2026-04-27）
+
+**Sprint Goal**：ADR-010 生命週期閉環完成 — sprint-review Issue 狀態回寫、Backlog 初始化、Tech Debt Grooming Sprint 36
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-74（Issue #67）：ADR-010 後置 — sprint-review SKILL.md Story 完成後 Issue 狀態回寫對齊 | S | 1 | Sprint 36 |
+| US-75（Issue #68）：ADR-010 Backlog 初始化 — 將現有候選 Stories 建立為 GitHub Issues | M | 2 | Sprint 36 |
+| US-76（Issue #62）：Tech Debt Grooming Sprint 36 — TD-002 評估 + ADR-010 遷移後新技術債掃描 | S | 1 | Sprint 36 |
+
+---
+
+## Sprint 37（2026-05-04 ~ 2026-05-10）
+
+**Sprint Goal**：單層 Issue 架構改造 + PO Review Gate + shoot ADR-010 適配
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-77（Issue #73）：單層 Issue 架構改造 — backlog-intake / backlog-management 棄用兩層 Issue | M | 2 | Sprint 37 |
+| US-78（Issue #72）：shoot skill US-XX 模式需適配 ADR-010 | S | 1 | Sprint 37 |
+| US-80（Issue #74）：backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段 | S | 1 | Sprint 37 |
+
+---
+
+## Sprint 38（2026-05-11 ~ 2026-05-17）
+
+**Sprint Goal**：ADR-011 起草 + Decision Knowledge Base + PO 審查積壓量可視化
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-81（Issue #75）：ADR-011 起草 — GitHub Actions 整合架構決策 | S | 1 | Sprint 38 |
+| US-11（Issue #76）：Decision Knowledge Base — ADR 查詢與決策影響追蹤 | M | 2 | Sprint 38 |
+| US-82（Issue #77）：PO 審查積壓量可視化 — backlog-management 新增待審 Issues 計數與老齡警示 | S | 1 | Sprint 38 |
+
+---
+
+## Sprint 39（2026-05-18 ~ 2026-05-24）
+
+**Sprint Goal**：ADR-011 正式裁決 + US-12 CI/CD 狀態感知
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-83（Issue #78）：ADR-011 正式裁決 — GitHub Actions 整合架構決策 Proposed → Accepted | S | 1 | Sprint 39 |
+| US-12（Issue #79）：GitHub Actions 整合 — CI/CD 狀態感知與 Sprint Health Check 整合 | M | 2 | Sprint 39 |
+
+---
+
+## Sprint 40（2026-05-25 ~ 2026-05-31）
+
+**Sprint Goal**：M4 度量層 — US-13 DORA Metrics 交付 + TD-002 技術債清償
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-13（Issue #80）：DORA Metrics — 部署頻率、變更前置時間、MTTR、變更失敗率追蹤 | L | 3 | Sprint 40 |
+| TD-002（Issue #65）：PO subagent 輸出格式 JSON Schema 正式驗證 | M | 2 | Sprint 40 |
+
+---
+
+## Sprint 41（2026-03-04）
+
+**Sprint Goal**：M4 收尾與文件一致性強化
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-84（Issue #80）：M4 里程碑正式收尾 — ROADMAP US-14 完成標注 + M4 結案評估 | S | 1 | Sprint 41 |
+| US-85（Issue #80）：TD-002 技術債結案 + Schema 文案修正 | S | 1 | Sprint 41 |
+| US-86（Issue #81）：交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | M | 2 | Sprint 41 |
+| US-87（Issue #82）：GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | S | 1 | Sprint 41 |
+
+---
+
+## Sprint 42（2026-03-04）
+
+**Sprint Goal**：完善 Onboarding 自動化鏈路（GitHub Action 串接）並強化 Sprint 執行品質（Done 定義 checkbox 強化）
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-88（Issue #83）：Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | M | 2 | Sprint 42 |
+| US-89（Issue #84）：story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | S | 1 | Sprint 42 |

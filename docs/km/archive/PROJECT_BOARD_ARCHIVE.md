@@ -1,8 +1,8 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-04（Sprint 36 歸檔）
-**歸檔範圍**：Sprint 1–36（共 36 個 Sprint）
+**最後更新**：2026-03-04（Sprint 37 歸檔）
+**歸檔範圍**：Sprint 1–37（共 37 個 Sprint）
 **歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔
 
 > 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 37–41）
@@ -609,6 +609,24 @@
 | US-74：ADR-010 後置 — sprint-review SKILL.md Story 完成後 Issue 狀態回寫對齊 | S | 1 | 完成 |
 | US-75：ADR-010 Backlog 初始化 — 將現有候選 Stories 建立為 GitHub Issues | M | 2 | 完成 |
 | US-76：Tech Debt Grooming Sprint 36 — TD-002 評估 + ADR-010 遷移後新技術債掃描 | S | 1 | 完成 |
+
+**目標 Velocity**：4 points（3 Stories）
+**實際 Velocity**：4 points（3 Stories）
+
+---
+
+## Sprint 37 — 完成
+
+**Sprint Goal**：完成 backlog-intake 單層 Issue 架構改造（#73/#72 合併交付）與 shoot US-XX ADR-010 適配，讓 Backlog 管理全工具鏈達到單層一致性與 PO 審查閉環。
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-05-04 ~ 2026-05-10
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-77：單層 Issue 架構改造 — backlog-intake / backlog-management 棄用兩層 Issue，改為 blockquote 保留原始內容 | M | 2 | 完成 |
+| US-78：shoot skill US-XX 模式需適配 ADR-010 — 從 GitHub Issues 查詢 Story | S | 1 | 完成 |
+| US-80：backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段與 label 語意修正 | S | 1 | 完成 |
 
 **目標 Velocity**：4 points（3 Stories）
 **實際 Velocity**：4 points（3 Stories）

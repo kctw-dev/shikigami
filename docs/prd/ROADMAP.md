@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.20.0**（Sprint 36）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.25.0**（Sprint 42）。
 
 | 版號 | 含義 |
 |------|------|
@@ -282,6 +282,8 @@ Sprint Review 時自動產出：
 | US-85 | TD-002 技術債結案 + Schema 文案修正 | Sprint 41 ✅ |
 | US-86 | 交付物文案一致性審查機制 — 回應 Sprint 38-40 連續 Retro Problem | Sprint 41 ✅ |
 | US-87 | GitHub Action 自動觸發 backlog-intake — Issue labeled 事件驅動入庫 | Sprint 41 ✅ |
+| US-88 | Onboarding 自動串接 GitHub Action — runner 偵測 + backlog-intake 驗證 | Sprint 42 ✅ |
+| US-89 | story-lifecycle-prompt.md Done 定義 checkbox 自動勾選提醒強化 | Sprint 42 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 
