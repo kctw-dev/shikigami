@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-04-27（Sprint 36 Review 完成）
-**當前 Sprint**：Sprint 36（完成）
+**最後更新**：2026-05-04（Sprint 37 Planning 完成）
+**當前 Sprint**：Sprint 37（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 36](sprints/sprint_36.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 37](sprints/sprint_37.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 37 — 進行中
+
+**Sprint Goal**：完成 backlog-intake 單層 Issue 架構改造（#73/#72 合併交付）與 shoot US-XX ADR-010 適配，讓 Backlog 管理全工具鏈達到單層一致性與 PO 審查閉環。
+**期間**：2026-05-04 ~ 2026-05-10
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-77：單層 Issue 架構改造 — backlog-intake / backlog-management 棄用兩層 Issue，改為 blockquote 保留原始內容 | M | 2 | 進行中 |
+| US-78：shoot skill US-XX 模式需適配 ADR-010 — 從 GitHub Issues 查詢 Story | S | 1 | 進行中 |
+| US-80：backlog-intake PO Review Gate — AI 自動入庫後新增 PO 審查階段與 label 語意修正 | S | 1 | 待開始 |
+
+**目標 Velocity**：4 points（3 Stories）
 
 ---
 
