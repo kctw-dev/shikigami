@@ -1,6 +1,6 @@
 # Sprint 49
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-05 ~ 2026-03-11
 **Sprint Goal**：實作 `shikigami:diagram` SKILL.md 核心功能 — 雙格式輸出、多圖標集切換、ADR-006 XML 隔離，讓 diagram 技能達到可執行狀態。
 **總計**：1 Story / 2 Points
@@ -11,7 +11,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-98 | #97 | shikigami:diagram SKILL.md 實作 — 雙格式輸出、--provider、ADR-006 XML 隔離 | M | 2 | Phase 1 | 進行中 |
+| US-98 | #97 | shikigami:diagram SKILL.md 實作 — 雙格式輸出、--provider、ADR-006 XML 隔離 | M | 2 | Phase 1 | 完成 |
 
 **Sprint 容量**：2 Points
 

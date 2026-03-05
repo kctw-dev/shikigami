@@ -1,22 +1,38 @@
 # Project Board
 
-**最後更新**：2026-03-05（Sprint 49 Planning 完成）
-**當前 Sprint**：Sprint 49（進行中）
+**最後更新**：2026-03-05（Sprint 50 Planning 完成）
+**當前 Sprint**：Sprint 50（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 49](sprints/sprint_49.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 50](sprints/sprint_50.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 49 — 進行中
+## Sprint 50 — 進行中
 
-**Sprint Goal**：實作 `shikigami:diagram` SKILL.md 核心功能 — 雙格式輸出、多圖標集切換、ADR-006 XML 隔離，讓 diagram 技能達到可執行狀態。
+**Sprint Goal**：完成 shikigami:diagram 技能文件整合 — 補充自動嵌入 Markdown 步驟與 Issue 回覆附圖指引，使 diagram 技能達到完整可交付狀態，並關閉父 Issue #89。
 **期間**：2026-03-05 ~ 2026-03-11
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-98（#97）：shikigami:diagram SKILL.md 實作 — 雙格式輸出、--provider、ADR-006 XML 隔離 | M | 2 | 進行中 |
+| US-99（#98）：shikigami:diagram 文件整合 — 自動嵌入 Markdown、Issue 回覆附圖、關閉 #89 | S | 1 | 進行中 |
+
+**目標 Velocity**：1 point（1 Story）
+
+---
+
+## Sprint 49 — 完成
+
+**Sprint Goal**：實作 `shikigami:diagram` SKILL.md 核心功能 — 雙格式輸出、多圖標集切換、ADR-006 XML 隔離，讓 diagram 技能達到可執行狀態。
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 2 points，完成率 100%。ADR-013 升級為 Accepted，SKILL.md 雙格式輸出路徑（.drawio MCP 操控 + PNG/SVG 手動匯出）在 v1.8.0 能力邊界內完整定義。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-98（#97）：shikigami:diagram SKILL.md 實作 — 雙格式輸出、--provider、ADR-006 XML 隔離 | M | 2 | 完成 |
 
 **目標 Velocity**：2 points（1 Story）
+**實際 Velocity**：2 points（1 Story）
 
 ---
 
