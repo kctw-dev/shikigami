@@ -97,6 +97,7 @@
 
 | 日期 | 標題 | Issue/Story | commit hash |
 |------|------|-------------|-------------|
+| 2026-03-05 | Agent 忽略使用者中途留言 — 缺乏即時回應機制 | #93 | e3f5071 |
 | 2026-04-27 | 改善 sprint-N-replied label 機制為單一可重用 sprint-replied label | #66 | 7ce9c12 |
 | 2026-04-27 | US-14 Notification Templates — PR/Deploy/Review 事件通知模板 | #63 | be133a5 |
 
