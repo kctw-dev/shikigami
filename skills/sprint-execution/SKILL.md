@@ -272,7 +272,7 @@ Sprint Backlog 還有 Story？
    | 補充資訊或澄清 | P2 | 記錄，納入下一個 Story 或當前 Story 的執行 |
    | 無關對話（如閒聊） | P3 | 簡短回應後繼續執行 |
 
-   **通用規則：單一 turn 內不超過 3 個 tool calls。超過時強制輸出中間狀態，切斷 turn。**
+   **通用規則：檢查點之間（CP-1→CP-2、CP-2→CP-3）不超過 3 個 tool calls。超過時強制輸出中間狀態，切斷 turn。**
 
 2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。**主 session 不讀取 Story 內容**，Story ID 與路徑傳入 subagent，由 subagent 自行讀取。
 3. **派遣 Story-Lifecycle subagent**：使用 `story-lifecycle-prompt.md` 作為 prompt，以 ADR-007 §AC2 介面契約格式傳入以下參數（主 session 不預讀這些內容，路徑由 **Story-Lifecycle subagent 自行讀取**）：
@@ -581,7 +581,7 @@ Agent 在一個 turn 內連續 tool call 時，平台無法插入使用者新訊
 2. 下一個 turn 開始時，檢查平台是否注入了 `<system-reminder>` 中的使用者新訊息
 3. 若有，依 P0-P3 優先級處理後再繼續
 
-**通用規則：單一 turn 內不超過 3 個 tool calls。超過時強制輸出中間狀態，切斷 turn。**
+**通用規則：檢查點之間（CP-1→CP-2、CP-2→CP-3）不超過 3 個 tool calls。超過時強制輸出中間狀態，切斷 turn。**
 
 ### 各角色的中斷處理責任
 
