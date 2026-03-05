@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-05（Sprint 44 Review 完成）
-**當前 Sprint**：Sprint 44（完成）
+**最後更新**：2026-03-05（Sprint 45 Planning Round 2 完成）
+**當前 Sprint**：Sprint 45（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 44](sprints/sprint_44.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 45](sprints/sprint_45.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 45 — 進行中
+
+**Sprint Goal**：完善多開發環境操作文件 — 建立 GCE 認證設定指引與 CI/CD workflow 拆分指引，讓多 GCE 平行開發流程可循、消費端 CI/CD 配置有據可依。
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-A（#87）：多 GCE 認證設定指引 — 文件化各開發環境 OAuth 認證與使用紀律規範 | S | 1 | 待開發 |
+| US-93（#88）：CI/CD workflow 拆分指引 — GitHub-hosted tests + self-hosted notification trigger | S | 1 | 待開發 |
+
+**目標 Velocity**：2 points（2 Stories）
 
 ---
 
