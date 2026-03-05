@@ -1,22 +1,38 @@
 # Project Board
 
-**最後更新**：2026-03-05（Sprint 47 Planning 完成）
-**當前 Sprint**：Sprint 47（進行中）
+**最後更新**：2026-03-05（Sprint 48 Planning 完成）
+**當前 Sprint**：Sprint 48（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 47](sprints/sprint_47.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 48](sprints/sprint_48.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 47 — 進行中
+## Sprint 48 — 進行中
 
-**Sprint Goal**：為 shikigami:diagram 技能建立架構決策基礎 — 起草 ADR-013，評估 MCP 整合架構。
+**Sprint Goal**：解決 ADR-013 高優先級開放問題（OQ-1、OQ-2），驗證 drawio-mcp-server stdio local 環境可行性，為 shikigami:diagram SKILL.md 實作提供可信的技術基礎。
 **期間**：2026-03-05 ~ 2026-03-11
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-96（#95）：ADR-013 起草 — shikigami:diagram MCP 整合架構決策 | S | 1 | 進行中 |
+| US-97（#96）：shikigami:diagram 環境準備 — drawio-mcp-server stdio local 安裝與整合驗證 | S | 1 | 進行中 |
 
 **目標 Velocity**：1 point（1 Story）
+
+---
+
+## Sprint 47 — 完成
+
+**Sprint Goal**：為 shikigami:diagram 技能建立架構決策基礎 — 起草 ADR-013，評估 MCP 整合架構。
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-96（#95）：ADR-013 起草 — shikigami:diagram MCP 整合架構決策 | S | 1 | 完成 |
+
+**目標 Velocity**：1 point（1 Story）
+**實際 Velocity**：1 point（1 Story）
 
 ---
 

@@ -1,6 +1,6 @@
 # Sprint 47
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-05 ~ 2026-03-11
 **Sprint Goal**：為 shikigami:diagram 技能建立架構決策基礎 — 起草 ADR-013，評估 MCP 整合架構（部署形態、transport 選型、CI 整合、安全考量），為 Issue #89 實作提供可信的技術前提。
 **總計**：1 Story / 1 Point
@@ -11,7 +11,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-96 | #95 | ADR-013 起草 — shikigami:diagram MCP 整合架構決策 | S | 1 | Phase 1 | 進行中 |
+| US-96 | #95 | ADR-013 起草 — shikigami:diagram MCP 整合架構決策 | S | 1 | Phase 1 | 完成 |
 
 **Sprint 容量**：1 Point
 
