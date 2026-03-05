@@ -115,12 +115,19 @@ Sprint Backlog 還有 Story？
    3. 在 Metrics_Log.md「Token Baseline Snapshots」表格新增一列：Sprint 編號填入本 Sprint 編號，環節名稱填「Execution」，兩個累計 token 欄位填入步驟 2 計算所得值
    4. 若 JSONL 不可存取，兩欄填「N/A」並輸出「Token Baseline 不可用，需手動補充」
 
-1. **Issue 快掃**：在取出 Story 之前，執行 GitHub Issue 快速掃描，處理社群或使用者的待回覆問題。
+1. **Issue 快掃**：在取出 Story 之前，執行 GitHub Issue 快速掃描，處理新 Issue 與新留言（含 closed issue 上的新 comment）。
 
-   **執行指令：**
+   **執行指令（兩段式掃描）：**
+
    ```bash
+   # (a) 新 Issue 與 open issue（原有邏輯）
    gh issue list --state open --limit 10
+
+   # (b) 近期有新 comment 的 issue（含 closed），抓最近 7 天內更新的
+   gh issue list --state all --sort updated --limit 10 --json number,title,state,updatedAt,labels
    ```
+
+   步驟 (b) 的結果中，篩出 `updatedAt` 在最近 7 天內且不在步驟 (a) 結果中的 issue（避免重複處理）。對這些 issue 執行 `gh issue view N --comments` 確認是否有未處理的新 comment。
 
    **降級指引：** gh 指令失敗（網路問題、權限不足、非 GitHub 倉庫等）時靜默略過，不阻塞 Story 執行。
 
@@ -244,26 +251,28 @@ Sprint Backlog 還有 Story？
 
    **降級指引：** `gh run list` 指令失敗（網路問題、權限不足、非 GitHub 倉庫等）或無任何執行記錄時，CI 狀態記為 `UNKNOWN`，靜默略過，不阻塞 Story 執行。UNKNOWN 狀態不觸發 `[CI-ALERT]`。
 
-1c. **使用者留言檢查**（中斷偵測檢查點）：在取出 Story 之前，檢查使用者是否在對話中插入了新的留言或指示。
+1c. **使用者留言檢查**（中斷偵測檢查點）：在關鍵步驟之間，強制輸出進度狀態給使用者，讓平台有機會注入待處理的使用者訊息。
 
-   **檢查時機（三個檢查點）：**
+   **機制原理：** Agent 在一個 turn 內連續 tool call 時，平台無法插入使用者新訊息。唯一讓訊息進來的方式是**結束當前 turn**（輸出文字給使用者）。因此「檢查留言」的實際動作 = **輸出狀態摘要，等待下一個 turn 開始**。
 
-   | 檢查點 | 時機 | 說明 |
-   |--------|------|------|
-   | CP-1 | 取出每個 Story 之前 | 確認使用者無新指示再開始新 Story |
-   | CP-2 | 派遣 Story-Lifecycle subagent 之前 | 確認 Story 方向未被使用者修正 |
-   | CP-3 | Story 完成、更新看板之前 | 確認使用者無需暫停或調整 |
+   **檢查點與執行方式：**
 
-   **處理規則：**
+   | 檢查點 | 時機 | 必要動作 |
+   |--------|------|---------|
+   | CP-1 | 取出每個 Story 之前 | 輸出「準備取出 Story US-XX」，結束當前 turn |
+   | CP-2 | 派遣 Story-Lifecycle subagent 之前 | 輸出「即將派遣 subagent 執行 US-XX」，結束當前 turn |
+   | CP-3 | Story 完成、更新看板之前 | 輸出「US-XX 完成，準備更新看板」，結束當前 turn |
+
+   **檢查邏輯：** 輸出狀態後，若平台在下一個 turn 注入了 `<system-reminder>` 包含使用者新訊息，依以下優先級處理後再繼續：
 
    | 留言類型 | 優先級 | 動作 |
    |---------|--------|------|
-   | 流程修正指示（如「停止」「跳過」「先做 X」） | 最高 | 立即暫停當前流程，回應使用者 |
-   | 品質質疑（如「有審查過嗎？」「確定嗎？」） | 高 | 暫停，執行使用者要求的審查或確認 |
-   | 補充資訊或澄清 | 中 | 記錄，納入下一個 Story 或當前 Story 的執行 |
-   | 無關對話（如閒聊） | 低 | 簡短回應後繼續執行 |
+   | 流程修正指示（如「停止」「跳過」「先做 X」） | P0 | 立即暫停當前流程，回應使用者 |
+   | 品質質疑（如「有審查過嗎？」「確定嗎？」） | P1 | 暫停，執行使用者要求的審查或確認 |
+   | 補充資訊或澄清 | P2 | 記錄，納入下一個 Story 或當前 Story 的執行 |
+   | 無關對話（如閒聊） | P3 | 簡短回應後繼續執行 |
 
-   **核心原則：使用者留言的處理優先級永遠高於當前自動化流程。**
+   **通用規則：單一 turn 內不超過 3 個 tool calls。超過時強制輸出中間狀態，切斷 turn。**
 
 2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。**主 session 不讀取 Story 內容**，Story ID 與路徑傳入 subagent，由 subagent 自行讀取。
 3. **派遣 Story-Lifecycle subagent**：使用 `story-lifecycle-prompt.md` 作為 prompt，以 ADR-007 §AC2 介面契約格式傳入以下參數（主 session 不預讀這些內容，路徑由 **Story-Lifecycle subagent 自行讀取**）：
@@ -562,17 +571,29 @@ Sprint 執行為長時間多步驟自動化流程。使用者可能在任何步�
 | P2（中） | 補充資訊、需求澄清 | 記錄留言，在下一個自然檢查點處理 | 「AC 要加一條」「這個 Issue 也相關」 |
 | P3（低） | 非緊急觀察、備忘 | 記錄，不中斷流程，Sprint 結束時回顧 | 「下次記得也看看 X」 |
 
+### 中斷偵測機制
+
+Agent 在一個 turn 內連續 tool call 時，平台無法插入使用者新訊息。**唯一讓訊息進來的方式是結束當前 turn（輸出文字給使用者）。**
+
+因此，中斷偵測的實際動作不是「去查有沒有訊息」，而是**「停下來讓訊息有機會進來」**：
+
+1. 在檢查點（CP-1/CP-2/CP-3）**強制輸出狀態摘要**，結束當前 turn
+2. 下一個 turn 開始時，檢查平台是否注入了 `<system-reminder>` 中的使用者新訊息
+3. 若有，依 P0-P3 優先級處理後再繼續
+
+**通用規則：單一 turn 內不超過 3 個 tool calls。超過時強制輸出中間狀態，切斷 turn。**
+
 ### 各角色的中斷處理責任
 
 **主 Session（Sprint Execution）：**
-- 在每個檢查點（CP-1/CP-2/CP-3）主動掃描使用者新留言
+- 在每個檢查點輸出狀態摘要，強制切斷 turn
 - P0/P1 留言：立即暫停，回應使用者
 - P2 留言：記錄，在當前 Story 完成後處理
 - P3 留言：記錄至 Sprint 筆記
 
 **Story-Lifecycle Subagent：**
 - Subagent 無法直接偵測使用者留言（隔離設計）
-- 依賴主 session 在派遣前（CP-2）與完成後（CP-3）的檢查
+- 依賴主 session 在派遣前（CP-2）與完成後（CP-3）的 turn 切斷
 - 若主 session 收到 P0/P1 留言，應等待 subagent 當前步驟完成後再處理（不強制中斷 subagent）
 
 ### 來源
