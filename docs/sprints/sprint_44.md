@@ -2,7 +2,7 @@
 
 **狀態**：進行中
 **期間**：2026-03-04 ~ 2026-03-10
-**Sprint Goal**：建立 API Key Rotation 架構基礎 — 起草 ADR-012，確認 ToS 合規性與 Key pool 設計方案，為 Sprint 45 US-A 實作提供可信的架構前提。
+**Sprint Goal**：建立多開發環境認證架構基礎 — 起草 ADR-012，確認 ToS 合規性與多 GCE 平行開發認證方案，為 Sprint 45 US-A 實作提供可信的架構前提。
 **總計**：1 Story / 1 Point
 
 ---
@@ -11,7 +11,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-92 | #86 | ADR-012 起草 — Claude API Key Rotation 認證輪流架構決策 | S | 1 | Phase 1（單一） | 待開始 |
+| US-92 | #86 | ADR-012 起草 — Claude Max 多開發環境認證架構決策 | S | 1 | Phase 1（單一） | 完成 |
 
 **Sprint 容量**：1 Point
 
@@ -31,7 +31,7 @@
 
 ---
 
-### US-92：ADR-012 起草 — Claude API Key Rotation 認證輪流架構決策
+### US-92：ADR-012 起草 — Claude Max 多開發環境認證架構決策
 
 **來源**：Sprint 43 US-90 精化 — Issue #69 子主題 A（API Key Rotation, RICE 4.2）
 **Size**：S / 1 Point
@@ -41,7 +41,7 @@
 
 **User Story**
 
-As an Architect, I want to document the architecture decision for Claude API Key Rotation, so that the team has a clear, ToS-compliant technical direction before implementing the Key Pool feature.
+As an Architect, I want to document the architecture decision for Claude Max subscription account rotation, so that the team has a clear, ToS-compliant technical direction before implementing the authentication architecture.
 
 **Acceptance Criteria**
 
@@ -65,12 +65,12 @@ As an Architect, I want to document the architecture decision for Claude API Key
 
 **Done 定義**
 
-- [ ] ADR-012.md 建立於 docs/adr/ 目錄
-- [ ] ToS 合規性分析完成（AC1）
-- [ ] 至少 2 個技術方案分析完成（AC2）
-- [ ] ADR Status 明確標注（AC3）
-- [ ] Key 管理機制定義完成（AC4）
-- [ ] 後續行動章節指向 US-A（AC5）
+- [x] ADR-012.md 建立於 docs/adr/ 目錄
+- [x] ToS 合規性分析完成（AC1）
+- [x] 至少 2 個技術方案分析完成（AC2）
+- [x] ADR Status 明確標注（AC3）
+- [x] 認證管理機制定義完成（AC4）
+- [x] 後續行動章節指向 US-A（AC5）
 
 ---
 

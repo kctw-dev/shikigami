@@ -9,12 +9,12 @@
 
 ## Sprint 44 — 進行中
 
-**Sprint Goal**：建立 API Key Rotation 架構基礎 — 起草 ADR-012，確認 ToS 合規性與 Key pool 設計方案，為 Sprint 45 US-A 實作提供可信的架構前提。
+**Sprint Goal**：建立多開發環境認證架構基礎 — 起草 ADR-012，確認 ToS 合規性與多 GCE 平行開發認證方案，為 Sprint 45 US-A 實作提供可信的架構前提。
 **期間**：2026-03-04 ~ 2026-03-10
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-92：ADR-012 起草 — Claude API Key Rotation 認證輪流架構決策 | S | 1 | 待開始 |
+| US-92：ADR-012 起草 — Claude Max 多開發環境認證架構決策 | S | 1 | 完成 |
 
 **目標 Velocity**：1 point（1 Story）
 
