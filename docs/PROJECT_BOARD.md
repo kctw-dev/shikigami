@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-05（Sprint 46 Review 完成）
-**當前 Sprint**：Sprint 47（規劃中）
+**最後更新**：2026-03-05（Sprint 47 Planning 完成）
+**當前 Sprint**：Sprint 47（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 46](sprints/sprint_46.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 47](sprints/sprint_47.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 47 — 進行中
+
+**Sprint Goal**：為 shikigami:diagram 技能建立架構決策基礎 — 起草 ADR-013，評估 MCP 整合架構。
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-96（#95）：ADR-013 起草 — shikigami:diagram MCP 整合架構決策 | S | 1 | 進行中 |
+
+**目標 Velocity**：1 point（1 Story）
 
 ---
 
