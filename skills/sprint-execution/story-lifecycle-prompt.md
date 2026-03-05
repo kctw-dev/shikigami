@@ -99,6 +99,7 @@ commit + 取得 commit SHA
 3. 讀取所有 `related_sdds` 路徑下的 SDD 文件（若有）
 4. 確認 `doc_only` 與 `bypass` 狀態，決定執行路徑
 5. 執行同檔案衝突偵測（規則參照 `developer-prompt.md`）
+6. **中斷信號確認**：確認主 session 無待處理的使用者留言或中斷指示。若主 session 傳入中斷信號，立即回傳 `ESCALATE: REQUIREMENT_AMBIGUITY`（附使用者留言內容），由主 session 決定是否繼續
 
 ---
 
