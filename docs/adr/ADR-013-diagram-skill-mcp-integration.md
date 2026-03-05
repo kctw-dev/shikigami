@@ -1,6 +1,6 @@
 # ADR-013：shikigami:diagram MCP 整合架構決策
 
-**狀態**：Proposed
+**狀態**：Accepted
 **日期**：2026-03-05
 **決策者**：Architect
 **關聯 Issue**：#89（feat: shikigami:diagram 技能）、#95（US-96 本 ADR 起草）
@@ -343,7 +343,7 @@ ADR-006（Prompt Injection Protection）定義了外部資料進入 Skill prompt
 
 ---
 
-## 決策結果（Proposed）
+## 決策結果（Accepted）
 
 ### 建議方案：stdio local + MCP stdio transport + CI 跳過 + 最小 Secrets
 
