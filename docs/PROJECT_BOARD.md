@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-04（Sprint 44 Planning 完成）
-**當前 Sprint**：Sprint 44（進行中）
+**最後更新**：2026-03-05（Sprint 44 Review 完成）
+**當前 Sprint**：Sprint 44（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 44](sprints/sprint_44.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 44 — 進行中
+## Sprint 44 — 完成
 
 **Sprint Goal**：建立多開發環境認證架構基礎 — 起草 ADR-012，確認 ToS 合規性與多 GCE 平行開發認證方案，為 Sprint 45 US-A 實作提供可信的架構前提。
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-04 ~ 2026-03-10
 
 | Story | Size | Points | 狀態 |
@@ -17,6 +19,7 @@
 | US-92：ADR-012 起草 — Claude Max 多開發環境認證架構決策 | S | 1 | 完成 |
 
 **目標 Velocity**：1 point（1 Story）
+**實際 Velocity**：1 point（1 Story）
 
 ---
 
@@ -90,23 +93,6 @@
 
 ---
 
-## Sprint 39 — 完成
-
-**Sprint Goal**：正式裁決 ADR-011（Proposed → Accepted），交付 M4 GitHub Actions 整合首個可執行 Story（US-12 CI/CD 狀態感知），讓外部工具鏈與 Shikigami Sprint 週期正式整合。
-**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。
-**Stakeholder 驗收**：接受
-**期間**：2026-05-18 ~ 2026-05-24
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-83：ADR-011 正式裁決 — GitHub Actions 整合架構決策 Proposed → Accepted | S | 1 | 完成 |
-| US-12：GitHub Actions 整合 — CI/CD 狀態感知與 Sprint Health Check 整合 | M | 2 | 完成 |
-
-**目標 Velocity**：3 points（2 Stories）
-**實際 Velocity**：3 points（2 Stories）
-
----
-
 ## 短衝記錄
 
 | 日期 | 標題 | Issue/Story | commit hash |
@@ -116,4 +102,4 @@
 
 ---
 
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–38）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–39）

@@ -1892,3 +1892,13 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 |-------|------|--------|------------|
 | US-90（Issue #69）：Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | S | 1 | Sprint 43 |
 | US-91（Issue #85）：M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | Sprint 43 |
+
+---
+
+## Sprint 44（2026-03-05）
+
+**Sprint Goal**：建立多開發環境認證架構基礎 — 起草 ADR-012，確認 ToS 合規性與多 GCE 平行開發認證方案
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-92（Issue #86）：ADR-012 起草 — Claude Max 多開發環境認證架構決策 | S | 1 | Sprint 44 |

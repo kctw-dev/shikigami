@@ -1,11 +1,11 @@
 # Retrospective Log 歷史歸檔
 
 **來源**：`docs/km/Retrospective_Log.md`
-**最後更新**：2026-03-04（Sprint 36 歸檔）
-**歸檔範圍**：Sprint 1–36（共 36 個 Sprint）
+**最後更新**：2026-03-05（Sprint 37 歸檔）
+**歸檔範圍**：Sprint 1–37（共 37 個 Sprint）
 **歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31–33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔
 
-> 主文件現況：[Retrospective_Log.md](../Retrospective_Log.md)（保留 Sprint 36–40）
+> 主文件現況：[Retrospective_Log.md](../Retrospective_Log.md)（保留 Sprint 38–44）
 
 ---
 
@@ -1036,3 +1036,21 @@ PO、Architect、QA Engineer、Developer、Stakeholder
 | # | Action | Owner | 驗收方式 | Issue |
 |---|--------|-------|----------|-------|
 | 1 | 改善 sprint-N-replied 機制：改用單一 `last-replied-sprint` label 取代每 Sprint 新增 label，並在 sprint-execution SKILL.md 更新對應邏輯 | Developer | 下 Sprint Issue 快掃時確認新機制運作，無新增 sprint-N-replied labels | #66 |
+
+---
+
+## Sprint 37 — 2026-05-04
+
+### Good
+- 連續 37 個 Sprint 100% 完成率（3/3 Stories PASS），Sprint Goal 達成：單層 Issue 架構改造 + PO Review Gate + shoot ADR-010 適配全數交付，Backlog 管理全工具鏈達成單層一致性
+- Phase 1 平行派遣（US-77 + US-78 各修改不同 SKILL.md）零衝突完成，Architect 分群策略連續十個 Sprint 有效（Sprint 28–37）
+- 外部抽樣審查 US-77（M-size，8 AC）全數 CONFIRM，自審品質無偏差
+- PO Review Gate（US-80）為本 Sprint 最有商業價值的交付：`auto-triaged` → `triaged` 明確區分 AI 自動入庫與 PO 人工審查，Backlog 品質控制權回歸 PO
+- Sprint 36 Retro Action #66（sprint-replied label 改善）已透過 /shoot 完成，本 Sprint Issue 快掃確認新機制正常運作
+
+### Problem
+- 快思模式持續執行，Token 分環節記錄 N/A（持續性成本可見性盲區，屬有意設計取捨）
+
+### Action Items
+
+本 Sprint 無新增 Action Items。

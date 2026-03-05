@@ -1,6 +1,6 @@
 # ADR-012：Claude Max 多開發環境認證架構決策
 
-**狀態**：Proposed
+**狀態**：Accepted
 **日期**：2026-03-05
 **決策者**：Architect
 **關聯 Issue**：#86（US-92）、#87（US-A — 認證架構實作）
@@ -304,7 +304,7 @@ GitHub Actions（CI/CD）
 
 ## 決策（AC3）
 
-**ADR Status：Proposed**
+**ADR Status：Accepted**
 
 本 ADR 建議採用**選項 B（多 GCE 各自訂閱、平行開發）為主要方案**。
 

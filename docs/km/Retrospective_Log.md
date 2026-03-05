@@ -1,6 +1,27 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–36）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–37）
+
+---
+
+## Sprint 44 — 2026-03-05
+
+### Good
+- 連續 44 個 Sprint 100% 完成率（1/1 Story PASS），Sprint Goal 達成：ADR-012 起草完成並於 Sprint Review 中升級為 Accepted，多 GCE 平行開發認證架構決策落地
+- 輕量 Sprint 策略（1pt）證明正確：ADR-012 經歷多輪迭代討論（API Key Rotation → Max 帳號輪換 → 多 GCE 平行開發 + 工作移動），實際工作量遠超 1pt 估點但成果品質因充分討論而顯著提升
+- ADR-012 ToS 合規分析誠實面對 MEDIUM-LOW 風險評級，未刻意美化使用情境（「工作流向有可用額度的機器」而非嚴格的「耗完即停」），決策品質因透明度而提升
+- §1.5 一致性審查機制連續第三個 Sprint 驗證有效（攔截 3 項：ROADMAP 遺漏 US-92、Issue #86 標題不一致、版本號 v0.26.0→v0.27.0 未更新），Sprint 38-40 Problem 引發的改進閉環持續穩定
+- Stakeholder 建議 ADR-012 直接升級為 Accepted（原為 Proposed），加速後續 Sprint 45 US-A 實作啟動，決策效率佳
+
+### Problem
+- ADR-012 初始範圍定義錯誤（API Key Rotation vs Max 訂閱帳號輪換），導致整份 ADR 需完全重寫。根因：Sprint Planning 時 Story 標題描述不夠精確，「API Key Rotation」未準確反映使用者實際需求（Max 訂閱帳號管理）
+- ADR-012 經歷 3 次完全重寫（API Key → 單機帳號輪換 → 多 GCE 平行開發），迭代次數偏高。雖最終品質佳，但反映 ADR 起草前的需求探索不夠充分
+
+### Action Items
+
+本 Sprint 無新增 Action Items。
+
+> Problem 1 與 Problem 2 均在 Sprint 執行過程中透過與使用者反覆討論解決，最終 ADR 品質經 QA 5/5 AC PASS 與 Stakeholder 接受確認。根因為 Story 標題精確度不足，屬 Sprint Planning 階段可改善項目，但因 ADR 類 Story 本質上需要探索性討論，非結構性缺陷，無需獨立追蹤。
 
 ---
 
@@ -126,23 +147,5 @@
 本 Sprint 無新增 Action Items。
 
 > Problem 已由外部抽樣審查在 Sprint 中攔截修正（fix commit b80721b），DISPUTE → CONFIRM 流程運作正常，無需跨 Sprint 追蹤。
-
----
-
-## Sprint 37 — 2026-05-04
-
-### Good
-- 連續 37 個 Sprint 100% 完成率（3/3 Stories PASS），Sprint Goal 達成：單層 Issue 架構改造 + PO Review Gate + shoot ADR-010 適配全數交付，Backlog 管理全工具鏈達成單層一致性
-- Phase 1 平行派遣（US-77 + US-78 各修改不同 SKILL.md）零衝突完成，Architect 分群策略連續十個 Sprint 有效（Sprint 28–37）
-- 外部抽樣審查 US-77（M-size，8 AC）全數 CONFIRM，自審品質無偏差
-- PO Review Gate（US-80）為本 Sprint 最有商業價值的交付：`auto-triaged` → `triaged` 明確區分 AI 自動入庫與 PO 人工審查，Backlog 品質控制權回歸 PO
-- Sprint 36 Retro Action #66（sprint-replied label 改善）已透過 /shoot 完成，本 Sprint Issue 快掃確認新機制正常運作
-
-### Problem
-- 快思模式持續執行，Token 分環節記錄 N/A（持續性成本可見性盲區，屬有意設計取捨）
-
-### Action Items
-
-本 Sprint 無新增 Action Items。
 
 ---
