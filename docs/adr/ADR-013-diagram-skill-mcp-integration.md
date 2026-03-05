@@ -398,7 +398,7 @@ ADR-012 決策的多 GCE 開發環境中，stdio 方案需各 GCE 個別安裝 d
 |-----|---------|------|
 | ADR-006 | 延伸 | `shikigami:diagram` SKILL.md 必須宣告 drawio-mcp-server tool 輸出為不信任外部資料，套用 XML 隔離標記 |
 | ADR-011 | 繼承 | CI 跳過 diagram 生成，與 ADR-011 輕量 CI 子集決策一致；无新增衝突 |
-| ADR-012 | 補充 | stdio local 安裝需納入 Issue #90 多 GCE 環境可重建性清單（`npm install drawio-mcp-server@<version>`） |
+| ADR-012 | 補充 | stdio local 安裝需納入 Issue #90 多 GCE 環境可重建性清單（`npm install -g drawio-mcp-server@1.8.0`）；無需 headless Chrome |
 
 ### 對 .mcp.json 的影響
 
@@ -408,13 +408,15 @@ ADR-012 決策的多 GCE 開發環境中，stdio 方案需各 GCE 個別安裝 d
     "drawio": {
       "type": "stdio",
       "command": "npx",
-      "args": ["drawio-mcp-server@<pinned-version>"]
+      "args": ["-y", "drawio-mcp-server@1.8.0", "--editor"]
     }
   }
 }
 ```
 
-`.mcp.json` 版本鎖定（精確版號取代 `@latest`），符合 §4.4 Supply Chain 安全建議。
+`.mcp.json` 版本鎖定（精確版號 `1.8.0` 取代 `@latest`），符合 §4.4 Supply Chain 安全建議。`--editor` 旗標啟用內建 Draw.io 編輯器（`http://localhost:3000/`），無需 headless Chrome。
+
+> 此設定已於 Sprint 48 US-97 實際寫入專案根目錄 `.mcp.json`（2026-03-05）。
 
 ---
 
@@ -422,12 +424,107 @@ ADR-012 決策的多 GCE 開發環境中，stdio 方案需各 GCE 個別安裝 d
 
 本 ADR 起草階段識別以下開放問題，待 Issue #89 實作前解決：
 
-| # | 問題 | 優先級 | 說明 |
-|---|------|--------|------|
-| OQ-1 | drawio-mcp-server headless Chrome 在 GCE 環境的安裝方式 | 高 | ubuntu-based GCE 通常需 `apt install chromium-browser`；需確認與 drawio-mcp-server 的 Chrome 路徑期望是否一致 |
-| OQ-2 | drawio-mcp-server 輸出格式確認 | 高 | 需確認 tool 回傳的是檔案路徑還是 Base64 內容，影響 ADR-006 隔離標記的設計 |
-| OQ-3 | 多圖標集（--provider）的本機 icon set 資源管理 | 中 | GCP / AWS / Azure icon set 是否包含於 npm package 中，或需另行下載；影響安裝指引 |
-| OQ-4 | 未來 Cloud Run 升級觸發條件 | 低 | 若 stdio 方案有明確不足（如多 CI parallel 競爭、跨專案共享），重新評估 Cloud Run 方案的觸發條件需明確定義 |
+| # | 問題 | 優先級 | 狀態 | 說明 |
+|---|------|--------|------|------|
+| OQ-1 | drawio-mcp-server headless Chrome 在 GCE 環境的安裝方式 | 高 | **已解答（US-97）** | 見下方 OQ-1 解答區塊 |
+| OQ-2 | drawio-mcp-server 輸出格式確認 | 高 | **已解答（US-97）** | 見下方 OQ-2 解答區塊 |
+| OQ-3 | 多圖標集（--provider）的本機 icon set 資源管理 | 中 | 待解答 | GCP / AWS / Azure icon set 是否包含於 npm package 中，或需另行下載；影響安裝指引 |
+| OQ-4 | 未來 Cloud Run 升級觸發條件 | 低 | 待解答 | 若 stdio 方案有明確不足（如多 CI parallel 競爭、跨專案共享），重新評估 Cloud Run 方案的觸發條件需明確定義 |
+
+---
+
+### OQ-1 解答：drawio-mcp-server v1.8.0 不需要 headless Chrome
+
+**調查日期**：2026-03-05（Sprint 48 US-97）
+**調查結果**：`drawio-mcp-server v1.8.0` 的架構已大幅演進，**完全不依賴 headless Chrome**。
+
+#### 架構說明
+
+v1.8.0 採用兩種運作模式，均透過 WebSocket 與 Draw.io 前端溝通，而非 headless Chrome rendering：
+
+1. **內建編輯器模式（`--editor`）**：Server 在 `http://localhost:3000/` 提供完整 Draw.io 編輯器（靜態資源打包於 npm package 中），無需瀏覽器 extension 或 headless Chrome
+2. **瀏覽器 Extension 模式**：連接使用者瀏覽器中已開啟的 Draw.io，透過 WebSocket extension（port 3333）溝通
+
+#### Chromium 安裝現況（本機 GCE）
+
+雖然 drawio-mcp-server 不需要 Chromium，本機 GCE 環境已安裝 Chromium 供一般瀏覽使用：
+
+```
+路徑：/usr/bin/chromium-browser
+版本：Chromium 145.0.7632.116 snap
+安裝方式：sudo apt install -y chromium-browser
+```
+
+#### 對 ADR-013 的影響
+
+- **OQ-1 原始假設（需要 headless Chrome）已過時**：此假設基於舊版本架構
+- **CI 整合影響**：CI 跳過決策（決策域 3 Option B）仍成立，但理由從「避免 headless Chrome 安裝複雜度」調整為「diagram 生成需 Draw.io 編輯器，屬內容產出而非 CI 驗證職責」
+- **ADR-012 多 GCE 環境影響**：各 GCE 環境只需 `npm install -g drawio-mcp-server@1.8.0`，無需額外安裝 headless Chrome
+
+---
+
+### OQ-2 解答：drawio-mcp-server tool 輸出格式
+
+**調查日期**：2026-03-05（Sprint 48 US-97）
+**調查方式**：審閱 `drawio-mcp-server@1.8.0` npm package 原始碼（`build/tool.js`、`build/index.js`）
+
+#### Tool 輸出格式
+
+所有 MCP tool 均回傳標準 MCP content 格式：
+
+```json
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "<JSON 字串，包含 tool 回應的結構化資料>"
+    }
+  ]
+}
+```
+
+**關鍵特性**：
+- **text 型別**：所有工具一律回傳 `type: "text"` content，值為 JSON-stringify 的物件
+- **無 Base64 圖片輸出**：v1.8.0 不產出 PNG/SVG 二進制內容（無 headless Chrome rendering）
+- **無檔案路徑輸出**：tool 不寫入本機檔案，直接回傳結構化 JSON 資料
+- **diagram 操作語意**：工具執行「diagram 狀態操作」（新增/修改/刪除 cell），而非「export 圖片」
+
+#### 可用 MCP Tools（v1.8.0 完整清單）
+
+| Tool 名稱 | 說明 | 輸出格式 |
+|-----------|------|---------|
+| `get_selected_cell` | 取得當前選取的 cell 屬性 | JSON text |
+| `add_rectangle` | 新增矩形 vertex cell | JSON text |
+| `add_edge` | 建立兩個 vertex 之間的邊 | JSON text |
+| `delete_cell_by_id` | 刪除指定 cell | JSON text |
+| `get_shape_categories` | 取得圖形庫分類清單 | JSON text |
+| `get_shapes_in_category` | 取得指定分類的所有圖形 | JSON text |
+| `get_shape_by_name` | 依名稱取得特定圖形 | JSON text |
+| `add_cell_of_shape` | 依圖形名稱新增 vertex cell | JSON text |
+| `set_cell_shape` | 更新 cell 的視覺樣式 | JSON text |
+| `set_cell_data` | 設定 cell 的自訂屬性 | JSON text |
+| `edit_cell` | 修改 vertex cell 屬性 | JSON text |
+| `edit_edge` | 修改 edge 屬性 | JSON text |
+| `list_paged_model` | 分頁列出所有 cells | JSON text |
+| `list_layers` | 列出所有 layers | JSON text |
+| `set_active_layer` | 設定當前使用的 layer | JSON text |
+| `move_cell_to_layer` | 將 cell 移至指定 layer | JSON text |
+| `get_active_layer` | 取得當前 layer 資訊 | JSON text |
+| `create_layer` | 建立新 layer | JSON text |
+
+#### 對 ADR-006 Injection 防護的影響
+
+- **隔離標記設計確認**：tool 回傳 `type: "text"` 的 JSON 字串，屬於文字型不信任外部資料
+- **XML 隔離標記適用**：`<mcp_tool_output>...</mcp_tool_output>` 標記設計仍適用，無需調整
+- **PNG/SVG 工件產出**：v1.8.0 不直接產出圖片二進制；若需 PNG/SVG，須透過 Draw.io 編輯器 UI 手動匯出，或待未來版本新增 export tool
+
+#### 對 shikigami:diagram 技能設計的影響
+
+`shikigami:diagram` 技能的實作模式需從「產出圖片檔案」調整為「操控 Draw.io diagram 狀態」：
+
+1. Claude 透過 MCP tools 建立/修改 diagram 元素（cell、edge、layer）
+2. 使用者在 Draw.io 編輯器（`http://localhost:3000/`）確認結果
+3. 手動匯出 PNG/SVG/PDF（v1.8.0 無自動匯出 tool）
 
 ---
 
