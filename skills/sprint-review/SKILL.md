@@ -636,7 +636,7 @@ MX 完成狀態：
 
 ## 6. 歸檔觸發檢查
 
-Sprint Review 完成、產出文件更新後，執行以下歸檔觸發檢查。
+Sprint Review 完成、產出文件更新後，**派遣 subagent** 執行歸檔觸發檢查與歸檔操作。主 session 僅接收歸檔結果摘要（歸檔了哪些 Sprint、更新了哪些文件），不直接操作歸檔文件。
 
 ### 觸發條件
 
@@ -648,8 +648,7 @@ Sprint Review 完成、產出文件更新後，執行以下歸檔觸發檢查。
 ### 歸檔規則
 
 - **保留範圍**：以當次 Sprint Review 為基準，保留**當前 Sprint + 最近 2 個 Sprint**的完整記錄
-- **移出範圍**：超出保留範圍的歷史 Sprint 記錄移至對應歸檔文件
-- **每次最多移動**：1 個最舊 Sprint，直到符合保留範圍（漸進歸檔）
+- **移出範圍**：超出保留範圍的**所有**歷史 Sprint 記錄**一次性**移至對應歸檔文件（批量歸檔）
 
 ### 歸檔目標路徑
 
@@ -658,12 +657,14 @@ Sprint Review 完成、產出文件更新後，執行以下歸檔觸發檢查。
 | `docs/PROJECT_BOARD.md` | `docs/km/archive/PROJECT_BOARD_ARCHIVE.md` |
 | `docs/km/Retrospective_Log.md` | `docs/km/archive/RETRO_ARCHIVE.md` |
 
-### 歸檔操作
+### 歸檔操作（由 subagent 執行）
 
-1. 從主文件剪下超出保留範圍的最舊 Sprint 完整區塊（保持原始格式不變）
-2. 附加至對應歸檔文件末尾
-3. 確認主文件底部有歸檔連結（`PROJECT_BOARD.md`）或頂部有歸檔連結（`Retrospective_Log.md`）
-4. 更新 `docs/km/archive/README.md` 的歸檔範圍欄位與最後更新日期
+1. 計算超出保留範圍的 Sprint 數量（總數 - 3）
+2. 從主文件剪下所有超出保留範圍的 Sprint 完整區塊（保持原始格式不變，按 Sprint 編號升序排列）
+3. 附加至對應歸檔文件末尾
+4. 確認主文件底部有歸檔連結（`PROJECT_BOARD.md`）或頂部有歸檔連結（`Retrospective_Log.md`）
+5. 更新 `docs/km/archive/README.md` 的歸檔範圍欄位與最後更新日期
+6. 回傳摘要給主 session：歸檔了 Sprint X–Y 共 N 個、更新了哪些文件
 
 ---
 
@@ -702,7 +703,7 @@ Sprint Review 完成、產出文件更新後，執行以下歸檔觸發檢查。
 - [ ] 已完成 Story 從 `PRODUCT_BACKLOG.md` 移至 `BACKLOG_DONE.md`，按 Sprint 歸檔
 - [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步；版本 Tag 與里程碑對齊確認完成，見「ROADMAP 更新操作指引」）
 - [ ] **Beta 狀態檢查**：確認 Issue #59 是否有新的外部使用者回饋（`gh issue view 59 --comments`）；若有，更新 `docs/prd/M5_COMPLETION_ASSESSMENT.md` 條件 (a) 狀態（累積回饋數與最後更新日期）
-- [ ] **歸檔觸發檢查**（見 §6）：確認 `PROJECT_BOARD.md` 與 `Retrospective_Log.md` 歷史 Sprint 區塊是否超過 5 個；若觸發則執行漸進歸檔（移出最舊 1 個 Sprint 至 `docs/km/archive/`），並更新 `docs/km/archive/README.md`
+- [ ] **歸檔觸發檢查**（見 §6）：確認 `PROJECT_BOARD.md` 與 `Retrospective_Log.md` 歷史 Sprint 區塊是否超過 5 個；若觸發則**派遣 subagent** 批量歸檔所有超出保留範圍的 Sprint 至 `docs/km/archive/`，主 session 僅接收摘要
 - [ ] **Token 成本摘要** *(慢想模式限定)*（見下方子節）
 - [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格** *(慢想模式限定)*（對應 Review token 欄）：
   - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens`、`cache_read_input_tokens`、`cache_creation_input_tokens` 與 `output_tokens`，依下列公式加總後填入 Metrics_Log.md 對應欄位：
