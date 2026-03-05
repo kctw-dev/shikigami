@@ -1902,3 +1902,14 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 | Story | Size | Points | 完成 Sprint |
 |-------|------|--------|------------|
 | US-92（Issue #86）：ADR-012 起草 — Claude Max 多開發環境認證架構決策 | S | 1 | Sprint 44 |
+
+---
+
+## Sprint 45（2026-03-05）
+
+**Sprint Goal**：完善多開發環境操作文件 — 建立 GCE 認證設定指引與 CI/CD workflow 拆分指引
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-A（Issue #87）：多 GCE 認證設定指引 — 文件化各開發環境 OAuth 認證與使用紀律規範 | S | 1 | Sprint 45 |
+| US-93（Issue #88）：CI/CD workflow 拆分指引 — GitHub-hosted tests + self-hosted notification trigger | S | 1 | Sprint 45 |
