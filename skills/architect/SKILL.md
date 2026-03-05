@@ -242,10 +242,41 @@ US-XX → US-YY（嚴格序列，不可平行）
 
 ---
 
+## §4 環境管理成本評估原則
+
+### 觸發條件
+
+當架構方案涉及以下情境時，Architect 必須同步評估環境管理成本：
+
+- 多台機器 / 多環境部署（如多 GCE 平行開發）
+- 新增獨立的執行環境（如 CI/CD runner、staging 環境）
+- 工作流程需要開發者在多個環境之間移動
+
+### 評估要求
+
+Architect 在方案評估階段，除功能性與 ToS 合規性外，必須同時評估以下三類環境管理成本：
+
+| 成本類型 | 評估問題 |
+|---------|---------|
+| 設置成本 | 新環境從零到可用需要多少步驟？是否可自動化？ |
+| 維護成本 | 多環境的工具版本同步、磁碟清理、安全更新如何管理？ |
+| 同步成本 | 開發者在環境之間移動時，需要手動同步哪些資產？ |
+
+### 判斷框架
+
+| 條件 | 決策 |
+|------|------|
+| 環境管理成本 ≤ 方案本身收益 | 採用多環境方案，但 ADR 中需記錄環境管理策略 |
+| 環境管理成本 > 方案本身收益 | 降級為單機方案，或要求 IaC / 環境自動化作為前置條件 |
+| 環境管理成本無法評估 | 先以單環境 MVP 驗證，再決定是否擴展至多環境 |
+
+---
+
 ## 參照文件
 
 - **ADR-003**：`docs/adr/ADR-003.md`（Framework Document Change 流程）
 - **ADR-004**：`docs/adr/ADR-004.md`（角色權重調整機制）
 - **ADR-007**：`docs/adr/ADR-007-story-lifecycle-subagent.md`（Story-Lifecycle Subagent 封裝，含 L-size 分批策略）
 - **sprint-planning/SKILL.md**：`skills/sprint-planning/SKILL.md`（Sprint Planning 完整流程，含 Subagent 派遣順序）
+- **ADR-012**：`docs/adr/ADR-012-max-account-rotation.md`（§環境管理考量，啟發 §4 原則）
 - **sprint-execution/SKILL.md**：`skills/sprint-execution/SKILL.md`（Sprint Execution 流程，含 DESIGN_ISSUE 升級處置）

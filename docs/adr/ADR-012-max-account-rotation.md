@@ -397,6 +397,43 @@ jobs:
 
 ---
 
+### 環境管理考量
+
+> **已知盲區**：本 ADR 決策聚焦於認證架構與 ToS 合規性分析，未充分評估多 GCE 環境的 operational overhead。本章節為事後補充，後續由 Issue #90 追蹤改善。
+
+### 多 GCE 環境的管理成本
+
+選項 B（多 GCE 各自訂閱）在解決用量瓶頸的同時，引入了以下環境管理成本：
+
+| 成本類型 | 說明 | 嚴重度 |
+|---------|------|--------|
+| 設置成本 | 每台新 GCE 需獨立安裝開發工具（Node.js、Claude Code、git hooks 等） | 中 |
+| 維護成本 | 工具版本分歧隨時間增長，各機器逐漸偏離一致性（Snowflake Server） | 中-高 |
+| 同步成本 | 開發者在 GCE 之間移動時需手動同步 repo、dotfiles、Claude Code config | 中 |
+| 磁碟膨脹 | 各機器累積不同的 cache、log、依賴套件，長期運行後磁碟空間不可控 | 低-中 |
+
+### 工作可攜性需求
+
+開發者在多 GCE 之間自然流動的模式，要求以下資產可快速重建：
+
+- **Repository clone**：包含所有 branch、submodule 與 git hooks
+- **Dotfiles**：shell config（.bashrc/.zshrc）、git config、editor config
+- **Claude Code config**：`~/.claude/` 下的 settings、memory、project config
+- **開發工具鏈**：Node.js 版本、npm global packages、CLI 工具
+
+### 環境可重建性建議
+
+1. **定期清理**：定期清除各 GCE 的 cache、log、未使用的 branch，防止磁碟膨脹
+2. **IaC 或 Snapshot**：考慮使用 GCE Custom Image / Snapshot 或 IaC（Terraform）管理環境基線，確保新機器可快速建立
+3. **Dotfiles 統一管理**：將 shell config、git config 等納入 dotfiles repo，各 GCE clone 同一來源
+4. **避免 Snowflake Server**：不在 GCE 上進行手動的全域修改；所有環境變更應可追溯、可重現
+
+### 後續追蹤
+
+- **Issue #90**：開發環境可攜性與可重建性 — 多 GCE 環境管理策略
+
+---
+
 ## 後續行動（AC5）
 
 ### 對 US-A（Issue #87）的影響
