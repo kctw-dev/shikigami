@@ -1,6 +1,6 @@
 # Sprint 50
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-05 ~ 2026-03-11
 **Sprint Goal**：完成 shikigami:diagram 技能文件整合 — 補充自動嵌入 Markdown 步驟與 Issue 回覆附圖指引，使 diagram 技能達到完整可交付狀態，並關閉父 Issue #89。
 **總計**：1 Story / 1 Point
@@ -11,7 +11,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-99 | #98 | shikigami:diagram 文件整合 — 自動嵌入 Markdown、Issue 回覆附圖、關閉 #89 | S | 1 | Phase 1 | 進行中 |
+| US-99 | #98 | shikigami:diagram 文件整合 — 自動嵌入 Markdown、Issue 回覆附圖、關閉 #89 | S | 1 | Phase 1 | 完成 |
 
 **Sprint 容量**：1 Point
 
@@ -66,9 +66,9 @@ As a Developer subagent, I want SKILL.md to include step-by-step guidance for em
 
 **Done 定義**
 
-- [ ] SKILL.md 新增嵌入 Markdown 段落（AC1）
-- [ ] SKILL.md 新增 GitHub Issue 回覆附圖段落（AC2）
-- [ ] Issue #89 關閉（AC3）
+- [x] SKILL.md 新增嵌入 Markdown 段落（AC1）
+- [x] SKILL.md 新增 GitHub Issue 回覆附圖段落（AC2）
+- [x] Issue #89 關閉（AC3）
 
 ---
 
@@ -84,7 +84,7 @@ As a Developer subagent, I want SKILL.md to include step-by-step guidance for em
 |----------|-------|------|----------|------|
 | 子 Story A（US-97） | #96 | S | 環境準備 + OQ-1/OQ-2 解決 | 完成（Sprint 48） |
 | 子 Story B（US-98） | #97 | M | SKILL.md 實作（雙格式輸出、--provider、ADR-006 XML 隔離） | 完成（Sprint 49） |
-| 子 Story C（US-99） | #98 | S | 文件整合（自動嵌入 Markdown、Issue 回覆附圖）+ 關閉 #89 | 本 Sprint |
+| 子 Story C（US-99） | #98 | S | 文件整合（自動嵌入 Markdown、Issue 回覆附圖）+ 關閉 #89 | 完成（Sprint 50） |
 
 ---
 
@@ -95,7 +95,7 @@ As a Developer subagent, I want SKILL.md to include step-by-step guidance for em
 | Product Owner | Sprint Goal 對齊子 Story C 文件整合，Backlog 拆分序列一致，RICE Score 支持排序 | 已確認 |
 | Architect | S-size 合理（SKILL.md 補充兩段落 + 關閉 Issue），無新架構決策觸發 | 已確認 |
 | QA | doc-only 判定：AC1-AC3 均為靜態文件 AC，無動態執行需求 | 已確認 |
-| Developer | Story 清晰度確認 | 待確認 |
+| Developer | Story 清晰度確認 | 已確認 |
 
 **Sprint Planning 決策記錄**
 

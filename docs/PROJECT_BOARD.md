@@ -1,22 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-05（Sprint 50 Planning 完成）
-**當前 Sprint**：Sprint 50（進行中）
+**最後更新**：2026-03-05（Sprint 50 Review 完成）
+**當前 Sprint**：Sprint 50（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 50](sprints/sprint_50.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 50 — 進行中
+## Sprint 50 — 完成
 
 **Sprint Goal**：完成 shikigami:diagram 技能文件整合 — 補充自動嵌入 Markdown 步驟與 Issue 回覆附圖指引，使 diagram 技能達到完整可交付狀態，並關閉父 Issue #89。
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。Issue #89 三個子 Stories（US-97/98/99）跨 Sprint 48-50 完整交付，ADR-013 從 Proposed 升為 Accepted 閉環。
+**Stakeholder 驗收**：接受
 **期間**：2026-03-05 ~ 2026-03-11
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-99（#98）：shikigami:diagram 文件整合 — 自動嵌入 Markdown、Issue 回覆附圖、關閉 #89 | S | 1 | 進行中 |
+| US-99（#98）：shikigami:diagram 文件整合 — 自動嵌入 Markdown、Issue 回覆附圖、關閉 #89 | S | 1 | 完成 |
 
 **目標 Velocity**：1 point（1 Story）
+**實際 Velocity**：1 point（1 Story）
 
 ---
 
