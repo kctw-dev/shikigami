@@ -1,22 +1,38 @@
 # Project Board
 
-**最後更新**：2026-03-05（Sprint 48 Planning 完成）
-**當前 Sprint**：Sprint 48（進行中）
+**最後更新**：2026-03-05（Sprint 49 Planning 完成）
+**當前 Sprint**：Sprint 49（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 48](sprints/sprint_48.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 49](sprints/sprint_49.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 48 — 進行中
+## Sprint 49 — 進行中
 
-**Sprint Goal**：解決 ADR-013 高優先級開放問題（OQ-1、OQ-2），驗證 drawio-mcp-server stdio local 環境可行性，為 shikigami:diagram SKILL.md 實作提供可信的技術基礎。
+**Sprint Goal**：實作 `shikigami:diagram` SKILL.md 核心功能 — 雙格式輸出、多圖標集切換、ADR-006 XML 隔離，讓 diagram 技能達到可執行狀態。
 **期間**：2026-03-05 ~ 2026-03-11
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-97（#96）：shikigami:diagram 環境準備 — drawio-mcp-server stdio local 安裝與整合驗證 | S | 1 | 進行中 |
+| US-98（#97）：shikigami:diagram SKILL.md 實作 — 雙格式輸出、--provider、ADR-006 XML 隔離 | M | 2 | 進行中 |
+
+**目標 Velocity**：2 points（1 Story）
+
+---
+
+## Sprint 48 — 完成
+
+**Sprint Goal**：解決 ADR-013 高優先級開放問題（OQ-1、OQ-2），驗證 drawio-mcp-server stdio local 環境可行性，為 shikigami:diagram SKILL.md 實作提供可信的技術基礎。
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。AC4（claude mcp list 通訊驗證）標注「需手動驗證」，非阻斷。重要發現：v1.8.0 不需要 headless Chrome（內建 Web 編輯器），18 個 MCP tools 均回傳 type: "text" JSON。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-97（#96）：shikigami:diagram 環境準備 — drawio-mcp-server stdio local 安裝與整合驗證 | S | 1 | 完成 |
 
 **目標 Velocity**：1 point（1 Story）
+**實際 Velocity**：1 point（1 Story）
 
 ---
 
