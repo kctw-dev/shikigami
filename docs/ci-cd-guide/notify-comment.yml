@@ -1,0 +1,61 @@
+# CI/CD Workflow 模板：issue_comment 事件觸發 + self-hosted runner
+#
+# 用途：當 Stakeholder 於 GitHub Issue 留言時，觸發本機 bash 腳本執行通知流程。
+# 適用場景：事件驅動型任務（非 compute-heavy）、需要本機環境存取的通知觸發。
+#
+# 使用說明：
+#   1. 複製本檔案至消費端專案的 .github/workflows/ 目錄
+#   2. 替換以下 3 個 Placeholder（搜尋 <<PLACEHOLDER_xxx>>）：
+#      - <<PLACEHOLDER_RUNNER_LABEL>>  : self-hosted runner 的 label（例如：self-hosted, linux, x64）
+#      - <<PLACEHOLDER_BASH_SCRIPT>>   : 要執行的本機 bash 腳本路徑（例如：./scripts/notify.sh）
+#      - <<PLACEHOLDER_TOKEN_SCOPE>>   : 所需 GitHub token 的 scope（例如：issues: write, pull-requests: read）
+#   3. 除上述 3 個 Placeholder 外，其餘 workflow 結構無需修改即可觸發
+
+name: Notify on Issue Comment (Self-Hosted)
+
+on:
+  issue_comment:
+    types: [created]
+
+# 替換 <<PLACEHOLDER_TOKEN_SCOPE>>：
+# 說明：根據 bash 腳本實際需要的 GitHub API 操作，填入對應的 token scope。
+# 常見 scope 對照：
+#   - 僅讀取 issue：issues: read
+#   - 回寫 issue comment：issues: write
+#   - 讀取 PR：pull-requests: read
+# ADR-011 最小權限原則：僅授予所需最小 scope，不得使用 contents: write 除非明確需要。
+permissions:
+  issues: write            # <<PLACEHOLDER_TOKEN_SCOPE>>
+
+jobs:
+  notify:
+    # 替換 <<PLACEHOLDER_RUNNER_LABEL>>：
+    # 說明：填入消費端專案 self-hosted runner 的 label。
+    # 範例值：[self-hosted, linux, x64] 或 [self-hosted, gce-dev-01]
+    # 注意：self-hosted runner 需已在 GitHub repo Settings > Actions > Runners 完成註冊。
+    runs-on: <<PLACEHOLDER_RUNNER_LABEL>>
+
+    # 安全性過濾：僅處理非 bot 使用者的留言，防止無窮觸發迴圈（ADR-006 Injection 防護）
+    if: ${{ github.event.comment.user.type != 'Bot' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up environment variables
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+          REPO_FULL_NAME: ${{ github.repository }}
+        # 替換 <<PLACEHOLDER_BASH_SCRIPT>>：
+        # 說明：填入消費端專案中負責處理通知邏輯的 bash 腳本路徑。
+        # 範例值：./scripts/notify-stakeholder.sh 或 ./ci/trigger-shikigami.sh
+        # 腳本要求：
+        #   - 必須具備執行權限（chmod +x）
+        #   - 可透過環境變數讀取 GITHUB_TOKEN、ISSUE_NUMBER、COMMENT_BODY、COMMENT_AUTHOR
+        #   - 不得在腳本內硬編碼任何 token 或 secret（ADR-011 零硬編碼 Secrets 約束）
+        run: |
+          echo "Issue #${ISSUE_NUMBER} 收到留言，觸發通知流程..."
+          <<PLACEHOLDER_BASH_SCRIPT>>

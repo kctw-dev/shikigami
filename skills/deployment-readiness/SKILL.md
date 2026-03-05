@@ -270,3 +270,62 @@ Toil（重複性手動操作）不得超過 50% 工時。
 | 部署後發現品質問題 | 觸發回滾，然後觸發 `quality-gate` 重新審查 |
 | 需要新功能才能部署 | 回到 `sprint-execution` 完成實作 → 重新觸發 deployment-readiness |
 | Sprint 全部 Stories 部署完成 | 觸發 `sprint-review` 進行驗收與回顧 |
+
+---
+
+## 11. CI/CD 環境偵測 — Self-hosted Runner 警示
+
+**新增於**：Sprint 45（US-93，ADR-011 合規）
+
+部署就緒檢查期間，SRE subagent 必須執行以下 CI/CD 環境偵測步驟，識別潛在的 self-hosted runner OOM 風險。
+
+### 偵測步驟
+
+1. **掃描現有 workflow 設定**
+
+   執行下列指令，列出消費端專案所有 workflow 的 runner 配置：
+
+   ```bash
+   grep -rn "runs-on:" .github/workflows/
+   ```
+
+2. **判斷是否全部跑在 self-hosted runner**
+
+   檢查輸出結果：
+   - 若所有 `runs-on:` 值均包含 `self-hosted`，則進入步驟 3
+   - 若已有 workflow 使用 `ubuntu-latest` 或其他 GitHub-hosted runner，則跳過本節
+
+3. **自動提示 CI/CD 拆分建議**
+
+   當偵測到現有 workflow 全部跑在 self-hosted runner 時，SRE subagent 必須輸出以下警示：
+
+   ```
+   [CI/CD 拆分建議]
+   偵測到所有 GitHub Actions workflow 均配置於 self-hosted runner。
+
+   Self-hosted runner 適合事件驅動型任務（issue_comment、webhook），
+   但不適合 compute-heavy 任務（測試套件、建置、依賴安裝）。
+   全部使用 self-hosted runner 可能導致：
+   - 測試執行時 OOM（記憶體不足）
+   - CI 失敗率上升
+
+   建議依 docs/ci-cd-guide/README.md 決策樹拆分 workflow：
+   - Compute-heavy 任務 → GitHub-hosted runner（ubuntu-latest）
+   - Event-driven 任務  → Self-hosted runner
+
+   模板參考：docs/ci-cd-guide/notify-comment.yml
+   ```
+
+4. **記錄偵測結果**
+
+   將偵測結果記錄於部署就緒檢查的 Checklist 備注欄，供後續追蹤。
+
+### 決策規則
+
+| 偵測結果 | 動作 |
+|---------|------|
+| 所有 workflow 均跑在 self-hosted | 輸出 CI/CD 拆分建議警示，不阻擋部署 |
+| 部分 workflow 已使用 GitHub-hosted | 無需動作，視為已拆分 |
+| 無 `.github/workflows/` 目錄 | 無需動作，跳過此步驟 |
+
+> **注意**：此偵測為建議性提示，不構成部署 Hard Gate 阻擋條件。但若消費端專案持續出現 CI 測試失敗，應將拆分建議列入下一 Sprint 技術債處理。

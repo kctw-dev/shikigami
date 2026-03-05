@@ -15,7 +15,7 @@
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
 | US-A（#87）：多 GCE 認證設定指引 — 文件化各開發環境 OAuth 認證與使用紀律規範 | S | 1 | 完成 |
-| US-93（#88）：CI/CD workflow 拆分指引 — GitHub-hosted tests + self-hosted notification trigger | S | 1 | 待開發 |
+| US-93（#88）：CI/CD workflow 拆分指引 — GitHub-hosted tests + self-hosted notification trigger | S | 1 | 完成 |
 
 **目標 Velocity**：2 points（2 Stories）
 

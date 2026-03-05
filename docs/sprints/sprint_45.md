@@ -12,7 +12,7 @@
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
 | US-A | #87 | 多 GCE 認證設定指引 — 文件化各開發環境 OAuth 認證與使用紀律規範 | S | 1 | Phase 1（平行） | 完成 |
-| US-93 | #88 | CI/CD workflow 拆分指引 — GitHub-hosted tests + self-hosted notification trigger | S | 1 | Phase 1（平行） | 待開發 |
+| US-93 | #88 | CI/CD workflow 拆分指引 — GitHub-hosted tests + self-hosted notification trigger | S | 1 | Phase 1（平行） | 完成 |
 
 **Sprint 容量**：2 Points
 

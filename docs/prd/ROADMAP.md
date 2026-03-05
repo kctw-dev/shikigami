@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-05（Sprint 44 Review — US-92 完成標注）
+> 最後更新：2026-03-05（Sprint 45 — US-93 完成標注）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -287,6 +287,7 @@ Sprint Review 時自動產出：
 | US-90 | Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | Sprint 43 ✅ |
 | US-91 | M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | Sprint 43 ✅ |
 | US-92 | ADR-012 起草 — Claude Max 多開發環境認證架構決策 | Sprint 44 ✅ |
+| US-93 | CI/CD workflow 拆分指引 — GitHub-hosted tests + self-hosted notification trigger | Sprint 45 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 
