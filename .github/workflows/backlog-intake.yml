@@ -2,14 +2,12 @@ name: Backlog Intake
 
 on:
   issues:
-    types: [labeled]
+    types: [opened]
 
 jobs:
   intake:
-    # Only trigger when 'backlog-intake' label is added
-    # Skip if 'backlog-intake-done' already present (idempotency)
+    # Trigger on every new issue; skip if 'backlog-intake-done' already present (idempotency)
     if: >-
-      github.event.label.name == 'backlog-intake' &&
       !contains(join(github.event.issue.labels.*.name, ','), 'backlog-intake-done')
     runs-on: self-hosted
     permissions:

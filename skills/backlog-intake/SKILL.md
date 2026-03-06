@@ -1,6 +1,6 @@
 ---
 name: backlog-intake
-description: "Use when automatically processing GitHub Issues tagged with backlog-intake label into structured Backlog entries by rewriting the Issue body in-place. Handles label filtering, injection-safe content parsing, User Story template population, original content blockquote preservation, idempotency via GitHub label marking, and RICE scoring."
+description: "Use when automatically processing GitHub Issues into structured Backlog entries by rewriting the Issue body in-place. Handles injection-safe content parsing, User Story template population, original content blockquote preservation, idempotency via GitHub label marking, and RICE scoring."
 requiredTools:
   - Read
   - Glob
@@ -19,7 +19,11 @@ requiredTools:
 
 ## 1. 概述
 
-自動將帶有 `backlog-intake` label 的 GitHub Issues 轉化為結構化的 Backlog 項目，採用**單層 Issue 架構**：直接改寫原始 Issue body，以 blockquote 保留原始內容，並在其後填補 Story template，讓 Product Owner 無需人工介入即可維持 Backlog 的即時更新。
+自動將 GitHub Issues 轉化為結構化的 Backlog 項目，採用**單層 Issue 架構**：直接改寫原始 Issue body，以 blockquote 保留原始內容，並在其後填補 Story template，讓 Product Owner 無需人工介入即可維持 Backlog 的即時更新。
+
+**雙路觸發機制**：
+- **GitHub Action 驅動**（`.github/workflows/backlog-intake.yml`）：新 Issue 建立時自動觸發（`on: issues: [opened]`），即時入庫
+- **CLI 批次觸發**（`/backlog-intake`）：掃描所有尚未入庫的 open Issues，批次補齊
 
 單層 Issue 架構：
 - **單一 Issue**：原始 Issue 即為結構化 Story 的載體，AI 改寫 Issue body 時以 `>` blockquote 保留原始內容，並在 blockquote 之後填補完整 Story template（User Story、Acceptance Criteria、RICE 評分）
@@ -65,7 +69,6 @@ claude -p "/schedule backlog-intake --interval 1h"
 
 | 條件 | 說明 |
 |------|------|
-| label 包含 `backlog-intake` | 帶有此 label 的 Issues 才會被處理 |
 | 狀態為 `open` | 僅處理開放中的 Issues |
 | label 不包含 `backlog-intake-done` | 已入庫的 Issues 自動跳過（冪等性保護） |
 
@@ -73,11 +76,12 @@ claude -p "/schedule backlog-intake --interval 1h"
 
 ```bash
 gh issue list \
-  --label "backlog-intake" \
   --state open \
   --json number,title,body,url,labels \
   --limit 50
 ```
+
+讀取後需在程式端過濾：排除 labels 中包含 `backlog-intake-done` 的 Issues。
 
 ### 3.2 輸入欄位對應
 
@@ -271,8 +275,8 @@ AI 根據 Issue 內容推導 MoSCoW 優先級，對應至以下 label：
 | 2 | OAuth 認證有效（claude） | `unset ANTHROPIC_API_KEY && claude auth status` | 阻擋，提示 `claude auth login` |
 | 3 | gh CLI 存在 | `which gh` | 阻擋，提示安裝 GitHub CLI |
 | 4 | gh CLI 認證有效 | `gh auth status` | 阻擋，提示 `gh auth login` |
-| 5 | backlog-intake label 存在 | `gh label list --search backlog-intake` | 自動建立 label（ADR-009 決策域五） |
-| 6 | status: backlog label 存在 | `gh label list --search "status: backlog"` | 自動建立 label（ADR-010 單層架構） |
+| 5 | status: backlog label 存在 | `gh label list --search "status: backlog"` | 自動建立 label（ADR-010 單層架構） |
+| 6 | backlog-intake-done label 存在 | `gh label list --search "backlog-intake-done"` | 自動建立 label（冪等性保護） |
 | 7 | flock 可用性 | `which flock` | macOS 提示 `brew install util-linux`；若不存在則警告後繼續 |
 
 ---
@@ -284,7 +288,7 @@ AI 根據 Issue 內容推導 MoSCoW 優先級，對應至以下 label：
 本 Skill 採用 label-only 單層冪等性保護，防止同一需求重複入庫：
 
 **Label 過濾**（`backlog-intake-done`）
-`gh issue list` 的 label 過濾條件自動排除已標記 `backlog-intake-done` 的 Issues。單層 Issue 架構不需要第二層 body 掃描保護。
+讀取所有 open Issues 後，在程式端排除 labels 中包含 `backlog-intake-done` 的 Issues。GitHub Action 則透過 `if` 條件在觸發時檢查。單層 Issue 架構不需要第二層 body 掃描保護。
 
 移除 `backlog-intake-done` label 後重新執行 backlog-intake，該 Issue 將被重新處理（Issue body 重新改寫、labels 重新套用）。
 
@@ -294,7 +298,6 @@ AI 根據 Issue 內容推導 MoSCoW 優先級，對應至以下 label：
 
 | label | 語意 | 添加方式 |
 |-------|------|---------|
-| `backlog-intake` | 此 Issue 請求入庫審查 | PO 或 Issue 建立者手動添加 |
 | `auto-triaged` | AI 自動入庫完成，待 PO 人工審查 | backlog-intake Skill 自動添加（Step 5） |
 | `triaged` | PO 已完成人工審查確認 | PO 手動執行 label 替換操作（見下方說明） |
 | `backlog-intake-done` | 此 Issue 已完成入庫流程（冪等性保護） | backlog-intake Skill 自動添加（Step 6） |
@@ -362,7 +365,7 @@ gh issue list \
 
 | 決策域 | 決策 | 核心理由 |
 |--------|------|----------|
-| 輸入來源模型 | GitHub Issues + `backlog-intake` label 過濾 | 一致性、MVP 原則、Issue number 天然冪等識別碼 |
+| 輸入來源模型 | GitHub Issues（全量掃描 + `backlog-intake-done` 冪等過濾） | 一致性、MVP 原則、Issue number 天然冪等識別碼 |
 | Injection 防護 | 繼承 ADR-006 + 補充輸出格式強制 / 建立位置限制 | 深度防禦 |
 | Cron 認證策略 | 完整繼承 ADR-005 決策域四（OAuth）+ gh CLI OAuth | 安全性優先，token 不出現在腳本明文 |
 | 冪等性保護 | GitHub label 標記（`backlog-intake-done`），label-only 單層保護 | 狀態持久化於 GitHub，不依賴本地環境 |
@@ -391,9 +394,9 @@ claude auth login
 gh auth login
 ```
 
-### Issues 無 backlog-intake Label
+### 無待入庫 Issues
 
-若無 Issues 帶有 `backlog-intake` label，Skill 正常執行並輸出「0 個 Issues 待入庫」，不視為錯誤。
+若所有 open Issues 均已帶有 `backlog-intake-done` label，Skill 正常執行並輸出「0 個 Issues 待入庫」，不視為錯誤。
 
 ### 手動觸發重新入庫
 
