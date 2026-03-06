@@ -15,7 +15,7 @@
 | US-149 | #147 | SDD 前端模板更新 — 新增 Figma 設計稿連結欄位 | S | 1 | 是 | 完成 |
 | US-145 | #146 | Figma MCP Server 選型與本地設定驗證 | M | 2 | 否 | 完成（AC3 靜態通過；AC1/AC2 需使用者本地驗證） |
 | US-146 | #148 | Figma 文件結構定義 — Page 架構、Layer 命名規則、Frame 模板 | S | 1 | 是 | 完成 |
-| US-148 | #149 | Component Library 基礎建立 — Button / Input / Card | M | 2 | 否 | 待開始 |
+| US-148 | #149 | Component Library 基礎建立 — Button / Input / Card | M | 2 | 否 | 完成（靜態規格交付；AC1/AC2/AC3 動態驗證需使用者本地 Figma 執行） |
 | US-147 | #150 | AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | M | 2 | 否 | 待開始 |
 
 **Sprint 容量**：8 Points（5 Stories）
@@ -187,9 +187,12 @@ As a Designer establishing the Figma Component Library, I want to create the fou
 
 **Done 定義**
 
-- [ ] Button、Input、Card 三個元件已建立於 Figma Component Library Page（AC1）
-- [ ] 三個元件均設定 Auto Layout 與顏色 Variable 綁定（AC2）
-- [ ] Claude Code 已透過 MCP 成功以 Component Instance 方式引用三個元件（AC3）
+- [x] `docs/design/component-library-spec.md` 已建立，定義三個元件完整規格（屬性、Auto Layout、Variable 綁定、MCP 操作步驟）（靜態交付）
+- [ ] Button、Input、Card 三個元件已建立於 Figma Component Library Page（AC1，動態，需使用者本地執行）
+- [ ] 三個元件均設定 Auto Layout 與顏色 Variable 綁定（AC2，動態，需使用者本地執行）
+- [ ] Claude Code 已透過 MCP 成功以 Component Instance 方式引用三個元件（AC3，動態，需使用者本地執行）
+
+**靜態交付說明**：動態 AC1/AC2/AC3 需要 Figma Desktop App 執行環境，CLI 環境無法直接驗證。`docs/design/component-library-spec.md` 提供完整的元件規格與 MCP 操作步驟指引，使用者可依照指引在本地 Figma 環境完成動態驗證。
 
 ---
 
