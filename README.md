@@ -15,7 +15,7 @@ Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專
 
 這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 50 個 Sprint 完成率 100%，QA 雙階段審查攔截了每個 Sprint 的品質問題。
 
-**當前版本：v0.29.0**（23 Skills / 7 Agents / 4 Commands）
+**當前版本：v0.29.0**（22 Skills / 7 Agents / 4 Commands）
 
 ---
 

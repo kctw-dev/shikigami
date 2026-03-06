@@ -42,7 +42,8 @@ skills/
 ├── architect/SKILL.md
 ├── qa-engineer/SKILL.md
 ├── schedule/SKILL.md
-└── shoot/SKILL.md
+├── shoot/SKILL.md
+└── diagram/SKILL.md
 ```
 
 ---
