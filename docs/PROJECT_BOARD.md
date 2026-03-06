@@ -1,23 +1,30 @@
 # Project Board
 
-**最後更新**：2026-03-06（Sprint 56 Planning 完成，3 Stories / 5 Points）
-**當前 Sprint**：Sprint 56（進行中）
+**最後更新**：2026-03-06（Sprint 56 Review 完成，Velocity 5 points，完成率 100%）
+**當前 Sprint**：Sprint 57（規劃中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 56](sprints/sprint_56.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 56 — 進行中
+## Sprint 56 — 完成
 
 **Sprint Goal**：驗證 UIUX Figma 管線可運作性 — 建立 Figma Desktop 本地驗證環境 SOP、定義 Vision Critic Frame 截圖審查 PoC 規格、撰寫 Figma 管線使用指南，使 ADR-015 Phase 1 從技術文件走向可操作的驗證與使用文件。
 **期間**：2026-03-06 ~ 2026-03-12
 **ADR 依賴**：ADR-015（Accepted）
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 5 points，完成率 100%。ADR-015 Phase 1 從技術基礎完整轉化為可操作的驗證與使用文件。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-150：Figma Desktop 本地驗證環境 SOP | #151 | S | 1 | 完成 |
 | US-151：Vision Critic PoC — Figma Frame 截圖審查 | #118 | M | 2 | 完成 |
 | US-152：Figma 管線使用指南 | #123 | M | 2 | 完成 |
+
+## Sprint 56 統計
+- Velocity：5 points
+- 完成率：100%（完成 3 / 計畫 3）
+- 日期：2026-03-06
 
 ---
 
@@ -92,71 +99,4 @@
 
 ---
 
-## Sprint 53 — 完成
-
-**Sprint Goal**：完成 ADR-014 全部三個 Phase 的 SKILL.md 定義（UX Agent / UI Agent / Vision Critic），決策 OQ-1 與 OQ-3 開放問題，並設計三層 Agent 管線端對端整合測試規格，使 UIUX Agent 工作流從架構決策走向完整的可執行 Skill 定義。
-**期間**：2026-03-06 ~ 2026-03-12
-**結果**：Goal 達成（6/6 Stories PASS）。Velocity 10 points，完成率 100%。三層 Agent 管線 SKILL.md 全部交付（UX Agent / UI Agent / Vision Critic），ADR-014 OQ-1/OQ-3 決策完成，SDD-UIUX-E2E 整合測試規格建立。
-**Stakeholder 驗收**：接受
-
-| Story | Issue | Size | Points | 狀態 |
-|-------|-------|------|--------|------|
-| 前置任務：ADR-014 Proposed → Accepted | — | — | 0 | 完成 |
-| US-105：UX Agent SKILL.md 實作 | #112 | M | 2 | 完成 |
-| OQ-1：Playwright 截圖可行性調查 | #109 | S | 1 | 完成 |
-| OQ-3：Vision Critic 通過閾值量化決策 | #111 | S | 1 | 完成 |
-| US-106：UI Agent SKILL.md 實作 | #113 | M | 2 | 完成 |
-| US-107：Vision Critic Agent SKILL.md 實作 | #114 | M | 2 | 完成 |
-| US-108：三層 Agent 管線端對端整合測試設計 | #115 | M | 2 | 完成 |
-
-**目標 Velocity**：10 points（6 Stories）
-
-## Sprint 53 統計
-- Velocity：10 points
-- 完成率：100%（完成 6 / 計畫 6）
-- 日期：2026-03-06
-
----
-
-## Sprint 52 — 完成
-
-**Sprint Goal**：建立 UIUX Agent 工作流的「防呆設計基礎」—— 定義機器可讀的 Design Tokens 規格、強制元件庫白名單，以及前端 Story AC 模板注入機制，使 ADR-014 Phase 1 具體落地。
-**期間**：2026-03-06 ~ 2026-03-12
-**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。ADR-014 Phase 1 具體落地：Design Tokens 機器可讀規格（design-tokens.json）建立、前端 SDD 模板標準化、issue-management 前端 Story AC 自動注入機制上線。
-**Stakeholder 驗收**：接受
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-103（#104）：Design Tokens 定義檔建立 | S | 1 | 完成 |
-| US-104（#105）：元件庫白名單 AC 注入機制 | S | 1 | 完成 |
-
-**目標 Velocity**：2 points（2 Stories）
-
-## Sprint 52 統計
-- Velocity：2 points
-- 完成率：100%（完成 2 / 計畫 2）
-- 日期：2026-03-06
-
----
-
-## Sprint 51 — 完成
-
-**Sprint Goal**：結案 backlog-intake 修正，並為 UIUX Agent 建立架構決策基礎（ADR-014），為後續 UI/UX 自動化實作鋪路。
-**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。Issue #102 正式結案；ADR-014（UIUX Agent 架構決策）Proposed，識別 6 個後續 Story 方向。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-06 ~ 2026-03-12
-
-## Sprint 51 統計
-- Velocity：2 points
-- 完成率：100%（完成 2 / 計畫 2）
-- 日期：2026-03-06
-
-## Sprint 外完成項目（Sprint 51 /shoot 短衝記錄）
-
-| 日期 | 來源 | 標題 | commit hash |
-|------|------|------|-------------|
-| 2026-03-06 | direct | backlog-intake Skill 整併至 issue-management §11，消除重複邏輯 | 174b86b |
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–50）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–53）

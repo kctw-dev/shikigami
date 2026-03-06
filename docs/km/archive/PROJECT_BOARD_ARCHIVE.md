@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-06（Sprint 49–50 歸檔）
-**歸檔範圍**：Sprint 1–50（共 50 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔
+**最後更新**：2026-03-06（Sprint 51–53 歸檔）
+**歸檔範圍**：Sprint 1–53（共 53 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 51–55）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 54–56）
 
 ---
 
@@ -849,3 +849,70 @@
 
 **目標 Velocity**：1 point（1 Story）
 **實際 Velocity**：1 point（1 Story）
+
+---
+
+## Sprint 51 — 完成
+
+**Sprint Goal**：結案 backlog-intake 修正，並為 UIUX Agent 建立架構決策基礎（ADR-014），為後續 UI/UX 自動化實作鋪路。
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。Issue #102 正式結案；ADR-014（UIUX Agent 架構決策）Proposed，識別 6 個後續 Story 方向。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-06 ~ 2026-03-12
+
+## Sprint 51 統計
+- Velocity：2 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-06
+
+## Sprint 外完成項目（Sprint 51 /shoot 短衝記錄）
+
+| 日期 | 來源 | 標題 | commit hash |
+|------|------|------|-------------|
+| 2026-03-06 | direct | backlog-intake Skill 整併至 issue-management §11，消除重複邏輯 | 174b86b |
+
+---
+
+## Sprint 52 — 完成
+
+**Sprint Goal**：建立 UIUX Agent 工作流的「防呆設計基礎」—— 定義機器可讀的 Design Tokens 規格、強制元件庫白名單，以及前端 Story AC 模板注入機制，使 ADR-014 Phase 1 具體落地。
+**期間**：2026-03-06 ~ 2026-03-12
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。ADR-014 Phase 1 具體落地：Design Tokens 機器可讀規格（design-tokens.json）建立、前端 SDD 模板標準化、issue-management 前端 Story AC 自動注入機制上線。
+**Stakeholder 驗收**：接受
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-103（#104）：Design Tokens 定義檔建立 | S | 1 | 完成 |
+| US-104（#105）：元件庫白名單 AC 注入機制 | S | 1 | 完成 |
+
+**目標 Velocity**：2 points（2 Stories）
+
+## Sprint 52 統計
+- Velocity：2 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-06
+
+---
+
+## Sprint 53 — 完成
+
+**Sprint Goal**：完成 ADR-014 全部三個 Phase 的 SKILL.md 定義（UX Agent / UI Agent / Vision Critic），決策 OQ-1 與 OQ-3 開放問題，並設計三層 Agent 管線端對端整合測試規格，使 UIUX Agent 工作流從架構決策走向完整的可執行 Skill 定義。
+**期間**：2026-03-06 ~ 2026-03-12
+**結果**：Goal 達成（6/6 Stories PASS）。Velocity 10 points，完成率 100%。三層 Agent 管線 SKILL.md 全部交付（UX Agent / UI Agent / Vision Critic），ADR-014 OQ-1/OQ-3 決策完成，SDD-UIUX-E2E 整合測試規格建立。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| 前置任務：ADR-014 Proposed → Accepted | — | — | 0 | 完成 |
+| US-105：UX Agent SKILL.md 實作 | #112 | M | 2 | 完成 |
+| OQ-1：Playwright 截圖可行性調查 | #109 | S | 1 | 完成 |
+| OQ-3：Vision Critic 通過閾值量化決策 | #111 | S | 1 | 完成 |
+| US-106：UI Agent SKILL.md 實作 | #113 | M | 2 | 完成 |
+| US-107：Vision Critic Agent SKILL.md 實作 | #114 | M | 2 | 完成 |
+| US-108：三層 Agent 管線端對端整合測試設計 | #115 | M | 2 | 完成 |
+
+**目標 Velocity**：10 points（6 Stories）
+
+## Sprint 53 統計
+- Velocity：10 points
+- 完成率：100%（完成 6 / 計畫 6）
+- 日期：2026-03-06

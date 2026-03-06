@@ -1973,3 +1973,15 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 | US-146（Issue #148）：Figma 文件結構定義 — Page 架構、Layer 命名規則、Frame 模板 | S | 1 | Sprint 55 |
 | US-148（Issue #149）：Component Library 基礎建立 — Button / Input / Card | M | 2 | Sprint 55 |
 | US-147（Issue #150）：AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | M | 2 | Sprint 55 |
+
+---
+
+## Sprint 56（2026-03-06）
+
+**Sprint Goal**：驗證 UIUX Figma 管線可運作性 — 建立 Figma Desktop 本地驗證環境 SOP、定義 Vision Critic Frame 截圖審查 PoC 規格、撰寫 Figma 管線使用指南，使 ADR-015 Phase 1 從技術文件走向可操作的驗證與使用文件。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-150（Issue #151）：Figma Desktop 本地驗證環境 SOP | S | 1 | Sprint 56 |
+| US-151（Issue #118）：Vision Critic PoC — Figma Frame 截圖審查 | M | 2 | Sprint 56 |
+| US-152（Issue #123）：Figma 管線使用指南 | M | 2 | Sprint 56 |

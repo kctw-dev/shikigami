@@ -1,6 +1,6 @@
 # Sprint 56
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-06 ~ 2026-03-12
 **Sprint Goal**：驗證 UIUX Figma 管線可運作性 — 建立 Figma Desktop 本地驗證環境 SOP、定義 Vision Critic Frame 截圖審查 PoC 規格、撰寫 Figma 管線使用指南，使 ADR-015 Phase 1 從技術文件走向可操作的驗證與使用文件。
 **ADR 依賴**：ADR-015（Accepted）

@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-06（Sprint 55 — ADR-015 Figma 整合 Phase 1 基礎建立，5 Stories / 8 Points 全數交付）
+> 最後更新：2026-03-06（Sprint 56 — ADR-015 Phase 1 驗證與使用文件交付，3 Stories / 5 Points 全數交付）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -303,6 +303,9 @@ Sprint Review 時自動產出：
 | US-146 | Figma 文件結構定義 — Page 架構、Layer 命名規則（語意化）、Frame 模板規格（Desktop/Mobile） | Sprint 55 ✅ |
 | US-148 | Component Library 基礎規格 — Button / Input / Card 元件完整規格 + Figma Variable 綁定 + MCP 操作步驟 | Sprint 55 ✅ |
 | US-147 | AI 生成 Frame PoC — 完整 11 步驟 MCP 工具呼叫序列 + Auto Layout + Variable 綁定執行計畫 | Sprint 55 ✅ |
+| US-150 | Figma Desktop 本地驗證環境 SOP — MCP 連接與動態 AC 驗證流程標準化 | Sprint 56 ✅ |
+| US-151 | Vision Critic PoC — Figma Frame 截圖審查（三維度評分模型 + MCP 工具呼叫序列） | Sprint 56 ✅ |
+| US-152 | Figma 管線使用指南 — 端對端工作流程 + 快速參考卡 + 限制與 Fallback | Sprint 56 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 
