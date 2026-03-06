@@ -12,7 +12,7 @@
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
 | US-103 | #104 | Design Tokens 定義檔建立 | S | 1 | Phase 1 | 完成 |
-| US-104 | #105 | 元件庫白名單 AC 注入機制 | S | 1 | Phase 1 | 待開發 |
+| US-104 | #105 | 元件庫白名單 AC 注入機制 | S | 1 | Phase 1 | 完成 |
 
 **Sprint 容量**：2 Points
 
@@ -110,9 +110,9 @@ ADR-014 Phase 1 的第二個防呆機制是「AC 注入」：當 issue-managemen
 
 **Done 定義**
 
-- [ ] `skills/issue-management/SKILL.md` 新增「前端 Story 識別規則」段落，含觸發關鍵字列表（AC1）
-- [ ] SKILL.md 定義 2 條標準注入 AC 條目（元件庫符合性 + Design Tokens 符合性）（AC2）
-- [ ] SKILL.md Backlog Bridge 段落新增「前端 Story 辨識後 AC 注入」步驟說明（AC3）
+- [x] `skills/issue-management/SKILL.md` 新增「前端 Story 識別規則」段落，含觸發關鍵字列表（AC1）
+- [x] SKILL.md 定義 2 條標準注入 AC 條目（元件庫符合性 + Design Tokens 符合性）（AC2）
+- [x] SKILL.md Backlog Bridge 段落新增「前端 Story 辨識後 AC 注入」步驟說明（AC3）
 
 ---
 
