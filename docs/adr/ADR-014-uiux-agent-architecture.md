@@ -332,10 +332,43 @@ Phase 1 和 Phase 2 不依賴 Vision Critic Agent 的截圖機制，可先交付
 | # | 問題 | 優先級 | 狀態 | 說明 |
 |---|------|--------|------|------|
 | OQ-1 | Playwright 截圖在 GitHub Actions self-hosted runner 的可行性 | 高 | 待解答 | self-hosted runner 的 headless browser 環境需確認；影響 Vision Critic Phase 3 的 CI 整合 |
-| OQ-2 | Design Tokens 格式標準選型 | 高 | 待解答 | W3C Design Tokens Community Group 格式 vs. 自訂 JSON；影響與 UI Agent 的互通性 |
+| OQ-2 | Design Tokens 格式標準選型 | 高 | 已決策（2026-03-06） | 選擇自訂 JSON（YAGNI 原則）。詳見下方 OQ-2 決策說明。 |
 | OQ-3 | Vision Critic 審查的量化通過閾值定義 | 中 | 待解答 | PASS/FAIL 判定標準需量化（如對比度 WCAG AA、留白最小值）；避免主觀判定導致迴圈無法終止 |
 | OQ-4 | UX Agent 骨架文件格式 JSON Schema 定義 | 中 | 待解答 | 需在 US-105 前確認骨架文件的標準結構，確保 UI Agent 可解析 |
 | OQ-5 | 長對話 Context Window 管理策略 | 低 | 待解答 | Vision Critic 退件迴圈多輪後 context 可能超出限制；需定義截斷或摘要策略 |
+
+### OQ-2 決策說明：Design Tokens 格式選型（2026-03-06）
+
+**問題**：應採用 W3C Design Tokens Community Group（DTCG）格式還是自訂 JSON 格式作為 `design-tokens.json` 的規格標準？
+
+**候選方案比較**
+
+| 面向 | W3C DTCG 格式 | 自訂 JSON（選定） |
+|------|-------------|----------------|
+| 標準化程度 | 高（業界標準草案） | 低（專案私有格式） |
+| 工具生態相容性 | 高（Style Dictionary、Token Transformer 等工具原生支援） | 低（需自行解析） |
+| 學習成本 | 中（需遵循 `$type`、`$value`、`$extensions` 規範） | 低（直觀 JSON 鍵值對） |
+| MVP 階段所需複雜度 | 過高（DTCG spec 尚為 W3C Draft，實作細節持續演進） | 適當（當前僅需 Agent 可讀的靜態規格） |
+| 與 UI Agent 互通性 | 高（未來工具鏈整合更容易） | 中（後續若需互通，可遷移至 DTCG） |
+| YAGNI 符合性 | 不符合（Phase 1 無工具鏈整合需求） | 符合 |
+
+**決策**：選擇**自訂 JSON 格式**。
+
+**理由**：
+
+1. **YAGNI 原則**：ADR-011、ADR-012 共同確立的 MVP 階段 YAGNI 約束適用於本決策。Phase 1 的 Design Tokens 用途僅為「Agent 可讀的靜態設計規格」，不涉及工具鏈轉換（Token Transformer、Style Dictionary）或跨工具輸出（CSS Custom Properties、iOS Tokens）。W3C DTCG 格式的完整規範在此階段帶來不必要的複雜度。
+
+2. **W3C DTCG 仍為 Draft 規格**：截至 2026-03-06，W3C Design Tokens Community Group 格式仍為草案階段（未正式發布），採用 Draft 規格作為生產環境標準存在格式漂移風險。
+
+3. **自訂 JSON 已充分滿足 Phase 1 需求**：`docs/design/design-tokens.json` 採用直觀的群組 → token 鍵值對結構（`color.primary.500`、`spacing.4`），UI Agent 與 Developer Subagent 均可直接解析，無需額外 schema 學習。
+
+4. **低遷移成本**：自訂 JSON 的扁平化結構若未來需遷移至 DTCG，轉換腳本可在 1-2 小時內完成，遷移風險可控。
+
+**影響**：
+
+- `docs/design/design-tokens.json` v1.0.0 採用自訂 JSON 格式，以 `$value`、`$description` 作為 token 物件的標準欄位名稱（與 DTCG 慣例部分對齊，降低未來遷移成本）。
+- Phase 2 的 UI Agent 實作（US-106）須以此格式解析 Design Tokens，不依賴外部 Token 轉換工具。
+- 若 Phase 3 或以後引入跨平台 Token 輸出需求，應透過新 ADR 評估是否遷移至 W3C DTCG 或採用 Style Dictionary。
 
 ---
 
