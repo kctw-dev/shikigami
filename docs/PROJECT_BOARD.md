@@ -1,27 +1,32 @@
 # Project Board
 
-**最後更新**：2026-03-06（US-147 PoC 執行計畫交付，Sprint 55 全部 Stories 完成靜態交付）
-**當前 Sprint**：Sprint 55（進行中）
+**最後更新**：2026-03-06（Sprint 55 Review 完成，Velocity 8 points，完成率 100%）
+**當前 Sprint**：Sprint 56（規劃中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 55](sprints/sprint_55.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 55 — 進行中
+## Sprint 55 — 完成
 
 **Sprint Goal**：建立 Figma 整合環境基礎 — 完成 MCP Server 選型與本地設定驗證、Figma 文件結構定義，並執行 AI 透過 Figma MCP 生成 Frame 的端對端 PoC，確認 ADR-015 Phase 1 技術路徑可落地。
 **期間**：2026-03-06 ~ 2026-03-12
 **ADR 依賴**：ADR-015（Accepted）
+**結果**：Goal 達成（5/5 Stories PASS）。Velocity 8 points，完成率 100%。ADR-015 Figma 整合方向確立後首個 Sprint 全數交付。
+**Stakeholder 驗收**：接受（動態 AC 標記為「需使用者本地驗證」可接受）
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-149：SDD 前端模板更新 — 新增 Figma 設計稿連結欄位 | #147 | S | 1 | 完成 |
-| US-145：Figma MCP Server 選型與本地設定驗證 | #146 | M | 2 | 完成（AC3 靜態通過；AC1/AC2 需使用者本地驗證） |
+| US-145：Figma MCP Server 選型與本地設定驗證 | #146 | M | 2 | 完成 |
 | US-146：Figma 文件結構定義 — Page 架構、Layer 命名規則、Frame 模板 | #148 | S | 1 | 完成 |
-| US-148：Component Library 基礎建立 — Button / Input / Card | #149 | M | 2 | 完成（靜態規格交付；動態 AC 需使用者本地 Figma 執行） |
-| US-147：AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | #150 | M | 2 | 完成（靜態 PoC 執行計畫交付；動態 AC 需使用者本地 Figma 執行） |
+| US-148：Component Library 基礎建立 — Button / Input / Card | #149 | M | 2 | 完成 |
+| US-147：AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | #150 | M | 2 | 完成 |
 
-**目標 Velocity**：8 points（5 Stories）
+## Sprint 55 統計
+- Velocity：8 points
+- 完成率：100%（完成 5 / 計畫 5）
+- 日期：2026-03-06
 
 ---
 
@@ -132,7 +137,7 @@
 - 完成率：100%（完成 2 / 計畫 2）
 - 日期：2026-03-06
 
-## Sprint 外完成項目（/shoot 短衝記錄）
+## Sprint 外完成項目（Sprint 51 /shoot 短衝記錄）
 
 | 日期 | 來源 | 標題 | commit hash |
 |------|------|------|-------------|
@@ -140,36 +145,4 @@
 
 ---
 
-## Sprint 50 — 完成
-
-**Sprint Goal**：完成 shikigami:diagram 技能文件整合 — 補充自動嵌入 Markdown 步驟與 Issue 回覆附圖指引，使 diagram 技能達到完整可交付狀態，並關閉父 Issue #89。
-**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。Issue #89 三個子 Stories（US-97/98/99）跨 Sprint 48-50 完整交付，ADR-013 從 Proposed 升為 Accepted 閉環。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-05 ~ 2026-03-11
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-99（#98）：shikigami:diagram 文件整合 — 自動嵌入 Markdown、Issue 回覆附圖、關閉 #89 | S | 1 | 完成 |
-
-**目標 Velocity**：1 point（1 Story）
-**實際 Velocity**：1 point（1 Story）
-
----
-
-## Sprint 49 — 完成
-
-**Sprint Goal**：實作 `shikigami:diagram` SKILL.md 核心功能 — 雙格式輸出、多圖標集切換、ADR-006 XML 隔離，讓 diagram 技能達到可執行狀態。
-**結果**：Goal 達成（1/1 Stories PASS）。Velocity 2 points，完成率 100%。ADR-013 升級為 Accepted，SKILL.md 雙格式輸出路徑（.drawio MCP 操控 + PNG/SVG 手動匯出）在 v1.8.0 能力邊界內完整定義。
-**Stakeholder 驗收**：接受
-**期間**：2026-03-05 ~ 2026-03-11
-
-| Story | Size | Points | 狀態 |
-|-------|------|--------|------|
-| US-98（#97）：shikigami:diagram SKILL.md 實作 — 雙格式輸出、--provider、ADR-006 XML 隔離 | M | 2 | 完成 |
-
-**目標 Velocity**：2 points（1 Story）
-**實際 Velocity**：2 points（1 Story）
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–48）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–50）

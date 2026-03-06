@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-06（Sprint 48 歸檔）
-**歸檔範圍**：Sprint 1–48（共 48 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔
+**最後更新**：2026-03-06（Sprint 49–50 歸檔）
+**歸檔範圍**：Sprint 1–50（共 50 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 49–51）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 51–55）
 
 ---
 
@@ -814,6 +814,38 @@
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
 | US-97（#96）：shikigami:diagram 環境準備 — drawio-mcp-server stdio local 安裝與整合驗證 | S | 1 | 完成 |
+
+**目標 Velocity**：1 point（1 Story）
+**實際 Velocity**：1 point（1 Story）
+
+---
+
+## Sprint 49 — 完成
+
+**Sprint Goal**：實作 `shikigami:diagram` SKILL.md 核心功能 — 雙格式輸出、多圖標集切換、ADR-006 XML 隔離，讓 diagram 技能達到可執行狀態。
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 2 points，完成率 100%。ADR-013 升級為 Accepted，SKILL.md 雙格式輸出路徑（.drawio MCP 操控 + PNG/SVG 手動匯出）在 v1.8.0 能力邊界內完整定義。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-98（#97）：shikigami:diagram SKILL.md 實作 — 雙格式輸出、--provider、ADR-006 XML 隔離 | M | 2 | 完成 |
+
+**目標 Velocity**：2 points（1 Story）
+**實際 Velocity**：2 points（1 Story）
+
+---
+
+## Sprint 50 — 完成
+
+**Sprint Goal**：完成 shikigami:diagram 技能文件整合 — 補充自動嵌入 Markdown 步驟與 Issue 回覆附圖指引，使 diagram 技能達到完整可交付狀態，並關閉父 Issue #89。
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。Issue #89 三個子 Stories（US-97/98/99）跨 Sprint 48-50 完整交付，ADR-013 從 Proposed 升為 Accepted 閉環。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-99（#98）：shikigami:diagram 文件整合 — 自動嵌入 Markdown、Issue 回覆附圖、關閉 #89 | S | 1 | 完成 |
 
 **目標 Velocity**：1 point（1 Story）
 **實際 Velocity**：1 point（1 Story）

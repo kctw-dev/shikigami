@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-06（Sprint 53 — UIUX Agent 三層管線 SKILL.md 全部交付）
+> 最後更新：2026-03-06（Sprint 55 — ADR-015 Figma 整合 Phase 1 基礎建立，5 Stories / 8 Points 全數交付）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -298,6 +298,11 @@ Sprint Review 時自動產出：
 | US-106 | UI Agent SKILL.md 實作（shikigami:ui 技能定義 + Design Tokens 注入 + 元件庫白名單約束） | Sprint 53 ✅ |
 | US-107 | Vision Critic Agent SKILL.md 實作（shikigami:vision-critic 技能定義 + 視覺比對規則 + Playwright 截圖整合） | Sprint 53 ✅ |
 | US-108 | 三層 Agent 管線端對端整合測試設計（SDD-UIUX-E2E.md：5 測試案例 + 三層降級策略） | Sprint 53 ✅ |
+| US-149 | SDD 前端模板更新 — Figma 設計稿區塊 + Figma 驗證 Gate Phase 1/2 過渡期規則 | Sprint 55 ✅ |
+| US-145 | Figma MCP Server 選型（雙層架構：claude-talk-to-figma-mcp 寫入 + 官方 MCP 讀取）+ 安裝指南 | Sprint 55 ✅ |
+| US-146 | Figma 文件結構定義 — Page 架構、Layer 命名規則（語意化）、Frame 模板規格（Desktop/Mobile） | Sprint 55 ✅ |
+| US-148 | Component Library 基礎規格 — Button / Input / Card 元件完整規格 + Figma Variable 綁定 + MCP 操作步驟 | Sprint 55 ✅ |
+| US-147 | AI 生成 Frame PoC — 完整 11 步驟 MCP 工具呼叫序列 + Auto Layout + Variable 綁定執行計畫 | Sprint 55 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 

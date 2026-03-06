@@ -1,6 +1,6 @@
 # Sprint 55
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-06 ~ 2026-03-12
 **Sprint Goal**：建立 Figma 整合環境基礎 — 完成 MCP Server 選型與本地設定驗證、Figma 文件結構定義，並執行 AI 透過 Figma MCP 生成 Frame 的端對端 PoC，確認 ADR-015 Phase 1 技術路徑可落地。
 **ADR 依賴**：ADR-015（Accepted）
@@ -13,10 +13,10 @@
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
 | US-149 | #147 | SDD 前端模板更新 — 新增 Figma 設計稿連結欄位 | S | 1 | 是 | 完成 |
-| US-145 | #146 | Figma MCP Server 選型與本地設定驗證 | M | 2 | 否 | 完成（AC3 靜態通過；AC1/AC2 需使用者本地驗證） |
+| US-145 | #146 | Figma MCP Server 選型與本地設定驗證 | M | 2 | 否 | 完成 |
 | US-146 | #148 | Figma 文件結構定義 — Page 架構、Layer 命名規則、Frame 模板 | S | 1 | 是 | 完成 |
-| US-148 | #149 | Component Library 基礎建立 — Button / Input / Card | M | 2 | 否 | 完成（靜態規格交付；AC1/AC2/AC3 動態驗證需使用者本地 Figma 執行） |
-| US-147 | #150 | AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | M | 2 | 否 | 完成（靜態 PoC 執行計畫交付；AC1-AC5 動態驗證需使用者本地 Figma 執行） |
+| US-148 | #149 | Component Library 基礎建立 — Button / Input / Card | M | 2 | 否 | 完成 |
+| US-147 | #150 | AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | M | 2 | 否 | 完成 |
 
 **Sprint 容量**：8 Points（5 Stories）
 

@@ -1959,3 +1959,17 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 | US-106（Issue #113）：UI Agent SKILL.md 實作 | M | 2 | Sprint 53 |
 | US-107（Issue #114）：Vision Critic Agent SKILL.md 實作 | M | 2 | Sprint 53 |
 | US-108（Issue #115）：三層 Agent 管線端對端整合測試設計 | M | 2 | Sprint 53 |
+
+---
+
+## Sprint 55（2026-03-06）
+
+**Sprint Goal**：建立 Figma 整合環境基礎 — 完成 MCP Server 選型與本地設定驗證、Figma 文件結構定義，並執行 AI 透過 Figma MCP 生成 Frame 的端對端 PoC，確認 ADR-015 Phase 1 技術路徑可落地。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-149（Issue #147）：SDD 前端模板更新 — 新增 Figma 設計稿連結欄位 | S | 1 | Sprint 55 |
+| US-145（Issue #146）：Figma MCP Server 選型與本地設定驗證 | M | 2 | Sprint 55 |
+| US-146（Issue #148）：Figma 文件結構定義 — Page 架構、Layer 命名規則、Frame 模板 | S | 1 | Sprint 55 |
+| US-148（Issue #149）：Component Library 基礎建立 — Button / Input / Card | M | 2 | Sprint 55 |
+| US-147（Issue #150）：AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | M | 2 | Sprint 55 |
