@@ -11,7 +11,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
-| US-109 | #116 | CLI 輸出設計原則符合性評估 | M | 2 | 是 | 待開始 |
+| US-109 | #116 | CLI 輸出設計原則符合性評估 | M | 2 | 是 | 完成 |
 | US-110 | #117 | ADR-014 OQ-4 骨架文件 JSON Schema 標準化決策 | S | 1 | 是 | 待開始 |
 | US-111 | #118 | Vision Critic PoC 腳本建立 | M | 2 | 否 | 待開始 |
 | US-112 | #119 | UX Agent 實際觸發驗證 | M | 2 | 否 | 待開始 |
@@ -95,9 +95,9 @@ As a Product Owner overseeing UIUX Agent CLI output quality, I want to evaluate 
 
 **Done 定義**
 
-- [ ] CLI 輸出設計原則符合性評估報告已產出（AC1）
-- [ ] 三層管線不符合項目清單已列出，含改善建議（AC2）
-- [ ] 不符合項目已依影響範圍排序（AC3）
+- [x] CLI 輸出設計原則符合性評估報告已產出（AC1）
+- [x] 三層管線不符合項目清單已列出，含改善建議（AC2）
+- [x] 不符合項目已依影響範圍排序（AC3）
 
 ---
 
