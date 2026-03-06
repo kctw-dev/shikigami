@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-06（Sprint 51 Review 完成）
-**當前 Sprint**：Sprint 51（完成）
+**最後更新**：2026-03-06（Sprint 52 Planning 完成）
+**當前 Sprint**：Sprint 52（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 51](sprints/sprint_51.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 52](sprints/sprint_52.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 52 — 進行中
+
+**Sprint Goal**：建立 UIUX Agent 工作流的「防呆設計基礎」—— 定義機器可讀的 Design Tokens 規格、強制元件庫白名單，以及前端 Story AC 模板注入機制，使 ADR-014 Phase 1 具體落地。
+**期間**：2026-03-06 ~ 2026-03-12
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-103（#104）：Design Tokens 定義檔建立 | S | 1 | 待開發 |
+| US-104（#105）：元件庫白名單 AC 注入機制 | S | 1 | 待開發 |
+
+**目標 Velocity**：2 points（2 Stories）
 
 ---
 
