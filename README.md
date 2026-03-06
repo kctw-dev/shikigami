@@ -1,6 +1,6 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.26.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.29.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
 > 7 個 AI 隊友，各司其職，互相制衡 — 讓你的 AI 開發工具擁有一整組有紀律的工程團隊。
@@ -13,9 +13,9 @@
 
 Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：QA 審你的代碼並挑戰架構決策，Security 審外部輸入，SRE 從維運角度評估部署可行性。**不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
 
-這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 43 個 Sprint 完成率 100%，QA 雙階段審查攔截了每個 Sprint 的品質問題。
+這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 50 個 Sprint 完成率 100%，QA 雙階段審查攔截了每個 Sprint 的品質問題。
 
-**當前版本：v0.26.0**（22 Skills / 7 Agents / 4 Commands）
+**當前版本：v0.29.0**（23 Skills / 7 Agents / 4 Commands）
 
 ---
 
@@ -322,7 +322,7 @@ shikigami.project_level: medium
 
 **重點：它們會互相制衡。** 不是 7 個獨立助手，是一組有紀律的工程團隊。
 
-### 22 個 Skills
+### 23 個 Skills
 
 **Scrum 流程**
 
@@ -360,6 +360,7 @@ shikigami.project_level: medium
 | **schedule** | Sprint 自動排程執行、cron 腳本生成、序列排程保護 |
 | **shoot** | 短衝模式、單 Story 快速執行、不起 Sprint 的輕量交付 |
 | **backlog-intake** | GitHub Issue 自動拉入 Backlog、標籤過濾、注入安全解析、冪等標記 |
+| **diagram** | 架構圖自動化生成（drawio-mcp-server stdio 整合、雙格式輸出、多雲圖標集） |
 
 ---
 
@@ -380,11 +381,12 @@ Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發
 | v0.9.x | 品質強化 | Sprint 21–24 | parallel-dispatch 同檔案衝突偵測 + Onboarding Labels + 提示注入防護（ADR-006）+ ADR-007 Story-Lifecycle Subagent + 外部抽樣審查機制 + Architect/QA 知識框架 Skill |
 | v0.13.0 | 多平台支援 | Sprint 25–29 | M5 完成條件終審 + OpenCode 平台整合（ADR-008）+ symlink 適配策略 + 五角色 Agent 移植 + INSTALL_OPENCODE.md 安裝指南 + Issue #3 正式結案 + Beta 使用者招募 |
 | v0.17.0 | 自動化閉環 | Sprint 30–33 | Issue #46 排程四條流程完成 + backlog-intake Skill + ADR-009 + M5 推廣行動 + Token Baseline Snapshot |
+| v0.29.0 | 多環境穩定化 + diagram 技能 | Sprint 34–50 | 多 GCE 認證指引（ADR-012）+ CI/CD workflow 拆分指引 + 版號三檔同步腳本 + 環境可攜性方案（Dotfiles Repo）+ ADR-013 diagram MCP 架構決策 + shikigami:diagram Skill（drawio-mcp-server stdio 整合）|
 
-### 累積數據（截至 Sprint 42）
+### 累積數據（截至 Sprint 50）
 
-- 連續 42 個 Sprint 完成率 100%，Velocity 歷史：8→5→5→4→6→8→7→6→5→6→4→4→4→2→4→8→4→3→5→5→4→6→5→5→4→2→4→4→3→4→4→4→4→2→8→4→4→4→3→5→5→3
-- 9 個 ADR（架構決策紀錄）
+- 連續 50 個 Sprint 完成率 100%
+- 13 個 ADR（架構決策紀錄）
 - 8 個自動化驗證腳本 + GitHub Actions CI Pipeline
 
 ### 開發流程實證
@@ -401,8 +403,8 @@ Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發
 
 | 文件 | 說明 |
 |------|------|
-| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-009） |
-| `docs/sprints/` | Sprint 規劃與執行紀錄（sprint_1 ~ sprint_33） |
+| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-013） |
+| `docs/sprints/` | Sprint 規劃與執行紀錄（sprint_1 ~ sprint_50） |
 | `docs/km/Retrospective_Log.md` | 每次犯的錯都記下來，不重複犯 |
 | `docs/km/Metrics_Log.md` | Velocity 趨勢與完成率追蹤 |
 | `docs/km/ROLE_BALANCE_CASES.md` | [真實制衡案例記錄](docs/km/ROLE_BALANCE_CASES.md) |
