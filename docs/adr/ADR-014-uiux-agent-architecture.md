@@ -1,7 +1,8 @@
 # ADR-014：UIUX Agent 架構決策
 
-**狀態**：Proposed
+**狀態**：Accepted
 **日期**：2026-03-06
+**接受日期**：2026-03-06（Sprint 53 前置任務）
 **決策者**：Architect
 **關聯 Issue**：#100（UIUX agent 功能需求）、#95（US-102 本 ADR 起草）
 **關聯 ADR**：ADR-006（Prompt Injection 防護）、ADR-007（Story Lifecycle Subagent）、ADR-011（GitHub Actions 整合）、ADR-013（Diagram Skill MCP 整合）
@@ -225,6 +226,17 @@ Vision Critic Agent 需要「前端渲染結果的截圖」作為輸入。在 Sh
 **預計後續 Story 方向（Phase 1）**：
 - **US-103**：Design Tokens 定義檔建立（`design-tokens.json` + SDD 欄位模板）
 - **US-104**：元件庫白名單 AC 模板注入機制（Backlog Intake 自動化）
+
+**Phase 1 完成佐證（Sprint 52，2026-03-06）**：
+
+| 工作項目 | 交付工件 | 狀態 |
+|---------|---------|------|
+| Design Tokens 定義檔建立 | `docs/design/design-tokens.json`（五個設計變數群組，各含 3+ 具名 token） | 完成 |
+| 元件庫白名單 SDD | `docs/templates/sdd-frontend-template.md`（Frontend Constraints 區段） | 完成 |
+| 前端 Story AC 模板強化 | `skills/issue-management/SKILL.md` §12（前端 Story 識別 + 自動 AC 注入） | 完成 |
+| ADR-014 OQ-2 決策 | 自訂 JSON 格式（YAGNI 原則），已填入 OQ-2 說明區塊 | 完成 |
+
+Phase 1 全部 2 Stories（US-103/US-104）於 Sprint 52 完成，Velocity 2 points，完成率 100%。本 ADR 狀態從 Proposed 升為 Accepted。
 
 ---
 

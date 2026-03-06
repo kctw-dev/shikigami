@@ -1,9 +1,28 @@
 # Project Board
 
-**最後更新**：2026-03-06（Sprint 52 Review 完成）
-**當前 Sprint**：Sprint 52（完成）
+**最後更新**：2026-03-06（Sprint 53 Planning 完成）
+**當前 Sprint**：Sprint 53（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 52](sprints/sprint_52.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 53](sprints/sprint_53.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 53 — 進行中
+
+**Sprint Goal**：完成 ADR-014 全部三個 Phase 的 SKILL.md 定義（UX Agent / UI Agent / Vision Critic），決策 OQ-1 與 OQ-3 開放問題，並設計三層 Agent 管線端對端整合測試規格，使 UIUX Agent 工作流從架構決策走向完整的可執行 Skill 定義。
+**期間**：2026-03-06 ~ 2026-03-12
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| 前置任務：ADR-014 Proposed → Accepted | — | — | 0 | 完成 |
+| US-105：UX Agent SKILL.md 實作 | #112 | M | 2 | 進行中 |
+| OQ-1：Playwright 截圖可行性調查 | #109 | S | 1 | 進行中 |
+| OQ-3：Vision Critic 通過閾值量化決策 | #111 | S | 1 | 進行中 |
+| US-106：UI Agent SKILL.md 實作 | #113 | M | 2 | 待開始 |
+| US-107：Vision Critic Agent SKILL.md 實作 | #114 | M | 2 | 待開始 |
+| US-108：三層 Agent 管線端對端整合測試設計 | #115 | M | 2 | 待開始 |
+
+**目標 Velocity**：10 points（6 Stories）
 
 ---
 
