@@ -12,7 +12,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
-| US-149 | #147 | SDD 前端模板更新 — 新增 Figma 設計稿連結欄位 | S | 1 | 是 | 待開始 |
+| US-149 | #147 | SDD 前端模板更新 — 新增 Figma 設計稿連結欄位 | S | 1 | 是 | 完成 |
 | US-145 | #146 | Figma MCP Server 選型與本地設定驗證 | M | 2 | 否 | 待開始 |
 | US-146 | #148 | Figma 文件結構定義 — Page 架構、Layer 命名規則、Frame 模板 | S | 1 | 是 | 待開始 |
 | US-148 | #149 | Component Library 基礎建立 — Button / Input / Card | M | 2 | 否 | 待開始 |
