@@ -11,7 +11,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-100 | #102 | backlog-intake GitHub Action 結案確認 | S | 1 | Phase 1 | 進行中 |
+| US-100 | #102 | backlog-intake GitHub Action 結案確認 | S | 1 | Phase 1 | 完成 |
 | US-102 | #100 | ADR-014 起草：UIUX Agent 架構決策 | S | 1 | Phase 1 | 進行中 |
 
 **Sprint 容量**：2 Points
@@ -67,8 +67,8 @@ Issue #102 記錄了 backlog-intake 觸發機制的缺陷：原設計要求 Issu
 
 **Done 定義**
 
-- [ ] Issue #102 已關閉，附完整修正說明 comment（AC1）
-- [ ] 測試 Issue 端對端驗證通過，測試 Issue 已關閉（AC2）
+- [x] Issue #102 已關閉，附完整修正說明 comment（AC1）
+- [x] 測試 Issue 端對端驗證通過，測試 Issue 已關閉（AC2）
 
 ---
 
