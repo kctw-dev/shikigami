@@ -1,6 +1,6 @@
 # Project Board
 
-**最後更新**：2026-03-06（US-148 Component Library 規格交付）
+**最後更新**：2026-03-06（US-147 PoC 執行計畫交付，Sprint 55 全部 Stories 完成靜態交付）
 **當前 Sprint**：Sprint 55（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 55](sprints/sprint_55.md) → 本看板 | [Tutorial](tutorial/README.md)
@@ -19,7 +19,7 @@
 | US-145：Figma MCP Server 選型與本地設定驗證 | #146 | M | 2 | 完成（AC3 靜態通過；AC1/AC2 需使用者本地驗證） |
 | US-146：Figma 文件結構定義 — Page 架構、Layer 命名規則、Frame 模板 | #148 | S | 1 | 完成 |
 | US-148：Component Library 基礎建立 — Button / Input / Card | #149 | M | 2 | 完成（靜態規格交付；動態 AC 需使用者本地 Figma 執行） |
-| US-147：AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | #150 | M | 2 | 待開始 |
+| US-147：AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | #150 | M | 2 | 完成（靜態 PoC 執行計畫交付；動態 AC 需使用者本地 Figma 執行） |
 
 **目標 Velocity**：8 points（5 Stories）
 

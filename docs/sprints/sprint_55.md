@@ -16,7 +16,7 @@
 | US-145 | #146 | Figma MCP Server 選型與本地設定驗證 | M | 2 | 否 | 完成（AC3 靜態通過；AC1/AC2 需使用者本地驗證） |
 | US-146 | #148 | Figma 文件結構定義 — Page 架構、Layer 命名規則、Frame 模板 | S | 1 | 是 | 完成 |
 | US-148 | #149 | Component Library 基礎建立 — Button / Input / Card | M | 2 | 否 | 完成（靜態規格交付；AC1/AC2/AC3 動態驗證需使用者本地 Figma 執行） |
-| US-147 | #150 | AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | M | 2 | 否 | 待開始 |
+| US-147 | #150 | AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | M | 2 | 否 | 完成（靜態 PoC 執行計畫交付；AC1-AC5 動態驗證需使用者本地 Figma 執行） |
 
 **Sprint 容量**：8 Points（5 Stories）
 
@@ -231,11 +231,15 @@ As a Developer validating the ADR-015 Phase 1 end-to-end technical path, I want 
 
 **Done 定義**
 
-- [ ] 以真實 User Story 為輸入，透過 Figma MCP 生成 Frame（AC1）
-- [ ] Frame 存在於 Figma 文件指定 Sprint Page，命名符合規則（AC2）
-- [ ] Auto Layout 已設定（方向 + 間距）（AC3）
-- [ ] 至少一個視覺元素綁定 Figma Variable（AC4）
-- [ ] 截圖已透過 MCP 或 REST API 讀取並存放於 `docs/design/poc-screenshots/`（AC5）
+- [x] `docs/design/poc-frame-generation-guide.md` 已建立，定義完整 PoC 執行計畫（靜態交付）
+- [x] `docs/design/poc-screenshots/` 目錄已建立（含 .gitkeep）（靜態交付）
+- [ ] 以真實 User Story 為輸入，透過 Figma MCP 生成 Frame（AC1，動態，需使用者本地執行）
+- [ ] Frame 存在於 Figma 文件指定 Sprint Page，命名符合規則（AC2，動態，需使用者本地執行）
+- [ ] Auto Layout 已設定（方向 + 間距）（AC3，動態，需使用者本地執行）
+- [ ] 至少一個視覺元素綁定 Figma Variable（AC4，動態，需使用者本地執行）
+- [ ] 截圖已透過 MCP 或 REST API 讀取並存放於 `docs/design/poc-screenshots/`（AC5，動態，需使用者本地執行）
+
+**靜態交付說明**：AC1-AC5 均為動態 AC，需要 Figma Desktop App + claude-talk-to-figma-mcp Plugin 連接才能執行。`docs/design/poc-frame-generation-guide.md` 提供完整的 Step-by-Step MCP 工具呼叫序列（11 個步驟），使用者可依照指引在本地 Figma 環境完成動態驗證。
 
 ---
 
