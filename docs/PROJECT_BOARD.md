@@ -1,9 +1,50 @@
 # Project Board
 
-**最後更新**：2026-03-06（Sprint 53 Review 完成）
-**當前 Sprint**：Sprint 53（完成）
+**最後更新**：2026-03-06（Sprint 54 Planning 完成）
+**當前 Sprint**：Sprint 54（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 53](sprints/sprint_53.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 54](sprints/sprint_54.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 54 — 進行中
+
+**Sprint Goal**：完成 ADR-014 全部開放問題（OQ-4/OQ-5）的正式決策，建立三層 UIUX 管線的端對端可執行測試腳本與 CI 整合框架，並對齊三個 SKILL.md 的 CLI 輸出標準，使 UIUX Agent 管線從文件規格走向可驗證的整合工件。
+**期間**：2026-03-06 ~ 2026-03-12
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-109：CLI 輸出設計原則符合性評估 | #116 | M | 2 | 待辦 |
+| US-110：ADR-014 OQ-4 骨架文件 JSON Schema 標準化決策 | #117 | S | 1 | 待辦 |
+| US-111：Vision Critic PoC 腳本建立 | #118 | M | 2 | 待辦 |
+| US-112：UX Agent 實際觸發驗證 | #119 | M | 2 | 待辦 |
+| US-113：UI Agent Design Tokens 注入驗證 | #120 | M | 2 | 待辦 |
+| US-114：Playwright CI 整合腳本建立 | #121 | L | 3 | 待辦 |
+| US-115：SDD-UIUX-E2E TC-001 Happy Path 端對端驗證 | #122 | L | 3 | 待辦 |
+| US-116：UIUX Agent 模型分層策略調查 | #107 | S | 1 | 待辦 |
+| US-117：ADR-014 OQ-4 骨架文件 Schema 標準化 | #141 | S | 1 | 待辦 |
+| US-118：ADR-014 OQ-5 Context Window 管理策略 | #142 | S | 1 | 待辦 |
+| US-119：UIUX Agent 使用者文件補充 | #123 | M | 2 | 待辦 |
+| US-120：SDD 前端模板 Done Definition 更新 | #124 | S | 1 | 待辦 |
+| US-121：Gemini CLI 能力邊界調查 | #108 | S | 1 | 待辦 |
+| US-122：Playwright 截圖 PoC 腳本正式化 | #125 | S | 1 | 待辦 |
+| US-123：SDD-UIUX-E2E TC-02 退件迴圈腳本建立 | #126 | L | 3 | 待辦 |
+| US-124：SDD-UIUX-E2E TC-03 條件通過邊界測試腳本 | #127 | M | 2 | 待辦 |
+| US-125：ADR-014 OQ-4 正式決策文件 | #128 | S | 1 | 待辦 |
+| US-126：ADR-014 OQ-5 Context Window 管理決策 | #129 | S | 1 | 待辦 |
+| US-127：ADR-007 延伸 — 前端 Story 觸發 UIUX 管線決策點 | #130 | M | 2 | 待辦 |
+| US-128：Vision Critic 退件報告儲存機制 | #131 | S | 1 | 待辦 |
+| US-129：UX Agent SKILL.md CLI 輸出設計符合性審查 | #132 | M | 2 | 待辦 |
+| US-130：UI Agent CLI 輸出設計符合性審查 | #133 | M | 2 | 待辦 |
+| US-131：Vision Critic CLI 輸出設計符合性審查 | #134 | S | 1 | 待辦 |
+| US-132：設計 Token 版本控制機制建立 | #135 | M | 2 | 待辦 |
+| US-133：SDD-UIUX-E2E TC-04 UX Agent 輸入驗證測試腳本 | #136 | S | 1 | 待辦 |
+| US-134：UIUX Agent 三層管線整合文件補充 | #137 | M | 2 | 待辦 |
+| US-135：SDD 前端模板 Design Token 路徑驗證規則 | #138 | S | 1 | 待辦 |
+| US-136：Issue #107 UIUX Agent 模型分層策略實作規劃 | #139 | S | 1 | 待辦 |
+| US-137：UIUX 管線 CI GitHub Action 整合框架 | #140 | L | 3 | 待辦 |
+
+**目標 Velocity**：50 points（29 Stories）
 
 ---
 
