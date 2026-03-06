@@ -18,7 +18,7 @@
 | US-113 | #120 | UI Agent Design Tokens 注入驗證 | M | 2 | 否 | 待開始 |
 | US-114 | #121 | Playwright CI 整合腳本建立 | L | 3 | 否 | 待開始 |
 | US-115 | #122 | SDD-UIUX-E2E TC-001 Happy Path 端對端驗證 | L | 3 | 否 | 待開始 |
-| US-116 | #107 | UIUX Agent 模型分層策略調查 | S | 1 | 是 | 待開始 |
+| US-116 | #107 | UIUX Agent 模型分層策略調查 | S | 1 | 是 | 完成 |
 | US-117 | #141 | ADR-014 OQ-4 骨架文件 Schema 標準化 | S | 1 | 是 | 待開始 |
 | US-118 | #142 | ADR-014 OQ-5 Context Window 管理策略 | S | 1 | 是 | 待開始 |
 | US-119 | #123 | UIUX Agent 使用者文件補充 | M | 2 | 是 | 待開始 |
@@ -377,9 +377,9 @@ As an Architect designing the UIUX Agent pipeline, I want to investigate the opt
 
 **Done 定義**
 
-- [ ] 三層管線任務複雜度分析已完成（AC1）
-- [ ] 模型推薦清單已產出（AC2）
-- [ ] ADR-014 相關區塊已填入建議（AC3）
+- [x] 三層管線任務複雜度分析已完成（AC1）
+- [x] 模型推薦清單已產出（AC2）
+- [x] ADR-014 相關區塊已填入建議（AC3）
 
 ---
 

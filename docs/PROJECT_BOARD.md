@@ -21,7 +21,7 @@
 | US-113：UI Agent Design Tokens 注入驗證 | #120 | M | 2 | 待辦 |
 | US-114：Playwright CI 整合腳本建立 | #121 | L | 3 | 待辦 |
 | US-115：SDD-UIUX-E2E TC-001 Happy Path 端對端驗證 | #122 | L | 3 | 待辦 |
-| US-116：UIUX Agent 模型分層策略調查 | #107 | S | 1 | 待辦 |
+| US-116：UIUX Agent 模型分層策略調查 | #107 | S | 1 | 完成 |
 | US-117：ADR-014 OQ-4 骨架文件 Schema 標準化 | #141 | S | 1 | 待辦 |
 | US-118：ADR-014 OQ-5 Context Window 管理策略 | #142 | S | 1 | 待辦 |
 | US-119：UIUX Agent 使用者文件補充 | #123 | M | 2 | 待辦 |
