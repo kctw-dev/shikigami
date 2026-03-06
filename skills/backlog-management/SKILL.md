@@ -63,7 +63,7 @@ Backlog Management 合併 **Product Discovery** 與 **Backlog Grooming** 兩個�
     --json number,title,body,labels --limit 200
   ```
 - [ ] 關閉過時或已不再適用的 Story Issue（`gh issue close <number>`）
-- [ ] 根據最新需求與回饋，新開 Issue 並套用 `backlog-intake` label 以觸發自動入庫，或直接套用 `status: backlog` label 並編寫 Story template（User Story、Acceptance Criteria、RICE 評分）
+- [ ] 根據最新需求與回饋，新開 Issue（系統自動觸發入庫，不需手動貼 label），或直接套用 `status: backlog` label 並編寫 Story template（User Story、Acceptance Criteria、RICE 評分）
 - [ ] 以 `gh issue edit <number>` 調整優先級 label（`priority: must` / `priority: should` / `priority: could`）並更新 Issue body 中的 RICE 分數
 - [ ] 確保每個 Backlog Issue body 有清楚的 Acceptance Criteria（驗收標準）
 

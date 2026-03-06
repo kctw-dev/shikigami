@@ -935,144 +935,20 @@ tail -f logs/schedule-daily-standup.log
 
 ---
 
-### 範例 (c)：需求入庫自動化排程（backlog-intake）
+### 範例 (c)：Issue 管理自動化排程（issue-management）
 
 **情境說明**
 
-Product Owner 希望自動將帶有 `backlog-intake` label 的 GitHub Issues 轉化為 `docs/prd/PRODUCT_BACKLOG.md` 的結構化 User Story 格式，在 Sprint 週期之間維持 Backlog 的即時更新，無需人工介入。透過 `backlog-intake` Skill 設定 cron 排程，每小時自動執行需求入庫流程。
-
-**前提條件**
-
-在執行 `/schedule` 前，必須確認以下條件全部通過（ADR-005 規格 Pre-flight）：
-
-| 條件 | 驗證指令 | 說明 |
-|------|----------|------|
-| OAuth 認證有效（claude CLI） | `claude auth status` | 排程腳本使用 OAuth 而非 API Key（ADR-005 決策域四）；`unset ANTHROPIC_API_KEY` 已強制排除 API Key 路徑 |
-| OAuth 認證有效（gh CLI） | `gh auth status` | backlog-intake 需要 `gh` CLI 讀取 Issues 並寫入 labels；token 無效時入庫操作會失敗 |
-| 目標 Skill 已存在 | `ls skills/backlog-intake/SKILL.md` | Pre-flight 檢查 5 會驗證 `skills/<skill-name>/SKILL.md` 存在；frontmatter 的 `requiredTools` 用於生成 `--allowedTools` 參數（ADR-005 決策域三） |
-| flock 指令可用 | `which flock` | 互斥鎖依賴 flock，防止同一 Skill 並行執行（ADR-005 決策域二）；macOS 需 `brew install util-linux` |
-| 專案目錄可寫 | `test -w $PWD && echo OK` | 腳本生成與 log 寫入皆需寫入權限 |
-
-**ADR-005 規格 Pre-flight 步驟**（`--dry-run` 模式執行所有 Pre-flight 不部署）：
+Product Owner 希望定期掃描 GitHub Issues 並執行入庫、分類、回覆等管理操作，在 Sprint 週期之間維持 Issue 的即時處理。透過 `issue-management` Skill 設定 cron 排程，每小時自動執行。
 
 ```bash
-# 執行 Pre-flight 檢測（不部署任何檔案）
-claude -p "/schedule backlog-intake --dry-run"
-```
+# 設定 issue-management 自動排程（每小時執行一次）
+claude -p "/schedule issue-management --interval 1h"
 
-預期輸出（Pre-flight 全部通過）：
-
-```
-── QA Pre-flight ──────────────────────
-  [PASS] skill name 字元白名單通過
-  [PASS] claude CLI 可用
-  [PASS] flock 可用
-  [PASS] OAuth 認證有效（非無效 API key）
-  [PASS] 專案目錄存在且可寫
-  [PASS] /backlog-intake skill 已註冊
-  [PASS] 無衝突的排程已存在
-
-Pre-flight 全部通過。dry-run 模式，不部署任何檔案。
-```
-
-**完整 `/schedule` 指令語法**：
-
-```bash
-# 設定 backlog-intake 自動排程（每小時執行一次）
-claude -p "/schedule backlog-intake --interval 1h"
-```
-
-**預期成功輸出**：
-
-```
-── QA Pre-flight ──────────────────────
-  [PASS] skill name 字元白名單通過
-  [PASS] claude CLI 可用
-  [PASS] flock 可用
-  [PASS] OAuth 認證有效（非無效 API key）
-  [PASS] 專案目錄存在且可寫
-  [PASS] /backlog-intake skill 已註冊
-  [PASS] 無衝突的排程已存在
-
-── 部署 ───────────────────────────────
-  ✓ 腳本已生成：scripts/backlog_intake_cron.sh
-  ✓ 執行權限已設定（chmod +x）
-  ✓ Log 目錄已確認：logs/
-  ✓ Crontab 已寫入
-
-── QA Post-deploy ─────────────────────
-  [PASS] crontab 項目已寫入（crontab -l 確認）
-  [PASS] 腳本存在且可執行（test -x）
-  [PASS] flock 配置正確（grep flock 確認）
-  [PASS] 腳本語法正確（bash -n）
-
-✓ 排程啟用完成 — backlog-intake 每 1 小時執行
-
-── 摘要 ───────────────────────────────
-  腳本路徑：scripts/backlog_intake_cron.sh
-  Crontab 項目：0 * * * * /home/user/proj/scripts/backlog_intake_cron.sh
-  Log 路徑：logs/schedule-backlog-intake.log
-```
-
-**生成的 cron 腳本核心邏輯（ADR-005 規格）**：
-
-```bash
-#!/usr/bin/env bash
-# shikigami-schedule-generated
-# skill: backlog-intake
-# requiredTools-hash: <md5-of-requiredTools>
-# generated-at: <ISO-8601-timestamp>
-
-PROJECT_DIR="{{PROJECT_DIR}}"
-PROJECT_HASH="{{PROJECT_HASH}}"
-SKILL_NAME="backlog-intake"
-LOCK_FILE="/tmp/shikigami-schedule-${PROJECT_HASH}-${SKILL_NAME}.lock"
-LOG_FILE="${PROJECT_DIR}/logs/schedule-backlog-intake.log"
-
-# ADR-005 決策域四：強制 OAuth 路徑，禁止 API Key 明文
-unset ANTHROPIC_API_KEY
-
-# ADR-005 決策域二：flock 互斥鎖（進程死亡自動釋放，不殘留孤兒鎖）
-exec 200>"${LOCK_FILE}"
-if ! flock -n 200; then
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] SKIPPED — previous run still active (lock: ${LOCK_FILE})" >> "${LOG_FILE}"
-  exit 0
-fi
-
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] START — skill=backlog-intake interval=1h group=none" >> "${LOG_FILE}"
-
-# ADR-005 決策域三：從 SKILL.md frontmatter 讀取 requiredTools
-claude \
-  --allowedTools "{{ALLOWED_TOOLS}}" \
-  -p "/backlog-intake" \
-  >> "${LOG_FILE}" 2>&1
-
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] END (exit: $?)" >> "${LOG_FILE}"
-```
-
-**驗證排程已生效**：
-
-```bash
-# 確認 crontab 已寫入
-crontab -l | grep backlog_intake
-
-# 先以 dry-run 確認環境就緒（不部署任何檔案）
-claude -p "/schedule backlog-intake --dry-run"
-
-# 監控執行 log
-tail -f logs/schedule-backlog-intake.log
-
-# 手動觸發一次（驗證流程正確後再依賴 cron）
-claude -p "/backlog-intake"
-```
-
-**移除排程（如需停止自動入庫）**：
-
-```bash
-claude -p "/schedule backlog-intake --remove"
+# 移除排程
+claude -p "/schedule issue-management --remove"
 ```
 
 **注意事項**：
-- backlog-intake 的 `requiredTools`（定義於 `skills/backlog-intake/SKILL.md` frontmatter）包含 `Bash`，schedule 腳本以此生成 `--allowedTools` 參數（ADR-005 決策域三）
-- 若 `skills/backlog-intake/SKILL.md` 的 `requiredTools` 有新增，需重新執行 `/schedule backlog-intake --remove` 後重新部署，更新 `--allowedTools` 參數（避免靜默失敗）
-- backlog-intake 執行時依賴 gh CLI OAuth 認證（除 claude CLI OAuth 外），兩者均可能因 token 過期而失敗，需定期確認認證狀態
+- issue-management 執行時依賴 gh CLI OAuth 認證（除 claude CLI OAuth 外），兩者均可能因 token 過期而失敗，需定期確認認證狀態
+- 新 Issue 入庫已由 GitHub Action（`new-issue-intake.yml`）即時處理，排程主要用於批次補齊與 comment 回覆

@@ -359,7 +359,6 @@ shikigami.project_level: medium
 | **onboarding** | 新專案初始化、目錄結構建立、CLAUDE.md 生成引導 |
 | **schedule** | Sprint 自動排程執行、cron 腳本生成、序列排程保護 |
 | **shoot** | 短衝模式、單 Story 快速執行、不起 Sprint 的輕量交付 |
-| **backlog-intake** | GitHub Issue 自動拉入 Backlog、標籤過濾、注入安全解析、冪等標記 |
 | **diagram** | 架構圖自動化生成（drawio-mcp-server stdio 整合、雙格式輸出、多雲圖標集） |
 
 ---

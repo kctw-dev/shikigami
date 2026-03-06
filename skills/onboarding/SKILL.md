@@ -50,7 +50,7 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
 
 #### 2.1.2 ADR-010 GitHub Labels 驗證（Pre-flight）
 
-**目的**：確認 ADR-010 定義的 Backlog Issue 核心 labels 已建立於 GitHub repo。這些 labels 是 Backlog 管理流程的基礎設施，若缺失則後續 Sprint Planning 與 backlog-intake 流程將無法正常運作。
+**目的**：確認 ADR-010 定義的 Backlog Issue 核心 labels 已建立於 GitHub repo。這些 labels 是 Backlog 管理流程的基礎設施，若缺失則後續 Sprint Planning 與 Issue 自動入庫流程將無法正常運作。
 
 執行步驟：
 ```bash
@@ -217,12 +217,12 @@ gh label list --json name --limit 100
 ```
 
 > `{GITHUB_ACTION_STATUS}` 由 §2.6 執行結果填入，例如：
-> - `backlog-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）`
-> - `backlog-intake 待設定（見 §2.6 手動指引）`
+> - `new-issue-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）`
+> - `new-issue-intake 待設定（見 §2.6 手動指引）`
 
-### 2.6 GitHub Action 串接（backlog-intake 自動化）
+### 2.6 GitHub Action 串接（new-issue-intake 自動化）
 
-**目的**：確認 GitHub Actions self-hosted runner 已就緒、OAuth 已認證、backlog-intake workflow 已存在，讓 Backlog 自動化管線在 Onboarding 後立即可用，無需手動配置。
+**目的**：確認 GitHub Actions self-hosted runner 已就緒、OAuth 已認證、new-issue-intake workflow 已存在，讓 Backlog 自動化管線在 Onboarding 後立即可用，無需手動配置。
 
 **安全邊界**：此階段僅執行「偵測與驗證」，不自動安裝 runner 或儲存認證憑證。所有安裝步驟均輸出為手動指引，由使用者決定是否執行。
 
@@ -237,15 +237,15 @@ gh label list --json name --limit 100
   [略過] GitHub Action 串接已就緒
   - Self-hosted runner：已連線
   - OAuth 認證（claude auth status）：已認證
-  - .github/workflows/backlog-intake.yml：存在
-並跳至 §2.5 下一步清單，填入「backlog-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）」
+  - .github/workflows/new-issue-intake.yml：存在
+並跳至 §2.5 下一步清單，填入「new-issue-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）」
 ```
 
 若任一條件不成立，繼續執行 §2.6.2 ~ §2.6.4 各步驟。
 
 #### 2.6.2 Runner 偵測
 
-**目的**：確認 GitHub repo 已有 self-hosted runner 連線（backlog-intake workflow 需要 self-hosted runner 執行）。
+**目的**：確認 GitHub repo 已有 self-hosted runner 連線（new-issue-intake workflow 需要 self-hosted runner 執行）。
 
 執行指令：
 
@@ -263,7 +263,7 @@ API 回傳結果中 total_count > 0 且至少一個 runner.status = "online"？
 └── 否 → 輸出警告與手動指引：
 
   [警告] 未偵測到 online 狀態的 self-hosted runner。
-  backlog-intake workflow 需要 self-hosted runner 才能在本機執行 Claude Code。
+  new-issue-intake workflow 需要 self-hosted runner 才能在本機執行 Claude Code。
 
   手動安裝步驟：
   1. 前往 GitHub repo 的 Settings → Actions → Runners → New self-hosted runner
@@ -276,7 +276,7 @@ API 回傳結果中 total_count > 0 且至少一個 runner.status = "online"？
 
 #### 2.6.3 OAuth 驗證狀態確認
 
-**目的**：確認 Claude Code 已完成 OAuth 認證，backlog-intake workflow 的 claude CLI 呼叫才能正常執行。
+**目的**：確認 Claude Code 已完成 OAuth 認證，new-issue-intake workflow 的 claude CLI 呼叫才能正常執行。
 
 執行指令：
 
@@ -292,7 +292,7 @@ claude auth status
 └── 否 → 輸出警告與手動指引：
 
   [警告] Claude OAuth 未認證。
-  backlog-intake workflow 在 runner 上執行時需要有效的 OAuth 認證。
+  new-issue-intake workflow 在 runner 上執行時需要有效的 OAuth 認證。
 
   手動認證步驟：
   1. 在 runner 主機上執行：claude auth
@@ -305,24 +305,24 @@ claude auth status
 
 #### 2.6.4 Workflow 存在性確認
 
-**目的**：確認 `.github/workflows/backlog-intake.yml` 已存在於 repo，這是 backlog 自動化管線的觸發入口。
+**目的**：確認 `.github/workflows/new-issue-intake.yml` 已存在於 repo，這是 backlog 自動化管線的觸發入口。
 
-執行方式：使用 Glob 工具確認 `.github/workflows/backlog-intake.yml` 是否存在。
+執行方式：使用 Glob 工具確認 `.github/workflows/new-issue-intake.yml` 是否存在。
 
 **判定規則**：
 
 ```
-.github/workflows/backlog-intake.yml 存在？
-├── 是 → 輸出：[Pass] backlog-intake.yml workflow 已就緒
+.github/workflows/new-issue-intake.yml 存在？
+├── 是 → 輸出：[Pass] new-issue-intake.yml workflow 已就緒
 └── 否 → 輸出警告：
 
-  [警告] .github/workflows/backlog-intake.yml 不存在。
+  [警告] .github/workflows/new-issue-intake.yml 不存在。
   此 workflow 文件是 backlog 自動化管線的觸發入口。
 
   修復步驟：
   此 workflow 由 US-87 相關步驟建立。請先完成以下其中一項：
-  - 執行 US-87 對應的 Sprint Story（建立 backlog-intake workflow）
-  - 或從 Shikigami 官方 repository 複製範本至 .github/workflows/backlog-intake.yml
+  - 執行 US-87 對應的 Sprint Story（建立 new-issue-intake workflow）
+  - 或從 Shikigami 官方 repository 複製範本至 .github/workflows/new-issue-intake.yml
 
   完成後重新執行 Onboarding 以驗證。
 ```
@@ -332,8 +332,8 @@ claude auth status
 依據 §2.6.2 ~ §2.6.4 的各項結果，決定 §2.5 的 `{GITHUB_ACTION_STATUS}` 填入值：
 
 ```
-全部 Pass → 填入：backlog-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）
-任一 Warning → 填入：backlog-intake 待設定（見 §2.6 手動指引）
+全部 Pass → 填入：new-issue-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）
+任一 Warning → 填入：new-issue-intake 待設定（見 §2.6 手動指引）
 ```
 
 ---

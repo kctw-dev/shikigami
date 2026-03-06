@@ -42,8 +42,7 @@ skills/
 ├── architect/SKILL.md
 ├── qa-engineer/SKILL.md
 ├── schedule/SKILL.md
-├── shoot/SKILL.md
-└── backlog-intake/SKILL.md
+└── shoot/SKILL.md
 ```
 
 ---

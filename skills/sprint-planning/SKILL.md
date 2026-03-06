@@ -206,7 +206,9 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
 **派遣說明**：
 
 0.5. **角色權重調整檢查**：健康檢查完成後立即執行。讀取 `docs/km/Retrospective_Log.md`，統計已完成 Sprint 記錄數量。若少於 3 個則輸出「歷史資料不足 3 個 Sprint，跳過權重調整」；否則對 QA 領域執行關鍵字清單比對，判斷是否觸發升級或放寬。結果（無論調整與否）均持久化至 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊。完整規則詳見 §7。
-1. **PO（第一輪）**：先掃描 GitHub open issues 進行 Triage（question/invalid 直接回覆 + close，bug/feature-request 走 Backlog Bridge 納入 Backlog）。然後由 PO subagent 執行以下步驟選取 Stories，**主 session 不直接讀取這些資源**：
+0.9. **Issue 快掃**：委派 `/issue-management`（§11 Backlog Bridge 批次模式）執行 Issue 掃描與 comment 回覆（新 Issue 入庫、未處理 comment 回覆、Triage 分類）。降級指引：gh 指令失敗時靜默略過，不阻塞 Planning 流程。
+
+1. **PO（第一輪）**：由 PO subagent 執行以下步驟選取 Stories，**主 session 不直接讀取這些資源**：
 
    **資料來源（PO subagent 讀取）**：
    - `gh issue list --label "type: backlog-item" --label "status: backlog" --state open --json number,title,body,labels --limit 200`（Backlog Issues）
