@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-06（Sprint 55 Review 完成，Velocity 8 points，完成率 100%）
-**當前 Sprint**：Sprint 56（規劃中）
+**最後更新**：2026-03-06（Sprint 56 Planning 完成，3 Stories / 5 Points）
+**當前 Sprint**：Sprint 56（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 55](sprints/sprint_55.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 56](sprints/sprint_56.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 56 — 進行中
+
+**Sprint Goal**：驗證 UIUX Figma 管線可運作性 — 建立 Figma Desktop 本地驗證環境 SOP、定義 Vision Critic Frame 截圖審查 PoC 規格、撰寫 Figma 管線使用指南，使 ADR-015 Phase 1 從技術文件走向可操作的驗證與使用文件。
+**期間**：2026-03-06 ~ 2026-03-12
+**ADR 依賴**：ADR-015（Accepted）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-150：Figma Desktop 本地驗證環境 SOP | #151 | S | 1 | 待開始 |
+| US-151：Vision Critic PoC — Figma Frame 截圖審查 | #118 | M | 2 | 待開始 |
+| US-152：Figma 管線使用指南 | #123 | M | 2 | 待開始 |
 
 ---
 
