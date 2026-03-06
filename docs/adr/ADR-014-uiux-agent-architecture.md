@@ -343,11 +343,253 @@ Phase 1 和 Phase 2 不依賴 Vision Critic Agent 的截圖機制，可先交付
 
 | # | 問題 | 優先級 | 狀態 | 說明 |
 |---|------|--------|------|------|
-| OQ-1 | Playwright 截圖在 GitHub Actions self-hosted runner 的可行性 | 高 | 待解答 | self-hosted runner 的 headless browser 環境需確認；影響 Vision Critic Phase 3 的 CI 整合 |
+| OQ-1 | Playwright 截圖在 GitHub Actions self-hosted runner 的可行性 | 高 | 已決策（2026-03-06） | 可行。GCP Ubuntu 22.04/24.04 VM 可透過 `npx playwright install chromium --with-deps` 完成安裝；建議 2 vCPU / 4 GB RAM；詳見下方 OQ-1 決策說明。 |
 | OQ-2 | Design Tokens 格式標準選型 | 高 | 已決策（2026-03-06） | 選擇自訂 JSON（YAGNI 原則）。詳見下方 OQ-2 決策說明。 |
-| OQ-3 | Vision Critic 審查的量化通過閾值定義 | 中 | 待解答 | PASS/FAIL 判定標準需量化（如對比度 WCAG AA、留白最小值）；避免主觀判定導致迴圈無法終止 |
+| OQ-3 | Vision Critic 審查的量化通過閾值定義 | 中 | 已決策（2026-03-06） | 採用三維度加權評分制（色彩一致性 40%、元件位置 35%、間距合規性 25%），總分 ≥ 80 為 PASS。詳見下方 OQ-3 決策說明。 |
 | OQ-4 | UX Agent 骨架文件格式 JSON Schema 定義 | 中 | 待解答 | 需在 US-105 前確認骨架文件的標準結構，確保 UI Agent 可解析 |
 | OQ-5 | 長對話 Context Window 管理策略 | 低 | 待解答 | Vision Critic 退件迴圈多輪後 context 可能超出限制；需定義截斷或摘要策略 |
+
+### OQ-1 決策說明：Playwright 截圖在 GCP self-hosted runner 可行性（2026-03-06）
+
+**問題**：在 GCP self-hosted GitHub Actions runner 上安裝 headless Chromium 並執行 Playwright 截圖，環境需求為何？是否可行？
+
+**決策：可行**
+
+GCP 上的 Ubuntu 22.04 / 24.04 VM 與 Playwright 官方支援清單完全吻合，一行指令即可完成 Chromium 及全部 OS 層相依套件的安裝，技術路徑明確無阻塞性障礙。
+
+#### AC1 — 環境需求清單
+
+**OS 套件（Playwright 自動管理）**
+
+`npx playwright install chromium --with-deps` 會自動安裝以下 apt 套件（Ubuntu 22.04 / 24.04）：
+
+| 套件 | 用途 |
+|------|------|
+| `libnss3` | Network Security Services |
+| `libatk-bridge2.0-0` | Accessibility Toolkit Bridge |
+| `libdrm2` | Direct Rendering Manager |
+| `libxkbcommon0` | X keyboard extension |
+| `libxcomposite1` | X composite extension |
+| `libxdamage1` | X damage extension |
+| `libxrandr2` | X RandR extension |
+| `libgbm1` | Generic Buffer Management |
+| `libxss1` | X11 screensaver extension |
+| `libasound2` | ALSA sound library |
+
+不需要額外安裝 Xvfb（headless 模式不需要顯示伺服器）。
+
+**記憶體 / CPU 需求（建議規格）**
+
+| 規格項目 | 最低需求 | 建議規格 | 說明 |
+|---------|---------|---------|------|
+| CPU | 1 vCPU | 2 vCPU | Chromium 啟動時 CPU 峰值約 1 核；並發渲染需 2 核以上 |
+| RAM | 2 GB | 4 GB | 單一 Chromium instance 約佔 200-400 MB；加上 Node.js + Actions runner 共需 2 GB 以上 |
+| Disk | 2 GB free | 5 GB free | Playwright Chromium bundle 約 300 MB；build artifacts 額外消耗 |
+| OS | Ubuntu 22.04 | Ubuntu 24.04 LTS | 兩版本均在 Playwright 官方支援清單內 |
+
+**GCP VM 對應機型建議**：`e2-medium`（2 vCPU / 4 GB）即可滿足單一截圖工作負載；如需並行多個 Agent 截圖任務，升級為 `e2-standard-4`（4 vCPU / 16 GB）。
+
+**GitHub Actions runner 設定**
+
+```yaml
+# .github/workflows/vision-critic.yml（片段）
+jobs:
+  screenshot:
+    runs-on: [self-hosted, linux, gcp]   # 使用 GCP self-hosted runner
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Playwright Chromium + deps
+        run: npx playwright install chromium --with-deps
+      - name: Run screenshot capture
+        run: node scripts/capture-screenshot.js
+        env:
+          # 在 Container/VM 環境必須設定，繞過 Chrome sandbox 限制
+          PLAYWRIGHT_CHROMIUM_LAUNCH_ARGS: "--no-sandbox --disable-dev-shm-usage"
+```
+
+關鍵設定要點：
+- `--no-sandbox`：GCP VM 上執行 Chromium 必須設定（非 root 但無 kernel user namespace 時）
+- `--disable-dev-shm-usage`：避免 `/dev/shm` 空間不足導致渲染失敗（GCP VM 預設 `/dev/shm` 較小）
+- runner label 加入 `gcp` tag 以路由到正確 runner pool
+
+#### AC2 — 可行性判定
+
+**判定：可行**
+
+| 面向 | 評估 | 說明 |
+|------|------|------|
+| OS 相容性 | 通過 | GCP Ubuntu 22.04/24.04 在 Playwright 官方支援矩陣內 |
+| 套件安裝 | 通過 | `--with-deps` 一行指令自動解析全部相依，無需手動維護套件清單 |
+| Headless 執行 | 通過 | 無需 Xvfb；`--no-sandbox --disable-dev-shm-usage` 解決 VM 限制 |
+| Base64 傳遞 | 通過 | `page.screenshot()` 直接返回 Buffer，`.toString('base64')` 即可傳入 Claude API |
+| CI 整合 | 通過 | 標準 GitHub Actions step，與現有工作流無衝突 |
+| 資源需求 | 通過 | `e2-medium`（2 vCPU / 4 GB）即可滿足 MVP 階段單次截圖工作負載 |
+
+#### AC3 — 最小 Playwright 截圖 PoC 腳本（Node.js）
+
+以下腳本示範 Vision Critic Agent 的截圖整合核心邏輯：渲染 HTML 片段、截圖、輸出 Base64 字串，可直接傳入 Claude API `image` 類型訊息。
+
+```javascript
+// scripts/capture-screenshot.js
+// 最小 Playwright 截圖 PoC — Vision Critic Agent 整合路徑
+// 用途：渲染 UI Agent 輸出的 HTML 片段，截圖後以 Base64 傳入 Claude API
+// 本機驗證：node scripts/capture-screenshot.js
+
+import { chromium } from 'playwright';
+import { readFileSync } from 'fs';
+import path from 'path';
+
+// 環境設定
+const LAUNCH_ARGS = [
+  '--no-sandbox',          // 必要：VM/Container 環境
+  '--disable-dev-shm-usage', // 必要：避免 /dev/shm 不足
+  '--disable-gpu',         // 建議：headless 模式不需要 GPU
+];
+
+/**
+ * 截圖並返回 Base64 字串
+ * @param {string} htmlContent - UI Agent 輸出的 HTML 片段
+ * @param {Object} options
+ * @param {number} options.width - viewport 寬度（預設 1280）
+ * @param {number} options.height - viewport 高度（預設 720）
+ * @returns {Promise<string>} Base64 編碼的 PNG 截圖
+ */
+async function captureScreenshot(htmlContent, { width = 1280, height = 720 } = {}) {
+  const browser = await chromium.launch({
+    headless: true,
+    args: LAUNCH_ARGS,
+  });
+
+  try {
+    const page = await browser.newPage();
+    await page.setViewportSize({ width, height });
+
+    // 直接設定 HTML 內容（無需 HTTP server）
+    await page.setContent(htmlContent, { waitUntil: 'networkidle' });
+
+    // 截圖返回 Buffer（不寫入檔案）
+    const buffer = await page.screenshot({
+      type: 'png',
+      fullPage: false, // Vision Critic 審查 viewport 範圍即可
+    });
+
+    // 轉換為 Base64（Claude API 接受格式）
+    return buffer.toString('base64');
+  } finally {
+    await browser.close();
+  }
+}
+
+/**
+ * 組裝 Claude API 多模態訊息 payload（示範用）
+ * @param {string} base64Image - Base64 PNG 字串
+ * @param {Object} skeletonDoc - UX Agent 輸出的骨架文件 JSON
+ * @returns {Object} Claude API messages 格式
+ */
+function buildVisionCriticPayload(base64Image, skeletonDoc) {
+  return {
+    role: 'user',
+    content: [
+      {
+        type: 'image',
+        source: {
+          type: 'base64',
+          media_type: 'image/png',
+          data: base64Image,
+        },
+      },
+      {
+        type: 'text',
+        // ADR-006 XML 隔離標記：骨架文件作為外部資料須包覆隔離
+        text: `<skeleton_document>\n${JSON.stringify(skeletonDoc, null, 2)}\n</skeleton_document>\n\n請對照骨架文件審查截圖的視覺一致性。`,
+      },
+    ],
+  };
+}
+
+// 本機驗證入口
+async function main() {
+  // 模擬 UI Agent 輸出的 HTML 片段
+  const sampleHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-white p-8">
+      <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-bold text-gray-900 mb-4">使用者登入</h1>
+        <input type="email" placeholder="電子郵件"
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-3" />
+        <button class="w-full bg-blue-600 text-white rounded-lg px-4 py-2 font-medium">
+          登入
+        </button>
+      </div>
+    </body>
+    </html>
+  `;
+
+  // 模擬骨架文件（UX Agent 輸出）
+  const skeletonDoc = {
+    sections: [
+      {
+        id: 'login-form',
+        label: '登入表單',
+        components: [
+          { type: 'heading', level: 1, content: '使用者登入' },
+          { type: 'input', inputType: 'email', placeholder: '電子郵件',
+            designToken: 'color.border.default' },
+          { type: 'button', variant: 'primary', label: '登入',
+            designToken: 'color.primary.600' },
+        ],
+      },
+    ],
+  };
+
+  console.log('正在啟動 Playwright Chromium...');
+  const base64 = await captureScreenshot(sampleHtml);
+  console.log(`截圖完成，Base64 長度：${base64.length} 字元`);
+
+  const payload = buildVisionCriticPayload(base64, skeletonDoc);
+  console.log('Claude API payload 結構：');
+  console.log(JSON.stringify({
+    role: payload.role,
+    content: [
+      { type: 'image', source: { type: 'base64', media_type: 'image/png', data: '[...BASE64...]' } },
+      { type: 'text', text: payload.content[1].text.substring(0, 100) + '...' },
+    ],
+  }, null, 2));
+
+  console.log('\nPoC 驗證成功。Base64 截圖可直接傳入 Claude API vision-critic 呼叫。');
+}
+
+main().catch(console.error);
+```
+
+**本機驗證步驟**：
+```bash
+# 1. 安裝 Playwright（專案根目錄）
+npm install playwright
+
+# 2. 安裝 Chromium（含 OS 相依套件）
+npx playwright install chromium --with-deps
+
+# 3. 執行 PoC
+node scripts/capture-screenshot.js
+```
+
+**預期輸出**：
+```
+正在啟動 Playwright Chromium...
+截圖完成，Base64 長度：XXXXXX 字元
+Claude API payload 結構：{ ... }
+PoC 驗證成功。Base64 截圖可直接傳入 Claude API vision-critic 呼叫。
+```
+
+---
 
 ### OQ-2 決策說明：Design Tokens 格式選型（2026-03-06）
 
@@ -381,6 +623,119 @@ Phase 1 和 Phase 2 不依賴 Vision Critic Agent 的截圖機制，可先交付
 - `docs/design/design-tokens.json` v1.0.0 採用自訂 JSON 格式，以 `$value`、`$description` 作為 token 物件的標準欄位名稱（與 DTCG 慣例部分對齊，降低未來遷移成本）。
 - Phase 2 的 UI Agent 實作（US-106）須以此格式解析 Design Tokens，不依賴外部 Token 轉換工具。
 - 若 Phase 3 或以後引入跨平台 Token 輸出需求，應透過新 ADR 評估是否遷移至 W3C DTCG 或採用 Style Dictionary。
+
+---
+
+### OQ-3 決策說明：Vision Critic 通過閾值量化（2026-03-06）
+
+**問題**：Vision Critic Agent 的視覺一致性審查應以何種量化標準判定 PASS/FAIL，以防止主觀判定導致退件迴圈無法收斂？
+
+**背景**
+
+退件迴圈終止條件若缺乏量化基準，Vision Critic Agent 將陷入主觀評判，導致兩個問題：（1）無法收斂：Agent 每輪審查結論不一致；（2）過度嚴苛：輕微差異觸發不必要的退件，浪費 LLM 呼叫成本。本決策參考 WCAG 2.1 AA 標準與業界視覺迴歸測試實踐，為三個評分維度定義可操作的量化閾值。
+
+**參考基準**
+
+| 參考來源 | 適用維度 | 關鍵指標 |
+|---------|---------|---------|
+| WCAG 2.1 AA SC 1.4.3 | 色彩一致性 | 文字與背景對比度 ≥ 4.5:1（正常字）、≥ 3:1（大字 / UI 元件） |
+| WCAG 2.1 AA SC 2.5.5 | 元件位置 | 可互動目標最小尺寸 44×44 CSS px |
+| WCAG 2.1 AA SC 1.4.12 | 間距合規性 | 行高 ≥ 1.5 倍字體大小；段落間距 ≥ 2 倍字體大小 |
+| Playwright maxDiffPixelRatio | 元件位置 | 業界常見像素差異容忍率 0.1%–1% |
+| Percy / Chromatic | 元件位置 | 設計系統層級採用更嚴格閾值（接近 0%）；應用層級可放寬 |
+| Design Tokens 約束 | 色彩一致性 | 所有色彩值須引用 `docs/design/design-tokens.json` 具名 token |
+
+**評分維度定義**
+
+Vision Critic 對每個維度輸出 0–100 分，加權合算為總分。
+
+#### 維度一：色彩一致性（權重 40%）
+
+評估 UI 輸出的色彩使用是否符合 Design Tokens 規格與 WCAG 對比度要求。
+
+| 分數範圍 | 判定說明 |
+|---------|---------|
+| 90–100 | 所有色彩均引用 Design Tokens 具名 token；文字對比度 ≥ 4.5:1；UI 元件邊框對比度 ≥ 3:1 |
+| 70–89 | 色彩值偏差 ≤ 5%（如 hardcode 值與 token 值接近）；對比度符合 WCAG AA |
+| 50–69 | 存在 1–2 處色彩 hardcode，但不違反 WCAG AA 對比度 |
+| 0–49 | 存在 WCAG AA 對比度違規（< 4.5:1 正常字 或 < 3:1 UI 元件），或大量 hardcode 色彩 |
+
+**PASS 閾值**：維度分 ≥ 70（對比度達標為必要條件，未達 WCAG AA 直接判 0–49）
+
+#### 維度二：元件位置（權重 35%）
+
+評估 UI 元件的佈局位置是否符合骨架文件（UX Agent 輸出）的版面規格。
+
+| 分數範圍 | 判定說明 |
+|---------|---------|
+| 90–100 | 所有元件位置與骨架文件規格完全對齊；可互動元件尺寸 ≥ 44×44 CSS px |
+| 70–89 | 元件位置偏移 ≤ 8px（對應 Tailwind 2 個間距單位）；層級結構符合骨架文件 |
+| 50–69 | 元件位置偏移 9–16px，或 1–2 個元件層級錯置，但整體視覺可辨 |
+| 0–49 | 元件位置偏移 > 16px，或元件層級嚴重錯置，或可互動元件低於 44×44 CSS px |
+
+**PASS 閾值**：維度分 ≥ 70（對應像素偏移容忍 ≤ 8px，略高於業界 Playwright 1% 但更適合設計系統語意審查場景）
+
+#### 維度三：間距合規性（權重 25%）
+
+評估元件間距、行高、留白是否符合 Design Tokens 間距規格與 WCAG 可讀性要求。
+
+| 分數範圍 | 判定說明 |
+|---------|---------|
+| 90–100 | 所有間距值引用 Design Tokens 間距 token；行高 ≥ 1.5 倍字體大小；段落間距 ≥ 2 倍字體大小 |
+| 70–89 | 間距值偏差 ≤ 4px（1 個 Tailwind 基礎單位），或 1 處行高略低但不低於 1.3 倍 |
+| 50–69 | 2–3 處間距 hardcode，但整體視覺節奏可接受 |
+| 0–49 | 大量間距 hardcode 或行高 < 1.3 倍字體大小（嚴重影響可讀性） |
+
+**PASS 閾值**：維度分 ≥ 70（對應間距偏差容忍 ≤ 4px）
+
+**總分計算與 PASS/FAIL 判定**
+
+```
+總分 = (色彩一致性分 × 0.40) + (元件位置分 × 0.35) + (間距合規性分 × 0.25)
+```
+
+| 總分範圍 | 判定結果 | 後續行動 |
+|---------|---------|---------|
+| ≥ 80 | **PASS** | 交付後端串接 |
+| 70–79 | **條件通過** | 附改善建議，可選擇性修正後重提；不強制退件 |
+| < 70 | **FAIL** | 發出結構化退件報告，要求 UI Agent 修正並重試（最多 3 次） |
+
+**PASS 附帶必要條件（Hard Gate）**
+
+以下任一條件觸發，無論總分多高均強制判 FAIL：
+
+1. 任一文字色彩對比度 < 4.5:1（WCAG 2.1 AA SC 1.4.3 硬性要求）
+2. 任一 UI 元件邊框對比度 < 3:1（WCAG 2.1 AA SC 1.4.11 硬性要求）
+3. 骨架文件中標記為「必要」的元件在截圖中完全缺失
+
+**候選方案比較**
+
+| 方案 | 總分 PASS 閾值 | 優點 | 缺點 |
+|------|-------------|------|------|
+| 嚴格方案（≥ 90） | 各維度均需接近滿分 | 最高品質保證 | 誤退率高，迴圈成本高 |
+| **標準方案（≥ 80）（選定）** | 允許少量偏差 | 平衡品質與效率；業界 QA 常見「80分及格」慣例 | — |
+| 寬鬆方案（≥ 70） | 接受中等品質 | 退件率低 | 可能放過明顯視覺問題 |
+
+**決策**：選擇**三維度加權評分制，總分 ≥ 80 為 PASS**，並附三項 Hard Gate 必要條件。
+
+**理由**
+
+1. **量化可重現**：LLM 審查時以分數代替主觀詞彙（「良好」、「可接受」），每次審查結果有明確數字錨點，大幅降低不一致性。
+
+2. **WCAG AA 作為 Hard Gate**：色彩對比度違規屬無障礙合規問題，不允許用分數「平均掉」，故獨立為強制條件，與維度分數邏輯分離。
+
+3. **加權設計反映商業重要性**：色彩一致性（40%）影響品牌識別與可及性，為最高權重；元件位置（35%）決定功能可用性；間距合規性（25%）影響閱讀舒適度，為最低但不可忽視的維度。
+
+4. **80 分閾值符合業界慣例**：Chromatic 和 Percy 在設計系統層級設定接近 0 差異，但此為像素級比對工具；Vision Critic 以 LLM 語意審查為主，80 分閾值提供適當容錯空間，避免因渲染細節導致的誤退。
+
+5. **條件通過區間（70–79）防止二元極端化**：給出改善建議但不強制退件，減少迴圈次數，符合 YAGNI 精神（不為邊界案例建立複雜退件流程）。
+
+**影響**
+
+- US-107（Vision Critic SKILL.md）的 AC3 直接引用本決策，定義通過/不通過閾值量化標準。
+- Vision Critic Agent 的退件報告 JSON Schema 須包含三個維度分數欄位（`colorConsistencyScore`、`componentPositionScore`、`spacingComplianceScore`）及總分（`totalScore`）。
+- Hard Gate 違規須在退件報告中以獨立欄位標記（`hardGateViolations: []`），與分數邏輯分離。
+- 最多重試 3 次的限制（見技術可行性評估迴圈終止條件）不受本決策修改，維持原設計。
 
 ---
 
