@@ -1916,6 +1916,15 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 
 ---
 
+### Sprint 52（2026-03-06）
+
+| Story ID | Issue | 標題 | Size | Points |
+|----------|-------|------|------|--------|
+| US-103 | #104 | Design Tokens 定義檔建立 | S | 1 |
+| US-104 | #105 | 元件庫白名單 AC 注入機制 | S | 1 |
+
+---
+
 ## Sprint 51（2026-03-06）
 
 **Sprint Goal**：結案 backlog-intake 修正，並為 UIUX Agent 建立架構決策基礎（ADR-014）

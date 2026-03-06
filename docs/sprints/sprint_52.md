@@ -1,6 +1,6 @@
 # Sprint 52
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-06 ~ 2026-03-12
 **Sprint Goal**：建立 UIUX Agent 工作流的「防呆設計基礎」—— 定義機器可讀的 Design Tokens 規格、強制元件庫白名單，以及前端 Story AC 模板注入機制，使 ADR-014 Phase 1 具體落地。
 **總計**：2 Stories / 2 Points

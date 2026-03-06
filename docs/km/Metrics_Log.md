@@ -57,6 +57,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 44 | 2026-03-05 | 1 point | 100% | 不規則 | Sprint Goal 達成（1/1 PASS）；US-92（S/1pt）；S42=3→S43=3→S44=1，S43→S44 下降 -66.7%（超出 ±20%），先平後降方向不一致→不規則；有意輕量 Sprint（ADR-012 決策先行） |
 | Sprint 45 | 2026-03-05 | 2 points | 100% | 不規則 | Sprint Goal 達成（2/2 PASS）；US-A（S/1pt）+ US-93（S/1pt）；S43=3→S44=1→S45=2，S44→S45 回升 +100%，先降後升方向不一致→不規則；doc-only 兩 Story 完全平行執行 |
 | Sprint 51 | 2026-03-06 | 2 points | 100% | 不規則 | Sprint Goal 達成（2/2 PASS）；US-100（S/1pt）+ US-102（S/1pt）；S43=3→S44=1→S45=2→S51=2，S45→S51 持平 0%，但 S43→S44 下降 -66.7% 方向不一致→不規則；backlog-intake 結案 + ADR-014 UIUX Agent 架構決策起草 |
+| Sprint 52 | 2026-03-06 | 2 points | 100% | 穩定 | Sprint Goal 達成（2/2 PASS）；US-103（S/1pt）+ US-104（S/1pt）；S45=2→S51=2→S52=2，三期持平 0%，均值 2.0，全部落於 ±20% 區間 1.6–2.4 內→穩定；ADR-014 Phase 1 落地 |
 
 ---
 

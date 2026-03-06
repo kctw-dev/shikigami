@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-05（Sprint 45 — US-93 完成標注）
+> 最後更新：2026-03-06（Sprint 52 — US-103/US-104 完成標注）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -288,6 +288,10 @@ Sprint Review 時自動產出：
 | US-91 | M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | Sprint 43 ✅ |
 | US-92 | ADR-012 起草 — Claude Max 多開發環境認證架構決策 | Sprint 44 ✅ |
 | US-93 | CI/CD workflow 拆分指引 — GitHub-hosted tests + self-hosted notification trigger | Sprint 45 ✅ |
+| US-100 | backlog-intake GitHub Action 結案確認（Issue #102 關閉，AC2 端對端驗證） | Sprint 51 ✅ |
+| US-102 | ADR-014 起草 — UIUX Agent 架構決策（三方案對比，四階段分期策略，6 個後續 Story） | Sprint 51 ✅ |
+| US-103 | Design Tokens 定義檔建立（design-tokens.json + SDD 前端模板 + ADR-014 OQ-2 回填） | Sprint 52 ✅ |
+| US-104 | 元件庫白名單 AC 注入機制（issue-management SKILL.md 前端 Story 識別規則 + AC 自動注入） | Sprint 52 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 
