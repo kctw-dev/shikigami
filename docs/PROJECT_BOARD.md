@@ -30,7 +30,7 @@
 | US-122：Playwright 截圖 PoC 腳本正式化 | #125 | S | 1 | 待辦 |
 | US-123：SDD-UIUX-E2E TC-02 退件迴圈腳本建立 | #126 | L | 3 | 待辦 |
 | US-124：SDD-UIUX-E2E TC-03 條件通過邊界測試腳本 | #127 | M | 2 | 待辦 |
-| US-125：ADR-014 OQ-4 正式決策文件 | #128 | S | 1 | 進行中 |
+| US-125：ADR-014 OQ-4 正式決策文件 | #128 | S | 1 | 完成 |
 | US-126：ADR-014 OQ-5 Context Window 管理決策 | #129 | S | 1 | 進行中 |
 | US-127：ADR-007 延伸 — 前端 Story 觸發 UIUX 管線決策點 | #130 | M | 2 | 待辦 |
 | US-128：Vision Critic 退件報告儲存機制 | #131 | S | 1 | 進行中 |
@@ -40,7 +40,7 @@
 | US-132：設計 Token 版本控制機制建立 | #135 | M | 2 | 完成 |
 | US-133：SDD-UIUX-E2E TC-04 UX Agent 輸入驗證測試腳本 | #136 | S | 1 | 待辦 |
 | US-134：UIUX Agent 三層管線整合文件補充 | #137 | M | 2 | 待辦 |
-| US-135：SDD 前端模板 Design Token 路徑驗證規則 | #138 | S | 1 | 進行中 |
+| US-135：SDD 前端模板 Design Token 路徑驗證規則 | #138 | S | 1 | 完成 |
 | US-136：Issue #107 UIUX Agent 模型分層策略實作規劃 | #139 | S | 1 | 進行中 |
 | US-137：UIUX 管線 CI GitHub Action 整合框架 | #140 | L | 3 | 待辦 |
 

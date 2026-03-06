@@ -27,7 +27,7 @@
 | US-122 | #125 | Playwright 截圖 PoC 腳本正式化 | S | 1 | 否 | 待開始 |
 | US-123 | #126 | SDD-UIUX-E2E TC-02 退件迴圈腳本建立 | L | 3 | 否 | 待開始 |
 | US-124 | #127 | SDD-UIUX-E2E TC-03 條件通過邊界測試腳本 | M | 2 | 否 | 待開始 |
-| US-125 | #128 | ADR-014 OQ-4 正式決策文件 | S | 1 | 是 | 進行中 |
+| US-125 | #128 | ADR-014 OQ-4 正式決策文件 | S | 1 | 是 | 完成 |
 | US-126 | #129 | ADR-014 OQ-5 Context Window 管理決策 | S | 1 | 是 | 進行中 |
 | US-127 | #130 | ADR-007 延伸 — 前端 Story 觸發 UIUX 管線決策點 | M | 2 | 是 | 待開始 |
 | US-128 | #131 | Vision Critic 退件報告儲存機制 | S | 1 | 是 | 進行中 |
@@ -37,7 +37,7 @@
 | US-132 | #135 | 設計 Token 版本控制機制建立 | M | 2 | 是 | 完成 |
 | US-133 | #136 | SDD-UIUX-E2E TC-04 UX Agent 輸入驗證測試腳本 | S | 1 | 否 | 待開始 |
 | US-134 | #137 | UIUX Agent 三層管線整合文件補充 | M | 2 | 是 | 待開始 |
-| US-135 | #138 | SDD 前端模板 Design Token 路徑驗證規則 | S | 1 | 是 | 進行中 |
+| US-135 | #138 | SDD 前端模板 Design Token 路徑驗證規則 | S | 1 | 是 | 完成 |
 | US-136 | #139 | Issue #107 UIUX Agent 模型分層策略實作規劃 | S | 1 | 是 | 進行中 |
 | US-137 | #140 | UIUX 管線 CI GitHub Action 整合框架 | L | 3 | 否 | 待開始 |
 
@@ -726,9 +726,9 @@ As a Product Owner closing open questions in ADR-014, I want OQ-4 (Skeleton Docu
 
 **Done 定義**
 
-- [ ] ADR-014 OQ-4 正式決策已填入，附理由（AC1）
-- [ ] OQ-4 狀態已更新為「已決策」（AC2）
-- [ ] Schema 版本與驗證工具已指定（AC3）
+- [x] ADR-014 OQ-4 正式決策已填入，附理由（AC1）
+- [x] OQ-4 狀態已更新為「已決策」（AC2）
+- [x] Schema 版本與驗證工具已指定（AC3）
 
 ---
 
@@ -1109,8 +1109,8 @@ As a Developer implementing frontend components, I want the SDD frontend templat
 
 **Done 定義**
 
-- [ ] SDD-frontend-template.md 已新增 Design Token 路徑驗證規則（AC1）
-- [ ] 違規範例與正確範例對照已提供（AC2）
+- [x] SDD-frontend-template.md 已新增 Design Token 路徑驗證規則（AC1）
+- [x] 違規範例與正確範例對照已提供（AC2）
 
 ---
 
