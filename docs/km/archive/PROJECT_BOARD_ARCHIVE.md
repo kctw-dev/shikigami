@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-05（Sprint 42 歸檔）
-**歸檔範圍**：Sprint 1–42（共 42 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔
+**最後更新**：2026-03-06（Sprint 48 歸檔）
+**歸檔範圍**：Sprint 1–48（共 48 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 43–45）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 49–51）
 
 ---
 
@@ -718,3 +718,102 @@
 
 **目標 Velocity**：3 points（2 Stories）
 **實際 Velocity**：3 points（2 Stories）
+
+---
+
+## Sprint 43 — 完成
+
+**Sprint Goal**：為 Backlog 下一個發展方向奠定決策基礎：精化 #69（開發不中斷）為可執行 Story，並執行 M5 外部觸及效果最終診斷，確認對外最後一哩是否有可改善空白。
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-04 ~ 2026-03-10
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-90：Issue #69 精化 — 「開發不中斷 營運不中斷」可行性分析與 Story 拆解 | S | 1 | 完成 |
+| US-91：M5 條件 (a) 觸及診斷 — Outreach Log 審查 + 安裝阻力掃描 | M | 2 | 完成 |
+
+**目標 Velocity**：3 points（2 Stories）
+**實際 Velocity**：3 points（2 Stories）
+
+---
+
+## Sprint 44 — 完成
+
+**Sprint Goal**：建立多開發環境認證架構基礎 — 起草 ADR-012，確認 ToS 合規性與多 GCE 平行開發認證方案，為 Sprint 45 US-A 實作提供可信的架構前提。
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-04 ~ 2026-03-10
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-92：ADR-012 起草 — Claude Max 多開發環境認證架構決策 | S | 1 | 完成 |
+
+**目標 Velocity**：1 point（1 Story）
+**實際 Velocity**：1 point（1 Story）
+
+---
+
+## Sprint 45 — 完成
+
+**Sprint Goal**：完善多開發環境操作文件 — 建立 GCE 認證設定指引與 CI/CD workflow 拆分指引，讓多 GCE 平行開發流程可循、消費端 CI/CD 配置有據可依。
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-A（#87）：多 GCE 認證設定指引 — 文件化各開發環境 OAuth 認證與使用紀律規範 | S | 1 | 完成 |
+| US-93（#88）：CI/CD workflow 拆分指引 — GitHub-hosted tests + self-hosted notification trigger | S | 1 | 完成 |
+
+**目標 Velocity**：2 points（2 Stories）
+**實際 Velocity**：2 points（2 Stories）
+
+---
+
+## Sprint 46 — 完成
+
+**Sprint Goal**：確保多 GCE 開發架構穩定落地 — 建立版號三檔同步安全網，並完成開發環境可攜性與可重建性方案，讓多 GCE 平行開發流程具備足夠的操作一致性與防錯機制。
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-94（#94）：版號更新三檔同步 checklist 或自動化腳本 | S | 1 | 完成 |
+| US-95（#90）：開發環境可攜性與可重建性 — 多 GCE 環境管理策略 | M | 2 | 完成 |
+
+**目標 Velocity**：3 points（2 Stories）
+**實際 Velocity**：3 points（2 Stories）
+
+---
+
+## Sprint 47 — 完成
+
+**Sprint Goal**：為 shikigami:diagram 技能建立架構決策基礎 — 起草 ADR-013，評估 MCP 整合架構。
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-96（#95）：ADR-013 起草 — shikigami:diagram MCP 整合架構決策 | S | 1 | 完成 |
+
+**目標 Velocity**：1 point（1 Story）
+**實際 Velocity**：1 point（1 Story）
+
+---
+
+## Sprint 48 — 完成
+
+**Sprint Goal**：解決 ADR-013 高優先級開放問題（OQ-1、OQ-2），驗證 drawio-mcp-server stdio local 環境可行性，為 shikigami:diagram SKILL.md 實作提供可信的技術基礎。
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。AC4（claude mcp list 通訊驗證）標注「需手動驗證」，非阻斷。重要發現：v1.8.0 不需要 headless Chrome（內建 Web 編輯器），18 個 MCP tools 均回傳 type: "text" JSON。
+**Stakeholder 驗收**：接受
+**期間**：2026-03-05 ~ 2026-03-11
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-97（#96）：shikigami:diagram 環境準備 — drawio-mcp-server stdio local 安裝與整合驗證 | S | 1 | 完成 |
+
+**目標 Velocity**：1 point（1 Story）
+**實際 Velocity**：1 point（1 Story）

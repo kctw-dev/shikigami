@@ -1913,3 +1913,14 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 |-------|------|--------|------------|
 | US-A（Issue #87）：多 GCE 認證設定指引 — 文件化各開發環境 OAuth 認證與使用紀律規範 | S | 1 | Sprint 45 |
 | US-93（Issue #88）：CI/CD workflow 拆分指引 — GitHub-hosted tests + self-hosted notification trigger | S | 1 | Sprint 45 |
+
+---
+
+## Sprint 51（2026-03-06）
+
+**Sprint Goal**：結案 backlog-intake 修正，並為 UIUX Agent 建立架構決策基礎（ADR-014）
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-100（Issue #102）：backlog-intake GitHub Action 結案確認 | S | 1 | Sprint 51 |
+| US-102（Issue #100）：ADR-014 起草 — UIUX Agent 架構決策 | S | 1 | Sprint 51 |

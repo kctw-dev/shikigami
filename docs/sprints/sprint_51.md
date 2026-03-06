@@ -1,6 +1,6 @@
 # Sprint 51
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-06 ~ 2026-03-12
 **Sprint Goal**：結案 backlog-intake 修正，並為 UIUX Agent 建立架構決策基礎（ADR-014），為後續 UI/UX 自動化實作鋪路。
 **總計**：2 Stories / 2 Points
