@@ -1,6 +1,6 @@
 # ADR-015：UIUX 管線架構轉型 — Figma 整合取代三層 SSD 管線
 
-**狀態**：Proposed
+**狀態**：Accepted
 **日期**：2026-03-06
 **決策者**：Architect
 **關聯 ADR**：ADR-014（UIUX Agent 架構決策）
@@ -118,7 +118,7 @@ Figma 是設計師的原生工作環境。以 Figma 作為設計中間層，意�
 
 以 Figma 作為 UIUX 管線的核心設計工作空間，取代 SSD JSON 中間格式。
 
-此決策在 Open Questions（OQ-1 至 OQ-4）技術前置調查完成並確認可行後正式生效。若調查結果顯示 Figma MCP 能力不足，則降級回選項 A 並繼續 ADR-014 Phase 2 規劃。
+OQ-1 至 OQ-4 技術前置調查已於 2026-03-06 全部完成，結論為「條件式可行」。本 ADR 正式生效（Accepted），ADR-014 Phase 2-3 進入凍結狀態。Sprint 54 因架構轉型中止。
 
 ---
 

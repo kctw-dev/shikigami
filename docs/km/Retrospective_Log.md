@@ -4,6 +4,28 @@
 
 ---
 
+## Sprint 54 — 2026-03-06（中止）
+
+**中止原因**：ADR-015 架構轉型決策 — Figma 整合取代 ADR-014 三層 SSD 管線。20 個待辦 Story 中 14 個直接綁定舊管線（DROP），6 個需重寫 AC（MODIFY），繼續執行無意義。
+
+### Good
+- 架構方向轉型決策及時：在 Sprint 54 執行初期即完成 ADR-015 四個 OQ 調查（Figma MCP 能力邊界、REST API 限制、代碼生成路徑、授權成本），避免在過時的三層 SSD 管線上投入 37+ points 的無效工作量
+- ADR-015 調查品質高：四個 OQ 均已產出可行性結論與具體限制摘要，為後續 Figma 整合 Phase 1 提供清晰的技術前提
+- Sprint 54 已完成的 9 Stories（11 points）中，US-116（模型分層策略）、US-121（Gemini CLI 調查）、US-128（退件報告儲存）等概念在 Figma 方案下仍可延續
+
+### Problem
+- Sprint 54 規劃了 29 Stories / 50 points 的工作量，但架構方向在同日轉型，暴露出 Sprint Planning 與架構決策的時序問題：ADR-015 的四個 OQ 調查在 Sprint 54 Planning 之後才完成
+- 14 個 GitHub Issues 需批次關閉，6 個需註記回 Backlog，Sprint 中止的行政成本不低
+
+### Action Items
+
+| # | 行動 | 負責人 | 狀態 |
+|---|------|--------|------|
+| 1 | ADR-015 狀態從 Proposed 升級為 Accepted | Architect | Open |
+| 2 | Sprint 55 Planning 基於 Figma 整合演進路徑規劃 | Product Owner | Open |
+
+---
+
 ## Sprint 53 — 2026-03-06
 
 ### Good
