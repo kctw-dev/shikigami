@@ -27,18 +27,18 @@
 | US-122 | #125 | Playwright 截圖 PoC 腳本正式化 | S | 1 | 否 | 待開始 |
 | US-123 | #126 | SDD-UIUX-E2E TC-02 退件迴圈腳本建立 | L | 3 | 否 | 待開始 |
 | US-124 | #127 | SDD-UIUX-E2E TC-03 條件通過邊界測試腳本 | M | 2 | 否 | 待開始 |
-| US-125 | #128 | ADR-014 OQ-4 正式決策文件 | S | 1 | 是 | 待開始 |
-| US-126 | #129 | ADR-014 OQ-5 Context Window 管理決策 | S | 1 | 是 | 待開始 |
+| US-125 | #128 | ADR-014 OQ-4 正式決策文件 | S | 1 | 是 | 進行中 |
+| US-126 | #129 | ADR-014 OQ-5 Context Window 管理決策 | S | 1 | 是 | 進行中 |
 | US-127 | #130 | ADR-007 延伸 — 前端 Story 觸發 UIUX 管線決策點 | M | 2 | 是 | 待開始 |
-| US-128 | #131 | Vision Critic 退件報告儲存機制 | S | 1 | 是 | 待開始 |
+| US-128 | #131 | Vision Critic 退件報告儲存機制 | S | 1 | 是 | 進行中 |
 | US-129 | #132 | UX Agent SKILL.md CLI 輸出設計符合性審查 | M | 2 | 是 | 待開始 |
 | US-130 | #133 | UI Agent CLI 輸出設計符合性審查 | M | 2 | 是 | 待開始 |
 | US-131 | #134 | Vision Critic CLI 輸出設計符合性審查 | S | 1 | 是 | 待開始 |
-| US-132 | #135 | 設計 Token 版本控制機制建立 | M | 2 | 是 | 待開始 |
+| US-132 | #135 | 設計 Token 版本控制機制建立 | M | 2 | 是 | 完成 |
 | US-133 | #136 | SDD-UIUX-E2E TC-04 UX Agent 輸入驗證測試腳本 | S | 1 | 否 | 待開始 |
 | US-134 | #137 | UIUX Agent 三層管線整合文件補充 | M | 2 | 是 | 待開始 |
-| US-135 | #138 | SDD 前端模板 Design Token 路徑驗證規則 | S | 1 | 是 | 待開始 |
-| US-136 | #139 | Issue #107 UIUX Agent 模型分層策略實作規劃 | S | 1 | 是 | 待開始 |
+| US-135 | #138 | SDD 前端模板 Design Token 路徑驗證規則 | S | 1 | 是 | 進行中 |
+| US-136 | #139 | Issue #107 UIUX Agent 模型分層策略實作規劃 | S | 1 | 是 | 進行中 |
 | US-137 | #140 | UIUX 管線 CI GitHub Action 整合框架 | L | 3 | 否 | 待開始 |
 
 **Sprint 容量**：50 Points
@@ -995,9 +995,9 @@ As a Designer managing design tokens, I want a versioning mechanism for design-t
 
 **Done 定義**
 
-- [ ] `docs/design/design-tokens-versioning.md` 已建立（AC1）
-- [ ] 版本號格式與變更記錄規則已定義（AC2）
-- [ ] design-tokens.json 已新增 version 欄位（AC3）
+- [x] `docs/design/design-tokens-versioning.md` 已建立（AC1）
+- [x] 版本號格式與變更記錄規則已定義（AC2）
+- [x] design-tokens.json 已新增 version 欄位（AC3）
 
 ---
 

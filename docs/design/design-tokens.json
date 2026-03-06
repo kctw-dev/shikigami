@@ -3,6 +3,7 @@
   "$description": "Shikigami UIUX Agent Design Tokens — ADR-014 Phase 1 規格定義",
   "$version": "1.0.0",
   "$updatedAt": "2026-03-06",
+  "version": "1.0.0",
 
   "color": {
     "$description": "主色盤 — 所有前端 Story 禁止 hardcode 色碼，須引用此處具名 token",
