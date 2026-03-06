@@ -41,7 +41,7 @@
 | US-133：SDD-UIUX-E2E TC-04 UX Agent 輸入驗證測試腳本 | #136 | S | 1 | 待辦 |
 | US-134：UIUX Agent 三層管線整合文件補充 | #137 | M | 2 | 待辦 |
 | US-135：SDD 前端模板 Design Token 路徑驗證規則 | #138 | S | 1 | 完成 |
-| US-136：Issue #107 UIUX Agent 模型分層策略實作規劃 | #139 | S | 1 | 進行中 |
+| US-136：Issue #107 UIUX Agent 模型分層策略實作規劃 | #139 | S | 1 | 完成 |
 | US-137：UIUX 管線 CI GitHub Action 整合框架 | #140 | L | 3 | 待辦 |
 
 **目標 Velocity**：50 points（29 Stories）

@@ -38,7 +38,7 @@
 | US-133 | #136 | SDD-UIUX-E2E TC-04 UX Agent 輸入驗證測試腳本 | S | 1 | 否 | 待開始 |
 | US-134 | #137 | UIUX Agent 三層管線整合文件補充 | M | 2 | 是 | 待開始 |
 | US-135 | #138 | SDD 前端模板 Design Token 路徑驗證規則 | S | 1 | 是 | 完成 |
-| US-136 | #139 | Issue #107 UIUX Agent 模型分層策略實作規劃 | S | 1 | 是 | 進行中 |
+| US-136 | #139 | Issue #107 UIUX Agent 模型分層策略實作規劃 | S | 1 | 是 | 完成 |
 | US-137 | #140 | UIUX 管線 CI GitHub Action 整合框架 | L | 3 | 否 | 待開始 |
 
 **Sprint 容量**：50 Points
@@ -1147,9 +1147,9 @@ As a Product Owner translating the model tiering strategy decision into actionab
 
 **Done 定義**
 
-- [ ] 三層管線推薦模型清單已產出（AC1）
-- [ ] 三個 SKILL.md 已更新模型標注（AC2）
-- [ ] 切換判斷條件已記錄（AC3）
+- [x] 三層管線推薦模型清單已產出（AC1）
+- [x] 三個 SKILL.md 已更新模型標注（AC2）
+- [x] 切換判斷條件已記錄（AC3）
 
 ---
 
