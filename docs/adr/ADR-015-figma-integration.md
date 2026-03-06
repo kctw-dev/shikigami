@@ -220,10 +220,10 @@ AI 透過 Figma MCP / REST API 畫 UI
 
 | # | 問題 | 優先級 | 狀態 | 阻塞性 |
 |---|------|--------|------|--------|
-| OQ-1 | Figma MCP Server 能力邊界 | 高 | 待調查 | 是 |
-| OQ-2 | Figma REST API 限制 | 高 | 待調查 | 是 |
-| OQ-3 | 從 Figma 到代碼的最佳路徑 | 中 | 待調查 | 否（可有多選項） |
-| OQ-4 | Figma 授權與成本 | 中 | 待調查 | 視成本規模而定 |
+| OQ-1 | Figma MCP Server 能力邊界 | 高 | **已調查（2026-03-06）** | 是 |
+| OQ-2 | Figma REST API 限制 | 高 | **已調查（2026-03-06）** | 是 |
+| OQ-3 | 從 Figma 到代碼的最佳路徑 | 中 | **已調查（2026-03-06）** | 否（可有多選項） |
+| OQ-4 | Figma 授權與成本 | 中 | **已調查（2026-03-06）** | 視成本規模而定 |
 
 ### OQ-1：Figma MCP Server 能力邊界
 
@@ -247,18 +247,92 @@ AI 透過 Figma MCP / REST API 畫 UI
 
 **問題**：Figma REST API 的操作限制是否對本管線的自動化生成構成阻礙？
 
-- Rate limit：自動化生成多個 US 的 Frame 時，是否會觸發 API 限制？
-- 檔案大小：單一 Figma 文件的 Frame 數量上限為何？多個 Sprint 的 US 累積後是否超限？
-- 操作粒度：REST API 的節點操作能否達到 MCP Server 工具所需的精細度？
-- Write API 限制：Figma REST API 的寫入操作（建立/修改節點）與讀取操作的限制是否對稱？
+**調查日期**：2026-03-06
+**調查結論**：REST API 寫入能力存在根本性限制，構成架構決策的核心約束。
 
-**調查方向**：
+---
 
-- Figma REST API 官方文件的 Rate Limit 規格（requests per minute、per day）
-- 社群報告的 API 操作上限與已知限制
-- Figma Plugin API（在 Figma 應用程式內執行）與 REST API 的能力差異
+#### A. REST API 寫入能力：根本性限制
 
-**判定標準**：Rate limit 應支援每分鐘至少 10 次節點寫入操作（單一 US 的 UI 生成估計需 5-15 次 API 呼叫）。
+**Figma REST API 為讀取導向設計，不支援節點層級的寫入操作。**
+
+官方 API 比較文件（`developers.figma.com/compare-apis/`）明確說明：
+
+- **REST API 寫入範疇**：僅限於 Comments（留言）、Variables（Figma Enterprise 限定）、Dev Resources、Webhooks
+- **REST API 無法執行**：建立 Frame、修改節點屬性、設定 Auto Layout、建立/引用 Component Instance
+- **`file_content:write` scope**：雖存在於 OAuth 規格，但為內部保留，不對外開放使用
+
+這意味著「AI 透過 REST API 直接畫 Figma UI」在技術上不可行。任何對 Figma 文件的設計內容修改，必須透過 Plugin API 執行（需在 Figma 應用程式內運行）。
+
+#### B. Rate Limit 矩陣
+
+Rate Limit 於 2025-11-17 更新，採用 Leaky Bucket 演算法，依「方案層級 × 座位類型 × API 端點層級」三維度決定限額。
+
+**Tier 定義**：
+- **Tier 1**：高成本端點（讀取整個 Figma 文件 `/v1/files/{key}`）
+- **Tier 2**：中成本端點（讀取特定節點、元件、樣式）
+- **Tier 3**：低成本端點（讀取評論、元資料、版本列表）
+
+| 端點層級 | 座位類型 | Starter | Professional | Organization | Enterprise |
+|---------|---------|---------|--------------|--------------|------------|
+| **Tier 1** | View / Collab | 6 次/月 | 6 次/月 | 6 次/月 | 6 次/月 |
+| **Tier 1** | Dev / Full | 10 次/分 | 15 次/分 | 20 次/分 | 無限制 |
+| **Tier 2** | View / Collab | 5 次/分 | 5 次/分 | 5 次/分 | 5 次/分 |
+| **Tier 2** | Dev / Full | 25 次/分 | 50 次/分 | 100 次/分 | 無限制 |
+| **Tier 3** | View / Collab | 10 次/分 | 10 次/分 | 10 次/分 | 10 次/分 |
+| **Tier 3** | Dev / Full | 50 次/分 | 100 次/分 | 150 次/分 | 無限制 |
+
+**對本管線的影響評估**：管線的 REST API 使用場景主要為讀取（Vision Critic 讀取 Frame 截圖 export、AI 讀取 Component Library 節點結構）。單一 US 的審查預估需要 3-8 次 Tier 1/Tier 2 讀取操作。Professional 方案的 15-50 次/分配額足以支撐。
+
+**已知問題**：Tier 1 端點的圖片 export（`/v1/images`）在高流量時有 429 報告，即使配額充足仍可能觸發 CloudFront 端的流量管制，實際可用配額可能低於文件值。
+
+#### C. 檔案大小與節點粒度
+
+| 限制類型 | 規格 | 說明 |
+|---------|------|------|
+| 回應超時 | 55 秒 | `/v1/files/{key}` 與圖片端點的最大等待時間 |
+| 建議回應大小 | < 500 KB | 超過此大小需加 `depth=2-3` 參數限制節點深度 |
+| 實際最大回應 | ~280-320 MB | 超大型文件可能觸發 CloudFlare 錯誤 |
+| 節點批次請求 | 支援（計 1 次） | 單一 `/v1/files/{key}/nodes?ids=...` 可包含多個 node ID，計為 1 次 API 呼叫 |
+
+**對本管線建議**：讀取 Frame 時使用 `depth=2` 配合指定 node ID，避免拉取整個文件。
+
+#### D. Plugin API vs REST API 能力對比
+
+| 能力 | REST API | Plugin API |
+|------|---------|-----------|
+| 讀取文件節點 | 支援（多文件） | 支援（僅當前開啟文件） |
+| 建立 Frame | **不支援** | 支援 |
+| 修改節點屬性（顏色、大小、位置） | **不支援** | 支援 |
+| 設定 Auto Layout | **不支援** | 支援 |
+| 建立 Component Instance | **不支援** | 支援 |
+| 建立新 Component | **不支援** | 支援 |
+| 套用 Variables | **Enterprise 限定** | 支援（所有方案） |
+| 讀取 Variables | **Enterprise 限定** | 支援（所有方案） |
+| 讀取 Styles / Component 元資料 | 支援 | 支援 |
+| 新增 Comment | 支援 | 支援 |
+| 無需 Figma 開啟即可執行 | 支援 | **不支援** |
+| 多文件批次處理 | 支援 | **不支援** |
+
+**架構含義**：AI 若要對 Figma 文件進行設計操作（建立 Frame、排版、套用元件），必須透過 Plugin API，而非 REST API。Figma MCP Server 的官方實作即基於 Plugin API（透過 Figma 桌面應用程式的 local server 轉發）。
+
+#### E. Variables API 授權限制
+
+Figma Variables REST API 僅限 Enterprise 方案，且需要具備 `variables:read` / `variables:write` scope 的 Personal Access Token。此為硬性限制，Professional 及 Organization 方案無法透過 REST API 存取 Variables。
+
+**替代方案**：Plugin API 可在所有方案讀寫 Variables，不受方案層級限制。透過 Figma MCP Server（Plugin API 封裝）操作 Variables 不受此限制。
+
+#### F. OQ-2 判定結論
+
+**REST API 寫入限制對本管線構成技術約束，但不構成整體方案的否決因素。**
+
+1. **寫入路徑確認**：本管線的所有設計寫入操作必須經由 Figma MCP Server（Plugin API），不得依賴 REST API 寫入端點
+2. **讀取配額充足**：REST API 在 Professional 方案（Dev/Full seat）的讀取配額（Tier 2：50 次/分）可支撐 Vision Critic 審查需求
+3. **Variables 限制可繞過**：透過 MCP Server（Plugin API 路徑）操作 Variables 不受 Enterprise 限制
+
+**OQ-2 判定：條件性可行。** 架構設計須明確區分「讀取路徑（REST API）」與「寫入路徑（Plugin API via MCP Server）」。此結論強化了 OQ-1（Figma MCP Server 能力邊界）是本架構決策的核心阻塞性依賴。
+
+**判定標準對照**：原判定標準為「Rate limit 應支援每分鐘至少 10 次節點寫入操作」。修正後認知為：REST API 不支援節點寫入，但寫入操作透過 MCP Server（Plugin API）執行，不受 REST API Rate Limit 限制；寫入路徑的實際限制由 Figma Plugin 執行環境決定（非 API 呼叫頻率問題）。
 
 ### OQ-3：從 Figma 到代碼的最佳路徑
 
