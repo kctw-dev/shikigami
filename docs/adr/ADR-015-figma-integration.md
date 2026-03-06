@@ -338,43 +338,216 @@ Figma Variables REST API 僅限 Enterprise 方案，且需要具備 `variables:r
 
 **問題**：在 Figma 設計完成後，哪種代碼生成路徑能以最低維護成本輸出符合本專案技術棧（React + Tailwind CSS + Shadcn UI）的前端代碼？
 
-**候選路徑評估方向**：
+**調查日期**：2026-03-06
+**調查結論**：AI + Figma MCP Server 輔助的 AI 直接代碼生成（Path D）為本專案最佳路徑；Code Connect 作為輔助加值機制。
 
-| 候選路徑 | 說明 | 評估重點 |
-|---------|------|---------|
-| Figma Dev Mode API | Figma 官方提供的設計標注 API，輸出 CSS 值與元件資訊 | 是否能直接輸出 Tailwind class；是否需要自訂後處理 |
-| Builder.io / Anima | 第三方 Figma-to-code 工具，支援 React 輸出 | 輸出代碼品質；Tailwind 支援程度；授權費用 |
-| 自訂 codegen | 透過 Figma REST API 讀取節點結構，自行生成 React + Tailwind | 維護成本；準確度；對 Shadcn UI 的支援能力 |
-| AI 讀取 Figma Export | AI 讀取 Figma Frame 截圖或 SVG export，直接生成代碼 | 準確度；是否需要額外 Figma API 整合 |
+---
 
-**判定標準**：選定路徑應能在無大量人工干預的情況下，生成通過 Vision Critic 審查（≥ 80 分）的前端代碼。
+#### A. 候選路徑詳細評估
+
+**路徑一：Figma Dev Mode + Codegen Plugin（官方路徑）**
+
+Dev Mode 是 Figma 官方提供的開發者協作環境，支援直接輸出 CSS 值（含變數名稱）、提供元件 Spec 標注、支援 Code Connect 連結。
+
+Codegen Plugin 機制允許開發者建立自訂代碼生成 Plugin，在 Dev Mode 中選取節點即可觸發代碼輸出。Figma 官方支援的語言包含 CSS、Swift、XML，但原生不輸出 Tailwind class。
+
+| 評估維度 | 說明 |
+|---------|------|
+| Tailwind 支援 | 原生不支援，需自行建立 Codegen Plugin 做 CSS → Tailwind 轉換 |
+| Shadcn UI 感知 | 無原生支援，需透過 Code Connect 手動定義映射關係 |
+| 自動化程度 | 低（需人工在 Dev Mode 操作，無法無人值守批次生成） |
+| 維護成本 | 中（需維護自訂 Codegen Plugin 邏輯） |
+| 方案要求 | Dev Mode 需 Dev seat 或 Full seat；Codegen Plugin 本身免費 |
+
+**路徑二：第三方工具（Builder.io Visual Copilot / Anima）**
+
+Builder.io Visual Copilot 是目前最成熟的 Figma-to-React + Tailwind 商業工具，以 AI 模型分析 Figma 節點樹並輸出結構化 React 元件。支援多框架（React、Vue、Svelte）和 Tailwind CSS 輸出。
+
+| 評估維度 | 說明 |
+|---------|------|
+| Tailwind 支援 | 原生支援（一鍵輸出 React + Tailwind） |
+| Shadcn UI 支援 | 無直接映射，輸出為 Tailwind utility class，需人工替換為 Shadcn 元件 |
+| 代碼品質 | Fast mode 約 80% 可用；Quality mode（付費）可達更高品質，但動態互動仍需人工修正 |
+| 自動化程度 | 中（Plugin 操作仍需人工觸發；無 CLI/API 無人值守模式） |
+| 維護成本 | 低（維護由 Builder.io 負責） |
+| 費用 | 付費方案；Quality mode 需額外費用；具體定價需查詢 |
+
+Anima 能力相近，同支援 React + Tailwind，但 Shadcn UI 感知同樣缺失。
+
+**路徑三：自訂 Codegen（REST API 節點樹 → React + Tailwind）**
+
+透過 Figma REST API 讀取節點結構（JSON），自行解析 Auto Layout、Typography、Color 等屬性，生成 React + Tailwind 代碼。開源實作參考：`bernaferrari/FigmaToCode`（GitHub）。
+
+| 評估維度 | 說明 |
+|---------|------|
+| Tailwind 支援 | 完全可控，可自訂 Tailwind class 映射規則 |
+| Shadcn UI 支援 | 可自訂映射邏輯，理論上可達最高契合度 |
+| 代碼品質 | 高度依賴映射邏輯品質；初期需大量調試 |
+| 自動化程度 | 高（可完全無人值守，REST API 讀取 + codegen 腳本） |
+| 維護成本 | 高（節點結構解析邏輯、映射表、Tailwind 版本相容性均需自行維護） |
+| 費用 | 無第三方授權費用，但工程投入成本高 |
+
+**路徑四：AI 直接代碼生成（Figma MCP Server 輔助）**
+
+AI（Claude）透過 Figma MCP Server 取得 Frame 的完整 context（節點結構 JSON + Design Token 映射 + Code Connect 元件定義），直接生成符合本專案技術棧的 React + Tailwind + Shadcn UI 代碼。這是 Figma 官方 2025-2026 推廣的設計到代碼新正規。
+
+| 評估維度 | 說明 |
+|---------|------|
+| Tailwind 支援 | AI 直接理解設計意圖並輸出 Tailwind class，可指定偏好的 class 命名模式 |
+| Shadcn UI 支援 | AI 可直接使用 Shadcn 元件，結合 Code Connect 映射，達成最高的語意準確度 |
+| 代碼品質 | 依賴 AI 模型能力，現實測試顯示對靜態版型準確度高；複雜互動仍需少量修正 |
+| 自動化程度 | 高（可整合至 CI/CD 流程；AI Agent 呼叫 MCP tools 無人值守）|
+| 維護成本 | 低（無自訂解析邏輯；隨 AI 模型升級自動改善） |
+| 費用 | Figma MCP Server 免費（所有方案）；AI API 使用費用另計 |
+
+**Shadcn Studio 驗證**：已有 `shadcnstudio.com` 實際示範透過 Figma MCP Server + AI 生成 Shadcn UI 元件的端對端流程，確認技術路徑可行。
+
+#### B. Code Connect 的角色定位
+
+Code Connect 是 Figma 的元件映射機制，可將 Figma Component 節點與實際代碼庫中的元件定義連結。透過 CLI 發布連結後，MCP Server 在提供 context 時會自動附帶 Code Connect 定義的代碼片段，讓 AI 生成的代碼直接引用正確的 Shadcn 元件語法。
+
+**限制**：Code Connect 完整 UI 功能（Connect UI）需 Organization 或 Enterprise 方案。CLI 方式可在 Professional 方案使用。
+
+| Code Connect 功能 | Professional | Organization | Enterprise |
+|-----------------|-------------|--------------|------------|
+| Code Connect CLI（本地發布） | 支援 | 支援 | 支援 |
+| Code Connect UI（Figma 介面操作） | 不支援 | 支援 | 支援 |
+| 一對多元件映射 | 支援（CLI） | 支援 | 支援 |
+
+#### C. 代碼生成路徑比較矩陣
+
+| 評估維度 | 路徑一：Dev Mode Codegen | 路徑二：Builder.io | 路徑三：自訂 Codegen | 路徑四：AI + MCP（推薦） |
+|---------|------------------------|------------------|-------------------|-----------------------|
+| Tailwind 原生支援 | 需自訂 Plugin | 支援 | 完全可控 | AI 直接輸出 |
+| Shadcn UI 感知 | 需 Code Connect 手動定義 | 不支援（需人工替換） | 可自訂（工程成本高） | 結合 Code Connect 支援 |
+| 自動化程度 | 低（需人工觸發） | 中（Plugin 觸發） | 高 | 高（Agent 無人值守） |
+| 維護成本 | 中 | 低 | 高 | 低 |
+| 初始設定成本 | 低 | 低 | 高 | 中（需建立 Code Connect 映射） |
+| 代碼品質上限 | 中（CSS 值轉換精度高，語意低） | 中高（AI 優化，但非針對 Shadcn） | 高（完全可控） | 高（語意最準確） |
+| 與 Vision Critic 整合 | 無直接整合 | 無直接整合 | 可整合 | 天然整合（同一 AI 上下文） |
+| 方案要求 | Dev seat | 第三方付費 | 無（REST API） | MCP Server 免費 |
+
+#### D. OQ-3 判定結論與建議
+
+**推薦路徑：路徑四（AI + Figma MCP Server），搭配 Code Connect CLI 作為元件映射機制。**
+
+理由：
+1. **最高 Shadcn UI 契合度**：AI 可直接理解 Code Connect 映射，輸出直接引用 `<Button variant="default">` 等 Shadcn 語法，而非通用 Tailwind utility class 的堆疊
+2. **最低維護成本**：無自訂解析邏輯；AI 模型升級後代碼品質自動改善；不依賴第三方商業工具授權
+3. **與管線天然整合**：AI Agent 在同一次執行中可完成「讀取 User Story → Figma MCP 畫 UI → MCP 讀取 Frame context → 生成代碼」四步驟，無需外部工具切換
+4. **Vision Critic 審查一致性**：由同一 AI Agent 生成代碼後自我審查，或由 Vision Critic 讀取截圖審查，上下文完整
+
+**前置條件**：需在 Figma 文件中建立 Code Connect 映射，將 Shadcn UI 元件（Button、Input、Card 等）與 Figma Component Library 中的元件節點連結。此為一次性工程投入（預估 2-3 Sprint）。
+
+**降級路徑**：若 AI + MCP 的代碼品質在實際驗證中不達 Vision Critic ≥ 80 分，以路徑三（自訂 Codegen）作為備選，利用 REST API 讀取節點樹並產出可預測的結構化代碼。
 
 ### OQ-4：Figma 授權與成本
 
 **問題**：Figma API 的使用是否存在授權門檻或成本限制，影響本方案的可行性？
 
-**調查方向**：
+**調查日期**：2026-03-06
+**調查結論**：Professional 方案（Dev seat）可覆蓋本管線 80% 的技術需求；Variables REST API 的 Enterprise 限制可透過 Plugin API（MCP Server）完全繞過。
 
-- Figma REST API 的免費方案限制（每日/每月 API 呼叫數）
-- Figma 組織方案（Organization/Enterprise）的 API 配額
-- Figma Variables API 的存取限制（Variables API 在 Figma 的定價層級要求）
-- MCP Server 整合是否需要特殊的 API token 類型（Personal Access Token vs OAuth App）
+---
 
-**判定標準**：總體授權成本應在專案可承受範圍內（具體閾值待 OQ-4 調查結果後評估）。
+#### A. 方案功能矩陣（2026 年 3 月現況）
+
+Figma 於 2025 年 3 月重新設計定價結構，引入三種座位類型（Full / Dev / Collab）與四個方案層級（Starter / Professional / Organization / Enterprise）。
+
+**方案費用（年繳）**：
+
+| 方案 | Full seat | Dev seat | Collab seat | View（免費） |
+|------|----------|----------|------------|-------------|
+| Starter | 免費 | 免費 | 免費 | 免費 |
+| Professional | $20/月 | $15/月 | $5/月 | 免費 |
+| Organization | $55/月 | $25/月 | $5/月 | 免費 |
+| Enterprise | $90/月 | $35/月 | $5/月 | 免費 |
+
+注意：Organization 及 Enterprise 方案僅支援年繳，不提供月繳選項。
+
+**API 功能與方案對照**：
+
+| 功能 | Starter | Professional | Organization | Enterprise |
+|------|---------|--------------|--------------|------------|
+| REST API 基本讀取 | 支援（Tier 1 僅 6 次/月） | 支援（Dev/Full seat 15-50 次/分） | 支援（20-100 次/分） | 無限制 |
+| Figma MCP Server | 支援（所有方案免費） | 支援 | 支援 | 支援 |
+| Code Connect CLI | 支援 | 支援 | 支援 | 支援 |
+| Code Connect UI | **不支援** | **不支援** | 支援 | 支援 |
+| Variables REST API | **不支援** | **不支援** | **不支援** | **僅限 Enterprise** |
+| Variables（Plugin API / MCP） | 支援 | 支援 | 支援 | 支援 |
+| Dev Mode（CSS Spec 標注） | 支援（Dev seat） | 支援 | 支援 | 支援 |
+| 無限制檔案數 | **不支援（3 個草稿）** | 支援 | 支援 | 支援 |
+
+#### B. API Token 類型
+
+**Personal Access Token（PAT）**：
+
+- 所有方案均可建立，適用於個人自動化腳本與本地開發
+- Scope 可精細設定（`file_content:read`、`variables:read` 等）
+- 最大有效期 90 天（2025 更新後強制）；需定期輪換
+- Variables scope（`variables:read` / `variables:write`）僅在 Enterprise 方案的 token 上可用
+
+**OAuth 2.0**：
+
+- 適用於需要代表多位使用者的應用程式
+- 所有方案均可使用，但公開 OAuth App 需完成 App 發布流程（2025-11-17 起生效）
+- 本管線為 AI Agent 內部自動化，PAT 即已足夠，無需 OAuth
+
+**MCP Server 認證**：
+
+- Figma 官方遠端 MCP Server 僅支援 OAuth（目前限 Claude Code 和 OpenAI Codex）
+- Figma 桌面應用程式本地 MCP Server 透過桌面 App 的已登入帳號授權，無需額外 token
+
+#### C. 成本分析（本管線場景）
+
+**最小可行方案（Professional + Dev seat）**：
+
+本管線的 AI 操作者需要：
+- REST API 讀取能力（Tier 2：50 次/分）
+- Figma MCP Server 存取（免費）
+- Code Connect CLI 支援
+- Dev Mode 查看設計稿
+
+→ 1 x Dev seat（Professional）= **$15/月**
+
+**設計師協作（選配）**：若需要人工設計師在 Figma 中直接協作修改，需額外 Full seat（Professional $20/月）。
+
+**Code Connect UI（選配）**：若希望在 Figma 介面直接操作元件映射（而非 CLI），需升級至 Organization 方案（$55/月 Full seat）。OQ-3 推薦的路徑不強制需要此功能。
+
+**Variables REST API（暫不需要）**：OQ-2 已確認透過 MCP Server（Plugin API）可在 Professional 方案操作 Variables，不需為 Variables REST API 升級至 Enterprise。
+
+#### D. OQ-4 判定結論
+
+**最低可行成本：Professional 方案 + 1 Dev seat = $15/月（年繳）。**
+
+此配置可支援：
+- REST API 讀取（Vision Critic 審查、Component Library 讀取）
+- Figma MCP Server（AI 設計操作的寫入路徑）
+- Code Connect CLI（Shadcn 元件映射）
+- Variables 操作（透過 MCP Server，非 REST API）
+
+**Enterprise 非必要**：Variables REST API 為 Enterprise 限定，但本管線的 Variables 操作路徑為 Plugin API（MCP Server），不需要 REST API 寫入 Variables，因此 Enterprise 升級對本管線無必要性。
+
+**OQ-4 判定：授權成本可接受。** 月費 $15（AI 操作帳號）+ 可選 $20（設計師協作帳號），相對於本管線的工程投入，成本無阻塞性。
+
+**風險提示**：Personal Access Token 90 天到期機制需建立自動輪換流程，避免 CI/CD 中 API 呼叫因 Token 過期而失敗。
 
 ---
 
 ## 風險與緩解
 
-| 風險 | 可能性 | 影響 | 緩解策略 |
-|------|--------|------|---------|
-| Figma MCP Server 能力不足（OQ-1 阻塞） | 中 | 高（此 ADR 降級） | 降級回 ADR-014 三層管線（選項 A），Phase 2 繼續推進 SSD JSON 路徑 |
-| Figma REST API Rate Limit 阻塞自動化（OQ-2 阻塞） | 低至中 | 高 | 引入請求佇列與重試機制；考慮 Figma Plugin API 作為替代寫入路徑 |
-| AI 生成的 Figma Frame 品質不達標 | 中 | 中 | 強化 AI Prompt 設計（引用 Component Library、明確 Auto Layout 規則）；引入人工設計師介入修正環節 |
-| 從 Figma 到代碼的路徑無法輸出 Tailwind（OQ-3） | 低至中 | 中 | 自訂 codegen 作為備選路徑；ADR-014 Phase 1 確立的元件庫白名單原則不因代碼生成路徑而改變 |
-| Figma Variables API 授權成本過高（OQ-4） | 低 | 中 | 評估降級使用 `design-tokens.json` 靜態管理；僅在 Figma 中使用 Styles 而非 Variables |
-| Figma 服務中斷影響設計流程 | 低 | 中 | 本地快取最近 Sprint 的 Figma 設計稿（export 為 SVG / PNG）；定義服務中斷時的人工替代流程 |
-| 與 ADR-014 Phase 1 成果的相容性問題 | 低 | 低 | ADR-014 Phase 1 交付物（Design Tokens、元件庫白名單、AC 模板）均可在新管線中繼續適用 |
+| 風險 | 可能性 | 影響 | 緩解策略 | OQ 更新 |
+|------|--------|------|---------|---------|
+| Figma MCP Server 能力不足（OQ-1 阻塞） | 中 | 高（此 ADR 降級） | 降級回 ADR-014 三層管線（選項 A），Phase 2 繼續推進 SSD JSON 路徑 | 待 OQ-1 調查完成 |
+| Figma REST API 寫入限制阻塞設計操作（OQ-2） | **已確認**（非風險，為已知約束） | 高 → **已緩解** | OQ-2 調查確認：寫入操作路徑已明確為 Plugin API via MCP Server；REST API 僅用於讀取 | OQ-2 已解決 |
+| REST API Rate Limit 阻塞讀取操作（OQ-2） | 低（Professional Dev seat 50次/分） | 低（讀取配額充足） | 讀取時使用 `depth=2` + 指定 node ID 節省配額；圖片 export 加入指數退避重試 | OQ-2 已解決 |
+| AI 生成的 Figma Frame 品質不達標 | 中 | 中 | 強化 AI Prompt 設計（引用 Component Library、明確 Auto Layout 規則）；引入人工設計師介入修正環節 | 無關聯 |
+| AI 代碼生成品質不達 Vision Critic ≥ 80 分（OQ-3） | 低至中 | 中 | 建立 Code Connect 映射（Shadcn 元件）提升語意準確度；降級路徑為自訂 Codegen（路徑三） | OQ-3 已解決 |
+| Code Connect 映射建立工程成本超預期 | 低至中 | 低 | 僅映射核心元件（Button、Input、Card、Dialog 等約 15 個）；長尾元件可延遲映射 | OQ-3 已解決 |
+| Figma Variables API 需 Enterprise（OQ-4） | **已確認**（非風險，為已知約束） | 低 → **已緩解** | Variables 操作透過 MCP Server（Plugin API）執行，不需 Enterprise；REST API Variables 路徑放棄 | OQ-4 已解決 |
+| PAT Token 90 天到期導致 CI/CD 失敗 | 中 | 中 | 建立 Token 輪換提醒機制（60 天警告）；或使用 OAuth App token（無強制過期） | OQ-4 已解決 |
+| Figma 服務中斷影響設計流程 | 低 | 中 | 本地快取最近 Sprint 的 Figma 設計稿（export 為 SVG / PNG）；定義服務中斷時的人工替代流程 | 無關聯 |
+| 與 ADR-014 Phase 1 成果的相容性問題 | 低 | 低 | ADR-014 Phase 1 交付物（Design Tokens、元件庫白名單、AC 模板）均可在新管線中繼續適用 | 無關聯 |
 
 ---
 
@@ -434,7 +607,24 @@ Figma 整合 Phase 3：代碼生成（Sprint 59-60）
 - ADR-006：Issue 內容提示注入防護（Vision Critic 外部資料處理規則）
 - ADR-013：shikigami:diagram MCP 整合架構決策（MCP 整合參考模式）
 - GitHub Issue #100：UIUX agent 功能需求（原始需求與四階段藍圖）
+
+### OQ-2/OQ-3/OQ-4 調查來源（2026-03-06）
+
 - [Figma REST API 文件](https://www.figma.com/developers/api)
 - [Figma Plugin API 文件](https://www.figma.com/plugin-docs/)
-- [Figma Variables API](https://www.figma.com/developers/api#variables)
+- [Figma Compare APIs — REST vs Plugin vs Widget](https://developers.figma.com/compare-apis/)
+- [Figma REST API Rate Limits（2025-11-17 更新）](https://developers.figma.com/docs/rest-api/rate-limits/)
+- [Figma REST API Scopes](https://developers.figma.com/docs/rest-api/scopes/)
+- [Figma Variables API（Enterprise 限定）](https://www.figma.com/developers/api#variables)
+- [Figma Variables API 方案限制 — 社群討論](https://forum.figma.com/suggest-a-feature-11/why-s-the-variables-api-only-available-on-enterprise-plans-36426)
+- [Figma MCP Server 官方介紹](https://www.figma.com/blog/introducing-figma-mcp-server/)
+- [Figma MCP Server 方案與存取權限](https://developers.figma.com/docs/figma-mcp-server/plans-access-and-permissions/)
+- [Figma Dev Mode 指南（2025）](https://help.figma.com/hc/en-us/articles/15023124644247-Guide-to-Dev-Mode)
+- [Figma Code Connect 介紹](https://developers.figma.com/docs/code-connect/)
+- [Figma Codegen Plugins](https://developers.figma.com/docs/plugins/codegen-plugins/)
+- [Builder.io Visual Copilot — Figma to React + Tailwind](https://www.builder.io/figma-to-code)
+- [Shadcn Studio — Figma to Code via MCP Server](https://shadcnstudio.com/docs/getting-started/figma-to-code-mcp-server)
+- [Figma MCP Server 2026 實際測試](https://research.aimultiple.com/figma-to-code/)
+- [Figma 定價方案（2026 現況）](https://www.figma.com/pricing/)
+- [Manage Personal Access Tokens](https://help.figma.com/hc/en-us/articles/8085703771159-Manage-personal-access-tokens)
 - [Claude API — Vision capabilities](https://docs.anthropic.com/en/docs/build-with-claude/vision)
