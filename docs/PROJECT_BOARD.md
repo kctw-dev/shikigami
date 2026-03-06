@@ -15,9 +15,9 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-150：Figma Desktop 本地驗證環境 SOP | #151 | S | 1 | 待開始 |
-| US-151：Vision Critic PoC — Figma Frame 截圖審查 | #118 | M | 2 | 待開始 |
-| US-152：Figma 管線使用指南 | #123 | M | 2 | 待開始 |
+| US-150：Figma Desktop 本地驗證環境 SOP | #151 | S | 1 | 完成 |
+| US-151：Vision Critic PoC — Figma Frame 截圖審查 | #118 | M | 2 | 完成 |
+| US-152：Figma 管線使用指南 | #123 | M | 2 | 完成 |
 
 ---
 

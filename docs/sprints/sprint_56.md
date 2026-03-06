@@ -12,9 +12,9 @@
 
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
-| US-150 | #151 | Figma Desktop 本地驗證環境 SOP | S | 1 | 是 | 待開始 |
-| US-151 | #118 | Vision Critic PoC — Figma Frame 截圖審查 | M | 2 | 是 | 待開始 |
-| US-152 | #123 | Figma 管線使用指南 | M | 2 | 是 | 待開始 |
+| US-150 | #151 | Figma Desktop 本地驗證環境 SOP | S | 1 | 是 | 完成 |
+| US-151 | #118 | Vision Critic PoC — Figma Frame 截圖審查 | M | 2 | 是 | 完成 |
+| US-152 | #123 | Figma 管線使用指南 | M | 2 | 是 | 完成 |
 
 **Sprint 容量**：5 Points（3 Stories）
 
