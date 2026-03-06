@@ -4,6 +4,14 @@
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "drawio-mcp-server@1.8.0", "--editor"]
+    },
+    "talk-to-figma": {
+      "type": "stdio",
+      "command": "/home/kevin/.bun/bin/bunx",
+      "args": ["cursor-talk-to-figma-mcp@latest"],
+      "env": {
+        "PATH": "/home/kevin/.bun/bin:/usr/local/bin:/usr/bin:/bin"
+      }
     }
   }
 }

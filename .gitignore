@@ -10,3 +10,4 @@ node_modules/
 .DS_Store
 .claude/settings.local.json
 .gemini/settings.json
+claude-talk-to-figma-mcp/
