@@ -23,7 +23,7 @@
 | US-118 | #142 | ADR-014 OQ-5 Context Window 管理策略 | S | 1 | 是 | 待開始 |
 | US-119 | #123 | UIUX Agent 使用者文件補充 | M | 2 | 是 | 待開始 |
 | US-120 | #124 | SDD 前端模板 Done Definition 更新 | S | 1 | 是 | 待開始 |
-| US-121 | #108 | Gemini CLI 能力邊界調查 | S | 1 | 是 | 待開始 |
+| US-121 | #108 | Gemini CLI 能力邊界調查 | S | 1 | 是 | 完成 |
 | US-122 | #125 | Playwright 截圖 PoC 腳本正式化 | S | 1 | 否 | 待開始 |
 | US-123 | #126 | SDD-UIUX-E2E TC-02 退件迴圈腳本建立 | L | 3 | 否 | 待開始 |
 | US-124 | #127 | SDD-UIUX-E2E TC-03 條件通過邊界測試腳本 | M | 2 | 否 | 待開始 |
@@ -570,9 +570,9 @@ As an Architect evaluating multi-CLI collaboration, I want to investigate Gemini
 
 **Done 定義**
 
-- [ ] Gemini CLI 能力邊界調查已完成（AC1）
-- [ ] 協作場景已定義（AC2）
-- [ ] 決策建議已產出（AC3）
+- [x] Gemini CLI 能力邊界調查已完成（AC1）
+- [x] 協作場景已定義（AC2）
+- [x] 決策建議已產出（AC3）
 
 ---
 

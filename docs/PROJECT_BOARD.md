@@ -26,7 +26,7 @@
 | US-118：ADR-014 OQ-5 Context Window 管理策略 | #142 | S | 1 | 待辦 |
 | US-119：UIUX Agent 使用者文件補充 | #123 | M | 2 | 待辦 |
 | US-120：SDD 前端模板 Done Definition 更新 | #124 | S | 1 | 待辦 |
-| US-121：Gemini CLI 能力邊界調查 | #108 | S | 1 | 待辦 |
+| US-121：Gemini CLI 能力邊界調查 | #108 | S | 1 | 完成 |
 | US-122：Playwright 截圖 PoC 腳本正式化 | #125 | S | 1 | 待辦 |
 | US-123：SDD-UIUX-E2E TC-02 退件迴圈腳本建立 | #126 | L | 3 | 待辦 |
 | US-124：SDD-UIUX-E2E TC-03 條件通過邊界測試腳本 | #127 | M | 2 | 待辦 |
