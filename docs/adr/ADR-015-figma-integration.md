@@ -243,6 +243,168 @@ AI 透過 Figma MCP / REST API 畫 UI
 
 **判定標準**：至少支援「建立 Frame、Auto Layout、套用 Variables、引用 Component Instance」四項核心操作，才能判定 OQ-1 為可行。
 
+**調查日期**：2026-03-06
+
+---
+
+#### OQ-1 調查結論
+
+**結論：部分可行（條件式可行）**
+
+核心限制：UI 設計寫入能力存在，但依賴社群 Plugin-based MCP，而非官方 MCP Server。
+
+---
+
+##### 一、API 架構全貌
+
+Figma 存在兩條平行的 API 路徑，其寫入能力截然不同：
+
+| API 路徑 | 能力範圍 | 寫入設計節點 |
+|---------|---------|------------|
+| **Figma REST API** | 讀取設計、讀取 Variables（Enterprise 限定）、寫入評論、寫入 Variables（Enterprise 限定） | 不支援建立或修改視覺節點（Frame、元件、文字等） |
+| **Figma Plugin API** | 幾乎可編輯 Figma 設計的所有層面，即時修改節點 | 完整支援，為唯一可行寫入路徑 |
+
+關鍵發現：REST API 對設計節點的操作幾乎唯讀。Plugin API 是唯一能建立 Frame、設定 Auto Layout、建立 Component Instance 的技術路徑。因此，所有具備「AI 直接畫 UI」能力的 MCP Server，都必須透過 Plugin API（即在 Figma Desktop App 內執行 Plugin）才能實現寫入能力。
+
+---
+
+##### 二、MCP Server 實作調查
+
+**A. 官方 Figma MCP Server**
+
+Figma 於 2025 年發布的官方 MCP Server（`developers.figma.com/docs/figma-mcp-server/`），提供 13 項工具：
+
+| 工具名稱 | 類別 | 說明 |
+|--------|:---:|------|
+| `get_design_context` | 讀取 | 讀取設計背景，輸出 React + Tailwind 代碼建議 |
+| `get_screenshot` | 讀取 | 擷取選定節點截圖 |
+| `get_metadata` | 讀取 | 讀取層級的 XML 表示（ID、名稱、類型、尺寸） |
+| `get_variable_defs` | 讀取 | 讀取選區使用的變數與樣式 |
+| `create_design_system_rules` | 讀取 | 生成設計系統規則檔案，輔助代碼生成 |
+| `get_code_connect_map` | 讀取 | 讀取 Figma 節點 ID 與代碼元件的映射 |
+| `add_code_connect_map` | 寫入 | 新增節點與代碼映射（非設計節點） |
+| `get_code_connect_suggestions` | 讀取 | 自動偵測映射建議 |
+| `send_code_connect_mappings` | 寫入 | 確認映射（非設計節點） |
+| `get_figjam` | 讀取 | 讀取 FigJam 圖表（XML 格式） |
+| `generate_diagram` | 寫入 | 從 Mermaid 語法生成 FigJam 圖表 |
+| `generate_figma_design` | 寫入（限定） | 捕捉執行中的 Web UI 截圖並寫入 Figma（遠端模式限定） |
+| `whoami` | 讀取 | 返回認證使用者資訊（遠端模式限定） |
+
+評估：官方 MCP Server 以讀取為主，核心用途是「Figma 設計 → AI 生成代碼」的單向流程。`generate_figma_design` 工具雖支援寫入，但其實是捕捉已執行的 Web UI 截圖轉換為 Figma Layers，而非 AI 從 User Story 從零建立設計。不具備 `create_frame`、`set_auto_layout`、`instantiate_component`、`apply_variable` 等核心設計寫入操作。
+
+**B. 社群 Plugin-based：Figma Console MCP（southleft）**
+
+透過 Figma Plugin API 封裝，提供 57+ 工具，包含完整設計寫入能力。
+
+| 能力分類 | 代表工具 | 支援狀態 | 執行模式要求 |
+|--------|---------|:---:|-----------|
+| 建立 Frame | `figma_execute`（含 frame 建立指令） | 支援 | NPX 本地模式 + Plugin |
+| Auto Layout 設定 | 元件排列工具群 | 支援 | NPX 本地模式 + Plugin |
+| Component Instance 建立 | `figma_instantiate_component` | 支援 | NPX 本地模式 + Plugin |
+| 批量建立 Variables | `figma_batch_create_variables` | 支援 | NPX 本地模式 + Plugin |
+| Design Tokens 設置 | `figma_setup_design_tokens` | 支援 | NPX 本地模式 + Plugin |
+| 元件排列 | `figma_arrange_component_set` | 支援 | NPX 本地模式 + Plugin |
+| 擷取截圖 | 截圖工具群 | 支援 | 本地及遠端模式均可 |
+| 讀取設計 | 讀取/提取工具群 | 支援 | 本地及遠端模式均可 |
+
+重要限制：Remote SSE 模式（無需 Plugin）能力大幅縮減，僅支援讀取設計資料、讀取 Tokens、截圖、讀取 Console log、讀取元件 Metadata。寫入操作在 Remote SSE 模式下完全不可用，必須使用 NPX 本地模式 + Figma Plugin 才能啟用完整寫入能力。
+
+維護狀態：社群維護（southleft agency），2025-2026 年持續活躍更新。
+
+**C. 社群 Plugin-based：Talk to Figma MCP（sonnylazuardi / grab）**
+
+基於 WebSocket 的雙向通訊，透過 Figma Plugin 執行 AI 代理指令。
+
+| 能力 | 工具 | 支援狀態 |
+|-----|------|:---:|
+| 建立 Frame（含位置、尺寸、填色） | `create_frame` | 支援 |
+| Auto Layout 設定（layout mode、間距） | 含於節點屬性設定 | 支援 |
+| 建立 Component Instance 及 overrides | 元件管理工具群 | 支援 |
+| 新增文字節點及修改文字內容 | 文字元素工具 | 支援 |
+| 圖層順序、群組、命名、移動、複製、刪除 | 節點操作工具群 | 支援 |
+| 讀取既有設計 | `get_document_info`、`read_my_design`、`get_node_info` | 支援 |
+| 匯出截圖及圖片 | export 工具 | 支援 |
+| Variables 操作 | 未在工具清單中明確列出 | 未確認 |
+
+維護狀態：開源（GitHub），社群活躍，2025 年持續維護。需搭配 Figma Desktop App Plugin + WebSocket Server。
+
+---
+
+##### 三、核心能力評估矩陣
+
+| 能力 | Must/Should | 官方 MCP Server | Figma Console MCP（NPX 模式） | Talk to Figma MCP | 整體判定 |
+|-----|:---:|:---:|:---:|:---:|------|
+| **建立 Frame** | Must | 不支援 | 支援 | 支援（`create_frame`） | 可行（社群工具） |
+| **Auto Layout 設定** | Must | 不支援 | 支援 | 支援 | 可行（社群工具） |
+| **建立 Component Instance** | Must | 不支援 | 支援（`figma_instantiate_component`） | 支援 | 可行（社群工具） |
+| **套用 Variables（Design Tokens）** | Must | 不支援（讀取僅） | 支援（`figma_batch_create_variables`） | 未確認 | 部分可行（Plugin 路徑） |
+| **新增/修改文字** | Must | 不支援 | 支援 | 支援 | 可行（社群工具） |
+| **圖層操作（順序/群組/命名）** | Must | 不支援 | 支援 | 支援 | 可行（社群工具） |
+| **讀取既有設計** | Should | 支援（完整） | 支援 | 支援 | 可行（官方/社群均支援） |
+| **匯出截圖** | Should | 支援（`get_screenshot`） | 支援 | 支援 | 可行（官方/社群均支援） |
+| **Component Library 查詢** | Should | 支援（`get_design_context`） | 支援 | 支援 | 可行（官方/社群均支援） |
+
+---
+
+##### 四、限制摘要
+
+**限制一：寫入能力必須透過 Figma Plugin（Desktop App）**
+
+所有「AI 直接畫 UI」的核心操作（建立 Frame、Auto Layout、Component Instance）均須透過 Figma Plugin API，即必須在 Figma Desktop App 執行 Plugin 才能生效。純 REST API 無法建立或修改設計節點。AI Agent 的執行環境必須能與 Figma Desktop App 進行通訊（WebSocket 或本地 IPC），這排除了純雲端 CI 環境的使用場景。
+
+**限制二：Variables API 寫入需 Enterprise 帳號（REST API 路徑）**
+
+若透過 REST API 讀寫 Variables，需要 Figma Enterprise 帳號。Plugin API 路徑（`figma.variables`）則無此限制，可在 Pro 帳號下透過 Plugin 操作 Variables。Design Tokens 的 AI 寫入操作，必須透過 Plugin-based MCP（而非 REST API）才能在非 Enterprise 環境下運作。
+
+**限制三：社群工具的成熟度風險**
+
+具備完整寫入能力的 MCP Server 均為社群維護，非 Figma 官方支援。Figma API 更新時，社群工具的適配速度存在延遲風險。Figma Console MCP 的 Remote SSE 模式寫入能力完全缺失，必須使用 NPX 本地模式。
+
+**限制四：Rate Limit（官方 MCP Server / REST API）**
+
+官方 MCP Server 在 Starter/Free 帳號下限制為每月 6 次工具呼叫，Pro 帳號（Dev/Full seat）每分鐘 Tier 1 API 限 15 次。自動化生成多個 US Frame 的場景，Pro 帳號基本可支援（單一 US 估計 5-15 次讀取 API 呼叫）。Plugin API 路徑的寫入操作不受 REST API Rate Limit 限制。
+
+---
+
+##### 五、OQ-1 最終判定
+
+**整體判定：OQ-1 條件式可行，未觸發阻塞降級條件。**
+
+四項核心操作（建立 Frame、Auto Layout、套用 Variables、引用 Component Instance）均可透過社群 Plugin-based MCP Server 實現，符合 OQ-1 判定標準（至少支援四項核心操作）。
+
+| 判定維度 | 結果 | 說明 |
+|--------|:---:|------|
+| 建立 Frame | 可行（條件式） | 需 Figma Desktop App + Plugin-based MCP |
+| Auto Layout 設定 | 可行（條件式） | 同上 |
+| Component Instance 引用 | 可行（條件式） | 需 Figma Console MCP NPX 模式或 Talk to Figma |
+| Variables 套用（Design Tokens） | 部分可行 | Plugin API 路徑可行；REST API 寫入需 Enterprise |
+| 文字操作 | 可行（條件式） | 需 Plugin-based MCP |
+| 圖層操作 | 可行（條件式） | 需 Plugin-based MCP |
+| 讀取既有設計 | 可行 | 官方 MCP Server 完整支援 |
+| 匯出截圖 | 可行 | 官方及社群均支援 |
+
+**關鍵前提條件（後續實作必須滿足）**：
+
+1. AI Agent 工作流必須設計為與 Figma Desktop App 共存的環境（不能是純雲端 CI 環境）
+2. 選用 Figma Console MCP（NPX 模式）或 Talk to Figma MCP 作為寫入路徑，而非官方 MCP Server
+3. Variables 操作優先透過 Plugin API 路徑，避免 REST API 的 Enterprise 限制
+4. 需接受社群工具維護穩定性風險，並訂定工具版本鎖定與升級策略
+
+**對 ADR-015 決策的影響**：OQ-1 可行結論維持 ADR-015 選項 B（Figma 整合）的有效性。後續須在 Figma Console MCP 與 Talk to Figma MCP 之間進行深入評估，建議以 POC 驗證社群工具的實際可用性後，再進入 Figma 整合 Phase 1 實作。
+
+---
+
+**調查參考來源**：
+- [Figma MCP Server 官方開發者文檔](https://developers.figma.com/docs/figma-mcp-server/)
+- [Figma MCP Server Tools and Prompts](https://developers.figma.com/docs/figma-mcp-server/tools-and-prompts/)
+- [Compare the Figma APIs（Plugin API vs REST API）](https://developers.figma.com/compare-apis/)
+- [Figma Variables REST API](https://developers.figma.com/docs/rest-api/variables/)
+- [Figma REST API Rate Limits](https://developers.figma.com/docs/rest-api/rate-limits/)
+- [Figma Console MCP（southleft）](https://github.com/southleft/figma-console-mcp)
+- [Talk to Figma MCP（sonnylazuardi）](https://github.com/sonnylazuardi/cursor-talk-to-figma-mcp)
+- [Figma-Context-MCP（GLips / Framelink）](https://github.com/GLips/Figma-Context-MCP)
+- [Community Figma MCP Server for Generative Design（DEV.to）](https://dev.to/om_shree_0709/bridging-llms-and-design-systems-via-mcp-implementing-a-community-figma-mcp-server-for-generative-2ig2)
+
 ### OQ-2：Figma REST API 限制
 
 **問題**：Figma REST API 的操作限制是否對本管線的自動化生成構成阻礙？
