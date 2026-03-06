@@ -14,7 +14,7 @@
 
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
-| US-103（#104）：Design Tokens 定義檔建立 | S | 1 | 待開發 |
+| US-103（#104）：Design Tokens 定義檔建立 | S | 1 | 完成 |
 | US-104（#105）：元件庫白名單 AC 注入機制 | S | 1 | 待開發 |
 
 **目標 Velocity**：2 points（2 Stories）
