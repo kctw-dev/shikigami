@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-06（Sprint 52 — US-103/US-104 完成標注）
+> 最後更新：2026-03-06（Sprint 53 — UIUX Agent 三層管線 SKILL.md 全部交付）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -292,6 +292,12 @@ Sprint Review 時自動產出：
 | US-102 | ADR-014 起草 — UIUX Agent 架構決策（三方案對比，四階段分期策略，6 個後續 Story） | Sprint 51 ✅ |
 | US-103 | Design Tokens 定義檔建立（design-tokens.json + SDD 前端模板 + ADR-014 OQ-2 回填） | Sprint 52 ✅ |
 | US-104 | 元件庫白名單 AC 注入機制（issue-management SKILL.md 前端 Story 識別規則 + AC 自動注入） | Sprint 52 ✅ |
+| US-105 | UX Agent SKILL.md 實作（shikigami:ux 技能定義 + 骨架文件 JSON Schema + designToken 型別） | Sprint 53 ✅ |
+| OQ-1 | Playwright 截圖可行性調查（ADR-014 OQ-1 填入：GCP self-hosted runner headless Chromium 可行） | Sprint 53 ✅ |
+| OQ-3 | Vision Critic 通過閾值量化決策（ADR-014 OQ-3 填入：三維加權評分 ≥80 PASS） | Sprint 53 ✅ |
+| US-106 | UI Agent SKILL.md 實作（shikigami:ui 技能定義 + Design Tokens 注入 + 元件庫白名單約束） | Sprint 53 ✅ |
+| US-107 | Vision Critic Agent SKILL.md 實作（shikigami:vision-critic 技能定義 + 視覺比對規則 + Playwright 截圖整合） | Sprint 53 ✅ |
+| US-108 | 三層 Agent 管線端對端整合測試設計（SDD-UIUX-E2E.md：5 測試案例 + 三層降級策略） | Sprint 53 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 

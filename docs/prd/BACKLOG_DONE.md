@@ -1933,3 +1933,29 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 |-------|------|--------|------------|
 | US-100（Issue #102）：backlog-intake GitHub Action 結案確認 | S | 1 | Sprint 51 |
 | US-102（Issue #100）：ADR-014 起草 — UIUX Agent 架構決策 | S | 1 | Sprint 51 |
+
+---
+
+## Sprint 52（2026-03-06）
+
+**Sprint Goal**：建立 UIUX Agent 工作流的「防呆設計基礎」—— 定義機器可讀的 Design Tokens 規格、強制元件庫白名單，以及前端 Story AC 模板注入機制，使 ADR-014 Phase 1 具體落地。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-103（Issue #104）：Design Tokens 定義檔建立 | S | 1 | Sprint 52 |
+| US-104（Issue #105）：元件庫白名單 AC 注入機制 | S | 1 | Sprint 52 |
+
+---
+
+## Sprint 53（2026-03-06）
+
+**Sprint Goal**：完成 ADR-014 全部三個 Phase 的 SKILL.md 定義（UX Agent / UI Agent / Vision Critic），決策 OQ-1 與 OQ-3 開放問題，並設計三層 Agent 管線端對端整合測試規格。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-105（Issue #112）：UX Agent SKILL.md 實作 | M | 2 | Sprint 53 |
+| OQ-1（Issue #109）：Playwright 截圖可行性調查 | S | 1 | Sprint 53 |
+| OQ-3（Issue #111）：Vision Critic 通過閾值量化決策 | S | 1 | Sprint 53 |
+| US-106（Issue #113）：UI Agent SKILL.md 實作 | M | 2 | Sprint 53 |
+| US-107（Issue #114）：Vision Critic Agent SKILL.md 實作 | M | 2 | Sprint 53 |
+| US-108（Issue #115）：三層 Agent 管線端對端整合測試設計 | M | 2 | Sprint 53 |
