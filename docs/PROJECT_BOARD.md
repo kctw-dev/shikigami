@@ -31,9 +31,9 @@
 | US-123：SDD-UIUX-E2E TC-02 退件迴圈腳本建立 | #126 | L | 3 | 待辦 |
 | US-124：SDD-UIUX-E2E TC-03 條件通過邊界測試腳本 | #127 | M | 2 | 待辦 |
 | US-125：ADR-014 OQ-4 正式決策文件 | #128 | S | 1 | 完成 |
-| US-126：ADR-014 OQ-5 Context Window 管理決策 | #129 | S | 1 | 進行中 |
+| US-126：ADR-014 OQ-5 Context Window 管理決策 | #129 | S | 1 | 完成 |
 | US-127：ADR-007 延伸 — 前端 Story 觸發 UIUX 管線決策點 | #130 | M | 2 | 待辦 |
-| US-128：Vision Critic 退件報告儲存機制 | #131 | S | 1 | 進行中 |
+| US-128：Vision Critic 退件報告儲存機制 | #131 | S | 1 | 完成 |
 | US-129：UX Agent SKILL.md CLI 輸出設計符合性審查 | #132 | M | 2 | 待辦 |
 | US-130：UI Agent CLI 輸出設計符合性審查 | #133 | M | 2 | 待辦 |
 | US-131：Vision Critic CLI 輸出設計符合性審查 | #134 | S | 1 | 待辦 |

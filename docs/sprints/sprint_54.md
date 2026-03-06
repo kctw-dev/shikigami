@@ -28,9 +28,9 @@
 | US-123 | #126 | SDD-UIUX-E2E TC-02 退件迴圈腳本建立 | L | 3 | 否 | 待開始 |
 | US-124 | #127 | SDD-UIUX-E2E TC-03 條件通過邊界測試腳本 | M | 2 | 否 | 待開始 |
 | US-125 | #128 | ADR-014 OQ-4 正式決策文件 | S | 1 | 是 | 完成 |
-| US-126 | #129 | ADR-014 OQ-5 Context Window 管理決策 | S | 1 | 是 | 進行中 |
+| US-126 | #129 | ADR-014 OQ-5 Context Window 管理決策 | S | 1 | 是 | 完成 |
 | US-127 | #130 | ADR-007 延伸 — 前端 Story 觸發 UIUX 管線決策點 | M | 2 | 是 | 待開始 |
-| US-128 | #131 | Vision Critic 退件報告儲存機制 | S | 1 | 是 | 進行中 |
+| US-128 | #131 | Vision Critic 退件報告儲存機制 | S | 1 | 是 | 完成 |
 | US-129 | #132 | UX Agent SKILL.md CLI 輸出設計符合性審查 | M | 2 | 是 | 待開始 |
 | US-130 | #133 | UI Agent CLI 輸出設計符合性審查 | M | 2 | 是 | 待開始 |
 | US-131 | #134 | Vision Critic CLI 輸出設計符合性審查 | S | 1 | 是 | 待開始 |
@@ -764,9 +764,9 @@ As a Product Owner closing open questions in ADR-014, I want OQ-5 (Context Windo
 
 **Done 定義**
 
-- [ ] Context Window 累積問題調查已完成（AC1）
-- [ ] ADR-014 OQ-5 Context Window 管理策略決策已填入（AC2）
-- [ ] OQ-5 狀態已更新為「已決策」（AC3）
+- [x] Context Window 累積問題調查已完成（AC1）
+- [x] ADR-014 OQ-5 Context Window 管理策略決策已填入（AC2）
+- [x] OQ-5 狀態已更新為「已決策」（AC3）
 
 ---
 
@@ -840,9 +840,9 @@ As a Developer using the Vision Critic Agent, I want rejection reports to be aut
 
 **Done 定義**
 
-- [ ] 退件報告儲存路徑規則已定義（AC1）
-- [ ] 退件報告 JSON 格式已定義（AC2）
-- [ ] Vision Critic SKILL.md 已更新說明自動儲存行為（AC3）
+- [x] 退件報告儲存路徑規則已定義（AC1）
+- [x] 退件報告 JSON 格式已定義（AC2）
+- [x] Vision Critic SKILL.md 已更新說明自動儲存行為（AC3）
 
 ---
 

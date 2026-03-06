@@ -346,8 +346,8 @@ Phase 1 和 Phase 2 不依賴 Vision Critic Agent 的截圖機制，可先交付
 | OQ-1 | Playwright 截圖在 GitHub Actions self-hosted runner 的可行性 | 高 | 已決策（2026-03-06） | 可行。GCP Ubuntu 22.04/24.04 VM 可透過 `npx playwright install chromium --with-deps` 完成安裝；建議 2 vCPU / 4 GB RAM；詳見下方 OQ-1 決策說明。 |
 | OQ-2 | Design Tokens 格式標準選型 | 高 | 已決策（2026-03-06） | 選擇自訂 JSON（YAGNI 原則）。詳見下方 OQ-2 決策說明。 |
 | OQ-3 | Vision Critic 審查的量化通過閾值定義 | 中 | 已決策（2026-03-06） | 採用三維度加權評分制（色彩一致性 40%、元件位置 35%、間距合規性 25%），總分 ≥ 80 為 PASS。詳見下方 OQ-3 決策說明。 |
-| OQ-4 | UX Agent 骨架文件格式 JSON Schema 定義 | 中 | 待解答 | 需在 US-105 前確認骨架文件的標準結構，確保 UI Agent 可解析 |
-| OQ-5 | 長對話 Context Window 管理策略 | 低 | 待解答 | Vision Critic 退件迴圈多輪後 context 可能超出限制；需定義截斷或摘要策略 |
+| OQ-4 | UX Agent 骨架文件格式 JSON Schema 定義 | 中 | 已決策（2026-03-06） | 採用 JSON Schema Draft-07，以 `ajv` 為驗證工具。詳見下方 OQ-4 決策說明。 |
+| OQ-5 | 長對話 Context Window 管理策略 | 低 | 已決策（2026-03-06） | 採用「新對話隔離 + 結構化摘要接力」策略，每層 Agent 啟動獨立對話；退件報告以 JSON 摘要格式傳遞而非全文 context 累積。詳見下方 OQ-5 決策說明。 |
 
 ### OQ-1 決策說明：Playwright 截圖在 GCP self-hosted runner 可行性（2026-03-06）
 
@@ -736,6 +736,125 @@ Vision Critic 對每個維度輸出 0–100 分，加權合算為總分。
 - Vision Critic Agent 的退件報告 JSON Schema 須包含三個維度分數欄位（`colorConsistencyScore`、`componentPositionScore`、`spacingComplianceScore`）及總分（`totalScore`）。
 - Hard Gate 違規須在退件報告中以獨立欄位標記（`hardGateViolations: []`），與分數邏輯分離。
 - 最多重試 3 次的限制（見技術可行性評估迴圈終止條件）不受本決策修改，維持原設計。
+
+---
+
+### OQ-4 決策說明：骨架文件 JSON Schema 標準（2026-03-06）
+
+**問題**：UX Agent 輸出的骨架文件（Skeleton Document）應採用哪種 JSON Schema 標準加以定義與驗證，以確保 UI Agent 可解析、可驗證，並符合 MVP 階段的複雜度約束？
+
+**候選方案比較**
+
+| 面向 | JSON Schema Draft-07（選定） | JSON Schema Draft-2020-12 | OpenAPI 3.1 |
+|------|--------------------------|--------------------------|-------------|
+| 瀏覽器 / Node.js 工具鏈支援 | 最廣泛（ajv 6.x 原生支援，生態成熟） | 廣泛（ajv 8.x 支援，但部分功能仍有實作差異） | 廣泛（openapi-validator、swagger-parser） |
+| 規格穩定性 | 高（Draft-07 為業界長期穩定基準） | 高（W3C 正式發布，但 ajv 8.x 尚有實作邊緣案例） | 高（OpenAPI 3.1 已正式發布，但語意範圍偏向 API 描述） |
+| 學習成本 | 低（開發者廣泛熟悉） | 中（引入 `$defs`、`unevaluatedProperties` 等新語意） | 中（原為 API 規格格式，用於 JSON 資料驗證屬非預設用途） |
+| YAGNI 符合性 | 高（Draft-07 功能足以滿足骨架文件驗證需求） | 中（新功能在 MVP 階段無明確需求） | 低（OpenAPI 設計目標為 API endpoint 描述，語意與骨架文件驗證存在概念錯位） |
+| 驗證工具 | `ajv` v6.x（最成熟，npm 週下載量 1.5 億+） | `ajv` v8.x（需設定 `strict: false` 以相容部分 Draft 行為） | `openapi-validator`（需額外包裝才能用於一般 JSON 驗證） |
+| 版本遷移彈性 | 高（Draft-07 → 2020-12 遷移路徑清晰） | — | — |
+
+**決策**：選擇 **JSON Schema Draft-07**，以 **`ajv` v6.x** 為標準驗證工具。
+
+**理由**
+
+1. **工具生態最成熟**：`ajv`（Another JSON Schema Validator）是 Node.js 生態中下載量最大的 JSON Schema 驗證函式庫，Draft-07 為其最穩定的長期支援版本，開箱即用，無需額外設定。
+
+2. **YAGNI 原則**：骨架文件的驗證需求為「欄位型別正確、必要欄位存在、元件陣列格式合規」，Draft-07 的 `type`、`required`、`items`、`enum` 等關鍵字已完全滿足此範圍。Draft-2020-12 的新功能（`$defs`、`unevaluatedProperties`、`prefixItems` 等）在 MVP 階段無明確應用場景，引入只會增加學習成本與工具依賴版本分歧。
+
+3. **OpenAPI 3.1 語意不匹配**：OpenAPI 3.1 的設計目標是描述 REST API endpoint，骨架文件是純 JSON 資料結構，使用 OpenAPI 3.1 驗證純 JSON 資料屬概念錯位，且需要額外包裝層才能提取 `components/schemas` 進行獨立驗證，增加無謂複雜度。
+
+4. **版本遷移路徑清晰**：若未來骨架文件複雜度提升需要 Draft-2020-12 功能，`ajv` 的遷移路徑明確（更換版本號 + 調整 `$schema` URI），遷移風險可控。
+
+**Schema 版本標識規範**
+
+骨架文件 JSON Schema 定義檔（`docs/schemas/skeleton-document-schema.json`）須包含以下欄位：
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/shikigami/schemas/skeleton-document-schema.json",
+  "version": "1.0.0",
+  "title": "Skeleton Document Schema"
+}
+```
+
+**驗證工具規範**
+
+| 工具 | 版本 | 用途 |
+|------|------|------|
+| `ajv` | v6.x（最新穩定 Draft-07 版本） | 骨架文件 JSON Schema 驗證 |
+| `ajv-formats` | v1.x | 支援 `format` 關鍵字（如 `uri`、`date-time`） |
+
+**影響**
+
+- US-117（OQ-4 骨架文件 Schema 標準化）的實作直接引用本決策，建立 `docs/schemas/skeleton-document-schema.json`，採用 JSON Schema Draft-07 格式。
+- US-112（UX Agent 實際觸發驗證）的 AC2 Schema 驗證須使用 `ajv` v6.x 執行，驗證 UX Agent 輸出的骨架文件。
+- UX Agent（US-105）與 UI Agent（US-106）的 SKILL.md 應引用 `docs/schemas/skeleton-document-schema.json` 作為骨架文件的標準定義來源。
+- 若 Phase 3 或以後骨架文件欄位複雜度提升需要 Draft-2020-12 功能，應透過新 ADR Addendum 評估遷移。
+
+---
+
+### OQ-5 決策說明：長對話 Context Window 管理策略（2026-03-06）
+
+**問題**：三層 Agent 管線（UX → UI → Vision Critic）串接執行時，多輪退件迴圈可能導致 context window 累積消耗過大；Vision Critic 每輪重試需攜帶「原始 SSD + 歷次 VRR」（SKILL.md §9.2），退件報告不斷累積有超出 context 限制的風險。
+
+#### AC1 — 三層管線 Context Window 累積問題調查
+
+**各層 Token 消耗估算（基於 Claude Sonnet 4.6，200K context window）**
+
+| 管線層 | 輸入 Token 估算 | 輸出 Token 估算 | 累積風險 |
+|--------|--------------|--------------|---------|
+| UX Agent | 系統提示（~1,000）+ User Story（~500）+ XML 隔離（~50）= **~1,550** | SSD JSON（~1,000–3,000） | 低：單次對話，無累積 |
+| UI Agent（首次） | 系統提示（~1,500）+ SSD JSON（~3,000）+ design-tokens.json（~500）+ XML 隔離（~100）= **~5,100** | React 代碼（~2,000–5,000） | 低：單次對話，無累積 |
+| UI Agent（退件重試，每輪） | 首次基礎（~5,100）+ 退件報告（~500–1,000 × 退件次數）= **最多 ~8,100** | React 代碼（~2,000–5,000） | 中：3 輪退件後累積 ~3,000 token 退件歷史 |
+| Vision Critic（每輪） | 系統提示（~1,000）+ SSD JSON（~3,000）+ PNG Base64（~2,000–8,000）= **~6,000–12,000** | VRR JSON（~500–1,000） | 中：截圖是最大消耗來源；3 輪退件時累積歷史 VRR ~3,000 |
+
+**關鍵風險識別**：
+
+1. **退件迴圈累積**：Vision Critic SKILL.md §9.2 規定「每次重試須帶入原始 SSD + 歷次 VRR」，3 輪退件後累積 VRR 約 1,500–3,000 tokens，在 200K context 限制下可控，但需設計清晰的摘要策略以避免邊界情況。
+
+2. **截圖 token 佔用**：PNG Base64 編碼圖片在 Claude API 中依解析度不同消耗 2,000–8,000 tokens（1280×720 典型 UI 截圖估計 3,000–6,000 tokens）。全流程 3 輪截圖審查累積最多 ~18,000 tokens，不構成溢出風險，但對成本有影響。
+
+3. **最壞情況估算**：三層全管線（含 3 輪退件）的總 context 消耗估算：UX（~5K）+ UI × 4 輪（~32K）+ Vision Critic × 3 輪（~36K）= **~73K tokens**，遠低於 200K 限制，正常場景不會觸發 context 溢出。
+
+4. **異常場景風險**：若 User Story 超長（>5,000 tokens）或 SSD JSON 異常複雜（>10,000 tokens），可能在退件迴圈末期接近限制，需備援截斷策略。
+
+**結論**：在 Claude Sonnet 4.6 的 200K context window 下，標準使用場景不會觸發 context 溢出。管理策略以「防禦性設計」為主，為異常場景提供降級機制。
+
+#### 候選方案比較
+
+| 方案 | 描述 | 優點 | 缺點 |
+|------|------|------|------|
+| **方案 A：新對話隔離 + 結構化摘要接力（選定）** | 每層啟動獨立對話；VRR JSON 作為唯一層間傳遞媒介 | 每層 context 乾淨；易於推理和除錯；符合 SKILL.md 現有設計 | 層間無法共享對話上下文（但層間本不需要對話連續性） |
+| 方案 B：單一長對話串接三層 | 三層 Agent 在同一對話中依序執行 | 保留完整對話歷史 | 退件迴圈後 context 快速膨脹；截圖三輪後累積 ~18K tokens 圖片 context；難以維護 |
+| 方案 C：對話摘要（Summarization） | 每隔 N 輪自動呼叫 LLM 壓縮 context | 理論上無限擴展 | 需要額外 LLM 呼叫（成本增加）；摘要可能遺失關鍵退件細節；實作複雜度高 |
+
+**決策**：選擇**方案 A（新對話隔離 + 結構化摘要接力）**。
+
+**理由**：
+
+1. **Claude Sonnet 4.6 的 200K context window 充足**：標準使用場景的最壞情況估算 ~73K tokens，遠低於 200K 限制。方案 A 的新對話隔離使每層實際 context 維持在 ≤20K，更為安全。
+
+2. **符合現有 SKILL.md 設計**：三個 SKILL.md 均已定義以 JSON 工件（SSD JSON、VRR JSON）為層間傳遞格式，方案 A 與現有設計天然一致，無需修改 SKILL.md 核心邏輯。
+
+3. **YAGNI 原則**：方案 C（對話摘要）引入額外 LLM 呼叫和複雜實作，在當前問題規模下屬過度工程（over-engineering）。方案 A 以簡單的「新對話 + JSON 傳遞」解決同樣的問題。
+
+4. **可測試性**：每層獨立對話使各層的 context 邊界清晰，易於在測試場景中定義 budget 上限並驗證降級行為。
+
+#### 各層 Context Budget（每次對話的 token 分配）
+
+| 管線層 | Context Budget | 超出時降級行為 |
+|--------|---------------|--------------|
+| **UX Agent** | 系統提示（≤2K）+ User Story（≤5K）+ XML 隔離（≤0.5K）= **上限 7.5K** | 截斷 User Story 至 5K，輸出 `[UX-WARN] input truncated` |
+| **UI Agent（每輪）** | 系統提示（≤2K）+ SSD JSON（≤5K）+ Design Tokens（≤1K）+ 退件報告摘要（≤3K）= **上限 11K** | 壓縮退件報告：僅保留 `issues[].description`，移除 `findings` 冗餘欄位；超出時僅保留最新一份 VRR |
+| **Vision Critic（每輪）** | 系統提示（≤2K）+ SSD JSON（≤5K）+ PNG 截圖（≤10K）+ 歷史 VRR 摘要（≤3K）= **上限 20K** | 降低截圖解析度（1280×720 → 800×600 → 640×480）；640×480 仍超出時升級人工審查 |
+
+**影響**：
+
+- US-118（OQ-5 Context Window 管理策略 SKILL.md 實作）的 AC1/AC2/AC3 直接引用本決策：在三個 SKILL.md 中新增 Context Window 管理段落、定義各層 context budget、說明降級策略。
+- Vision Critic SKILL.md §9.2「每次重試須帶入原始 SSD + 歷次 VRR」的實作方式確認為：**VRR JSON 的結構化摘要傳遞**（非對話 context 累積），與方案 A 一致。
+- 退件報告 JSON Schema（§8.1）的 `findings` 詳細欄位設計為選填（`optional`），支援 UI Agent 降級時僅傳遞 `issues[]` 核心欄位。
 
 ---
 
