@@ -1,0 +1,115 @@
+{
+  "$schema": "https://shikigami.dev/schemas/design-tokens/v1",
+  "$description": "Shikigami UIUX Agent Design Tokens — ADR-014 Phase 1 規格定義",
+  "$version": "1.0.0",
+  "$updatedAt": "2026-03-06",
+
+  "color": {
+    "$description": "主色盤 — 所有前端 Story 禁止 hardcode 色碼，須引用此處具名 token",
+    "primary": {
+      "50":  { "$value": "#eff6ff", "$description": "Primary 最淺底色，適合 hover 狀態背景" },
+      "100": { "$value": "#dbeafe", "$description": "Primary 淺色，適合選取/高亮狀態" },
+      "200": { "$value": "#bfdbfe", "$description": "Primary 中淺，適合 disabled 狀態邊框" },
+      "300": { "$value": "#93c5fd", "$description": "Primary 中色，輔助圖示填色" },
+      "400": { "$value": "#60a5fa", "$description": "Primary 中深，次要互動元素" },
+      "500": { "$value": "#3b82f6", "$description": "Primary 標準色，主要 CTA 按鈕背景" },
+      "600": { "$value": "#2563eb", "$description": "Primary 深色，主要 CTA hover 狀態" },
+      "700": { "$value": "#1d4ed8", "$description": "Primary 更深，active 按壓狀態" },
+      "900": { "$value": "#1e3a8a", "$description": "Primary 最深，深色主題文字色" }
+    },
+    "secondary": {
+      "50":  { "$value": "#f8fafc", "$description": "Secondary 最淺，頁面背景底色" },
+      "100": { "$value": "#f1f5f9", "$description": "Secondary 淺灰，卡片底色" },
+      "300": { "$value": "#cbd5e1", "$description": "Secondary 中灰，分隔線" },
+      "500": { "$value": "#64748b", "$description": "Secondary 標準，次要文字色" },
+      "700": { "$value": "#334155", "$description": "Secondary 深灰，主要內文色" },
+      "900": { "$value": "#0f172a", "$description": "Secondary 最深，標題主色" }
+    },
+    "danger": {
+      "50":  { "$value": "#fef2f2", "$description": "Danger 最淺，錯誤訊息背景" },
+      "300": { "$value": "#fca5a5", "$description": "Danger 淺紅，輕量錯誤 badge 背景" },
+      "500": { "$value": "#ef4444", "$description": "Danger 標準，破壞性操作 CTA" },
+      "700": { "$value": "#b91c1c", "$description": "Danger 深紅，錯誤狀態文字色" }
+    },
+    "neutral": {
+      "0":   { "$value": "#ffffff", "$description": "純白，卡片/模態底色" },
+      "50":  { "$value": "#f9fafb", "$description": "接近白色，頁面層底色" },
+      "100": { "$value": "#f3f4f6", "$description": "極淺灰，輸入框背景" },
+      "200": { "$value": "#e5e7eb", "$description": "淺灰，邊框預設色" },
+      "400": { "$value": "#9ca3af", "$description": "中灰，placeholder 文字色" },
+      "600": { "$value": "#4b5563", "$description": "中深灰，說明文字" },
+      "800": { "$value": "#1f2937", "$description": "深灰，主要標題" },
+      "950": { "$value": "#030712", "$description": "近黑，深色模式背景" }
+    }
+  },
+
+  "typography": {
+    "$description": "字型規格 — 字型族群與字級尺度",
+    "fontFamily": {
+      "sans":  { "$value": "'Inter', 'Noto Sans TC', ui-sans-serif, system-ui, sans-serif", "$description": "主要介面字型（英文 + 繁體中文）" },
+      "mono":  { "$value": "'JetBrains Mono', 'Fira Code', ui-monospace, monospace", "$description": "程式碼區塊、CLI 輸出字型" },
+      "serif": { "$value": "'Noto Serif TC', ui-serif, Georgia, serif", "$description": "長篇閱讀內文字型（選用）" }
+    },
+    "fontSize": {
+      "xs":   { "$value": "0.75rem",   "$description": "12px — 標籤、badge、輔助說明" },
+      "sm":   { "$value": "0.875rem",  "$description": "14px — 次要文字、表格內文" },
+      "base": { "$value": "1rem",      "$description": "16px — 主要內文基準" },
+      "lg":   { "$value": "1.125rem",  "$description": "18px — 小標、卡片標題" },
+      "xl":   { "$value": "1.25rem",   "$description": "20px — 段落標題" },
+      "2xl":  { "$value": "1.5rem",    "$description": "24px — 頁面區段標題" },
+      "3xl":  { "$value": "1.875rem",  "$description": "30px — 頁面主標題" },
+      "4xl":  { "$value": "2.25rem",   "$description": "36px — Hero 大標" }
+    },
+    "fontWeight": {
+      "normal":   { "$value": "400", "$description": "一般文字" },
+      "medium":   { "$value": "500", "$description": "強調文字、表格欄位標題" },
+      "semibold": { "$value": "600", "$description": "卡片標題、按鈕文字" },
+      "bold":     { "$value": "700", "$description": "頁面主標題" }
+    },
+    "lineHeight": {
+      "tight":  { "$value": "1.25", "$description": "標題用，緊湊行高" },
+      "normal": { "$value": "1.5",  "$description": "內文標準行高" },
+      "relaxed":{ "$value": "1.75", "$description": "長篇閱讀舒適行高" }
+    }
+  },
+
+  "borderRadius": {
+    "$description": "圓角尺度 — UI 元素圓角統一規格",
+    "none": { "$value": "0px",    "$description": "無圓角，表格邊框等" },
+    "sm":   { "$value": "0.125rem", "$description": "2px — 極小圓角，細標籤" },
+    "base": { "$value": "0.25rem",  "$description": "4px — 預設圓角，輸入框" },
+    "md":   { "$value": "0.375rem", "$description": "6px — 按鈕、badge" },
+    "lg":   { "$value": "0.5rem",   "$description": "8px — 卡片、小模態" },
+    "xl":   { "$value": "0.75rem",  "$description": "12px — 大卡片" },
+    "2xl":  { "$value": "1rem",     "$description": "16px — 大圓角元素" },
+    "full": { "$value": "9999px",   "$description": "全圓，pill button、avatar" }
+  },
+
+  "spacing": {
+    "$description": "間距尺度 — 基於 4px 基礎單位，所有 margin/padding 使用具名 token",
+    "0":   { "$value": "0px",    "$description": "0 — 無間距" },
+    "px":  { "$value": "1px",    "$description": "1px — 極細邊框偏移" },
+    "0.5": { "$value": "0.125rem","$description": "2px — 行內微調" },
+    "1":   { "$value": "0.25rem", "$description": "4px — 基礎單位" },
+    "2":   { "$value": "0.5rem",  "$description": "8px — 內縮、icon-label 間距" },
+    "3":   { "$value": "0.75rem", "$description": "12px — 小元件內距" },
+    "4":   { "$value": "1rem",    "$description": "16px — 標準內距基準" },
+    "6":   { "$value": "1.5rem",  "$description": "24px — 卡片內距" },
+    "8":   { "$value": "2rem",    "$description": "32px — 區段間距" },
+    "10":  { "$value": "2.5rem",  "$description": "40px — 區段大間距" },
+    "12":  { "$value": "3rem",    "$description": "48px — 頁面區塊間距" },
+    "16":  { "$value": "4rem",    "$description": "64px — 頁面頂部空間" },
+    "24":  { "$value": "6rem",    "$description": "96px — Hero 區段大留白" }
+  },
+
+  "shadow": {
+    "$description": "陰影尺度 — 層級感表達，禁止自訂 box-shadow 數值",
+    "none": { "$value": "none",                                                                          "$description": "無陰影，扁平化元素" },
+    "sm":   { "$value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",                                               "$description": "極細陰影，輸入框 focus 狀態" },
+    "base": { "$value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",              "$description": "標準陰影，卡片預設" },
+    "md":   { "$value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",           "$description": "中等陰影，懸浮卡片" },
+    "lg":   { "$value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",         "$description": "大陰影，下拉選單、tooltip" },
+    "xl":   { "$value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",        "$description": "超大陰影，模態對話框" },
+    "inner":{ "$value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",                                         "$description": "內陰影，輸入框凹陷感" }
+  }
+}
