@@ -734,13 +734,73 @@ UX Agent（本技能）輸出的 SSD JSON 是 UI Agent（`shikigami:ui`）的**�
 
 ---
 
-## 10. 參考資料
+## 10. 推薦模型配置（US-136 AC2 — 模型分層策略實作）
+
+### 10.1 UX Agent 推薦模型
+
+**推薦模型**：`claude-opus-4` 或 `claude-sonnet-4-6`（依任務複雜度選擇）
+
+**任務複雜度分析**：
+
+UX Agent 的核心任務是從非結構化的自然語言 User Story 中萃取語意化資訊架構，需要高度的：
+
+- **語意理解能力**：解讀 "As / Want / So" 三要素並推導隱含的 UX 意圖
+- **結構化推理能力**：將功能需求映射至 sections、component hierarchy、interactions 的正確層級
+- **設計決策能力**：選取適當的 `semanticRole`、`layoutHint`、`designTokenHints`，確保 SSD 語意正確
+
+這些任務屬於**高推理、高設計判斷**的工作，對模型的語言理解深度要求高。
+
+**模型推薦清單**：
+
+| 優先級 | 推薦模型 | 適用場景 | 成本/品質評估 |
+|--------|---------|---------|--------------|
+| 1（首選） | `claude-opus-4` | 複雜 User Story（多頁面、多互動、Edge Case 豐富）；對 SSD 品質要求高的生產環境 | 高成本，最高品質；適合設計評審關鍵節點 |
+| 2（標準） | `claude-sonnet-4-6` | 標準 User Story（單頁面、明確功能）；CI/CD 自動化管線；原型快速迭代 | 中成本，高品質；適合日常開發場景 |
+
+**切換判斷條件**（見 §10.4）
+
+### 10.2 關聯 ADR 依據
+
+- **ADR-014 §技術可行性評估**：「Claude Sonnet 4.6 原生支援圖片輸入，截圖審查的模型能力面無阻塞性障礙」
+- **ADR-014 §建議方案**：UX Agent 為「資訊架構師」角色，負責高語意理解任務，需高推理能力模型
+
+---
+
+## 11. 模型切換判斷條件（US-136 AC3）
+
+### 11.1 三層管線模型切換決策框架
+
+本節說明 UIUX 三層管線（UX Agent → UI Agent → Vision Critic）統一適用的模型切換判斷條件。
+
+**判斷維度**：
+
+| 判斷維度 | 使用高階模型（Opus） | 使用標準模型（Sonnet） |
+|---------|--------------------|--------------------|
+| User Story 複雜度 | 多頁面流程、複雜狀態機、跨元件互動 ≥ 5 個 | 單頁面、明確功能、互動 ≤ 3 個 |
+| 設計關鍵性 | 主要使用者旅程（Login、Checkout、Onboarding） | 輔助功能頁面（設定、次要清單、詳細頁） |
+| 品質要求 | 對外展示、設計評審、客戶驗收 | 內部開發迭代、原型驗證 |
+| 管線執行環境 | 手動觸發（開發者主動審查） | CI 自動化執行（PR 觸發） |
+| 成本容忍度 | 允許高成本（Opus 約 15x Sonnet 成本） | 需控制成本（Sonnet 為預設選擇） |
+
+### 11.2 UX Agent 專屬切換條件
+
+| 條件 | 切換至 Opus | 維持 Sonnet | 說明 |
+|------|------------|------------|------|
+| User Story 字數 | ≥ 500 字（含豐富 AC） | < 500 字 | 長文本需更強的語意理解 |
+| Section 數預期 | ≥ 4 個 sections | 1–3 個 sections | 複雜頁面架構需高推理 |
+| Edge Case 描述 | Story 含明確 Edge Case（錯誤狀態、空狀態、Loading 狀態） | 僅 Happy Path | Edge Case 需推理隱含設計意圖 |
+| SDD 品質閾值 | 輸出 SSD 將直接進入生產環境 | 原型或驗證用途 | 生產品質需最佳模型 |
+
+---
+
+## 12. 參考資料
 
 - **ADR-014**：`docs/adr/ADR-014-uiux-agent-architecture.md`（三層 Agent 分工架構）
 - **ADR-006**：`docs/adr/ADR-006-prompt-injection-protection.md`（Prompt Injection Isolation Rule）
 - **Design Tokens**：`docs/design/design-tokens.json`（v1.0.0，自訂 JSON 格式，ADR-014 OQ-2 決策）
 - **US-106**：UI Agent SKILL.md（下游 Agent，消費本技能輸出）
 - **US-107**：Vision Critic Agent SKILL.md（三層管線最下游審查層）
+- **US-136**：Issue #107 UIUX Agent 模型分層策略實作規劃（模型推薦清單與切換判斷條件來源）
 - [JSON Schema Draft-07](https://json-schema.org/draft-07/json-schema-release-notes.html)
 - [WCAG 2.1 AA 標準](https://www.w3.org/TR/WCAG21/)（Vision Critic Agent 視覺審查基準）
 - [Claude API Vision capabilities](https://docs.anthropic.com/en/docs/build-with-claude/vision)（多模態支援）

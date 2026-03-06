@@ -682,16 +682,60 @@ export function LoginPage() {
 
 ---
 
-## 13. 參考資料
+## 13. 推薦模型配置（US-136 AC2 — 模型分層策略實作）
+
+### 13.1 UI Agent 推薦模型
+
+**推薦模型**：`claude-sonnet-4-6`（預設）；`claude-opus-4`（高品質要求場景）
+
+**任務複雜度分析**：
+
+UI Agent 的核心任務是將結構化的 SSD JSON 轉化為前端代碼，任務特性為：
+
+- **代碼生成能力**：依照元件類型映射表（§4.1）產出正確的 Shadcn UI 元件和 Tailwind CSS class
+- **規則遵循能力**：嚴格遵循 Design Tokens 注入規則（§5）和元件庫白名單約束（§6）
+- **結構化輸入處理**：輸入為機器可讀的 SSD JSON（高度結構化），降低語意理解負擔
+
+這些任務屬於**代碼生成、規則遵循**的工作，輸入結構化程度高，對語意理解深度的要求低於 UX Agent，Sonnet 模型可充分勝任。
+
+**模型推薦清單**：
+
+| 優先級 | 推薦模型 | 適用場景 | 成本/品質評估 |
+|--------|---------|---------|--------------|
+| 1（首選） | `claude-sonnet-4-6` | 標準前端代碼生成；CI 自動化管線；退件重試迴圈（最多 3 次） | 中成本，高品質；代碼生成能力充分，為最佳性價比選擇 |
+| 2（高品質） | `claude-opus-4` | 複雜互動邏輯（多狀態、複雜表單驗證）；生產環境初次生成 | 高成本，最高品質；適合 SSD 元件層級 ≥ 20 個或含複雜互動的場景 |
+
+**設計理由**：UI Agent 輸入（SSD JSON）已由 UX Agent 完成語意化轉換，代碼生成任務的主要挑戰在於規則遵循和映射準確性，而非深度語意推理。Sonnet 4.6 在結構化代碼生成場景中具有高性價比優勢。
+
+### 13.2 關聯 ADR 依據
+
+- **ADR-014 §建議方案**：UI Agent 為「前端實作者」角色，負責「代碼生成、規則遵循」任務
+- **ADR-014 §約束條件**：「小團隊 / MVP 階段，維護負擔需控制，避免引入持續性 Ops 複雜度」→ Sonnet 作為 CI 預設選擇，降低運行成本
+
+### 13.3 模型切換判斷條件（UI Agent 專屬）
+
+| 條件 | 切換至 Opus | 維持 Sonnet | 說明 |
+|------|------------|------------|------|
+| SSD 元件數 | ≥ 20 個 Component 節點 | < 20 個 Component 節點 | 複雜元件層級需更強的代碼推理 |
+| 互動複雜度 | Interaction 含跨元件狀態機（≥ 3 個 affectsComponentIds） | 簡單點擊 / 提交互動 | 複雜互動需更準確的事件處理程式骨架 |
+| 退件次數 | 同一輸入第 2 次退件後 | 首次生成或第 1 次退件 | 退件表示 Sonnet 輸出有系統性問題，升級模型嘗試突破 |
+| 框架類型 | TypeScript + 複雜 Props 型別定義 | 標準 React / HTML | TypeScript 型別推理需更強的代碼理解 |
+
+統一三層管線的模型切換決策框架見 `skills/ux-agent/SKILL.md` §11.1。
+
+---
+
+## 14. 參考資料
 
 - **ADR-014**：`docs/adr/ADR-014-uiux-agent-architecture.md`（三層 Agent 分工架構，Phase 2 UI Agent 定位）
 - **ADR-006**：`docs/adr/ADR-006-prompt-injection-protection.md`（Prompt Injection Isolation Rule，§3.2 套用點）
-- **US-105 SKILL.md**：`skills/ux-agent/SKILL.md`（SSD JSON Schema v1 定義，§5.1 — 本技能輸入格式的唯一來源）
+- **US-105 SKILL.md**：`skills/ux-agent/SKILL.md`（SSD JSON Schema v1 定義，§5.1 — 本技能輸入格式的唯一來源；§11.1 三層管線模型切換決策框架）
 - **Design Tokens**：`docs/design/design-tokens.json`（v1.0.0，自訂 JSON 格式，ADR-014 OQ-2 決策）
 - **issue-management §12**：`skills/issue-management/SKILL.md` §12（前端 Story 識別與 AC-FE-1/AC-FE-2 注入規則，§6.3 對齊依據）
 - **ADR-014 OQ-3**：Vision Critic 通過閾值量化決策（三維度加權評分，§9 退件重試流程依據）
 - **US-107**：Vision Critic Agent SKILL.md（退件報告 JSON Schema 的完整定義來源）
 - **US-108**：三層 Agent 管線端對端整合測試設計（E2E 測試規格）
+- **US-136**：Issue #107 UIUX Agent 模型分層策略實作規劃（模型推薦清單與切換判斷條件來源）
 - [Shadcn UI 元件文件](https://ui.shadcn.com/docs/components)
 - [Tailwind CSS 工具類別參考](https://tailwindcss.com/docs)
 - [WCAG 2.1 AA 標準](https://www.w3.org/TR/WCAG21/)（無障礙合規要求，§8 驗證基準）
