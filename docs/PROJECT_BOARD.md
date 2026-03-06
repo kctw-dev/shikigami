@@ -17,7 +17,7 @@
 |-------|-------|------|--------|------|
 | US-149：SDD 前端模板更新 — 新增 Figma 設計稿連結欄位 | #147 | S | 1 | 完成 |
 | US-145：Figma MCP Server 選型與本地設定驗證 | #146 | M | 2 | 完成（AC3 靜態通過；AC1/AC2 需使用者本地驗證） |
-| US-146：Figma 文件結構定義 — Page 架構、Layer 命名規則、Frame 模板 | #148 | S | 1 | 待開始 |
+| US-146：Figma 文件結構定義 — Page 架構、Layer 命名規則、Frame 模板 | #148 | S | 1 | 完成 |
 | US-148：Component Library 基礎建立 — Button / Input / Card | #149 | M | 2 | 待開始 |
 | US-147：AI 生成 Frame PoC — 透過 Figma MCP 生成帶 Auto Layout 的 Frame | #150 | M | 2 | 待開始 |
 
