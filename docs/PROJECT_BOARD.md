@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-05（Sprint 50 Review 完成）
-**當前 Sprint**：Sprint 50（完成）
+**最後更新**：2026-03-06（Sprint 51 Planning 完成）
+**當前 Sprint**：Sprint 51（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 50](sprints/sprint_50.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 51](sprints/sprint_51.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 51 — 進行中
+
+**Sprint Goal**：結案 backlog-intake 修正，並為 UIUX Agent 建立架構決策基礎（ADR-014），為後續 UI/UX 自動化實作鋪路。
+**期間**：2026-03-06 ~ 2026-03-12
+
+| Story | Size | Points | 狀態 |
+|-------|------|--------|------|
+| US-100（#102）：backlog-intake GitHub Action 結案確認 | S | 1 | 進行中 |
+| US-102（#100）：ADR-014 起草 — UIUX Agent 架構決策 | S | 1 | 進行中 |
+
+**目標 Velocity**：2 points（2 Stories）
 
 ---
 
