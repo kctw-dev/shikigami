@@ -12,7 +12,7 @@
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
 | US-100 | #102 | backlog-intake GitHub Action 結案確認 | S | 1 | Phase 1 | 完成 |
-| US-102 | #100 | ADR-014 起草：UIUX Agent 架構決策 | S | 1 | Phase 1 | 進行中 |
+| US-102 | #100 | ADR-014 起草：UIUX Agent 架構決策 | S | 1 | Phase 1 | 完成 |
 
 **Sprint 容量**：2 Points
 

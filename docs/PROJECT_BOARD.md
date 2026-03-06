@@ -15,7 +15,7 @@
 | Story | Size | Points | 狀態 |
 |-------|------|--------|------|
 | US-100（#102）：backlog-intake GitHub Action 結案確認 | S | 1 | 完成 |
-| US-102（#100）：ADR-014 起草 — UIUX Agent 架構決策 | S | 1 | 進行中 |
+| US-102（#100）：ADR-014 起草 — UIUX Agent 架構決策 | S | 1 | 完成 |
 
 **目標 Velocity**：2 points（2 Stories）
 
