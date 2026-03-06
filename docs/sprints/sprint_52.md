@@ -11,7 +11,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | Phase | 狀態 |
 |----------|---------|------|------|--------|-------|------|
-| US-103 | #104 | Design Tokens 定義檔建立 | S | 1 | Phase 1 | 待開發 |
+| US-103 | #104 | Design Tokens 定義檔建立 | S | 1 | Phase 1 | 完成 |
 | US-104 | #105 | 元件庫白名單 AC 注入機制 | S | 1 | Phase 1 | 待開發 |
 
 **Sprint 容量**：2 Points
@@ -68,9 +68,9 @@ ADR-014 決策了 UIUX Agent 工作流的四階段分期策略。Phase 1 的核�
 
 **Done 定義**
 
-- [ ] `docs/design/design-tokens.json` 已建立，涵蓋五個設計變數群組，各含 3+ 具名 token（AC1）
-- [ ] `docs/templates/sdd-frontend-template.md` 已建立，包含 Frontend Constraints 區段（AC2）
-- [ ] ADR-014 OQ-2 已填入自訂 JSON 決策，狀態更新為「已決策」（AC3）
+- [x] `docs/design/design-tokens.json` 已建立，涵蓋五個設計變數群組，各含 3+ 具名 token（AC1）
+- [x] `docs/templates/sdd-frontend-template.md` 已建立，包含 Frontend Constraints 區段（AC2）
+- [x] ADR-014 OQ-2 已填入自訂 JSON 決策，狀態更新為「已決策」（AC3）
 
 ---
 
