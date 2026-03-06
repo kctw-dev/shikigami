@@ -20,7 +20,7 @@
 | OQ-3：Vision Critic 通過閾值量化決策 | #111 | S | 1 | 完成 |
 | US-106：UI Agent SKILL.md 實作 | #113 | M | 2 | 完成 |
 | US-107：Vision Critic Agent SKILL.md 實作 | #114 | M | 2 | 完成 |
-| US-108：三層 Agent 管線端對端整合測試設計 | #115 | M | 2 | 進行中 |
+| US-108：三層 Agent 管線端對端整合測試設計 | #115 | M | 2 | 完成 |
 
 **目標 Velocity**：10 points（6 Stories）
 
