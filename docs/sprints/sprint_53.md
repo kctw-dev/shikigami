@@ -15,9 +15,9 @@
 | US-105 | #112 | UX Agent SKILL.md 實作 | M | 2 | Phase 1 | 完成 |
 | OQ-1 | #109 | Playwright 截圖可行性調查 | S | 1 | Phase 1 | 完成 |
 | OQ-3 | #111 | Vision Critic 通過閾值量化決策 | S | 1 | Phase 1 | 完成 |
-| US-106 | #113 | UI Agent SKILL.md 實作 | M | 2 | Phase 2 | 進行中 |
-| US-107 | #114 | Vision Critic Agent SKILL.md 實作 | M | 2 | Phase 2 | 進行中 |
-| US-108 | #115 | 三層 Agent 管線端對端整合測試設計 | M | 2 | Phase 3 | 待開始 |
+| US-106 | #113 | UI Agent SKILL.md 實作 | M | 2 | Phase 2 | 完成 |
+| US-107 | #114 | Vision Critic Agent SKILL.md 實作 | M | 2 | Phase 2 | 完成 |
+| US-108 | #115 | 三層 Agent 管線端對端整合測試設計 | M | 2 | Phase 3 | 進行中 |
 
 **Sprint 容量**：10 Points
 
