@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 63 Review 完成）
-**當前 Sprint**：Sprint 63（完成）
+**最後更新**：2026-03-08（Sprint 64 啟動）
+**當前 Sprint**：Sprint 64（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 63](sprints/sprint_63.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 64](sprints/sprint_64.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 64 — 進行中
+
+**Sprint Goal**：清空 Backlog，終結所有懸而未決的 Open Issues — 評估並結案或推進 #159（多模型 CLI Phase 3 方向決策）、#59（Beta 回饋機制評估結案）、#5（Marketplace 上架現狀評估）、#4（Cursor 平台現狀評估）。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-171：多模型 CLI 路由 Phase 3 方向決策 — Issue #159 結案或規劃後續 | #159 | S | 1 | 待開始 |
+| US-172：Beta 回饋機制評估與結案 — Issue #59 現狀審查 | #59 | S | 1 | 待開始 |
+| US-173：Marketplace 上架現狀審查 — Issue #5 結案決策 | #5 | S | 1 | 待開始 |
+| US-174：Cursor 平台現狀審查 — Issue #4 結案決策 | #4 | S | 1 | 待開始 |
 
 ---
 
