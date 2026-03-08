@@ -96,19 +96,6 @@ gemini extensions install https://github.com/KCTW/shikigami
 
 ---
 
-## Beta 使用者招募
-
-> **[Beta 回饋收集 — 請在此留言分享你的使用經驗](https://github.com/KCTW/shikigami/issues/59)**
-
-Shikigami 正在尋找第一批 Beta 使用者，歡迎試用並分享回饋，幫助我們驗證真實場景下的使用體驗。
-
-**試用對象**：
-- **Claude Code 使用者**：依照 [docs/tutorial/README.md](docs/tutorial/README.md) 完成安裝，走完一個 Sprint 週期
-- **OpenCode 使用者**：依照 [docs/INSTALL_OPENCODE.md](docs/INSTALL_OPENCODE.md) 完成安裝（[OpenCode 安裝指南直連](docs/INSTALL_OPENCODE.md)），走完一個 Sprint 週期
-- **Gemini CLI 使用者**：依照 [docs/INSTALL_GEMINI.md](docs/INSTALL_GEMINI.md) 完成安裝，走完一個 Sprint 週期
-
-完成安裝後留言即可。我們特別想了解：安裝是否順利、哪些步驟有卡關、Sprint 流程的實際感受。不需要長篇大論 — 一兩句話就很有幫助。
-
 ### 5 分鐘快速試用
 
 想先確認 Shikigami 是否適合你？以下 5 步驟帶你從安裝到第一次執行：
@@ -153,8 +140,6 @@ Scrum Master 會建立 `CLAUDE.md` 與 `docs/` 目錄結構。
 ```
 
 Shikigami 會自動調度 PO、Architect、QA 分析需求並建立 User Story。
-
-完成後，到 [Issue #59](https://github.com/KCTW/shikigami/issues/59) 留言分享你的體驗。
 
 ---
 
