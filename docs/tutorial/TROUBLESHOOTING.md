@@ -10,9 +10,10 @@
 1. [Claude Code CLI 未認證](#1-claude-code-cli-未認證)
 2. [GitHub CLI 未認證](#2-github-cli-未認證)
 3. [Plugin 掛載失敗](#3-plugin-掛載失敗)
-4. [Standup 健康快篩 CRITICAL](#4-standup-健康快篩-critical)
-5. [Sprint Planning QA Hard Gate 失敗](#5-sprint-planning-qa-hard-gate-失敗)
-6. [README 前置條件未說明導致安裝卡關](#6-readme-前置條件未說明導致安裝卡關)
+4. [Plugin 間歇性載入失敗（Shallow Clone SHA 不匹配）](#4-plugin-間歇性載入失敗shallow-clone-sha-不匹配)
+5. [Standup 健康快篩 CRITICAL](#5-standup-健康快篩-critical)
+6. [Sprint Planning QA Hard Gate 失敗](#6-sprint-planning-qa-hard-gate-失敗)
+7. [README 前置條件未說明導致安裝卡關](#7-readme-前置條件未說明導致安裝卡關)
 
 ---
 
@@ -193,7 +194,74 @@ github.com
 
 ---
 
-## 4. Standup 健康快篩 CRITICAL
+## 4. Plugin 間歇性載入失敗（Shallow Clone SHA 不匹配）
+
+### 情境描述
+
+Plugin 已正確安裝，但開啟新 Session 後偶爾出現載入失敗錯誤，且此問題在 `git push` 後特別容易觸發。
+
+### 症狀（錯誤訊息或異常行為）
+
+- 執行 `/plugin` 時出現：
+  ```
+  Plugin Errors
+    ❯ shikigami@shikigami
+       Plugin 'shikigami' not found in marketplace 'shikigami'
+       → Plugin may not exist in marketplace 'shikigami'
+  ```
+- `.claude-plugin/plugin.json` 與 `marketplace.json` 版號正確且一致，但 Plugin 仍無法載入
+- 問題具有間歇性——有時能正常載入，有時失敗
+
+### 根因說明
+
+**根本原因：Claude Code marketplace mirror 採用 depth=1 shallow clone。**
+
+Claude Code 平台在 mirror shikigami marketplace 時，使用 `--depth=1` 的 shallow clone 模式。這意味著：
+
+1. 每次你執行 `git push` 後，平台的 mirror 會更新到最新 commit
+2. 但因為是 shallow clone，**舊的 commit SHA 在 mirror 中消失**
+3. 你本機的 Plugin 安裝記錄仍指向舊的 `gitCommitSha`
+4. 平台嘗試用舊 SHA lookup Plugin 時找不到，導致「not found in marketplace」錯誤
+
+這是 Claude Code 平台的已知 bug（Issue #101），不是 Shikigami 本身的問題。
+
+### 觸發條件
+
+**git push 後開啟新 Session 時觸發。** 具體來說：
+
+- 推送新 commit 到 GitHub 後，平台 mirror 更新，舊 installed SHA 消失
+- 下一次開啟 Claude Code 新 Session 時，平台用已消失的舊 SHA lookup 失敗
+
+### 操作 SOP（Workaround）
+
+發生此錯誤時，執行以下指令重新對齊 SHA：
+
+```
+/plugin install shikigami
+```
+
+**效果**：重新執行 install 會讀取 mirror 的最新 SHA，並更新本機安裝記錄，使兩端重新對齊。執行後開啟新 Session 即可正常使用。
+
+完整流程：
+1. 在 Claude Code 中執行 `/plugin install shikigami`
+2. 關閉並重新開啟 Session
+3. 執行 `/plugin` 確認 shikigami 狀態為 Active
+
+### 預防建議
+
+**採用里程碑式版號更新，降低 `git push` 頻率。**
+
+每次 push 都可能觸發此問題。減少非必要的推送可以降低發生頻率：
+
+- 避免連續衝刺每個 Sprint 都 bump version 並推送
+- 只在對外發布節點（里程碑）才 push 版號更新
+- 日常開發可以累積多個 commit 後一次推送
+
+> **平台 Bug 追蹤**：此問題已記錄於 [Issue #101](https://github.com/KCTW/shikigami/issues/101)。若 Claude Code 平台修復 shallow clone 問題，此 workaround 將不再必要。
+
+---
+
+## 5. Standup 健康快篩 CRITICAL
 
 ### 情境描述
 
@@ -260,7 +328,7 @@ cat docs/km/Retrospective_Log.md
 
 ---
 
-## 5. Sprint Planning QA Hard Gate 失敗
+## 6. Sprint Planning QA Hard Gate 失敗
 
 ### 情境描述
 
@@ -327,7 +395,7 @@ QA subagent 會重新審查修正後的 AC。
 
 ---
 
-## 6. README 前置條件未說明導致安裝卡關
+## 7. README 前置條件未說明導致安裝卡關
 
 ### 情境描述
 
