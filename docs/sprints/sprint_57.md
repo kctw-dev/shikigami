@@ -1,6 +1,6 @@
 # Sprint 57
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-08 ~ 2026-03-14
 **Sprint Goal**：鞏固 ADR-015 Phase 1 文件一致性 — 同步 Vision Critic SKILL.md 至 Figma 架構、標記舊 UX/UI Agent 文件為 Deprecated。
 **ADR 依賴**：ADR-015（Accepted）

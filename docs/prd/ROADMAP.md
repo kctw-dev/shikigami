@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-06（Sprint 56 — ADR-015 Phase 1 驗證與使用文件交付，3 Stories / 5 Points 全數交付）
+> 最後更新：2026-03-08（Sprint 57 — ADR-015 Phase 1 文件一致性鞏固，2 Stories / 2 Points 全數交付）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。

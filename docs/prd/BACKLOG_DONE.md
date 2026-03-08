@@ -1985,3 +1985,14 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 | US-150（Issue #151）：Figma Desktop 本地驗證環境 SOP | S | 1 | Sprint 56 |
 | US-151（Issue #118）：Vision Critic PoC — Figma Frame 截圖審查 | M | 2 | Sprint 56 |
 | US-152（Issue #123）：Figma 管線使用指南 | M | 2 | Sprint 56 |
+
+---
+
+## Sprint 57（2026-03-08）
+
+**Sprint Goal**：鞏固 ADR-015 Phase 1 文件一致性 — 同步 Vision Critic SKILL.md 至 Figma 架構、標記舊 UX/UI Agent 文件為 Deprecated。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-153（Issue #153）：Vision Critic SKILL.md 同步 ADR-015 Figma 架構更新 | S | 1 | Sprint 57 |
+| US-154（Issue #152）：UX Agent / UI Agent SKILL.md 標記 Deprecated | S | 1 | Sprint 57 |

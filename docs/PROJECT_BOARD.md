@@ -1,13 +1,13 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 57 Planning 完成，Velocity 2 points）
-**當前 Sprint**：Sprint 57（進行中）
+**最後更新**：2026-03-08（Sprint 57 Review 完成，Velocity 2 points，完成率 100%）
+**當前 Sprint**：Sprint 58（規劃中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 57](sprints/sprint_57.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 57 — 進行中
+## Sprint 57 — 完成
 
 **Sprint Goal**：鞏固 ADR-015 Phase 1 文件一致性 — 同步 Vision Critic SKILL.md 至 Figma 架構、標記舊 UX/UI Agent 文件為 Deprecated。
 **期間**：2026-03-08 ~ 2026-03-14
@@ -19,8 +19,8 @@
 | US-154：UX Agent / UI Agent SKILL.md 標記 Deprecated | #152 | S | 1 | 完成 |
 
 ## Sprint 57 統計
-- Velocity 目標：2 points
-- 計畫：2 Stories / 2 Points
+- Velocity：2 points
+- 完成率：100%（完成 2 / 計畫 2）
 - 日期：2026-03-08
 
 ---
