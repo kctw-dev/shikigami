@@ -13,7 +13,7 @@
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
 | US-155 | #154 | Sprint Review 執行時間過長 — 流程精簡化 | M | 2 | 是 | 完成 |
-| US-156 | #106 | 模型分層策略：Planning 用高階模型、Coding 用合適模型 | S | 1 | 是 | 待辦 |
+| US-156 | #106 | 模型分層策略：Planning 用高階模型、Coding 用合適模型 | S | 1 | 是 | 完成 |
 
 **Sprint 容量**：3 Points（2 Stories）
 
@@ -81,9 +81,9 @@ As a developer managing Shikigami operating costs, I want a documented model tie
 
 **Done 定義**
 
-- [ ] `docs/km/MODEL_TIERING_STRATEGY.md` 已建立，包含三環節模型層級建議表格（AC1）
-- [ ] 文件已包含 Claude Code Agent tool `model` 參數可行性調查結論（AC2）
-- [ ] 文件已包含分層 vs. 統一模型 token 成本差異估算（AC3）
+- [x] `docs/km/MODEL_TIERING_STRATEGY.md` 已建立，包含三環節模型層級建議表格（AC1）
+- [x] 文件已包含 Claude Code Agent tool `model` 參數可行性調查結論（AC2）
+- [x] 文件已包含分層 vs. 統一模型 token 成本差異估算（AC3）
 
 ---
 
