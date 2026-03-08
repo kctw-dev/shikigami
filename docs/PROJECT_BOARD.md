@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 67 完成）
-**當前 Sprint**：Sprint 67（完成）
+**最後更新**：2026-03-08（Sprint 68 Planning）
+**當前 Sprint**：Sprint 68（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 67](sprints/sprint_67.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 68](sprints/sprint_68.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 68 — 進行中
+
+**Sprint Goal**：KM 減法 — 移除無用的 DORA Metrics + KM 檔案瘦身
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-178：移除 DORA Metrics — 刪除 sprint-review §2.7 整段、Metrics_Log DORA 區塊、相關 checklist | #172 | S | 1 | 進行中 |
+| US-179：BACKLOG_DONE.md 歸檔機制 — 主檔只保留最近 5 個 Sprint | #173 | S | 1 | 進行中 |
 
 ---
 
