@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-08（Sprint 57 — ADR-015 Phase 1 文件一致性鞏固，2 Stories / 2 Points 全數交付）
+> 最後更新：2026-03-08（Sprint 58 — Sprint Review 流程精簡化 + 模型分層策略調查，2 Stories / 3 Points 全數交付）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -306,6 +306,10 @@ Sprint Review 時自動產出：
 | US-150 | Figma Desktop 本地驗證環境 SOP — MCP 連接與動態 AC 驗證流程標準化 | Sprint 56 ✅ |
 | US-151 | Vision Critic PoC — Figma Frame 截圖審查（三維度評分模型 + MCP 工具呼叫序列） | Sprint 56 ✅ |
 | US-152 | Figma 管線使用指南 — 端對端工作流程 + 快速參考卡 + 限制與 Fallback | Sprint 56 ✅ |
+| US-153 | Vision Critic SKILL.md 同步 ADR-015 Figma 架構更新 | Sprint 57 ✅ |
+| US-154 | UX Agent / UI Agent SKILL.md 標記 Deprecated | Sprint 57 ✅ |
+| US-155 | Sprint Review 快思/慢想模式 — 流程精簡化 | Sprint 58 ✅ |
+| US-156 | 模型分層策略：Planning 用高階模型、Coding 用合適模型 | Sprint 58 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 

@@ -1996,3 +1996,14 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 |-------|------|--------|------------|
 | US-153（Issue #153）：Vision Critic SKILL.md 同步 ADR-015 Figma 架構更新 | S | 1 | Sprint 57 |
 | US-154（Issue #152）：UX Agent / UI Agent SKILL.md 標記 Deprecated | S | 1 | Sprint 57 |
+
+---
+
+## Sprint 58（2026-03-08）
+
+**Sprint Goal**：精簡 Sprint Review 執行流程，降低每次 Review 的時間成本與認知負荷，使 Velocity 恢復正向趨勢。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-155（Issue #154）：Sprint Review 執行時間過長 — 流程精簡化 | M | 2 | Sprint 58 |
+| US-156（Issue #106）：模型分層策略：Planning 用高階模型、Coding 用合適模型 | S | 1 | Sprint 58 |
