@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 68 Review）
-**當前 Sprint**：Sprint 68（完成）
+**最後更新**：2026-03-08（Sprint 69 Planning）
+**當前 Sprint**：Sprint 69（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 68](sprints/sprint_68.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 69](sprints/sprint_69.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 69 — 進行中
+
+**Sprint Goal**：Developer Provider 路由落地 — Gemini CLI 自動 Fallback 派遣機制
+**期間**：2026-03-08 ~ 2026-03-15
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-180：Developer 角色 Provider 路由 — 支援 Gemini CLI 可切換派遣（環境變數控制） | #175 | S | 1 | 進行中 |
 
 ---
 
