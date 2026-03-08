@@ -9,3 +9,4 @@
 | 2026-03-06 | direct | backlog-intake Skill 整併至 issue-management §11，消除重複邏輯 | PASS | 174b86b |
 | 2026-03-08 | direct | 修復 ROADMAP.md 版號不同步：目前版本欄位從 v0.29.1（Sprint 51）更新為 v0.32.0（Sprint 58） | PASS | 894756a |
 | 2026-03-08 | direct | 移除 CI workflow（Structural Validation）— 連續 4 Sprint 失敗，驗證功能已由 QA subagent 覆蓋 | PASS | f15556a |
+| 2026-03-08 | #174 | Gemini 3.1 Pro 實測評估 — haiku 替代可行性與程式碼生成能力調查 | PASS | 2749882 |
