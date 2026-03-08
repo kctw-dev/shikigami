@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 69 Planning）
-**當前 Sprint**：Sprint 69（進行中）
+**最後更新**：2026-03-08（Sprint 70 Planning）
+**當前 Sprint**：Sprint 70（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 69](sprints/sprint_69.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 70](sprints/sprint_70.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 70 — 進行中
+
+**Sprint Goal**：Provider 路由品質修正 — 宿主平台自動偵測，消除 Gemini CLI 預設值邏輯矛盾
+**期間**：2026-03-08 ~ 2026-03-15
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-181：Provider 路由預設值應偵測宿主平台 — 修正寫死 claude 預設值 | #176 | S | 1 | 待辦 |
 
 ---
 
