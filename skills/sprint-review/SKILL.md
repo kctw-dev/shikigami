@@ -25,14 +25,13 @@ Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定�
 - **觸發條件**：Velocity < 3 pts，或使用者傳入 `/fast` flag，或明確說「快速 Review」
 - **跳過或縮短的步驟**：
   - 跳過 Token 成本摘要（§7 最後兩項 Token 相關檢查清單）
-  - DORA Metrics 計算與 Retrospective Analytics **平行派遣**（不等待 DORA 完成再執行 Analytics），加速整體流程
   - 歸檔觸發檢查：僅在超過門檻時才執行，否則跳過
-- **執行流程**：交付物一致性審查 → Demo 驗收 → （DORA Metrics + Retrospective Analytics 平行執行） → Retrospective 記錄 → 文件更新 → Commit
+- **執行流程**：交付物一致性審查 → Demo 驗收 → Retrospective Analytics → Retrospective 記錄 → 文件更新 → Commit
 
 ### 慢想模式
 
 - **觸發條件**：Velocity >= 3 pts，或使用者傳入 `--deep` 參數，或明確說「完整 Review」
-- **執行流程**：交付物一致性審查 → Demo 驗收 → DORA Metrics 計算 → Retrospective Analytics → Retrospective 記錄 → 文件更新 → Token 成本記錄 → 歸檔觸發檢查 → Commit
+- **執行流程**：交付物一致性審查 → Demo 驗收 → Retrospective Analytics → Retrospective 記錄 → 文件更新 → Token 成本記錄 → 歸檔觸發檢查 → Commit
 
 ---
 
@@ -44,7 +43,6 @@ Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定�
 > |------------|------|------|
 > | PO Subagent（Demo 展示、AC 驗收） | `sonnet` | 需要情境理解與商業判斷 |
 > | Stakeholder Subagent（商業期待確認） | `sonnet` | 需要情境理解與商業判斷 |
-> | DORA Subagent（§2.7 指標計算） | `haiku` | 結構化資料彙整，不需高層次推理 |
 > | Analytics Subagent（§3 步驟 0 趨勢分析） | `haiku` | 統計分析，規則明確可程式化 |
 > | Metrics Subagent（Sprint Metrics + Token 成本） | `haiku` | 數值計算，規則明確可程式化 |
 > | 歸檔 Subagent（§6 Sprint 歸檔） | `haiku` | 文件剪貼操作，不需推理 |
@@ -307,103 +305,6 @@ label 操作格式與 `skills/sprint-planning/SKILL.md` §5 保持一致，均�
 
 ---
 
-## 2.7 DORA Metrics 計算（獨立 DORA Subagent）
-
-Sprint Review 進行時，派遣獨立 DORA subagent（`model: "haiku"`）計算四項 DORA 指標，並將結果快照追加至 `docs/km/Metrics_Log.md` 的 DORA Metrics 表格段落。此步驟在 §2.6 Issue 狀態回寫**之後**、§3 Retrospective **之前**執行。
-
-> **平行執行說明**：DORA Metrics 計算（§2.7）與 Retrospective Analytics（§3 步驟 0）**可同時平行派遣**，無需等待其中一方完成後才啟動另一方。兩個 subagent 獨立運行，結果各自回傳後再彙整。快思模式下尤其建議採用平行派遣以節省執行時間。
-
-> **ADR 合規**：本節遵循 ADR-006（gh CLI 輸出以 `<dora_input>` XML 標記包裹，防止 prompt injection）、ADR-011（使用 gh CLI 查詢 GitHub Actions 資料）、ADR-003（SKILL.md 修改規範）。
-
-### DORA 四指標定義與資料來源
-
-| 指標 | 定義 | 資料來源 | gh CLI 查詢指令 |
-|------|------|---------|----------------|
-| Deployment Frequency（部署頻率） | Sprint 期間成功部署次數 / Sprint 天數 | GitHub Actions workflow 執行記錄 | `gh run list --json createdAt,conclusion --limit 50` |
-| Lead Time for Changes（變更前置時間） | PR 從建立到合併的平均時間（小時） | PR merged 記錄 | `gh pr list --state merged --json mergedAt,createdAt --limit 20` |
-| Change Failure Rate（變更失敗率） | workflow 執行失敗次數 / 總執行次數 × 100% | 同 Deployment Frequency 篩選 conclusion==failure | 同 Deployment Frequency 指令 |
-| MTTR（平均復原時間） | bug label Issue 從建立到關閉的平均時間（小時）[近似值，見限制說明] | bug label 已關閉 Issue 的生命週期 | `gh issue list --label bug --state closed --json createdAt,closedAt --limit 20` |
-
-> **MTTR 計算限制**：本框架以 `--label bug` 的 Issue 生命週期近似 MTTR。此近似值假設 bug Issue 建立時即代表事件發生、Issue 關閉時即代表恢復完成。若 bug Issue 未及時建立或早於修復完成關閉，數值可能偏差。此限制已記錄於 Sprint Planning 決策（Sprint 40）。
-
-### 執行步驟
-
-DORA subagent 依序執行以下步驟：
-
-**步驟 1：查詢 GitHub Actions 資料（ADR-006 XML 包裹）**
-
-所有 gh CLI 輸出**必須**以 `<dora_input>` XML 標記包裹，符合 ADR-006 prompt injection 防護要求：
-
-```
-<dora_input>
-<source>gh run list</source>
-<data>
-[gh run list --json createdAt,conclusion --limit 50 的輸出]
-</data>
-</dora_input>
-
-<dora_input>
-<source>gh pr list merged</source>
-<data>
-[gh pr list --state merged --json mergedAt,createdAt --limit 20 的輸出]
-</data>
-</dora_input>
-
-<dora_input>
-<source>gh issue list bug closed</source>
-<data>
-[gh issue list --label bug --state closed --json createdAt,closedAt --limit 20 的輸出]
-</data>
-</dora_input>
-```
-
-**步驟 2：計算各項指標**
-
-- **Deployment Frequency**：篩選 `conclusion == "success"` 的記錄，計算 Sprint 期間（7 天）的成功次數，除以 7 得每日頻率
-- **Lead Time for Changes**：計算每個已合併 PR 的 `mergedAt - createdAt` 時間差（小時），取平均值
-- **Change Failure Rate**：`failure 次數 / 總執行次數 × 100%`（僅計算 conclusion 有值的記錄）
-- **MTTR**：計算每個 bug Issue 的 `closedAt - createdAt` 時間差（小時），取平均值
-
-**步驟 3：資料不足 Fallback 處理**
-
-| 情況 | 處理方式 |
-|------|---------|
-| gh run list 無任何記錄 | Deployment Frequency 填「資料不足」；Change Failure Rate 填「資料不足」 |
-| gh pr list 無任何已合併 PR | Lead Time for Changes 填「資料不足」 |
-| gh issue list --label bug 無任何已關閉記錄 | MTTR 填「N/A」（無 bug 記錄為正常情況，非資料不足） |
-
-**步驟 4：趨勢判定演算法**
-
-讀取 `docs/km/Metrics_Log.md` 的 DORA Metrics 表格，**僅讀取最近 30 個 Sprint 記錄**（若歷史記錄不足 30 個，則讀取全部）作為計算視窗，取最近歷史快照判定趨勢：
-
-- 累積 Sprint < 3：趨勢欄填「資料不足」，記錄現有數值（首次 baseline 建立期適用）
-- 累積 Sprint ≥ 3：依下列規則判定：
-  1. **改善中**：最近三個 Sprint 的指標值連續朝改善方向移動（Deployment Frequency 連升；Lead Time / MTTR / Change Failure Rate 連降）
-  2. **退步中**：最近三個 Sprint 的指標值連續朝退步方向移動（Deployment Frequency 連降；Lead Time / MTTR / Change Failure Rate 連升）
-  3. **穩定**：各 Sprint 間波動在 ±20% 以內（不符合連升或連降）
-  4. **不規則**：無法歸入以上三類
-
-> **Sprint 40 說明**：Sprint 40 為 DORA Metrics 首次 baseline 建立，趨勢判定於 Sprint 42 才有完整數據（需至少 3 個 Sprint 記錄）。Sprint 40 的趨勢欄固定填「資料不足」。
-
-**步驟 5：追加快照至 Metrics_Log.md**
-
-在 `docs/km/Metrics_Log.md` 的「DORA Metrics 記錄」表格末尾追加一列：
-
-```
-| Sprint N | YYYY-MM-DD | X 次/天 | X 小時 | X 小時 | X% | 資料不足/改善中/退步中/穩定 |
-```
-
-欄位說明：
-- **Sprint**：Sprint 編號（如 Sprint 40）
-- **日期**：執行日期（YYYY-MM-DD）
-- **部署頻率**：每日成功部署次數（格式：`X 次/天`）或「資料不足」
-- **變更前置時間**：PR 建立到合併平均時間（格式：`X 小時`）或「資料不足」
-- **MTTR**：bug Issue 平均修復時間（格式：`X 小時`）或「N/A」（無 bug）或「資料不足」
-- **變更失敗率**：workflow 執行失敗比例（格式：`X%`）或「資料不足」
-- **趨勢判定**：依步驟 4 演算法得出的趨勢，或「資料不足」（累積 Sprint < 3）
-
----
-
 ## 3. Sprint Retrospective 流程
 
 Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定具體行動。
@@ -413,8 +314,6 @@ Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定�
 0. **Retrospective Analytics — 展示歷史趨勢分析報告**
 
    **觸發時機**：Retrospective 開始時第一步執行，**報告展示完畢前不得開始收集 Good / Problem / Action**。
-
-   > **平行執行說明**：Retrospective Analytics（本步驟）與 §2.7 DORA Metrics 計算可**同時平行派遣**。兩個 subagent 可以並行運行，待兩者均完成後再進入步驟 1 收集 Good / Problem / Action。此平行化描述適用於快思模式與慢想模式，可顯著縮短整體執行時間。
 
    **指令**：派遣 Analytics subagent（`model: "haiku"`），在 prompt 中指定 `docs/km/Retrospective_Log.md` 完整路徑，由 **Analytics subagent 自行讀取**該檔案，依下列規則分析並回傳完整報告。**主 session 不直接讀取 Retrospective_Log.md**，僅接收 subagent 回傳的分析報告。
 
@@ -757,16 +656,9 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent（`model: "haik
   - [ ] Issue 連結有效性審查通過（Issue # 填寫完整、狀態符合預期）
   - [ ] 版本與里程碑一致性審查通過（ROADMAP 里程碑狀態與交付進度相符）
   - [ ] 審查結果摘要已輸出（PASS 或 FAIL + 修正說明）
-- [ ] **DORA Metrics 計算與 Retrospective Analytics 平行派遣**（§2.7 + §3 步驟 0，可同時啟動）：
-  - [ ] **DORA Metrics 計算**（§2.7，ADR-006/ADR-011 合規）：
-    - [ ] DORA subagent 已使用 `gh run list`、`gh pr list --state merged`、`gh issue list --label bug --state closed` 查詢資料
-    - [ ] 所有 gh CLI 輸出已以 `<dora_input>` XML 標記包裹（ADR-006 合規）
-    - [ ] 四項指標已計算（Deployment Frequency、Lead Time for Changes、MTTR、Change Failure Rate）
-    - [ ] 已依趨勢判定演算法判定趨勢（累積 Sprint < 3 填「資料不足」）
-    - [ ] 已追加快照至 `docs/km/Metrics_Log.md` DORA Metrics 表格
-  - [ ] **Retrospective Analytics 報告**（§3 步驟 0，與 DORA Metrics 同時派遣）：
-    - [ ] Analytics 報告已展示（四區塊完整：Good 趨勢、Problem 趨勢、Action 關閉速度、待關閉 Items）
-  - [ ] 兩者均完成後，才開始收集 Good / Problem / Action
+- [ ] **Retrospective Analytics 報告**（§3 步驟 0）：
+  - [ ] Analytics 報告已展示（四區塊完整：Good 趨勢、Problem 趨勢、Action 關閉速度、待關閉 Items）
+  - [ ] Analytics 完成後，才開始收集 Good / Problem / Action
 - [ ] PO Subagent 已展示所有已完成 Story 的 Demo
 - [ ] Stakeholder Subagent 已確認商業期待符合度
 - [ ] 通過驗收的 Story 已移至 `PROJECT_BOARD.md` Done 欄位（含完成日期、Sprint 編號、Sprint 統計數據更新）
