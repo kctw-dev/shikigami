@@ -4,6 +4,16 @@
 
 ---
 
+## Sprint 70（2026-03-08）
+
+**Sprint Goal**：Provider 路由品質修正 — 宿主平台自動偵測，消除 Gemini CLI 預設值邏輯矛盾
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-181（Issue #176）：Provider 路由預設值應偵測宿主平台 — 修正寫死 claude 預設值 | S | 1 | Sprint 70 |
+
+---
+
 ## Sprint 69（2026-03-08）
 
 **Sprint Goal**：Developer Provider 路由落地 — Gemini CLI 自動 Fallback 派遣機制

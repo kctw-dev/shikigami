@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-08（Sprint 57–60 歸檔）
-**歸檔範圍**：Sprint 1–60（共 60 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔；Sprint 57–60 由 Sprint 63 Review 歸檔
+**最後更新**：2026-03-08（Sprint 65–67 歸檔）
+**歸檔範圍**：Sprint 1–67（共 67 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔；Sprint 57–60 由 Sprint 63 Review 歸檔；Sprint 65–67 由 Sprint 70 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 61–63）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 68–70）
 
 ---
 
@@ -1170,4 +1170,61 @@
 ## Sprint 64 統計
 - Velocity：4 points
 - 完成率：100%（完成 4 / 計畫 4）
+- 日期：2026-03-08
+
+---
+
+## Sprint 65 — 完成
+
+**Sprint Goal**：Subagent 模型自動調度完善 — 補齊所有 subagent 派遣點的 model 參數標注，建立角色→模型對照表，實現成本分層（haiku/sonnet/opus 三級）自動化。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。sprint-review SKILL.md 補齊 4 處 haiku 派遣標注 + 角色對照表建立 + story-lifecycle-prompt.md 補充 sonnet 派遣說明。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-175：Subagent 多模型自動調度 — 角色對照表建立與派遣點 model 參數補齊 | #169 | S | 1 | 完成 |
+
+## Sprint 65 統計
+- Velocity：1 point
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-08
+
+---
+
+## Sprint 66 — 完成
+
+**Sprint Goal**：CLI Adapter Phase 3 SKILL.md 整合 — 建立雙軌派遣機制，讓框架能透過 cli-adapter.sh 派遣 Gemini 執行特定角色任務，實現角色→Provider 路由。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 2 points，完成率 100%。sprint-execution SKILL.md 新增 §2.1 Provider 路由（雙軌派遣）+ story-lifecycle-prompt.md Provider-Aware 說明。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-176：CLI Adapter Phase 3 -- SKILL.md 整合與角色→Provider 路由機制 | #170 | M | 2 | 完成 |
+
+## Sprint 66 統計
+- Velocity：2 points
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-08
+
+---
+
+## Sprint 67 — 完成
+
+**Sprint Goal**：簡化多模型派遣架構 — 移除基於錯誤前提設計的 cli-adapter.sh 抽象層，直接利用 Gemini CLI 原生 agent 能力。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。cli-adapter.sh + 2 個測試檔案刪除（558 行移除）+ SKILL.md / story-lifecycle-prompt.md adapter 引用清理 + Gemini CLI 能力描述修正。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-177：CLI Adapter 簡化 — 移除不必要的抽象層，直接使用 Gemini CLI 原生 agent 能力 | #171 | S | 1 | 完成 |
+
+## Sprint 67 統計
+- Velocity：1 point
+- 完成率：100%（完成 1 / 計畫 1）
 - 日期：2026-03-08

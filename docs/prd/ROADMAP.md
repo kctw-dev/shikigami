@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-08（Sprint 69 — US-180 完成，Developer Provider 路由落地：Gemini CLI 自動 Fallback 派遣機制）
+> 最後更新：2026-03-08（Sprint 70 — US-181 完成，Provider 路由品質修正：宿主平台自動偵測，消除 Gemini CLI 預設值邏輯矛盾）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.43.0**（Sprint 69）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.44.0**（Sprint 70）。
 
 | 版號 | 含義 |
 |------|------|
@@ -334,6 +334,7 @@ Sprint Review 時自動產出：
 | US-178 | 移除 DORA Metrics — sprint-review SKILL.md §2.7 刪除 + Metrics_Log.md DORA 區塊清除 | Sprint 68 ✅ |
 | US-179 | BACKLOG_DONE.md 歸檔機制 — 主檔瘦身（2110→63 行）+ BACKLOG_DONE_ARCHIVE.md 建立 | Sprint 68 ✅ |
 | US-180 | Developer 角色 Provider 路由 — Gemini CLI 可切換派遣（環境變數控制）+ 自動 Fallback | Sprint 69 ✅ |
+| US-181 | Provider 路由預設值應偵測宿主平台 — 修正寫死 claude 預設值，宿主平台自動偵測 | Sprint 70 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 
