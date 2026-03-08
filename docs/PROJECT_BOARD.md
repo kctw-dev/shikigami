@@ -1,6 +1,6 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 70 Planning）
+**最後更新**：2026-03-08（Sprint 70 US-181 完成）
 **當前 Sprint**：Sprint 70（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 70](sprints/sprint_70.md) → 本看板 | [Tutorial](tutorial/README.md)
@@ -15,7 +15,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-181：Provider 路由預設值應偵測宿主平台 — 修正寫死 claude 預設值 | #176 | S | 1 | 待辦 |
+| US-181：Provider 路由預設值應偵測宿主平台 — 修正寫死 claude 預設值 | #176 | S | 1 | 完成 |
 
 ---
 
