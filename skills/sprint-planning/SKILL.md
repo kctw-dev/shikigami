@@ -47,11 +47,7 @@ Sprint Planning 支援兩種執行模式：
 
 以下步驟必須逐項建立 task 完成，不可跳過：
 
-- [ ] **Planning 環節開始前記錄 baseline snapshot 至 `docs/km/Metrics_Log.md` Token Baseline Snapshots 表格** *(慢想模式限定)*：
-  1. 列出 `~/.claude/projects/-home-kevin-shikigami/` 目錄下所有 JSONL 檔案，找出最新（依修改時間排序）的 JSONL
-  2. 讀取該 JSONL，對所有含 `message.usage` 欄位的記錄加總 `input_tokens`（含 `cache_read_input_tokens` 與 `cache_creation_input_tokens`）與 `output_tokens`，得到當前累計值
-  3. 在 Metrics_Log.md「Token Baseline Snapshots」表格新增一列：Sprint 編號填入本 Sprint 編號，環節名稱填「Planning」，兩個累計 token 欄位填入步驟 2 計算所得值
-  4. 若 JSONL 不可存取，兩欄填「N/A」並輸出「Token Baseline 不可用，需手動補充」
+- [ ] **Planning 環節開始前記錄 baseline snapshot 至 `docs/km/Metrics_Log.md` Token Baseline Snapshots 表格** *(慢想模式限定)*：參照 `skills/sprint-execution/SKILL.md` §步驟詳解 步驟 0 的 Token Baseline Snapshot 操作規格執行，環節名稱填「Planning」。
 
 - [ ] **執行框架健康檢查**（<!-- Claude Code -->invoke shikigami:health-check<!-- OpenCode -->使用 health-check skill<!-- /OpenCode -->）— 完整 4 項檢查（必要文件 + 孤兒 Story + ADR 一致性 + Retro 逾期）。CRITICAL 標注警告但不阻塞 Planning 流程 *(慢想模式限定)*
 - [ ] **角色權重調整檢查**（US-22 / ADR-004）— 讀取 `docs/km/Retrospective_Log.md`，依關鍵字比對演算法判斷是否觸發調整；結果寫入 `docs/sprints/sprint_N.md`「## 權重調整記錄」區塊（詳見 §7） *(慢想模式限定)*
@@ -63,11 +59,7 @@ Sprint Planning 支援兩種執行模式：
 - [ ] 上個 Sprint 的 **Retro Action Items** 自動列入 Backlog（若有未完成項目）
 - [ ] **PO subagent** 建立 `docs/sprints/sprint_N.md`（N 為遞增的 Sprint 編號）
 - [ ] 更新 `docs/PROJECT_BOARD.md`，反映新 Sprint 的 Stories 配置
-- [ ] **記錄本次 Planning 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格**（對應 Planning token 欄） *(慢想模式限定)*：
-  - **主要方法（優先）**：<!-- Claude Code -->讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案<!-- OpenCode -->OpenCode session 資料路徑待 Phase 2 實機調查確認；暫時填「N/A」並輸出「Token 資料不可用，需手動補充」<!-- /OpenCode -->，提取所有 `message.usage` 欄位中的 `input_tokens`、`cache_read_input_tokens`、`cache_creation_input_tokens` 與 `output_tokens`，依下列公式加總後填入 Metrics_Log.md 對應欄位：
-    - **有效 input tokens = input_tokens + cache_read_input_tokens + cache_creation_input_tokens**
-    - **output tokens = output_tokens**
-  - **次選（降級方法）**：若 JSONL 檔案不存在、路徑不可存取、或 `message.usage` 欄位解析失敗，則各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
+- [ ] **記錄本次 Planning 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格**（對應 Planning token 欄） *(慢想模式限定)*：參照 `skills/sprint-execution/SKILL.md` §步驟詳解 步驟 7「記錄本次 Execution 環節 Token 消耗」的 Token 計算公式與降級方法執行，填入 Planning token 欄。<!-- OpenCode -->OpenCode session 資料路徑待 Phase 2 實機調查確認；暫時填「N/A」並輸出「Token 資料不可用，需手動補充」<!-- /OpenCode -->
 - [ ] **完成 `docs/PROJECT_BOARD.md` 或 `docs/sprints/sprint_N.md` 修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件，格式與範圍見 §5 Commit + Push 規範）
 
 ---
@@ -197,7 +189,7 @@ git commit -m "docs: Sprint N Planning — 更新看板與 Sprint 文件"
 git push
 ```
 
-> **範圍限制**：此即時 commit + push 規範**僅適用於 Sprint 狀態文件**（`PROJECT_BOARD.md`、`docs/sprints/sprint_N.md`、`docs/km/Metrics_Log.md`、`docs/km/Retrospective_Log.md`）。`Metrics_Log.md` 與 `Retrospective_Log.md` 雖位於 `docs/km/` 路徑，但屬 Sprint 狀態文件，適用本規範。其他 Knowledge Management 文件（ADR、SDD、PRODUCT_BACKLOG.md、ROADMAP.md、ROLE_BALANCE_CASES.md、Tech_Debt_Registry.md 等）**不在此規範範圍內**，避免觸發 ADR-003 Out-of-Sprint Hard Gate。
+> **範圍限制**：僅適用於 Sprint 狀態文件（`PROJECT_BOARD.md`、`sprint_N.md`、`Metrics_Log.md`、`Retrospective_Log.md`）；其他 KM 文件（ADR、SDD、PRODUCT_BACKLOG.md、ROADMAP.md 等）不適用，避免觸發 ADR-003 Out-of-Sprint Hard Gate。
 
 ---
 

@@ -742,11 +742,7 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent** 執行歸檔�
 - [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步；版本 Tag 與里程碑對齊確認完成，見「ROADMAP 更新操作指引」）
 - [ ] **歸檔觸發檢查**（見 §6）：確認 `PROJECT_BOARD.md` 與 `Retrospective_Log.md` 歷史 Sprint 區塊是否超過 5 個；若觸發則**派遣 subagent** 批量歸檔所有超出保留範圍的 Sprint 至 `docs/km/archive/`，主 session 僅接收摘要（快思模式下：未超過門檻可跳過）
 - [ ] **Token 成本摘要** *(慢想模式限定)*（見下方子節）
-- [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格** *(慢想模式限定)*（對應 Review token 欄）：
-  - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens`、`cache_read_input_tokens`、`cache_creation_input_tokens` 與 `output_tokens`，依下列公式加總後填入 Metrics_Log.md 對應欄位：
-    - **有效 input tokens = input_tokens + cache_read_input_tokens + cache_creation_input_tokens**
-    - **output tokens = output_tokens**
-  - **次選（降級方法）**：若 JSONL 檔案不存在、路徑不可存取、或 `message.usage` 欄位解析失敗，則各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
+- [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格** *(慢想模式限定)*（對應 Review token 欄）：參照 `skills/sprint-execution/SKILL.md` §步驟詳解 步驟 7「記錄本次 Execution 環節 Token 消耗」的 Token 計算公式與降級方法執行，填入 Review token 欄。
 - [ ] **ROADMAP 里程碑對齊檢查**（見 §5.1）：在觸發 deployment-readiness 前，確認本 Sprint 交付是否使某個 ROADMAP 里程碑達成完成狀態，並將結果傳達給 deployment-readiness 作為版本 Tag 決策依據
 - [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag），並附帶 ROADMAP 里程碑對齊檢查結果（里程碑完成 → Major bump 候選；未完成 → Minor bump）
 - [ ] Sprint Metrics 計算並追加至 `docs/km/Metrics_Log.md`（見下方計算指引）

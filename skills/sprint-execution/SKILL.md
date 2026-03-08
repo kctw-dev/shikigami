@@ -371,18 +371,18 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 
 ## 6. DoD 自檢
 
-每個 Story 完成前，Developer 必須逐項檢查 Definition of Done：
+每個 Story 完成前，Developer 必須逐項檢查 Definition of Done。DoD 條件定義請參照 `skills/scrum-master/SKILL.md` §8，以下為執行時 checkbox 格式：
 
-| 層次 | 條件 | 自檢 |
-|------|------|------|
-| 功能 | 所有 Acceptance Criteria 通過 | [ ] |
-| 測試 | 單元測試 + 整合測試全部通過（0 failed） | [ ] |
-| 安全 | 外部輸入通過安全驗證與去活化處理 | [ ] |
-| 文件 | 設計文件對應章節已更新，代碼含設計文件引用 | [ ] |
-| 設定 | 無硬編碼金鑰，配置透過環境變數管理 | [ ] |
-| 度量 | Metrics_Log.md 本 Sprint 數據已更新（Velocity、完成率、趨勢） | [ ] |
-| 反回歸 | 既有測試全部仍然通過 | [ ] |
-| 技術債 | 取捷徑情況已用 `[TECH-DEBT]` 標記，並更新 `docs/km/Tech_Debt_Registry.md`（詳見 `developer-prompt.md` 的「Tech Debt 管理」區段） | [ ] |
+| 層次 | 自檢 |
+|------|------|
+| 功能：所有 Acceptance Criteria 通過 | [ ] |
+| 測試：單元測試 + 整合測試全部通過（0 failed） | [ ] |
+| 安全：外部輸入通過安全驗證與去活化處理 | [ ] |
+| 文件：設計文件對應章節已更新，代碼含設計文件引用 | [ ] |
+| 設定：無硬編碼金鑰，配置透過環境變數管理 | [ ] |
+| 度量：Metrics_Log.md 本 Sprint 數據已更新 | [ ] |
+| 反回歸：既有測試全部仍然通過 | [ ] |
+| 技術債：取捷徑情況已用 `[TECH-DEBT]` 標記並更新 Tech_Debt_Registry.md | [ ] |
 
 ---
 
@@ -409,13 +409,7 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 
 ## 8. 安全審查觸發條件
 
-以下情況自動觸發 Security subagent：
-
-- Story 涉及外部使用者輸入處理
-- 新增或修改 API 端點
-- 涉及認證 / 授權邏輯
-- 涉及加密 / 金鑰管理
-- 涉及配置變更或環境變數
+主 session 層級觸發入口：Story-Lifecycle subagent 回傳 `ESCALATE: SECURITY_CRITICAL` 時，暫停 Sprint 執行，觸發 `security-review` Skill。完整觸發條件清單定義於 `skills/sprint-execution/story-lifecycle-prompt.md` §7 Security Self-Review。
 
 ---
 
@@ -437,79 +431,4 @@ Sprint Execution 中各角色的具體決策標準請參閱以下文件：
 
 ---
 
----
-
-## 11. ADR-007 Phase 2 靜態驗收清單
-
-<!-- ADR-007 Phase 2 實作 — Sprint 24 / US-41 AC5 -->
-<!-- 供 QA 逐項核對 Phase 2 所有新增機制是否正確寫入文件 -->
-
-以下清單供 QA Engineer 在 Sprint Review 時逐項靜態核對，確認 Phase 2 外部抽樣審查機制文件化完整。
-
-### (a) 基礎 sampling rate 30% 設定值
-
-| 核對項目 | 文件位置 | 識別關鍵字 |
-|---------|---------|-----------|
-| 30% 基礎抽樣率設定值存在且可識別 | `skills/sprint-execution/story-lifecycle-prompt.md` §AC3「基礎抽樣率」小節 | `基礎抽樣率：30%（取上整）` |
-
-- [ ] 30% 設定值在文件中存在
-- [ ] 設定值位於可識別的獨立段落（「基礎抽樣率」標題下）
-- [ ] 取上整（ceiling）計算說明存在
-
-### (b) TC-1 至 TC-4 各有獨立可識別段落
-
-| 觸發條件 | 文件位置 | 識別標題 |
-|---------|---------|---------|
-| TC-1：L-size Story → 100% | `skills/sprint-execution/story-lifecycle-prompt.md` §AC3 | `#### TC-1：L-size Story 全量觸發` |
-| TC-2：安全相關 AC → 100% | `skills/sprint-execution/story-lifecycle-prompt.md` §AC3 | `#### TC-2：安全相關 AC 全量觸發` |
-| TC-3：前次 Sprint Review 自審品質問題 → 100% | `skills/sprint-execution/story-lifecycle-prompt.md` §AC3 | `#### TC-3：前次 Sprint Review 自審品質問題全量觸發` |
-| TC-4：連續 2 次 self-review FAIL → 強制 | `skills/sprint-execution/story-lifecycle-prompt.md` §AC3 | `#### TC-4：連續 2 次 self-review FAIL 強制觸發` |
-
-- [ ] TC-1 有獨立可識別段落（含判斷規則）
-- [ ] TC-2 有獨立可識別段落（含判斷規則）
-- [ ] TC-3 有獨立可識別段落（含判斷規則）
-- [ ] TC-4 有獨立可識別段落（含判斷規則）
-- [ ] 觸發條件優先順序（TC-1 → TC-4 依序評估）已文件化
-
-### (c) CONFIRM 路徑有明確步驟列表
-
-| 核對項目 | 文件位置 | 識別標題 |
-|---------|---------|---------|
-| CONFIRM 路徑步驟列表 | `skills/sprint-execution/SKILL.md` §4.1 | `### 4.1 CONFIRM 路徑` |
-
-- [ ] CONFIRM 路徑有獨立可識別標題（§4.1）
-- [ ] CONFIRM 路徑步驟列表存在（有序步驟，非散文）
-- [ ] 步驟包含：記錄抽樣結果 → 更新指標 → 繼續下一 Story
-
-### (d) DISPUTE 路徑有明確步驟列表
-
-| 核對項目 | 文件位置 | 識別標題 |
-|---------|---------|---------|
-| DISPUTE 路徑步驟列表 | `skills/sprint-execution/SKILL.md` §4.2 | `### 4.2 DISPUTE 路徑` |
-
-- [ ] DISPUTE 路徑有獨立可識別標題（§4.2）
-- [ ] 步驟列表包含：**回退** Story 狀態（步驟 2）
-- [ ] 步驟列表包含：**傳入缺陷清單**給 Story-Lifecycle subagent（步驟 3）
-- [ ] 步驟列表包含：強制**第二輪外部抽樣**審查（步驟 5）
-
-### (e) Circuit Breaker 觸發條件已文件化
-
-| 核對項目 | 文件位置 | 識別標題 |
-|---------|---------|---------|
-| Circuit Breaker 觸發條件 | `skills/sprint-execution/SKILL.md` §4.3 | `### 4.3 Circuit Breaker 機制（自動降級規則）` |
-
-- [ ] Circuit Breaker 觸發條件有獨立可識別段落（§4.3「觸發條件」小節）
-- [ ] 連續 3 Sprint 閾值已明確寫入（`連續 **3 個 Sprint**`）
-- [ ] DISPUTE 率 20% 閾值已明確寫入（`超過 **20%**`）
-- [ ] 觸發後動作（Architect 通知 + 全量外部抽樣升級）已說明
-
-### (f) Circuit Breaker 重置條件已文件化
-
-| 核對項目 | 文件位置 | 識別標題 |
-|---------|---------|---------|
-| Circuit Breaker 重置條件 | `skills/sprint-execution/SKILL.md` §4.3 | `#### 重置條件` 小節 |
-
-- [ ] 重置條件有獨立可識別段落（§4.3「重置條件」小節）
-- [ ] 滾動 3 Sprint 窗口機制已說明
-- [ ] Architect 手動重置條件已說明（含重置記錄格式）
-- [ ] 重置記錄格式存在（`[Circuit Breaker 重置]` 關鍵字）
+<!-- ADR-007 Phase 2 外部抽樣審查機制已於 Sprint 24 US-41 完成實作並通過 QA 驗收，詳見 `docs/adr/ADR-007-story-lifecycle-subagent.md`。 -->
