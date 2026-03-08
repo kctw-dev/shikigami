@@ -271,6 +271,21 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
    - **Phase 1（可平行）**：PO 獨立性評估為「獨立」的 Story，可同時派遣給不同 Developer subagent 執行
    - **Phase 2（需序列）**：PO 獨立性評估標注衝突的 Story，需依建議順序逐一執行，避免 merge conflict
    - 若所有 Story 皆獨立，Phase 2 區塊可省略，填「無」
+
+   **方法論適用性評估**（正式輸出項目）：Architect 須對每個 Story 自動執行方法論適用性評估（BDD/DDD），結果為建議性質，不阻塞流程。詳細觸發條件請參閱 [Architect 角色決策指引 §5](../architect/SKILL.md)。
+
+   輸出格式：
+
+   ```markdown
+   ## 方法論適用性評估
+
+   | Story ID | BDD 建議 | DDD 建議 | 說明 |
+   |----------|---------|---------|------|
+   | US-XX | 建議（B1, B2） | 不適用 | AC2 含多執行路徑 + CLI 輸出變更，建議補充行為範例 |
+   | US-YY | 不適用 | 不適用 | doc-only，所有 AC 為 [靜態] |
+   | US-ZZ | 不適用 | 建議（D1） | 引入新的 Domain Entity，建議先建領域模型 |
+   ```
+
 3. **QA**：逐一確認剩餘 Stories 的 Acceptance Criteria 是否明確且可被自動化測試驗證。若驗收標準模糊，退回 PO 補充後重新評估。詳細決策標準（AC 驗證策略、Spec Compliance review 決策、Code Quality review 策略）請參閱 [QA Engineer 角色決策指引](../qa-engineer/SKILL.md)。
 
    **路徑驗證規則（AC 路徑存在性檢查）**：

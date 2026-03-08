@@ -281,6 +281,83 @@ Architect 在方案評估階段，除功能性與 ToS 合規性外，必須同�
 
 ---
 
+## §5 方法論適用性評估（Methodology Fitness Check）
+
+### 目的
+
+Sprint Planning Architect Round 2 時，Architect 對每個 Story 自動執行方法論適用性評估，判斷是否建議採用 BDD（行為驅動開發）或 DDD（領域驅動設計）方法論。評估結果為**建議性質（Advisory）**，不阻塞 Sprint 流程。
+
+### BDD 適用性觸發條件
+
+Architect 檢查 Story 是否符合以下任一條件，若符合則建議採用 BDD 方法論：
+
+| # | 觸發條件 | 說明 | 建議動作 |
+|---|---------|------|---------|
+| B1 | Story 含 `[動態]` AC 且有多條執行路徑 | AC 通過標準描述「當 X 時 Y，否則 Z」的分支邏輯 | 建議將該 AC 改為 `[行為]` 類型，以 Given-When-Then 明確描述各路徑 |
+| B2 | Story 涉及使用者可觀察的行為變更 | 新增或修改 CLI 輸出、告警訊息、錯誤處理等使用者面向行為 | 建議補充行為範例（Specification by Example） |
+| B3 | Story 涉及狀態轉換邏輯 | 狀態機、label 流轉、Story 生命週期等有 N 個狀態的轉換 | 建議用 Given-When-Then 逐一描述每個轉換路徑 |
+| B4 | AC 通過標準超過 80 字且含條件邏輯 | 複雜的通過標準用散文寫容易漏判 | 建議拆為多個 Given-When-Then 場景 |
+
+**不觸發 BDD 建議**：doc-only 且所有 AC 為 `[靜態]` 的 Story、簡單存在性檢查、格式修改。
+
+### DDD 適用性觸發條件
+
+| # | 觸發條件 | 說明 | 建議動作 |
+|---|---------|------|---------|
+| D1 | Story 引入新的核心領域概念 | 新增 Entity、Value Object、Aggregate 等業務物件 | 建議先建立領域模型文件（`docs/sdd/domain-model-*.md`） |
+| D2 | Story 跨越多個模組且共享業務邏輯 | 多個 Skill/模組需要理解同一業務規則 | 建議定義 Bounded Context 邊界與統一語言（Ubiquitous Language） |
+| D3 | Story 涉及複雜業務規則 | 包含 3 個以上互相影響的業務條件判斷 | 建議建立領域規則文件，用表格或決策樹記錄規則 |
+| D4 | Story 修改的程式碼涉及 3+ 個 Entity 的互動 | 多物件交互容易產生隱含耦合 | 建議繪製領域互動圖或建立 SDD |
+
+**不觸發 DDD 建議**：純 UI 修改、配置變更、doc-only Story、單一模組內部重構。
+
+### 評估輸出格式
+
+Architect Round 2 回傳新增以下區塊：
+
+```markdown
+## 方法論適用性評估
+
+| Story ID | BDD 建議 | DDD 建議 | 說明 |
+|----------|---------|---------|------|
+| US-XX | 建議（B1, B2） | 不適用 | AC2 含多執行路徑 + CLI 輸出變更，建議補充行為範例 |
+| US-YY | 不適用 | 不適用 | doc-only，所有 AC 為 [靜態] |
+| US-ZZ | 不適用 | 建議（D1） | 引入新的 Domain Entity，建議先建領域模型 |
+```
+
+### 當 BDD 被建議時的後續流程
+
+1. Architect 輸出建議後，**QA Round 3** 接手確認
+2. QA 評估被標記的 AC 是否確實需要行為範例
+3. 若 QA 同意：要求 PO 在 AC 表格下方補充「行為範例」區塊
+4. 行為範例格式：
+
+```markdown
+**行為範例（Specification by Example）**
+
+> AC2 範例：
+> - **Given** 排程模式 `SHIKIGAMI_SCHEDULED=true`
+>   **When** PO 選入 M-size Story
+>   **Then** 輸出 `[SCHEDULED-MODE-GATE]` 告警並中止 Planning
+>
+> - **Given** 手動模式（非排程）
+>   **When** PO 選入 M-size Story
+>   **Then** 正常選入，無告警
+```
+
+5. Story-Lifecycle subagent 在 Spec Compliance Self-Review 時，逐一驗證每個行為範例場景
+
+### 當 DDD 被建議時的後續流程
+
+1. Architect 輸出建議後，標記為 Sprint 實作前置條件
+2. Developer 在 TDD Red 階段前，先建立或更新領域模型文件（`docs/sdd/` 下）
+3. 領域模型不需要完整的 DDD 戰術模式，只需：
+   - 核心概念定義（Entity / Value Object 列表）
+   - 概念間關係（簡單表格或文字描述）
+   - 統一語言詞彙表（術語 → 定義，避免同一概念多種稱呼）
+
+---
+
 ## 參照文件
 
 - **ADR-003**：`docs/adr/ADR-003.md`（Framework Document Change 流程）

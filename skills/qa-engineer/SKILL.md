@@ -50,6 +50,49 @@ AC 類型決定驗收方式與測試策略，QA 在 Sprint Planning 中必須明
 - 「輸入無效 token 時，API 返回 401」→ `[動態]`（需執行請求）
 - 「排程模式下選入 M-size Story 時，Planning 中止並輸出告警字串」→ `[動態]`（需執行並觀察輸出）
 
+#### 行為 AC `[行為]`
+
+**識別標準（滿足所有以下條件）：**
+
+- AC 通過標準涉及多條執行路徑（分支邏輯：「當 X 時 Y，否則 Z」）
+- AC 描述的是使用者可觀察的行為（CLI 輸出、告警訊息、狀態轉換等）
+- 適合以 Given-When-Then 格式明確描述各路徑
+
+**來源**：由 Architect Round 2 的方法論適用性評估（BDD 建議 B1-B4）標記，QA Round 3 確認後要求 PO 補充行為範例。
+
+**典型範例：**
+- 「排程模式下選入 M-size Story 時，Planning 中止並輸出告警字串」→ `[行為]`（多條件分支 + 使用者面向輸出）
+- 「Story 狀態從 In Progress 轉為 Done 時，Done 定義 checkbox 全部勾選」→ `[行為]`（狀態轉換邏輯）
+- 「輸入無效 token 時返回 401，輸入過期 token 時返回 403」→ `[行為]`（多條件路徑）
+
+**行為範例格式（Specification by Example）：**
+
+若 AC 被標記為 `[行為]` 類型，PO 須在 AC 表格下方補充行為範例：
+
+```markdown
+**行為範例（Specification by Example）**
+
+> AC2 範例：
+> - **Given** {前置條件}
+>   **When** {觸發動作}
+>   **Then** {預期結果}
+>
+> - **Given** {另一前置條件}
+>   **When** {相同或不同觸發動作}
+>   **Then** {不同預期結果}
+```
+
+**行為範例驗證指引（QA 在外部抽樣審查與 Story-Lifecycle 自審中使用）：**
+
+| 驗證項目 | 判定標準 |
+|---------|---------|
+| 範例完整性 | 每個 `[行為]` AC 至少有 2 個 Given-When-Then 場景（涵蓋主流程與至少一個替代路徑） |
+| 場景覆蓋 | 所有 Given-When-Then 場景均有對應的實作行為（靜態核對或測試驗證） |
+| 行為一致性 | 實作行為與 Given-When-Then 描述完全一致，無偏離 |
+| 遺漏路徑 | 無 AC 描述中隱含但未被 Given-When-Then 覆蓋的執行路徑 |
+
+**FAIL 判定**：任一 `[行為]` AC 的行為範例場景未被實作覆蓋 → Spec Compliance FAIL，問題分類為 `[BEHAVIOR-MISMATCH]`。
+
 #### 混合型 Story 的判斷規則
 
 若 Story 包含靜態與動態 AC：
