@@ -15,7 +15,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-157：Plugin 載入失敗 Workaround 正式文件化 — TROUBLESHOOTING.md 新增 shallow clone 根因分析與操作 SOP | #101 | S | 1 | 待辦 |
+| US-157：Plugin 載入失敗 Workaround 正式文件化 — TROUBLESHOOTING.md 新增 shallow clone 根因分析與操作 SOP | #101 | S | 1 | 完成 |
 
 ---
 

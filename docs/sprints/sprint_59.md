@@ -12,7 +12,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
-| US-157 | #101 | Plugin 載入失敗 Workaround 正式文件化 — TROUBLESHOOTING.md 新增 shallow clone 根因分析與操作 SOP | S | 1 | 是 | 待辦 |
+| US-157 | #101 | Plugin 載入失敗 Workaround 正式文件化 — TROUBLESHOOTING.md 新增 shallow clone 根因分析與操作 SOP | S | 1 | 是 | 完成 |
 
 **Sprint 容量**：1 Points（1 Story）
 
