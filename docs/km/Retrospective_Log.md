@@ -4,6 +4,31 @@
 
 ---
 
+## Sprint 62 — 2026-03-08
+
+**Sprint Goal**：新手體驗提升與框架減法落地 — 系統化整理首次 Sprint 常見卡關點指引（M5 條件 (a) 前提），並執行 SKILL.md 冗餘內容合併精簡（延續減法策略）。
+
+### Good
+
+1. Sprint 62 3/3 Stories PASS，4 Points，100% 完成率。Sprint Goal 完整達成 — Tutorial 卡關點指引（US-165）、SKILL.md 減法落地（US-166）、多模型 CLI Adapter（US-167）全數交付
+2. 加法與減法平衡：US-165 做加法（Tutorial 新手體驗改善）、US-166 做減法（93 行精簡，5.19%），完美呼應「不只加法也要減法」方向
+3. US-166 將 Sprint 61 US-162 審查報告的 5 處冗餘全數執行落地，審查→行動的閉環在 2 個 Sprint 內完成
+4. US-167 以 TDD 開發完成 CLI Adapter（16/16 測試全綠），包含 fallback 降級策略，為多模型路由建立穩固基礎
+5. Velocity 回升至 4 points（歷史新高區間），Phase 1 平行 + Phase 2 序列的分群策略有效
+
+### Problem
+
+1. DORA 指標持續異常：CFR 100%（連續 12 Sprint），部署頻率 0.00 次/天。CI workflow 已於 Sprint 59 移除但歷史記錄仍影響指標計算
+2. 5 個 Retro Action Items 懸而未決超過 50 Sprint（Sprint 11-12 建立），需決策是否關閉或重新啟動
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- DORA 指標異常為歷史 CI 記錄影響，非當前框架問題，隨新 Sprint 累積將自然稀釋
+- 懸而未決 Action Items 建議在下次 Sprint Planning 時由 PO 統一決策（關閉或轉為 Backlog Story）
+
+---
+
 ## Sprint 61 — 2026-03-08
 
 **Sprint Goal**：Backlog 健康化與框架減法持續 — 補充 Backlog 候選 Story 池（解決連續 3 Sprint 枯竭問題），並延續「不只加法也要減法」方向，評估框架流程與文件的進一步精簡機會。

@@ -1,23 +1,30 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 62 Planning 完成）
-**當前 Sprint**：Sprint 62（進行中）
+**最後更新**：2026-03-08（Sprint 62 Review 完成）
+**當前 Sprint**：Sprint 62（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 62](sprints/sprint_62.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 62 — 進行中
+## Sprint 62 — 完成
 
 **Sprint Goal**：新手體驗提升與框架減法落地 — 系統化整理首次 Sprint 常見卡關點指引（M5 條件 (a) 前提），並執行 SKILL.md 冗餘內容合併精簡（延續減法策略）。
 **期間**：2026-03-08 ~ 2026-03-14
 **ADR 依賴**：無
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。Tutorial 卡關點指引新增 + SKILL.md 93 行精簡 + CLI Adapter 實作完成。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-165：Tutorial 新手體驗改善 — 首次 Sprint 成功率提升（錯誤訊息說明 + 常見卡關點指引） | #164 | S | 1 | 完成 |
 | US-166：框架文件精簡 — SKILL.md 重複指引合併與冗餘步驟移除 | #163 | S | 1 | 完成 |
 | US-167：多模型 CLI 路由 Phase 1 — Adapter 介面設計與 Gemini CLI 整合實作 | #165 | M | 2 | 完成 |
+
+## Sprint 62 統計
+- Velocity：4 points
+- 完成率：100%（完成 3 / 計畫 3）
+- 日期：2026-03-08
 
 ---
 

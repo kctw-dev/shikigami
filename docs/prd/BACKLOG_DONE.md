@@ -2010,6 +2010,30 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 
 ---
 
+## Sprint 62（2026-03-08）
+
+**Sprint Goal**：新手體驗提升與框架減法落地 — 系統化整理首次 Sprint 常見卡關點指引（M5 條件 (a) 前提），並執行 SKILL.md 冗餘內容合併精簡（延續減法策略）。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-165（Issue #164）：Tutorial 新手體驗改善 — 首次 Sprint 成功率提升（錯誤訊息說明 + 常見卡關點指引） | S | 1 | Sprint 62 |
+| US-166（Issue #163）：框架文件精簡 — SKILL.md 重複指引合併與冗餘步驟移除 | S | 1 | Sprint 62 |
+| US-167（Issue #165）：多模型 CLI 路由 Phase 1 — Adapter 介面設計與 Gemini CLI 整合實作 | M | 2 | Sprint 62 |
+
+---
+
+## Sprint 61（2026-03-08）
+
+**Sprint Goal**：Backlog 健康化與框架減法持續。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-162（Issue #160）：框架流程減法審查 — SKILL.md 冗餘步驟與重複內容清理 | S | 1 | Sprint 61 |
+| US-163（Issue #161）：多模型 CLI 路由 Phase 0 — Gemini CLI 呼叫介面調查 | S | 1 | Sprint 61 |
+| US-164（Issue #162）：Backlog Grooming — 現有 Issues RICE 評分補齊 + 新候選 Story 提案 | S | 1 | Sprint 61 |
+
+---
+
 ## Sprint 60（2026-03-08）
 
 **Sprint Goal**：輕量化與實踐 — 精簡 Sprint 流程步驟（減法）、完成模型分層 Phase 1 落地、優化 Metrics 分析視窗，鞏固框架持續改善能力。
