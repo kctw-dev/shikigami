@@ -26,9 +26,9 @@ Sprint 執行的核心 Skill。從 Sprint Backlog 逐個取出 Story，透過 **
 
 ## 2.1 Provider 路由（多模型派遣）
 
-<!-- US-176 CLI Adapter Phase 3 — Sprint 66 -->
+<!-- US-177 CLI Adapter 簡化 — Sprint 67 -->
 
-Sprint 執行支援**雙軌派遣機制**：Story-Lifecycle subagent 可透過 Claude Agent tool 或 `scripts/cli-adapter.sh` 派遣，由環境變數控制路由決策。
+Sprint 執行支援**雙軌派遣機制**：Story-Lifecycle subagent 可透過 Claude Agent tool 或直接呼叫 Gemini CLI 派遣，由環境變數控制路由決策。
 
 ### 環境變數定義
 
@@ -57,11 +57,11 @@ SHIKIGAMI_ROLE_PROVIDER_MAP[role]
 
 ### Fallback 行為
 
-Gemini CLI 呼叫失敗（`cli-adapter.sh` exit code != 0）時，自動 fallback 回 Claude（繼承 `scripts/cli-adapter.sh` 既有行為），Sprint 執行不中斷。失敗原因記錄至 stderr，主 session 可從日誌中識別但不阻塞後續 Story 執行。
+Gemini CLI 呼叫失敗時，手動切回 Claude（設定 `SHIKIGAMI_MODEL_PROVIDER=claude`）重新執行 Sprint。框架不自動 fallback，簡化路由邏輯。
 
-### 限制說明
+### Gemini CLI 能力說明
 
-Gemini 路徑（`cli-adapter.sh`）**不具備 tool calling 能力**，無法執行 Read / Edit / Bash 等工具。適用場景：AI 僅需產生文字輸出的任務（如純文件生成）。需要 TDD、檔案編輯等工具操作的 Story，**必須使用 Claude Agent tool 路徑**。
+Gemini CLI 為原生 agent，具備完整工具能力（ReadFile、WriteFile、Edit、Shell 等），適用所有 Story 類型，包括需要 TDD、檔案編輯等工具操作的 Story。
 
 ### 手動切換機制
 
@@ -219,14 +219,13 @@ Sprint Backlog 還有 Story？
 
    - **provider = claude（預設）**：使用 Agent tool 派遣，指定 `model: "sonnet"`，確保 Execution 環節使用中階模型以兼顧速度與成本。此路徑支援完整 tool calling（Read / Edit / Bash 等），適用所有 Story 類型。
 
-   - **provider = gemini**：使用 Bash 呼叫 `scripts/cli-adapter.sh`，以 stdin pipe 傳入 `story-lifecycle-prompt.md` 內容與 Story 參數。**注意**：Gemini 路徑不具備 tool calling 能力，僅適用於純文字輸出任務（如 doc-only Story）；需要 TDD 或工具操作的 Story 應維持 Claude 路徑。
+   - **provider = gemini**：使用 Bash 直接呼叫 Gemini CLI，以 stdin pipe 傳入 `story-lifecycle-prompt.md` 內容與 Story 參數。Gemini CLI 為原生 agent，具備完整工具能力（ReadFile、WriteFile、Edit、Shell 等），適用所有 Story 類型。
 
    ```bash
-   # Gemini 路徑呼叫範例（doc-only Story 適用）
-   cat skills/sprint-execution/story-lifecycle-prompt.md \
-     <(echo "story_id: ${story_id}") \
-     <(echo "sprint_file: ${sprint_file}") \
-     | invoke_cli_adapter "gemini" ""
+   # Gemini 路徑呼叫範例
+   echo "$(cat skills/sprint-execution/story-lifecycle-prompt.md)
+   story_id: ${story_id}
+   sprint_file: ${sprint_file}" | gemini
    ```
    - `story_id`：Story 識別碼（如 `US-XX`）
    - `sprint_file`：`docs/sprints/sprint_N.md`（Story AC 與完整需求）
