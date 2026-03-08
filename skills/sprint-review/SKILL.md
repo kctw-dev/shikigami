@@ -25,7 +25,6 @@ Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定�
 - **觸發條件**：Velocity < 3 pts，或使用者傳入 `/fast` flag，或明確說「快速 Review」
 - **跳過或縮短的步驟**：
   - 跳過 Token 成本摘要（§7 最後兩項 Token 相關檢查清單）
-  - 跳過 Beta 狀態檢查（§7 Beta 狀態檢查項目）
   - DORA Metrics 計算與 Retrospective Analytics **平行派遣**（不等待 DORA 完成再執行 Analytics），加速整體流程
   - 歸檔觸發檢查：僅在超過門檻時才執行，否則跳過
 - **執行流程**：交付物一致性審查 → Demo 驗收 → （DORA Metrics + Retrospective Analytics 平行執行） → Retrospective 記錄 → 文件更新 → Commit
@@ -33,7 +32,7 @@ Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定�
 ### 慢想模式
 
 - **觸發條件**：Velocity >= 3 pts，或使用者傳入 `--deep` 參數，或明確說「完整 Review」
-- **執行流程**：交付物一致性審查 → Demo 驗收 → DORA Metrics 計算 → Retrospective Analytics → Retrospective 記錄 → 文件更新 → Token 成本記錄 → Beta 狀態檢查 → 歸檔觸發檢查 → Commit
+- **執行流程**：交付物一致性審查 → Demo 驗收 → DORA Metrics 計算 → Retrospective Analytics → Retrospective 記錄 → 文件更新 → Token 成本記錄 → 歸檔觸發檢查 → Commit
 
 ---
 
@@ -732,7 +731,6 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent** 執行歸檔�
 - [ ] `PRODUCT_BACKLOG.md` 已更新（未完成 Story 回填）
 - [ ] 已完成 Story 從 `PRODUCT_BACKLOG.md` 移至 `BACKLOG_DONE.md`，按 Sprint 歸檔
 - [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步；版本 Tag 與里程碑對齊確認完成，見「ROADMAP 更新操作指引」）
-- [ ] **Beta 狀態檢查** *(快思模式可跳過)*：確認 Issue #59 是否有新的外部使用者回饋（`gh issue view 59 --comments`）；若有，更新 `docs/prd/M5_COMPLETION_ASSESSMENT.md` 條件 (a) 狀態（累積回饋數與最後更新日期）
 - [ ] **歸檔觸發檢查**（見 §6）：確認 `PROJECT_BOARD.md` 與 `Retrospective_Log.md` 歷史 Sprint 區塊是否超過 5 個；若觸發則**派遣 subagent** 批量歸檔所有超出保留範圍的 Sprint 至 `docs/km/archive/`，主 session 僅接收摘要（快思模式下：未超過門檻可跳過）
 - [ ] **Token 成本摘要** *(慢想模式限定)*（見下方子節）
 - [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格** *(慢想模式限定)*（對應 Review token 欄）：
