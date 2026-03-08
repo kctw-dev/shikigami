@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 58 Review 完成，Sprint 目標：精簡 Sprint Review 流程）
-**當前 Sprint**：Sprint 58（完成）
+**最後更新**：2026-03-08（Sprint 59 Planning 完成，Sprint 目標：鞏固 M5 穩定化 — TROUBLESHOOTING.md shallow clone 根因文件化）
+**當前 Sprint**：Sprint 59（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 58](sprints/sprint_58.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 59](sprints/sprint_59.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 59 — 進行中
+
+**Sprint Goal**：鞏固 M5 穩定化 — 修補已知 plugin 載入問題的框架端文件缺口（TROUBLESHOOTING.md shallow clone 根因文件化）。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-157：Plugin 載入失敗 Workaround 正式文件化 — TROUBLESHOOTING.md 新增 shallow clone 根因分析與操作 SOP | #101 | S | 1 | 待辦 |
 
 ---
 
