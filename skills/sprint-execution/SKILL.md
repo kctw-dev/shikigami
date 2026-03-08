@@ -48,11 +48,14 @@ Sprint 執行支援**雙軌派遣機制**：Story-Lifecycle subagent 可透過 C
 
 ### 預設角色→Provider 對照表
 
+預設所有角色均使用宿主平台偵測結果（見「宿主平台偵測規則」）。以下為當宿主平台為 Claude Code 時的等效預設值（供理解用）：
+
 ```
+# 以下為 Claude Code 環境下的等效預設值，非寫死設定
 SHIKIGAMI_ROLE_PROVIDER_MAP="developer:claude,qa:claude,po:claude,architect:claude"
 ```
 
-預設所有角色均使用 Claude。使用者可透過環境變數覆寫特定角色的 provider（見「切換機制」）。
+使用者可透過明確設定環境變數覆寫特定角色的 provider（見「手動切換機制」）。
 
 ### 宿主平台偵測規則
 
