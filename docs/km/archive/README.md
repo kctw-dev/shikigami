@@ -8,8 +8,8 @@
 
 | 文件 | 說明 | 歸檔範圍 | 最後更新 |
 |------|------|----------|----------|
-| [PROJECT_BOARD_ARCHIVE.md](PROJECT_BOARD_ARCHIVE.md) | PROJECT_BOARD.md 歷史 Sprint 區塊歸檔 | Sprint 1–53 | 2026-03-06 |
-| [RETRO_ARCHIVE.md](RETRO_ARCHIVE.md) | Retrospective_Log.md 歷史 Sprint 記錄歸檔 | Sprint 1–53 | 2026-03-06 |
+| [PROJECT_BOARD_ARCHIVE.md](PROJECT_BOARD_ARCHIVE.md) | PROJECT_BOARD.md 歷史 Sprint 區塊歸檔 | Sprint 1–56 | 2026-03-08 |
+| [RETRO_ARCHIVE.md](RETRO_ARCHIVE.md) | Retrospective_Log.md 歷史 Sprint 記錄歸檔 | Sprint 1–56 | 2026-03-08 |
 
 ---
 

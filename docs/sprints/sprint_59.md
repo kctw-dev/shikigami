@@ -1,6 +1,6 @@
 # Sprint 59
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-08 ~ 2026-03-14
 **Sprint Goal**：鞏固 M5 穩定化 — 修補已知 plugin 載入問題的框架端文件缺口（TROUBLESHOOTING.md shallow clone 根因文件化）。
 **ADR 依賴**：無

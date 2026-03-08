@@ -2007,3 +2007,13 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 |-------|------|--------|------------|
 | US-155（Issue #154）：Sprint Review 執行時間過長 — 流程精簡化 | M | 2 | Sprint 58 |
 | US-156（Issue #106）：模型分層策略：Planning 用高階模型、Coding 用合適模型 | S | 1 | Sprint 58 |
+
+---
+
+## Sprint 59（2026-03-08）
+
+**Sprint Goal**：鞏固 M5 穩定化 — 修補已知 plugin 載入問題的框架端文件缺口（TROUBLESHOOTING.md shallow clone 根因文件化）。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-157（Issue #101）：Plugin 載入失敗 Workaround 正式文件化 — TROUBLESHOOTING.md 新增 shallow clone 根因分析與操作 SOP | S | 1 | Sprint 59 |

@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.32.0**（Sprint 58）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.33.0**（Sprint 59）。
 
 | 版號 | 含義 |
 |------|------|
@@ -310,6 +310,7 @@ Sprint Review 時自動產出：
 | US-154 | UX Agent / UI Agent SKILL.md 標記 Deprecated | Sprint 57 ✅ |
 | US-155 | Sprint Review 快思/慢想模式 — 流程精簡化 | Sprint 58 ✅ |
 | US-156 | 模型分層策略：Planning 用高階模型、Coding 用合適模型 | Sprint 58 ✅ |
+| US-157 | Plugin 載入失敗 Workaround 正式文件化 — TROUBLESHOOTING.md shallow clone 根因分析 | Sprint 59 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 
