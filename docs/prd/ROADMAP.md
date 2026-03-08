@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-08（Sprint 58 — Sprint Review 流程精簡化 + 模型分層策略調查，2 Stories / 3 Points 全數交付）
+> 最後更新：2026-03-08（Sprint 60 — 輕量化與實踐，3 Stories / 3 Points 全數交付）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -311,6 +311,9 @@ Sprint Review 時自動產出：
 | US-155 | Sprint Review 快思/慢想模式 — 流程精簡化 | Sprint 58 ✅ |
 | US-156 | 模型分層策略：Planning 用高階模型、Coding 用合適模型 | Sprint 58 ✅ |
 | US-157 | Plugin 載入失敗 Workaround 正式文件化 — TROUBLESHOOTING.md shallow clone 根因分析 | Sprint 59 ✅ |
+| US-158 | Sprint Review / Planning 流程精簡化 — Token Baseline 與 Beta 檢查降級 | Sprint 60 ✅ |
+| US-159 | 模型分層策略 Phase 1 落地 — SKILL.md + tutorial 新增模型切換提示 | Sprint 60 ✅ |
+| US-160 | Metrics 計算視窗限制 — 趨勢分析僅讀取最近 30 個 Sprint | Sprint 60 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
 

@@ -4,6 +4,27 @@
 
 ---
 
+## Sprint 60 — 2026-03-08
+
+**Sprint Goal**：輕量化與實踐 — 精簡 Sprint 流程步驟（減法）、完成模型分層 Phase 1 落地、優化 Metrics 分析視窗，鞏固框架持續改善能力。
+
+### Good
+
+1. Sprint 60 3/3 Stories PASS，3 Points，100% 完成率。Sprint Goal 完整達成 — 流程精簡化（US-158）、模型分層落地（US-159）、Metrics 視窗限制（US-160）全數交付
+2. 使用者「不只加法也要減法」策略方向成功轉化為 Sprint Backlog：3 Stories 中 2 個為減法（67% 減法佔比），框架首次以減法為主軸的 Sprint
+3. Phase 2 平行派遣零衝突：US-159 + US-160 修改同一檔案（sprint-review/SKILL.md）不同段落，Architect 分群策略有效避免衝突
+
+### Problem
+
+1. DORA 部署頻率維持 0.00 次/天（連續 6 個 Sprint，Sprint 55-60），CFR 81.0%，無 deployment pipeline 問題持續
+2. Backlog 枯竭持續：本 Sprint 3 個 Story 全部為新建（非來自既有 Backlog），僅有 3 個 open Issues（#59、#5、#4）全部受外部條件阻塞
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 為結構性問題（CI/部署管線、Backlog 健康度），需 PO 策略方向決策，非 Retro Action 範圍。
+
+---
+
 ## Sprint 59 — 2026-03-08
 
 **Sprint Goal**：鞏固 M5 穩定化 — 修補已知 plugin 載入問題的框架端文件缺口（TROUBLESHOOTING.md shallow clone 根因文件化）。

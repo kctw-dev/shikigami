@@ -2010,6 +2010,18 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 
 ---
 
+## Sprint 60（2026-03-08）
+
+**Sprint Goal**：輕量化與實踐 — 精簡 Sprint 流程步驟（減法）、完成模型分層 Phase 1 落地、優化 Metrics 分析視窗，鞏固框架持續改善能力。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-158（Issue #155）：Sprint Review / Planning 流程精簡化 — Token Baseline 與 Beta 檢查降級 | S | 1 | Sprint 60 |
+| US-159（Issue #156）：模型分層策略 Phase 1 落地 — SKILL.md + tutorial 新增模型切換提示 | S | 1 | Sprint 60 |
+| US-160（Issue #157）：Metrics 計算視窗限制 — 趨勢分析僅讀取最近 30 個 Sprint | S | 1 | Sprint 60 |
+
+---
+
 ## Sprint 59（2026-03-08）
 
 **Sprint Goal**：鞏固 M5 穩定化 — 修補已知 plugin 載入問題的框架端文件缺口（TROUBLESHOOTING.md shallow clone 根因文件化）。

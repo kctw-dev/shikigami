@@ -64,6 +64,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 57 | 2026-03-08 | 2 points | 100% | 下降趨勢 | Sprint Goal 達成（2/2 PASS）；US-153（S/1pt）+ US-154（S/1pt）；S55=8→S56=5→S57=2，連續兩期下降（S55→S56 -37.5%，S56→S57 -60%）→下降趨勢；低容量係因 ADR-014→015 轉型期 Backlog 汙染，多數候選 Story AC 過時需精化 |
 | Sprint 58 | 2026-03-08 | 3 points | 100% | 不規則 | Sprint Goal 達成（2/2 PASS）；US-155（M/2pt）+ US-156（S/1pt）；S56=5→S57=2→S58=3，S57→S58 回升 +50%，先降後升方向不一致→不規則；均值 3.33，S58=3 落於 ±20% 區間（2.67–4.00）；Sprint Review 快思模式精簡 + 模型分層策略文件交付 |
 | Sprint 59 | 2026-03-08 | 1 point | 100% | 不規則 | Sprint Goal 達成（1/1 PASS）；US-157（S/1pt）；S57=2→S58=3→S59=1，S58→S59 下降 -66.7%，先升後降方向不一致→不規則；Backlog 嚴重枯竭期間的過渡 Sprint，TROUBLESHOOTING.md shallow clone 根因文件化完成 |
+| Sprint 60 | 2026-03-08 | 3 points | 100% | 不規則 | Sprint Goal 達成（3/3 PASS）；US-158（S/1pt）+ US-159（S/1pt）+ US-160（S/1pt）；S58=3→S59=1→S60=3，S59→S60 回升 +200%，先降後升方向不一致→不規則；輕量化與實踐：流程精簡化（減法）+ 模型分層落地（加法）+ Metrics 視窗限制（減法）全數交付 |
 
 ---
 
@@ -96,6 +97,7 @@ Sprint Review 時由 DORA subagent 計算四項 DORA 指標並追加快照。
 | Sprint 57 | 2026-03-08 | 0.00 次/天 | N/A | 13.3 小時 | 100% | 不規則 |
 | Sprint 58 | 2026-03-08 | 0.00 次/天 | N/A | 13.3 小時 | 100% | 不規則 |
 | Sprint 59 | 2026-03-08 | 0.00 次/天 | N/A | 10.5 小時 | 76.6% | 不規則 |
+| Sprint 60 | 2026-03-08 | 0.00 次/天 | N/A | 26.8 小時 | 81.0% | 不規則 |
 
 > **Sprint 40 說明**：首次 DORA baseline 建立。趨勢判定需至 Sprint 42 才有完整數據（需至少 3 個 Sprint 記錄）。MTTR 填「N/A」表示本 Sprint 無已關閉的 bug label Issue 記錄。
 >
@@ -124,6 +126,8 @@ Sprint Review 時由 DORA subagent 計算四項 DORA 指標並追加快照。
 > **Sprint 58 說明**：部署頻率 0.00 次/天（29 筆有效執行全數 failure，0 success；in-progress/cancelled/skipped 不計入）。變更前置時間 N/A（無已合併 PR）。MTTR 13.3 小時（Sprint 58 期間有 2 個 bug Issues 關閉：Bug 1 = 4.3 小時、Bug 2 = 22.3 小時，平均 13.3 小時；與 Sprint 57 持平）。變更失敗率 100%（29 failure / 29 有效執行），Issue #101（shallow clone SHA 不一致）持續未解，Structural Validation 全數失敗。趨勢判定：S56=100%→S57=100%→S58=100% 部署頻率四期持平 0.00 次/天、CFR 四期持平 100%，MTTR 與 Sprint 57 持平 13.3 小時；所有指標均停滯於最差值→不規則（系統性停滯狀態，Issue #101 為根因）。
 >
 > **Sprint 59 說明**：部署頻率 0.00 次/天（50 筆記錄中 success=0；failure=36、cancelled=9、skipped=2、in-progress=3；有效執行 47 筆，全無 success）。變更前置時間 N/A（無已合併 PR）。MTTR 10.5 小時（3 個 closed bug Issues：Issue 1 = 4.30 小時（Sprint 59 窗口內新增）、Issue 2 = 22.30 小時、Issue 3 = 5.03 小時，三期平均）。變更失敗率 76.6%（36 failure / 47 有效執行），CFR 相較 Sprint 57-58 的 100% 有所改善，主因 cancelled/skipped 記錄增加使分母擴大。趨勢判定：部署頻率 S57=0.00→S58=0.00→S59=0.00 持平於零，CFR S57=100%→S58=100%→S59=76.6% 首次改善，MTTR S57=13.3→S58=13.3→S59=10.5 小時有所改善；部分指標改善但部分停滯，方向不一致→不規則。Issue #101（shallow clone SHA）持續追蹤中。
+>
+> **Sprint 60 說明**：部署頻率 0.00 次/天（50 筆記錄中 success=0；failure=34、cancelled=8、skipped=2、in-progress=6；有效執行 42 筆，全無 success）。變更前置時間 N/A（無已合併 PR）。MTTR 26.8 小時（Sprint 60 窗口內關閉的 3 個 bug Issues：Bug 1 = 4.30 小時、Bug 2 = 53.89 小時、Bug 3 = 22.30 小時，平均 26.83 小時；其中 Bug 2 跨越 Sprint 邊界導致 MTTR 顯著拉高）。變更失敗率 81.0%（34 failure / 42 有效執行），相較 Sprint 59 的 76.6% 小幅惡化。趨勢判定：部署頻率 S58=0.00→S59=0.00→S60=0.00 持平於零，CFR S58=100%→S59=76.6%→S60=81.0% 先降後升方向不一致，MTTR S58=13.3→S59=10.5→S60=26.8 小時先降後大幅升方向不一致；三項指標方向均不一致→不規則。Issue #101（shallow clone SHA）持續追蹤中。
 
 ---
 
@@ -137,6 +141,7 @@ Sprint 整體 Token 消耗記錄，與 Velocity 記錄粒度對齊（Sprint 為�
 |------------|-----------|-----------|--------------|---------|
 | Sprint 10 | 107M | 266K | $234.10 | Claude Code JSONL |
 | Sprint 11 | N/A | N/A | N/A | 不可用 |
+| Sprint 60 | 68M | 131K | N/A（cache 比例不明，無法精確估算） | Claude Code JSONL |
 
 ---
 
@@ -171,6 +176,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 18 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 19 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 23 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
+| Sprint 60 | N/A | N/A | 68M input / 131K output | N/A（無 Planning/Execution baseline） | N/A / N/A / N/A |
 
 ---
 

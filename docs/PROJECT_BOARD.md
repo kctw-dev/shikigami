@@ -1,23 +1,30 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 60 Planning 完成）
-**當前 Sprint**：Sprint 60（進行中）
+**最後更新**：2026-03-08（Sprint 60 Review 完成）
+**當前 Sprint**：Sprint 60（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 60](sprints/sprint_60.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 60 — 進行中
+## Sprint 60 — 完成
 
 **Sprint Goal**：輕量化與實踐 — 精簡 Sprint 流程步驟（減法）、完成模型分層 Phase 1 落地、優化 Metrics 分析視窗，鞏固框架持續改善能力。
 **期間**：2026-03-08 ~ 2026-03-14
 **ADR 依賴**：無
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 3 points，完成率 100%。流程精簡化（減法）+ 模型分層落地（加法）+ Metrics 視窗限制（減法）全數交付。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-158：Sprint Review / Planning 流程精簡化 — Token Baseline 與 Beta 檢查降級 | #155 | S | 1 | 完成 |
 | US-159：模型分層策略 Phase 1 落地 — SKILL.md + tutorial 新增模型切換提示 | #156 | S | 1 | 完成 |
 | US-160：Metrics 計算視窗限制 — 趨勢分析僅讀取最近 30 個 Sprint | #157 | S | 1 | 完成 |
+
+## Sprint 60 統計
+- Velocity：3 points
+- 完成率：100%（完成 3 / 計畫 3）
+- 日期：2026-03-08
 
 ---
 
