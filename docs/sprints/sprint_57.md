@@ -12,7 +12,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
-| US-153 | #153 | Vision Critic SKILL.md 同步 ADR-015 Figma 架構更新 | S | 1 | 是 | 進行中 |
+| US-153 | #153 | Vision Critic SKILL.md 同步 ADR-015 Figma 架構更新 | S | 1 | 是 | 完成 |
 | US-154 | #152 | UX Agent / UI Agent SKILL.md 標記 Deprecated | S | 1 | 是 | 完成 |
 
 **Sprint 容量**：2 Points（2 Stories）
@@ -53,9 +53,9 @@ As an Architect maintaining the UIUX pipeline skill documentation, I want Vision
 
 **Done 定義**
 
-- [ ] Vision Critic SKILL.md 架構描述已移除 SSD 引用並改為 Figma 架構（AC1）
-- [ ] MCP 工具參照已更新為 Figma MCP 工具（AC2）
-- [ ] 評分模型描述與 vision-critic-poc-spec.md 一致（AC3）
+- [x] Vision Critic SKILL.md 架構描述已移除 SSD 引用並改為 Figma 架構（AC1）
+- [x] MCP 工具參照已更新為 Figma MCP 工具（AC2）
+- [x] 評分模型描述與 vision-critic-poc-spec.md 一致（AC3）
 
 ---
 

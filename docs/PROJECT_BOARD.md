@@ -15,7 +15,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-153：Vision Critic SKILL.md 同步 ADR-015 Figma 架構更新 | #153 | S | 1 | 進行中 |
+| US-153：Vision Critic SKILL.md 同步 ADR-015 Figma 架構更新 | #153 | S | 1 | 完成 |
 | US-154：UX Agent / UI Agent SKILL.md 標記 Deprecated | #152 | S | 1 | 完成 |
 
 ## Sprint 57 統計
