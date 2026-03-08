@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 60 Review 完成）
-**當前 Sprint**：Sprint 60（完成）
+**最後更新**：2026-03-08（Sprint 61 Planning 完成）
+**當前 Sprint**：Sprint 61（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 60](sprints/sprint_60.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 61](sprints/sprint_61.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 61 — 進行中
+
+**Sprint Goal**：Backlog 健康化與框架減法持續 — 補充 Backlog 候選 Story 池（解決連續 3 Sprint 枯竭問題），並延續「不只加法也要減法」方向，評估框架流程與文件的進一步精簡機會。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-162：框架流程減法審查 — SKILL.md 冗餘步驟與重複內容清理 | #160 | S | 1 | 待辦 |
+| US-163：多模型 CLI 路由 Phase 0 — Gemini CLI 呼叫介面調查（Issue #159 拆分） | #161 | S | 1 | 待辦 |
+| US-164：Backlog Grooming — 現有 Issues RICE 評分補齊 + 新候選 Story 提案 | #162 | S | 1 | 待辦 |
 
 ---
 
