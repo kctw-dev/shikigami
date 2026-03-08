@@ -2010,6 +2010,16 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 
 ---
 
+## Sprint 66（2026-03-08）
+
+**Sprint Goal**：CLI Adapter Phase 3 SKILL.md 整合 — 建立雙軌派遣機制，讓框架能透過 cli-adapter.sh 派遣 Gemini 執行特定角色任務。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-176（Issue #170）：CLI Adapter Phase 3 -- SKILL.md 整合與角色→Provider 路由機制 | M | 2 | Sprint 66 |
+
+---
+
 ## Sprint 65（2026-03-08）
 
 **Sprint Goal**：Subagent 模型自動調度完善 — 補齊所有 subagent 派遣點的 model 參數標注，建立角色→模型對照表，實現成本分層自動化。

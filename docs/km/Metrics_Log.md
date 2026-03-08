@@ -70,6 +70,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 63 | 2026-03-08 | 3 points | 100% | 不規則 | Goal 達成，3/3 Stories PASS；US-168（S/1pt）+ US-169（S/1pt）+ US-170（S/1pt）；S61=3→S62=4→S63=3，S62→S63 下降 -25%（超出 ±20%），先升後降方向不一致→不規則 |
 | Sprint 64 | 2026-03-08 | 4 points | 100% | 不規則 | Goal 達成，4/4 Stories PASS；US-171（S/1pt）+ US-172（S/1pt）+ US-173（S/1pt）+ US-174（S/1pt）；S62=4→S63=3→S64=4，S63→S64 回升 +33%（超出 ±20%），先降後升方向不一致→不規則 |
 | Sprint 65 | 2026-03-08 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-175（S/1pt）；S63=3→S64=4→S65=1，S64→S65 下降 -75%（超出 ±20%），先升後降方向不一致→不規則 |
+| Sprint 66 | 2026-03-08 | 2 points | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-176（M/2pt）；S64=4→S65=1→S66=2，S65→S66 回升 +100%（超出 ±20%），先降後升方向不一致→不規則 |
 
 ---
 
