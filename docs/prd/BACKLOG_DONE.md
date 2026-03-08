@@ -2010,6 +2010,16 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 
 ---
 
+## Sprint 67（2026-03-08）
+
+**Sprint Goal**：簡化多模型派遣架構 — 移除基於錯誤前提設計的 cli-adapter.sh 抽象層，直接利用 Gemini CLI 原生 agent 能力。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-177（Issue #171）：CLI Adapter 簡化 — 移除不必要的抽象層，直接使用 Gemini CLI 原生 agent 能力 | S | 1 | Sprint 67 |
+
+---
+
 ## Sprint 66（2026-03-08）
 
 **Sprint Goal**：CLI Adapter Phase 3 SKILL.md 整合 — 建立雙軌派遣機制，讓框架能透過 cli-adapter.sh 派遣 Gemini 執行特定角色任務。

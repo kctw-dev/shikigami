@@ -1,6 +1,6 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.34.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.41.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
 > 7 個 AI 隊友，各司其職，互相制衡 — 讓你的 AI 開發工具擁有一整組有紀律的工程團隊。
@@ -15,7 +15,7 @@ Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專
 
 這不是理論框架 — Shikigami 從第一天起就用自己開發自己：60 個 Sprint 中完成 59 個（完成率 98%），QA 雙階段審查攔截了每個 Sprint 的品質問題。
 
-**當前版本：v0.34.0**（25 Skills / 7 Agents / 4 Commands）
+**當前版本：v0.41.0**（25 Skills / 7 Agents / 4 Commands）
 
 ---
 

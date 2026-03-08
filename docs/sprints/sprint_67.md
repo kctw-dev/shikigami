@@ -3,14 +3,14 @@
 **Sprint Goal**：簡化多模型派遣架構 — 移除基於錯誤前提設計的 cli-adapter.sh 抽象層，直接利用 Gemini CLI 原生 agent 能力。
 
 **期間**：2026-03-08 ~ 2026-03-14
-**狀態**：進行中
+**狀態**：完成
 **ADR 依賴**：無
 
 ## Sprint Backlog
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-177：CLI Adapter 簡化 — 移除不必要的抽象層，直接使用 Gemini CLI 原生 agent 能力 | #171 | S | 1 | 進行中 |
+| US-177：CLI Adapter 簡化 — 移除不必要的抽象層，直接使用 Gemini CLI 原生 agent 能力 | #171 | S | 1 | 完成 |
 
 ## 平行分群
 

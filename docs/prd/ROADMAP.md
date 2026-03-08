@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.40.0**（Sprint 66）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.41.0**（Sprint 67）。
 
 | 版號 | 含義 |
 |------|------|
@@ -330,6 +330,7 @@ Sprint Review 時自動產出：
 | US-174 | Cursor 平台現狀審查 — Issue #4 維持 OPEN（v2.6.13 條件達成，待 POC 驗證） | Sprint 64 ✅ |
 | US-175 | Subagent 多模型自動調度 — 角色對照表建立與派遣點 model 參數補齊 | Sprint 65 ✅ |
 | US-176 | CLI Adapter Phase 3 — SKILL.md 整合與角色→Provider 路由機制 | Sprint 66 ✅ |
+| US-177 | CLI Adapter 簡化 — 移除不必要的抽象層，直接使用 Gemini CLI 原生 agent 能力 | Sprint 67 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 
@@ -339,14 +340,12 @@ Sprint Review 時自動產出：
 - Phase 0（US-163）：Gemini CLI 調查完成 — 確認非互動式呼叫可行，建議 `--output-format json` + stdin pipe 模式
 - Phase 1（US-167）：`scripts/cli-adapter.sh` 實作完成 — 132 行 Bash，Claude/Gemini 雙 provider，自動 fallback，16/16 測試全綠
 - Phase 2（US-169）：開源替代方案評估完成 — 四個候選方案均不適配，決策「維持自建」
+- Phase 3（US-171）：方向決策 — 目前不需要，列為 Long-term（Sprint 64 決策）
 
-**Phase 3 評估結論**：**目前不需要，列為 Long-term**（Sprint 64 US-171 決策）
-
-理由：provider 數量未達閾值（目前 2 個，閾值 5 個以上）、自建 adapter 已足夠（YAGNI 原則）、Codex CLI 整合阻礙未解（網路沙箱）、框架輕量化方向。
+**Sprint 67 簡化（US-177）**：發現 Gemini CLI 已具備完整 agent 能力（ReadFile, WriteFile, Edit, Shell 等內建工具 + ReAct loop），cli-adapter.sh 基於「Gemini 路徑不具備 tool calling」的錯誤前提設計，實為不必要的抽象層。已刪除 cli-adapter.sh + 2 個測試檔案（558 行移除），改為直接 `echo "prompt" | gemini` 呼叫。
 
 **重新評估觸發條件**（任一達成時重開）：
 - Shikigami 需要支援 5 個以上 LLM provider
-- `scripts/cli-adapter.sh` 超過 500 行
 - Codex CLI 網路沙箱問題解除
 
 ### 平台優先排序決策記錄（Sprint 25，2026-03-03）

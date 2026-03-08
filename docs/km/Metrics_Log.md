@@ -71,6 +71,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 64 | 2026-03-08 | 4 points | 100% | 不規則 | Goal 達成，4/4 Stories PASS；US-171（S/1pt）+ US-172（S/1pt）+ US-173（S/1pt）+ US-174（S/1pt）；S62=4→S63=3→S64=4，S63→S64 回升 +33%（超出 ±20%），先降後升方向不一致→不規則 |
 | Sprint 65 | 2026-03-08 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-175（S/1pt）；S63=3→S64=4→S65=1，S64→S65 下降 -75%（超出 ±20%），先升後降方向不一致→不規則 |
 | Sprint 66 | 2026-03-08 | 2 points | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-176（M/2pt）；S64=4→S65=1→S66=2，S65→S66 回升 +100%（超出 ±20%），先降後升方向不一致→不規則 |
+| Sprint 67 | 2026-03-08 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-177（S/1pt）；S65=1→S66=2→S67=1，S66→S67 下降 -50%（超出 ±20%），先升後降方向不一致→不規則 |
 
 ---
 
@@ -110,6 +111,7 @@ Sprint Review 時由 DORA subagent 計算四項 DORA 指標並追加快照。
 | Sprint 64 | 2026-03-08 | 0.00 次/天 | N/A | 26.83 小時 | 84.8% | 不規則 |
 | Sprint 65 | 2026-03-08 | 0.00 次/天 | N/A | 21.38 小時 | 81.3% | 不規則 |
 | Sprint 66 | 2026-03-08 | 0.00 次/天 | N/A | 21.63 小時 | 100% | 不規則 |
+| Sprint 67 | 2026-03-08 | 0.00 次/天 | N/A | 21.63 小時 | 100% | 不規則 |
 
 > **Sprint 40 說明**：首次 DORA baseline 建立。趨勢判定需至 Sprint 42 才有完整數據（需至少 3 個 Sprint 記錄）。MTTR 填「N/A」表示本 Sprint 無已關閉的 bug label Issue 記錄。
 >
