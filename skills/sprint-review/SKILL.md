@@ -36,6 +36,18 @@ Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定�
 
 ---
 
+## 模型選用建議
+
+> **Sprint Review 預設可使用 Sonnet 模型執行。深度 Retrospective 分析（根因識別、架構影響評估、系統性問題診斷）可選用 Opus 模型。**
+>
+> 指標計算、DORA 數據彙整、通過標準核對等常規步驟 Sonnet 已可高品質完成。若本 Sprint Velocity 大幅偏差或出現連續 Problem 趨勢，建議升級至 Opus 進行更深度的回顧分析。
+>
+> 切換指令：`/model claude-opus-4-6`（選用）
+>
+> 執行完畢後切換回 Sonnet：`/model claude-sonnet-4-6`
+
+---
+
 ## 1.5 交付物文案一致性審查（Sprint Review 前執行）
 
 <!-- US-86：回應 Sprint 38-40 連續 Retro Problem — Issue #81 -->
@@ -322,7 +334,7 @@ DORA subagent 依序執行以下步驟：
 
 **步驟 4：趨勢判定演算法**
 
-讀取 `docs/km/Metrics_Log.md` 的 DORA Metrics 表格，取最近歷史快照判定趨勢：
+讀取 `docs/km/Metrics_Log.md` 的 DORA Metrics 表格，**僅讀取最近 30 個 Sprint 記錄**（若歷史記錄不足 30 個，則讀取全部）作為計算視窗，取最近歷史快照判定趨勢：
 
 - 累積 Sprint < 3：趨勢欄填「資料不足」，記錄現有數值（首次 baseline 建立期適用）
 - 累積 Sprint ≥ 3：依下列規則判定：
@@ -778,7 +790,7 @@ Metrics subagent 自行讀取 `docs/sprints/sprint_N.md`（N 為本 Sprint 編�
 
 #### 步驟 4：趨勢分析
 
-Metrics subagent 自行讀取 `docs/km/Metrics_Log.md` 取得歷史 Velocity 資料：
+Metrics subagent 自行讀取 `docs/km/Metrics_Log.md` 取得歷史 Velocity 資料，**僅讀取最近 30 個 Sprint 記錄**（若歷史記錄不足 30 個，則讀取全部）作為計算視窗：
 
 - **Sprint 1–2（資料不足）**：輸出「資料不足」，不進行趨勢判斷
 - **Sprint 3+（啟用趨勢）**：取最近三筆 Velocity，依下列優先順序判定：

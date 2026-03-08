@@ -17,7 +17,7 @@
 |-------|-------|------|--------|------|
 | US-158：Sprint Review / Planning 流程精簡化 — Token Baseline 與 Beta 檢查降級 | #155 | S | 1 | 完成 |
 | US-159：模型分層策略 Phase 1 落地 — SKILL.md + tutorial 新增模型切換提示 | #156 | S | 1 | 待開始 |
-| US-160：Metrics 計算視窗限制 — 趨勢分析僅讀取最近 30 個 Sprint | #157 | S | 1 | 待開始 |
+| US-160：Metrics 計算視窗限制 — 趨勢分析僅讀取最近 30 個 Sprint | #157 | S | 1 | 完成 |
 
 ---
 
