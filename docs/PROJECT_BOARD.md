@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 66 完成）
-**當前 Sprint**：Sprint 66（完成）
+**最後更新**：2026-03-08（Sprint 67 進行中）
+**當前 Sprint**：Sprint 67（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 66](sprints/sprint_66.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 67](sprints/sprint_67.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 67 — 進行中
+
+**Sprint Goal**：簡化多模型派遣架構 — 移除基於錯誤前提設計的 cli-adapter.sh 抽象層，直接利用 Gemini CLI 原生 agent 能力。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-177：CLI Adapter 簡化 — 移除不必要的抽象層，直接使用 Gemini CLI 原生 agent 能力 | #171 | S | 1 | 進行中 |
 
 ---
 
