@@ -27,6 +27,7 @@ Sprint 執行的核心 Skill。從 Sprint Backlog 逐個取出 Story，透過 **
 ## 2.1 Provider 路由（多模型派遣）
 
 <!-- US-177 CLI Adapter 簡化 — Sprint 67 -->
+<!-- US-180 Developer Provider 路由 Fallback 自動化 — Sprint 69 -->
 
 Sprint 執行支援**雙軌派遣機制**：Story-Lifecycle subagent 可透過 Claude Agent tool 或直接呼叫 Gemini CLI 派遣，由環境變數控制路由決策。
 
@@ -35,7 +36,14 @@ Sprint 執行支援**雙軌派遣機制**：Story-Lifecycle subagent 可透過 C
 | 環境變數 | 說明 | 預設值 |
 |---------|------|--------|
 | `SHIKIGAMI_MODEL_PROVIDER` | 全域 provider 切換（`claude` / `gemini`） | `claude` |
-| `SHIKIGAMI_ROLE_PROVIDER_MAP` | 角色層級 provider 對照（格式見下方） | 全部 `claude` |
+| `SHIKIGAMI_ROLE_PROVIDER_MAP` | 角色層級 provider 對照（格式見下方），支援兩種格式：`role:provider` 或 `role:provider:model` | 全部 `claude` |
+
+**`SHIKIGAMI_ROLE_PROVIDER_MAP` 格式說明：**
+
+| 格式 | 範例 | 說明 |
+|------|------|------|
+| `role:provider` | `developer:gemini` | 使用指定 provider 的預設模型 |
+| `role:provider:model` | `developer:gemini:gemini-3.1-pro-preview` | 使用指定 provider 的指定模型 |
 
 ### 預設角色→Provider 對照表
 
@@ -43,7 +51,7 @@ Sprint 執行支援**雙軌派遣機制**：Story-Lifecycle subagent 可透過 C
 SHIKIGAMI_ROLE_PROVIDER_MAP="developer:claude,qa:claude,po:claude,architect:claude"
 ```
 
-預設所有角色均使用 Claude。使用者可透過環境變數覆寫特定角色的 provider（見「手動切換機制」）。
+預設所有角色均使用 Claude。使用者可透過環境變數覆寫特定角色的 provider（見「切換機制」）。
 
 ### Provider 解析順序
 
@@ -57,7 +65,21 @@ SHIKIGAMI_ROLE_PROVIDER_MAP[role]
 
 ### Fallback 行為
 
-Gemini CLI 呼叫失敗時，手動切回 Claude（設定 `SHIKIGAMI_MODEL_PROVIDER=claude`）重新執行 Sprint。框架不自動 fallback，簡化路由邏輯。
+Gemini CLI 呼叫失敗（exit code != 0 / timeout / quota 耗盡 / 認證失敗）時，**自動 fallback 至 Claude Agent tool**，並輸出以下告警訊息，不中斷流程：
+
+```
+[FALLBACK] Gemini CLI 失敗，切回 Claude
+```
+
+框架自動處理 fallback，使用者無需手動切換環境變數重新執行。
+
+### 不降級策略
+
+當指定的 Gemini 模型不存在（Gemini CLI 回傳 `ModelNotFoundError`）時，**fallback 至 Claude**，不靜默降級至其他 Gemini 模型。
+
+- 觸發條件：Gemini CLI stderr 含 `ModelNotFoundError` 字串
+- 處置行為：輸出 `[FALLBACK] Gemini CLI 失敗，切回 Claude` 告警，切換至 Claude Agent tool 執行
+- 禁止行為：不得靜默將模型降級至其他 Gemini 模型（如 `gemini-pro`）繼續執行
 
 ### Gemini CLI 能力說明
 
