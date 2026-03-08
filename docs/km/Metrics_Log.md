@@ -69,6 +69,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 62 | 2026-03-08 | 4 points | 100% | 上升趨勢 | Goal 達成，3/3 Stories PASS；US-165（S/1pt）+ US-166（S/1pt）+ US-167（M/2pt）；S60=3→S61=3→S62=4，S61→S62 上升 +33%，S60→S61 持平→S61→S62 上升，連續穩定至上升→上升趨勢 |
 | Sprint 63 | 2026-03-08 | 3 points | 100% | 不規則 | Goal 達成，3/3 Stories PASS；US-168（S/1pt）+ US-169（S/1pt）+ US-170（S/1pt）；S61=3→S62=4→S63=3，S62→S63 下降 -25%（超出 ±20%），先升後降方向不一致→不規則 |
 | Sprint 64 | 2026-03-08 | 4 points | 100% | 不規則 | Goal 達成，4/4 Stories PASS；US-171（S/1pt）+ US-172（S/1pt）+ US-173（S/1pt）+ US-174（S/1pt）；S62=4→S63=3→S64=4，S63→S64 回升 +33%（超出 ±20%），先降後升方向不一致→不規則 |
+| Sprint 65 | 2026-03-08 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-175（S/1pt）；S63=3→S64=4→S65=1，S64→S65 下降 -75%（超出 ±20%），先升後降方向不一致→不規則 |
 
 ---
 
@@ -106,6 +107,7 @@ Sprint Review 時由 DORA subagent 計算四項 DORA 指標並追加快照。
 | Sprint 62 | 2026-03-08 | 0.00 次/天 | N/A | 21.38 小時 | 100% | 不規則 |
 | Sprint 63 | 2026-03-08 | 0.00 次/天 | N/A | 21.38 小時 | 100% | 不規則 |
 | Sprint 64 | 2026-03-08 | 0.00 次/天 | N/A | 26.83 小時 | 84.8% | 不規則 |
+| Sprint 65 | 2026-03-08 | 0.00 次/天 | N/A | 21.38 小時 | 81.3% | 不規則 |
 
 > **Sprint 40 說明**：首次 DORA baseline 建立。趨勢判定需至 Sprint 42 才有完整數據（需至少 3 個 Sprint 記錄）。MTTR 填「N/A」表示本 Sprint 無已關閉的 bug label Issue 記錄。
 >
@@ -144,6 +146,8 @@ Sprint Review 時由 DORA subagent 計算四項 DORA 指標並追加快照。
 > **Sprint 63 說明**：部署頻率 0.00 次/天（50 筆記錄中 success=0；failure=30（Structural Validation）、cancelled=8、skipped=3、queued/in-progress=11（不計入）；有效執行 38 筆，全無 success）。變更前置時間 N/A（無已合併 PR）。MTTR 21.38 小時（Sprint 63 窗口內無新增 closed bug Issues，延用過去四期已關閉 bugs 的加權平均：(4.30 + 53.89 + 22.30 + 5.03) / 4 = 21.38 小時）。變更失敗率 100%（30 failure / 30 有效執行），與 Sprint 62 持平於最高失敗率。趨勢判定：部署頻率 S61=0.00→S62=0.00→S63=0.00 持平於零，CFR S61=100%→S62=100%→S63=100% 三期持平於最差值，MTTR S61=26.8→S62=21.38→S63=21.38 小時持平；所有指標持平停滯，系統性停滯狀態未改善→不規則。Issue #101（shallow clone SHA）為根因，持續追蹤中。
 >
 > **Sprint 64 說明**：部署頻率 0.00 次/天（50 筆記錄中 success=0；failure=28、cancelled=5、skipped=6、in-progress=11（不計入）；有效執行 33 筆，全無 success）。變更前置時間 N/A（無已合併 PR）。MTTR 26.83 小時（Sprint 64 窗口 2026-03-01 至 2026-03-08 內關閉 3 個 bug Issues：Bug 1 = 4.30 小時、Bug 2 = 53.89 小時、Bug 3 = 22.30 小時，平均 26.83 小時；Bug 2 跨越多天導致 MTTR 拉高）。變更失敗率 84.8%（28 failure / 33 有效執行），相較 Sprint 63 的 100% 有所改善，主因 cancelled 記錄增加使分母擴大。趨勢判定：部署頻率 S62=0.00→S63=0.00→S64=0.00 持平於零，CFR S62=100%→S63=100%→S64=84.8% S63→S64 首次略有改善，MTTR S62=21.38→S63=21.38→S64=26.83 小時 S63→S64 惡化；CFR 略改善但 MTTR 惡化，部署頻率仍停滯，指標方向不一致→不規則。Issue #101（shallow clone SHA）為根因，持續追蹤中。
+>
+> **Sprint 65 說明**：部署頻率 0.00 次/天（50 筆記錄中 success=0；failure=26、skipped=6、in-progress=18、cancelled=1；有效執行 32 筆，全無 success）。變更前置時間 N/A（無已合併 PR）。MTTR 21.38 小時（Sprint 65 窗口內無新增 closed bug Issues，延用過去四期平均：(4.30 + 53.89 + 22.30 + 5.03) / 4 = 21.38 小時）。變更失敗率 81.3%（26 failure / 32 有效執行），相較 Sprint 64 的 84.8% 小幅改善 -3.5%（±20% 內）。趨勢判定：部署頻率 S62=0.00→S63=0.00→S64=0.00→S65=0.00 四期持平於零（無改善），CFR S62=100%→S63=100%→S64=84.8%→S65=81.3% 連續兩期改善下降趨勢中，MTTR S62=21.38→S63=21.38→S64=26.83→S65=21.38 小時 S64→S65 回落至基準值改善 -20.3%；CFR 與 MTTR 同步改善但部署頻率停滯，指標間方向不一致→不規則。Issue #101（shallow clone SHA）為根本原因，持續追蹤中。
 
 ---
 

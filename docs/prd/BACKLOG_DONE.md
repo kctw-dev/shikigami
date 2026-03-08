@@ -2010,6 +2010,16 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 
 ---
 
+## Sprint 65（2026-03-08）
+
+**Sprint Goal**：Subagent 模型自動調度完善 — 補齊所有 subagent 派遣點的 model 參數標注，建立角色→模型對照表，實現成本分層自動化。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-175（Issue #169）：Subagent 多模型自動調度 — 角色對照表建立與派遣點 model 參數補齊 | S | 1 | Sprint 65 |
+
+---
+
 ## Sprint 64（2026-03-08）
 
 **Sprint Goal**：清空 Backlog，終結所有懸而未決的 Open Issues — 評估並結案或推進 #159、#59、#5、#4。
