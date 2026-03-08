@@ -28,6 +28,7 @@ Sprint 執行的核心 Skill。從 Sprint Backlog 逐個取出 Story，透過 **
 
 <!-- US-177 CLI Adapter 簡化 — Sprint 67 -->
 <!-- US-180 Developer Provider 路由 Fallback 自動化 — Sprint 69 -->
+<!-- US-181 Provider 路由預設值宿主平台偵測 — Sprint 70 -->
 
 Sprint 執行支援**雙軌派遣機制**：Story-Lifecycle subagent 可透過 Claude Agent tool 或直接呼叫 Gemini CLI 派遣，由環境變數控制路由決策。
 
@@ -35,8 +36,8 @@ Sprint 執行支援**雙軌派遣機制**：Story-Lifecycle subagent 可透過 C
 
 | 環境變數 | 說明 | 預設值 |
 |---------|------|--------|
-| `SHIKIGAMI_MODEL_PROVIDER` | 全域 provider 切換（`claude` / `gemini`） | `claude` |
-| `SHIKIGAMI_ROLE_PROVIDER_MAP` | 角色層級 provider 對照（格式見下方），支援兩種格式：`role:provider` 或 `role:provider:model` | 全部 `claude` |
+| `SHIKIGAMI_MODEL_PROVIDER` | 全域 provider 切換（`claude` / `gemini`） | 宿主平台自動偵測（見偵測規則） |
+| `SHIKIGAMI_ROLE_PROVIDER_MAP` | 角色層級 provider 對照（格式見下方），支援兩種格式：`role:provider` 或 `role:provider:model` | 全部使用宿主平台偵測結果 |
 
 **`SHIKIGAMI_ROLE_PROVIDER_MAP` 格式說明：**
 
