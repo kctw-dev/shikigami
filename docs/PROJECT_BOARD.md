@@ -15,7 +15,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-176：CLI Adapter Phase 3 -- SKILL.md 整合與角色→Provider 路由機制 | #170 | M | 2 | 待辦 |
+| US-176：CLI Adapter Phase 3 -- SKILL.md 整合與角色→Provider 路由機制 | #170 | M | 2 | 完成 |
 
 ---
 

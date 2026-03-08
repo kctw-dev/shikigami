@@ -24,6 +24,63 @@ Sprint 執行的核心 Skill。從 Sprint Backlog 逐個取出 Story，透過 **
 
 ---
 
+## 2.1 Provider 路由（多模型派遣）
+
+<!-- US-176 CLI Adapter Phase 3 — Sprint 66 -->
+
+Sprint 執行支援**雙軌派遣機制**：Story-Lifecycle subagent 可透過 Claude Agent tool 或 `scripts/cli-adapter.sh` 派遣，由環境變數控制路由決策。
+
+### 環境變數定義
+
+| 環境變數 | 說明 | 預設值 |
+|---------|------|--------|
+| `SHIKIGAMI_MODEL_PROVIDER` | 全域 provider 切換（`claude` / `gemini`） | `claude` |
+| `SHIKIGAMI_ROLE_PROVIDER_MAP` | 角色層級 provider 對照（格式見下方） | 全部 `claude` |
+
+### 預設角色→Provider 對照表
+
+```
+SHIKIGAMI_ROLE_PROVIDER_MAP="developer:claude,qa:claude,po:claude,architect:claude"
+```
+
+預設所有角色均使用 Claude。使用者可透過環境變數覆寫特定角色的 provider（見「手動切換機制」）。
+
+### Provider 解析順序
+
+```
+SHIKIGAMI_ROLE_PROVIDER_MAP[role]
+  → SHIKIGAMI_MODEL_PROVIDER
+  → "claude"（預設）
+```
+
+即：角色對照表優先，其次全域 provider，最後 fallback 至 claude。
+
+### Fallback 行為
+
+Gemini CLI 呼叫失敗（`cli-adapter.sh` exit code != 0）時，自動 fallback 回 Claude（繼承 `scripts/cli-adapter.sh` 既有行為），Sprint 執行不中斷。失敗原因記錄至 stderr，主 session 可從日誌中識別但不阻塞後續 Story 執行。
+
+### 限制說明
+
+Gemini 路徑（`cli-adapter.sh`）**不具備 tool calling 能力**，無法執行 Read / Edit / Bash 等工具。適用場景：AI 僅需產生文字輸出的任務（如純文件生成）。需要 TDD、檔案編輯等工具操作的 Story，**必須使用 Claude Agent tool 路徑**。
+
+### 手動切換機制
+
+**(a) 切換全域 provider（全部角色改用 Gemini）：**
+
+```bash
+export SHIKIGAMI_MODEL_PROVIDER=gemini
+```
+
+**(b) 切換特定角色 provider（僅 Developer 與 QA 改用 Gemini）：**
+
+```bash
+export SHIKIGAMI_ROLE_PROVIDER_MAP="developer:gemini,qa:gemini,po:claude,architect:claude"
+```
+
+設定後執行 Sprint，框架即依對照表為各角色選擇對應 provider。
+
+---
+
 ## 3. 執行流程
 
 ```
@@ -156,7 +213,21 @@ Sprint Backlog 還有 Story？
    **降級指引：** `gh run list` 指令失敗（網路問題、權限不足、非 GitHub 倉庫等）或無任何執行記錄時，CI 狀態記為 `UNKNOWN`，靜默略過，不阻塞 Story 執行。UNKNOWN 狀態不觸發 `[CI-ALERT]`。
 
 2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。**主 session 不讀取 Story 內容**，Story ID 與路徑傳入 subagent，由 subagent 自行讀取。
-3. **派遣 Story-Lifecycle subagent**（`model: "sonnet"`）：使用 `story-lifecycle-prompt.md` 作為 prompt，以 ADR-007 §AC2 介面契約格式傳入以下參數（主 session 不預讀這些內容，路徑由 **Story-Lifecycle subagent 自行讀取**）。派遣時指定 `model: "sonnet"`，確保 Execution 環節使用中階模型以兼顧速度與成本：
+3. **派遣 Story-Lifecycle subagent**：使用 `story-lifecycle-prompt.md` 作為 prompt，以 ADR-007 §AC2 介面契約格式傳入以下參數（主 session 不預讀這些內容，路徑由 **Story-Lifecycle subagent 自行讀取**）。派遣前依 §2.1 Provider 解析順序決定目標角色的 provider，並選擇對應派遣路徑：
+
+   **雙軌派遣路徑：**
+
+   - **provider = claude（預設）**：使用 Agent tool 派遣，指定 `model: "sonnet"`，確保 Execution 環節使用中階模型以兼顧速度與成本。此路徑支援完整 tool calling（Read / Edit / Bash 等），適用所有 Story 類型。
+
+   - **provider = gemini**：使用 Bash 呼叫 `scripts/cli-adapter.sh`，以 stdin pipe 傳入 `story-lifecycle-prompt.md` 內容與 Story 參數。**注意**：Gemini 路徑不具備 tool calling 能力，僅適用於純文字輸出任務（如 doc-only Story）；需要 TDD 或工具操作的 Story 應維持 Claude 路徑。
+
+   ```bash
+   # Gemini 路徑呼叫範例（doc-only Story 適用）
+   cat skills/sprint-execution/story-lifecycle-prompt.md \
+     <(echo "story_id: ${story_id}") \
+     <(echo "sprint_file: ${sprint_file}") \
+     | invoke_cli_adapter "gemini" ""
+   ```
    - `story_id`：Story 識別碼（如 `US-XX`）
    - `sprint_file`：`docs/sprints/sprint_N.md`（Story AC 與完整需求）
    - `project_board`：`docs/PROJECT_BOARD.md`
