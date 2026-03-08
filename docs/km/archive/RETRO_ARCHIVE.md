@@ -426,8 +426,8 @@
 
 | # | Action | Owner | 驗收方式 | 狀態 | Issue |
 |---|--------|-------|----------|------|-------|
-| 1 | Sprint Planning QA 精化增加 AC 路徑驗證步驟：若 AC 引用具體檔案路徑，QA 需執行路徑存在性確認 | QA | 下次 Sprint Planning QA 精化有路徑檢查記錄 | Open | [#21](https://github.com/KCTW/shikigami/issues/21) |
-| 2 | Sprint 12 追蹤 US-25 AC4 量測：cache_read_input_tokens < 41.6M（Must-have） | PO + Scrum Master | Sprint 12 Review 出示量測數據 | Open | [#22](https://github.com/KCTW/shikigami/issues/22) |
+| 1 | Sprint Planning QA 精化增加 AC 路徑驗證步驟：若 AC 引用具體檔案路徑，QA 需執行路徑存在性確認 | QA | 下次 Sprint Planning QA 精化有路徑檢查記錄 | Closed（Sprint 63 確認已落地） | [#21](https://github.com/KCTW/shikigami/issues/21) |
+| 2 | Sprint 12 追蹤 US-25 AC4 量測：cache_read_input_tokens < 41.6M（Must-have） | PO + Scrum Master | Sprint 12 Review 出示量測數據 | Closed（Sprint 63 確認已落地） | [#22](https://github.com/KCTW/shikigami/issues/22) |
 
 > Sprint 10 的 1 個 Open Action Item（#20）已在本 Sprint 關閉（Retro #20 Story 交付）。
 
@@ -467,9 +467,9 @@
 
 | # | Action | Owner | 驗收方式 | 狀態 | Issue |
 |---|--------|-------|----------|------|-------|
-| 1 | PO Demo 應讀取 repo 源碼而非 plugin cache | PO / Scrum Master | sprint-review SKILL.md §2 Step 1 明確指定 repo 源碼路徑 | Open | [#26](https://github.com/KCTW/shikigami/issues/26) |
-| 2 | Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | Developer / Scrum Master | sprint-execution SKILL.md 步驟 8 明確限定更新範圍 | Open | [#27](https://github.com/KCTW/shikigami/issues/27) |
-| 3 | 量測門檻設定應包含容忍帶（±2%） | PO / Architect | 下次量測類 AC 包含容忍帶說明 | Open | [#28](https://github.com/KCTW/shikigami/issues/28) |
+| 1 | PO Demo 應讀取 repo 源碼而非 plugin cache | PO / Scrum Master | sprint-review SKILL.md §2 Step 1 明確指定 repo 源碼路徑 | Closed（Sprint 63 確認已落地） | [#26](https://github.com/KCTW/shikigami/issues/26) |
+| 2 | Developer Board 更新範圍限制 — 防止越權標記 Sprint 完成 | Developer / Scrum Master | sprint-execution SKILL.md 步驟 8 明確限定更新範圍 | Closed（Sprint 63 確認已落地） | [#27](https://github.com/KCTW/shikigami/issues/27) |
+| 3 | 量測門檻設定應包含容忍帶（±2%） | PO / Architect | 下次量測類 AC 包含容忍帶說明 | Closed（Sprint 63 確認已落地） | [#28](https://github.com/KCTW/shikigami/issues/28) |
 
 > Sprint 11 的 2 個 Open Action Items（#21、#22）已在本 Sprint 關閉。
 

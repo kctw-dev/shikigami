@@ -229,12 +229,33 @@ Story 驗收判定完成後，須依判定結果回寫對應 GitHub Issue 的狀
 
 | 驗收判定 | Issue 操作 | 說明 |
 |---------|-----------|------|
-| Story PASS（已完成） | 套用 `done` label，然後關閉 Issue | 代表 Story 生命週期結束，Issue 天然追蹤完成狀態 |
+| Story PASS（已完成） | 依 Issue 建立者判斷（見下方「Issue 建立者判斷」）執行對應操作 | 內部 Issue 自動關閉；外部 Issue 保持 Open，僅加 label + 留言 |
 | Story FAIL（未完成） | Issue 保持 open，不執行任何關閉操作 | 未完成的 Story 回流 Backlog，Issue 維持 open 狀態等待下次 Sprint 選取 |
+
+### Issue 建立者判斷
+
+Story PASS 時，在執行任何操作前，必須先判斷 Issue 的建立者類型：
+
+**判斷方式：**
+
+```bash
+# 查詢 Issue 建立者
+gh issue view <issue-number> --json author --jq '.author.login'
+```
+
+**內部 Issue（自動建立）定義：** 滿足以下任一條件即視為內部 Issue：
+- Issue 建立者 login 為 `github-actions[bot]`
+- Issue body 含有 `backlog-intake` 字串（由 backlog-intake workflow 自動建立的標記）
+
+**外部 Issue（Stakeholder 建立）定義：** 不符合上述任一內部條件的 Issue，一律視為外部 Issue。
 
 ### Story PASS — 操作步驟
 
-對每個驗收通過（PASS）的 Story，依序執行以下指令：
+根據 Issue 建立者判斷結果，執行對應操作：
+
+**情況一：內部 Issue（建立者為 `github-actions[bot]` 或 body 含 `backlog-intake`）**
+
+維持現行邏輯，自動關閉 Issue：
 
 ```bash
 # 步驟 1：套用 done label 並移除 in-sprint label
@@ -243,6 +264,20 @@ gh issue edit <issue-number> --add-label "done" --remove-label "status: in-sprin
 # 步驟 2：關閉 Issue，留言記錄完成 Sprint
 gh issue close <issue-number> -c "Sprint N Review 驗收通過（PASS）。Story 已完成交付。"
 ```
+
+**情況二：外部 Issue（Stakeholder 或其他外部使用者建立）**
+
+Issue 保持 Open，僅加 label 並留言通知，等待 Stakeholder 確認後自行關閉：
+
+```bash
+# 步驟 1：套用 done label 並移除 in-sprint label
+gh issue edit <issue-number> --add-label "done" --remove-label "status: in-sprint"
+
+# 步驟 2：留言通知，Issue 保持 Open（不執行 gh issue close）
+gh issue comment <issue-number> --body "Sprint N Review 驗收通過（PASS）。已修復，請測試確認後關閉此 Issue。"
+```
+
+> **重要**：外部 Issue 不得執行 `gh issue close`。Issue 保持 Open 讓外部 Stakeholder 有機會在測試確認後自行關閉，避免在其尚未驗證前強制關閉。
 
 ### Story FAIL — 操作步驟
 
@@ -729,8 +764,9 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent** 執行歸檔�
 - [ ] 通過驗收的 Story 已移至 `PROJECT_BOARD.md` Done 欄位（含完成日期、Sprint 編號、Sprint 統計數據更新）
 - [ ] `docs/sprints/sprint_N.md` Sprint Backlog 表格中每筆 Story 的狀態欄已回寫最終驗收結果（完成 / 未完成，未完成者標注原因）
 - [ ] **Story Issue 狀態回寫**（§2.6，ADR-010 生命週期閉環）：
-  - [ ] 每個 PASS Story：已執行 `gh issue edit <number> --add-label "done" --remove-label "status: in-sprint"` 套用 done label
-  - [ ] 每個 PASS Story：已執行 `gh issue close <number> -c "Sprint N Review 驗收通過（PASS）。Story 已完成交付。"` 關閉 Issue
+  - [ ] 每個 PASS Story：已執行 `gh issue view <number> --json author --jq '.author.login'` 查詢 Issue 建立者，判斷為內部或外部 Issue
+  - [ ] 每個 PASS Story（內部 Issue — 建立者為 `github-actions[bot]` 或 body 含 `backlog-intake`）：已執行 `gh issue edit <number> --add-label "done" --remove-label "status: in-sprint"` 套用 done label，並執行 `gh issue close <number> -c "Sprint N Review 驗收通過（PASS）。Story 已完成交付。"` 關閉 Issue
+  - [ ] 每個 PASS Story（外部 Issue — Stakeholder 或其他外部建立者）：已執行 `gh issue edit <number> --add-label "done" --remove-label "status: in-sprint"` 套用 done label，並執行 `gh issue comment <number> --body "Sprint N Review 驗收通過（PASS）。已修復，請測試確認後關閉此 Issue。"` 留言通知；**Issue 保持 Open，不執行 close**
   - [ ] 每個 FAIL Story：Issue 保持 open，已執行 `gh issue edit <number> --remove-label "status: in-sprint" --add-label "status: backlog"` 回復 backlog 狀態，並留言記錄未完成原因
 - [ ] 未達 DoD 的 Story 已移回 Backlog 並標注原因
 - [ ] `Retrospective_Log.md` 已新增 Good / Problem / Action 記錄
