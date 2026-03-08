@@ -15,9 +15,9 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-168：Sprint Review Issue 關閉邏輯修正 — 區分內部/外部 Issue 關閉策略 | #166 | S | 1 | 待開始 |
-| US-169：多模型 CLI 路由 Phase 2 — 開源 Adapter 評估與決策 | #167 | S | 1 | 待開始 |
-| US-170：Retro Action Items 批次處理 — Sprint 11-12 懸而未決項目清理 | #168 | S | 1 | 待開始 |
+| US-168：Sprint Review Issue 關閉邏輯修正 — 區分內部/外部 Issue 關閉策略 | #166 | S | 1 | 完成 |
+| US-169：多模型 CLI 路由 Phase 2 — 開源 Adapter 評估與決策 | #167 | S | 1 | 完成 |
+| US-170：Retro Action Items 批次處理 — Sprint 11-12 懸而未決項目清理 | #168 | S | 1 | 完成 |
 
 ---
 

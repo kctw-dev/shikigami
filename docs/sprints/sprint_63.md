@@ -12,9 +12,9 @@
 
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
-| US-168 | #166 | Sprint Review Issue 關閉邏輯修正 — 區分內部/外部 Issue 關閉策略 | S | 1 | 是 | 待開始 |
-| US-169 | #167 | 多模型 CLI 路由 Phase 2 — 開源 Adapter 評估與決策 | S | 1 | 是 | 待開始 |
-| US-170 | #168 | Retro Action Items 批次處理 — Sprint 11-12 懸而未決項目清理 | S | 1 | 是 | 待開始 |
+| US-168 | #166 | Sprint Review Issue 關閉邏輯修正 — 區分內部/外部 Issue 關閉策略 | S | 1 | 是 | 完成 |
+| US-169 | #167 | 多模型 CLI 路由 Phase 2 — 開源 Adapter 評估與決策 | S | 1 | 是 | 完成 |
+| US-170 | #168 | Retro Action Items 批次處理 — Sprint 11-12 懸而未決項目清理 | S | 1 | 是 | 完成 |
 
 **Sprint 容量**：3 Points（3 Stories）
 
