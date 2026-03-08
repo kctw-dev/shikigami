@@ -16,6 +16,7 @@
 > - **Gemini CLI（Gemini 路徑）**：主 session 透過 `echo "prompt" | gemini` 直接呼叫 Gemini CLI，以 stdin pipe 傳入本 prompt 與 Story 參數。Gemini CLI 為原生 agent，具備完整工具能力（ReadFile、WriteFile、Edit、Shell 等），適用所有 Story 類型。無論哪種派遣方式，本 prompt 定義的角色職責、審查流程與輸出格式均保持一致。
 
 <!-- US-180 Developer Provider 路由 — Sprint 69 -->
+<!-- US-181 Provider 路由預設值宿主平台偵測 — Sprint 70 -->
 
 ## §0 Provider 路由（Developer 派遣前置決策）
 
@@ -35,11 +36,18 @@ MAP_VALUE = $SHIKIGAMI_ROLE_PROVIDER_MAP 中 ROLE 對應的值
 
 # 步驟 1b：若角色層級無對照，查詢全域 provider
 若 MAP_VALUE 未設定：
-  provider = $SHIKIGAMI_MODEL_PROVIDER（若未設定則 "claude"）
+  provider = $SHIKIGAMI_MODEL_PROVIDER（若未設定則使用宿主平台偵測結果）
 
 # 步驟 1c：最終決定
-provider = MAP_VALUE 中解析的 provider（或全域 provider，或預設 "claude"）
+provider = MAP_VALUE 中解析的 provider（或全域 provider，或宿主平台偵測結果）
 model    = MAP_VALUE 中解析的 model（若有），否則使用 provider 預設模型
+
+# 宿主平台偵測規則（步驟 1b/1c fallback 使用）
+宿主平台偵測：
+  - Claude Code session 中執行 → provider = "claude"
+  - Gemini CLI session 中執行  → provider = "gemini"
+  - 無法判定                   → provider = "claude"（保守 fallback）
+完整偵測規則參照 SKILL.md §2.1「宿主平台偵測規則」
 ```
 
 ### 步驟 2：依 provider 選擇派遣路徑
