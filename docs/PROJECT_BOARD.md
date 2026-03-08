@@ -7,15 +7,22 @@
 
 ---
 
-## Sprint 69 — 進行中
+## Sprint 69 — 完成
 
 **Sprint Goal**：Developer Provider 路由落地 — Gemini CLI 自動 Fallback 派遣機制
 **期間**：2026-03-08 ~ 2026-03-15
 **ADR 依賴**：無
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。SKILL.md §2.1 Fallback 自動化（手動→自動）+ 模型指定格式擴充（`role:provider:model`）+ story-lifecycle-prompt.md §0 Provider 路由落地。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-180：Developer 角色 Provider 路由 — 支援 Gemini CLI 可切換派遣（環境變數控制） | #175 | S | 1 | 完成 |
+
+## Sprint 69 統計
+- Velocity：1 point
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-08
 
 ---
 

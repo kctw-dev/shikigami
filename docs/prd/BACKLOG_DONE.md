@@ -4,6 +4,16 @@
 
 ---
 
+## Sprint 69（2026-03-08）
+
+**Sprint Goal**：Developer Provider 路由落地 — Gemini CLI 自動 Fallback 派遣機制
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-180（Issue #175）：Developer 角色 Provider 路由 — 支援 Gemini CLI 可切換派遣（環境變數控制） | S | 1 | Sprint 69 |
+
+---
+
 ## Sprint 68（2026-03-08）
 
 **Sprint Goal**：KM 減法 — 移除無用的 DORA Metrics + KM 檔案瘦身

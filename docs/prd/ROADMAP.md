@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-08（Sprint 68 — US-178/179 完成，KM 減法：DORA 移除 + BACKLOG_DONE 歸檔）
+> 最後更新：2026-03-08（Sprint 69 — US-180 完成，Developer Provider 路由落地：Gemini CLI 自動 Fallback 派遣機制）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.42.0**（Sprint 68）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.43.0**（Sprint 69）。
 
 | 版號 | 含義 |
 |------|------|
@@ -333,6 +333,7 @@ Sprint Review 時自動產出：
 | US-177 | CLI Adapter 簡化 — 移除不必要的抽象層，直接使用 Gemini CLI 原生 agent 能力 | Sprint 67 ✅ |
 | US-178 | 移除 DORA Metrics — sprint-review SKILL.md §2.7 刪除 + Metrics_Log.md DORA 區塊清除 | Sprint 68 ✅ |
 | US-179 | BACKLOG_DONE.md 歸檔機制 — 主檔瘦身（2110→63 行）+ BACKLOG_DONE_ARCHIVE.md 建立 | Sprint 68 ✅ |
+| US-180 | Developer 角色 Provider 路由 — Gemini CLI 可切換派遣（環境變數控制）+ 自動 Fallback | Sprint 69 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 
