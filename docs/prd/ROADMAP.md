@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-08（Sprint 63 — 流程修正與技術債清理，3 Stories / 3 Points 全數交付）
+> 最後更新：2026-03-08（Sprint 64 — 多模型 CLI 路由 Issue #159 結案，US-171 完成）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -314,8 +314,35 @@ Sprint Review 時自動產出：
 | US-158 | Sprint Review / Planning 流程精簡化 — Token Baseline 與 Beta 檢查降級 | Sprint 60 ✅ |
 | US-159 | 模型分層策略 Phase 1 落地 — SKILL.md + tutorial 新增模型切換提示 | Sprint 60 ✅ |
 | US-160 | Metrics 計算視窗限制 — 趨勢分析僅讀取最近 30 個 Sprint | Sprint 60 ✅ |
+| US-161 | 模型分層策略 Phase 2 — subagent 自動模型指定（Issue #158） | Sprint 60 ✅ |
+| US-162 | 框架流程減法審查 — SKILL.md 冗餘步驟與重複內容清理 | Sprint 61 ✅ |
+| US-163 | 多模型 CLI 路由 Phase 0 — Gemini CLI 呼叫介面調查（Issue #159 拆分） | Sprint 61 ✅ |
+| US-164 | Backlog Grooming — 現有 Issues RICE 評分補齊 + 新候選 Story 提案 | Sprint 61 ✅ |
+| US-165 | Tutorial 新手體驗改善 — 首次 Sprint 成功率提升（錯誤訊息說明 + 常見卡關點指引） | Sprint 62 ✅ |
+| US-166 | 框架文件精簡 — SKILL.md 重複指引合併與冗餘步驟移除 | Sprint 62 ✅ |
+| US-167 | 多模型 CLI 路由 Phase 1 — Adapter 介面設計與 Gemini CLI 整合實作 | Sprint 62 ✅ |
+| US-168 | Sprint Review Issue 關閉邏輯修正 — 區分內部/外部 Issue 關閉策略 | Sprint 63 ✅ |
+| US-169 | 多模型 CLI 路由 Phase 2 — 開源 Adapter 評估與決策（維持自建） | Sprint 63 ✅ |
+| US-170 | Retro Action Items 批次處理 — Sprint 11-12 懸而未決項目清理 | Sprint 63 ✅ |
+| US-171 | 多模型 CLI 路由 Phase 3 方向決策 — Issue #159 結案（Phase 3 列為 Long-term） | Sprint 64 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issues #4 #5 有明確結論
+
+### 多模型 CLI 路由結案記錄（Sprint 61–64，Issue #159，2026-03-08）
+
+**三 Phase 交付摘要**：
+- Phase 0（US-163）：Gemini CLI 調查完成 — 確認非互動式呼叫可行，建議 `--output-format json` + stdin pipe 模式
+- Phase 1（US-167）：`scripts/cli-adapter.sh` 實作完成 — 132 行 Bash，Claude/Gemini 雙 provider，自動 fallback，16/16 測試全綠
+- Phase 2（US-169）：開源替代方案評估完成 — 四個候選方案均不適配，決策「維持自建」
+
+**Phase 3 評估結論**：**目前不需要，列為 Long-term**（Sprint 64 US-171 決策）
+
+理由：provider 數量未達閾值（目前 2 個，閾值 5 個以上）、自建 adapter 已足夠（YAGNI 原則）、Codex CLI 整合阻礙未解（網路沙箱）、框架輕量化方向。
+
+**重新評估觸發條件**（任一達成時重開）：
+- Shikigami 需要支援 5 個以上 LLM provider
+- `scripts/cli-adapter.sh` 超過 500 行
+- Codex CLI 網路沙箱問題解除
 
 ### 平台優先排序決策記錄（Sprint 25，2026-03-03）
 
@@ -328,6 +355,22 @@ Sprint Review 時自動產出：
 | **Codex CLI** | 2/5 | 延後，等待 OpenAI 官方 GitHub integration | gh CLI 預設無法使用（網路沙箱封鎖），為根本性阻礙 |
 
 > 決策依據：Issues #3/#4 各已在 Sprint 16 收到 US-17 調查結論評論；本決策記錄為 Sprint 25 M5 終審的正式補充。
+
+### Cursor 平台重新評估（Sprint 64 US-174，2026-03-08）
+
+Sprint 25 延後條件（Cursor v2.5+ Task tool API 開放）已達成，執行重新評估。
+
+| 評估項目 | 結論 |
+|----------|------|
+| 最新版本 | v2.6.13（2026-03-06） |
+| Cloud Agents API | 已開放（Beta，所有方案可用），提供程式化 SDK（Python/TypeScript/CLI） |
+| Agent Skills（SKILL.md） | v2.4 起支援，slash command 觸發機制，與 shikigami SKILL.md 有格式差異（`.cursor/rules/*.mdc`） |
+| 技術可行性 | **大幅提升**，但 shikigami 主動 Subagent dispatch 與 Cursor Cloud Agents 架構仍有根本差異（被動觸發 vs 主動派遣） |
+| 策略優先性 | 中低（RICE 1.0）；輕量化方向下多平台維護負擔需審慎評估 |
+
+**Sprint 64 決策**：**Issue #4 維持 OPEN**，等待 POC Sprint 驗證。
+
+**POC 前提條件**：框架 v0.35+ 穩定後排入 Backlog。POC 範疇為最小可行 Adapter（MVA），驗證 2 個核心 SKILL 的格式轉換與觸發可行性。
 
 ---
 
