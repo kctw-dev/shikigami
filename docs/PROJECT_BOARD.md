@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 62 Review 完成）
-**當前 Sprint**：Sprint 62（完成）
+**最後更新**：2026-03-08（Sprint 63 Planning 完成）
+**當前 Sprint**：Sprint 63（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 62](sprints/sprint_62.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 63](sprints/sprint_63.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 63 — 進行中
+
+**Sprint Goal**：流程修正與技術債清理 — 修復 Sprint Review Issue 自動關閉問題（#166），評估開源 CLI Adapter 替代方案（#167），清理 50+ Sprint 懸而未決的 Retro Action Items（#168）。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-168：Sprint Review Issue 關閉邏輯修正 — 區分內部/外部 Issue 關閉策略 | #166 | S | 1 | 待開始 |
+| US-169：多模型 CLI 路由 Phase 2 — 開源 Adapter 評估與決策 | #167 | S | 1 | 待開始 |
+| US-170：Retro Action Items 批次處理 — Sprint 11-12 懸而未決項目清理 | #168 | S | 1 | 待開始 |
 
 ---
 
