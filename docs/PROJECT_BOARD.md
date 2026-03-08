@@ -15,8 +15,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-155：Sprint Review 執行時間過長 — 流程精簡化 | #154 | M | 2 | 待辦 |
-| US-156：模型分層策略：Planning 用高階模型、Coding 用合適模型 | #106 | S | 1 | 待辦 |
+| US-155：Sprint Review 執行時間過長 — 流程精簡化 | #154 | M | 2 | 已完成 |
+| US-156：模型分層策略：Planning 用高階模型、Coding 用合適模型 | #106 | S | 1 | 進行中 |
 
 **Sprint 容量**：3 Points（2 Stories）
 

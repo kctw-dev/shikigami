@@ -12,7 +12,7 @@
 
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
-| US-155 | #154 | Sprint Review 執行時間過長 — 流程精簡化 | M | 2 | 是 | 待辦 |
+| US-155 | #154 | Sprint Review 執行時間過長 — 流程精簡化 | M | 2 | 是 | 完成 |
 | US-156 | #106 | 模型分層策略：Planning 用高階模型、Coding 用合適模型 | S | 1 | 是 | 待辦 |
 
 **Sprint 容量**：3 Points（2 Stories）
@@ -53,9 +53,9 @@ As a Product Owner executing Sprint Review, I want the Sprint Review skill to su
 
 **Done 定義**
 
-- [ ] `skills/sprint-review/SKILL.md` 已新增快思/慢想模式段落，包含跳過或縮短的步驟清單（AC1）
-- [ ] DORA Metrics 計算與 Retrospective Analytics 描述已改為平行執行（AC2）
-- [ ] 快思模式與慢想模式的觸發條件已有明確定義（AC3）
+- [x] `skills/sprint-review/SKILL.md` 已新增快思/慢想模式段落，包含跳過或縮短的步驟清單（AC1）
+- [x] DORA Metrics 計算與 Retrospective Analytics 描述已改為平行執行（AC2）
+- [x] 快思模式與慢想模式的觸發條件已有明確定義（AC3）
 
 ---
 

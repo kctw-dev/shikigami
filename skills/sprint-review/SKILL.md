@@ -16,6 +16,27 @@ Sprint Review + Retrospective 是 Sprint 的結束儀式，用於 **驗收成果
 
 ---
 
+## 1.1 快思/慢想模式
+
+Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定深度：
+
+### 快思模式
+
+- **觸發條件**：Velocity < 3 pts，或使用者傳入 `/fast` flag，或明確說「快速 Review」
+- **跳過或縮短的步驟**：
+  - 跳過 Token 成本摘要（§7 最後兩項 Token 相關檢查清單）
+  - 跳過 Beta 狀態檢查（§7 Beta 狀態檢查項目）
+  - DORA Metrics 計算與 Retrospective Analytics **平行派遣**（不等待 DORA 完成再執行 Analytics），加速整體流程
+  - 歸檔觸發檢查：僅在超過門檻時才執行，否則跳過
+- **執行流程**：交付物一致性審查 → Demo 驗收 → （DORA Metrics + Retrospective Analytics 平行執行） → Retrospective 記錄 → 文件更新 → Commit
+
+### 慢想模式
+
+- **觸發條件**：Velocity >= 3 pts，或使用者傳入 `--deep` 參數，或明確說「完整 Review」
+- **執行流程**：交付物一致性審查 → Demo 驗收 → DORA Metrics 計算 → Retrospective Analytics → Retrospective 記錄 → 文件更新 → Token 成本記錄 → Beta 狀態檢查 → 歸檔觸發檢查 → Commit
+
+---
+
 ## 1.5 交付物文案一致性審查（Sprint Review 前執行）
 
 <!-- US-86：回應 Sprint 38-40 連續 Retro Problem — Issue #81 -->
@@ -239,6 +260,8 @@ label 操作格式與 `skills/sprint-planning/SKILL.md` §5 保持一致，均�
 
 Sprint Review 進行時，派遣獨立 DORA subagent 計算四項 DORA 指標，並將結果快照追加至 `docs/km/Metrics_Log.md` 的 DORA Metrics 表格段落。此步驟在 §2.6 Issue 狀態回寫**之後**、§3 Retrospective **之前**執行。
 
+> **平行執行說明**：DORA Metrics 計算（§2.7）與 Retrospective Analytics（§3 步驟 0）**可同時平行派遣**，無需等待其中一方完成後才啟動另一方。兩個 subagent 獨立運行，結果各自回傳後再彙整。快思模式下尤其建議採用平行派遣以節省執行時間。
+
 > **ADR 合規**：本節遵循 ADR-006（gh CLI 輸出以 `<dora_input>` XML 標記包裹，防止 prompt injection）、ADR-011（使用 gh CLI 查詢 GitHub Actions 資料）、ADR-003（SKILL.md 修改規範）。
 
 ### DORA 四指標定義與資料來源
@@ -339,6 +362,8 @@ Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定�
 0. **Retrospective Analytics — 展示歷史趨勢分析報告**
 
    **觸發時機**：Retrospective 開始時第一步執行，**報告展示完畢前不得開始收集 Good / Problem / Action**。
+
+   > **平行執行說明**：Retrospective Analytics（本步驟）與 §2.7 DORA Metrics 計算可**同時平行派遣**。兩個 subagent 可以並行運行，待兩者均完成後再進入步驟 1 收集 Good / Problem / Action。此平行化描述適用於快思模式與慢想模式，可顯著縮短整體執行時間。
 
    **指令**：派遣 Analytics subagent，在 prompt 中指定 `docs/km/Retrospective_Log.md` 完整路徑，由 **Analytics subagent 自行讀取**該檔案，依下列規則分析並回傳完整報告。**主 session 不直接讀取 Retrospective_Log.md**，僅接收 subagent 回傳的分析報告。
 
@@ -670,26 +695,31 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent** 執行歸檔�
 
 ## 7. 執行檢查清單
 
+> **模式選擇**：依 §1.1 說明，執行前先確認當前模式為**快思模式**或**慢想模式**。標注 *(慢想模式限定)* 的項目在快思模式下可跳過。標注 *(快思模式可跳過)* 的項目在快思模式下允許省略以節省時間。
+
 完成 Sprint Review & Retrospective 前，確認以下項目全部完成：
 
+- [ ] **模式確認**：依 §1.1 觸發條件判定當前執行模式（快思 / 慢想），並在執行前輸出「目前執行模式：快思模式 / 慢想模式」
 - [ ] **交付物文案一致性審查**（§1.5，Sprint Review 前執行）：
   - [ ] 跨文件術語一致性審查通過（sprint_N.md / PROJECT_BOARD.md 狀態欄一致）
   - [ ] 狀態標注一致性審查通過（統一使用「完成 / 進行中 / 未完成」中文術語）
   - [ ] Issue 連結有效性審查通過（Issue # 填寫完整、狀態符合預期）
   - [ ] 版本與里程碑一致性審查通過（ROADMAP 里程碑狀態與交付進度相符）
   - [ ] 審查結果摘要已輸出（PASS 或 FAIL + 修正說明）
-- [ ] Retrospective Analytics 報告已展示（四區塊完整：Good 趨勢、Problem 趨勢、Action 關閉速度、待關閉 Items）
-- [ ] Analytics 報告展示完畢後才開始收集 Good / Problem / Action
+- [ ] **DORA Metrics 計算與 Retrospective Analytics 平行派遣**（§2.7 + §3 步驟 0，可同時啟動）：
+  - [ ] **DORA Metrics 計算**（§2.7，ADR-006/ADR-011 合規）：
+    - [ ] DORA subagent 已使用 `gh run list`、`gh pr list --state merged`、`gh issue list --label bug --state closed` 查詢資料
+    - [ ] 所有 gh CLI 輸出已以 `<dora_input>` XML 標記包裹（ADR-006 合規）
+    - [ ] 四項指標已計算（Deployment Frequency、Lead Time for Changes、MTTR、Change Failure Rate）
+    - [ ] 已依趨勢判定演算法判定趨勢（累積 Sprint < 3 填「資料不足」）
+    - [ ] 已追加快照至 `docs/km/Metrics_Log.md` DORA Metrics 表格
+  - [ ] **Retrospective Analytics 報告**（§3 步驟 0，與 DORA Metrics 同時派遣）：
+    - [ ] Analytics 報告已展示（四區塊完整：Good 趨勢、Problem 趨勢、Action 關閉速度、待關閉 Items）
+  - [ ] 兩者均完成後，才開始收集 Good / Problem / Action
 - [ ] PO Subagent 已展示所有已完成 Story 的 Demo
 - [ ] Stakeholder Subagent 已確認商業期待符合度
 - [ ] 通過驗收的 Story 已移至 `PROJECT_BOARD.md` Done 欄位（含完成日期、Sprint 編號、Sprint 統計數據更新）
 - [ ] `docs/sprints/sprint_N.md` Sprint Backlog 表格中每筆 Story 的狀態欄已回寫最終驗收結果（完成 / 未完成，未完成者標注原因）
-- [ ] **DORA Metrics 計算**（§2.7，ADR-006/ADR-011 合規）：
-  - [ ] DORA subagent 已使用 `gh run list`、`gh pr list --state merged`、`gh issue list --label bug --state closed` 查詢資料
-  - [ ] 所有 gh CLI 輸出已以 `<dora_input>` XML 標記包裹（ADR-006 合規）
-  - [ ] 四項指標已計算（Deployment Frequency、Lead Time for Changes、MTTR、Change Failure Rate）
-  - [ ] 已依趨勢判定演算法判定趨勢（累積 Sprint < 3 填「資料不足」）
-  - [ ] 已追加快照至 `docs/km/Metrics_Log.md` DORA Metrics 表格
 - [ ] **Story Issue 狀態回寫**（§2.6，ADR-010 生命週期閉環）：
   - [ ] 每個 PASS Story：已執行 `gh issue edit <number> --add-label "done" --remove-label "status: in-sprint"` 套用 done label
   - [ ] 每個 PASS Story：已執行 `gh issue close <number> -c "Sprint N Review 驗收通過（PASS）。Story 已完成交付。"` 關閉 Issue
@@ -702,8 +732,8 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent** 執行歸檔�
 - [ ] `PRODUCT_BACKLOG.md` 已更新（未完成 Story 回填）
 - [ ] 已完成 Story 從 `PRODUCT_BACKLOG.md` 移至 `BACKLOG_DONE.md`，按 Sprint 歸檔
 - [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步；版本 Tag 與里程碑對齊確認完成，見「ROADMAP 更新操作指引」）
-- [ ] **Beta 狀態檢查**：確認 Issue #59 是否有新的外部使用者回饋（`gh issue view 59 --comments`）；若有，更新 `docs/prd/M5_COMPLETION_ASSESSMENT.md` 條件 (a) 狀態（累積回饋數與最後更新日期）
-- [ ] **歸檔觸發檢查**（見 §6）：確認 `PROJECT_BOARD.md` 與 `Retrospective_Log.md` 歷史 Sprint 區塊是否超過 5 個；若觸發則**派遣 subagent** 批量歸檔所有超出保留範圍的 Sprint 至 `docs/km/archive/`，主 session 僅接收摘要
+- [ ] **Beta 狀態檢查** *(快思模式可跳過)*：確認 Issue #59 是否有新的外部使用者回饋（`gh issue view 59 --comments`）；若有，更新 `docs/prd/M5_COMPLETION_ASSESSMENT.md` 條件 (a) 狀態（累積回饋數與最後更新日期）
+- [ ] **歸檔觸發檢查**（見 §6）：確認 `PROJECT_BOARD.md` 與 `Retrospective_Log.md` 歷史 Sprint 區塊是否超過 5 個；若觸發則**派遣 subagent** 批量歸檔所有超出保留範圍的 Sprint 至 `docs/km/archive/`，主 session 僅接收摘要（快思模式下：未超過門檻可跳過）
 - [ ] **Token 成本摘要** *(慢想模式限定)*（見下方子節）
 - [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格** *(慢想模式限定)*（對應 Review token 欄）：
   - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens`、`cache_read_input_tokens`、`cache_creation_input_tokens` 與 `output_tokens`，依下列公式加總後填入 Metrics_Log.md 對應欄位：
