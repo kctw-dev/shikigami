@@ -173,7 +173,11 @@ echo ""
 echo "--- AC4: 預設行為不變 ---"
 
 # AC4-1: 未設定環境變數時預設使用 claude
-if [[ -f "${ADAPTER_SCRIPT}" ]] && grep -qE "SHIKIGAMI_MODEL_PROVIDER.*:-.*claude|default.*claude" "${ADAPTER_SCRIPT}"; then
+# 接受兩種寫法：
+#   (a) ${SHIKIGAMI_MODEL_PROVIDER:-claude}
+#   (b) 常數定義 DEFAULT_PROVIDER="claude" 搭配 ${VAR:-${CONSTANT}}
+if [[ -f "${ADAPTER_SCRIPT}" ]] && \
+   grep -qE 'SHIKIGAMI_MODEL_PROVIDER[^}]*:-[^}]*claude|DEFAULT_PROVIDER[^=]*=.*claude' "${ADAPTER_SCRIPT}"; then
   pass "AC4-1: 未設定 SHIKIGAMI_MODEL_PROVIDER 時預設使用 claude"
 else
   fail "AC4-1: 缺少 claude 預設行為定義"
