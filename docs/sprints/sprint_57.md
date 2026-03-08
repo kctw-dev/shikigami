@@ -13,7 +13,7 @@
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
 | US-153 | #153 | Vision Critic SKILL.md 同步 ADR-015 Figma 架構更新 | S | 1 | 是 | 進行中 |
-| US-154 | #152 | UX Agent / UI Agent SKILL.md 標記 Deprecated | S | 1 | 是 | 進行中 |
+| US-154 | #152 | UX Agent / UI Agent SKILL.md 標記 Deprecated | S | 1 | 是 | 完成 |
 
 **Sprint 容量**：2 Points（2 Stories）
 
@@ -81,9 +81,9 @@ As a developer consulting the UIUX pipeline skill documentation, I want UX Agent
 
 **Done 定義**
 
-- [ ] UX Agent SKILL.md 頂部已新增 Deprecated 警告區塊（AC1）
-- [ ] UI Agent SKILL.md 頂部已新增 Deprecated 警告區塊（AC2）
-- [ ] AC3（物理移除）確認為 Out-of-Scope，不納入本 Sprint Done 判定
+- [x] UX Agent SKILL.md 頂部已新增 Deprecated 警告區塊（AC1）
+- [x] UI Agent SKILL.md 頂部已新增 Deprecated 警告區塊（AC2）
+- [x] AC3（物理移除）確認為 Out-of-Scope，不納入本 Sprint Done 判定
 
 ---
 

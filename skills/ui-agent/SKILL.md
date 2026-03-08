@@ -3,6 +3,17 @@ name: ui-agent
 description: "Use when transforming a UX Agent skeleton document (SSD JSON) into frontend code using only Tailwind CSS and Shadcn UI components with Design Tokens. Produces React/HTML code fragments constrained to approved libraries and named design tokens."
 ---
 
+> [!WARNING]
+> **DEPRECATED — 此文件已廢棄，請勿用於新開發**
+>
+> **廢棄聲明**：本文件反映 ADR-014 三層 Agent 管線架構（UX Agent → UI Agent → Vision Critic），該架構已被 ADR-015 正式取代。ADR-015 以 Figma 整合管線取代 SSD JSON 中間格式，UI Agent 的 SSD JSON 消費邏輯不再實作。
+>
+> **替代方案**：
+> - 架構決策：[`docs/adr/ADR-015-figma-integration.md`](../../docs/adr/ADR-015-figma-integration.md)
+> - 管線操作指南：[`docs/guides/figma-pipeline-usage-guide.md`](../../docs/guides/figma-pipeline-usage-guide.md)
+>
+> **廢棄生效日期**：2026-03-08
+
 # UI Agent Skill — 前端代碼產生器
 
 **關聯 Story**：US-106（Issue #113）
