@@ -4,6 +4,16 @@
 
 ---
 
+## Sprint 68（2026-03-08）
+
+**Sprint Goal**：KM 減法 — 移除無用的 DORA Metrics + KM 檔案瘦身
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-178（Issue #172）：移除 DORA Metrics — 刪除 sprint-review §2.7 整段、Metrics_Log DORA 區塊、相關 checklist | S | 1 | Sprint 68 |
+| US-179（Issue #173）：BACKLOG_DONE.md 歸檔機制 — 主檔只保留最近 5 個 Sprint | S | 1 | Sprint 68 |
+
+---
 
 ## Sprint 67（2026-03-08）
 

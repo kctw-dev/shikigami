@@ -1,22 +1,29 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 68 Planning）
-**當前 Sprint**：Sprint 68（進行中）
+**最後更新**：2026-03-08（Sprint 68 Review）
+**當前 Sprint**：Sprint 68（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 68](sprints/sprint_68.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 68 — 進行中
+## Sprint 68 — 完成
 
 **Sprint Goal**：KM 減法 — 移除無用的 DORA Metrics + KM 檔案瘦身
 **期間**：2026-03-08 ~ 2026-03-14
 **ADR 依賴**：無
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。DORA Metrics 全面移除（sprint-review SKILL.md §2.7 刪除 + Metrics_Log.md 17KB 削減）+ BACKLOG_DONE.md 歸檔（2110→63 行，Sprint 1-62 移至 archive）。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-178：移除 DORA Metrics — 刪除 sprint-review §2.7 整段、Metrics_Log DORA 區塊、相關 checklist | #172 | S | 1 | 進行中 |
-| US-179：BACKLOG_DONE.md 歸檔機制 — 主檔只保留最近 5 個 Sprint | #173 | S | 1 | 進行中 |
+| US-178：移除 DORA Metrics — 刪除 sprint-review §2.7 整段、Metrics_Log DORA 區塊、相關 checklist | #172 | S | 1 | 完成 |
+| US-179：BACKLOG_DONE.md 歸檔機制 — 主檔只保留最近 5 個 Sprint | #173 | S | 1 | 完成 |
+
+## Sprint 68 統計
+- Velocity：2 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-08
 
 ---
 

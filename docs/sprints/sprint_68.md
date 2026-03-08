@@ -3,15 +3,15 @@
 **Sprint Goal**：KM 減法 — 移除無用的 DORA Metrics + KM 檔案瘦身
 
 **期間**：2026-03-08 ~ 2026-03-14
-**狀態**：進行中
+**狀態**：完成
 **ADR 依賴**：無
 
 ## Sprint Backlog
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-178：移除 DORA Metrics — 刪除 sprint-review §2.7 整段、Metrics_Log DORA 區塊、相關 checklist | #172 | S | 1 | 進行中 |
-| US-179：BACKLOG_DONE.md 歸檔機制 — 主檔只保留最近 5 個 Sprint | #173 | S | 1 | 進行中 |
+| US-178：移除 DORA Metrics — 刪除 sprint-review §2.7 整段、Metrics_Log DORA 區塊、相關 checklist | #172 | S | 1 | 完成 |
+| US-179：BACKLOG_DONE.md 歸檔機制 — 主檔只保留最近 5 個 Sprint | #173 | S | 1 | 完成 |
 
 ## 平行分群
 
