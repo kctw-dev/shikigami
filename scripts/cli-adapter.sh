@@ -53,50 +53,41 @@ _cli_adapter_log_info() {
 
 # _invoke_claude：呼叫 Claude CLI
 # 參數：$1 = prompt（空字串時從 stdin 讀取）
-# 回傳：stdout = 模型回應；exit code 0 = 成功，1 = 失敗
+# 回傳：stdout = 模型回應；exit code 0 = 成功，非 0 = 失敗
 _invoke_claude() {
   local prompt="$1"
-
   if [[ -n "${prompt}" ]]; then
-    # 短 prompt：使用 -p 旗標
     claude -p "${prompt}"
   else
-    # 長 prompt：從 stdin 讀取後用 pipe 傳入
-    cat | claude
+    claude  # 從 stdin 讀取
   fi
 }
 
 # _invoke_gemini：呼叫 Gemini CLI
 # 設計依據 GEMINI_CLI_INVESTIGATION.md：
+#   - 統一使用 stdin pipe 傳遞 prompt（避免 OS ARG_MAX 與多位元組字元問題）
 #   - 使用 --output-format json 取得乾淨的 .response 欄位
-#   - 長 prompt 透過 stdin 傳遞避免 OS ARG_MAX 與多位元組字元問題
-#   - 監控 exit code 以偵測失敗
+#   - 監控 exit code 以偵測失敗；jq 不可用時輸出原始 JSON
 # 參數：$1 = prompt（空字串時從 stdin 讀取）
 # 回傳：stdout = 模型回應純文字；exit code 0 = 成功，非 0 = 失敗
 _invoke_gemini() {
   local prompt="$1"
   local raw_output
-  local exit_code
 
+  # 統一使用 stdin pipe：若有 prompt 引數則 echo，否則直接從 stdin 讀取
   if [[ -n "${prompt}" ]]; then
-    # 短 prompt：使用 stdin pipe（避免多位元組字元 ARG_MAX 問題）
     raw_output=$(echo "${prompt}" | gemini --output-format json 2>/dev/null)
-    exit_code=$?
   else
-    # 長 prompt：直接從 stdin 接收後 pipe 至 gemini
-    raw_output=$(cat | gemini --output-format json 2>/dev/null)
-    exit_code=$?
+    raw_output=$(gemini --output-format json 2>/dev/null)
   fi
+  local exit_code=$?
 
-  if [[ "${exit_code}" -ne 0 ]]; then
-    return "${exit_code}"
-  fi
+  [[ "${exit_code}" -ne 0 ]] && return "${exit_code}"
 
-  # 從 JSON 輸出提取 .response 欄位
+  # 從 JSON 輸出提取 .response 欄位（jq 不可用時降級輸出原始 JSON）
   if command -v jq &>/dev/null; then
     echo "${raw_output}" | jq -r '.response // empty'
   else
-    # jq 不可用時輸出原始 JSON（降級處理）
     echo "${raw_output}"
   fi
 }
