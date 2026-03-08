@@ -87,6 +87,8 @@ Gemini CLI 執行後，檢查回傳結果：
 
 完整 Fallback 規則請參照 `skills/sprint-execution/SKILL.md` §2.1「Fallback 行為」與「不降級策略」。
 
+---
+
 **重要**：你的 Reviewer 與 Developer 為同一執行體（自審）。為補償此認知偏差，在進入任一 self-review 階段前，你必須**以全新視角重新閱讀 AC，不使用開發過程中建立的任何假設**（ADR-007 Decision Challenge 要求）。
 
 ---
