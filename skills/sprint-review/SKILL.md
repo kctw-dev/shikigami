@@ -617,6 +617,7 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent（`model: "haik
 
 - `docs/PROJECT_BOARD.md` 中已完成的歷史 Sprint 區塊（不含當前進行中 Sprint）超過 **5 個**
 - 或 `docs/km/Retrospective_Log.md` 中的 Sprint 記錄（含歸檔連結行以外的記錄）超過 **5 個**
+- 或 `docs/prd/BACKLOG_DONE.md` 中的歷史 Sprint 區塊（`## Sprint N` 標頭數量）超過 **5 個**
 
 滿足任一條件即觸發歸檔作業。
 
@@ -631,6 +632,7 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent（`model: "haik
 |------|----------|
 | `docs/PROJECT_BOARD.md` | `docs/km/archive/PROJECT_BOARD_ARCHIVE.md` |
 | `docs/km/Retrospective_Log.md` | `docs/km/archive/RETRO_ARCHIVE.md` |
+| `docs/prd/BACKLOG_DONE.md` | `docs/km/archive/BACKLOG_DONE_ARCHIVE.md` |
 
 ### 歸檔操作（由 subagent 執行）
 
