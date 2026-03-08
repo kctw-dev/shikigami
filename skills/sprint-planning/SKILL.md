@@ -30,6 +30,18 @@ Sprint Planning 支援兩種執行模式：
 
 ---
 
+## 模型選用建議
+
+> **建議在執行 Sprint Planning 前切換至 Opus 模型。**
+>
+> Sprint Planning 需要多步策略推理（AC 分析、Story 估點、平行分群、依賴評估），Opus 在此類高層次判斷任務上具備明顯優勢，且 Planning 決策品質直接影響整個 Sprint 的執行效率。
+>
+> 切換指令：`/model claude-opus-4-6`
+>
+> Planning 完成後如需切換回 Sonnet：`/model claude-sonnet-4-6`
+
+---
+
 ## 2. 流程 Checklist
 
 > **模式選擇**：預設為**快思模式**，跳過前 3 項（健康檢查、權重調整、Token 記錄），直接從 PO 選 Stories 開始。使用者傳入 `--deep` 或說「完整檢查」時切換至**慢想模式**，執行完整流程。
