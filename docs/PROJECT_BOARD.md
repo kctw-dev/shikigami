@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 57 Review 完成，Velocity 2 points，完成率 100%）
-**當前 Sprint**：Sprint 58（規劃中）
+**最後更新**：2026-03-08（Sprint 58 Planning 完成，Sprint 目標：精簡 Sprint Review 流程）
+**當前 Sprint**：Sprint 58（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 57](sprints/sprint_57.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 58](sprints/sprint_58.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 58 — 進行中
+
+**Sprint Goal**：精簡 Sprint Review 執行流程，降低每次 Review 的時間成本與認知負荷，使 Velocity 恢復正向趨勢。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-155：Sprint Review 執行時間過長 — 流程精簡化 | #154 | M | 2 | 待辦 |
+| US-156：模型分層策略：Planning 用高階模型、Coding 用合適模型 | #106 | S | 1 | 待辦 |
+
+**Sprint 容量**：3 Points（2 Stories）
 
 ---
 
