@@ -1,6 +1,6 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.30.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.34.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
 > 7 個 AI 隊友，各司其職，互相制衡 — 讓你的 AI 開發工具擁有一整組有紀律的工程團隊。
@@ -13,9 +13,9 @@
 
 Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：QA 審你的代碼並挑戰架構決策，Security 審外部輸入，SRE 從維運角度評估部署可行性。**不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
 
-這不是理論框架 — Shikigami 從第一天起就用自己開發自己：56 個 Sprint 中完成 55 個（完成率 98%），QA 雙階段審查攔截了每個 Sprint 的品質問題。
+這不是理論框架 — Shikigami 從第一天起就用自己開發自己：60 個 Sprint 中完成 59 個（完成率 98%），QA 雙階段審查攔截了每個 Sprint 的品質問題。
 
-**當前版本：v0.30.0**（25 Skills / 7 Agents / 4 Commands）
+**當前版本：v0.34.0**（25 Skills / 7 Agents / 4 Commands）
 
 ---
 
@@ -322,7 +322,7 @@ shikigami.project_level: medium
 
 **重點：它們會互相制衡。** 不是 7 個獨立助手，是一組有紀律的工程團隊。
 
-### 23 個 Skills
+### 25 個 Skills
 
 **Scrum 流程**
 
@@ -386,10 +386,11 @@ Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發
 | v0.29.0 | 多環境穩定化 + diagram 技能 | Sprint 34–50 | 多 GCE 認證指引（ADR-012）+ CI/CD workflow 拆分指引 + 版號三檔同步腳本 + 環境可攜性方案（Dotfiles Repo）+ ADR-013 diagram MCP 架構決策 + shikigami:diagram Skill（drawio-mcp-server stdio 整合）|
 | v0.29.1 | UIUX Agent 基礎建設 | Sprint 51–52 | ADR-014 UIUX Agent 架構決策 + Design Tokens 機器可讀規格（design-tokens.json）+ 前端 SDD 模板標準化 + issue-management 前端 Story AC 自動注入機制 |
 | v0.30.0 | Figma 整合管線 | Sprint 53–56 | ADR-015 Figma 整合架構決策 + UX/UI/Vision Critic 三層 Skill 定義 + Figma MCP Server 連線設定 + Component Library 規格 + Design Tokens Versioning + Figma 管線使用指南 + Vision Critic PoC 規格 + 設計師協作指南 |
+| v0.34.0 | 輕量化與品質強化 | Sprint 57–60 | Vision Critic 同步 ADR-015 Figma 架構 + Sprint Review 流程精簡化 + 模型分層策略調查與 Phase 1/2 落地（subagent 自動模型指定）+ Plugin 載入 TROUBLESHOOTING 文件化 + Metrics 計算視窗限制（30 Sprint）+ 方法論適用性自動評估（BDD/DDD 建議） |
 
-### 累積數據（截至 Sprint 56）
+### 累積數據（截至 Sprint 60）
 
-- 56 個 Sprint 中完成 55 個（完成率 98%，Sprint 54 因架構轉向中止）
+- 60 個 Sprint 中完成 59 個（完成率 98%，Sprint 54 因架構轉向中止）
 - 15 個 ADR（架構決策紀錄）
 - 8 個自動化驗證腳本 + GitHub Actions CI Pipeline
 
