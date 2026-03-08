@@ -15,9 +15,9 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-162：框架流程減法審查 — SKILL.md 冗餘步驟與重複內容清理 | #160 | S | 1 | 待辦 |
-| US-163：多模型 CLI 路由 Phase 0 — Gemini CLI 呼叫介面調查（Issue #159 拆分） | #161 | S | 1 | 待辦 |
-| US-164：Backlog Grooming — 現有 Issues RICE 評分補齊 + 新候選 Story 提案 | #162 | S | 1 | 待辦 |
+| US-162：框架流程減法審查 — SKILL.md 冗餘步驟與重複內容清理 | #160 | S | 1 | 完成 |
+| US-163：多模型 CLI 路由 Phase 0 — Gemini CLI 呼叫介面調查（Issue #159 拆分） | #161 | S | 1 | 完成 |
+| US-164：Backlog Grooming — 現有 Issues RICE 評分補齊 + 新候選 Story 提案 | #162 | S | 1 | 完成 |
 
 ---
 
