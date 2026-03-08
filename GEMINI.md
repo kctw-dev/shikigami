@@ -10,7 +10,7 @@ This file is the Gemini CLI entry point for the Shikigami framework. It is autom
 
 Shikigami is a **plugin framework** that injects 7 specialized roles (Shikigami) into your AI development tool. They form a **mutual governance network**: QA reviews your code and challenges architectural decisions, Security reviews external inputs, SRE evaluates deployment feasibility. Use natural language to describe what you want — the Scrum Master automatically dispatches the appropriate roles.
 
-**Current version: v0.20.1** (22 Skills / 7 Agents / 4 Commands)
+**Current version: v0.44.0** (22 Skills / 7 Agents / 4 Commands)
 
 ---
 
@@ -345,6 +345,65 @@ Lightweight process channel for low-risk, small-scope tasks:
    /shikigami:review
    /shikigami:dispel
    ```
+
+---
+
+## Agent Behavior Enhancement
+
+Guidelines for robust agent execution, derived from practical evolution patterns.
+
+### Error Self-Healing
+
+| Exit Code | Symptom | Auto-Recovery |
+|-----------|---------|---------------|
+| 2 | heredoc/quotes unclosed | Rewrite using `write_file` or Edit tool |
+| 127 | Tool missing | Check `$PATH` and environment variables before asking user |
+
+**Resource fallback**: When GitHub API fails, automatically fall back to `gh` CLI. Exhaust all programmatic recovery paths before escalating to user.
+
+### Failure RCA (Root Cause Analysis)
+
+On any execution failure, automatically produce a concise RCA entry:
+- **What failed**: Command or operation that errored
+- **Root cause**: Why it failed (environment, syntax, dependency, etc.)
+- **Fix applied**: How it was resolved
+- **Prevention**: Rule or pattern to avoid recurrence
+
+RCA entries feed into the project's knowledge management (`docs/km/`) for continuous learning.
+
+### Commit Completeness
+
+Every code change must include:
+1. All modified files staged (no partial commits)
+2. Project status records synced (PROJECT_BOARD.md, sprint files)
+3. Tests passing before commit
+
+This aligns with the existing Definition of Done (DoD) in this framework.
+
+### Adversarial Debate for Architecture Decisions
+
+When evaluating ADR (Architecture Decision Records), the Architect role should simulate two perspectives:
+- **Optimistic advocate**: Argues for the proposed approach — scalability, velocity, innovation
+- **Rigorous challenger**: Questions risks — complexity, maintenance burden, failure modes
+
+This dual-perspective analysis produces more robust technical decisions. Controlled by `project_level`:
+- **low**: Auto-execute debate internally, output conclusion only
+- **medium**: Output debate summary with recommendation
+- **high**: Present both perspectives to user for decision
+
+### Autonomy & Conciseness (project_level controlled)
+
+| Behavior | low | medium (default) | high |
+|----------|-----|-------------------|------|
+| Proactive execution | Full autonomy — infer next step and execute | Auto for low-risk, QA review for high-risk | Human confirmation for high-risk |
+| Response length | Concise — minimize ceremony output | Standard — balanced detail | Verbose — full audit trail |
+| Self-check | Internal pillar review before each response | Standard DoD self-check | Full DoD + human review |
+
+**Core mandates** (all levels):
+- Infer reasonable next steps rather than asking "what should I do?"
+- Apply engineering subtraction — remove redundancy in docs and code
+- Convert every failure into a learned rule (RCA → KM)
+- Keep analysis professionally deep even when output is concise
 
 ---
 
