@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-08（Sprint 54–56 歸檔）
-**歸檔範圍**：Sprint 1–56（共 56 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔
+**最後更新**：2026-03-08（Sprint 57–60 歸檔）
+**歸檔範圍**：Sprint 1–60（共 60 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔；Sprint 57–60 由 Sprint 63 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 57–59）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 61–63）
 
 ---
 
@@ -1008,3 +1008,81 @@
 - Velocity：5 points
 - 完成率：100%（完成 3 / 計畫 3）
 - 日期：2026-03-06
+
+---
+
+## Sprint 57 — 完成
+
+**Sprint Goal**：鞏固 ADR-015 Phase 1 文件一致性 — 同步 Vision Critic SKILL.md 至 Figma 架構、標記舊 UX/UI Agent 文件為 Deprecated。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：ADR-015（Accepted）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-153：Vision Critic SKILL.md 同步 ADR-015 Figma 架構更新 | #153 | S | 1 | 完成 |
+| US-154：UX Agent / UI Agent SKILL.md 標記 Deprecated | #152 | S | 1 | 完成 |
+
+## Sprint 57 統計
+- Velocity：2 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-08
+
+---
+
+## Sprint 58 — 完成
+
+**Sprint Goal**：精簡 Sprint Review 執行流程，降低每次 Review 的時間成本與認知負荷，使 Velocity 恢復正向趨勢。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。Sprint Review 快思/慢想模式建立，模型分層策略調查完成。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-155：Sprint Review 執行時間過長 — 流程精簡化 | #154 | M | 2 | 完成 |
+| US-156：模型分層策略：Planning 用高階模型、Coding 用合適模型 | #106 | S | 1 | 完成 |
+
+## Sprint 58 統計
+- Velocity：3 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-08
+
+---
+
+## Sprint 59 — 完成
+
+**Sprint Goal**：鞏固 M5 穩定化 — 修補已知 plugin 載入問題的框架端文件缺口（TROUBLESHOOTING.md shallow clone 根因文件化）。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。TROUBLESHOOTING.md shallow clone 根因文件化完成，Issue #101 正式結案。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-157：Plugin 載入失敗 Workaround 正式文件化 — TROUBLESHOOTING.md 新增 shallow clone 根因分析與操作 SOP | #101 | S | 1 | 完成 |
+
+## Sprint 59 統計
+- Velocity：1 point
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-08
+
+---
+
+## Sprint 60 — 完成
+
+**Sprint Goal**：輕量化與實踐 — 精簡 Sprint 流程步驟（減法）、完成模型分層 Phase 1 落地、優化 Metrics 分析視窗，鞏固框架持續改善能力。
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 3 points，完成率 100%。流程精簡化（減法）+ 模型分層落地（加法）+ Metrics 視窗限制（減法）全數交付。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-158：Sprint Review / Planning 流程精簡化 — Token Baseline 與 Beta 檢查降級 | #155 | S | 1 | 完成 |
+| US-159：模型分層策略 Phase 1 落地 — SKILL.md + tutorial 新增模型切換提示 | #156 | S | 1 | 完成 |
+| US-160：Metrics 計算視窗限制 — 趨勢分析僅讀取最近 30 個 Sprint | #157 | S | 1 | 完成 |
+
+## Sprint 60 統計
+- Velocity：3 points
+- 完成率：100%（完成 3 / 計畫 3）
+- 日期：2026-03-08

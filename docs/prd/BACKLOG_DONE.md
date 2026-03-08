@@ -2010,6 +2010,18 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 
 ---
 
+## Sprint 63（2026-03-08）
+
+**Sprint Goal**：流程修正與技術債清理 — 修復 Sprint Review Issue 自動關閉問題（#166），評估開源 CLI Adapter 替代方案（#167），清理 50+ Sprint 懸而未決的 Retro Action Items（#168）。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-168（Issue #166）：Sprint Review Issue 關閉邏輯修正 — 區分內部/外部 Issue 關閉策略 | S | 1 | Sprint 63 |
+| US-169（Issue #167）：多模型 CLI 路由 Phase 2 — 開源 Adapter 評估與決策 | S | 1 | Sprint 63 |
+| US-170（Issue #168）：Retro Action Items 批次處理 — Sprint 11-12 懸而未決項目清理 | S | 1 | Sprint 63 |
+
+---
+
 ## Sprint 62（2026-03-08）
 
 **Sprint Goal**：新手體驗提升與框架減法落地 — 系統化整理首次 Sprint 常見卡關點指引（M5 條件 (a) 前提），並執行 SKILL.md 冗餘內容合併精簡（延續減法策略）。

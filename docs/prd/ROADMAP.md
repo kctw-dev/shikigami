@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-08（Sprint 60 — 輕量化與實踐，3 Stories / 3 Points 全數交付）
+> 最後更新：2026-03-08（Sprint 63 — 流程修正與技術債清理，3 Stories / 3 Points 全數交付）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.33.0**（Sprint 59）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.36.0**（Sprint 63）。
 
 | 版號 | 含義 |
 |------|------|

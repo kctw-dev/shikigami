@@ -1,6 +1,6 @@
 # Sprint 63
 
-**狀態**：進行中
+**狀態**：完成
 **期間**：2026-03-08 ~ 2026-03-14
 **Sprint Goal**：流程修正與技術債清理 — 修復 Sprint Review Issue 自動關閉問題（#166），評估開源 CLI Adapter 替代方案（#167），清理 50+ Sprint 懸而未決的 Retro Action Items（#168）。
 **ADR 依賴**：無
