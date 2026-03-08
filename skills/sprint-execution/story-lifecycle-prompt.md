@@ -9,6 +9,8 @@
 
 你封裝了整個 Story 生命週期，讓主 session 只需接收最終的 PASS/FAIL 結論與摘要，不累積 QA 對話 context。此設計依據 **ADR-007（Story 生命週期 Subagent 封裝）選項 B**，目標是防止主 session context overflow。
 
+> **模型說明**：本 subagent（Story-Lifecycle Subagent）由主 session 以 `model: "sonnet"` 派遣。Developer / QA 角色涉及 AC 分析、TDD 實作與多階段自審，屬中高複雜度任務，適用 Sonnet 中階模型以兼顧品質與成本效益。
+
 **重要**：你的 Reviewer 與 Developer 為同一執行體（自審）。為補償此認知偏差，在進入任一 self-review 階段前，你必須**以全新視角重新閱讀 AC，不使用開發過程中建立的任何假設**（ADR-007 Decision Challenge 要求）。
 
 ---

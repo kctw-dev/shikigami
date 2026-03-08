@@ -38,9 +38,17 @@ Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定�
 
 ## 模型選用建議
 
-> **Sprint Review 的 subagent 自動使用 Sonnet 模型（`model: "sonnet"`）。**
+> **Sprint Review 的 subagent 依角色複雜度分層使用不同模型。**
 >
-> 指標計算、DORA 數據彙整、通過標準核對等常規步驟 Sonnet 已可高品質完成。
+> | 角色 / 步驟 | 模型 | 說明 |
+> |------------|------|------|
+> | PO Subagent（Demo 展示、AC 驗收） | `sonnet` | 需要情境理解與商業判斷 |
+> | Stakeholder Subagent（商業期待確認） | `sonnet` | 需要情境理解與商業判斷 |
+> | DORA Subagent（§2.7 指標計算） | `haiku` | 結構化資料彙整，不需高層次推理 |
+> | Analytics Subagent（§3 步驟 0 趨勢分析） | `haiku` | 統計分析，規則明確可程式化 |
+> | Metrics Subagent（Sprint Metrics + Token 成本） | `haiku` | 數值計算，規則明確可程式化 |
+> | 歸檔 Subagent（§6 Sprint 歸檔） | `haiku` | 文件剪貼操作，不需推理 |
+>
 > 使用者無需手動切換模型，框架在派遣 subagent 時自動指定。
 
 ---
@@ -301,7 +309,7 @@ label 操作格式與 `skills/sprint-planning/SKILL.md` §5 保持一致，均�
 
 ## 2.7 DORA Metrics 計算（獨立 DORA Subagent）
 
-Sprint Review 進行時，派遣獨立 DORA subagent 計算四項 DORA 指標，並將結果快照追加至 `docs/km/Metrics_Log.md` 的 DORA Metrics 表格段落。此步驟在 §2.6 Issue 狀態回寫**之後**、§3 Retrospective **之前**執行。
+Sprint Review 進行時，派遣獨立 DORA subagent（`model: "haiku"`）計算四項 DORA 指標，並將結果快照追加至 `docs/km/Metrics_Log.md` 的 DORA Metrics 表格段落。此步驟在 §2.6 Issue 狀態回寫**之後**、§3 Retrospective **之前**執行。
 
 > **平行執行說明**：DORA Metrics 計算（§2.7）與 Retrospective Analytics（§3 步驟 0）**可同時平行派遣**，無需等待其中一方完成後才啟動另一方。兩個 subagent 獨立運行，結果各自回傳後再彙整。快思模式下尤其建議採用平行派遣以節省執行時間。
 
@@ -408,7 +416,7 @@ Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定�
 
    > **平行執行說明**：Retrospective Analytics（本步驟）與 §2.7 DORA Metrics 計算可**同時平行派遣**。兩個 subagent 可以並行運行，待兩者均完成後再進入步驟 1 收集 Good / Problem / Action。此平行化描述適用於快思模式與慢想模式，可顯著縮短整體執行時間。
 
-   **指令**：派遣 Analytics subagent，在 prompt 中指定 `docs/km/Retrospective_Log.md` 完整路徑，由 **Analytics subagent 自行讀取**該檔案，依下列規則分析並回傳完整報告。**主 session 不直接讀取 Retrospective_Log.md**，僅接收 subagent 回傳的分析報告。
+   **指令**：派遣 Analytics subagent（`model: "haiku"`），在 prompt 中指定 `docs/km/Retrospective_Log.md` 完整路徑，由 **Analytics subagent 自行讀取**該檔案，依下列規則分析並回傳完整報告。**主 session 不直接讀取 Retrospective_Log.md**，僅接收 subagent 回傳的分析報告。
 
    #### 前置檢查
 
@@ -704,7 +712,7 @@ MX 完成狀態：
 
 ## 6. 歸檔觸發檢查
 
-Sprint Review 完成、產出文件更新後，**派遣 subagent** 執行歸檔觸發檢查與歸檔操作。主 session 僅接收歸檔結果摘要（歸檔了哪些 Sprint、更新了哪些文件），不直接操作歸檔文件。
+Sprint Review 完成、產出文件更新後，**派遣 subagent（`model: "haiku"`）** 執行歸檔觸發檢查與歸檔操作。主 session 僅接收歸檔結果摘要（歸檔了哪些 Sprint、更新了哪些文件），不直接操作歸檔文件。
 
 ### 觸發條件
 
@@ -792,7 +800,7 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent** 執行歸檔�
 
 ### Sprint Metrics 計算指引
 
-Sprint Review 結束時，派遣 Metrics subagent 執行以下計算並將結果追加至 `docs/km/Metrics_Log.md`。**主 session 不直接讀取 sprint_N.md 或 Metrics_Log.md**，所有讀取與計算均由 Metrics subagent 負責，subagent 回傳計算結果後由主 session 確認並指示 subagent 寫入。
+Sprint Review 結束時，派遣 Metrics subagent（`model: "haiku"`）執行以下計算並將結果追加至 `docs/km/Metrics_Log.md`。**主 session 不直接讀取 sprint_N.md 或 Metrics_Log.md**，所有讀取與計算均由 Metrics subagent 負責，subagent 回傳計算結果後由主 session 確認並指示 subagent 寫入。
 
 #### 步驟 1：讀取本 Sprint 資料
 
@@ -854,7 +862,7 @@ Metrics subagent 自行讀取 `docs/km/Metrics_Log.md` 取得歷史 Velocity 資
 
 ### Token 成本摘要指引
 
-Sprint Review 結束時，派遣 Metrics subagent 依下列步驟產出 Token 成本摘要。**主 session 不直接讀取 Metrics_Log.md**，由 subagent 讀取並回傳摘要。
+Sprint Review 結束時，派遣 Metrics subagent（`model: "haiku"`）依下列步驟產出 Token 成本摘要。**主 session 不直接讀取 Metrics_Log.md**，由 subagent 讀取並回傳摘要。
 
 #### 步驟 1：讀取 Token 表格
 

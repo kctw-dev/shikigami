@@ -1,21 +1,28 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 65 進行中）
-**當前 Sprint**：Sprint 65（進行中）
+**最後更新**：2026-03-08（Sprint 65 完成）
+**當前 Sprint**：Sprint 65（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 65](sprints/sprint_65.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 65 — 進行中
+## Sprint 65 — 完成
 
 **Sprint Goal**：Subagent 模型自動調度完善 — 補齊所有 subagent 派遣點的 model 參數標注，建立角色→模型對照表，實現成本分層（haiku/sonnet/opus 三級）自動化。
 **期間**：2026-03-08 ~ 2026-03-14
 **ADR 依賴**：無
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。sprint-review SKILL.md 補齊 4 處 haiku 派遣標注 + 角色對照表建立 + story-lifecycle-prompt.md 補充 sonnet 派遣說明。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-175：Subagent 多模型自動調度 — 角色對照表建立與派遣點 model 參數補齊 | #169 | S | 1 | 待辦 |
+| US-175：Subagent 多模型自動調度 — 角色對照表建立與派遣點 model 參數補齊 | #169 | S | 1 | 完成 |
+
+## Sprint 65 統計
+- Velocity：1 point
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-08
 
 ---
 
