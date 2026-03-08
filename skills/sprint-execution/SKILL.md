@@ -54,15 +54,28 @@ SHIKIGAMI_ROLE_PROVIDER_MAP="developer:claude,qa:claude,po:claude,architect:clau
 
 預設所有角色均使用 Claude。使用者可透過環境變數覆寫特定角色的 provider（見「切換機制」）。
 
+### 宿主平台偵測規則
+
+當 `SHIKIGAMI_MODEL_PROVIDER` 及 `SHIKIGAMI_ROLE_PROVIDER_MAP` 均未設定時，框架依以下規則自動偵測宿主平台，決定預設 provider：
+
+| 情境 | 偵測依據 | 偵測結果 |
+|------|---------|---------|
+| Claude Code 啟動 | LLM 自我認知：在 Claude Code session 中執行 | `claude` |
+| Gemini CLI 啟動 | LLM 自我認知：在 Gemini CLI session 中執行 | `gemini` |
+| 無法判定 | 以上情境均不符合 | `claude`（保守 fallback） |
+
+**偵測本質**：LLM 天然知道自己的宿主平台（Claude Code session 中的 LLM 知道自己是 Claude；Gemini CLI session 中的 LLM 知道自己是 Gemini），「偵測」為 LLM 的自我認知，不依賴程式化環境變數查詢。
+
 ### Provider 解析順序
 
 ```
-SHIKIGAMI_ROLE_PROVIDER_MAP[role]
-  → SHIKIGAMI_MODEL_PROVIDER
-  → "claude"（預設）
+SHIKIGAMI_ROLE_PROVIDER_MAP[role]        # 最高優先：角色層級明確指定
+  → SHIKIGAMI_MODEL_PROVIDER             # 次優先：全域明確指定
+  → auto_detect_host_platform()          # 新增：自動偵測宿主平台
+  → "claude"（ultimate fallback）        # 最終保底：無法判定時
 ```
 
-即：角色對照表優先，其次全域 provider，最後 fallback 至 claude。
+即：角色對照表優先，其次全域 provider，再次宿主平台自動偵測結果，最後 ultimate fallback 至 claude。
 
 ### Fallback 行為
 
