@@ -1,6 +1,6 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.29.1-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.30.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
 > 7 個 AI 隊友，各司其職，互相制衡 — 讓你的 AI 開發工具擁有一整組有紀律的工程團隊。
@@ -13,9 +13,9 @@
 
 Shikigami 是一個 **plugin 框架**，為你的 AI 開發工具注入 7 個專業角色（式神）。它們不只各自回答問題 — 而是組成一張**互相制衡的治理網**：QA 審你的代碼並挑戰架構決策，Security 審外部輸入，SRE 從維運角度評估部署可行性。**不需要記指令，用自然語言說你要做什麼**，Scrum Master 會自動調度對應角色。
 
-這不是理論框架 — Shikigami 從第一天起就用自己開發自己：連續 52 個 Sprint 完成率 100%，QA 雙階段審查攔截了每個 Sprint 的品質問題。
+這不是理論框架 — Shikigami 從第一天起就用自己開發自己：56 個 Sprint 中完成 55 個（完成率 98%），QA 雙階段審查攔截了每個 Sprint 的品質問題。
 
-**當前版本：v0.29.1**（23 Skills / 7 Agents / 4 Commands）
+**當前版本：v0.30.0**（25 Skills / 7 Agents / 4 Commands）
 
 ---
 
@@ -360,6 +360,9 @@ shikigami.project_level: medium
 | **schedule** | Sprint 自動排程執行、cron 腳本生成、序列排程保護 |
 | **shoot** | 短衝模式、單 Story 快速執行、不起 Sprint 的輕量交付 |
 | **diagram** | 架構圖自動化生成（drawio-mcp-server stdio 整合、雙格式輸出、多雲圖標集） |
+| **ux-agent** | User Story → 語意骨架文件（JSON），產出無樣式資訊架構供 UI Agent 消費 |
+| **ui-agent** | 語意骨架 → 前端程式碼，使用 Tailwind CSS + Shadcn UI + Design Tokens |
+| **vision-critic** | UI 截圖多維度視覺一致性評分，產出 PASS/FAIL 報告與可執行修正建議 |
 
 ---
 
@@ -382,11 +385,12 @@ Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發
 | v0.17.0 | 自動化閉環 | Sprint 30–33 | Issue #46 排程四條流程完成 + backlog-intake Skill + ADR-009 + M5 推廣行動 + Token Baseline Snapshot |
 | v0.29.0 | 多環境穩定化 + diagram 技能 | Sprint 34–50 | 多 GCE 認證指引（ADR-012）+ CI/CD workflow 拆分指引 + 版號三檔同步腳本 + 環境可攜性方案（Dotfiles Repo）+ ADR-013 diagram MCP 架構決策 + shikigami:diagram Skill（drawio-mcp-server stdio 整合）|
 | v0.29.1 | UIUX Agent 基礎建設 | Sprint 51–52 | ADR-014 UIUX Agent 架構決策 + Design Tokens 機器可讀規格（design-tokens.json）+ 前端 SDD 模板標準化 + issue-management 前端 Story AC 自動注入機制 |
+| v0.30.0 | Figma 整合管線 | Sprint 53–56 | ADR-015 Figma 整合架構決策 + UX/UI/Vision Critic 三層 Skill 定義 + Figma MCP Server 連線設定 + Component Library 規格 + Design Tokens Versioning + Figma 管線使用指南 + Vision Critic PoC 規格 + 設計師協作指南 |
 
-### 累積數據（截至 Sprint 52）
+### 累積數據（截至 Sprint 56）
 
-- 連續 52 個 Sprint 完成率 100%
-- 14 個 ADR（架構決策紀錄）
+- 56 個 Sprint 中完成 55 個（完成率 98%，Sprint 54 因架構轉向中止）
+- 15 個 ADR（架構決策紀錄）
 - 8 個自動化驗證腳本 + GitHub Actions CI Pipeline
 
 ### 開發流程實證
@@ -403,12 +407,12 @@ Shikigami 用自己開發自己（dogfooding）。以下是完整的自治開發
 
 | 文件 | 說明 |
 |------|------|
-| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-014） |
-| `docs/sprints/` | Sprint 規劃與執行紀錄（sprint_1 ~ sprint_52） |
+| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-015） |
+| `docs/sprints/` | Sprint 規劃與執行紀錄（sprint_1 ~ sprint_56） |
 | `docs/km/Retrospective_Log.md` | 每次犯的錯都記下來，不重複犯 |
 | `docs/km/Metrics_Log.md` | Velocity 趨勢與完成率追蹤 |
 | `docs/km/ROLE_BALANCE_CASES.md` | [真實制衡案例記錄](docs/km/ROLE_BALANCE_CASES.md) |
-| `docs/prd/PRODUCT_BACKLOG.md` | RICE 評分排序的 Backlog |
+| `docs/prd/PRODUCT_BACKLOG.md` | Backlog 歷史快照（自 ADR-010 起，source of truth 已遷移至 GitHub Issues） |
 
 ---
 
