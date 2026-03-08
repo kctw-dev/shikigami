@@ -38,13 +38,10 @@ Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定�
 
 ## 模型選用建議
 
-> **Sprint Review 預設可使用 Sonnet 模型執行。深度 Retrospective 分析（根因識別、架構影響評估、系統性問題診斷）可選用 Opus 模型。**
+> **Sprint Review 的 subagent 自動使用 Sonnet 模型（`model: "sonnet"`）。**
 >
-> 指標計算、DORA 數據彙整、通過標準核對等常規步驟 Sonnet 已可高品質完成。若本 Sprint Velocity 大幅偏差或出現連續 Problem 趨勢，建議升級至 Opus 進行更深度的回顧分析。
->
-> 切換指令：`/model claude-opus-4-6`（選用）
->
-> 執行完畢後切換回 Sonnet：`/model claude-sonnet-4-6`
+> 指標計算、DORA 數據彙整、通過標準核對等常規步驟 Sonnet 已可高品質完成。
+> 使用者無需手動切換模型，框架在派遣 subagent 時自動指定。
 
 ---
 

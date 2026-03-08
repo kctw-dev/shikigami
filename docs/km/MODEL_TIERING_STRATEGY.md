@@ -52,63 +52,46 @@ Haiku 雖然速度最快、成本最低，但在 Execution 環節的兩個核心
 
 ### 3.1 調查結論摘要
 
-**結論：Claude Code Agent tool（即 Task tool）目前不支援 `model` 參數指定。**
+**~~結論（v1.0，已過時）：Claude Code Agent tool 不支援 `model` 參數指定。~~**
 
-分層策略在技術上**無法**透過 Agent tool 的 model 參數原生實現，需採用替代方案。
+**結論（v2.0，2026-03-08 更正）：Claude Code Agent tool 已支援 `model` 參數。**
+
+Agent tool 的 `model` 參數接受 `"sonnet"` | `"opus"` | `"haiku"` 三個值，不指定時繼承主 session 模型。分層策略可透過 Agent tool 原生實現，無需手動切換。
 
 ### 3.2 調查細節
 
-#### (a) Claude Code Agent tool 的現有介面
+#### (a) Claude Code Agent tool 的介面（已更新）
 
-根據對 `skills/sprint-execution/story-lifecycle-prompt.md` 及 `SKILL.md` 的分析，Story-Lifecycle Subagent 的派遣方式為：
-
-```
-主 session 透過 Agent tool（Task tool）派遣 subagent
-  輸入：prompt 字串（包含 story_id, sprint_file 等參數）
-  輸出：subagent 回傳的標準化摘要（PASS/FAIL/ESCALATE）
-```
-
-Agent tool 的呼叫介面為：
+Agent tool 呼叫介面：
 
 ```yaml
 task:
-  description: "..."   # subagent prompt 內容
-  # 目前無 model 欄位
+  description: "..."       # subagent prompt 內容
+  model: "opus"            # 可選：指定 subagent 使用的模型
+  subagent_type: "general-purpose"
 ```
 
-**Claude Code 的 Agent tool（Task tool）不暴露 `model` 參數**。模型選用由 Claude Code 平台層面統一決定，Skill prompt 無法在 subagent 呼叫時指定使用不同模型層級。
+支援的 model 值：
 
-#### (b) 平台層級的模型控制
+| 值 | 模型 | 適用場景 |
+|----|------|---------|
+| `"opus"` | claude-opus-4-6 | 高階策略推理（Planning） |
+| `"sonnet"` | claude-sonnet-4-6 | 代碼實作、文件撰寫（Execution） |
+| `"haiku"` | claude-haiku-4-5 | 快速簡單任務（不建議用於 Sprint 環節） |
 
-Claude Code 的模型選擇發生在以下層級：
+不指定時，subagent 繼承主 session 的模型配置。
 
-| 控制層 | 機制 | 對分層策略的影響 |
-|--------|------|----------------|
-| 使用者設定 | `/model` 指令切換主 session 模型 | 影響主 session，不影響 subagent |
-| 平台預設 | 系統設定的預設模型（目前為 Sonnet） | subagent 繼承主 session 設定 |
-| Agent tool 呼叫 | 無 model 參數 | 無法逐 subagent 指定模型 |
+#### (b) 分層策略自動化實作
 
-#### (c) 已確認的限制
+各 Sprint 環節的 subagent 派遣已加入 model 參數指示：
 
-1. **Subagent 繼承主 session 模型**：透過 Agent tool 派遣的 subagent 使用與主 session 相同的模型配置，不支援獨立指定。
-2. **無動態模型切換 API**：Claude Code 目前無法在 SKILL.md prompt 中透過程式化方式在不同 subagent 之間切換模型。
-3. **`/model` 指令為手動操作**：使用者可以在對話中手動執行 `/model claude-opus-4-6` 切換，但這是互動式操作，無法在 Skill 流程中自動觸發。
+| 環節 | SKILL.md 位置 | model 參數 |
+|------|--------------|-----------|
+| Sprint Planning（PO / Architect / QA subagent） | `sprint-planning/SKILL.md` §6 | `model: "opus"` |
+| Sprint Execution（Story-Lifecycle subagent） | `sprint-execution/SKILL.md` §3 | `model: "sonnet"` |
+| Sprint Review | `sprint-review/SKILL.md` | `model: "sonnet"`（預設） |
 
-#### (d) 替代方案評估
-
-| 替代方案 | 可行性 | 說明 |
-|----------|--------|------|
-| **手動環節切換（Manual Tiering）** | 高 | 使用者在 Planning 前手動執行 `/model claude-opus-4-6`，Execution 前切回 `/model claude-sonnet-4-6`。成本：需使用者記憶並執行切換。 |
-| **SKILL.md 提示指引** | 中 | 在各環節 SKILL.md 中加入「建議使用者切換至 [模型] 後執行本 Skill」提示。降低遺忘率，但仍是手動操作。 |
-| **等待平台支援** | 低（短期） | 持續追蹤 Claude Code 路線圖，待 Agent tool 支援 model 參數後再實作。預計 2026 H2 或更晚。 |
-| **Multi-session 架構** | 低 | 主 session 為 Opus、subagent session 為 Sonnet，透過 CLI 呼叫實現。架構複雜度高，不符合 KISS 原則，且需 ADR 決策。 |
-
-**建議採用「手動環節切換 + SKILL.md 提示指引」的輕量方案**，在平台原生支援前作為過渡方案。
-
-#### (e) 未來觀察點
-
-- 追蹤 Claude Code changelog 是否新增 Agent tool `model` 參數（Anthropic API `/v1/messages` 已支援 model 參數，平台 Task tool 整合時間待觀察）
-- 若 OpenCode 平台（MULTI_PLATFORM_SURVEY.md 調查結論：可行性 4/5）支援 per-subagent model 指定，可評估 Shikigami OpenCode 版的分層策略原生實作
+使用者不再需要手動執行 `/model` 切換，框架在派遣 subagent 時自動指定適當模型。
 
 ---
 
@@ -196,16 +179,19 @@ Claude Code 的模型選擇發生在以下層級：
 
 ## 五、實作路線圖
 
-### Phase 1（當前可執行，無需 ADR）
+### Phase 1（✅ 完成，Sprint 60 / US-159）
 
-- [ ] 在 `skills/sprint-planning/SKILL.md` 開頭新增「建議切換至 Opus 執行本 Skill」提示
-- [ ] 在 `skills/sprint-review/SKILL.md` 開頭新增「Sonnet 已足夠；深度 Retro 分析可選用 Opus」提示
-- [ ] 在 `docs/tutorial/README.md` 新增「模型選用建議」段落
+- [x] 在 `skills/sprint-planning/SKILL.md` 開頭新增「建議切換至 Opus 執行本 Skill」提示
+- [x] 在 `skills/sprint-review/SKILL.md` 開頭新增「Sonnet 已足夠；深度 Retro 分析可選用 Opus」提示
+- [x] 在 `docs/tutorial/README.md` 新增「模型選用建議」段落
 
-### Phase 2（待平台支援）
+### Phase 2（✅ 完成，Issue #158）
 
-- [ ] 追蹤 Claude Code changelog — Agent tool 是否新增 `model` 參數
-- [ ] 若支援，評估在 `story-lifecycle-prompt.md` 中加入 model 參數的架構決策（需要 ADR）
+- [x] ~~追蹤 Claude Code changelog — Agent tool 是否新增 `model` 參數~~ → **已確認支援**（`model: "opus"` | `"sonnet"` | `"haiku"`）
+- [x] 在 `sprint-planning/SKILL.md` §6 subagent 派遣加入 `model: "opus"` 指示
+- [x] 在 `sprint-execution/SKILL.md` §3 Story-Lifecycle subagent 派遣加入 `model: "sonnet"` 指示
+- [x] 更新 tutorial 反映自動化能力
+- 不需要 ADR：屬於現有機制的參數配置，無架構決策變更
 
 ### Phase 3（長期）
 

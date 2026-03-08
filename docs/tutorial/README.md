@@ -25,25 +25,15 @@
 
 ## 模型選用建議
 
-Shikigami 框架的不同 Sprint 環節對模型能力的需求不同，建議依環節選用適當模型：
+Shikigami 框架會在派遣 subagent 時**自動指定適當模型**，使用者無需手動切換：
 
-| 環節 | 建議模型 | 理由 |
-|------|---------|------|
-| **Sprint Planning** | Opus（`claude-opus-4-6`） | Planning 需要多步策略推理（AC 分析、Story 估點、平行分群、依賴評估），高階模型在此類任務具備明顯優勢，且 Planning 決策品質直接影響整個 Sprint 執行效率 |
-| **Story Execution（開發）** | Sonnet（`claude-sonnet-4-6`） | 代碼實作與文件撰寫的速度與準確性要求高，Sonnet 已達足夠水準，且速度比 Opus 快 3-5 倍 |
-| **Sprint Review** | Sonnet（預設），Opus（選用） | 常規指標計算與通過標準核對用 Sonnet 即可；出現 Velocity 大幅偏差或連續 Problem 趨勢時，可升級至 Opus 進行深度回顧 |
+| 環節 | 自動選用模型 | 理由 |
+|------|------------|------|
+| **Sprint Planning** | Opus（自動） | Planning subagent（PO / Architect / QA）派遣時自動指定 `model: "opus"`，用於多步策略推理 |
+| **Story Execution（開發）** | Sonnet（自動） | Story-Lifecycle subagent 派遣時自動指定 `model: "sonnet"`，兼顧速度與成本 |
+| **Sprint Review** | Sonnet（自動） | Review subagent 使用 Sonnet，常規指標計算與通過標準核對已足夠 |
 
-### 切換指令
-
-```bash
-# 切換至 Opus（建議 Sprint Planning 前執行）
-/model claude-opus-4-6
-
-# 切換回 Sonnet（Planning 完成後或 Execution 開始前）
-/model claude-sonnet-4-6
-```
-
-> 詳細策略說明請參閱 [模型分層策略文件](../km/MODEL_TIERING_STRATEGY.md)。
+> 框架透過 Agent tool 的 `model` 參數自動分層，使用者不需要執行 `/model` 切換。詳細策略說明請參閱 [模型分層策略文件](../km/MODEL_TIERING_STRATEGY.md)。
 
 ---
 

@@ -32,13 +32,12 @@ Sprint Planning 支援兩種執行模式：
 
 ## 模型選用建議
 
-> **建議在執行 Sprint Planning 前切換至 Opus 模型。**
+> **Sprint Planning 的所有 subagent（PO / Architect / QA）自動使用 Opus 模型。**
 >
-> Sprint Planning 需要多步策略推理（AC 分析、Story 估點、平行分群、依賴評估），Opus 在此類高層次判斷任務上具備明顯優勢，且 Planning 決策品質直接影響整個 Sprint 的執行效率。
+> 派遣 subagent 時指定 `model: "opus"`，無需使用者手動切換。
+> Sprint Planning 需要多步策略推理（AC 分析、Story 估點、平行分群、依賴評估），Opus 在此類高層次判斷任務上具備明顯優勢。
 >
-> 切換指令：`/model claude-opus-4-6`
->
-> Planning 完成後如需切換回 Sonnet：`/model claude-sonnet-4-6`
+> 主 session 模型不受影響，使用者無需執行 `/model` 切換。
 
 ---
 
@@ -209,10 +208,10 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
 ```
 0.   健康檢查       → <!-- Claude Code -->invoke shikigami:health-check<!-- OpenCode -->使用 health-check skill<!-- /OpenCode -->（完整 4 項）【慢想模式限定】
 0.5. 角色權重調整   → 讀取 Retrospective_Log.md，執行關鍵字比對，輸出調整結果至 sprint_N.md（詳見 §7）【慢想模式限定】
-1.   PO             → 分析 Backlog、選取 Stories、定義 Sprint Goal
-2.   Architect      → 技術評估、ADR 檢查
-3.   QA             → 驗收標準確認
-4.   PO             → 產出 Sprint 文件
+1.   PO             → 分析 Backlog、選取 Stories、定義 Sprint Goal        【model: "opus"】
+2.   Architect      → 技術評估、ADR 檢查、方法論適用性評估                   【model: "opus"】
+3.   QA             → 驗收標準確認                                         【model: "opus"】
+4.   PO             → 產出 Sprint 文件                                     【model: "opus"】
 ```
 
 **派遣說明**：

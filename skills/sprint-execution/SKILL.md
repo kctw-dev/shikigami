@@ -84,7 +84,7 @@ Sprint Backlog 中取出 Story
         +-- 觸發外部抽樣審查
                 |
                 v
-          派遣獨立 QA subagent 執行外部抽樣審查
+          派遣獨立 QA subagent 執行外部抽樣審查【model: "sonnet"】
           （使用 spec-reviewer-prompt.md 或 quality-reviewer-prompt.md）
                 |
                 |-- CONFIRM --> 記錄抽樣結果，更新 PROJECT_BOARD（Story 狀態 → 完成）
@@ -156,7 +156,7 @@ Sprint Backlog 還有 Story？
    **降級指引：** `gh run list` 指令失敗（網路問題、權限不足、非 GitHub 倉庫等）或無任何執行記錄時，CI 狀態記為 `UNKNOWN`，靜默略過，不阻塞 Story 執行。UNKNOWN 狀態不觸發 `[CI-ALERT]`。
 
 2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。**主 session 不讀取 Story 內容**，Story ID 與路徑傳入 subagent，由 subagent 自行讀取。
-3. **派遣 Story-Lifecycle subagent**：使用 `story-lifecycle-prompt.md` 作為 prompt，以 ADR-007 §AC2 介面契約格式傳入以下參數（主 session 不預讀這些內容，路徑由 **Story-Lifecycle subagent 自行讀取**）：
+3. **派遣 Story-Lifecycle subagent**（`model: "sonnet"`）：使用 `story-lifecycle-prompt.md` 作為 prompt，以 ADR-007 §AC2 介面契約格式傳入以下參數（主 session 不預讀這些內容，路徑由 **Story-Lifecycle subagent 自行讀取**）。派遣時指定 `model: "sonnet"`，確保 Execution 環節使用中階模型以兼顧速度與成本：
    - `story_id`：Story 識別碼（如 `US-XX`）
    - `sprint_file`：`docs/sprints/sprint_N.md`（Story AC 與完整需求）
    - `project_board`：`docs/PROJECT_BOARD.md`
