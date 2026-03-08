@@ -3,7 +3,7 @@
 **Sprint Goal**：清空 Backlog，終結所有懸而未決的 Open Issues — 評估並結案或推進 #159（多模型 CLI Phase 3 方向決策）、#59（Beta 回饋機制評估結案）、#5（Marketplace 上架現狀評估）、#4（Cursor 平台現狀評估）。
 
 **期間**：2026-03-08 ~ 2026-03-14
-**狀態**：進行中
+**狀態**：完成
 **ADR 依賴**：無
 
 ## Sprint Backlog

@@ -2010,6 +2010,19 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 
 ---
 
+## Sprint 64（2026-03-08）
+
+**Sprint Goal**：清空 Backlog，終結所有懸而未決的 Open Issues — 評估並結案或推進 #159、#59、#5、#4。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-171（Issue #159）：多模型 CLI 路由 Phase 3 方向決策 — Issue #159 結案或規劃後續 | S | 1 | Sprint 64 |
+| US-172（Issue #59）：Beta 回饋機制評估與結案 — Issue #59 現狀審查 | S | 1 | Sprint 64 |
+| US-173（Issue #5）：Marketplace 上架現狀審查 — Issue #5 結案決策 | S | 1 | Sprint 64 |
+| US-174（Issue #4）：Cursor 平台現狀審查 — Issue #4 結案決策 | S | 1 | Sprint 64 |
+
+---
+
 ## Sprint 63（2026-03-08）
 
 **Sprint Goal**：流程修正與技術債清理 — 修復 Sprint Review Issue 自動關閉問題（#166），評估開源 CLI Adapter 替代方案（#167），清理 50+ Sprint 懸而未決的 Retro Action Items（#168）。

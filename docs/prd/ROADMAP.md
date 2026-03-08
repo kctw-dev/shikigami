@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.36.0**（Sprint 63）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.37.0**（Sprint 63）。
 
 | 版號 | 含義 |
 |------|------|
@@ -325,7 +325,9 @@ Sprint Review 時自動產出：
 | US-169 | 多模型 CLI 路由 Phase 2 — 開源 Adapter 評估與決策（維持自建） | Sprint 63 ✅ |
 | US-170 | Retro Action Items 批次處理 — Sprint 11-12 懸而未決項目清理 | Sprint 63 ✅ |
 | US-171 | 多模型 CLI 路由 Phase 3 方向決策 — Issue #159 結案（Phase 3 列為 Long-term） | Sprint 64 ✅ |
+| US-172 | Beta 回饋機制評估與結案 — Issue #59 關閉（零外部回饋 + 策略調整） | Sprint 64 ✅ |
 | US-173 | Marketplace 上架現狀審查 — Issue #5 正式結案（策略不對齊，延後至 ~2028 v1.0.0 前重評） | Sprint 64 ✅ |
+| US-174 | Cursor 平台現狀審查 — Issue #4 維持 OPEN（v2.6.13 條件達成，待 POC 驗證） | Sprint 64 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 
