@@ -10,7 +10,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-180：Developer 角色 Provider 路由 — 支援 Gemini CLI 可切換派遣（環境變數控制） | #175 | S | 1 | 進行中 |
+| US-180：Developer 角色 Provider 路由 — 支援 Gemini CLI 可切換派遣（環境變數控制） | #175 | S | 1 | 完成 |
 
 ## 平行分群
 
