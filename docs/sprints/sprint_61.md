@@ -13,7 +13,7 @@
 | Story ID | Issue # | 標題 | Size | Points | doc-only | 狀態 |
 |----------|---------|------|------|--------|----------|------|
 | US-162 | #160 | 框架流程減法審查 — SKILL.md 冗餘步驟與重複內容清理 | S | 1 | 是 | 待辦 |
-| US-163 | #161 | 多模型 CLI 路由 Phase 0 — Gemini CLI 呼叫介面調查（Issue #159 拆分） | S | 1 | 是 | 待辦 |
+| US-163 | #161 | 多模型 CLI 路由 Phase 0 — Gemini CLI 呼叫介面調查（Issue #159 拆分） | S | 1 | 是 | 完成 |
 | US-164 | #162 | Backlog Grooming — 現有 Issues RICE 評分補齊 + 新候選 Story 提案 | S | 1 | 是 | 待辦 |
 
 **Sprint 容量**：3 Points（3 Stories）
@@ -93,10 +93,10 @@ As a framework developer, I want a documented investigation of Gemini CLI's invo
 
 **Done 定義**
 
-- [ ] `docs/km/GEMINI_CLI_INVESTIGATION.md` 檔案存在（AC1）
-- [ ] 文件包含呼叫方式、輸出格式、Prompt 限制三章節（AC2）
-- [ ] 至少 2 個章節有明確結論（AC3）
-- [ ] 文件記錄調查日期與 CLI 版本（AC4）
+- [x] `docs/km/GEMINI_CLI_INVESTIGATION.md` 檔案存在（AC1）
+- [x] 文件包含呼叫方式、輸出格式、Prompt 限制三章節（AC2）
+- [x] 至少 2 個章節有明確結論（AC3）
+- [x] 文件記錄調查日期與 CLI 版本（AC4）
 
 ---
 
