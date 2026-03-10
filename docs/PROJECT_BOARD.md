@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 74 Review 完成）
-**當前 Sprint**：Sprint 74（完成）
+**最後更新**：2026-03-11（Sprint 75 Planning 完成）
+**當前 Sprint**：Sprint 75（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 74](sprints/sprint_74.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 75](sprints/sprint_75.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 75 — 進行中
+
+**Sprint Goal**：強化交付品質閉環 — CI/CD 通知不遺漏 + E2E 結果納入流程判定 + Issue 回覆如實反映驗證狀態
+**期間**：2026-03-11 ~ 2026-03-18
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-200：Issue 回覆溝通策略改善 — 分階段通知避免誤認已交付 | #197 | S | 1 | 待開發 |
+| US-198：CI/CD 失敗通知強化 — 多節點 CI 檢查與升級策略 | #195 | M | 2 | 待開發 |
+| US-199：E2E 測試與 CI/CD 管線整合 — deployment-readiness E2E Gate 升級 | #196 | M | 2 | 待開發 |
 
 ---
 
