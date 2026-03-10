@@ -119,6 +119,61 @@ Sprint 38、39、40 連續三個 Retrospective 均發現「交付物文案不一
 
 Sprint Review 的目的是驗收本 Sprint 交付的成果，確認是否符合商業期待。
 
+### Pre-Demo 部署驗證（Demo 展示前必要前置條件）
+
+<!-- US-187：回應 Sprint Review 缺少生產環境部署驗證步驟 — Issue #179 -->
+
+在 PO Subagent 展示 Demo 前，執行主 session 須確認生產環境已部署最新代碼，確保 Stakeholder 看到的是最新版本。
+
+#### 驗證步驟
+
+1. **取得最新 commit hash**
+
+   ```bash
+   git log --oneline -1
+   ```
+
+   記錄輸出的 commit hash（例：`abc1234 feat: 更新功能 X`）。
+
+2. **確認生產環境部署狀態（Cloud Run）**
+
+   若專案有 Cloud Run 部署，執行以下指令確認生產環境 image 包含最新 commit：
+
+   ```bash
+   # 確認最後部署時間是否晚於最後 Story commit 時間
+   gcloud run services describe <SERVICE_NAME> --region=<REGION> \
+     --format="value(status.conditions[0].lastTransitionTime,spec.template.metadata.annotations)"
+   ```
+
+   **判斷標準**：滿足以下任一條件即視為部署已完成：
+   - 生產環境 image digest 包含最新 commit hash
+   - 最後部署時間晚於 `git log --oneline -1` 對應 commit 的時間戳
+
+3. **未部署時自動觸發部署**
+
+   若確認生產環境未部署最新代碼，**在 Demo 展示前**先觸發 `deployment-readiness` skill 確保 Demo 基於最新代碼：
+
+   ```
+   觸發 deployment-readiness：確保 <最新 commit hash> 已部署至生產環境後再執行 Sprint Review Demo
+   ```
+
+   等待 `deployment-readiness` 完成並確認部署成功後，才進入步驟 1（PO Subagent Demo）。
+
+#### 驗證結果輸出格式
+
+```
+## Pre-Demo 部署驗證結果
+
+最新 commit：<hash> <訊息>
+Cloud Run 部署狀態：已部署 / 未部署 / 不適用（無 Cloud Run）
+最後部署時間：YYYY-MM-DDTHH:MM:SSZ（若適用）
+驗證結論：PASS（可進行 Demo）/ FAIL（已觸發 deployment-readiness，等待完成）
+```
+
+> **注意**：若專案無 Cloud Run 部署，跳過步驟 2，直接輸出「不適用（無 Cloud Run）」並繼續。
+
+---
+
 ### 步驟
 
 1. **PO Subagent 展示 Demo 結果**
@@ -652,6 +707,11 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent（`model: "haik
 完成 Sprint Review & Retrospective 前，確認以下項目全部完成：
 
 - [ ] **模式確認**：依 §1.1 觸發條件判定當前執行模式（快思 / 慢想），並在執行前輸出「目前執行模式：快思模式 / 慢想模式」
+- [ ] **Pre-Demo 部署驗證**（§2 Pre-Demo，Demo 展示前執行）：
+  - [ ] 執行 `git log --oneline -1` 取得最新 commit hash
+  - [ ] 確認生產環境部署狀態（Cloud Run 或標記「不適用」）
+  - [ ] 若未部署：已觸發 `deployment-readiness` 並等待完成後才繼續 Demo
+  - [ ] 輸出「Pre-Demo 部署驗證結果」摘要（PASS 或 FAIL + 處理說明）
 - [ ] **交付物文案一致性審查**（§1.5，Sprint Review 前執行）：
   - [ ] 跨文件術語一致性審查通過（sprint_N.md / PROJECT_BOARD.md 狀態欄一致）
   - [ ] 狀態標注一致性審查通過（統一使用「完成 / 進行中 / 未完成」中文術語）

@@ -19,7 +19,7 @@
 | US-184：P0: Sprint Execution 缺少修復驗證步驟 | #180 | M | 2 | 完成 |
 | US-185：sprint-execution: Story-Lifecycle subagent 預設使用 general-purpose agent type | #184 | S | 1 | 完成 |
 | US-186：Developer subagent 缺少 API 契約對齊步驟 | #178 | M | 2 | 完成 |
-| US-187：Sprint Review 缺少生產環境部署驗證步驟 | #179 | S | 1 | 待開始 |
+| US-187：Sprint Review 缺少生產環境部署驗證步驟 | #179 | S | 1 | 完成 |
 | US-188：sprint-execution: 平行 subagent 禁止直接修改共用文件 — 主 session 批次更新 | #183 | M | 2 | 待開始 |
 | US-189：CI/CD 變更強制 QA + SRE 雙審查 Gate | #177 | M | 2 | 待開始 |
 | US-190：feat: Dispel 及 Sprint Execution 應產出 Mermaid SA 圖表 | #185 | L | 3 | 待開始 |

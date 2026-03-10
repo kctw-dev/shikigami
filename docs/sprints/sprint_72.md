@@ -12,7 +12,7 @@
 | US-184：P0: Sprint Execution 缺少修復驗證步驟 | #180 | M | 2 | 完成 |
 | US-185：sprint-execution: Story-Lifecycle subagent 預設使用 general-purpose agent type | #184 | S | 1 | 完成 |
 | US-186：Developer subagent 缺少 API 契約對齊步驟 | #178 | M | 2 | 完成 |
-| US-187：Sprint Review 缺少生產環境部署驗證步驟 | #179 | S | 1 | 待開始 |
+| US-187：Sprint Review 缺少生產環境部署驗證步驟 | #179 | S | 1 | 完成 |
 | US-188：sprint-execution: 平行 subagent 禁止直接修改共用文件 — 主 session 批次更新 | #183 | M | 2 | 待開始 |
 | US-189：CI/CD 變更強制 QA + SRE 雙審查 Gate | #177 | M | 2 | 待開始 |
 | US-190：feat: Dispel 及 Sprint Execution 應產出 Mermaid SA 圖表 | #185 | L | 3 | 待開始 |
@@ -113,6 +113,17 @@
 | AC2 | 最新 commit hash 驗證 | 驗證步驟包含：執行 `git log --oneline -1` 取得最新 commit hash |
 | AC3 | 生產環境部署確認 | 驗證步驟包含：若專案有 Cloud Run 部署，確認生產環境 image 包含最新 commit 或最後部署時間晚於最後 Story commit 時間 |
 | AC4 | 未部署時自動觸發部署 | 若未部署，在 Review 前先觸發 `deployment-readiness` 確保 Demo 基於最新代碼 |
+
+**Done 定義 Checklist**：
+
+- [x] AC1：`skills/sprint-review/SKILL.md` §2 已在 Demo 展示前新增「Pre-Demo 部署驗證」前置條件子節
+- [x] AC2：驗證步驟包含 `git log --oneline -1` 取得最新 commit hash
+- [x] AC3：驗證步驟包含 Cloud Run `gcloud run services describe` 部署時間確認，並說明兩個判斷標準（image digest / 部署時間），無 Cloud Run 時標記「不適用」
+- [x] AC4：未部署時明確指示觸發 `deployment-readiness` skill，並等待完成後才進行 Demo
+- [x] §7 執行檢查清單新增「Pre-Demo 部署驗證」4 項 checkbox
+- [x] Spec Compliance 審查通過
+- [x] Code Quality 審查通過
+- [x] Security 審查：不適用（framework skill 文件，無程式碼）
 
 ---
 
