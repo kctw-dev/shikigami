@@ -10,7 +10,7 @@
 |-------|-------|------|--------|------|
 | US-194：feat: README 資訊架構重設計 — 30 秒內讓人知道怎麼開始用 | #194 | M | 2 | 待開始 |
 | US-195：feat: API 契約 Hard Gate — 涉及 API 的 Story 無契約不得進入開發 | #191 | M | 2 | 待開始 |
-| US-196：docs: E2E 測試 Client 端教學手冊 — CDP 穿隧 + 本地瀏覽器連接 SOP | #193 | S | 1 | 待開始 |
+| US-196：docs: E2E 測試 Client 端教學手冊 — CDP 穿隧 + 本地瀏覽器連接 SOP | #193 | S | 1 | 完成 |
 | US-197：feat: E2E 測試 Server 端模板 — Playwright workflow + CI 登入自動化模板 | #192 | L | 3 | 待開始 |
 
 **總計**：8 points（2M + 1S + 1L）
@@ -100,8 +100,8 @@
 | AC4 | Troubleshooting | 常見問題（port 衝突、防火牆、WSL 特殊設定）至少 3 條 |
 
 **Done 定義**：
-- [ ] AC1-AC4 全部通過
-- [ ] QA Review PASS
+- [x] AC1-AC4 全部通過
+- [x] QA Review PASS
 
 ---
 
