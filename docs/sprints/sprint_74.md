@@ -76,7 +76,7 @@
 | AC5 | 不涉及 API 的 Story 不受影響 | Architect 技術評估表格中「API 契約」欄位標記為「不適用」的 Story，Story-Lifecycle subagent 跳過此 Gate，不觸發阻擋 |
 
 **Done 定義**：
-- [ ] AC1-AC5 全部通過
+- [x] AC1-AC5 全部通過
 - [ ] QA Review PASS
 
 ---

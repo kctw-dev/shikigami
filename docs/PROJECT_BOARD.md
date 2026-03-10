@@ -16,7 +16,7 @@
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-194：feat: README 資訊架構重設計 — 30 秒內讓人知道怎麼開始用 | #194 | M | 2 | 待開始 |
-| US-195：feat: API 契約 Hard Gate — 涉及 API 的 Story 無契約不得進入開發 | #191 | M | 2 | 待開始 |
+| US-195：feat: API 契約 Hard Gate — 涉及 API 的 Story 無契約不得進入開發 | #191 | M | 2 | 完成 |
 | US-196：docs: E2E 測試 Client 端教學手冊 — CDP 穿隧 + 本地瀏覽器連接 SOP | #193 | S | 1 | 待開始 |
 | US-197：feat: E2E 測試 Server 端模板 — Playwright workflow + CI 登入自動化模板 | #192 | L | 3 | 待開始 |
 
