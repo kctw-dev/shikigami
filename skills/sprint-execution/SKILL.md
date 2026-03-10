@@ -256,7 +256,7 @@ Sprint Backlog 還有 Story？
 
    **雙軌派遣路徑：**
 
-   - **provider = claude（預設）**：使用 Agent tool 派遣，指定 `model: "sonnet"`，確保 Execution 環節使用中階模型以兼顧速度與成本。此路徑支援完整 tool calling（Read / Edit / Bash 等），適用所有 Story 類型。
+   - **provider = claude（預設）**：使用 Agent tool 派遣，指定 `model: "sonnet"`，並**明確指定 `agent_type: "general-purpose"`**（預設使用通用 agent type，避免 shikigami:developer 等角色特定 agent 的 prompt injection 偵測導致 subagent 拒絕執行）。此路徑支援完整 tool calling（Read / Edit / Bash 等），適用所有 Story 類型。
 
    - **provider = gemini**：使用 Bash 直接呼叫 Gemini CLI，以 stdin pipe 傳入 `story-lifecycle-prompt.md` 內容與 Story 參數。Gemini CLI 為原生 agent，具備完整工具能力（ReadFile、WriteFile、Edit、Shell 等），適用所有 Story 類型。
 
