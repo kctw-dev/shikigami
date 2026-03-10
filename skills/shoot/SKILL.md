@@ -218,6 +218,15 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
   +-- PASS
         |
         v
+[步驟 5.5] CI/CD 雙審查 Gate（條件觸發，見 §8.1）
+  偵測 .github/workflows/**、scripts/deploy*.sh、scripts/add_secret.sh、
+  Dockerfile*、cloudbuild*.yaml、docker-compose*.yml 是否被修改
+  |-- 偵測到 CI/CD 變更
+  │     ├─ QA regression check FAIL → exit code 非 0，禁止 shoot: commit
+  │     └─ SRE infra config check FAIL → exit code 非 0，禁止 shoot: commit
+  +-- 無 CI/CD 變更 → SKIP
+        |
+        v
 [步驟 6] 更新 docs/km/Shoot_Log.md 與 docs/PROJECT_BOARD.md
         |
         v
@@ -289,13 +298,42 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
 
 ### 任一 FAIL 時的三個可觀察驗收點
 
-當 QA Pre-flight、Architect 審查、或 QA Post-check 任一回傳 FAIL 時：
+當 QA Pre-flight、Architect 審查、QA Post-check 或 CI/CD 雙審查 Gate 任一回傳 FAIL 時：
 
 | 可觀察點 | 說明 |
 |---------|------|
 | (a) exit code 非 0 | process 以錯誤碼結束 |
 | (b) Shoot_Log.md 中該次任務無 PASS 記錄 | log 筆數不增加，Shoot_Log.md 保持不變 |
 | (c) 不執行 `shoot:` 前綴的 git commit | commit 狀態為未提交 |
+
+---
+
+## 8.1 CI/CD 雙審查 Gate（條件觸發）
+
+<!-- US-189 CI/CD 變更強制 QA + SRE 雙審查 Gate — Sprint 72 -->
+
+在 QA Post-check 通過後、執行 `shoot:` commit 前，偵測本次任務修改的檔案是否包含 CI/CD 相關路徑。
+
+### CI/CD 路徑 Pattern
+
+| Pattern | 範例 |
+|---------|------|
+| `.github/workflows/**` | `.github/workflows/deploy.yml` |
+| `scripts/deploy*.sh` | `scripts/deploy-prod.sh` |
+| `scripts/add_secret.sh` | `scripts/add_secret.sh` |
+| `Dockerfile*` | `Dockerfile`、`Dockerfile.prod` |
+| `cloudbuild*.yaml` | `cloudbuild.yaml`、`cloudbuild-staging.yaml` |
+| `docker-compose*.yml` | `docker-compose.yml`、`docker-compose.prod.yml` |
+
+### 審查規則
+
+偵測到 CI/CD 變更後，**QA regression check 與 SRE infra config check 兩者均必須 PASS，才允許執行 `shoot:` commit**。
+
+完整審查項目定義請參照 `skills/sprint-execution/story-lifecycle-prompt.md` §6.8「CI/CD 雙審查 Gate」。
+
+<HARD-GATE>
+**CI/CD 雙審查 Hard Gate（/shoot）**：偵測到 CI/CD 路徑變更時，QA regression check 與 SRE infra config check **兩者均必須 PASS**，才允許執行 `shoot:` git commit。任一 FAIL → exit code 非 0，禁止 commit。
+</HARD-GATE>
 
 ---
 

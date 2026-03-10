@@ -14,7 +14,7 @@
 | US-186：Developer subagent 缺少 API 契約對齊步驟 | #178 | M | 2 | 完成 |
 | US-187：Sprint Review 缺少生產環境部署驗證步驟 | #179 | S | 1 | 完成 |
 | US-188：sprint-execution: 平行 subagent 禁止直接修改共用文件 — 主 session 批次更新 | #183 | M | 2 | 完成 |
-| US-189：CI/CD 變更強制 QA + SRE 雙審查 Gate | #177 | M | 2 | 待開始 |
+| US-189：CI/CD 變更強制 QA + SRE 雙審查 Gate | #177 | M | 2 | 完成 |
 | US-190：feat: Dispel 及 Sprint Execution 應產出 Mermaid SA 圖表 | #185 | L | 3 | 待開始 |
 | US-191：支援 Cursor 平台安裝 | #4 | L | 3 | 待開始 |
 
@@ -172,6 +172,16 @@
 | AC2 | QA 審查自動觸發 | 偵測到 CI/CD 變更時，自動派遣 QA subagent 執行 regression check，確認變更不會破壞既有部署流程 |
 | AC3 | SRE 審查自動觸發 | 偵測到 CI/CD 變更時，自動派遣 SRE subagent 確認基礎設施配置正確性（secret 掛載、IAM、環境變數完整性） |
 | AC4 | 雙審查 PASS 後才允許 commit | QA + SRE 雙審查皆 PASS 後，才允許執行 commit 動作 |
+
+**Done 定義 Checklist**：
+
+- [x] AC1：`skills/sprint-execution/story-lifecycle-prompt.md` §6.8 新增 CI/CD 路徑 pattern 偵測（`.github/workflows/**`、`scripts/deploy*.sh`、`scripts/add_secret.sh`、`Dockerfile*`、`cloudbuild*.yaml`、`docker-compose*.yml`）；`skills/shoot/SKILL.md` 步驟 5.5 與 §8.1 同步新增偵測機制
+- [x] AC2：§6.8「QA 審查（regression check）」明確定義 QA-CICD-1～QA-CICD-4 四個自動審查項目，偵測到 CI/CD 變更時自動觸發
+- [x] AC3：§6.8「SRE 審查（infrastructure config correctness）」明確定義 SRE-CICD-1～SRE-CICD-4 四個審查項目（secret 掛載、IAM 最小權限、env var 完整性、映像來源安全），偵測到 CI/CD 變更時自動觸發
+- [x] AC4：§6.8 結尾 HARD-GATE 明確規定 QA + SRE 雙審查均 PASS 後才允許 commit；`shoot/SKILL.md` §8.1 同步加入 HARD-GATE；執行流程圖已更新
+- [x] Spec Compliance 審查通過
+- [x] Code Quality 審查通過
+- [x] Security 審查通過（CI/CD 安全相關 Story，已審查 secret 掛載與 IAM 規則）
 
 ---
 
