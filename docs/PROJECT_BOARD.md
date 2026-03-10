@@ -1,9 +1,29 @@
 # Project Board
 
-**最後更新**：2026-03-10（Sprint 71 Review 完成）
-**當前 Sprint**：Sprint 71（完成）
+**最後更新**：2026-03-10（Sprint 72 Planning 完成）
+**當前 Sprint**：Sprint 72（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 71](sprints/sprint_71.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 72](sprints/sprint_72.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 72 — 進行中
+
+**Sprint Goal**：框架品質全面強化 — Bug 修復 + 流程補全 + 平行安全防護
+**期間**：2026-03-10 ~ 2026-03-17
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-183：Bug: shikigami:dispel skill 設定 disable-model-invocation 導致無法透過 Skill tool 呼叫 | #181 | S | 1 | 待開始 |
+| US-184：P0: Sprint Execution 缺少修復驗證步驟 | #180 | M | 2 | 待開始 |
+| US-185：sprint-execution: Story-Lifecycle subagent 預設使用 general-purpose agent type | #184 | S | 1 | 待開始 |
+| US-186：Developer subagent 缺少 API 契約對齊步驟 | #178 | M | 2 | 待開始 |
+| US-187：Sprint Review 缺少生產環境部署驗證步驟 | #179 | S | 1 | 待開始 |
+| US-188：sprint-execution: 平行 subagent 禁止直接修改共用文件 — 主 session 批次更新 | #183 | M | 2 | 待開始 |
+| US-189：CI/CD 變更強制 QA + SRE 雙審查 Gate | #177 | M | 2 | 待開始 |
+| US-190：feat: Dispel 及 Sprint Execution 應產出 Mermaid SA 圖表 | #185 | L | 3 | 待開始 |
+| US-191：支援 Cursor 平台安裝 | #4 | L | 3 | 待開始 |
 
 ---
 
