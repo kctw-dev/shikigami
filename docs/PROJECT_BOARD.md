@@ -1,6 +1,6 @@
 # Project Board
 
-**最後更新**：2026-03-10（Sprint 71 Planning 完成）
+**最後更新**：2026-03-10（Sprint 71 US-182 完成）
 **當前 Sprint**：Sprint 71（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 71](sprints/sprint_71.md) → 本看板 | [Tutorial](tutorial/README.md)
@@ -15,7 +15,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-182：QA 測試覆蓋驗證 — 第一層 Story-level checklist | #182 | M | 2 | 進行中 |
+| US-182：QA 測試覆蓋驗證 — 第一層 Story-level checklist | #182 | M | 2 | 完成 |
 
 ---
 

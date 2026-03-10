@@ -8,7 +8,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-182：QA 測試覆蓋驗證 — 第一層 Story-level checklist | #182 | M | 2 | 進行中 |
+| US-182：QA 測試覆蓋驗證 — 第一層 Story-level checklist | #182 | M | 2 | 完成 |
 
 ---
 
@@ -45,6 +45,6 @@
 
 **Definition of Done**
 
-- [ ] AC1–AC4 靜態驗證：文件修改可在指定位置找到對應內容
-- [ ] AC5 動態驗證：下一個含業務邏輯的 Story QA Review 使用新 checklist
-- [ ] ADR-003 Code Quality Self-Review 完成
+- [x] AC1–AC4 靜態驗證：文件修改可在指定位置找到對應內容
+- [x] AC5 動態驗證：下一個含業務邏輯的 Story QA Review 使用新 checklist
+- [x] ADR-003 Code Quality Self-Review 完成
