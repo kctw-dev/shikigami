@@ -59,6 +59,23 @@
 - [ ] 資料流是否符合設計文件的預期？
 - [ ] 是否有對需求的錯誤假設？（例：假設輸入格式、假設使用情境）
 
+### 5. 前後端 API 欄位一致性檢查（全端 Story 適用）
+
+<!-- US-186 前後端欄位一致性檢查 — Sprint 72 -->
+
+> **全端 Story 定義**：同時涉及前端和後端修改的 Story。
+
+若 Story 同時修改前後端（全端 Story），必須執行以下檢查：
+
+- [ ] 讀取後端 router 的 return statement，列出所有回應欄位的 key 名稱
+- [ ] 讀取前端對應的 API response type / interface，列出所有欄位名稱
+- [ ] 逐一比對前後端欄位名稱，確認完全一致（區分大小寫）
+- [ ] 若任何欄位名稱不一致 → **FAIL**（標記為 [FIELD-MISMATCH]）
+
+**判定標準**：前端 API response type 欄位名 與 後端 response dict/model 的 key **不完全一致** → 整體審查 FAIL。
+
+若 Story 非全端 Story（僅修改前端或僅修改後端），此檢查標記為 N/A。
+
 ---
 
 ## 輸出格式
@@ -119,6 +136,12 @@
    - 預期行為：Given {前置條件}，When {動作}，Then {預期結果}
    - 實際行為：{實際觀察到的行為}
    - 建議修復：{具體修復方向}
+
+#### [FIELD-MISMATCH] 前後端欄位名稱不一致（全端 Story）
+1. **前端 type / interface {檔案路徑}**
+   - 後端 key：`{backend_key}`
+   - 前端欄位：`{frontend_field}`
+   - 建議修復：將前端欄位名稱改為 `{backend_key}` 以與後端一致
 ```
 
 ---

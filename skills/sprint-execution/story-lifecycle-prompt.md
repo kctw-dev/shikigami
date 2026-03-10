@@ -206,6 +206,16 @@ commit + 取得 commit SHA
 
 ### Green（綠燈）
 
+<!-- US-186 API 契約對齊步驟 — Sprint 72 -->
+
+> **定義**：「全端 Story」指同時涉及前端和後端修改的 Story。
+
+> **Hard Rule（全端 Story 適用）**：若當前 Story 為全端 Story，在撰寫實作代碼前，必須先執行以下 API 契約對齊步驟：
+> 1. 使用 Read 工具讀取後端 router 的 return statement，確認所有回應欄位的 key 名稱
+> 2. 將前端 API response type / interface 的欄位名稱與後端 key 名稱逐一比對
+> 3. 確保前端 type 欄位名稱與後端 key 名稱**完全一致**（區分大小寫）
+> 4. 若存在不一致，以後端 key 名稱為準修正前端 type，再繼續實作
+
 1. 寫出**最小量**的代碼讓測試通過
 2. 不要過度設計，只做剛好讓測試通過的事
 3. 執行所有測試，確認新測試通過、既有測試不受影響
