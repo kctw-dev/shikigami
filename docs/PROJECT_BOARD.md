@@ -1,17 +1,19 @@
 # Project Board
 
-**最後更新**：2026-03-10（Sprint 72 Planning 完成）
-**當前 Sprint**：Sprint 72（進行中）
+**最後更新**：2026-03-10（Sprint 72 Review 完成）
+**當前 Sprint**：Sprint 72（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 72](sprints/sprint_72.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 72 — 進行中
+## Sprint 72 — 完成
 
 **Sprint Goal**：框架品質全面強化 — Bug 修復 + 流程補全 + 平行安全防護
 **期間**：2026-03-10 ~ 2026-03-17
 **ADR 依賴**：無
+**結果**：Goal 達成（9/9 Stories PASS）。Velocity 17 points，完成率 100%。Bug 修復（US-183 dispel frontmatter）+ 流程補全（US-184 修復驗證、US-185 agent type、US-186 API 契約、US-187 部署驗證、US-188 平行安全、US-189 CI/CD Gate）+ SA 圖表（US-190）+ Cursor 平台支援（US-191）。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
@@ -24,6 +26,11 @@
 | US-189：CI/CD 變更強制 QA + SRE 雙審查 Gate | #177 | M | 2 | 完成 |
 | US-190：feat: Dispel 及 Sprint Execution 應產出 Mermaid SA 圖表 | #185 | L | 3 | 完成 |
 | US-191：支援 Cursor 平台安裝 | #4 | L | 3 | 完成 |
+
+## Sprint 72 統計
+- Velocity：17 points
+- 完成率：100%（完成 9 / 計畫 9）
+- 日期：2026-03-10
 
 ---
 

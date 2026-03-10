@@ -76,6 +76,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 69 | 2026-03-08 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-180（S/1pt）；S67=1→S68=2→S69=1，S68→S69 下降 -50%（超出 ±20%），先升後降方向不一致→不規則 |
 | Sprint 70 | 2026-03-08 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-181（S/1pt）；S68=2→S69=1→S70=1，S68→S69 下降 -50%（超出 ±20%），S69→S70 持平 0%，先降後平方向不一致→不規則 |
 | Sprint 71 | 2026-03-10 | 2 points | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-182（M/2pt）；S69=1→S70=1→S71=2，S70→S71 回升 +100%，先平後升方向不一致→不規則 |
+| Sprint 72 | 2026-03-10 | 17 points | 100% | 上升趨勢 | Goal 達成，9/9 Stories PASS；US-183（S/1pt）+ US-184（M/2pt）+ US-185（S/1pt）+ US-186（M/2pt）+ US-187（S/1pt）+ US-188（M/2pt）+ US-189（M/2pt）+ US-190（L/3pt）+ US-191（L/3pt）；S70=1→S71=2→S72=17，S71→S72 +750%，連續三期上升（1→2→17）→上升趨勢；歷史最高 Velocity |
 
 ---
 
@@ -125,6 +126,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 19 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 23 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 60 | N/A | N/A | 68M input / 131K output | N/A（無 Planning/Execution baseline） | N/A / N/A / N/A |
+| Sprint 72 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 
 ---
 
@@ -157,6 +159,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 41 | Execution | 677819 | 1818 |
 | Sprint 44 | Execution | 48502704 | 127547 |
 | Sprint 51 | Execution | 42844134 | 88640 |
+| Sprint 72 | Execution | N/A | N/A |
 
 ---
 

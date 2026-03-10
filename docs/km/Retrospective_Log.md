@@ -4,6 +4,30 @@
 
 ---
 
+## Sprint 72 — 2026-03-10
+
+**Sprint Goal**：框架品質全面強化 — Bug 修復 + 流程補全 + 平行安全防護
+
+### Good
+
+1. Sprint 72 9/9 Stories PASS，17 Points，100% 完成率。連續 14 Sprint（S59-S72）100% 完成率，框架穩定性持續維持
+2. 歷史最高 Velocity（17 points），9 個 Story 含 2 個 L-size，全部一次通過自審與外部抽樣審查
+3. Backlog 枯竭問題徹底解決 — Sprint 72 從 9 個候選中全部選入，Backlog 健康度大幅改善
+4. Cursor 平台支援（US-191）交付：install-cursor.sh 一鍵生成 23 個 .mdc 規則檔，88% skill 覆蓋率，Issue #4 正式結案
+
+### Problem
+
+1. Retro Action #186（PO R1 Sonnet 預設）已連續延期 2 Sprint（S71→S72），尚未正式落地至 sprint-planning SKILL.md
+2. US-191 AC5 GUI 驗證受限 — Cursor IDE GUI 互動無法在 CLI 環境自動化驗證，僅能靜態確認檔案生成結果
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue |
+|---|--------|-------|----------|-------|
+| 1 | Sprint Planning PO Round 1 預設使用 Sonnet — 正式落地至 sprint-planning SKILL.md（延續 #186） | Scrum Master | sprint-planning SKILL.md 明確指定 PO R1 model: sonnet | #186 |
+
+---
+
 ## Sprint 71 — 2026-03-10
 
 **Sprint Goal**：建立 QA 測試覆蓋驗證機制第一層 — Story-level 測試覆蓋 checklist
