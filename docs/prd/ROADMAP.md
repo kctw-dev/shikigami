@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-11（Sprint 73 — 2/2 Stories 完成，PO R1 Sonnet 預設落地 + L2 API 驗證步驟模板交付）
+> 最後更新：2026-03-11（Sprint 74 — 4/4 Stories 完成，README 重設計 + API 契約 Hard Gate + E2E 測試基礎設施）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.47.0**（Sprint 73）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.48.0**（Sprint 74）。
 
 | 版號 | 含義 |
 |------|------|
@@ -347,6 +347,10 @@ Sprint Review 時自動產出：
 | US-191 | 支援 Cursor 平台安裝 | Sprint 72 ✅ |
 | US-192 | sprint-planning SKILL.md PO R1 模型改為 Sonnet 預設 | Sprint 73 ✅ |
 | US-193 | deployment-readiness SKILL.md 新增 L2 API 驗證步驟模板 | Sprint 73 ✅ |
+| US-194 | README 資訊架構重設計 — 30 秒內讓人知道怎麼開始用 | Sprint 74 ✅ |
+| US-195 | API 契約 Hard Gate — 涉及 API 的 Story 無契約不得進入開發 | Sprint 74 ✅ |
+| US-196 | E2E 測試 Client 端教學手冊 — CDP 穿隧 + 本地瀏覽器連接 SOP | Sprint 74 ✅ |
+| US-197 | E2E 測試 Server 端模板 — Playwright workflow + CI 登入自動化模板 | Sprint 74 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 

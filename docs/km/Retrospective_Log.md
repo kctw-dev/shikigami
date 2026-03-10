@@ -1,6 +1,28 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–67）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–71）
+
+---
+
+## Sprint 74 — 2026-03-11
+
+**Sprint Goal**：使用者體驗與開發流程雙強化 — README 首印象重塑 + API 契約 Hard Gate 落地 + E2E 測試基礎設施補齊
+
+### Good
+
+1. Sprint 74 4/4 Stories PASS，8 Points，100% 完成率。連續 16 Sprint（S59-S74）100% 完成率
+2. 近期最高負載（8 points，2M+1S+1L），全部一次通過自審與外部抽樣審查（4/4 CONFIRM，DISPUTE 率 0%）
+3. Phase 1 三路平行執行有效（US-194/195/196 修改完全不同檔案群），Phase 2 序列執行 US-197（L-size）順利完成
+4. README 重設計（US-194）大幅提升首印象：30 秒區塊 + 漸進式揭露 + badges + 使用情境範例，內部細節移至 docs/CHANGELOG.md
+
+### Problem
+
+1. 平行 subagent 狀態更新競態條件再現 — 三個平行 subagent 並行更新 sprint_74.md 與 PROJECT_BOARD.md 時部分寫入遺失（US-195 在 sprint_74.md 仍為「待開始」、US-194/US-196 在 PROJECT_BOARD.md 仍為「待開始」），在 §1.5 一致性審查時修正。US-188（Sprint 72）已建立「主 session 批次更新」規範但未完全執行
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- 平行 subagent 狀態更新競態條件為 US-188 已知問題，需在下次平行派遣時嚴格執行「主 session 批次更新」規範，不另開 Issue
 
 ---
 
@@ -48,92 +70,3 @@
 | 1 | Sprint Planning PO Round 1 預設使用 Sonnet — 正式落地至 sprint-planning SKILL.md（延續 #186） | Scrum Master | sprint-planning SKILL.md 明確指定 PO R1 model: sonnet | #186 |
 
 ---
-
-## Sprint 71 — 2026-03-10
-
-**Sprint Goal**：建立 QA 測試覆蓋驗證機制第一層 — Story-level 測試覆蓋 checklist
-
-### Good
-
-1. Sprint 71 1/1 Stories PASS，2 Points，100% 完成率。連續 13 Sprint（S59-S71）100% 完成率
-2. Issue 快掃新增 3 個 backlog items（#185、#182、#181），Backlog 枯竭問題開始緩解
-3. PO 主動拆分 Issue #182 為第一層/第二層，控制 Sprint 範疇，避免範疇蔓延
-
-### Problem
-
-1. PO Round 1 subagent 首次派遣（Opus）疑似掛掉，無回應。改用 Sonnet 重新派遣後成功，但浪費約 3 分鐘等待時間
-2. Backlog 結構化程度不足 — 多數 open issues 缺乏 `type: backlog-item` + `priority:` labels，PO 選取時需額外判斷
-
-### Action Items
-
-| # | Action | Owner | 驗收方式 | Issue |
-|---|--------|-------|----------|-------|
-| 1 | Sprint Planning PO Round 1 預設使用 Sonnet 而非 Opus，避免超時風險 | Scrum Master | 下次 Sprint Planning PO R1 使用 Sonnet | #186 |
-| 2 | 對 open issues 批次補齊 `type: backlog-item` + `priority:` labels | PO | 下次 Sprint Planning 前，所有 open issues 具備完整 labels | #187 |
-
----
-
-## Sprint 70 — 2026-03-08
-
-**Sprint Goal**：Provider 路由品質修正 — 宿主平台自動偵測，消除 Gemini CLI 預設值邏輯矛盾
-
-### Good
-
-1. Sprint 70 1/1 Stories PASS，1 Point，100% 完成率。Sprint Goal 完整達成 — SKILL.md §2.1 宿主平台偵測規則新增 + Provider 解析順序末端 fallback 修正 + story-lifecycle-prompt.md §0 fallback 邏輯同步修正
-2. 使用者直接發現設計缺陷（「如果今天是裝在Gemini上面呢? 也會預設指定claude嘛?」），從發現到修復僅 1 Sprint 內完成，展示框架快速回應使用者回饋的能力
-3. 連續 12 Sprint（S59-S70）100% 完成率，框架穩定性持續維持
-
-### Problem
-
-1. Backlog 枯竭連續第 7 Sprint — Issue #176 為使用者臨時指出的設計缺陷才有 Story 可選，非預先規劃的需求
-
-### Action Items
-
-本 Sprint 無新增 Action Items。上述 Problem 說明：
-- Backlog 補充為下次 Sprint Planning PO 自然職責
-
----
-
-## Sprint 69 — 2026-03-08
-
-**Sprint Goal**：Developer Provider 路由落地 — Gemini CLI 自動 Fallback 派遣機制
-
-### Good
-
-1. Sprint 69 1/1 Stories PASS，1 Point，100% 完成率。Sprint Goal 完整達成 — SKILL.md §2.1 Fallback 自動化 + 模型指定格式擴充 + story-lifecycle-prompt.md §0 Provider 路由完整落地
-2. QA Round 3 品質把關有效：發現 Story ID 衝突（US-175 已用→US-180）、環境變數命名與現行框架不一致、Fallback 策略矛盾（手動→自動為設計變更）、AC4 類型標記錯誤。全數修正後才進入 Sprint
-3. 連續 11 Sprint（S59-S69）100% 完成率，框架穩定性持續維持
-
-### Problem
-
-1. Backlog 再次枯竭——連續 6 Sprint 面臨 Story 選項不足問題，Issue #175 為使用者臨時提出的新需求才有 Story 可選
-
-### Action Items
-
-本 Sprint 無新增 Action Items。上述 Problem 說明：
-- Backlog 補充為下次 Sprint Planning PO 自然職責
-
----
-
-## Sprint 68 — 2026-03-08
-
-**Sprint Goal**：KM 減法 — 移除無用的 DORA Metrics + KM 檔案瘦身
-
-### Good
-
-1. Sprint 68 2/2 Stories PASS，2 Points，100% 完成率。Sprint Goal 完整達成 — DORA Metrics 全面移除（sprint-review SKILL.md §2.7 刪除 + Metrics_Log.md 17KB 削減）+ BACKLOG_DONE.md 歸檔（2110→63 行，Sprint 1-62 移至 archive）
-2. Sprint 68 直接回應連續 3 Sprint Retro Problem（DORA 指標無用），展示「減法」方向的執行力——從發現問題到徹底移除僅隔 1 Sprint
-3. 連續 10 Sprint（S59-S68）100% 完成率，框架穩定性持續維持
-
-### Problem
-
-1. Backlog 再次枯竭——僅剩 Issue #4（Cursor POC），連續多 Sprint 面臨 Story 選項不足問題
-
-### Action Items
-
-本 Sprint 無新增 Action Items。上述 Problem 說明：
-- Backlog 補充為下次 Sprint Planning PO 自然職責
-
----
-
-

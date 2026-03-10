@@ -1,24 +1,31 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 74 Planning 完成）
-**當前 Sprint**：Sprint 74（進行中）
+**最後更新**：2026-03-11（Sprint 74 Review 完成）
+**當前 Sprint**：Sprint 74（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 74](sprints/sprint_74.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 74 — 進行中
+## Sprint 74 — 完成
 
 **Sprint Goal**：使用者體驗與開發流程雙強化 — README 首印象重塑 + API 契約 Hard Gate 落地 + E2E 測試基礎設施補齊
 **期間**：2026-03-11 ~ 2026-03-18
 **ADR 依賴**：無
+**結果**：Goal 達成（4/4 Stories PASS）。Velocity 8 points，完成率 100%。README 首印象重塑（US-194）+ API 契約 Hard Gate 落地（US-195）+ E2E Client 教學（US-196）+ E2E Server 模板（US-197）。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-194：feat: README 資訊架構重設計 — 30 秒內讓人知道怎麼開始用 | #194 | M | 2 | 待開始 |
+| US-194：feat: README 資訊架構重設計 — 30 秒內讓人知道怎麼開始用 | #194 | M | 2 | 完成 |
 | US-195：feat: API 契約 Hard Gate — 涉及 API 的 Story 無契約不得進入開發 | #191 | M | 2 | 完成 |
-| US-196：docs: E2E 測試 Client 端教學手冊 — CDP 穿隧 + 本地瀏覽器連接 SOP | #193 | S | 1 | 待開始 |
+| US-196：docs: E2E 測試 Client 端教學手冊 — CDP 穿隧 + 本地瀏覽器連接 SOP | #193 | S | 1 | 完成 |
 | US-197：feat: E2E 測試 Server 端模板 — Playwright workflow + CI 登入自動化模板 | #192 | L | 3 | 完成 |
+
+## Sprint 74 統計
+- Velocity：8 points
+- 完成率：100%（完成 4 / 計畫 4）
+- 日期：2026-03-11
 
 ---
 
@@ -67,84 +74,5 @@
 - 完成率：100%（完成 9 / 計畫 9）
 - 日期：2026-03-10
 
----
 
-## Sprint 71 — 完成
-
-**Sprint Goal**：建立 QA 測試覆蓋驗證機制第一層
-**期間**：2026-03-10 ~ 2026-03-17
-**ADR 依賴**：無
-**結果**：Goal 達成（1/1 Stories PASS）。Velocity 2 points，完成率 100%。story-lifecycle-prompt.md §6 新增 CQ-NEW 測試覆蓋 checklist + qa-engineer/SKILL.md §1.1 測試覆蓋驗證職責子節新增。
-**Stakeholder 驗收**：接受
-
-| Story | Issue | Size | Points | 狀態 |
-|-------|-------|------|--------|------|
-| US-182：QA 測試覆蓋驗證 — 第一層 Story-level checklist | #182 | M | 2 | 完成 |
-
-## Sprint 71 統計
-- Velocity：2 points
-- 完成率：100%（完成 1 / 計畫 1）
-- 日期：2026-03-10
-
----
-
-## Sprint 70 — 完成
-
-**Sprint Goal**：Provider 路由品質修正 — 宿主平台自動偵測，消除 Gemini CLI 預設值邏輯矛盾
-**期間**：2026-03-08 ~ 2026-03-15
-**ADR 依賴**：無
-**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。SKILL.md §2.1 宿主平台偵測規則新增 + Provider 解析順序末端 fallback 修正 + story-lifecycle-prompt.md §0 fallback 邏輯同步修正。
-**Stakeholder 驗收**：接受
-
-| Story | Issue | Size | Points | 狀態 |
-|-------|-------|------|--------|------|
-| US-181：Provider 路由預設值應偵測宿主平台 — 修正寫死 claude 預設值 | #176 | S | 1 | 完成 |
-
-## Sprint 70 統計
-- Velocity：1 point
-- 完成率：100%（完成 1 / 計畫 1）
-- 日期：2026-03-08
-
----
-
-## Sprint 69 — 完成
-
-**Sprint Goal**：Developer Provider 路由落地 — Gemini CLI 自動 Fallback 派遣機制
-**期間**：2026-03-08 ~ 2026-03-15
-**ADR 依賴**：無
-**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。SKILL.md §2.1 Fallback 自動化（手動→自動）+ 模型指定格式擴充（`role:provider:model`）+ story-lifecycle-prompt.md §0 Provider 路由落地。
-**Stakeholder 驗收**：接受
-
-| Story | Issue | Size | Points | 狀態 |
-|-------|-------|------|--------|------|
-| US-180：Developer 角色 Provider 路由 — 支援 Gemini CLI 可切換派遣（環境變數控制） | #175 | S | 1 | 完成 |
-
-## Sprint 69 統計
-- Velocity：1 point
-- 完成率：100%（完成 1 / 計畫 1）
-- 日期：2026-03-08
-
----
-
-## Sprint 68 — 完成
-
-**Sprint Goal**：KM 減法 — 移除無用的 DORA Metrics + KM 檔案瘦身
-**期間**：2026-03-08 ~ 2026-03-14
-**ADR 依賴**：無
-**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。DORA Metrics 全面移除（sprint-review SKILL.md §2.7 刪除 + Metrics_Log.md 17KB 削減）+ BACKLOG_DONE.md 歸檔（2110→63 行，Sprint 1-62 移至 archive）。
-**Stakeholder 驗收**：接受
-
-| Story | Issue | Size | Points | 狀態 |
-|-------|-------|------|--------|------|
-| US-178：移除 DORA Metrics — 刪除 sprint-review §2.7 整段、Metrics_Log DORA 區塊、相關 checklist | #172 | S | 1 | 完成 |
-| US-179：BACKLOG_DONE.md 歸檔機制 — 主檔只保留最近 5 個 Sprint | #173 | S | 1 | 完成 |
-
-## Sprint 68 統計
-- Velocity：2 points
-- 完成率：100%（完成 2 / 計畫 2）
-- 日期：2026-03-08
-
----
-
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–67）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–71）

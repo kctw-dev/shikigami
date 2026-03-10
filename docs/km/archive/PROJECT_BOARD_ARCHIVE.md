@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-08（Sprint 65–67 歸檔）
-**歸檔範圍**：Sprint 1–67（共 67 個 Sprint）
+**最後更新**：2026-03-11（Sprint 68–71 歸檔）
+**歸檔範圍**：Sprint 1–71（共 71 個 Sprint）
 **歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔；Sprint 57–60 由 Sprint 63 Review 歸檔；Sprint 65–67 由 Sprint 70 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 68–70）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 72–74）
 
 ---
 
@@ -1228,3 +1228,80 @@
 - Velocity：1 point
 - 完成率：100%（完成 1 / 計畫 1）
 - 日期：2026-03-08
+
+## Sprint 68 — 完成
+
+**Sprint Goal**：KM 減法 — 移除無用的 DORA Metrics + KM 檔案瘦身
+**期間**：2026-03-08 ~ 2026-03-14
+**ADR 依賴**：無
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 2 points，完成率 100%。DORA Metrics 全面移除（sprint-review SKILL.md §2.7 刪除 + Metrics_Log.md 17KB 削減）+ BACKLOG_DONE.md 歸檔（2110→63 行，Sprint 1-62 移至 archive）。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-178：移除 DORA Metrics — 刪除 sprint-review §2.7 整段、Metrics_Log DORA 區塊、相關 checklist | #172 | S | 1 | 完成 |
+| US-179：BACKLOG_DONE.md 歸檔機制 — 主檔只保留最近 5 個 Sprint | #173 | S | 1 | 完成 |
+
+## Sprint 68 統計
+- Velocity：2 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-08
+
+---
+
+## Sprint 69 — 完成
+
+**Sprint Goal**：Developer Provider 路由落地 — Gemini CLI 自動 Fallback 派遣機制
+**期間**：2026-03-08 ~ 2026-03-15
+**ADR 依賴**：無
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。SKILL.md §2.1 Fallback 自動化（手動→自動）+ 模型指定格式擴充（`role:provider:model`）+ story-lifecycle-prompt.md §0 Provider 路由落地。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-180：Developer 角色 Provider 路由 — 支援 Gemini CLI 可切換派遣（環境變數控制） | #175 | S | 1 | 完成 |
+
+## Sprint 69 統計
+- Velocity：1 point
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-08
+
+---
+
+## Sprint 70 — 完成
+
+**Sprint Goal**：Provider 路由品質修正 — 宿主平台自動偵測，消除 Gemini CLI 預設值邏輯矛盾
+**期間**：2026-03-08 ~ 2026-03-15
+**ADR 依賴**：無
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。SKILL.md §2.1 宿主平台偵測規則新增 + Provider 解析順序末端 fallback 修正 + story-lifecycle-prompt.md §0 fallback 邏輯同步修正。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-181：Provider 路由預設值應偵測宿主平台 — 修正寫死 claude 預設值 | #176 | S | 1 | 完成 |
+
+## Sprint 70 統計
+- Velocity：1 point
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-08
+
+---
+
+## Sprint 71 — 完成
+
+**Sprint Goal**：建立 QA 測試覆蓋驗證機制第一層
+**期間**：2026-03-10 ~ 2026-03-17
+**ADR 依賴**：無
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 2 points，完成率 100%。story-lifecycle-prompt.md §6 新增 CQ-NEW 測試覆蓋 checklist + qa-engineer/SKILL.md §1.1 測試覆蓋驗證職責子節新增。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-182：QA 測試覆蓋驗證 — 第一層 Story-level checklist | #182 | M | 2 | 完成 |
+
+## Sprint 71 統計
+- Velocity：2 points
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-10
+
+---
