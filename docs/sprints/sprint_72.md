@@ -15,7 +15,7 @@
 | US-187：Sprint Review 缺少生產環境部署驗證步驟 | #179 | S | 1 | 完成 |
 | US-188：sprint-execution: 平行 subagent 禁止直接修改共用文件 — 主 session 批次更新 | #183 | M | 2 | 完成 |
 | US-189：CI/CD 變更強制 QA + SRE 雙審查 Gate | #177 | M | 2 | 完成 |
-| US-190：feat: Dispel 及 Sprint Execution 應產出 Mermaid SA 圖表 | #185 | L | 3 | 待開始 |
+| US-190：feat: Dispel 及 Sprint Execution 應產出 Mermaid SA 圖表 | #185 | L | 3 | 完成 |
 | US-191：支援 Cursor 平台安裝 | #4 | L | 3 | 待開始 |
 
 **總計**：17 points
@@ -201,6 +201,16 @@
 | AC2 | Sprint Execution 新增 SA 圖表更新 checklist | Sprint Execution skill 新增 checklist 項目：若 Story 涉及 API 端點、Entity、業務流程、角色/權限、部署架構/CI/CD 變更，須同步更新 `docs/sa/` 下的對應圖表 |
 | AC3 | SA 文件目錄結構規範 | 規範中明確定義 `docs/sa/` 目錄結構：`deployment.md`、`domain-model.md`、`use-cases.md`、`workflows/` |
 | AC4 | Mermaid 語法正確性 | 所有新增的圖表範例使用有效的 Mermaid 語法，可在 GitHub 正常渲染 |
+
+**Done 定義 Checklist**：
+
+- [x] AC1：`skills/dispel/SKILL.md` §4 各角色子節新增「必要圖表」區塊：§4.1 intent.md（使用案例圖 + 領域模型圖）、§4.2 architecture.md（部署架構圖 + 模組依賴圖）、§4.3 codebase.md（關鍵業務流程圖 top 3）、§4.6 operations.md（CI/CD Pipeline 流程圖）
+- [x] AC2：`skills/sprint-execution/story-lifecycle-prompt.md` 新增 §8.4「SA 圖表更新 Checklist」，含 6 類觸發條件（API 端點、Entity、業務流程、角色/權限、部署架構、CI/CD）與對應 `docs/sa/` 文件對照表；DoD 自檢表新增「SA 圖表」層次
+- [x] AC3：§8.4 明確定義 `docs/sa/` 目錄結構：`deployment.md`、`domain-model.md`、`use-cases.md`、`workflows/`
+- [x] AC4：所有圖表範例均使用有效 Mermaid 語法（`graph TD`、`graph LR`、`erDiagram`、`sequenceDiagram`），以 ` ```mermaid ` 代碼塊包裹，可在 GitHub 正常渲染
+- [x] Spec Compliance 審查通過
+- [x] Code Quality 審查通過
+- [x] Security 審查：不適用（framework skill 文件，無程式碼）
 
 ---
 

@@ -54,6 +54,29 @@ docs/dispel/
 - **需求考古**：從 README、文件、commit history、issue tracker 推斷原始需求演變
 - **利害關係人**：誰在用這個系統？誰在維護？上次活躍是什麼時候？
 
+**必要圖表（`docs/dispel/intent.md` 中必須包含）**：
+
+1. **使用案例圖**（use case diagram）— 主要使用者角色與其對系統的互動
+
+   ```mermaid
+   graph LR
+     User["使用者"]
+     Admin["管理員"]
+     Sys["系統"]
+     User -->|"瀏覽內容"| Sys
+     User -->|"提交請求"| Sys
+     Admin -->|"管理設定"| Sys
+   ```
+
+2. **領域模型圖**（domain model diagram）— 核心業務概念與實體關係
+
+   ```mermaid
+   erDiagram
+     USER ||--o{ ORDER : "places"
+     ORDER ||--|{ LINE_ITEM : "contains"
+     PRODUCT ||--o{ LINE_ITEM : "included in"
+   ```
+
 **產出**：`docs/dispel/intent.md`
 
 ### 4.2 Architect — 結構解讀
@@ -66,6 +89,30 @@ docs/dispel/
 - **技術棧**：語言、框架、資料庫、基礎設施
 - **架構債務**：設計決策中的已知妥協、過時的架構選擇
 
+**必要圖表（`docs/dispel/architecture.md` 中必須包含）**：
+
+1. **部署架構圖**（deployment diagram）— 服務、容器、外部依賴的部署拓撲
+
+   ```mermaid
+   graph TD
+     Client["Client (Browser/App)"]
+     API["API Server"]
+     DB["Database"]
+     Cache["Cache (Redis)"]
+     Client --> API
+     API --> DB
+     API --> Cache
+   ```
+
+2. **模組依賴圖**（module dependency diagram）— 內部模組間的依賴方向
+
+   ```mermaid
+   graph LR
+     A["Module A"] --> B["Module B"]
+     A --> C["Module C"]
+     B --> D["Module D"]
+   ```
+
 **產出**：`docs/dispel/architecture.md`
 
 ### 4.3 Developer — 實作解讀
@@ -76,6 +123,25 @@ docs/dispel/
 - **技術債清單**：hardcoded values、TODO/FIXME/HACK 標記、重複代碼
 - **關鍵路徑**：核心業務邏輯的入口點與執行流程
 - **修改熱點**：git log 分析 — 哪些文件改最多？哪些區域最脆弱？
+
+**必要圖表（`docs/dispel/codebase.md` 中必須包含）**：
+
+**關鍵業務流程圖（top 3）**：列出系統中最核心的三條業務流程，每條以 sequence 或 flowchart 呈現。
+
+範例（以使用者登入流程為例）：
+
+```mermaid
+sequenceDiagram
+  participant U as 使用者
+  participant API as API Server
+  participant DB as Database
+  U->>API: POST /login (credentials)
+  API->>DB: 查詢使用者
+  DB-->>API: 回傳使用者資料
+  API-->>U: 回傳 JWT Token
+```
+
+若系統複雜度不足以列出 3 條，列出所有可識別的主要業務流程即可，並說明原因。
 
 **產出**：`docs/dispel/codebase.md`
 
@@ -109,6 +175,22 @@ docs/dispel/
 - **監控與日誌**：有哪些監控？日誌格式與層級？告警機制？
 - **環境管理**：幾個環境？配置如何管理？環境差異？
 - **災難恢復**：備份策略？回滾機制？RTO/RPO？
+
+**必要圖表（`docs/dispel/operations.md` 中必須包含）**：
+
+**CI/CD Pipeline 流程圖**：從 code push 到 production 部署的完整自動化流程。
+
+```mermaid
+graph LR
+  Push["git push"] --> CI["CI: Build & Test"]
+  CI -->|"PASS"| Build["Build Image"]
+  CI -->|"FAIL"| Notify["通知開發者"]
+  Build --> Deploy["Deploy to Staging"]
+  Deploy --> Approve["人工審查（可選）"]
+  Approve --> Prod["Deploy to Production"]
+```
+
+若 CI/CD pipeline 不存在，標記「CI/CD 缺失」並說明現有部署方式。
 
 **產出**：`docs/dispel/operations.md`
 

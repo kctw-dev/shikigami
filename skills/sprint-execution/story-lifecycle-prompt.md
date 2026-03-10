@@ -607,6 +607,7 @@ Security Self-Review — {story_id}
 | 測試 | 單元測試 + 整合測試全部通過（0 failed） | [ ] |
 | 安全 | 外部輸入通過安全驗證（或 N/A） | [ ] |
 | 文件 | 設計文件對應章節已更新，代碼含設計文件引用 | [ ] |
+| SA 圖表 | 若 Story 涉及 API/Entity/業務流程/角色權限/部署架構/CI-CD 變更，對應 `docs/sa/` 圖表已更新（或 N/A） | [ ] |
 | 設定 | 無硬編碼金鑰，配置透過環境變數管理 | [ ] |
 | 反回歸 | 既有測試全部仍然通過（0 regression） | [ ] |
 | 技術債 | 取捷徑情況已用 `[TECH-DEBT]` 標記，並更新 Registry（若無則 N/A） | [ ] |
@@ -681,6 +682,57 @@ Security Self-Review — {story_id}
 **§8.1 Done 定義 checkbox 更新例外**：即使在平行執行模式下，§8.1 Done 定義 checkbox 更新（僅修改 sprint_N.md 的 Done 定義 checkbox）仍可執行，因為各 Story 的 Done 定義 checkbox 操作的是不同的區段，不會發生衝突。
 
 ---
+
+---
+
+## §8.4 SA 圖表更新 Checklist（條件執行）
+
+<!-- US-190 Mermaid SA 圖表規範 — Sprint 72 -->
+
+**觸發條件**：Story 涉及以下任一類型的變更時，必須同步更新 `docs/sa/` 下對應的圖表文件。若 Story 完全不涉及以下類型，標記為 N/A 跳過。
+
+### 變更類型 → 對應 SA 文件對照表
+
+| 變更類型 | 對應 `docs/sa/` 文件 |
+|---------|-------------------|
+| API 端點新增或修改 | `use-cases.md`（使用案例圖）、`workflows/` 下對應業務流程圖 |
+| Entity / 資料模型新增或修改 | `domain-model.md`（領域模型圖） |
+| 業務流程新增或修改 | `workflows/` 下對應流程文件 |
+| 角色 / 權限新增或修改 | `use-cases.md`（使用案例圖中角色關係） |
+| 部署架構 / 基礎設施變更 | `deployment.md`（部署架構圖） |
+| CI/CD Pipeline 變更 | `deployment.md`（CI/CD 流程區塊） |
+
+### `docs/sa/` 目錄結構規範
+
+```
+docs/sa/
+├── deployment.md       ← 部署架構圖 + CI/CD Pipeline 流程圖（Mermaid graph 語法）
+├── domain-model.md     ← 領域模型圖（Mermaid erDiagram 語法）
+├── use-cases.md        ← 使用案例圖（角色與系統互動，Mermaid graph 語法）
+└── workflows/          ← 各業務流程圖（每個主要流程獨立一個 .md 檔，Mermaid sequenceDiagram 或 flowchart 語法）
+    ├── {flow-name}.md
+    └── ...
+```
+
+> **Mermaid 語法要求**：所有圖表必須使用有效的 Mermaid 語法，可在 GitHub Markdown 正常渲染。圖表以 ` ```mermaid ` 代碼塊包裹。
+
+### SA 圖表更新 Checklist
+
+```
+SA 圖表更新 Checklist — {story_id}
+
+偵測到的變更類型：
+- [ ] API 端點變更 → use-cases.md / workflows/ 已更新（或不涉及）
+- [ ] Entity 變更 → domain-model.md 已更新（或不涉及）
+- [ ] 業務流程變更 → workflows/ 下對應文件已更新（或不涉及）
+- [ ] 角色/權限變更 → use-cases.md 已更新（或不涉及）
+- [ ] 部署架構變更 → deployment.md 已更新（或不涉及）
+- [ ] CI/CD 變更 → deployment.md CI/CD 區塊已更新（或不涉及）
+
+整體結論：已更新 / N/A（本 Story 不涉及上述任何變更類型）
+```
+
+> **docs/sa/ 尚未存在時**：若專案尚未建立 `docs/sa/` 目錄，在首次觸發需要更新 SA 圖表的 Story 時，依上方目錄結構規範建立對應文件，並填入初始圖表內容。
 
 ---
 
