@@ -16,7 +16,7 @@
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-183：Bug: shikigami:dispel skill 設定 disable-model-invocation 導致無法透過 Skill tool 呼叫 | #181 | S | 1 | 完成 |
-| US-184：P0: Sprint Execution 缺少修復驗證步驟 | #180 | M | 2 | 待開始 |
+| US-184：P0: Sprint Execution 缺少修復驗證步驟 | #180 | M | 2 | 完成 |
 | US-185：sprint-execution: Story-Lifecycle subagent 預設使用 general-purpose agent type | #184 | S | 1 | 待開始 |
 | US-186：Developer subagent 缺少 API 契約對齊步驟 | #178 | M | 2 | 待開始 |
 | US-187：Sprint Review 缺少生產環境部署驗證步驟 | #179 | S | 1 | 待開始 |
