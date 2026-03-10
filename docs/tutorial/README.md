@@ -1,6 +1,6 @@
 # Tutorial 目錄
 
-**最後更新**：2026-03-08（US-165 Sprint 62）
+**最後更新**：2026-03-11（US-196 Sprint 74）
 
 本目錄包含 Shikigami 的外部使用者導向文件，協助首次使用者從安裝到第一個 Sprint 完整上手。
 
@@ -12,6 +12,7 @@
 |------|------|---------|
 | [GETTING_STARTED.md](./GETTING_STARTED.md) | 入門教學：從安裝到第一個 Sprint 的端對端步驟指引，含指令範例與預期輸出摘要 | 首次安裝、第一次走完整 Sprint 循環 |
 | [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) | 常見問題排查指南：6 個常見失敗情境，含症狀描述、根因說明與解決步驟 | 遇到問題、安裝卡關、功能異常 |
+| [CDP_TUNNEL_GUIDE.md](./CDP_TUNNEL_GUIDE.md) | CDP 穿隧教學手冊：Chrome remote debugging 啟動 → SSH reverse tunnel → Playwright connectOverCDP，含快速驗證指令與 Troubleshooting | Sprint Review 時需用本地 Chrome 進行探索性 E2E 驗證 |
 
 ---
 
@@ -20,6 +21,8 @@
 **剛安裝完 Shikigami？** → 從 [GETTING_STARTED.md](./GETTING_STARTED.md) 開始
 
 **遇到問題？** → 查看 [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
+
+**需要用本地 Chrome 進行 E2E 驗證？** → 查看 [CDP_TUNNEL_GUIDE.md](./CDP_TUNNEL_GUIDE.md)
 
 ---
 
