@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-08（Sprint 70 Review 完成）
-**當前 Sprint**：Sprint 70（完成）
+**最後更新**：2026-03-10（Sprint 71 Planning 完成）
+**當前 Sprint**：Sprint 71（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 70](sprints/sprint_70.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 71](sprints/sprint_71.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 71 — 進行中
+
+**Sprint Goal**：建立 QA 測試覆蓋驗證機制第一層
+**期間**：2026-03-10 ~ 2026-03-17
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-182：QA 測試覆蓋驗證 — 第一層 Story-level checklist | #182 | M | 2 | 進行中 |
 
 ---
 
