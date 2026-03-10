@@ -1,0 +1,89 @@
+# E2E 測試 Workflow 模板
+# ============================================================
+# 使用方式：
+#   1. 將此檔案複製至消費端專案的 .github/workflows/e2e.yml
+#   2. 將所有 YOUR_XXX 佔位符替換為實際值
+#   3. 在 GitHub 倉庫設定中新增對應的 Secrets
+# ============================================================
+#
+# 觸發時機：push tag（格式 v*，例如 v1.0.0、v2.3.1）
+# 前置條件：
+#   - 消費端專案已安裝 Playwright（@playwright/test）
+#   - E2E 測試腳本放置於 YOUR_TEST_DIR 目錄
+#   - GitHub Secrets 已設定（見下方說明）
+#
+# 必要 Secrets（在 GitHub 倉庫 Settings > Secrets and variables > Actions 設定）：
+#   YOUR_TEST_URL：E2E 測試目標服務的基礎 URL
+#   YOUR_SECRET_NAME_1：第一個所需 Secret（例如：API 金鑰、服務帳號憑證）
+# ============================================================
+
+name: E2E Tests
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  e2e:
+    name: Playwright E2E Tests
+    runs-on: ubuntu-latest
+
+    # 最小化 workflow 權限（僅授予必要權限）
+    permissions:
+      contents: read
+
+    steps:
+      # ── 1. Checkout 原始碼 ──────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. 設定 Node.js 環境 ────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "YOUR_NODE_VERSION"
+          # 例如："20"、"18"、"lts/*"
+          cache: "npm"
+
+      # ── 3. 安裝 Node.js 依賴 ────────────────────────────────
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 4. 安裝 Playwright 瀏覽器 ──────────────────────────
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        # 若需要其他瀏覽器，將 chromium 替換為 firefox、webkit 或 --all
+
+      # ── 5. 執行 E2E 測試（Headless 模式）──────────────────
+      - name: Run E2E tests (headless)
+        run: npx playwright test
+        env:
+          # 從 Secrets 注入測試所需憑證（勿直接在 run: 中插入 secrets 值）
+          TEST_BASE_URL: ${{ secrets.YOUR_TEST_URL }}
+          # 若需要 CI 登入（Firebase 等），在此注入對應憑證
+          # FIREBASE_SERVICE_ACCOUNT: ${{ secrets.YOUR_FIREBASE_SERVICE_ACCOUNT }}
+          # 參考登入腳本模板：docs/templates/ci-firebase-login.js
+
+      # ── 6. 上傳測試結果 Artifact ───────────────────────────
+      - name: Upload Playwright test report
+        uses: actions/upload-artifact@v4
+        # 無論測試成功或失敗，均上傳報告（方便排查問題）
+        if: always()
+        with:
+          name: playwright-report-${{ github.ref_name }}
+          path: YOUR_PLAYWRIGHT_REPORT_DIR
+          # 預設 Playwright 報告路徑通常為 playwright-report/
+          # 例如：path: playwright-report/
+          retention-days: 30
+
+      # ── 7. 上傳 Playwright traces（失敗時）────────────────
+      - name: Upload test traces on failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces-${{ github.ref_name }}
+          path: YOUR_PLAYWRIGHT_TRACES_DIR
+          # 預設 Playwright traces 路徑通常為 test-results/
+          # 例如：path: test-results/
+          retention-days: 7
