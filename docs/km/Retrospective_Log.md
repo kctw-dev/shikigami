@@ -4,6 +4,30 @@
 
 ---
 
+## Sprint 71 — 2026-03-10
+
+**Sprint Goal**：建立 QA 測試覆蓋驗證機制第一層 — Story-level 測試覆蓋 checklist
+
+### Good
+
+1. Sprint 71 1/1 Stories PASS，2 Points，100% 完成率。連續 13 Sprint（S59-S71）100% 完成率
+2. Issue 快掃新增 3 個 backlog items（#185、#182、#181），Backlog 枯竭問題開始緩解
+3. PO 主動拆分 Issue #182 為第一層/第二層，控制 Sprint 範疇，避免範疇蔓延
+
+### Problem
+
+1. PO Round 1 subagent 首次派遣（Opus）疑似掛掉，無回應。改用 Sonnet 重新派遣後成功，但浪費約 3 分鐘等待時間
+2. Backlog 結構化程度不足 — 多數 open issues 缺乏 `type: backlog-item` + `priority:` labels，PO 選取時需額外判斷
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue |
+|---|--------|-------|----------|-------|
+| 1 | Sprint Planning PO Round 1 預設使用 Sonnet 而非 Opus，避免超時風險 | Scrum Master | 下次 Sprint Planning PO R1 使用 Sonnet | #186 |
+| 2 | 對 open issues 批次補齊 `type: backlog-item` + `priority:` labels | PO | 下次 Sprint Planning 前，所有 open issues 具備完整 labels | #187 |
+
+---
+
 ## Sprint 70 — 2026-03-08
 
 **Sprint Goal**：Provider 路由品質修正 — 宿主平台自動偵測，消除 Gemini CLI 預設值邏輯矛盾

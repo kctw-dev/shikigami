@@ -1,21 +1,28 @@
 # Project Board
 
-**最後更新**：2026-03-10（Sprint 71 US-182 完成）
-**當前 Sprint**：Sprint 71（進行中）
+**最後更新**：2026-03-10（Sprint 71 Review 完成）
+**當前 Sprint**：Sprint 71（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 71](sprints/sprint_71.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 71 — 進行中
+## Sprint 71 — 完成
 
 **Sprint Goal**：建立 QA 測試覆蓋驗證機制第一層
 **期間**：2026-03-10 ~ 2026-03-17
 **ADR 依賴**：無
+**結果**：Goal 達成（1/1 Stories PASS）。Velocity 2 points，完成率 100%。story-lifecycle-prompt.md §6 新增 CQ-NEW 測試覆蓋 checklist + qa-engineer/SKILL.md §1.1 測試覆蓋驗證職責子節新增。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-182：QA 測試覆蓋驗證 — 第一層 Story-level checklist | #182 | M | 2 | 完成 |
+
+## Sprint 71 統計
+- Velocity：2 points
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-10
 
 ---
 
