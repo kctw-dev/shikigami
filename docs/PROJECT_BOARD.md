@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 73 Review 完成）
-**當前 Sprint**：Sprint 73（完成）
+**最後更新**：2026-03-11（Sprint 74 Planning 完成）
+**當前 Sprint**：Sprint 74（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 73](sprints/sprint_73.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 74](sprints/sprint_74.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 74 — 進行中
+
+**Sprint Goal**：使用者體驗與開發流程雙強化 — README 首印象重塑 + API 契約 Hard Gate 落地 + E2E 測試基礎設施補齊
+**期間**：2026-03-11 ~ 2026-03-18
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-194：feat: README 資訊架構重設計 — 30 秒內讓人知道怎麼開始用 | #194 | M | 2 | 待開始 |
+| US-195：feat: API 契約 Hard Gate — 涉及 API 的 Story 無契約不得進入開發 | #191 | M | 2 | 待開始 |
+| US-196：docs: E2E 測試 Client 端教學手冊 — CDP 穿隧 + 本地瀏覽器連接 SOP | #193 | S | 1 | 待開始 |
+| US-197：feat: E2E 測試 Server 端模板 — Playwright workflow + CI 登入自動化模板 | #192 | L | 3 | 待開始 |
 
 ---
 
