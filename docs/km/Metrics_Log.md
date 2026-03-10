@@ -77,6 +77,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 70 | 2026-03-08 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-181（S/1pt）；S68=2→S69=1→S70=1，S68→S69 下降 -50%（超出 ±20%），S69→S70 持平 0%，先降後平方向不一致→不規則 |
 | Sprint 71 | 2026-03-10 | 2 points | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-182（M/2pt）；S69=1→S70=1→S71=2，S70→S71 回升 +100%，先平後升方向不一致→不規則 |
 | Sprint 72 | 2026-03-10 | 17 points | 100% | 上升趨勢 | Goal 達成，9/9 Stories PASS；US-183（S/1pt）+ US-184（M/2pt）+ US-185（S/1pt）+ US-186（M/2pt）+ US-187（S/1pt）+ US-188（M/2pt）+ US-189（M/2pt）+ US-190（L/3pt）+ US-191（L/3pt）；S70=1→S71=2→S72=17，S71→S72 +750%，連續三期上升（1→2→17）→上升趨勢；歷史最高 Velocity |
+| Sprint 73 | 2026-03-11 | 3 points | 100% | 不規則 | Goal 達成，2/2 Stories PASS；US-192（S/1pt）+ US-193（M/2pt）；S71=2→S72=17→S73=3，S72→S73 下降 -82%（超出 ±20%），先升後降方向不一致→不規則；Retro Action #186 結案 + L2 API 驗證模板交付 |
 
 ---
 

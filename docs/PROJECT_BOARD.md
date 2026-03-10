@@ -1,22 +1,29 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 73 Planning 完成）
-**當前 Sprint**：Sprint 73（進行中）
+**最後更新**：2026-03-11（Sprint 73 Review 完成）
+**當前 Sprint**：Sprint 73（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 73](sprints/sprint_73.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 73 — 進行中
+## Sprint 73 — 完成
 
 **Sprint Goal**：落地延期 2 Sprint 的 Retro Action（PO R1 Sonnet 預設）+ 補強部署驗證模板
 **期間**：2026-03-11 ~ 2026-03-18
 **ADR 依賴**：無
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。PO R1 Sonnet 預設正式落地（US-192，Retro Action #186 結案）+ deployment-readiness L2 API 驗證步驟模板（US-193）。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-192：sprint-planning SKILL.md PO R1 模型改為 Sonnet 預設 | #186 | S | 1 | 完成 |
 | US-193：deployment-readiness SKILL.md 新增 L2 API 驗證步驟模板 | #190 | M | 2 | 完成 |
+
+## Sprint 73 統計
+- Velocity：3 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-11
 
 ---
 

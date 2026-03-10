@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-10（Sprint 72 — 9/9 Stories 完成，框架品質全面強化：Bug 修復 + 流程補全 + 平行安全防護 + Cursor 平台支援）
+> 最後更新：2026-03-11（Sprint 73 — 2/2 Stories 完成，PO R1 Sonnet 預設落地 + L2 API 驗證步驟模板交付）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.46.0**（Sprint 72）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.47.0**（Sprint 73）。
 
 | 版號 | 含義 |
 |------|------|
@@ -345,6 +345,8 @@ Sprint Review 時自動產出：
 | US-189 | CI/CD 變更強制 QA + SRE 雙審查 Gate | Sprint 72 ✅ |
 | US-190 | Dispel 及 Sprint Execution 應產出 Mermaid SA 圖表 | Sprint 72 ✅ |
 | US-191 | 支援 Cursor 平台安裝 | Sprint 72 ✅ |
+| US-192 | sprint-planning SKILL.md PO R1 模型改為 Sonnet 預設 | Sprint 73 ✅ |
+| US-193 | deployment-readiness SKILL.md 新增 L2 API 驗證步驟模板 | Sprint 73 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 
