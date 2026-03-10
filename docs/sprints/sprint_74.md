@@ -11,7 +11,7 @@
 | US-194：feat: README 資訊架構重設計 — 30 秒內讓人知道怎麼開始用 | #194 | M | 2 | 完成 |
 | US-195：feat: API 契約 Hard Gate — 涉及 API 的 Story 無契約不得進入開發 | #191 | M | 2 | 待開始 |
 | US-196：docs: E2E 測試 Client 端教學手冊 — CDP 穿隧 + 本地瀏覽器連接 SOP | #193 | S | 1 | 完成 |
-| US-197：feat: E2E 測試 Server 端模板 — Playwright workflow + CI 登入自動化模板 | #192 | L | 3 | 待開始 |
+| US-197：feat: E2E 測試 Server 端模板 — Playwright workflow + CI 登入自動化模板 | #192 | L | 3 | 完成 |
 
 **總計**：8 points（2M + 1S + 1L）
 
@@ -124,5 +124,5 @@
 | AC4 | 模板為泛用格式 | 模板使用 `YOUR_VARIABLE_NAME` 大寫佔位符格式（如 `YOUR_PROJECT_ID`、`YOUR_TEST_URL`），非硬編碼特定專案 |
 
 **Done 定義**：
-- [ ] AC1-AC4 全部通過
+- [x] AC1-AC4 全部通過
 - [ ] QA Review PASS
