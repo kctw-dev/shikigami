@@ -345,6 +345,77 @@ L2 驗證結果必須記錄於部署就緒檢查的 Checklist 備注欄。
 
 ---
 
+## 5.2 L3 E2E 端對端驗證步驟（可選）
+
+**目的**：在版本 tag 後透過 Playwright E2E 測試驗證完整使用者流程，補足 L2 API 驗證無法涵蓋的 UI 互動與跨服務整合場景。
+
+> **注意**：L3 E2E 驗證為**可選步驟，非 Hard Gate**。消費端專案可依資源與需求決定是否啟用。建議在 Staging 環境完成 L2 API 驗證後執行。
+
+> **模板路徑**：
+> - Playwright workflow 模板：`.github/workflows/e2e.yml`
+> - CI 環境 Firebase 登入腳本模板：`docs/templates/ci-firebase-login.js`
+
+### 前置條件
+
+- Staging / Production 環境服務已啟動並通過 L2 API 驗證
+- 消費端專案已安裝 Playwright（`@playwright/test`）
+- GitHub 倉庫已設定必要 Secrets（`YOUR_TEST_URL` 等）
+- 若需要登入驗證：Firebase Service Account 已設定於 CI Secrets
+
+### 啟用步驟
+
+#### 步驟 1：複製 Playwright E2E Workflow 模板
+
+將 `.github/workflows/e2e.yml` 複製至消費端專案的 `.github/workflows/` 目錄，並替換佔位符：
+
+| 佔位符 | 說明 | 範例值 |
+|--------|------|--------|
+| `YOUR_NODE_VERSION` | Node.js 版本 | `"20"` |
+| `YOUR_TEST_URL` | 測試目標服務 URL（設定於 GitHub Secrets） | `https://staging.example.com` |
+| `YOUR_PLAYWRIGHT_REPORT_DIR` | Playwright 報告輸出目錄 | `playwright-report/` |
+| `YOUR_PLAYWRIGHT_TRACES_DIR` | Playwright traces 輸出目錄 | `test-results/` |
+
+#### 步驟 2（若需登入）：設定 CI Firebase 登入腳本
+
+若 E2E 測試需要通過 Firebase Authentication 登入，複製 `docs/templates/ci-firebase-login.js` 並替換佔位符：
+
+| 佔位符 / 環境變數 | 說明 |
+|-------------------|------|
+| `YOUR_PROJECT_ID` | Firebase 專案 ID |
+| `YOUR_TEST_USER_UID` | 測試用 Firebase UID（需在 Firebase Auth 中已存在） |
+| `FIREBASE_SERVICE_ACCOUNT_JSON` | Service Account JSON（設定於 CI Secrets，切勿硬編碼） |
+| `FIREBASE_WEB_API_KEY` | Firebase Web API Key（設定於 CI Secrets） |
+
+在 E2E 測試前執行腳本取得 ID Token：
+
+```bash
+# 在 workflow 步驟中捕獲 ID Token
+ID_TOKEN=$(node scripts/ci-firebase-login.js)
+export TEST_ID_TOKEN="${ID_TOKEN}"
+```
+
+#### 步驟 3：執行 E2E 測試並收集報告
+
+tag-only workflow 會自動觸發（push `v*` tag 時）。手動執行方式：
+
+```bash
+npx playwright test
+```
+
+測試報告與 traces 會自動上傳至 GitHub Actions Artifact，保留 30 天（失敗的 traces 保留 7 天）。
+
+### 驗證結果判斷
+
+| 結果 | 說明 | 後續動作 |
+|------|------|----------|
+| 所有測試 PASS | L3 E2E 驗證通過 | 記錄至部署 Checklist 備注欄 |
+| 測試失敗 | L3 E2E 驗證失敗 | 查看 Playwright traces 排查問題（非 Hard Gate，可依商業判斷決策） |
+| CI 環境問題 | 環境未就緒 | 確認 Secrets 設定與服務狀態 |
+
+> **提醒**：L3 驗證失敗不構成 Hard Gate，但建議記錄失敗原因並排入下個 Sprint 追蹤。
+
+---
+
 ## 6. Golden Signals 監控
 
 部署後必須持續監控以下四大黃金信號，確保服務健康：
