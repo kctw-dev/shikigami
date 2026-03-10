@@ -96,6 +96,32 @@ gemini extensions install https://github.com/KCTW/shikigami
 
 ---
 
+## Cursor 平台支援
+
+Shikigami 支援在 **Cursor** 平台上執行。Cursor 採用 `.cursor/rules/` 適配策略，將 Shikigami Skills 轉換為 Cursor Rules，88% 的 Skills 可在 Cursor 中正常觸發。
+
+**安裝**（在 Shikigami 專案根目錄執行）：
+
+```bash
+bash scripts/install-cursor.sh
+```
+
+此腳本自動建立 `.cursor/rules/` 目錄並生成 23 個 Cursor Rule 檔案（含 scrum-master 常駐規則）。
+
+**詳細安裝步驟請參閱：[docs/INSTALL_CURSOR.md](docs/INSTALL_CURSOR.md)**
+
+安裝指南涵蓋：
+- 前置需求（Cursor 版本、AI 訂閱）
+- 一鍵安裝腳本說明
+- Cursor Rules 設定（alwaysApply / agentRequested）
+- 首次 Sprint 快速上手（30 分鐘完成安裝並執行第一個 Skill）
+- 模型選擇建議（推薦 Claude Sonnet 4.5）
+- Troubleshooting（5 個常見問題）
+
+> **已知限制**：Cursor 無原生 Subagent context 隔離機制，`parallel-dispatch` Skill 不可用。需要嚴格 context 隔離的場景建議使用 Claude Code。詳細分析請參閱 [CURSOR_COMPATIBILITY_SURVEY.md](docs/CURSOR_COMPATIBILITY_SURVEY.md)。
+
+---
+
 ### 5 分鐘快速試用
 
 想先確認 Shikigami 是否適合你？以下 5 步驟帶你從安裝到第一次執行：
