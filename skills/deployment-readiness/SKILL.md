@@ -196,6 +196,155 @@ Checklist 中任一項目未勾選，不得執行部署。
 
 ---
 
+## 5.1 L2 API 整合驗證步驟模板
+
+**目的**：在版本 tag 前自動驗證關鍵 API 端點的 response schema，補足 unit test 無法覆蓋的跨服務整合驗證。
+
+> **使用方式**：消費端專案將此模板複製至部署腳本或 CI workflow，並自行填入 `ENDPOINTS` 清單與各端點的預期欄位。
+
+### 前置條件
+
+- 目標環境（Staging / Production）API 服務已啟動
+- 具備 API 呼叫權限（Token / API Key 已設定於環境變數）
+- `curl` 與 `jq` 已安裝於執行環境
+
+### 驗證步驟
+
+#### 步驟 1：定義待驗證端點清單
+
+消費端專案自行填入以下變數（請勿硬編碼至 SKILL.md，僅在部署腳本或 CI workflow 中配置）：
+
+```bash
+# ============================================================
+# 消費端自行填入區域（此段不應出現在 SKILL.md，僅作範例說明）
+# ============================================================
+
+# 基礎 URL（由環境變數注入，勿硬編碼）
+BASE_URL="${API_BASE_URL}"          # 例：https://api.example.com
+AUTH_HEADER="${API_AUTH_HEADER}"    # 例：Authorization: Bearer ${TOKEN}
+
+# 待驗證端點清單（格式：METHOD PATH REQUIRED_FIELD1,REQUIRED_FIELD2,...）
+ENDPOINTS=(
+  "GET  /health          status,version"
+  "GET  /api/v1/ping     pong"
+  # 在此新增更多端點
+)
+```
+
+#### 步驟 2：執行 L2 API Schema 驗證
+
+使用以下腳本逐一驗證端點回應是否包含必要欄位：
+
+```bash
+#!/usr/bin/env bash
+# l2-api-validation.sh — L2 API 整合驗證腳本
+# 用法：BASE_URL=https://api.example.com AUTH_HEADER="Authorization: Bearer <token>" bash l2-api-validation.sh
+
+set -euo pipefail
+
+FAIL=0
+
+validate_endpoint() {
+  local method="$1"
+  local path="$2"
+  local required_fields="$3"  # 逗號分隔欄位名稱
+
+  local url="${BASE_URL}${path}"
+  local response
+
+  echo "  [CHECK] ${method} ${url}"
+
+  response=$(curl --silent --fail \
+    --request "${method}" \
+    --header "${AUTH_HEADER}" \
+    --header "Accept: application/json" \
+    "${url}") || {
+    echo "  [FAIL]  HTTP 請求失敗：${method} ${path}"
+    FAIL=1
+    return
+  }
+
+  # 驗證每個必要欄位是否存在且非 null
+  IFS=',' read -ra fields <<< "${required_fields}"
+  for field in "${fields[@]}"; do
+    local value
+    value=$(echo "${response}" | jq -r ".${field} // empty")
+    if [[ -z "${value}" ]]; then
+      echo "  [FAIL]  缺少必要欄位：${field}（路徑：${path}）"
+      FAIL=1
+    else
+      echo "  [OK]    欄位存在：${field} = ${value}"
+    fi
+  done
+}
+
+echo "=== L2 API 整合驗證開始 ==="
+echo "目標 BASE_URL：${BASE_URL}"
+echo ""
+
+for entry in "${ENDPOINTS[@]}"; do
+  read -r method path fields <<< "${entry}"
+  validate_endpoint "${method}" "${path}" "${fields}"
+done
+
+echo ""
+if [[ "${FAIL}" -eq 0 ]]; then
+  echo "=== L2 驗證通過：所有端點 schema 驗證成功 ==="
+  exit 0
+else
+  echo "=== L2 驗證失敗：發現一個或多個端點 schema 不符 ==="
+  exit 1
+fi
+```
+
+#### 步驟 3：範例 — 單一端點 curl + jq 快速驗證
+
+若只需手動驗證單一端點，可直接複製以下 snippet：
+
+```bash
+# 範例：驗證 /health 端點回應包含 status 與 version 欄位
+curl --silent --fail \
+  --request GET \
+  --header "Authorization: Bearer ${API_TOKEN}" \
+  --header "Accept: application/json" \
+  "${API_BASE_URL}/health" \
+| jq '
+  if (.status != null and .version != null)
+  then "PASS: status=\(.status), version=\(.version)"
+  else error("FAIL: 缺少必要欄位 status 或 version")
+  end
+'
+
+# 範例：驗證 /api/v1/users 回應為陣列且包含 id 欄位
+curl --silent --fail \
+  --request GET \
+  --header "Authorization: Bearer ${API_TOKEN}" \
+  --header "Accept: application/json" \
+  "${API_BASE_URL}/api/v1/users" \
+| jq '
+  if (type == "array" and length > 0 and .[0].id != null)
+  then "PASS: 回應為陣列，首筆資料 id=\(.[0].id)"
+  else error("FAIL: 回應格式不符預期")
+  end
+'
+```
+
+### 驗證結果判斷
+
+| 結果 | 說明 | 後續動作 |
+|------|------|----------|
+| 所有端點 PASS | L2 驗證通過 | 繼續 Release tag 流程 |
+| 任一端點 FAIL | L2 驗證失敗 | **阻擋 Release tag**，依下方 Hard Gate 處理 |
+| HTTP 連線失敗 | 環境未就緒 | 確認服務狀態後重試，逾時視為 FAIL |
+
+<HARD-GATE>
+L2 API 整合驗證失敗（任一端點回應 schema 不符或 HTTP 請求失敗）時，禁止打 Release tag。
+必須修復 API 回應問題後，重新執行完整 L2 驗證並全部通過，方可繼續版本 tag 流程。
+L2 驗證結果必須記錄於部署就緒檢查的 Checklist 備注欄。
+</HARD-GATE>
+
+---
+
 ## 6. Golden Signals 監控
 
 部署後必須持續監控以下四大黃金信號，確保服務健康：
