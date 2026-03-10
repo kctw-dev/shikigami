@@ -217,6 +217,21 @@ commit + 取得 commit SHA
 
 ### Green（綠燈）
 
+<!-- US-195 API 契約 Hard Gate — Sprint 74 -->
+
+<HARD-GATE>
+**API 契約 Hard Gate（涉及 API 的 Story）**：
+
+進入 Green 實作前，必須確認當前 Story 的 API 契約狀態：
+
+1. 讀取 Sprint Planning 產出的技術評估表格（位於 sprint_file 或 Architect 輸出），確認本 Story 的「API 契約」欄位值：
+   - **「不適用」**：本 Story 不涉及 API 互動，跳過此 Gate，直接進入 Green 實作
+   - **「有」**：Architect 已產出 API 契約，繼續進入 Green 實作
+   - **「無」或欄位缺失**：觸發阻擋，回傳 `ESCALATE: DEPENDENCY_MISSING`，升級至 Architect 補充 API 契約後方可繼續
+
+若 sprint_file 中無法找到本 Story 的 API 契約欄位資訊，且 Story AC 明確描述涉及 API 新增或修改（含 REST / GraphQL / WebSocket 端點、request/response schema 變更），視同「無」，觸發阻擋。
+</HARD-GATE>
+
 <!-- US-186 API 契約對齊步驟 — Sprint 72 -->
 
 > **定義**：「全端 Story」指同時涉及前端和後端修改的 Story。
