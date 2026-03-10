@@ -8,8 +8,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-192：sprint-planning SKILL.md PO R1 模型改為 Sonnet 預設 | #186 | S | 1 | 待開發 |
-| US-193：deployment-readiness SKILL.md 新增 L2 API 驗證步驟模板 | #190 | M | 2 | 待開發 |
+| US-192：sprint-planning SKILL.md PO R1 模型改為 Sonnet 預設 | #186 | S | 1 | 完成 |
+| US-193：deployment-readiness SKILL.md 新增 L2 API 驗證步驟模板 | #190 | M | 2 | 完成 |
 
 **總計**：3 points
 
