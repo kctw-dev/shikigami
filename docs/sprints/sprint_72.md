@@ -13,7 +13,7 @@
 | US-185：sprint-execution: Story-Lifecycle subagent 預設使用 general-purpose agent type | #184 | S | 1 | 完成 |
 | US-186：Developer subagent 缺少 API 契約對齊步驟 | #178 | M | 2 | 完成 |
 | US-187：Sprint Review 缺少生產環境部署驗證步驟 | #179 | S | 1 | 完成 |
-| US-188：sprint-execution: 平行 subagent 禁止直接修改共用文件 — 主 session 批次更新 | #183 | M | 2 | 待開始 |
+| US-188：sprint-execution: 平行 subagent 禁止直接修改共用文件 — 主 session 批次更新 | #183 | M | 2 | 完成 |
 | US-189：CI/CD 變更強制 QA + SRE 雙審查 Gate | #177 | M | 2 | 待開始 |
 | US-190：feat: Dispel 及 Sprint Execution 應產出 Mermaid SA 圖表 | #185 | L | 3 | 待開始 |
 | US-191：支援 Cursor 平台安裝 | #4 | L | 3 | 待開始 |
@@ -143,6 +143,16 @@
 | AC2 | story-lifecycle-prompt.md 同步更新 | `skills/sprint-execution/story-lifecycle-prompt.md` 移除平行 subagent 對共用文件的直接寫入指令 |
 | AC3 | 批次更新機制說明 | SKILL.md 明確描述主 session 批次更新流程：在所有平行 subagent 完成後統一更新共用文件 |
 | AC4 | §1.5 審查不再出現 subagent 覆蓋造成的狀態不一致 | Sprint Execution 的 §1.5 審查步驟中，不再出現因 subagent 並發寫入導致的 PROJECT_BOARD 狀態不一致 |
+
+**Done 定義 Checklist**：
+
+- [x] AC1：`skills/sprint-execution/SKILL.md` 新增 §2.2「平行執行安全防護（共用文件保護）」，HARD-GATE 明確說明平行 subagent 不得直接修改 PROJECT_BOARD.md 和 sprint_N.md
+- [x] AC2：`skills/sprint-execution/story-lifecycle-prompt.md` 執行流程更新為條件路徑（循序/平行），新增 §8.3 包含 HARD-GATE 禁止平行 subagent 直接寫入共用文件
+- [x] AC3：SKILL.md §2.2「主 session 批次更新機制」明確描述 4 步驟批次更新流程，含 git commit 範例
+- [x] AC4：透過規則制定消除並發寫入根源；循序執行仍保留既有衝突偵測機制（read-then-compare）
+- [x] Spec Compliance 審查通過
+- [x] Code Quality 審查通過
+- [x] Security 審查：不適用（framework skill 文件，無程式碼）
 
 ---
 

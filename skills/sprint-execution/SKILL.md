@@ -120,6 +120,48 @@ export SHIKIGAMI_ROLE_PROVIDER_MAP="developer:gemini,qa:gemini,po:claude,archite
 
 ---
 
+## 2.2 平行執行安全防護（共用文件保護）
+
+<!-- US-188 平行 subagent 禁止直接修改共用文件 — Sprint 72 -->
+
+### 共用文件限制規則
+
+<HARD-GATE>
+**平行 Story-Lifecycle subagent 禁止直接修改以下共用文件：**
+
+- `docs/PROJECT_BOARD.md`
+- `docs/sprints/sprint_N.md`（任何 sprint 文件）
+
+**理由**：多個平行 subagent 同時寫入共用文件會造成競態條件（race condition），導致狀態不一致（如多個 subagent 各自讀取舊版並覆蓋彼此的更新）。
+</HARD-GATE>
+
+### 主 session 批次更新機制
+
+所有平行 Story-Lifecycle subagent 完成後，**由主 session 統一執行批次更新**：
+
+1. **等待所有平行 subagent 完成**：收集所有平行 subagent 的 PASS/FAIL/ESCALATE 回傳結果
+2. **一次性讀取共用文件**：主 session 讀取最新版本的 `PROJECT_BOARD.md` 與 `sprint_N.md`
+3. **依序套用所有狀態更新**：逐一將各 Story 狀態更新寫入文件（一次寫入，避免多次覆蓋）
+4. **單次 commit 提交**：以一個 commit 提交所有 Story 的狀態更新
+
+```bash
+# 批次更新範例（多個平行 Story 完成後）
+git add docs/PROJECT_BOARD.md docs/sprints/sprint_N.md
+git commit -m "docs: Sprint N — US-XX, US-YY, US-ZZ 狀態批次更新為完成"
+git push
+```
+
+### 適用範圍
+
+| 執行模式 | 共用文件更新責任 |
+|---------|---------------|
+| 單一 Story 循序執行 | Story-Lifecycle subagent 可直接更新（無競態風險） |
+| 多 Story **平行**執行 | 主 session 負責批次更新；subagent 禁止直接寫入共用文件 |
+
+> **循序執行的 Story-Lifecycle subagent**（一次只有一個在執行）不受此限制，可依 §3 步驟 7 的流程直接更新共用文件。但當主 session 明確以平行方式派遣多個 subagent 時，所有平行執行的 subagent 均須遵守本限制規則。
+
+---
+
 ## 3. 執行流程
 
 ```

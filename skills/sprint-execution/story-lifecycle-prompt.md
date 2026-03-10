@@ -175,7 +175,9 @@ commit + 取得 commit SHA
 觸發時機：Story 通過雙階段審查（Spec Compliance + Code Quality）後、PROJECT_BOARD 狀態更新前
   |
   v
-更新 PROJECT_BOARD（Story 狀態 → 完成）+ sprint_N.md 狀態欄
+共用文件更新（依執行模式選擇路徑）：
+  |-- 循序執行（單一 subagent）→ 直接更新 PROJECT_BOARD + sprint_N.md 狀態欄（§8.2）
+  +-- 平行執行（多個並行 subagent）→ 跳過直接寫入；回傳摘要供主 session 批次更新（§8.3）
   |
   v
 回傳標準化摘要（§9 輸出格式）給主 session
@@ -498,6 +500,46 @@ Security Self-Review — {story_id}
 ```
 
 **注意**：此步驟為強制執行，不可省略。若忽略此步驟，Sprint Review 時需手動補正，產生額外 overhead。
+
+---
+
+## §8.2 共用文件更新（循序執行路徑）
+
+**適用條件**：主 session 以循序方式派遣本 subagent（一次只有一個 Story-Lifecycle subagent 在執行）。
+
+**執行步驟**：
+
+1. 依 `SKILL.md` §3 步驟 7 的流程，直接讀取並更新 `PROJECT_BOARD.md` 與 `sprint_N.md` 的狀態欄
+2. 執行 read-then-compare 衝突偵測（規則見 `SKILL.md` §3「狀態更新衝突防護」）
+3. 完成後執行 git commit + git push
+
+---
+
+## §8.3 共用文件更新（平行執行路徑）
+
+<!-- US-188 平行 subagent 禁止直接修改共用文件 — Sprint 72 -->
+
+**適用條件**：主 session 明確以平行方式派遣多個 Story-Lifecycle subagent（同時有多個 subagent 並行執行）。
+
+<HARD-GATE>
+**禁止行為**：平行執行時，本 subagent 不得直接寫入以下共用文件：
+
+- `docs/PROJECT_BOARD.md`
+- `docs/sprints/sprint_N.md`
+
+直接寫入共用文件會造成競態條件，導致多個 subagent 的更新互相覆蓋，產生狀態不一致。
+</HARD-GATE>
+
+**執行步驟**：
+
+1. **跳過**直接寫入 `PROJECT_BOARD.md` 與 `sprint_N.md` 的步驟
+2. 在回傳的標準化摘要（§9）中，明確包含以下資訊供主 session 批次更新使用：
+   - 本 Story 應更新的狀態（完成 / FAIL）
+   - 故事 ID（story_id）
+   - 修改的檔案清單（modified_files）
+3. 主 session 在**所有平行 subagent 完成後**，統一執行批次狀態更新（見 `SKILL.md` §2.2「主 session 批次更新機制」）
+
+**§8.1 Done 定義 checkbox 更新例外**：即使在平行執行模式下，§8.1 Done 定義 checkbox 更新（僅修改 sprint_N.md 的 Done 定義 checkbox）仍可執行，因為各 Story 的 Done 定義 checkbox 操作的是不同的區段，不會發生衝突。
 
 ---
 
