@@ -238,7 +238,27 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
    ```
 
    此階段 PO 需明確定義本次 Sprint 要達成的目標，並評估各 Story 間的檔案修改獨立性：逐一列出每個 Story 預計修改的主要檔案，判斷哪些 Story 修改不同檔案（可平行執行），哪些 Story 修改相同檔案（有衝突，需順序執行）。「獨立性評估」欄位填入「獨立」或「與 US-XX 衝突（同修改 path/to/file）」，供 Architect 後續規劃平行派工分群使用。
-2. **Architect**：對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若發現 Hard Gate 問題，該 Story 退回 Backlog。詳細決策標準（估點策略、ADR 需求判斷、平行分群策略）請參閱 [Architect 角色決策指引](../architect/SKILL.md)。
+2. **Architect**：對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若涉及 API 互動的 Story，Architect 必須產出 API 契約（參閱 [Architect 角色決策指引 §7](../architect/SKILL.md)）。若發現 Hard Gate 問題，該 Story 退回 Backlog。詳細決策標準（估點策略、ADR 需求判斷、平行分群策略、API 契約產出）請參閱 [Architect 角色決策指引](../architect/SKILL.md)。
+
+   **技術評估輸出表格**（正式輸出項目）：Architect 必須輸出包含「API 契約」欄位的技術評估結果：
+
+   ```markdown
+   ## 技術評估結果
+
+   | Story | T-shirt | ADR 需求 | API 契約 | 說明 |
+   |-------|---------|---------|---------|------|
+   | US-XX | M | 無需 ADR | **有**（見下方契約定義） | {說明} |
+   | US-YY | S | 無需 ADR | **無**（需補充，阻擋開發） | {說明} |
+   | US-ZZ | S | 無需 ADR | **不適用** | doc-only，無 API 互動 |
+   ```
+
+   **API 契約欄位說明**：
+
+   | 值 | 意義 |
+   |----|------|
+   | 有 | Architect 已產出 API 契約，Developer 可直接進入開發 |
+   | 無 | Story 涉及 API 但 Architect 尚未產出契約，Story-Lifecycle Hard Gate 將阻擋開發 |
+   | 不適用 | Story 不涉及 API 互動，Hard Gate 自動跳過 |
 
    **平行分群建議**（正式輸出項目）：Architect 須根據 PO 回傳表格中的「獨立性評估」欄位，輸出平行派工分群建議，供主 session 後續調度使用。
 
