@@ -8,7 +8,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-200：Issue 回覆溝通策略改善 — 分階段通知避免誤認已交付 | #197 | S | 1 | 待開發 |
+| US-200：Issue 回覆溝通策略改善 — 分階段通知避免誤認已交付 | #197 | S | 1 | 完成 |
 | US-198：CI/CD 失敗通知強化 — 多節點 CI 檢查與升級策略 | #195 | M | 2 | 待開發 |
 | US-199：E2E 測試與 CI/CD 管線整合 — deployment-readiness E2E Gate 升級 | #196 | M | 2 | 待開發 |
 
@@ -47,8 +47,8 @@
 | AC3 | §7 Checklist 同步更新 | `skills/sprint-review/SKILL.md` §7 外部 Issue PASS checkbox 拆為兩階段：(a) 階段 1 留言已發送；(b) 階段 2 留言已發送 |
 
 **Done 定義**：
-- [ ] AC1-AC3 全部通過
-- [ ] QA Review PASS
+- [x] AC1-AC3 全部通過
+- [x] QA Review PASS
 
 ---
 
