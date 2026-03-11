@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-11（Sprint 74 — 4/4 Stories 完成，README 重設計 + API 契約 Hard Gate + E2E 測試基礎設施）
+> 最後更新：2026-03-11（Sprint 75 — 3/3 Stories 完成，CI/CD 多節點通知 + E2E Soft Gate + Issue 分階段回覆）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.48.0**（Sprint 74）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.49.0**（Sprint 75）。
 
 | 版號 | 含義 |
 |------|------|
@@ -351,6 +351,9 @@ Sprint Review 時自動產出：
 | US-195 | API 契約 Hard Gate — 涉及 API 的 Story 無契約不得進入開發 | Sprint 74 ✅ |
 | US-196 | E2E 測試 Client 端教學手冊 — CDP 穿隧 + 本地瀏覽器連接 SOP | Sprint 74 ✅ |
 | US-197 | E2E 測試 Server 端模板 — Playwright workflow + CI 登入自動化模板 | Sprint 74 ✅ |
+| US-200 | Issue 回覆溝通策略改善 — 分階段通知避免誤認已交付 | Sprint 75 ✅ |
+| US-198 | CI/CD 失敗通知強化 — 多節點 CI 檢查與升級策略 | Sprint 75 ✅ |
+| US-199 | E2E 測試與 CI/CD 管線整合 — deployment-readiness E2E Gate 升級 | Sprint 75 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 

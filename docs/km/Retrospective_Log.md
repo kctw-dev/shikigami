@@ -4,6 +4,27 @@
 
 ---
 
+## Sprint 75 — 2026-03-11
+
+**Sprint Goal**：強化交付品質閉環 — CI/CD 通知不遺漏 + E2E 結果納入流程判定 + Issue 回覆如實反映驗證狀態
+
+### Good
+
+1. Sprint 75 3/3 Stories PASS，5 Points，100% 完成率。連續 17 Sprint（S59-S75）100% 完成率
+2. 全序列執行策略正確 — 三個 Story 共用 sprint-review/SKILL.md，序列執行避免衝突，無競態條件
+3. US-200 首次啟用分階段 Issue 通知機制（§2.6 階段 1 + 階段 2），外部 Stakeholder 不再誤判交付狀態
+
+### Problem
+
+1. Sprint 75 三個 Story 均修改 skills/ 路徑但 Sprint 文件標注 `doc-only: YES`，QA 正確攔截 skills/ path exclusion，但初始標注不精確增加了判定成本
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- doc-only 標注不精確為 Sprint Planning PO 階段判定不足，需在下次 Planning 時 QA 更嚴格確認 doc-only 條件，不另開 Issue
+
+---
+
 ## Sprint 74 — 2026-03-11
 
 **Sprint Goal**：使用者體驗與開發流程雙強化 — README 首印象重塑 + API 契約 Hard Gate 落地 + E2E 測試基礎設施補齊
