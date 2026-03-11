@@ -416,3 +416,60 @@ qa_keywords: ["QA", "審查", "Review", "Code Quality", "Spec Compliance", "雙�
 更新時機：Sprint Review 的 Retrospective 環節。
 更新觸發：Retrospective 記錄的 Problem 未被現有關鍵字捕捉時。
 更新流程：SQA 識別漏判 → 提議新關鍵字 → Architect 確認 → 更新本節清單。
+
+---
+
+## 8. Story Type 分類系統
+
+<!-- US-201 Story Type 分類系統定義 — Sprint 76 -->
+
+每個 Story 必須標注一個 Story Type，以決定適用的 Contract Owner、TDD 策略與 Review 規則。Type 由 PO 在 Backlog 建立 Story 時指定，Architect 在技術評估時確認。
+
+### 8.1 Story Type 定義表（AC1）
+
+| Type | 定義描述 | 典型範例 | Contract Owner |
+|------|---------|---------|---------------|
+| **FEATURE** | 新功能或現有功能增強，交付使用者可感知的業務價值 | 新增 Sprint Planning 快思模式、實作 CI Soft Gate、新增 API 端點 | **Architect** |
+| **DESIGN** | UI/UX 設計相關，含視覺稿、互動設計、設計系統維護 | 設計登入頁面 Wireframe、更新 Design Token、建立元件規格書 | **UI/UX Designer** |
+| **INFRA** | 基礎設施、部署、環境設定與維運相關 | 設定 CI/CD Pipeline、配置 Kubernetes Namespace、調整 Terraform 模組 | **SRE** |
+| **SECURITY** | 安全掃描、權限控制、漏洞修復、合規性確認 | 修復 OWASP 注入漏洞、實作 JWT 刷新機制、執行 Dependency Audit | **Security Engineer** |
+| **INTEGRATION** | 跨系統整合，含 API 串接、訊息佇列、第三方服務對接 | 整合 GitHub Webhook、串接 Slack 通知 API、實作 OAuth2 Provider 對接 | **Architect** |
+| **RESEARCH** | 探索性調查、POC（概念驗證）、技術選型評估 | 評估 Vector DB 選型、POC Gemini CLI 整合可行性、調查 WebSocket 替代方案 | **N/A（需 Spike Report）** |
+
+> **Contract Owner 說明**：Contract Owner 負責在 Story 進入 Sprint 前確認 API 契約（若適用）。FEATURE 與 INTEGRATION 共享 Architect 作為 Contract Owner，但職責不重疊——FEATURE 著重功能介面定義，INTEGRATION 著重跨系統協議定義。RESEARCH 無 Contract Owner，完成後須產出 Spike Report，內容包含調查結論與建議後續行動。
+
+### 8.2 分類判斷決策表（AC2）
+
+依以下規則順序判斷 Story Type，**以第一個符合的規則為準**：
+
+| 優先順序 | 判斷條件 | 判定 Type |
+|---------|---------|----------|
+| 1 | Story 包含安全關鍵字（漏洞、CVE、權限、認證、加密、OWASP、掃描）或 AC 含 `[安全]` 標記 | **SECURITY** |
+| 2 | Story 主要目的是調查、評估、POC，且無明確交付物（非文件類 deliverable）| **RESEARCH** |
+| 3 | Story 修改的是 `infrastructure/`、`deployment/`、`.github/workflows/`、`scripts/` 目錄，或涉及環境設定、CI/CD 設定 | **INFRA** |
+| 4 | Story 修改的是 `design/`、`assets/`、UI 元件目錄，或主要輸出為視覺設計稿 | **DESIGN** |
+| 5 | Story 涉及對外部系統（第三方 API、訊息佇列、外部服務）的整合，且包含 API 契約定義 | **INTEGRATION** |
+| 6 | 其他情況（新功能、增強現有功能、文件化已決策的功能） | **FEATURE** |
+
+**邊界情況範例（至少 2 個）：**
+
+| 邊界案例 | 判定理由 |
+|---------|---------|
+| **「新增 GitHub Webhook 端點」** — 此 Story 新增了一個接收 GitHub Webhook 的 API 端點，既像 FEATURE（新功能），又像 INTEGRATION（跨系統整合）。 | 判定為 **INTEGRATION**。規則 5 先於規則 6，且此 Story 的核心價值在於跨系統協議的建立，而非純粹的使用者功能交付。Contract Owner 為 Architect（需產出 Webhook 契約文件）。 |
+| **「修復 JWT 過期 Bug 並補強 Token 刷新邏輯」** — 此 Story 修復了 Bug（像 FEATURE），但涉及認證機制修改（像 SECURITY）。 | 判定為 **SECURITY**。規則 1 最高優先，「認證」符合 SECURITY 關鍵字，且修改認證邏輯的風險等級需要 Security Engineer 確認。 |
+| **「評估採用 Playwright 進行 E2E 測試的可行性」** — 此 Story 可能產出一份技術評估文件（像 FEATURE 的 doc-only），但目的是探索性調查。 | 判定為 **RESEARCH**。規則 2 適用，主要目的是調查與評估，輸出為 Spike Report 而非可交付的功能。無 Contract Owner，完成條件為產出 Spike Report。 |
+
+### 8.3 Contract Owner 對照表（AC4）
+
+每種 Type 對應唯一的 Contract Owner，無歧義重疊：
+
+| Type | Contract Owner | Contract 職責 | 無 Contract Owner 的情況 |
+|------|---------------|--------------|------------------------|
+| FEATURE | Architect | 功能介面定義、模組邊界確認 | doc-only FEATURE 不涉及 API，Contract 欄填「不適用」 |
+| DESIGN | UI/UX Designer | 設計規格確認、互動邏輯定義 | — |
+| INFRA | SRE | 基礎設施變更確認、部署規格定義 | — |
+| SECURITY | Security Engineer | 安全審查確認、漏洞修復驗收 | — |
+| INTEGRATION | Architect | 跨系統 API 契約定義、協議確認 | — |
+| RESEARCH | N/A | 無 Contract（產出 Spike Report） | RESEARCH 恆為 N/A |
+
+> **衝突排除說明**：FEATURE 與 INTEGRATION 雖共享 Architect 作為 Contract Owner，但在同一 Sprint 中不會對同一介面同時產生 FEATURE 和 INTEGRATION Story，因此不存在 Contract 衝突。若罕見情況下出現同一介面的 FEATURE + INTEGRATION 並行，由 Architect 統一協調，以 INTEGRATION Contract 為主文件，FEATURE Contract 作為補充。

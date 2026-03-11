@@ -510,6 +510,47 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 例外：標注為 [SPIKE] 的探索性任務可豁免，但進入正式開發時必須補測試。
 </HARD-GATE>
 
+### Story Type 對 TDD 豁免與 Review 策略的影響（AC3）
+
+<!-- US-201 Story Type 分類系統定義 — Sprint 76 -->
+
+Story Type（定義於 `skills/sprint-planning/SKILL.md` §8）影響 Sprint Execution 中的 TDD 豁免判定與 Review 策略。完整 Type 定義與分類規則請參閱 sprint-planning/SKILL.md §8。
+
+#### Type 對 TDD 策略的影響
+
+| Story Type | TDD 要求 | 說明 |
+|-----------|---------|------|
+| **FEATURE** | 必須（HARD-GATE） | 功能實作須先寫測試再寫代碼 |
+| **DESIGN** | 豁免 | 視覺設計與規格文件無可執行測試 |
+| **INFRA** | 條件性 | 含腳本/程式碼的 INFRA Story 須 TDD；純設定檔修改豁免 |
+| **SECURITY** | 必須（強制） | 安全修復必須有對應安全測試，不得豁免 |
+| **INTEGRATION** | 必須（HARD-GATE） | 跨系統整合必須有整合測試（含 mock 或 contract test） |
+| **RESEARCH** | 豁免 | 探索性調查無需測試；輸出為 Spike Report，非可執行代碼 |
+
+#### Type 對 Review 策略的影響
+
+| Story Type | Spec Compliance Review | Code Quality Review | Security Review |
+|-----------|----------------------|-------------------|----------------|
+| **FEATURE** | 必須通過 | 必須通過 | 條件觸發（含外部輸入時） |
+| **DESIGN** | 必須通過 | 不適用（無代碼） | 不適用 |
+| **INFRA** | 必須通過 | 必須通過 | 條件觸發（含網路/權限設定時） |
+| **SECURITY** | 必須通過 | 必須通過 | **強制執行**（所有 SECURITY Story 均觸發） |
+| **INTEGRATION** | 必須通過 | 必須通過 | 條件觸發（含認證/授權時） |
+| **RESEARCH** | 必須通過（Spike Report 完整性） | 不適用 | 不適用 |
+
+#### Story Type 與 doc-only 規則的優先順序（AC5）
+
+Story Type 系統與 doc-only 判定規則（見下方「doc-only Story 識別規則」）為**正交維度**，各自獨立判定，無衝突：
+
+1. **doc-only 優先判定 TDD 豁免**：doc-only Story（滿足下方識別規則）無論 Story Type 為何，均豁免 TDD 開發流程。例如 FEATURE Type 的 doc-only Story 豁免 TDD，但 Spec Compliance + Code Quality Review 維持必要。
+2. **Story Type 決定 Contract Owner 與 Review 深度**：即使是 doc-only Story，仍須標注 Story Type 以確定 Contract Owner 和適用的 Review 深度。
+3. **RESEARCH Type 的特殊交互**：RESEARCH Type 本身即豁免 TDD，若同時標注 doc-only 則兩者判定結果一致（均豁免 TDD）。
+4. **判定優先順序**：`doc-only=true` → TDD 豁免（優先規則）；Story Type → Review 策略（獨立規則）。兩者無矛盾，可同時套用。
+
+> **實踐指引**：QA subagent 在 Sprint Planning 時確認 doc-only 狀態；Story-Lifecycle subagent 在執行時依 Story Type 選擇 Review 策略。兩個判定步驟相互獨立，不互相覆蓋。
+
+---
+
 ### doc-only Story 識別規則
 
 **正向識別條件（滿足以下任一條件即判定為 doc-only）：**

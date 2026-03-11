@@ -8,7 +8,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-201：Story Type 分類系統定義 | #201 | S | 1 | 待開發 |
+| US-201：Story Type 分類系統定義 | #201 | S | 1 | 完成 |
 | US-202：Refinement 機制 | #202 | M | 2 | 待開發 |
 | US-204：Story Template 更新 | #203 | M | 2 | 待開發 |
 
