@@ -1,7 +1,7 @@
 # Decision Knowledge Base Index
 
 **建立日期**：2026-05-11
-**最後更新**：2026-03-11（新增 ADR-016）
+**最後更新**：2026-03-11（新增 ADR-017）
 **維護者**：Developer（手動維護，每次新增或更新 ADR 時同步更新本文件）
 **ADR 目錄**：`docs/adr/`
 
@@ -33,12 +33,15 @@
 | UI/UX Designer / 設計角色 / Design Foundation | ADR-016 |
 | Figma / Prototype / Contract / Vision Critic | ADR-014、ADR-015、ADR-016 |
 | Design Tokens / Design System / Component Library | ADR-014、ADR-016 |
+| Knowledge Ingestion / API 幻覺 / Anti-Hallucination | ADR-017 |
+| WebFetch / api-knowledge / ground truth | ADR-017 |
+| Context Hub / chub / MCP Knowledge Ingestion | ADR-017 |
 
 #### 依狀態篩選
 
 | 狀態 | ADR 列表 |
 |------|---------|
-| **Accepted**（正式採用） | ADR-001、ADR-002、ADR-003、ADR-004、ADR-005、ADR-006、ADR-007、ADR-008、ADR-009、ADR-010、ADR-016 |
+| **Accepted**（正式採用） | ADR-001、ADR-002、ADR-003、ADR-004、ADR-005、ADR-006、ADR-007、ADR-008、ADR-009、ADR-010、ADR-016、ADR-017 |
 | **Proposed**（起草中，待審查） | ADR-011 |
 | **Deprecated**（已棄用） | — |
 
@@ -51,7 +54,7 @@
 | 2026-03-02 | ADR-005、ADR-006、ADR-007 |
 | 2026-03-03 | ADR-008、ADR-009、ADR-010 |
 | 2026-05-11 | ADR-011 |
-| 2026-03-11 | ADR-016 |
+| 2026-03-11 | ADR-016、ADR-017 |
 
 ---
 
@@ -71,6 +74,7 @@
 | [ADR-010](../adr/ADR-010.md) | Backlog Source of Truth — GitHub Issues 優先策略 | Accepted | 2026-03-03 | Issue #46、US-69 ~ US-73（Sprint 35） |
 | [ADR-011](../adr/ADR-011-github-actions-integration.md) | GitHub Actions 整合架構決策 | Proposed | 2026-05-11 | Issue #46、Issue #76、US-81（Sprint 38） |
 | [ADR-016](../adr/ADR-016-uiux-designer-role.md) | UI/UX Designer 角色定義與 Design Foundation 流程 | Accepted | 2026-03-11 | Issue #207 |
+| [ADR-017](../adr/ADR-017-context-hub-knowledge-ingestion.md) | Context Hub 整合架構決策 — Knowledge Ingestion 機制 | Accepted | 2026-03-11 | Issue #216 |
 
 ---
 
@@ -220,6 +224,20 @@
 | Skills | `skills/scrum-master/SKILL.md` | 角色清單從 7 → 8 個 |
 | Skills | `skills/vision-critic/SKILL.md` | 定位為 Designer self-review 工具 |
 | ADR | ADR-014、ADR-015 | 補充/擴展：角色正式定義 |
+
+---
+
+### ADR-017：Context Hub 整合架構決策 — Knowledge Ingestion 機制
+
+**核心決策**：採用選項 A（Context Hub as MCP Server Integration），Agent 透過 MCP tool call 查詢 context-hub 專用爬蟲解析的結構化 API 知識（確定性輸出，非 LLM 推測）。選項 C（WebFetch Native）為 CI 環境 fallback。
+
+| 影響類型 | 路徑 | 說明 |
+|---------|------|------|
+| Skills | `skills/sprint-execution/story-lifecycle-prompt.md` | 新增步驟 7.5：Knowledge Ingestion via MCP（三問檢查後、TDD 前） |
+| MCP 設定 | `.mcp.json`（消費端專案） | 新增 context-hub MCP server 設定（與 ADR-015 Figma MCP 同模式） |
+| 目錄結構 | `docs/km/api-knowledge/` | fallback 模式知識庫目錄（僅 MCP 不可用時產生） |
+| ADR | ADR-006 | Injection 防護延伸至 MCP server 回傳內容（`<api_knowledge>` XML 隔離標記） |
+| ADR | ADR-015 | 與 Figma MCP 整合模式對齊，共用 `.mcp.json` 宣告式設定 |
 
 ---
 
