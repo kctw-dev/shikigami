@@ -1,17 +1,19 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 79 Planning 完成）
-**當前 Sprint**：Sprint 79（進行中）
+**最後更新**：2026-03-11（Sprint 79 Review 完成）
+**當前 Sprint**：Sprint 79（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 79](sprints/sprint_79.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 79 — 進行中
+## Sprint 79 — 完成
 
 **Sprint Goal**：ADR-016 落地 Phase 2 — 解決 UI/UX Designer 5 個 Open Questions，清除 DESIGN Story 進 Sprint 的前置障礙
 **期間**：2026-03-11 ~ 2026-03-18
 **ADR 依賴**：ADR-016（Accepted）
+**結果**：Goal 達成（5/5 Stories PASS）。Velocity 5 points，完成率 100%。ADR-016 全部 5 個 OQ 已 Closed——Health Check Runbook（US-209）+ DESIGN↔FEATURE 排序規則（US-210）+ Design Foundation 整合決策（US-211）+ VRR 儲存策略（US-212）+ Provider 路由調查（US-213）。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
@@ -20,6 +22,11 @@
 | US-211：ADR-016 OQ-1：Design Foundation Skill 歸屬 | #209 | S | 1 | 完成 |
 | US-212：ADR-016 OQ-5：VRR 報告長期儲存策略 | #213 | S | 1 | 完成 |
 | US-213：ADR-016 OQ-3：UI/UX Designer Provider 路由 | #211 | S | 1 | 完成 |
+
+## Sprint 79 統計
+- Velocity：5 points
+- 完成率：100%（完成 5 / 計畫 5）
+- 日期：2026-03-11
 
 ---
 

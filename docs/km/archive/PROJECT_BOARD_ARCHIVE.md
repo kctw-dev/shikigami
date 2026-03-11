@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-11（Sprint 72–74 歸檔）
-**歸檔範圍**：Sprint 1–74（共 74 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔；Sprint 57–60 由 Sprint 63 Review 歸檔；Sprint 65–67 由 Sprint 70 Review 歸檔
+**最後更新**：2026-03-11（Sprint 75 歸檔）
+**歸檔範圍**：Sprint 1–75（共 75 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔；Sprint 57–60 由 Sprint 63 Review 歸檔；Sprint 65–67 由 Sprint 70 Review 歸檔；Sprint 75 由 Sprint 78 Planning 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 75–77）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 76–78）
 
 ---
 

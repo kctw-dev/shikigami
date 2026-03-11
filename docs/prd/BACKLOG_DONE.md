@@ -4,6 +4,20 @@
 
 ---
 
+## Sprint 79（2026-03-11）
+
+**Sprint Goal**：ADR-016 落地 Phase 2 — 解決 UI/UX Designer 5 個 Open Questions，清除 DESIGN Story 進 Sprint 的前置障礙
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-209（Issue #212）：ADR-016 OQ-4：Figma MCP 環境健康檢查 Runbook | S | 1 | Sprint 79 |
+| US-210（Issue #210）：ADR-016 OQ-2：DESIGN Story Sprint 內排序規則 | S | 1 | Sprint 79 |
+| US-211（Issue #209）：ADR-016 OQ-1：Design Foundation Skill 歸屬 | S | 1 | Sprint 79 |
+| US-212（Issue #213）：ADR-016 OQ-5：VRR 報告長期儲存策略 | S | 1 | Sprint 79 |
+| US-213（Issue #211）：ADR-016 OQ-3：UI/UX Designer Provider 路由 | S | 1 | Sprint 79 |
+
+---
+
 ## Sprint 78（2026-03-11）
 
 **Sprint Goal**：全力落地 ADR-016 — 建立 UI/UX Designer 角色定義、整合進框架流程、清除已棄用設計 Skill
@@ -39,16 +53,4 @@
 
 ---
 
-## Sprint 75（2026-03-11）
-
-**Sprint Goal**：強化交付品質閉環 — CI/CD 通知不遺漏 + E2E 結果納入流程判定 + Issue 回覆如實反映驗證狀態
-
-| Story | Size | Points | 完成 Sprint |
-|-------|------|--------|------------|
-| US-200（Issue #197）：Issue 回覆溝通策略改善 — 分階段通知避免誤認已交付 | S | 1 | Sprint 75 |
-| US-198（Issue #195）：CI/CD 失敗通知強化 — 多節點 CI 檢查與升級策略 | M | 2 | Sprint 75 |
-| US-199（Issue #196）：E2E 測試與 CI/CD 管線整合 — deployment-readiness E2E Gate 升級 | M | 2 | Sprint 75 |
-
----
-
-> 歷史完成記錄：[BACKLOG_DONE_ARCHIVE](../km/archive/BACKLOG_DONE_ARCHIVE.md)（Sprint 1–74）
+> 歷史完成記錄：[BACKLOG_DONE_ARCHIVE](../km/archive/BACKLOG_DONE_ARCHIVE.md)（Sprint 1–75）

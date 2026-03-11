@@ -3,7 +3,7 @@
 **Sprint Goal**：ADR-016 落地 Phase 2 — 解決 UI/UX Designer 5 個 Open Questions，清除 DESIGN Story 進 Sprint 的前置障礙
 
 **期間**：2026-03-11 ~ 2026-03-18
-**狀態**：進行中
+**狀態**：完成
 **ADR 依賴**：ADR-016（Accepted）
 
 ---

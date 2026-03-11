@@ -361,8 +361,8 @@ DESIGN Story 進入 Sprint
 | OQ-1 | Design Foundation 流程的具體 Skill 實作——應獨立為 `design-foundation` Skill 還是整合進 `uiux-designer` SKILL.md？SRE 建議整合以降低 Toil。 | 中 | **Closed**（US-211，2026-03-11） |
 | OQ-2 | DESIGN Story 與 FEATURE Story 的 Sprint 內排序——DESIGN Story 是否必須在同 Sprint 的 FEATURE Story 之前完成（blocker 關係）？若 DESIGN Story 未在期限內完成的處理程序為何？此問題影響 Sprint 交付可靠性。 | 高 | **Closed**（US-210，2026-03-11） |
 | OQ-3 | UI/UX Designer 的 Provider 路由——是否支援 Gemini CLI 雙軌派遣（§2.1）？Figma MCP 工具在 Gemini 環境是否可用？ | 低 | **Closed**（US-213，2026-03-11） |
-| OQ-4 | Figma MCP 環境健康檢查 Runbook——DESIGN Story 啟動前需驗證 4 個依賴項（Figma Desktop、Plugin 連接、CLI Server、MCP 連接），定義快速檢查序列與各依賴失敗的恢復步驟。 | 高 | Open |
-| OQ-5 | VRR 報告長期儲存策略——`docs/vision-critic-reports/` 永久保留會造成 git 倉庫持續增長，是否設定保留期限（如 90 天）或排除 git 追蹤？ | 低 | Open |
+| OQ-4 | Figma MCP 環境健康檢查 Runbook——DESIGN Story 啟動前需驗證 4 個依賴項（Figma Desktop、Plugin 連接、CLI Server、MCP 連接），定義快速檢查序列與各依賴失敗的恢復步驟。 | 高 | **Closed**（US-209，2026-03-11） |
+| OQ-5 | VRR 報告長期儲存策略——`docs/vision-critic-reports/` 永久保留會造成 git 倉庫持續增長，是否設定保留期限（如 90 天）或排除 git 追蹤？ | 低 | **Closed**（US-212，2026-03-11） |
 
 ---
 

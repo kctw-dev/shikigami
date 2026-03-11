@@ -1,6 +1,28 @@
 # Retrospective Log
 
-> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–74）
+> 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–75）
+
+---
+
+## Sprint 79 — 2026-03-11
+
+**Sprint Goal**：ADR-016 落地 Phase 2 — 解決 UI/UX Designer 5 個 Open Questions，清除 DESIGN Story 進 Sprint 的前置障礙
+
+### Good
+
+1. Sprint 79 5/5 Stories PASS，5 Points，100% 完成率。連續 21 Sprint（S59-S79）100% 完成率
+2. ADR-016 全部 5 個 OQ 一次性 Closed — Health Check Runbook、排序規則、Skill 歸屬決策、VRR 儲存策略、Provider 路由調查，DESIGN Story 前置障礙完全清除
+3. Phase 1（US-209 + US-211 + US-212 + US-213）四個 Story 成功平行執行，Phase 2（US-210）序列依賴正確處理，Sprint 79 平行效率最佳化
+4. doc-only FEATURE Story 的 Spec Compliance + Code Quality Review 品質穩定，連續 Sprint DISPUTE 率 0%
+
+### Problem
+
+1. ADR-016 OQ-4/OQ-5 狀態欄未被 subagent 自動更新為 Closed（OQ-1/2/3 已更新），需主 session 在 Sprint Review 時手動補正。跨文件狀態同步仍有遺漏風險
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- ADR 開放問題狀態未同步為已知 subagent 行為邊界問題（subagent context 中未包含 ADR 狀態更新指令），已於本次 Review 手動補正，不另開 Issue
 
 ---
 
@@ -66,27 +88,6 @@
 
 本 Sprint 無新增 Action Items。上述 Problem 說明：
 - doc-only 標注不精確為已知問題（S75 Problem #1 同類），Sprint Planning QA 階段已增強確認，不另開 Issue
-
----
-
-## Sprint 75 — 2026-03-11
-
-**Sprint Goal**：強化交付品質閉環 — CI/CD 通知不遺漏 + E2E 結果納入流程判定 + Issue 回覆如實反映驗證狀態
-
-### Good
-
-1. Sprint 75 3/3 Stories PASS，5 Points，100% 完成率。連續 17 Sprint（S59-S75）100% 完成率
-2. 全序列執行策略正確 — 三個 Story 共用 sprint-review/SKILL.md，序列執行避免衝突，無競態條件
-3. US-200 首次啟用分階段 Issue 通知機制（§2.6 階段 1 + 階段 2），外部 Stakeholder 不再誤判交付狀態
-
-### Problem
-
-1. Sprint 75 三個 Story 均修改 skills/ 路徑但 Sprint 文件標注 `doc-only: YES`，QA 正確攔截 skills/ path exclusion，但初始標注不精確增加了判定成本
-
-### Action Items
-
-本 Sprint 無新增 Action Items。上述 Problem 說明：
-- doc-only 標注不精確為 Sprint Planning PO 階段判定不足，需在下次 Planning 時 QA 更嚴格確認 doc-only 條件，不另開 Issue
 
 ---
 

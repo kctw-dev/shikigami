@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-11（Sprint 78 — 3/3 Stories 完成，ADR-016 UI/UX Designer 角色全量交付）
+> 最後更新：2026-03-11（Sprint 79 — 5/5 Stories 完成，ADR-016 OQ 全部 Closed）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.52.0**（Sprint 78）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.53.0**（Sprint 79）。
 
 | 版號 | 含義 |
 |------|------|
@@ -360,6 +360,11 @@ Sprint Review 時自動產出：
 | US-206 | UI/UX Designer 角色建立 — Agent 定義 + Skill 定義（ADR-016） | Sprint 78 ✅ |
 | US-207 | 框架整合更新 — Scrum Master 8 角色 + Sprint Execution DESIGN 路徑 | Sprint 78 ✅ |
 | US-208 | 棄用 Skill 清除 — 刪除 ux-agent / ui-agent（ADR-016 清理） | Sprint 78 ✅ |
+| US-209 | ADR-016 OQ-4：Figma MCP 環境健康檢查 Runbook | Sprint 79 ✅ |
+| US-210 | ADR-016 OQ-2：DESIGN Story Sprint 內排序規則 | Sprint 79 ✅ |
+| US-211 | ADR-016 OQ-1：Design Foundation Skill 歸屬 | Sprint 79 ✅ |
+| US-212 | ADR-016 OQ-5：VRR 報告長期儲存策略 | Sprint 79 ✅ |
+| US-213 | ADR-016 OQ-3：UI/UX Designer Provider 路由 | Sprint 79 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 
