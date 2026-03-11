@@ -10,7 +10,7 @@
 |-------|-------|------|--------|------|
 | US-201：Story Type 分類系統定義 | #201 | S | 1 | 完成 |
 | US-202：Refinement 機制 | #202 | M | 2 | 完成 |
-| US-204：Story Template 更新 | #203 | M | 2 | 待開發 |
+| US-204：Story Template 更新 | #203 | M | 2 | 完成 |
 
 **總計**：5 points（2M + 1S）
 
@@ -102,5 +102,5 @@
 | AC6 | [靜態] | story_type 與 doc_only 欄位關係明確 | 定義哪些 Type 隱含 doc_only=true（如 RESEARCH），衝突組合的處理規則 |
 
 **Done 定義**：
-- [ ] AC1-AC6 全部通過
-- [ ] QA Review PASS
+- [x] AC1-AC6 全部通過
+- [x] QA Review PASS
