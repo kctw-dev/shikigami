@@ -14,8 +14,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-214：不確定性前置檢查 — Agent 執行前強制假設列舉與驗證 | #215 | M | 2 | 待開始 |
-| US-215：Discovery Phase RESEARCH Spike — 架構方案調查與 ADR-018 草稿 | #217 | M | 2 | 待開始 |
+| US-214：不確定性前置檢查 — Agent 執行前強制假設列舉與驗證 | #215 | M | 2 | 完成 |
+| US-215：Discovery Phase RESEARCH Spike — 架構方案調查與 ADR-018 草稿 | #217 | M | 2 | 完成 |
 
 ---
 
