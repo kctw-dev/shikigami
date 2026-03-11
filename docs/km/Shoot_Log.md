@@ -11,3 +11,4 @@
 | 2026-03-08 | direct | 移除 CI workflow（Structural Validation）— 連續 4 Sprint 失敗，驗證功能已由 QA subagent 覆蓋 | PASS | f15556a |
 | 2026-03-08 | #174 | Gemini 3.1 Pro 實測評估 — haiku 替代可行性與程式碼生成能力調查 | PASS | 2749882 |
 | 2026-03-08 | direct | GEMINI.md 合併 gevo 行為增強規則 + 修正版本號 | PASS | 5c90c58 |
+| 2026-03-11 | #207 | ADR-016: UI/UX Designer 角色定義與 Design Foundation 流程 | PASS | a144301 |
