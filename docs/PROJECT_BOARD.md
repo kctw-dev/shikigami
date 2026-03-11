@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 78 Planning 完成）
-**當前 Sprint**：Sprint 78（進行中）
+**最後更新**：2026-03-11（Sprint 79 Planning 完成）
+**當前 Sprint**：Sprint 79（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 78](sprints/sprint_78.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 79](sprints/sprint_79.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 79 — 進行中
+
+**Sprint Goal**：ADR-016 落地 Phase 2 — 解決 UI/UX Designer 5 個 Open Questions，清除 DESIGN Story 進 Sprint 的前置障礙
+**期間**：2026-03-11 ~ 2026-03-18
+**ADR 依賴**：ADR-016（Accepted）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-209：ADR-016 OQ-4：Figma MCP 環境健康檢查 Runbook | #212 | S | 1 | 待辦 |
+| US-210：ADR-016 OQ-2：DESIGN Story Sprint 內排序規則 | #210 | S | 1 | 待辦 |
+| US-211：ADR-016 OQ-1：Design Foundation Skill 歸屬 | #209 | S | 1 | 待辦 |
+| US-212：ADR-016 OQ-5：VRR 報告長期儲存策略 | #213 | S | 1 | 待辦 |
+| US-213：ADR-016 OQ-3：UI/UX Designer Provider 路由 | #211 | S | 1 | 待辦 |
 
 ---
 
