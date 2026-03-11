@@ -200,8 +200,6 @@ Architect：ADR-002 狀態 → Accepted
 | **schedule** | Sprint 自動排程執行、cron 腳本生成、序列排程保護 |
 | **shoot** | 短衝模式、單 Story 快速執行、不起 Sprint 的輕量交付 |
 | **diagram** | 架構圖自動化生成（drawio-mcp-server stdio 整合、雙格式輸出、多雲圖標集） |
-| **ux-agent** | User Story → 語意骨架文件（JSON），產出無樣式資訊架構供 UI Agent 消費 |
-| **ui-agent** | 語意骨架 → 前端程式碼，使用 Tailwind CSS + Shadcn UI + Design Tokens |
 | **vision-critic** | UI 截圖多維度視覺一致性評分，產出 PASS/FAIL 報告與可執行修正建議 |
 
 </details>
