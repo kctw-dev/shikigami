@@ -63,6 +63,15 @@
 
 **AC4**：[靜態] API 問題分類路徑含 graceful degradation（若 Knowledge Ingestion 不可用，標記 [KNOWLEDGE-GAP] 並繼續 Developer 修復路徑）。
 
+**Done 定義**：
+
+- [x] AC1：systematic-debugging/SKILL.md Phase 1 結尾新增「根因分類」步驟（步驟 6），定義 4 類根因與對應路由
+- [x] AC2：每類根因有 BDD 行為範例格式的判定規則表格（R1-R4，Given/Then 格式，語意分析）
+- [x] AC3：`[ROOT-CAUSE-TRACE]` 結構化標記定義完整（根因分類、判定依據、路由目標角色、建議處置動作）
+- [x] AC4：API 問題分類含 graceful degradation（KI 不可用 → [KNOWLEDGE-GAP] → Developer 修復路徑）
+- [x] Spec Compliance self-review 通過
+- [x] Code Quality self-review 通過
+
 ---
 
 ## 平行分群建議
