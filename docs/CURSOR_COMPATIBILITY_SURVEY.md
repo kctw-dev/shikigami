@@ -138,11 +138,9 @@ Cursor Agent Mode（單 session）
 | architect | 完整 | 可用 | Rule 作為知識框架 |
 | qa-engineer | 完整 | 可用 | Rule 作為知識框架 |
 | diagram | 完整 | 部分可用 | MCP 整合需個別設定 |
-| ux-agent | 完整 | 可用 | Rule + Agent Mode |
-| ui-agent | 完整 | 可用 | Rule + Agent Mode |
 | vision-critic | 完整 | 可用 | Rule + Agent Mode + 截圖上傳 |
 
-**統計**：25 Skills 中，22 完整/可用（88%），2 部分可用（8%），1 不可用（4%）
+**統計**：23 Skills 中，20 完整/可用（87%），2 部分可用（9%），1 不可用（4%）（ux-agent / ui-agent 已於 Sprint 78 棄用，ADR-015 Superseded）
 
 ---
 

@@ -40,8 +40,6 @@ SKILLS=(
   "architect"
   "qa-engineer"
   "schedule"
-  "ux-agent"
-  "ui-agent"
   "vision-critic"
 )
 
