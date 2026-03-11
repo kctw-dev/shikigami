@@ -52,10 +52,12 @@ Sprint 執行支援**雙軌派遣機制**：Story-Lifecycle subagent 可透過 C
 
 ```
 # 以下為 Claude Code 環境下的等效預設值，非寫死設定
-SHIKIGAMI_ROLE_PROVIDER_MAP="developer:claude,qa:claude,po:claude,architect:claude"
+SHIKIGAMI_ROLE_PROVIDER_MAP="developer:claude,qa:claude,po:claude,architect:claude,designer:claude"
 ```
 
 使用者可透過明確設定環境變數覆寫特定角色的 provider（見「手動切換機制」）。
+
+> **designer 角色 Provider 說明（US-213）**：UI/UX Designer 角色**支援 Gemini CLI 雙軌派遣**。Gemini CLI 原生支援 MCP Server（包含 STDIO transport），可連接 KCTW/talk-to-figma-mcp。STDIO transport 設定方式與 Claude Code 相同（`~/.gemini/settings.json` 的 `mcpServers` 區塊）。因此 designer 角色不受限於 claude provider，可依 Provider 解析順序正常派遣至 gemini。詳見 ADR-016 OQ-3 調查結論（`docs/adr/ADR-016-uiux-designer-role.md`）。
 
 ### 宿主平台偵測規則
 

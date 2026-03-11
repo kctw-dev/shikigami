@@ -360,9 +360,50 @@ DESIGN Story 進入 Sprint
 |---|------|--------|------|
 | OQ-1 | Design Foundation 流程的具體 Skill 實作——應獨立為 `design-foundation` Skill 還是整合進 `uiux-designer` SKILL.md？SRE 建議整合以降低 Toil。 | 中 | **Closed**（US-211，2026-03-11） |
 | OQ-2 | DESIGN Story 與 FEATURE Story 的 Sprint 內排序——DESIGN Story 是否必須在同 Sprint 的 FEATURE Story 之前完成（blocker 關係）？若 DESIGN Story 未在期限內完成的處理程序為何？此問題影響 Sprint 交付可靠性。 | 高 | Open |
-| OQ-3 | UI/UX Designer 的 Provider 路由——是否支援 Gemini CLI 雙軌派遣（§2.1）？Figma MCP 工具在 Gemini 環境是否可用？ | 低 | Open |
+| OQ-3 | UI/UX Designer 的 Provider 路由——是否支援 Gemini CLI 雙軌派遣（§2.1）？Figma MCP 工具在 Gemini 環境是否可用？ | 低 | **Closed**（US-213，2026-03-11） |
 | OQ-4 | Figma MCP 環境健康檢查 Runbook——DESIGN Story 啟動前需驗證 4 個依賴項（Figma Desktop、Plugin 連接、CLI Server、MCP 連接），定義快速檢查序列與各依賴失敗的恢復步驟。 | 高 | Open |
 | OQ-5 | VRR 報告長期儲存策略——`docs/vision-critic-reports/` 永久保留會造成 git 倉庫持續增長，是否設定保留期限（如 90 天）或排除 git 追蹤？ | 低 | Open |
+
+---
+
+## OQ-3 調查結論（US-213，2026-03-11）
+
+### 問題
+
+UI/UX Designer 的 Provider 路由——是否支援 Gemini CLI 雙軌派遣？Figma MCP 工具（KCTW/talk-to-figma-mcp）在 Gemini CLI 環境是否可用？
+
+### 調查結論
+
+**結論：Gemini CLI 支援 MCP Server，designer 角色可加入雙軌派遣路由表。**
+
+| 調查項目 | 結果 |
+|---------|------|
+| Gemini CLI 是否支援 MCP protocol？ | **是**。Gemini CLI 原生支援 Model Context Protocol（MCP），文件見 [google-gemini/gemini-cli/docs/tools/mcp-server.md](https://github.com/google-gemini/gemini-cli/blob/main/docs/tools/mcp-server.md) |
+| 是否支援 STDIO transport？ | **是**。與 KCTW/talk-to-figma-mcp 使用的 STDIO transport 相容，透過 `~/.gemini/settings.json` 的 `mcpServers` 區塊設定（`command`、`args`、`env` 欄位） |
+| 設定方式與 Claude Code 差異？ | **最小差異**。Claude Code 使用 `~/.claude/settings.json`（或 MCP config），Gemini CLI 使用 `~/.gemini/settings.json`。MCP Server 本體（KCTW fork）共用，僅宿主平台設定檔不同 |
+| KCTW/talk-to-figma-mcp 相容性？ | **可用**。KCTW fork 使用標準 MCP STDIO transport，Gemini CLI 可透過相同設定結構連接 ws://localhost:3000（Figma Plugin WebSocket Server） |
+| 環境安全性差異？ | Gemini CLI 有環境變數安全隔離（`*KEY*`、`*TOKEN*` 等自動 redact），ECDSA 金鑰等敏感環境變數需在 `env` 區塊明確聲明 |
+
+### 決策
+
+**designer 角色加入 Provider 路由表，支援雙軌派遣（claude / gemini）。**
+
+預設等效值更新為：
+
+```
+SHIKIGAMI_ROLE_PROVIDER_MAP="developer:claude,qa:claude,po:claude,architect:claude,designer:claude"
+```
+
+- designer 預設使用宿主平台偵測結果（與其他角色一致）
+- 使用者可透過 `SHIKIGAMI_ROLE_PROVIDER_MAP="designer:gemini"` 切換至 Gemini CLI 派遣
+- Gemini CLI 環境須額外確認 `~/.gemini/settings.json` 已設定 `mcpServers.talk-to-figma-mcp` 連接（Figma MCP 環境健康檢查見 OQ-4 Runbook）
+
+### 落地文件
+
+| 文件 | 更新內容 |
+|------|---------|
+| `skills/sprint-execution/SKILL.md` §2.1 | 預設 Provider 路由表新增 `designer:claude`，補充 designer 角色 Gemini CLI 支援說明 |
+| `docs/adr/ADR-016-uiux-designer-role.md` | OQ-3 狀態更新為 Closed |
 
 ---
 
