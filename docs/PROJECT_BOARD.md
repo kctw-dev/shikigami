@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 75 Review 完成）
-**當前 Sprint**：Sprint 75（完成）
+**最後更新**：2026-03-11（Sprint 76 Planning 完成）
+**當前 Sprint**：Sprint 76（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 75](sprints/sprint_75.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 76](sprints/sprint_76.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 76 — 進行中
+
+**Sprint Goal**：建立 Story 分類與精化機制基礎 — 落地 Story Type 分類系統與 Refinement Chair 制度
+**期間**：2026-03-11 ~ 2026-03-18
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-201：Story Type 分類系統定義 | #201 | S | 1 | 待開發 |
+| US-202：Refinement 機制 | #202 | M | 2 | 待開發 |
+| US-204：Story Template 更新 | #203 | M | 2 | 待開發 |
 
 ---
 
