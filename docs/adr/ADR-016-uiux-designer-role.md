@@ -359,7 +359,7 @@ DESIGN Story 進入 Sprint
 | # | 問題 | 優先級 | 狀態 |
 |---|------|--------|------|
 | OQ-1 | Design Foundation 流程的具體 Skill 實作——應獨立為 `design-foundation` Skill 還是整合進 `uiux-designer` SKILL.md？SRE 建議整合以降低 Toil。 | 中 | **Closed**（US-211，2026-03-11） |
-| OQ-2 | DESIGN Story 與 FEATURE Story 的 Sprint 內排序——DESIGN Story 是否必須在同 Sprint 的 FEATURE Story 之前完成（blocker 關係）？若 DESIGN Story 未在期限內完成的處理程序為何？此問題影響 Sprint 交付可靠性。 | 高 | Open |
+| OQ-2 | DESIGN Story 與 FEATURE Story 的 Sprint 內排序——DESIGN Story 是否必須在同 Sprint 的 FEATURE Story 之前完成（blocker 關係）？若 DESIGN Story 未在期限內完成的處理程序為何？此問題影響 Sprint 交付可靠性。 | 高 | **Closed**（US-210，2026-03-11） |
 | OQ-3 | UI/UX Designer 的 Provider 路由——是否支援 Gemini CLI 雙軌派遣（§2.1）？Figma MCP 工具在 Gemini 環境是否可用？ | 低 | **Closed**（US-213，2026-03-11） |
 | OQ-4 | Figma MCP 環境健康檢查 Runbook——DESIGN Story 啟動前需驗證 4 個依賴項（Figma Desktop、Plugin 連接、CLI Server、MCP 連接），定義快速檢查序列與各依賴失敗的恢復步驟。 | 高 | Open |
 | OQ-5 | VRR 報告長期儲存策略——`docs/vision-critic-reports/` 永久保留會造成 git 倉庫持續增長，是否設定保留期限（如 90 天）或排除 git 追蹤？ | 低 | Open |
@@ -459,6 +459,36 @@ SHIKIGAMI_ROLE_PROVIDER_MAP="developer:claude,qa:claude,po:claude,architect:clau
 **未來演進觸發條件**：若未來出現以下情況，可透過新 ADR 重新評估是否拆分為獨立 Skill：
 - 非 Designer 角色需要直接執行 Design Foundation 流程
 - Design Foundation 流程複雜度大幅增長，導致 `skills/uiux-designer/SKILL.md` 超過 600 行且閱讀困難
+
+---
+
+### OQ-2 決策：DESIGN Story Sprint 內排序規則（US-210，2026-03-11）
+
+**決策**：**DESIGN Story 是依賴其 Contract 的 FEATURE Story 的 blocker**，必須在同 Sprint 內先完成 Contract 凍結，依賴其 Contract 的 FEATURE Story 才可開始開發。
+
+**核心排序規則**：
+
+1. **DESIGN 先行原則**：Sprint Backlog 取出順序為：DESIGN Story → 無依賴 FEATURE Story（可平行）→ 依賴 DESIGN Contract 的 FEATURE Story
+2. **無依賴 FEATURE 可平行**：若 FEATURE Story 不依賴當前 Sprint 的任何 DESIGN Contract，可與 DESIGN Story 平行執行
+3. **blocker 識別**：透過 AC 描述或依賴欄位中的「依 Figma Prototype」或「依 {DESIGN Story ID} Contract」標記判定
+
+**未完成 DESIGN Story 的三個處理方案**：
+
+| 方案 | 條件 | 說明 |
+|------|------|------|
+| A：回流 Backlog | Sprint 剩餘時間不足 | DESIGN Story 與依賴 FEATURE Story 一起回流，下次 Sprint Planning 重排 |
+| B：Sprint 內繼續修復 | 剩餘時間充裕，問題為局部瑕疵 | Architect 介入評估，FEATURE Story 持續等待 |
+| C：[MOCK-CONTRACT] 降級執行 | FEATURE Story 可用模擬資料開發 | 標注 [MOCK-CONTRACT]，Contract 凍結後補做 Contract Compliance 驗收 |
+
+**預設行為**：無法判斷方案時，預設採用方案 A（回流 Backlog），不強行執行依賴未凍結 Contract 的 FEATURE Story。
+
+**落地文件**：
+
+| 文件 | 更新內容 |
+|------|---------|
+| `skills/sprint-execution/SKILL.md` §4.6 | 新增 DESIGN ↔ FEATURE 排序規則、未完成 DESIGN Story 處理決策樹 |
+| `skills/sprint-execution/story-lifecycle-prompt.md` §4.6 | 新增 DESIGN blocker 檢查邏輯（非 DESIGN Story 的前置防呆機制） |
+| `docs/adr/ADR-016-uiux-designer-role.md` | OQ-2 狀態更新為 Closed |
 
 ---
 

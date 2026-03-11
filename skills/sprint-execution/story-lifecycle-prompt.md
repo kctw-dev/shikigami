@@ -229,7 +229,10 @@ story_type 路由：
   |     ├─ Vision Critic 自審（≥80 分 PASS，最多 3 次）
   |     ├─ QA Contract Testability Review
   |     └─ 兩者皆 PASS → Prototype 凍結為 Contract → 跳至 DoD 自檢
-  +-- 其他 story_type --> 繼續下方一般路徑
+  +-- 其他 story_type --> DESIGN blocker 檢查（§4.6）
+        |-- 偵測到依賴未凍結 DESIGN Contract
+        |     → ESCALATE: DEPENDENCY_MISSING（DESIGN blocker 未解除）
+        +-- 無 DESIGN 依賴 / DESIGN Contract 已凍結 → 繼續下方一般路徑
   |
   v
 doc_only 判斷：
@@ -456,6 +459,69 @@ Prototype 凍結為 Contract → 跳至 §8 DoD 自檢
 | Contract 可測試性 | QA | Contract Testability Review（Contract 凍結條件） |
 
 詳細流程定義請參閱 [`skills/uiux-designer/SKILL.md`](../uiux-designer/SKILL.md)。
+
+---
+
+## §4.6 DESIGN Blocker 檢查（非 DESIGN Story 的前置檢查）
+
+<!-- US-210：DESIGN Story Sprint 內排序規則 — Sprint 79, ADR-016 OQ-2 -->
+
+**觸發條件**：`story_type` **不為** `DESIGN` 時，在進入一般執行路徑前，執行此檢查。`story_type=DESIGN` 時跳過（DESIGN Story 本身不需檢查自己是否被 blocker）。
+
+### 目的
+
+確保依賴 DESIGN Contract 的 FEATURE Story（或其他 Story）不在 Contract 凍結前開始開發，防止因規格未定導致的返工浪費。
+
+### 檢查流程
+
+```
+讀取 sprint_file，取得當前 Story 的 AC 與依賴資訊
+  |
+  v
+掃描依賴 DESIGN Contract 的標記：
+  判斷條件（滿足任一即視為依賴 DESIGN Contract）：
+  - AC 描述含「依 Figma Prototype」
+  - AC 描述含「依 {Story ID} Contract」（Story ID 為 DESIGN type）
+  - sprint_file 中當前 Story 的「依賴」欄位列出 DESIGN type Story
+  |
+  |-- 未偵測到 DESIGN 依賴標記
+  |     → DESIGN blocker 檢查：CLEAR（通過）
+  |     → 繼續執行一般路徑（doc_only 判斷 → TDD 循環 → ...）
+  |
+  +-- 偵測到 DESIGN 依賴標記
+        |
+        v
+      讀取 sprint_file，確認依賴的 DESIGN Story 狀態
+        |
+        |-- DESIGN Story 狀態為「完成」且 Contract 凍結記錄存在
+        |     → DESIGN blocker 檢查：CLEAR（通過）
+        |     → 繼續執行一般路徑
+        |
+        +-- DESIGN Story 狀態為「待辦」、「進行中」、「FAIL」或「不存在」
+              → 輸出告警：
+                [DESIGN-BLOCKER] {current_story_id} 依賴 {design_story_id} 的 Figma Prototype Contract，
+                但 Contract 尚未凍結（{design_story_id} 狀態：{status}）。
+                依 SKILL.md §4.6 排序規則，本 Story 不得在 Contract 凍結前開始開發。
+              → 回傳 ESCALATE: DEPENDENCY_MISSING
+```
+
+### 檢查結論輸出
+
+```
+DESIGN Blocker 檢查 — {story_id}
+
+依賴掃描結果：
+- DESIGN 依賴偵測：{偵測到 / 未偵測到}
+- 依賴的 DESIGN Story：{story_id 或 N/A}
+- DESIGN Contract 狀態：{已凍結 / 未凍結 / N/A}
+
+整體結論：CLEAR（可繼續執行）/ BLOCKED（ESCALATE: DEPENDENCY_MISSING）
+```
+
+### 備注
+
+- 本檢查為**防呆機制**：正常情況下主 session 的排序邏輯（`SKILL.md §4.6`）應確保 DESIGN Story 先於依賴其 Contract 的 FEATURE Story 執行。本檢查作為第二道防線，處理排序邏輯未能覆蓋的邊界情況（如主 session 錯誤排序、手動觸發等）。
+- **[MOCK-CONTRACT] 豁免**：若 FEATURE Story 備注欄含有 `[MOCK-CONTRACT]` 標記（主 session 明確決定以模擬資料降級執行），跳過本檢查，輸出告警提示後繼續執行。
 
 ---
 
