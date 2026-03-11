@@ -3,7 +3,7 @@
 **Sprint Goal**：Anti-Hallucination 第二步 — 落地 Knowledge Ingestion：整合 Context Hub MCP，建立 API 文件強制內化機制，完成雙軌 Anti-Hallucination 閉環。
 
 **期間**：2026-03-12 ~ 2026-03-19
-**狀態**：進行中
+**狀態**：完成
 **ADR 依賴**：ADR-017（Accepted）
 
 ---

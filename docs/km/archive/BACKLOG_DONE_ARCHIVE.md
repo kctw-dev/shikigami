@@ -1,10 +1,10 @@
 # BACKLOG_DONE 歷史歸檔
 
 **來源**：`docs/prd/BACKLOG_DONE.md`
-**最後更新**：2026-03-11（Sprint 72–74 歸檔）
-**歸檔範圍**：Sprint 1–74
+**最後更新**：2026-03-12（Sprint 76–78 歸檔）
+**歸檔範圍**：Sprint 1–78
 
-> 主文件現況：[BACKLOG_DONE.md](../../prd/BACKLOG_DONE.md)（保留 Sprint 75–77）
+> 主文件現況：[BACKLOG_DONE.md](../../prd/BACKLOG_DONE.md)（保留 Sprint 79–81）
 
 ---
 
@@ -2205,5 +2205,40 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 | US-200（Issue #197）：Issue 回覆溝通策略改善 — 分階段通知避免誤認已交付 | S | 1 | Sprint 75 |
 | US-198（Issue #195）：CI/CD 失敗通知強化 — 多節點 CI 檢查與升級策略 | M | 2 | Sprint 75 |
 | US-199（Issue #196）：E2E 測試與 CI/CD 管線整合 — deployment-readiness E2E Gate 升級 | M | 2 | Sprint 75 |
+
+---
+
+## Sprint 76（2026-03-11）
+
+**Sprint Goal**：建立 Story 分類與精化機制基礎 — 落地 Story Type 分類系統與 Refinement Chair 制度
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-201（Issue #201）：Story Type 分類系統定義 | S | 1 | Sprint 76 |
+| US-202（Issue #202）：Refinement 機制 | M | 2 | Sprint 76 |
+| US-204（Issue #203）：Story Template 更新 | M | 2 | Sprint 76 |
+
+---
+
+## Sprint 77（2026-03-11）
+
+**Sprint Goal**：延續 Issue #199 Epic 完成 + E2E 測試管理規範建立 — 完成角色 Refinement 職責定義並建立 E2E Test Case 分層管理標準
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-203（Issue #205）：角色定義更新 — 7 個角色 Refinement 職責 | M | 2 | Sprint 77 |
+| US-205（Issue #200）：E2E Test Case 管理規範 — 建立分層標記與目錄結構標準 | M | 2 | Sprint 77 |
+
+---
+
+## Sprint 78（2026-03-11）
+
+**Sprint Goal**：全力落地 ADR-016 — 建立 UI/UX Designer 角色定義、整合進框架流程、清除已棄用設計 Skill
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-206（Issue #207）：UI/UX Designer 角色建立 — Agent 定義 + Skill 定義 | M | 2 | Sprint 78 |
+| US-207（Issue #207）：框架整合更新 — Scrum Master 角色清單 + Sprint Execution DESIGN 路徑 | S | 1 | Sprint 78 |
+| US-208（Issue #207）：棄用 Skill 清除 — 刪除 ux-agent / ui-agent | S | 1 | Sprint 78 |
 
 ---

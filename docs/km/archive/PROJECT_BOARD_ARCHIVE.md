@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-11（Sprint 75 歸檔）
-**歸檔範圍**：Sprint 1–75（共 75 個 Sprint）
-**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔；Sprint 57–60 由 Sprint 63 Review 歸檔；Sprint 65–67 由 Sprint 70 Review 歸檔；Sprint 75 由 Sprint 78 Planning 歸檔
+**最後更新**：2026-03-12（Sprint 76–78 歸檔）
+**歸檔範圍**：Sprint 1–78（共 78 個 Sprint）
+**歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔；Sprint 57–60 由 Sprint 63 Review 歸檔；Sprint 65–67 由 Sprint 70 Review 歸檔；Sprint 75 由 Sprint 78 Planning 歸檔；Sprint 76–78 由 Sprint 81 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 76–78）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 79–81）
 
 ---
 
@@ -1391,6 +1391,68 @@
 
 ## Sprint 75 統計
 - Velocity：5 points
+- 完成率：100%（完成 3 / 計畫 3）
+- 日期：2026-03-11
+
+---
+
+## Sprint 76 — 完成
+
+**Sprint Goal**：建立 Story 分類與精化機制基礎 — 落地 Story Type 分類系統與 Refinement Chair 制度
+**期間**：2026-03-11 ~ 2026-03-18
+**ADR 依賴**：無
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 5 points，完成率 100%。Story Type 分類系統（US-201）+ Refinement Chair 制度（US-202）+ Story Template 更新（US-204）。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-201：Story Type 分類系統定義 | #201 | S | 1 | 完成 |
+| US-202：Refinement 機制 | #202 | M | 2 | 完成 |
+| US-204：Story Template 更新 | #203 | M | 2 | 完成 |
+
+## Sprint 76 統計
+- Velocity：5 points
+- 完成率：100%（完成 3 / 計畫 3）
+- 日期：2026-03-11
+
+---
+
+## Sprint 77 — 完成
+
+**Sprint Goal**：延續 Issue #199 Epic 完成 + E2E 測試管理規範建立 — 完成角色 Refinement 職責定義並建立 E2E Test Case 分層管理標準
+**期間**：2026-03-11 ~ 2026-03-18
+**ADR 依賴**：無
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 4 points，完成率 100%。角色 Refinement 職責定義（US-203）+ E2E Test Case 管理規範（US-205）。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-203：角色定義更新 — 7 個角色 Refinement 職責 | #205 | M | 2 | 完成 |
+| US-205：E2E Test Case 管理規範 — 建立分層標記與目錄結構標準 | #200 | M | 2 | 完成 |
+
+## Sprint 77 統計
+- Velocity：4 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-11
+
+---
+
+## Sprint 78 — 完成
+
+**Sprint Goal**：全力落地 ADR-016 — 建立 UI/UX Designer 角色定義、整合進框架流程、清除已棄用設計 Skill
+**期間**：2026-03-11 ~ 2026-03-18
+**ADR 依賴**：ADR-016（Accepted）
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。UI/UX Designer 角色建立（US-206）+ 框架整合更新（US-207）+ 棄用 Skill 清除（US-208）。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-206：UI/UX Designer 角色建立 — Agent 定義 + Skill 定義 | #207 | M | 2 | 完成 |
+| US-207：框架整合更新 — Scrum Master 角色清單 + Sprint Execution DESIGN 路徑 | #207 | S | 1 | 完成 |
+| US-208：棄用 Skill 清除 — 刪除 ux-agent / ui-agent | #207 | S | 1 | 完成 |
+
+## Sprint 78 統計
+- Velocity：4 points
 - 完成率：100%（完成 3 / 計畫 3）
 - 日期：2026-03-11
 

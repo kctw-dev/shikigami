@@ -1,17 +1,19 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 81 Planning 完成）
-**當前 Sprint**：Sprint 81（進行中）
+**最後更新**：2026-03-12（Sprint 81 Review 完成）
+**當前 Sprint**：Sprint 81（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 81](sprints/sprint_81.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 81 — 進行中
+## Sprint 81 — 完成
 
 **Sprint Goal**：Anti-Hallucination 第二步 — 落地 Knowledge Ingestion：整合 Context Hub MCP，建立 API 文件強制內化機制，完成雙軌 Anti-Hallucination 閉環。
 **期間**：2026-03-12 ~ 2026-03-19
 **ADR 依賴**：ADR-017（Accepted）
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 5 points，完成率 100%。Knowledge Ingestion 整合（US-216）+ 錯誤追溯鏈（US-220），雙軌 Anti-Hallucination 閉環完成。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
@@ -19,6 +21,11 @@
 | US-220：錯誤追溯鏈 — 測試失敗自動追溯根因源頭 | #220 | M | 2 | 完成 |
 
 **Sprint 容量**：5 points
+
+## Sprint 81 統計
+- Velocity：5 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-12
 
 ---
 
@@ -64,66 +71,4 @@
 
 ---
 
-## Sprint 78 — 完成
-
-**Sprint Goal**：全力落地 ADR-016 — 建立 UI/UX Designer 角色定義、整合進框架流程、清除已棄用設計 Skill
-**期間**：2026-03-11 ~ 2026-03-18
-**ADR 依賴**：ADR-016（Accepted）
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。UI/UX Designer 角色建立（US-206）+ 框架整合更新（US-207）+ 棄用 Skill 清除（US-208）。
-**Stakeholder 驗收**：接受
-
-| Story | Issue | Size | Points | 狀態 |
-|-------|-------|------|--------|------|
-| US-206：UI/UX Designer 角色建立 — Agent 定義 + Skill 定義 | #207 | M | 2 | 完成 |
-| US-207：框架整合更新 — Scrum Master 角色清單 + Sprint Execution DESIGN 路徑 | #207 | S | 1 | 完成 |
-| US-208：棄用 Skill 清除 — 刪除 ux-agent / ui-agent | #207 | S | 1 | 完成 |
-
-## Sprint 78 統計
-- Velocity：4 points
-- 完成率：100%（完成 3 / 計畫 3）
-- 日期：2026-03-11
-
----
-
-## Sprint 77 — 完成
-
-**Sprint Goal**：延續 Issue #199 Epic 完成 + E2E 測試管理規範建立 — 完成角色 Refinement 職責定義並建立 E2E Test Case 分層管理標準
-**期間**：2026-03-11 ~ 2026-03-18
-**ADR 依賴**：無
-**結果**：Goal 達成（2/2 Stories PASS）。Velocity 4 points，完成率 100%。角色 Refinement 職責定義（US-203）+ E2E Test Case 管理規範（US-205）。
-**Stakeholder 驗收**：接受
-
-| Story | Issue | Size | Points | 狀態 |
-|-------|-------|------|--------|------|
-| US-203：角色定義更新 — 7 個角色 Refinement 職責 | #205 | M | 2 | 完成 |
-| US-205：E2E Test Case 管理規範 — 建立分層標記與目錄結構標準 | #200 | M | 2 | 完成 |
-
-## Sprint 77 統計
-- Velocity：4 points
-- 完成率：100%（完成 2 / 計畫 2）
-- 日期：2026-03-11
-
----
-
-## Sprint 76 — 完成
-
-**Sprint Goal**：建立 Story 分類與精化機制基礎 — 落地 Story Type 分類系統與 Refinement Chair 制度
-**期間**：2026-03-11 ~ 2026-03-18
-**ADR 依賴**：無
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 5 points，完成率 100%。Story Type 分類系統（US-201）+ Refinement Chair 制度（US-202）+ Story Template 更新（US-204）。
-**Stakeholder 驗收**：接受
-
-| Story | Issue | Size | Points | 狀態 |
-|-------|-------|------|--------|------|
-| US-201：Story Type 分類系統定義 | #201 | S | 1 | 完成 |
-| US-202：Refinement 機制 | #202 | M | 2 | 完成 |
-| US-204：Story Template 更新 | #203 | M | 2 | 完成 |
-
-## Sprint 76 統計
-- Velocity：5 points
-- 完成率：100%（完成 3 / 計畫 3）
-- 日期：2026-03-11
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–75）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–78）

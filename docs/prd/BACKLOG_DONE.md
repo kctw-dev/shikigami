@@ -4,6 +4,17 @@
 
 ---
 
+## Sprint 81（2026-03-12）
+
+**Sprint Goal**：Anti-Hallucination 第二步 — 落地 Knowledge Ingestion：整合 Context Hub MCP，建立 API 文件強制內化機制，完成雙軌 Anti-Hallucination 閉環。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-216（Issue #216）：Knowledge Ingestion — Context Hub 整合，API 文件強制內化 | L | 3 | Sprint 81 |
+| US-220（Issue #220）：錯誤追溯鏈 — 測試失敗自動追溯根因源頭 | M | 2 | Sprint 81 |
+
+---
+
 ## Sprint 80（2026-03-11）
 
 **Sprint Goal**：Anti-Hallucination 第一步 — 建立 Agent 不確定性前置檢查機制，同步啟動 Discovery Phase 架構調查
