@@ -41,6 +41,17 @@
 
 **AC7**：[靜態] 範圍限定規則定義（僅查詢 AC 引用端點，上限 5 個）。
 
+**Done 定義**：
+- [x] AC1：story-lifecycle-prompt.md 步驟 7.5 已新增（位於步驟 7 三問檢查後、TDD/doc-only 前）
+- [x] AC2：步驟 7.5 觸發條件定義完整（三問 API [UNCERTAIN] 或 AC 含 API docs URL）
+- [x] AC3：MCP tool call 回傳以 `<api_knowledge>` XML 隔離標記包裹
+- [x] AC4：CI 環境 fallback 定義完整（CI=true → 跳過 MCP → [KNOWLEDGE-INGESTION-SKIPPED: CI_ENV]）
+- [x] AC5：MCP server 啟動失敗 fallback 定義完整（→ WebFetch native → [MCP-FALLBACK]）
+- [x] AC6：onboarding/SKILL.md 已新增 context-hub MCP 設定驗證步驟（§2.1.2）
+- [x] AC7：範圍限定規則定義（僅查詢 AC 引用端點，上限 5 個）
+- [x] Spec Compliance self-review 通過
+- [x] Code Quality self-review 通過
+
 ### US-220：錯誤追溯鏈 — 測試失敗自動追溯根因源頭（M, 2pt, FEATURE, doc-only）
 
 **Issue**：#220

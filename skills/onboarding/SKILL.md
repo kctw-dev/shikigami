@@ -48,7 +48,45 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
   ```
 - 全部存在 → 繼續執行
 
-#### 2.1.2 ADR-010 GitHub Labels 驗證（Pre-flight）
+#### 2.1.2 Context Hub MCP 設定驗證（Pre-flight）
+
+<!-- US-216 Knowledge Ingestion via MCP — Sprint 81, ADR-017 -->
+
+**目的**：確認 `.mcp.json` 中已配置 context-hub MCP server，讓 Story-Lifecycle subagent 在執行涉及外部 API 的 Story 時能透過 MCP 查詢 ground truth。驗證模式與 ADR-015 Figma MCP 驗證一致。
+
+執行步驟：
+1. 使用 Glob 工具確認 `.mcp.json` 是否存在於專案根目錄
+2. 若存在，讀取 `.mcp.json`，確認 `mcpServers` 中包含 `context-hub` server 配置
+
+**判定規則**：
+
+```
+.mcp.json 不存在：
+  → [警告] .mcp.json 不存在，context-hub MCP server 尚未配置。
+    若專案涉及外部 API 整合（INTEGRATION 類型 Story），建議在 .mcp.json 中新增以下配置：
+    {
+      "mcpServers": {
+        "context-hub": {
+          "type": "stdio",
+          "command": "npx",
+          "args": ["-y", "context-hub-mcp-server", "--config", ".chub/config.yml"]
+        }
+      }
+    }
+    缺少此配置時，Knowledge Ingestion（ADR-017）將自動 fallback 至 WebFetch native 模式。
+    → 繼續執行（不阻塞 Onboarding）
+
+.mcp.json 存在但無 context-hub server：
+  → [警告] .mcp.json 已存在，但未找到 context-hub server 配置。
+    建議在 mcpServers 物件中新增 context-hub 設定（見上方範本）。
+    → 繼續執行（不阻塞 Onboarding）
+
+.mcp.json 存在且包含 context-hub server 配置：
+  → [Pass] context-hub MCP server 設定已就緒
+  → 繼續執行
+```
+
+#### 2.1.3 ADR-010 GitHub Labels 驗證（Pre-flight）
 
 **目的**：確認 ADR-010 定義的 Backlog Issue 核心 labels 已建立於 GitHub repo。這些 labels 是 Backlog 管理流程的基礎設施，若缺失則後續 Sprint Planning 與 Issue 自動入庫流程將無法正常運作。
 
