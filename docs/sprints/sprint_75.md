@@ -9,7 +9,7 @@
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-200：Issue 回覆溝通策略改善 — 分階段通知避免誤認已交付 | #197 | S | 1 | 完成 |
-| US-198：CI/CD 失敗通知強化 — 多節點 CI 檢查與升級策略 | #195 | M | 2 | 待開發 |
+| US-198：CI/CD 失敗通知強化 — 多節點 CI 檢查與升級策略 | #195 | M | 2 | 進行中 |
 | US-199：E2E 測試與 CI/CD 管線整合 — deployment-readiness E2E Gate 升級 | #196 | M | 2 | 待開發 |
 
 **總計**：5 points（2M + 1S）
@@ -71,8 +71,8 @@
 | AC4 | CI 連續 FAIL 升級閾值 | `skills/sprint-execution/SKILL.md` 新增：同一 workflow 連續 3 次 FAIL 升級為 Hard Gate，阻塞 Story 開發 |
 
 **Done 定義**：
-- [ ] AC1-AC4 全部通過
-- [ ] QA Review PASS
+- [x] AC1-AC4 全部通過
+- [x] QA Review PASS
 
 ---
 

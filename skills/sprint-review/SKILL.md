@@ -94,6 +94,10 @@ Sprint 38、39、40 連續三個 Retrospective 均發現「交付物文案不一
 - [ ] `docs/prd/ROADMAP.md` 里程碑狀態與本 Sprint 交付進度相符（已完成里程碑已標注完成 Sprint）
 - [ ] 若本 Sprint 有版本 Tag 操作（deployment-readiness 執行後），版本號在 ROADMAP 與 `docs/PROJECT_BOARD.md` 中的描述一致
 
+**五、CI 狀態確認**
+
+- [ ] CI 最新 run 狀態為 PASS（執行 `gh run list --limit 1 --json conclusion` 確認最新 conclusion 為 `success`；若 CI FAIL 則在進入 Demo 前先處理 CI 失敗）
+
 ### 審查結果記錄
 
 審查完成後，在主 session 中輸出以下格式的審查摘要：

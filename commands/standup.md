@@ -61,7 +61,28 @@ WARNING/CRITICAL 僅附提示，不阻塞後續 Standup 流程，繼續執行區
 
 ## 區塊一：Git 同步狀態
 
-先檢查本地與遠端的同步狀態：
+先檢查本地與遠端的同步狀態，並執行 CI 狀態掃描：
+
+### CI 狀態掃描
+
+執行以下指令掃描最近 CI 執行結果：
+
+```bash
+gh run list --limit 3 --json name,status,conclusion,url
+```
+
+**判定規則**：
+- `gh` 指令失敗 / 無執行記錄 → 靜默略過，不阻塞後續流程
+- 最新一次 conclusion 為 `success` → CI PASS，繼續執行
+- 最新一次 conclusion 為 `failure` 或 `timed_out` → 輸出以下警示：
+
+```
+[CI-ALERT] CI 狀態異常 — workflow: {失敗 workflow 名稱}, run URL: {run URL}
+```
+
+CI ALERT 僅作為提示，不阻塞後續 Standup 流程。
+
+### Git 同步
 
 1. 執行 `git remote` 檢查是否有遠端設定
    - 若輸出為空 → 顯示「**Git 同步**：無遠端設定，略過同步檢查」，跳到區塊二

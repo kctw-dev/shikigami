@@ -173,7 +173,10 @@ Issue 快掃（gh issue list --state open --limit 10）
 CI 狀態快掃（gh run list --limit 3 --json name,status,conclusion,url）
   |-- gh 失敗 / UNKNOWN --> 靜默略過，繼續下一步（不阻塞）
   |-- CI PASS --> 繼續執行
-  +-- CI FAIL --> 輸出 [CI-ALERT]（含 workflow 名稱與 run URL），繼續執行（不阻塞）
+  +-- CI FAIL --> 輸出 [CI-SOFT-GATE]（含 workflow 名稱與 run URL），要求確認是否繼續
+        |-- 使用者確認繼續 --> 繼續 Story 開發
+        |-- 同一 workflow 連續 3 次 FAIL --> 升級為 Hard Gate，阻塞 Story 開發
+        +-- 使用者拒絕繼續 --> 中止本次 Sprint 執行，等待 CI 修復
   |
   v
 Sprint Backlog 中取出 Story
@@ -280,18 +283,35 @@ Sprint Backlog 還有 Story？
    | `FAIL` | 最近 3 次 workflow runs 中，最新一次 conclusion 為 `failure` 或 `timed_out` |
    | `UNKNOWN` | `gh run list` 指令失敗、無任何執行記錄、或 conclusion 為其他值（`cancelled`、`skipped` 等） |
 
-   **CI 失敗警示機制（[CI-ALERT]）：**
+   **CI 失敗 Soft Gate 機制（[CI-SOFT-GATE]）：**
 
-   CI 狀態為 `FAIL` 時，**立即在主 session 輸出以下警示訊息**，並繼續 Sprint 執行（不阻塞）：
+   CI 狀態為 `FAIL` 時，**立即在主 session 輸出以下 Soft Gate 訊息**，並等待確認後方可繼續：
 
    ```
-   [CI-ALERT] CI 狀態異常 — workflow: {失敗 workflow 名稱}, run URL: {run URL}
+   [CI-SOFT-GATE] CI 狀態異常 — workflow: {失敗 workflow 名稱}, run URL: {run URL}
+   請確認是否繼續 Story 開發？（y/n）
    ```
 
    - `{失敗 workflow 名稱}`：取自 `gh run list` 回傳的 `name` 欄位
    - `{run URL}`：取自 `gh run list` 回傳的 `url` 欄位
+   - 使用者輸入 `y`（或明確確認繼續）→ 繼續 Story 開發
+   - 使用者輸入 `n`（或拒絕）→ 中止本次 Sprint 執行，等待 CI 修復
 
-   **降級指引：** `gh run list` 指令失敗（網路問題、權限不足、非 GitHub 倉庫等）或無任何執行記錄時，CI 狀態記為 `UNKNOWN`，靜默略過，不阻塞 Story 執行。UNKNOWN 狀態不觸發 `[CI-ALERT]`。
+   **CI 連續 FAIL 升級為 Hard Gate：**
+
+   若同一 workflow 連續 3 次 FAIL，升級為 Hard Gate，**立即阻塞 Story 開發，不接受確認繼續**：
+
+   ```
+   [CI-HARD-GATE] 同一 workflow 連續 3 次 FAIL — workflow: {失敗 workflow 名稱}
+   Hard Gate 已觸發，Story 開發已阻塞。請修復 CI 失敗後重新執行 Sprint。
+   ```
+
+   **連續 FAIL 計數規則：**
+   - 連續計數基於同一 `name`（workflow 名稱）的連續失敗次數
+   - 若該 workflow 中間出現 `success`，計數歸零重新計算
+   - Hard Gate 觸發後，不得透過確認繼續，必須等待 CI 修復並重新執行
+
+   **降級指引：** `gh run list` 指令失敗（網路問題、權限不足、非 GitHub 倉庫等）或無任何執行記錄時，CI 狀態記為 `UNKNOWN`，靜默略過，不阻塞 Story 執行。UNKNOWN 狀態不觸發 `[CI-SOFT-GATE]`。
 
 2. **取出 Story**：從 `docs/PROJECT_BOARD.md` 的「待辦」欄取出優先級最高的 Story，移至「進行中」。**主 session 不讀取 Story 內容**，Story ID 與路徑傳入 subagent，由 subagent 自行讀取。
 3. **派遣 Story-Lifecycle subagent**：使用 `story-lifecycle-prompt.md` 作為 prompt，以 ADR-007 §AC2 介面契約格式傳入以下參數（主 session 不預讀這些內容，路徑由 **Story-Lifecycle subagent 自行讀取**）。派遣前依 §2.1 Provider 解析順序決定目標角色的 provider，並選擇對應派遣路徑：
