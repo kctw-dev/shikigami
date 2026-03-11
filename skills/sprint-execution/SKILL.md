@@ -644,3 +644,29 @@ Sprint Execution 中各角色的具體決策標準請參閱以下文件：
 ---
 
 <!-- ADR-007 Phase 2 外部抽樣審查機制已於 Sprint 24 US-41 完成實作並通過 QA 驗收，詳見 `docs/adr/ADR-007-story-lifecycle-subagent.md`。 -->
+
+---
+
+## 10. Developer Refinement 職責
+
+<!-- US-203 角色 Refinement 職責定義 — Sprint 77 -->
+
+Developer 在 Refinement 中負責提供技術實作面的輸入，協助 Architect（Refinement Chair）識別實作風險與依賴，確保 Story 進入 Sprint 後不因技術細節阻塞開發。Developer 在 Refinement 中為**諮詢（Consulted）**角色，不主持、不輸出正式報告。
+
+### 職責說明
+
+| 面向 | 職責內容 |
+|------|---------|
+| **技術可行性回應** | 針對 Architect 在 Q1–Q5 分析中提出的技術問題，提供實作可行性評估 |
+| **實作風險識別** | 指出已知的技術限制、潛在邊界條件或可能的實作陷阱 |
+| **Story 可拆分性判斷** | 從實作角度建議 Story 是否可合理拆分，或提出拆分邊界建議 |
+| **測試覆蓋初評** | 初步評估 AC 中的 `[動態]` 項目是否具備可測試的技術條件 |
+
+### Refinement 輸出
+
+Developer 在 Refinement 中不產出正式文件，但會於 Refinement 會議中提供以下口頭（文字）輸入：
+
+| 輸出項目 | 說明 |
+|---------|------|
+| 技術可行性評估意見 | 針對各 AC 的技術實作可行性，提供 FEASIBLE / CONCERN / BLOCKED 評估意見 |
+| 實作風險備注 | 列出已知風險，記錄於 Refinement 報告的「備註」欄位（由 Architect 填入） |

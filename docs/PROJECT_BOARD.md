@@ -1,6 +1,6 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 77 Planning 完成）
+**最後更新**：2026-03-11（Sprint 77 US-203 完成）
 **當前 Sprint**：Sprint 77（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 77](sprints/sprint_77.md) → 本看板 | [Tutorial](tutorial/README.md)
@@ -15,7 +15,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-203：角色定義更新 — 7 個角色 Refinement 職責 | #205 | M | 2 | 待開發 |
+| US-203：角色定義更新 — 7 個角色 Refinement 職責 | #205 | M | 2 | 完成 |
 | US-205：E2E Test Case 管理規範 — 建立分層標記與目錄結構標準 | #200 | M | 2 | 待開發 |
 
 ---

@@ -536,6 +536,64 @@ Sprint Planning Architect Round 2 輸出的技術評估結果，必須包含「A
 
 ---
 
+---
+
+## §9 Refinement 職責（Refinement Chair）
+
+<!-- US-203 角色 Refinement 職責定義 — Sprint 77 -->
+
+Architect 在 Refinement 中擔任 **Refinement Chair**，負責主持每個 M/L size Story 的結構化分析，確保 Story 在進入 Sprint 前已充分就緒。詳細 Refinement 機制定義請參閱 [sprint-planning/SKILL.md §9](../sprint-planning/SKILL.md)。
+
+### 職責說明
+
+| 面向 | 職責內容 |
+|------|---------|
+| **主持職責** | 召集並主持 Refinement 會議，控制會議節奏，確保 Q1–Q5 每項問題都有明確回答 |
+| **依賴識別** | 識別 Story 的前置依賴（Q1）與下游影響（Q2），確認依賴可在本 Sprint 解決 |
+| **Story Type 確認** | 依 sprint-planning/SKILL.md §8.2 決策表判定 Story Type，確認 Contract Owner |
+| **拆分建議** | 評估 Story 是否需跨 Type 拆分（Q3），提出拆分方案 |
+| **Contract Owner 確認** | 確認 Contract Owner 已知且可參與本 Sprint（Q4） |
+| **完成性評估** | 評估 Story 能否在單 Sprint 完成（Q5），必要時建議拆分 |
+
+### Refinement 輸出格式
+
+Architect（Refinement Chair）在每個 M/L Story 完成 Refinement 後，必須輸出以下結構化報告（詳細格式規範見 sprint-planning/SKILL.md §9.5）：
+
+```markdown
+## Refinement 報告：{Story ID} — {Story 標題}
+
+### Story Type 確認
+- **Story Type**：{FEATURE / DESIGN / INFRA / SECURITY / INTEGRATION / RESEARCH}
+- **判定依據**：{依 §8.2 決策表說明判定理由}
+- **Contract Owner**：{角色名稱 / N/A}
+
+### 依賴分析結果
+| 問題 | 結論 | 備註 |
+|------|------|------|
+| Q1 前置條件 | {有/無} | {若有：列出具體前置 Story ID 或外部依賴} |
+| Q2 下游依賴 | {有/無} | {若有：列出依賴本 Story 的 Story ID} |
+| Q3 跨 Type 拆分 | {需要/不需要} | {若需要：建議拆分方案} |
+| Q4 Contract Owner 出席 | {已確認/未確認} | {確認狀態說明} |
+| Q5 單 Sprint 可完成 | {是/否} | {若否：建議拆分方式} |
+
+### 結論
+**{READY / NOT_READY}**
+```
+
+**結論判定**：Q1–Q5 全部無阻塞項目 → READY；任一阻塞項目無明確解決方案 → NOT_READY。
+
+### 與 §6 Architect subagent 的職責區分
+
+Refinement Chair 職責（本節）與 Sprint Planning Round 2 Architect subagent 職責（§6 派遣順序）**互補不重疊**：
+
+| 面向 | Refinement Chair（Sprint Planning 前） | Architect subagent（Sprint Planning Round 2） |
+|------|---------------------------------------|----------------------------------------------|
+| 時機 | Sprint Planning **之前** | Sprint Planning **進行中** |
+| 焦點 | 依賴識別、風險評估、拆分判斷 | 技術可行性評估、ADR 需求判斷、平行分群建議 |
+| 輸出 | READY / NOT_READY 報告 | 技術評估表格、平行分群建議、API 契約 |
+
+---
+
 ## 參照文件
 
 - **ADR-003**：`docs/adr/ADR-003.md`（Framework Document Change 流程）

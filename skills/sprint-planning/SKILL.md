@@ -705,3 +705,31 @@ Architect 在擔任 Refinement Chair 時，必須對每個 M/L Story 逐一回�
 | **RESEARCH** | Spike Report 已由 PO/Architect 閱覽並確認納入後續 Backlog 規劃 | [Type-specific] |
 
 > **doc_only 豁免說明**：DESIGN 與 RESEARCH type 因無程式碼交付物，「測試：單元測試 + 整合測試」項目自動豁免（標記 N/A）。其他通用 DoD 項目仍須遵守。
+
+---
+
+## 11. Product Owner（PO）Refinement 職責
+
+<!-- US-203 角色 Refinement 職責定義 — Sprint 77 -->
+
+PO 在 Refinement 中負責提供需求側的完整輸入，確保 Architect（Refinement Chair）能在充分資訊下完成依賴分析與 READY/NOT_READY 判定。
+
+### 職責說明
+
+| 面向 | 職責內容 |
+|------|---------|
+| **Story 草稿準備** | 在 Refinement 前確保 Story 草稿包含完整的 AC 列表、User Story 描述與初步 MoSCoW 優先級 |
+| **驗收標準說明** | 向 Architect 說明每個 AC 的業務背景，協助判斷 Story Type 與依賴關係 |
+| **範圍澄清** | 回應 Architect 在 Q1–Q5 分析過程中提出的範圍澄清問題 |
+| **拆分決策配合** | 配合 Architect 的拆分建議，更新 Story 範圍與 AC 清單 |
+| **NOT_READY 處置** | 接受 NOT_READY 結論，完成阻塞項目後重新提交 Refinement |
+
+### Refinement 輸出
+
+PO 在 Refinement 完成後需確認或更新以下項目：
+
+| 輸出項目 | 說明 |
+|---------|------|
+| 更新後的 Story 草稿 | 反映 Refinement 中達成的範圍共識，AC 清單已更新 |
+| 拆分 Story（若適用） | 若 Architect 建議拆分，PO 建立對應的新 Story，納入下次排序 |
+| READY 確認 | READY 結論後，PO 確認 Story 可進入 Sprint Planning PO Round 1 |

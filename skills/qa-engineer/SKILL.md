@@ -326,6 +326,45 @@ Code Quality Review 的審查範圍與深度根據 Story 類型調整。
 
 ---
 
+---
+
+## §4 QA Engineer Refinement 職責
+
+<!-- US-203 角色 Refinement 職責定義 — Sprint 77 -->
+
+QA Engineer 在 Refinement 中負責從測試與驗收標準的角度評估 Story 的就緒程度，確保 AC 在 Story 進入 Sprint 前已具備可測試條件。QA 在 Refinement 中為**諮詢（Consulted）**角色，輸出 AC 可測試性評估意見。
+
+### 職責說明
+
+| 面向 | 職責內容 |
+|------|---------|
+| **AC 可測試性預評** | 針對 Story 草稿中的每個 AC，評估是否具備明確可觀察的通過標準（避免進 Sprint 後發現 AC 無法驗收）|
+| **測試策略初評** | 識別 AC 類型（`[靜態]` / `[動態]` / `[行為]`），判斷哪些 AC 需自動化測試覆蓋 |
+| **安全相關 AC 識別** | 若 Story 涉及外部輸入、認證或授權，提醒 AC 中需補充對應的安全驗收條件 |
+| **AC 完整性建議** | 指出遺漏的錯誤路徑 AC、邊界條件 AC，建議補充至 Story 草稿 |
+
+### Refinement 輸出
+
+QA 在 Refinement 中輸出以下結構化意見（可以表格或條列形式提供給 Architect 記錄於 Refinement 報告備注中）：
+
+| 輸出項目 | 說明 |
+|---------|------|
+| AC 可測試性評估表 | 逐條列出每個 AC 的可測試性判定：TESTABLE / AMBIGUOUS / UNTESTABLE，含具體說明 |
+| 測試覆蓋初估 | 初步列出哪些 AC 需自動化測試（`[動態]`）、哪些僅需文件審查（`[靜態]`） |
+| 補充 AC 建議（若有） | 列出建議補充的錯誤路徑或邊界條件 AC，供 PO 在 Refinement 後更新 Story 草稿 |
+
+**AC 可測試性判定標準：**
+
+| 判定 | 條件 |
+|------|------|
+| TESTABLE | AC 通過標準具體且可觀察，QA 可在 Sprint 中明確驗證 |
+| AMBIGUOUS | AC 描述模糊（如「應有良好效能」），需 PO 補充具體指標後方可進入 Sprint |
+| UNTESTABLE | AC 依賴外部不可控因素，或通過標準在技術上無法驗證，需 PO + Architect 重新設計 |
+
+**AMBIGUOUS / UNTESTABLE 處置**：QA 在 Refinement 中提出後，由 Architect 在 Refinement 報告 Q4（Contract Owner 確認）或 Q5（完成性評估）備注阻塞原因；PO 更新 AC 後重新進入 Refinement 評估。
+
+---
+
 ## 參照文件
 
 - **ADR-003**：`docs/adr/ADR-003.md`（Framework Document Change，skills/ 路徑修改需執行 Checklist）

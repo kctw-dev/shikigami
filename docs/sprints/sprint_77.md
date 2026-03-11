@@ -8,7 +8,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-203：角色定義更新 — 7 個角色 Refinement 職責 | #205 | M | 2 | 待開發 |
+| US-203：角色定義更新 — 7 個角色 Refinement 職責 | #205 | M | 2 | 完成 |
 | US-205：E2E Test Case 管理規範 — 建立分層標記與目錄結構標準 | #200 | M | 2 | 待開發 |
 
 **總計**：4 points（2M）
@@ -51,8 +51,8 @@
 | AC4 | [靜態] | 與現有角色職責無重疊衝突 | 新增的 Refinement 職責不與角色現有職責矛盾 |
 
 **Done 定義**：
-- [ ] AC1-AC4 全部通過
-- [ ] QA Review PASS
+- [x] AC1-AC4 全部通過
+- [x] QA Review PASS
 
 ---
 
