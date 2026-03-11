@@ -15,11 +15,11 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-209：ADR-016 OQ-4：Figma MCP 環境健康檢查 Runbook | #212 | S | 1 | 待辦 |
-| US-210：ADR-016 OQ-2：DESIGN Story Sprint 內排序規則 | #210 | S | 1 | 待辦 |
-| US-211：ADR-016 OQ-1：Design Foundation Skill 歸屬 | #209 | S | 1 | 待辦 |
-| US-212：ADR-016 OQ-5：VRR 報告長期儲存策略 | #213 | S | 1 | 待辦 |
-| US-213：ADR-016 OQ-3：UI/UX Designer Provider 路由 | #211 | S | 1 | 待辦 |
+| US-209：ADR-016 OQ-4：Figma MCP 環境健康檢查 Runbook | #212 | S | 1 | 完成 |
+| US-210：ADR-016 OQ-2：DESIGN Story Sprint 內排序規則 | #210 | S | 1 | 完成 |
+| US-211：ADR-016 OQ-1：Design Foundation Skill 歸屬 | #209 | S | 1 | 完成 |
+| US-212：ADR-016 OQ-5：VRR 報告長期儲存策略 | #213 | S | 1 | 完成 |
+| US-213：ADR-016 OQ-3：UI/UX Designer Provider 路由 | #211 | S | 1 | 完成 |
 
 ---
 
