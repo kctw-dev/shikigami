@@ -1,11 +1,11 @@
 # PROJECT_BOARD 歷史歸檔
 
 **來源**：`docs/PROJECT_BOARD.md`
-**最後更新**：2026-03-11（Sprint 68–71 歸檔）
-**歸檔範圍**：Sprint 1–71（共 71 個 Sprint）
+**最後更新**：2026-03-11（Sprint 72–74 歸檔）
+**歸檔範圍**：Sprint 1–74（共 74 個 Sprint）
 **歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31 由 Sprint 36 Review 歸檔；Sprint 32 由 Sprint 37 Review 歸檔；Sprint 33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–39 由 Sprint 43 Review 歸檔；Sprint 40–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–50 由 Sprint 55 Review 歸檔；Sprint 51–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔；Sprint 57–60 由 Sprint 63 Review 歸檔；Sprint 65–67 由 Sprint 70 Review 歸檔
 
-> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 72–74）
+> 主文件現況：[PROJECT_BOARD.md](../../PROJECT_BOARD.md)（保留 Sprint 75–77）
 
 ---
 
@@ -1303,5 +1303,74 @@
 - Velocity：2 points
 - 完成率：100%（完成 1 / 計畫 1）
 - 日期：2026-03-10
+
+---
+
+## Sprint 72 — 完成
+
+**Sprint Goal**：框架品質全面強化 — Bug 修復 + 流程補全 + 平行安全防護
+**期間**：2026-03-10 ~ 2026-03-17
+**ADR 依賴**：無
+**結果**：Goal 達成（9/9 Stories PASS）。Velocity 17 points，完成率 100%。Bug 修復（US-183 dispel frontmatter）+ 流程補全（US-184 修復驗證、US-185 agent type、US-186 API 契約、US-187 部署驗證、US-188 平行安全、US-189 CI/CD Gate）+ SA 圖表（US-190）+ Cursor 平台支援（US-191）。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-183：Bug: shikigami:dispel skill 設定 disable-model-invocation 導致無法透過 Skill tool 呼叫 | #181 | S | 1 | 完成 |
+| US-184：P0: Sprint Execution 缺少修復驗證步驟 | #180 | M | 2 | 完成 |
+| US-185：sprint-execution: Story-Lifecycle subagent 預設使用 general-purpose agent type | #184 | S | 1 | 完成 |
+| US-186：Developer subagent 缺少 API 契約對齊步驟 | #178 | M | 2 | 完成 |
+| US-187：Sprint Review 缺少生產環境部署驗證步驟 | #179 | S | 1 | 完成 |
+| US-188：sprint-execution: 平行 subagent 禁止直接修改共用文件 — 主 session 批次更新 | #183 | M | 2 | 完成 |
+| US-189：CI/CD 變更強制 QA + SRE 雙審查 Gate | #177 | M | 2 | 完成 |
+| US-190：feat: Dispel 及 Sprint Execution 應產出 Mermaid SA 圖表 | #185 | L | 3 | 完成 |
+| US-191：支援 Cursor 平台安裝 | #4 | L | 3 | 完成 |
+
+## Sprint 72 統計
+- Velocity：17 points
+- 完成率：100%（完成 9 / 計畫 9）
+- 日期：2026-03-10
+
+---
+
+## Sprint 73 — 完成
+
+**Sprint Goal**：落地延期 2 Sprint 的 Retro Action（PO R1 Sonnet 預設）+ 補強部署驗證模板
+**期間**：2026-03-11 ~ 2026-03-18
+**ADR 依賴**：無
+**結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。PO R1 Sonnet 預設正式落地（US-192，Retro Action #186 結案）+ deployment-readiness L2 API 驗證步驟模板（US-193）。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-192：sprint-planning SKILL.md PO R1 模型改為 Sonnet 預設 | #186 | S | 1 | 完成 |
+| US-193：deployment-readiness SKILL.md 新增 L2 API 驗證步驟模板 | #190 | M | 2 | 完成 |
+
+## Sprint 73 統計
+- Velocity：3 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-11
+
+---
+
+## Sprint 74 — 完成
+
+**Sprint Goal**：使用者體驗與開發流程雙強化 — README 首印象重塑 + API 契約 Hard Gate 落地 + E2E 測試基礎設施補齊
+**期間**：2026-03-11 ~ 2026-03-18
+**ADR 依賴**：無
+**結果**：Goal 達成（4/4 Stories PASS）。Velocity 8 points，完成率 100%。README 首印象重塑（US-194）+ API 契約 Hard Gate 落地（US-195）+ E2E Client 教學（US-196）+ E2E Server 模板（US-197）。
+**Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-194：feat: README 資訊架構重設計 — 30 秒內讓人知道怎麼開始用 | #194 | M | 2 | 完成 |
+| US-195：feat: API 契約 Hard Gate — 涉及 API 的 Story 無契約不得進入開發 | #191 | M | 2 | 完成 |
+| US-196：docs: E2E 測試 Client 端教學手冊 — CDP 穿隧 + 本地瀏覽器連接 SOP | #193 | S | 1 | 完成 |
+| US-197：feat: E2E 測試 Server 端模板 — Playwright workflow + CI 登入自動化模板 | #192 | L | 3 | 完成 |
+
+## Sprint 74 統計
+- Velocity：8 points
+- 完成率：100%（完成 4 / 計畫 4）
+- 日期：2026-03-11
 
 ---

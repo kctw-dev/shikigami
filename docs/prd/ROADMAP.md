@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-11（Sprint 76 — 3/3 Stories 完成，Story Type 分類系統 + Refinement Chair 制度 + Story Template 更新）
+> 最後更新：2026-03-11（Sprint 77 — 2/2 Stories 完成，角色 Refinement 職責 + E2E Test Case 管理規範）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。

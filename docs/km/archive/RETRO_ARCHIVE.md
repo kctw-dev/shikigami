@@ -1,11 +1,11 @@
 # Retrospective Log 歷史歸檔
 
 **來源**：`docs/km/Retrospective_Log.md`
-**最後更新**：2026-03-11（Sprint 68–71 歸檔）
-**歸檔範圍**：Sprint 1–71（共 71 個 Sprint）
+**最後更新**：2026-03-11（Sprint 72–74 歸檔）
+**歸檔範圍**：Sprint 1–74（共 74 個 Sprint）
 **歸檔執行者**：US-29（Issue #44）— Sprint 17；Sprint 14 由歸檔腳本追加；Sprint 15 由 Sprint 20 Review 歸檔；Sprint 16 由 Sprint 21 Review 歸檔；Sprint 17 由 Sprint 22 Review 歸檔；Sprint 18 由 Sprint 23 Review 歸檔；Sprint 19 由 Sprint 24 Review 歸檔；Sprint 20 由 Sprint 25 Review 歸檔；Sprint 21 由 Sprint 26 Review 歸檔；Sprint 22 由 Sprint 27 Review 歸檔；Sprint 23 由 Sprint 28 Review 歸檔；Sprint 24 由 Sprint 29 Review 歸檔；Sprint 25–27 由 Sprint 30 Review 歸檔；Sprint 28 由 Sprint 33 Review 歸檔；Sprint 29 由 Sprint 34 Review 歸檔；Sprint 30 由 Sprint 35 Review 歸檔；Sprint 31–33 由 Sprint 38 Review 歸檔；Sprint 34 由 Sprint 39 Review 歸檔；Sprint 35 由 Sprint 40 Review 歸檔；Sprint 36 由 Sprint 41 Review 歸檔；Sprint 37 由 Sprint 42 Review 歸檔；Sprint 38–42 由 Sprint 45 Review 歸檔；Sprint 43–48 由 Sprint 51 Review 歸檔；Sprint 49–53 由 Sprint 56 Review 歸檔；Sprint 54–56 由 Sprint 59 Review 歸檔；Sprint 57–60 由 Sprint 63 Review 歸檔；Sprint 65–67 由 Sprint 70 Review 歸檔
 
-> 主文件現況：[Retrospective_Log.md](../Retrospective_Log.md)（保留 Sprint 72–74）
+> 主文件現況：[Retrospective_Log.md](../Retrospective_Log.md)（保留 Sprint 75–77）
 
 ---
 
@@ -1802,5 +1802,72 @@ PO、Architect、QA Engineer、Developer、Stakeholder
 |---|--------|-------|----------|-------|
 | 1 | Sprint Planning PO Round 1 預設使用 Sonnet 而非 Opus，避免超時風險 | Scrum Master | 下次 Sprint Planning PO R1 使用 Sonnet | #186 |
 | 2 | 對 open issues 批次補齊 `type: backlog-item` + `priority:` labels | PO | 下次 Sprint Planning 前，所有 open issues 具備完整 labels | #187 |
+
+---
+
+## Sprint 72 — 2026-03-10
+
+**Sprint Goal**：框架品質全面強化 — Bug 修復 + 流程補全 + 平行安全防護
+
+### Good
+
+1. Sprint 72 9/9 Stories PASS，17 Points，100% 完成率。連續 14 Sprint（S59-S72）100% 完成率，框架穩定性持續維持
+2. 歷史最高 Velocity（17 points），9 個 Story 含 2 個 L-size，全部一次通過自審與外部抽樣審查
+3. Backlog 枯竭問題徹底解決 — Sprint 72 從 9 個候選中全部選入，Backlog 健康度大幅改善
+4. Cursor 平台支援（US-191）交付：install-cursor.sh 一鍵生成 23 個 .mdc 規則檔，88% skill 覆蓋率，Issue #4 正式結案
+
+### Problem
+
+1. Retro Action #186（PO R1 Sonnet 預設）已連續延期 2 Sprint（S71→S72），尚未正式落地至 sprint-planning SKILL.md
+2. US-191 AC5 GUI 驗證受限 — Cursor IDE GUI 互動無法在 CLI 環境自動化驗證，僅能靜態確認檔案生成結果
+
+### Action Items
+
+| # | Action | Owner | 驗收方式 | Issue |
+|---|--------|-------|----------|-------|
+| 1 | Sprint Planning PO Round 1 預設使用 Sonnet — 正式落地至 sprint-planning SKILL.md（延續 #186） | Scrum Master | sprint-planning SKILL.md 明確指定 PO R1 model: sonnet | #186 |
+
+---
+
+## Sprint 73 — 2026-03-11
+
+**Sprint Goal**：落地延期 2 Sprint 的 Retro Action（PO R1 Sonnet 預設）+ 補強部署驗證模板
+
+### Good
+
+1. Sprint 73 2/2 Stories PASS，3 Points，100% 完成率。連續 15 Sprint（S59-S73）100% 完成率
+2. Retro Action #186（PO R1 Sonnet 預設）正式結案 — 從 Sprint 71 提出到 Sprint 73 落地，延期 2 Sprint 後成功交付
+3. 兩個 Story 完全平行執行，無衝突，Sprint 效率高
+
+### Problem
+
+1. Backlog 再次枯竭 — Sprint 73 僅從 2 個候選中選取 2 個 Story（3pt），Backlog 補充速度跟不上消耗
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- Backlog 補充為下次 Sprint Planning PO 自然職責
+
+---
+
+## Sprint 74 — 2026-03-11
+
+**Sprint Goal**：使用者體驗與開發流程雙強化 — README 首印象重塑 + API 契約 Hard Gate 落地 + E2E 測試基礎設施補齊
+
+### Good
+
+1. Sprint 74 4/4 Stories PASS，8 Points，100% 完成率。連續 16 Sprint（S59-S74）100% 完成率
+2. 近期最高負載（8 points，2M+1S+1L），全部一次通過自審與外部抽樣審查（4/4 CONFIRM，DISPUTE 率 0%）
+3. Phase 1 三路平行執行有效（US-194/195/196 修改完全不同檔案群），Phase 2 序列執行 US-197（L-size）順利完成
+4. README 重設計（US-194）大幅提升首印象：30 秒區塊 + 漸進式揭露 + badges + 使用情境範例，內部細節移至 docs/CHANGELOG.md
+
+### Problem
+
+1. 平行 subagent 狀態更新競態條件再現 — 三個平行 subagent 並行更新 sprint_74.md 與 PROJECT_BOARD.md 時部分寫入遺失（US-195 在 sprint_74.md 仍為「待開始」、US-194/US-196 在 PROJECT_BOARD.md 仍為「待開始」），在 §1.5 一致性審查時修正。US-188（Sprint 72）已建立「主 session 批次更新」規範但未完全執行
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- 平行 subagent 狀態更新競態條件為 US-188 已知問題，需在下次平行派遣時嚴格執行「主 session 批次更新」規範，不另開 Issue
 
 ---
