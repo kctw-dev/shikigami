@@ -345,11 +345,11 @@ L2 驗證結果必須記錄於部署就緒檢查的 Checklist 備注欄。
 
 ---
 
-## 5.2 L3 E2E 端對端驗證步驟（可選）
+## 5.2 L3 E2E 端對端驗證步驟（Soft Gate）
 
 **目的**：在版本 tag 後透過 Playwright E2E 測試驗證完整使用者流程，補足 L2 API 驗證無法涵蓋的 UI 互動與跨服務整合場景。
 
-> **注意**：L3 E2E 驗證為**可選步驟，非 Hard Gate**。消費端專案可依資源與需求決定是否啟用。建議在 Staging 環境完成 L2 API 驗證後執行。
+> **注意**：L3 E2E 驗證為 **Soft Gate**。E2E 測試失敗時輸出 `[E2E-SOFT-GATE]`，需 PO 確認後方可繼續。建議在 Staging 環境完成 L2 API 驗證後執行。
 
 > **模板路徑**：
 > - Playwright workflow 模板：`.github/workflows/e2e.yml`
@@ -409,10 +409,10 @@ npx playwright test
 | 結果 | 說明 | 後續動作 |
 |------|------|----------|
 | 所有測試 PASS | L3 E2E 驗證通過 | 記錄至部署 Checklist 備注欄 |
-| 測試失敗 | L3 E2E 驗證失敗 | 查看 Playwright traces 排查問題（非 Hard Gate，可依商業判斷決策） |
+| 測試失敗 | L3 E2E 驗證失敗 | 輸出 `[E2E-SOFT-GATE]`，記錄失敗原因，需 PO 確認後方可繼續 |
 | CI 環境問題 | 環境未就緒 | 確認 Secrets 設定與服務狀態 |
 
-> **提醒**：L3 驗證失敗不構成 Hard Gate，但建議記錄失敗原因並排入下個 Sprint 追蹤。
+> **提醒**：L3 驗證失敗為 Soft Gate，輸出 `[E2E-SOFT-GATE]` 後須記錄失敗原因，由 PO 確認是否繼續；建議排入下個 Sprint 追蹤。
 
 ---
 

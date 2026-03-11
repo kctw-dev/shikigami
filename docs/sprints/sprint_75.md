@@ -10,7 +10,7 @@
 |-------|-------|------|--------|------|
 | US-200：Issue 回覆溝通策略改善 — 分階段通知避免誤認已交付 | #197 | S | 1 | 完成 |
 | US-198：CI/CD 失敗通知強化 — 多節點 CI 檢查與升級策略 | #195 | M | 2 | 完成 |
-| US-199：E2E 測試與 CI/CD 管線整合 — deployment-readiness E2E Gate 升級 | #196 | M | 2 | 待開發 |
+| US-199：E2E 測試與 CI/CD 管線整合 — deployment-readiness E2E Gate 升級 | #196 | M | 2 | 進行中 |
 
 **總計**：5 points（2M + 1S）
 
@@ -94,5 +94,5 @@
 | AC3 | E2E 驗證結果判斷表更新 | `skills/deployment-readiness/SKILL.md` §5.2「測試失敗」行更新：輸出 `[E2E-SOFT-GATE]`，記錄失敗原因，需 PO 確認 |
 
 **Done 定義**：
-- [ ] AC1-AC3 全部通過
-- [ ] QA Review PASS
+- [x] AC1-AC3 全部通過
+- [x] QA Review PASS

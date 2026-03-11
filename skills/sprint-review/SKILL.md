@@ -758,6 +758,7 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent（`model: "haik
 - [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格** *(慢想模式限定)*（對應 Review token 欄）：參照 `skills/sprint-execution/SKILL.md` §步驟詳解 步驟 7「記錄本次 Execution 環節 Token 消耗」的 Token 計算公式與降級方法執行，填入 Review token 欄。
 - [ ] **ROADMAP 里程碑對齊檢查**（見 §5.1）：在觸發 deployment-readiness 前，確認本 Sprint 交付是否使某個 ROADMAP 里程碑達成完成狀態，並將結果傳達給 deployment-readiness 作為版本 Tag 決策依據
 - [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag），並附帶 ROADMAP 里程碑對齊檢查結果（里程碑完成 → Major bump 候選；未完成 → Minor bump）
+- [ ] **E2E 驗證結果已確認**：`deployment-readiness` §5.2 L3 E2E 驗證結果已確認（PASS 記錄至 Checklist；若輸出 `[E2E-SOFT-GATE]` 則已取得 PO 確認並記錄決策）
 - [ ] Sprint Metrics 計算並追加至 `docs/km/Metrics_Log.md`（見下方計算指引）
 - [ ] 是否有本 Sprint 值得記錄的角色制衡案例？若有，更新 `docs/km/ROLE_BALANCE_CASES.md`
 - [ ] **產出文件（`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`、`sprint_N.md`）完成最後修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件；`Retrospective_Log.md` 與 `Metrics_Log.md` 雖位於 `docs/km/` 路徑，但屬 Sprint 狀態文件，適用本規範；`sprint_N.md` 為 Sprint 執行記錄，亦適用本規範。其他 Knowledge Management 文件如 `ROLE_BALANCE_CASES.md`、`Tech_Debt_Registry.md` 等不適用，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
