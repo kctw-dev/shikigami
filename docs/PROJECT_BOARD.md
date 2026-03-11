@@ -15,8 +15,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-216：Knowledge Ingestion — Context Hub 整合，API 文件強制內化 | #216 | L | 3 | 待開發 |
-| US-220：錯誤追溯鏈 — 測試失敗自動追溯根因源頭 | #220 | M | 2 | 待開發 |
+| US-216：Knowledge Ingestion — Context Hub 整合，API 文件強制內化 | #216 | L | 3 | 完成 |
+| US-220：錯誤追溯鏈 — 測試失敗自動追溯根因源頭 | #220 | M | 2 | 完成 |
 
 **Sprint 容量**：5 points
 

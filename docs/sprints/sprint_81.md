@@ -12,8 +12,8 @@
 
 | Story | Issue | Size | Points | 狀態 | 備註 |
 |-------|-------|------|--------|------|------|
-| US-216：Knowledge Ingestion — Context Hub 整合，API 文件強制內化 | #216 | L | 3 | 待開發 | doc-only, INTEGRATION, ADR-017 |
-| US-220：錯誤追溯鏈 — 測試失敗自動追溯根因源頭 | #220 | M | 2 | 待開發 | doc-only, FEATURE, 依賴 US-216（graceful degradation） |
+| US-216：Knowledge Ingestion — Context Hub 整合，API 文件強制內化 | #216 | L | 3 | 完成 | doc-only, INTEGRATION, ADR-017 |
+| US-220：錯誤追溯鏈 — 測試失敗自動追溯根因源頭 | #220 | M | 2 | 完成 | doc-only, FEATURE, 依賴 US-216（graceful degradation） |
 
 **Sprint 容量**：5 points
 
