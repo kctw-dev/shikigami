@@ -473,3 +473,158 @@ qa_keywords: ["QA", "審查", "Review", "Code Quality", "Spec Compliance", "雙�
 | RESEARCH | N/A | 無 Contract（產出 Spike Report） | RESEARCH 恆為 N/A |
 
 > **衝突排除說明**：FEATURE 與 INTEGRATION 雖共享 Architect 作為 Contract Owner，但在同一 Sprint 中不會對同一介面同時產生 FEATURE 和 INTEGRATION Story，因此不存在 Contract 衝突。若罕見情況下出現同一介面的 FEATURE + INTEGRATION 並行，由 Architect 統一協調，以 INTEGRATION Contract 為主文件，FEATURE Contract 作為補充。
+
+---
+
+## 9. Refinement 機制
+
+<!-- US-202 Refinement 機制 — Sprint 76 -->
+
+Refinement 是 M/L size Story 在正式進入 Sprint 前的結構化分析流程，目的是在開發啟動前識別跨領域依賴、風險與拆分需求，減少 Sprint 中的意外阻塞。
+
+### 9.1 Refinement Chair 角色（AC1）
+
+**Chair**：由 **Architect** 擔任 Refinement Chair。
+
+**職責範圍（與 §6 Architect subagent 的職責區分）：**
+
+| 面向 | Refinement Chair（§9，Sprint Planning 前） | Architect subagent（§6，Sprint Planning Round 2） |
+|------|------------------------------------------|--------------------------------------------------|
+| 時機 | Sprint Planning **之前**，Story 準備進入 Sprint 時 | Sprint Planning **進行中**，PO Round 1 完成後 |
+| 焦點 | 依賴識別、風險評估、Story 可拆分性判斷 | 技術可行性評估、ADR 需求判斷、平行分群建議 |
+| 輸入 | Story 草稿（未正式進 Sprint Backlog） | PO Round 1 已選取的 Story 清單 |
+| 輸出 | READY / NOT_READY 結論（§9.5） | 技術評估表格、ADR 觸發清單、平行分群建議 |
+| 參與者 | Architect + 依 Story Type 決定的相關角色 | 主 session（接收回傳摘要） |
+
+Refinement Chair 不替代 Architect subagent 的 Sprint Planning 評估職責；Refinement 是 Sprint Planning 的**前置門禁**，兩者互補。
+
+### 9.2 Refinement 觸發條件（AC2）
+
+#### 觸發規則
+
+| Story Size | Refinement 要求 | 說明 |
+|-----------|----------------|------|
+| **M（2 Points）** | **必須**經過 Refinement | M size Story 具有一定複雜度，需提前識別依賴與風險 |
+| **L（3 Points）** | **必須**經過 Refinement | L size Story 複雜度高，Refinement 為強制前置條件 |
+| **S（1 Point）** | **免除** Refinement（預設） | S size Story 複雜度低，Architect 在 Sprint Planning Round 2 評估已足夠 |
+
+#### S size 豁免例外
+
+以下情況 S size Story **仍須**執行 Refinement，不得豁免：
+
+| 豁免例外條件 | 說明 |
+|------------|------|
+| S size Story 跨越 3 個以上 Story Type 的邊界 | 例如同時涉及 FEATURE + INFRA + SECURITY，依賴關係複雜度不低於 M |
+| S size Story 是另一個 M/L Story 的前置依賴（unblocking dependency） | 若 S size Story 未完成將阻塞 M/L Story，需在 Refinement 中確認介面契約 |
+| S size Story 包含跨系統外部依賴（第三方 API、外部服務） | 外部依賴的可用性需在 Sprint 前確認，不應在 Sprint 中途發現阻塞 |
+
+#### 免除 Refinement 的確認
+
+S size Story 免除 Refinement 時，Architect 在 Sprint Planning Round 2 技術評估表格中標注「Refinement: 豁免（S-size）」，無需額外文件。
+
+### 9.3 Refinement 在 Sprint Planning 中的位置（AC4）
+
+Refinement 插入在 **§6 PO Round 1 之前**、Backlog 整理之後：
+
+```
+Sprint Planning 完整執行順序：
+
+0.   健康檢查           【慢想模式限定】
+0.5. 角色權重調整        【慢想模式限定】
+0.9. Issue 快掃
+
+[Refinement 區間] — 僅適用於 M/L size Story
+R1.  Architect 擔任 Chair，執行 Refinement
+R2.  產出 Refinement 報告（READY / NOT_READY）
+R3.  NOT_READY Story 退回 Backlog，不進入 Sprint Planning
+
+1.   PO Round 1        — 從已 READY 的 Story 中選取
+2.   Architect Round 2 — 技術評估（§6 職責）
+3.   QA               — 驗收標準確認
+4.   PO Round 2       — 產出 Sprint 文件
+```
+
+**與 §2 Checklist 的銜接**：
+
+- Refinement 發生在 §2 Checklist 的「PO subagent 選 Stories」步驟**之前**。
+- PO Round 1（§2 第 4 個 Checklist 項目）選取的 Story 清單，已排除 NOT_READY Story。
+- §2 Checklist 既有步驟不變，Refinement 為附加的前置步驟，不替換任何現有步驟。
+
+**與 §6 派遣順序的銜接**：
+
+- §6 所定義的 Subagent 派遣順序（步驟 0 → 4）保持不變。
+- Refinement（R1–R3）發生在步驟 1（PO Round 1）之前，不影響 §6 內部順序。
+
+### 9.4 Refinement 依賴分析 Checklist
+
+Architect 在擔任 Refinement Chair 時，必須對每個 M/L Story 逐一回答以下問題。詳細跨領域依賴分析方法請參閱 [Architect 角色決策指引 §8](../architect/SKILL.md)。
+
+| # | 問題 | 判斷條件 | 處置 |
+|---|------|---------|------|
+| Q1 | 這個 Story 開始前需要什麼前置條件？ | 是否有其他 Story 或外部工作必須先完成？ | 若有：記錄前置依賴，確認是否在同 Sprint 可達成；若不可達成，標記 NOT_READY |
+| Q2 | 是否有其他 Story 依賴本 Story 的輸出？ | 本 Story 的產出物（API、文件、Schema）是否是其他 Story 的輸入？ | 若有：確認本 Story 優先排程；Contract Owner 必須出席 Refinement |
+| Q3 | 本 Story 是否跨越多個 Story Type 需要拆分？ | 是否同時包含 INFRA + FEATURE、SECURITY + INTEGRATION 等跨 Type 組合？ | 若是：依 §8.2 規則判斷主 Type，評估是否拆成多個單一 Type Story |
+| Q4 | Contract Owner 是否已確認？是否出席？ | 依 §8.3 對照表，Contract Owner 角色是否已知且可在本 Sprint 參與？ | 若缺席或未確定：標記 NOT_READY，等待 Contract Owner 確認後重新 Refinement |
+| Q5 | 本 Story 能在一個 Sprint 內完成嗎？ | 依 §1 估點策略，M/L size 是否在 Sprint 容量內？ | 若不能：建議拆分為多個 S/M Story，分批進入不同 Sprint |
+
+### 9.5 Refinement 輸出格式（AC5）
+
+每個 M/L Story 完成 Refinement 後，Architect 必須輸出以下結構化報告：
+
+```markdown
+## Refinement 報告：{Story ID} — {Story 標題}
+
+### Story Type 確認
+- **Story Type**：{FEATURE / DESIGN / INFRA / SECURITY / INTEGRATION / RESEARCH}
+- **判定依據**：{依 §8.2 決策表說明判定理由}
+- **Contract Owner**：{角色名稱 / N/A}
+
+### 依賴分析結果
+| 問題 | 結論 | 備註 |
+|------|------|------|
+| Q1 前置條件 | {有/無} | {若有：列出具體前置 Story ID 或外部依賴} |
+| Q2 下游依賴 | {有/無} | {若有：列出依賴本 Story 的 Story ID} |
+| Q3 跨 Type 拆分 | {需要/不需要} | {若需要：建議拆分方案} |
+| Q4 Contract Owner 出席 | {已確認/未確認} | {確認狀態說明} |
+| Q5 單 Sprint 可完成 | {是/否} | {若否：建議拆分方式} |
+
+### 跨領域依賴處置
+{若有跨領域依賴（FEATURE + INFRA、FEATURE + SECURITY 等），說明處置方案：
+- 拆分方案：{拆成哪些 Story}
+- 或 Infra Prerequisites Checklist：{若 Infra 工作量極小，列出 SRE 簽核的清單項目}}
+
+### 結論
+**{READY / NOT_READY}**
+
+{READY 時}：Story 通過 Refinement，可進入 Sprint Planning PO Round 1 選取。
+{NOT_READY 時}：阻塞原因：{具體說明}。需完成以下動作後重新 Refinement：
+- [ ] {待完成動作 1}
+- [ ] {待完成動作 2}
+```
+
+**READY 條件**：Q1–Q5 全部無阻塞項目，或阻塞項目已有明確解決方案且可在本 Sprint 完成。
+
+**NOT_READY 條件**：任一以下情況：
+- 前置依賴無法在本 Sprint 解決
+- Contract Owner 未確認且無法在 Sprint 期間參與
+- Story 無法在一個 Sprint 內完成且尚未拆分
+
+### 9.6 排程模式與 Refinement 的互動（AC6）
+
+排程模式（§3.1）與 Refinement 機制有以下明確互動規則：
+
+| 執行模式 | Refinement 行為 |
+|---------|----------------|
+| **排程模式**（`SHIKIGAMI_SCHEDULED=true`） | **完全跳過 Refinement**。排程模式僅允許 S-size Story，S-size 預設豁免 Refinement，因此排程模式下不會有任何 Story 需要 Refinement。 |
+| **手動模式**（非排程） | 依 §9.2 觸發條件執行 Refinement，M/L size 必須，S size 預設豁免（豁免例外見 §9.2）。 |
+
+**理由**：排程模式的 S-size HARD-GATE（§3.1）確保選入 Sprint 的 Story 全為 S-size，S-size 預設豁免 Refinement，因此兩個機制在邏輯上完全相容——排程模式下不會有任何觸發 Refinement 的 Story 進入選取流程。
+
+**跨 Type 依賴的特殊處置（來自 Issue #199）**：
+
+當 FEATURE Story 包含 INFRA 前置需求時，Refinement 依以下規則處置：
+
+| 情況 | 處置方式 |
+|------|---------|
+| SRE 工作量不可忽略（需要獨立設計、建置或審查） | 拆分為獨立 INFRA Story，Contract Owner 由 SRE 擔任 |
+| SRE 工作量極小（設定調整、參數修改等） | 在 FEATURE Contract 中附加 Infra Prerequisites Checklist，由 SRE 簽核後合併在 FEATURE Story 中執行 |
