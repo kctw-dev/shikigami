@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 80 Review 完成）
-**當前 Sprint**：Sprint 80（完成）
+**最後更新**：2026-03-12（Sprint 81 Planning 完成）
+**當前 Sprint**：Sprint 81（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 80](sprints/sprint_80.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 81](sprints/sprint_81.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 81 — 進行中
+
+**Sprint Goal**：Anti-Hallucination 第二步 — 落地 Knowledge Ingestion：整合 Context Hub MCP，建立 API 文件強制內化機制，完成雙軌 Anti-Hallucination 閉環。
+**期間**：2026-03-12 ~ 2026-03-19
+**ADR 依賴**：ADR-017（Accepted）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-216：Knowledge Ingestion — Context Hub 整合，API 文件強制內化 | #216 | L | 3 | 待開發 |
+| US-220：錯誤追溯鏈 — 測試失敗自動追溯根因源頭 | #220 | M | 2 | 待開發 |
+
+**Sprint 容量**：5 points
 
 ---
 
