@@ -3,7 +3,7 @@
 **Sprint Goal**：Anti-Hallucination 第一步 — 建立 Agent 不確定性前置檢查機制，同步啟動 Discovery Phase 架構調查
 
 **期間**：2026-03-11 ~ 2026-03-18
-**狀態**：進行中
+**狀態**：完成
 **ADR 依賴**：無（ADR-017 由 Architect 平行撰寫中，不阻塞本 Sprint）
 
 ---

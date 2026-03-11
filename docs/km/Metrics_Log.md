@@ -84,6 +84,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 77 | 2026-03-11 | 4 points | 100% | 穩定 | Goal 達成，2/2 Stories PASS；US-203（M/2pt）+ US-205（M/2pt）；S75=5→S76=5→S77=4，S76→S77 微降 -20%（±20% 內）→穩定；角色 Refinement 職責 + E2E Test Case 管理規範 |
 | Sprint 78 | 2026-03-11 | 4 points | 100% | 穩定 | Goal 達成，3/3 Stories PASS；US-206（M/2pt）+ US-207（S/1pt）+ US-208（S/1pt）；S76=5→S77=4→S78=4，S77→S78 持平 0%（±20% 內）→穩定；ADR-016 UI/UX Designer 角色全量交付 |
 | Sprint 79 | 2026-03-11 | 5 points | 100% | 上升趨勢 | Goal 達成，5/5 Stories PASS；US-209（S/1pt）+ US-210（S/1pt）+ US-211（S/1pt）+ US-212（S/1pt）+ US-213（S/1pt）；S77=4→S78=4→S79=5，S78→S79 上升 +25%，連續穩定至上升→上升趨勢；ADR-016 OQ 全部 Closed |
+| Sprint 80 | 2026-03-11 | 4 points | 100% | 穩定 | Goal 達成，2/2 Stories PASS；US-214（M/2pt）+ US-215（M/2pt）；S78=4→S79=5→S80=4，S79→S80 微降 -20%（±20% 內）→穩定；Anti-Hallucination 不確定性三問 + ADR-018 Discovery Phase 草稿 |
 
 ---
 
@@ -98,6 +99,7 @@ Sprint 整體 Token 消耗記錄，與 Velocity 記錄粒度對齊（Sprint 為�
 | Sprint 10 | 107M | 266K | $234.10 | Claude Code JSONL |
 | Sprint 11 | N/A | N/A | N/A | 不可用 |
 | Sprint 60 | 68M | 131K | N/A（cache 比例不明，無法精確估算） | Claude Code JSONL |
+| Sprint 80 | 85414K | 155K | N/A（cache 比例不明，無法精確估算） | Claude Code JSONL |
 
 ---
 
@@ -174,6 +176,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 75 | Execution | 62898307 | 118030 |
 | Sprint 77 | Execution | 625749 | 1939 |
 | Sprint 78 | Execution | N/A | N/A |
+| Sprint 80 | Planning+Execution+Review | 85414K | 155K |
 
 ---
 

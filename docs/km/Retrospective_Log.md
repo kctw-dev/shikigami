@@ -4,6 +4,28 @@
 
 ---
 
+## Sprint 80 — 2026-03-11
+
+**Sprint Goal**：Anti-Hallucination 第一步 — 建立 Agent 不確定性前置檢查機制，同步啟動 Discovery Phase 架構調查
+
+### Good
+
+1. Sprint 80 2/2 Stories PASS，4 Points，100% 完成率。連續 22 Sprint（S59-S80）100% 完成率
+2. US-214 + US-215 完全平行執行成功（檔案無交集），§2.2 共用文件保護機制 + 主 session 批次更新正確運作
+3. US-214 Anti-Hallucination 不確定性三問檢查機制一次到位 — story-lifecycle-prompt.md 新增 5 個 AC 全部 PASS，含 [UNCERTAIN] 標記格式、[ASSUMPTION-VIOLATION] 偵測、uncertainty_check 輸出區塊
+4. US-215 ADR-018 Discovery Phase RESEARCH spike 品質高 — 9 維度差異分析表、2 個架構選項、Product Brief 格式建議、3-gate PO 確認關卡、4 個 Open Questions，草稿完整度超越預期
+
+### Problem
+
+1. US-214 初始分類為 doc_only=true（修改 skills/ 路徑的 .md 檔），與 S75/S76 同類問題再次出現。主 session 正確覆寫為 doc_only=false，但 PO/QA 在 Sprint Planning 階段的 doc-only 判定仍未有效攔截 skills/ 路徑案例
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- doc-only 判定不精確為已知 recurring pattern（S75/S76/S80），skills/ 路徑負面案例排除規則已定義於 sprint-execution SKILL.md §doc-only 規則，屬 Sprint Planning QA 階段執行面問題，不另開 Issue
+
+---
+
 ## Sprint 79 — 2026-03-11
 
 **Sprint Goal**：ADR-016 落地 Phase 2 — 解決 UI/UX Designer 5 個 Open Questions，清除 DESIGN Story 進 Sprint 的前置障礙

@@ -4,6 +4,17 @@
 
 ---
 
+## Sprint 80（2026-03-11）
+
+**Sprint Goal**：Anti-Hallucination 第一步 — 建立 Agent 不確定性前置檢查機制，同步啟動 Discovery Phase 架構調查
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-214（Issue #215）：不確定性前置檢查 — Agent 執行前強制假設列舉與驗證 | M | 2 | Sprint 80 |
+| US-215（Issue #217）：Discovery Phase RESEARCH Spike — 架構方案調查與 ADR-018 草稿 | M | 2 | Sprint 80 |
+
+---
+
 ## Sprint 79（2026-03-11）
 
 **Sprint Goal**：ADR-016 落地 Phase 2 — 解決 UI/UX Designer 5 個 Open Questions，清除 DESIGN Story 進 Sprint 的前置障礙
