@@ -1,7 +1,7 @@
 # Decision Knowledge Base Index
 
 **建立日期**：2026-05-11
-**最後更新**：2026-05-11（修正：補收 ADR-011）
+**最後更新**：2026-03-11（新增 ADR-016）
 **維護者**：Developer（手動維護，每次新增或更新 ADR 時同步更新本文件）
 **ADR 目錄**：`docs/adr/`
 
@@ -30,12 +30,15 @@
 | backlog-intake / 需求入庫 | ADR-009 |
 | GitHub Issues / Source of Truth | ADR-010 |
 | GitHub Actions / CI/CD / 整合 | ADR-011 |
+| UI/UX Designer / 設計角色 / Design Foundation | ADR-016 |
+| Figma / Prototype / Contract / Vision Critic | ADR-014、ADR-015、ADR-016 |
+| Design Tokens / Design System / Component Library | ADR-014、ADR-016 |
 
 #### 依狀態篩選
 
 | 狀態 | ADR 列表 |
 |------|---------|
-| **Accepted**（正式採用） | ADR-001、ADR-002、ADR-003、ADR-004、ADR-005、ADR-006、ADR-007、ADR-008、ADR-009、ADR-010 |
+| **Accepted**（正式採用） | ADR-001、ADR-002、ADR-003、ADR-004、ADR-005、ADR-006、ADR-007、ADR-008、ADR-009、ADR-010、ADR-016 |
 | **Proposed**（起草中，待審查） | ADR-011 |
 | **Deprecated**（已棄用） | — |
 
@@ -48,6 +51,7 @@
 | 2026-03-02 | ADR-005、ADR-006、ADR-007 |
 | 2026-03-03 | ADR-008、ADR-009、ADR-010 |
 | 2026-05-11 | ADR-011 |
+| 2026-03-11 | ADR-016 |
 
 ---
 
@@ -66,6 +70,7 @@
 | [ADR-009](../adr/ADR-009.md) | Backlog Intake 自動化技術決策 | Accepted | 2026-03-03 | Issue #46、US-63（Sprint 33） |
 | [ADR-010](../adr/ADR-010.md) | Backlog Source of Truth — GitHub Issues 優先策略 | Accepted | 2026-03-03 | Issue #46、US-69 ~ US-73（Sprint 35） |
 | [ADR-011](../adr/ADR-011-github-actions-integration.md) | GitHub Actions 整合架構決策 | Proposed | 2026-05-11 | Issue #46、Issue #76、US-81（Sprint 38） |
+| [ADR-016](../adr/ADR-016-uiux-designer-role.md) | UI/UX Designer 角色定義與 Design Foundation 流程 | Accepted | 2026-03-11 | Issue #207 |
 
 ---
 
@@ -198,6 +203,23 @@
 | Skills | `skills/backlog-management/SKILL.md` | Grooming 流程改為操作 GitHub Issues；加入 Pre-flight 錯誤恢復掃描 |
 | 文件 | `docs/prd/PRODUCT_BACKLOG.md` | 降級為唯讀歷史快照，加入 DEPRECATED 標頭 |
 | ADR | `docs/adr/ADR-009.md` | 格式契約決策域標注「Superseded by ADR-010」 |
+
+---
+
+### ADR-016：UI/UX Designer 角色定義與 Design Foundation 流程
+
+**核心決策**：新增第 8 角色 UI/UX Designer（合併 UX + UI）；Design Foundation 為 Pre-Sprint 三方協作（PO + Architect + Designer）；Prototype 凍結為 Contract 需 Vision Critic PASS + QA Contract Testability Review 雙重審查。
+
+| 影響類型 | 路徑 | 說明 |
+|---------|------|------|
+| Agent | `agents/uiux-designer.md`（待建立） | UI/UX Designer Agent 定義 |
+| Skills | `skills/uiux-designer/SKILL.md`（待建立） | UI/UX Designer Skill 定義（Design Foundation + DESIGN Story 執行） |
+| Skills | `skills/sprint-execution/SKILL.md` | §5 DESIGN type 執行路徑：派遣 Designer subagent |
+| Skills | `skills/sprint-execution/story-lifecycle-prompt.md` | DESIGN type 執行分支 |
+| Skills | `skills/sprint-planning/SKILL.md` | §8.3 Contract Owner 指向實際 Agent；§9 Design Foundation 觸發 |
+| Skills | `skills/scrum-master/SKILL.md` | 角色清單從 7 → 8 個 |
+| Skills | `skills/vision-critic/SKILL.md` | 定位為 Designer self-review 工具 |
+| ADR | ADR-014、ADR-015 | 補充/擴展：角色正式定義 |
 
 ---
 
