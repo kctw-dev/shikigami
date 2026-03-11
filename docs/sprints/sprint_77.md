@@ -9,7 +9,7 @@
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-203：角色定義更新 — 7 個角色 Refinement 職責 | #205 | M | 2 | 完成 |
-| US-205：E2E Test Case 管理規範 — 建立分層標記與目錄結構標準 | #200 | M | 2 | 待開發 |
+| US-205：E2E Test Case 管理規範 — 建立分層標記與目錄結構標準 | #200 | M | 2 | 完成 |
 
 **總計**：4 points（2M）
 
@@ -79,5 +79,5 @@
 | AC6 | [靜態] | Page Object / Fixture 規範 | 定義 UI 元素封裝（POM 或等效模式）與測試資料管理（fixture/factory）的標準 |
 
 **Done 定義**：
-- [ ] AC1-AC6 全部通過
-- [ ] QA Review PASS
+- [x] AC1-AC6 全部通過
+- [x] QA Review PASS
