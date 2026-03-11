@@ -222,6 +222,16 @@ story_type: "FEATURE"                      # 必填：Story 類型（FEATURE/DES
 衝突偵測：確認修改檔案清單無平行 Story 競態（參照 developer-prompt.md §同檔案衝突偵測）
   |
   v
+story_type 路由：
+  |-- story_type=DESIGN --> DESIGN 路徑（§4.5）
+  |     ├─ 確認 Design Foundation 就緒
+  |     ├─ 製作 Figma Prototype（KCTW/talk-to-figma-mcp）
+  |     ├─ Vision Critic 自審（≥80 分 PASS，最多 3 次）
+  |     ├─ QA Contract Testability Review
+  |     └─ 兩者皆 PASS → Prototype 凍結為 Contract → 跳至 DoD 自檢
+  +-- 其他 story_type --> 繼續下方一般路徑
+  |
+  v
 doc_only 判斷：
   |-- doc_only=true  --> 跳過 TDD，直接進入文件修改（§4 TDD 豁免路徑）
   +-- doc_only=false --> 進入 TDD 循環（§3）
@@ -371,6 +381,63 @@ commit + 取得 commit SHA
 | Spec Compliance self-review | 維持（必須通過） |
 | Code Quality self-review | 維持（必須通過） |
 | Runtime Verification（§6.5） | N/A（doc-only Story 豁免，不需 Runtime Verification） |
+
+---
+
+## §4.5 DESIGN Type 執行路徑（story_type=DESIGN 時）
+
+<!-- US-207：框架整合更新 — Sprint 78, ADR-016 -->
+
+當 `story_type=DESIGN` 時，本 subagent 切換至 DESIGN 專屬路徑，派遣 UI/UX Designer 角色執行。DESIGN type Story 不進入一般 TDD 循環或 doc-only 路徑，而是遵循以下獨立流程：
+
+### 執行流程
+
+```
+story_type=DESIGN 偵測
+  |
+  v
+確認 Design Foundation 就緒
+  |-- Design System 不存在 → ESCALATE: DEPENDENCY_MISSING
+  +-- 就緒
+        |
+        v
+透過 KCTW/talk-to-figma-mcp 製作 Figma Prototype
+  |
+  v
+Vision Critic 自審（/vision-critic --frame-id <node_id>）
+  |-- FAIL（總分 < 80）→ 修復後重試（最多 3 次）
+  |-- 連續 3 次 FAIL → ESCALATE: DESIGN_ISSUE
+  +-- PASS（≥80 分）
+        |
+        v
+QA Contract Testability Review
+  |-- FAIL → 修復後重試（最多 3 次）
+  +-- PASS
+        |
+        v
+Prototype 凍結為 Contract → 跳至 §8 DoD 自檢
+```
+
+### 豁免項目
+
+| 步驟 | 行為 |
+|------|------|
+| TDD 循環（§3） | 豁免（無可執行測試） |
+| Spec Compliance self-review（§5） | 替換為 Vision Critic 自審 |
+| Code Quality self-review（§6） | 不適用（無程式碼） |
+| Runtime Verification（§6.5） | 不適用 |
+| Security self-review（§7） | 不適用 |
+
+### Review 責任
+
+| 審查對象 | 審查者 | 說明 |
+|---------|--------|------|
+| Design System / Tokens | Architect | 技術可行性（Design Foundation 階段完成） |
+| Component Library | Architect | 元件粒度、框架匹配 |
+| Figma Prototype | Vision Critic | Designer 自審工具（非 QA） |
+| Contract 可測試性 | QA | Contract Testability Review（Contract 凍結條件） |
+
+詳細流程定義請參閱 [`skills/uiux-designer/SKILL.md`](../uiux-designer/SKILL.md)。
 
 ---
 

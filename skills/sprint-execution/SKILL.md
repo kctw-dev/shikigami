@@ -494,6 +494,44 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 
 ---
 
+## 4.5 DESIGN Type Story 執行路徑（ADR-016）
+
+<!-- US-207：框架整合更新 — Sprint 78 -->
+
+DESIGN type Story 的執行路徑與 FEATURE type 不同，派遣 **UI/UX Designer subagent**（而非 Developer subagent）：
+
+```
+Sprint Backlog 取出 DESIGN type Story
+  |
+  v
+派遣 UI/UX Designer subagent（agents/uiux-designer.md）
+  |
+  v
+Designer 內部閉環：
+  ├─ 確認 Design Foundation 就緒（Design System、Tokens、Component Library）
+  ├─ 透過 KCTW/talk-to-figma-mcp 製作 Figma Prototype
+  ├─ Vision Critic 自審（≥80 分 PASS，最多重試 3 次）
+  ├─ QA Contract Testability Review（確認 Prototype 可測試性）
+  └─ 兩者皆 PASS → Prototype 凍結為 Contract
+  |
+  v
+回傳 PASS / FAIL / ESCALATE
+```
+
+**與 FEATURE 路徑的差異：**
+
+| 面向 | FEATURE 路徑 | DESIGN 路徑 |
+|------|-------------|-------------|
+| 執行角色 | Developer subagent | UI/UX Designer subagent |
+| TDD | 必須（Hard Gate） | 豁免（無可執行測試） |
+| 自審工具 | Spec Compliance + Code Quality | Vision Critic（三維度評分） |
+| Contract 產出 | API 契約 | Figma Prototype |
+| QA 審查 | Spec Compliance + Code Quality Review | Contract Testability Review |
+
+詳細 DESIGN Story 執行流程定義請參閱 [`skills/uiux-designer/SKILL.md`](../uiux-designer/SKILL.md) §4。
+
+---
+
 ## 5. Hard Gates
 
 <HARD-GATE>

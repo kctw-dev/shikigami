@@ -45,12 +45,13 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 
 ## 3. 可用 Agents（Subagent 角色）
 
-團隊由 7 個 Subagent 角色組成，各有明確職責與觸發時機：
+團隊由 8 個 Subagent 角色組成，各有明確職責與觸發時機：
 
 | Agent | 職責 | 觸發時機 |
 |-------|------|----------|
 | `product-owner` | 需求定義、Sprint 規劃、優先排序 | 新功能、需求變更、Sprint 開始 |
 | `architect` | 系統設計、ADR、技術選型 | 技術決策、設計審查 |
+| `uiux-designer` | Design System、Design Token、Figma Prototype、DESIGN Story Contract Owner | Design Foundation、DESIGN type Story 執行、視覺規格確認 |
 | `developer` | 實作程式碼、TDD、重構 | Story 實作、Bug 修復 |
 | `qa-engineer` | 測試策略、品質門禁、Decision Challenger | 代碼審查、測試規劃 |
 | `sre-engineer` | 部署、監控、可靠性 | 部署就緒、環境變更 |
@@ -63,16 +64,17 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 
 決策權分配遵循 RACI 原則。**團隊自治優先**，Stakeholder 僅在升級時介入。
 
-| 任務 | PO | Arch | Dev | QA | SRE | Sec | SH |
-|------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 需求定義 | **A** | C | I | C | I | I | I |
-| 優先級排序 | **A** | C | I | I | I | I | I |
-| 架構決策 | C | **A** | I | I | C | C | I |
-| 功能實作 | I | C | **A** | I | I | I | — |
-| 代碼審查 | I | C | R | **A** | I | C | — |
-| 測試策略 | I | I | I | **A** | I | I | — |
-| 安全審查 | I | I | I | I | I | **A** | — |
-| 部署監控 | I | C | I | C | **A** | I | — |
+| 任務 | PO | Arch | Designer | Dev | QA | SRE | Sec | SH |
+|------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 需求定義 | **A** | C | I | I | C | I | I | I |
+| 優先級排序 | **A** | C | I | I | I | I | I | I |
+| 架構決策 | C | **A** | I | I | I | C | C | I |
+| 設計決策 | C | C | **A** | I | I | I | I | — |
+| 功能實作 | I | C | I | **A** | I | I | I | — |
+| 代碼審查 | I | C | I | R | **A** | I | C | — |
+| 測試策略 | I | I | I | I | **A** | I | I | — |
+| 安全審查 | I | I | I | I | I | I | **A** | — |
+| 部署監控 | I | C | I | I | C | **A** | I | — |
 
 **圖例**：A=Accountable（負責決策）、R=Responsible（執行者）、C=Consulted（徵詢意見）、I=Informed（事後知會）、—=不涉及
 
