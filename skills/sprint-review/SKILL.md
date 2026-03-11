@@ -335,10 +335,19 @@ Issue 保持 Open，僅加 label 並留言通知，等待 Stakeholder 確認後�
 gh issue edit <issue-number> --add-label "done" --remove-label "status: in-sprint"
 
 # 步驟 2：留言通知，Issue 保持 Open（不執行 gh issue close）
-gh issue comment <issue-number> --body "Sprint N Review 驗收通過（PASS）。已修復，請測試確認後關閉此 Issue。"
+gh issue comment <issue-number> --body "Sprint N Review 驗收通過（PASS）。程式碼已完成內部審查，待部署驗證後正式交付。"
 ```
 
 > **重要**：外部 Issue 不得執行 `gh issue close`。Issue 保持 Open 讓外部 Stakeholder 有機會在測試確認後自行關閉，避免在其尚未驗證前強制關閉。
+
+**情況二（階段 2）：部署驗證通過後**
+
+部署驗證完成（`deployment-readiness` 執行成功）後，對外部 Issue 補充留言：
+
+```bash
+# 部署驗證通過後，對外部 Issue 發送階段 2 通知
+gh issue comment <issue-number> --body "已通過端對端驗證，功能已正式交付。請測試確認後關閉此 Issue。"
+```
 
 ### Story FAIL — 操作步驟
 
@@ -728,7 +737,9 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent（`model: "haik
 - [ ] **Story Issue 狀態回寫**（§2.6，ADR-010 生命週期閉環）：
   - [ ] 每個 PASS Story：已執行 `gh issue view <number> --json author --jq '.author.login'` 查詢 Issue 建立者，判斷為內部或外部 Issue
   - [ ] 每個 PASS Story（內部 Issue — 建立者為 `github-actions[bot]` 或 body 含 `backlog-intake`）：已執行 `gh issue edit <number> --add-label "done" --remove-label "status: in-sprint"` 套用 done label，並執行 `gh issue close <number> -c "Sprint N Review 驗收通過（PASS）。Story 已完成交付。"` 關閉 Issue
-  - [ ] 每個 PASS Story（外部 Issue — Stakeholder 或其他外部建立者）：已執行 `gh issue edit <number> --add-label "done" --remove-label "status: in-sprint"` 套用 done label，並執行 `gh issue comment <number> --body "Sprint N Review 驗收通過（PASS）。已修復，請測試確認後關閉此 Issue。"` 留言通知；**Issue 保持 Open，不執行 close**
+  - [ ] 每個 PASS Story（外部 Issue — Stakeholder 或其他外部建立者）：已執行 `gh issue edit <number> --add-label "done" --remove-label "status: in-sprint"` 套用 done label，並執行階段 1 留言（見 §2.6 情況二）；**Issue 保持 Open，不執行 close**
+    - [ ] 階段 1 留言已發送：`gh issue comment <number> --body "Sprint N Review 驗收通過（PASS）。程式碼已完成內部審查，待部署驗證後正式交付。"`
+    - [ ] 階段 2 留言已發送（部署驗證通過後）：`gh issue comment <number> --body "已通過端對端驗證，功能已正式交付。請測試確認後關閉此 Issue。"`
   - [ ] 每個 FAIL Story：Issue 保持 open，已執行 `gh issue edit <number> --remove-label "status: in-sprint" --add-label "status: backlog"` 回復 backlog 狀態，並留言記錄未完成原因
 - [ ] 未達 DoD 的 Story 已移回 Backlog 並標注原因
 - [ ] `Retrospective_Log.md` 已新增 Good / Problem / Action 記錄
