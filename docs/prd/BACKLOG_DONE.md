@@ -4,6 +4,18 @@
 
 ---
 
+## Sprint 78（2026-03-11）
+
+**Sprint Goal**：全力落地 ADR-016 — 建立 UI/UX Designer 角色定義、整合進框架流程、清除已棄用設計 Skill
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-206（Issue #207）：UI/UX Designer 角色建立 — Agent 定義 + Skill 定義 | M | 2 | Sprint 78 |
+| US-207（Issue #207）：框架整合更新 — Scrum Master 角色清單 + Sprint Execution DESIGN 路徑 | S | 1 | Sprint 78 |
+| US-208（Issue #207）：棄用 Skill 清除 — 刪除 ux-agent / ui-agent | S | 1 | Sprint 78 |
+
+---
+
 ## Sprint 77（2026-03-11）
 
 **Sprint Goal**：延續 Issue #199 Epic 完成 + E2E 測試管理規範建立 — 完成角色 Refinement 職責定義並建立 E2E Test Case 分層管理標準

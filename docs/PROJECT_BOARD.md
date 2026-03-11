@@ -7,17 +7,24 @@
 
 ---
 
-## Sprint 78 — 進行中
+## Sprint 78 — 完成
 
 **Sprint Goal**：全力落地 ADR-016 — 建立 UI/UX Designer 角色定義、整合進框架流程、清除已棄用設計 Skill
 **期間**：2026-03-11 ~ 2026-03-18
 **ADR 依賴**：ADR-016（Accepted）
+**結果**：Goal 達成（3/3 Stories PASS）。Velocity 4 points，完成率 100%。UI/UX Designer 角色建立（US-206）+ 框架整合更新（US-207）+ 棄用 Skill 清除（US-208）。
+**Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-206：UI/UX Designer 角色建立 — Agent 定義 + Skill 定義 | #207 | M | 2 | 完成 |
 | US-207：框架整合更新 — Scrum Master 角色清單 + Sprint Execution DESIGN 路徑 | #207 | S | 1 | 完成 |
 | US-208：棄用 Skill 清除 — 刪除 ux-agent / ui-agent | #207 | S | 1 | 完成 |
+
+## Sprint 78 統計
+- Velocity：4 points
+- 完成率：100%（完成 3 / 計畫 3）
+- 日期：2026-03-11
 
 ---
 
@@ -62,25 +69,4 @@
 
 ---
 
-## Sprint 75 — 完成
-
-**Sprint Goal**：強化交付品質閉環 — CI/CD 通知不遺漏 + E2E 結果納入流程判定 + Issue 回覆如實反映驗證狀態
-**期間**：2026-03-11 ~ 2026-03-18
-**ADR 依賴**：無
-**結果**：Goal 達成（3/3 Stories PASS）。Velocity 5 points，完成率 100%。CI/CD 多節點通知（US-198）+ E2E Soft Gate（US-199）+ Issue 分階段回覆（US-200）。
-**Stakeholder 驗收**：接受
-
-| Story | Issue | Size | Points | 狀態 |
-|-------|-------|------|--------|------|
-| US-200：Issue 回覆溝通策略改善 — 分階段通知避免誤認已交付 | #197 | S | 1 | 完成 |
-| US-198：CI/CD 失敗通知強化 — 多節點 CI 檢查與升級策略 | #195 | M | 2 | 完成 |
-| US-199：E2E 測試與 CI/CD 管線整合 — deployment-readiness E2E Gate 升級 | #196 | M | 2 | 完成 |
-
-## Sprint 75 統計
-- Velocity：5 points
-- 完成率：100%（完成 3 / 計畫 3）
-- 日期：2026-03-11
-
----
-
-> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–74）
+> 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–75）

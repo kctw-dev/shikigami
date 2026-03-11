@@ -82,6 +82,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 75 | 2026-03-11 | 5 points | 100% | 不規則 | Goal 達成，3/3 Stories PASS；US-200（S/1pt）+ US-198（M/2pt）+ US-199（M/2pt）；S73=3→S74=8→S75=5，S74→S75 下降 -37.5%（超出 ±20%），先升後降方向不一致→不規則；交付品質閉環三維度（CI/CD 通知 + E2E Gate + Issue 分階段回覆） |
 | Sprint 76 | 2026-03-11 | 5 points | 100% | 穩定 | Goal 達成，3/3 Stories PASS；US-201（S/1pt）+ US-202（M/2pt）+ US-204（M/2pt）；S74=8→S75=5→S76=5，S75→S76 持平 0%（±20% 內）→穩定；Story Type 分類系統 + Refinement Chair 制度 + Story Template 更新 |
 | Sprint 77 | 2026-03-11 | 4 points | 100% | 穩定 | Goal 達成，2/2 Stories PASS；US-203（M/2pt）+ US-205（M/2pt）；S75=5→S76=5→S77=4，S76→S77 微降 -20%（±20% 內）→穩定；角色 Refinement 職責 + E2E Test Case 管理規範 |
+| Sprint 78 | 2026-03-11 | 4 points | 100% | 穩定 | Goal 達成，3/3 Stories PASS；US-206（M/2pt）+ US-207（S/1pt）+ US-208（S/1pt）；S76=5→S77=4→S78=4，S77→S78 持平 0%（±20% 內）→穩定；ADR-016 UI/UX Designer 角色全量交付 |
 
 ---
 
@@ -135,6 +136,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 75 | N/A | N/A | N/A | 10740K input / 15K output（Execution+Review 合計，無 Review baseline） | N/A / N/A / N/A |
 | Sprint 76 | N/A | N/A | N/A | 89837K input / 167K output（全 session 合計，無分環節 baseline） | N/A / N/A / N/A |
 | Sprint 77 | N/A | 2287K input / 7K output | 5562K input / 8K output | 7849K input / 15K output（Execution+Review，無 Planning baseline） | N/A / N/A / N/A |
+| Sprint 78 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 
 ---
 
@@ -170,6 +172,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 72 | Execution | N/A | N/A |
 | Sprint 75 | Execution | 62898307 | 118030 |
 | Sprint 77 | Execution | 625749 | 1939 |
+| Sprint 78 | Execution | N/A | N/A |
 
 ---
 

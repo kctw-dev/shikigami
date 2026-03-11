@@ -4,6 +4,28 @@
 
 ---
 
+## Sprint 78 — 2026-03-11
+
+**Sprint Goal**：全力落地 ADR-016 — 建立 UI/UX Designer 角色定義、整合進框架流程、清除已棄用設計 Skill
+
+### Good
+
+1. Sprint 78 3/3 Stories PASS，4 Points，100% 完成率。連續 20 Sprint（S59-S78）100% 完成率
+2. ADR-016 一次性全量交付 — Agent 定義、Skill 定義（415 行）、框架整合（scrum-master + sprint-execution + story-lifecycle-prompt）、棄用 Skill 清除，四面向一個 Sprint 內完成
+3. Phase 1（US-206 + US-208）平行執行成功，Phase 2（US-207）序列依賴正確識別，Architect 平行分群策略有效
+4. 第 8 個 Scrum 角色（UI/UX Designer）無縫整合進既有框架，RACI 矩陣更新、DESIGN type 執行路徑、story-lifecycle-prompt 分支均一次到位
+
+### Problem
+
+1. Subagent 狀態跨 session context compaction 遺失 — Story-Lifecycle subagent 執行完畢後，若主 session 因 context 壓縮而丟失 agent ID，無法 resume 已完成的 subagent，需重新執行（已開 Issue #208 追蹤）
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- Subagent 狀態遺失問題已於本 Sprint 開立 Issue #208 追蹤，屬 Claude Code 平台限制，框架端無法直接修復
+
+---
+
 ## Sprint 77 — 2026-03-11
 
 **Sprint Goal**：延續 Issue #199 Epic 完成 + E2E 測試管理規範建立 — 完成角色 Refinement 職責定義並建立 E2E Test Case 分層管理標準

@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-11（Sprint 77 — 2/2 Stories 完成，角色 Refinement 職責 + E2E Test Case 管理規範）
+> 最後更新：2026-03-11（Sprint 78 — 3/3 Stories 完成，ADR-016 UI/UX Designer 角色全量交付）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.51.0**（Sprint 77）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.52.0**（Sprint 78）。
 
 | 版號 | 含義 |
 |------|------|
@@ -357,6 +357,9 @@ Sprint Review 時自動產出：
 | US-201 | Story Type 分類系統定義 — 6 種 Type + Contract Owner 對照 | Sprint 76 ✅ |
 | US-202 | Refinement 機制 — Architect Chair + M/L 結構化精化流程 | Sprint 76 ✅ |
 | US-204 | Story Template 更新 — story_type 欄位 + Contract 區塊 + Type-specific DoR/DoD | Sprint 76 ✅ |
+| US-206 | UI/UX Designer 角色建立 — Agent 定義 + Skill 定義（ADR-016） | Sprint 78 ✅ |
+| US-207 | 框架整合更新 — Scrum Master 8 角色 + Sprint Execution DESIGN 路徑 | Sprint 78 ✅ |
+| US-208 | 棄用 Skill 清除 — 刪除 ux-agent / ui-agent（ADR-016 清理） | Sprint 78 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 
