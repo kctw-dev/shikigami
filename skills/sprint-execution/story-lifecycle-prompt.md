@@ -298,6 +298,35 @@ commit + 取得 commit SHA
 4. 確認 `doc_only` 與 `bypass` 狀態，決定執行路徑
 5. 執行同檔案衝突偵測（規則參照 `developer-prompt.md`）
 6. **中斷信號確認**：確認主 session 無待處理的使用者留言或中斷指示。若主 session 傳入中斷信號，立即回傳 `ESCALATE: REQUIREMENT_AMBIGUITY`（附使用者留言內容），由主 session 決定是否繼續
+7. **不確定性三問檢查**（強制，所有路徑不豁免）：在讀取 AC 後、進入 doc_only/TDD 路徑判斷前，必須強制輸出以下三問回答，格式為結構化清單：
+
+   ```
+   不確定性三問 — {story_id}
+
+   (1) 我的假設是什麼？
+   - {列出所有假設，若無則填「無」}
+
+   (2) 哪些地方我不確定？
+   - {列出所有不確定項目，以 [UNCERTAIN] 標記，附帶驗證方式}
+   - 範例：[UNCERTAIN] 現有 §3 TDD 路徑中 Red 步驟的確切位置 → 驗證方式：讀取 story-lifecycle-prompt.md §3
+
+   (3) 我需要查什麼才能繼續？
+   - {列出需要查閱的項目，若無則填「無」}
+   ```
+
+   **[UNCERTAIN] 標記規則**（AC3）：
+   - 不確定項目以 `[UNCERTAIN]` 標記，每項必須附帶驗證方式（Read 工具查閱、Bash 指令確認等）
+   - subagent 必須在進入 TDD/doc-only 路徑前，完成所有 `[UNCERTAIN]` 項目的驗證
+   - **Hard Rule**：若存在未驗證的 `[UNCERTAIN]` 項目，禁止繼續執行；必須先執行驗證步驟，確認後方可繼續
+
+   **腦補行為定義**（AC2）：
+   - 若三問輸出中第 (2) 項回答「無」且第 (3) 項回答「無」，但後續 Spec Compliance self-review 出現 FAIL，則回溯判定為「腦補行為」
+   - 在輸出摘要中標記 `[ASSUMPTION-VIOLATION]`，說明哪個假設導致錯誤
+
+   **與現有流程的交互**（AC4）：
+   - **TDD 路徑**：三問在 Red 階段之前執行（在步驟 7 完成後才進入 §3 TDD 循環）
+   - **doc-only 路徑**：同樣必須執行三問，不因 doc_only=true 而豁免
+   - **不取代 Spec Compliance self-review**：三問是前置檢查，不替代 §5 Spec Compliance 審查
 
 ---
 
@@ -1104,6 +1133,11 @@ summary: ""             # 必填：≤50 字的結果說明
 modified_files: []      # 必填：所有被修改的檔案清單（含變更描述）
 commit_sha: ""          # PASS 時必填；FAIL 時若有部分 commit 填最後 SHA，否則 N/A
 escalation: null        # 升級時必填：DESIGN_ISSUE | CONTEXT_OVERFLOW | REQUIREMENT_AMBIGUITY | DEPENDENCY_MISSING | SECURITY_CRITICAL
+uncertainty_check:      # 必填：不確定性三問檢查結果（US-214，開始前準備步驟 7）
+  assumptions: []       # 第 (1) 項：假設清單（若無則為空陣列）
+  uncertain_items: []   # 第 (2) 項：[UNCERTAIN] 標記項目清單（含驗證方式與驗證結果）
+  queries_needed: []    # 第 (3) 項：需查閱的項目清單（若無則為空陣列）
+  assumption_violation: false  # 若 Spec Compliance FAIL 且三問(2)(3)均為「無」→ true，輸出 [ASSUMPTION-VIOLATION]
 # --- Phase 2 欄位（AC3 抽樣邏輯已實作，schema 啟用待後續版本）---
 # sampling_triggered: false   # Phase 2 AC3：是否觸發外部抽樣審查（邏輯已實作於 §AC3 章節）
 # batch_index: null           # Phase 2 AC4：M/L size 分批執行批次索引
@@ -1131,6 +1165,12 @@ escalation: null        # 升級時必填：DESIGN_ISSUE | CONTEXT_OVERFLOW | RE
 - Spec Compliance：PASS（{一句話說明}）
 - Code Quality：PASS（{一句話說明}）
 - Security：PASS / SKIP（{一句話說明或「未觸發安全審查條件」}）
+
+**不確定性三問摘要**（uncertainty_check）：
+- 假設：{假設清單，若無則填「無」}
+- 不確定項目：{[UNCERTAIN] 項目清單與驗證結果，若無則填「無」}
+- 需查閱項目：{查閱項目清單，若無則填「無」}
+- 腦補行為判定：{無 / [ASSUMPTION-VIOLATION] + 說明}
 ```
 
 ### ESCALATE 回傳格式（升級通知）
