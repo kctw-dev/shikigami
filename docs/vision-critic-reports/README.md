@@ -1,8 +1,8 @@
 # Vision Critic 退件報告儲存規範
 
-**關聯 Story**：US-128（Issue #131）
+**關聯 Story**：US-128（Issue #131）、US-212（Issue #213，VRR 長期儲存策略）
 **關聯 SKILL.md**：`skills/vision-critic/SKILL.md` §10（退件報告自動儲存）
-**關聯 ADR**：ADR-014（三層 Agent 分工架構）、ADR-014 OQ-3（通過閾值量化）
+**關聯 ADR**：ADR-014（三層 Agent 分工架構）、ADR-014 OQ-3（通過閾值量化）、ADR-016 OQ-5（VRR 保留策略決策）
 
 ---
 
@@ -178,9 +178,41 @@ docs/vision-critic-reports/2026-03-06-us-128-retry2.json   # 第 3 次（retryCo
 
 ---
 
-## 5. 報告保留策略
+## 5. 報告保留策略（US-212 更新，ADR-016 OQ-5 決策落地）
 
-- 退件報告以 git 方式版本控制（commit 至 repo）
-- 同一 Story 的全部重試報告均保留（最多 3 份 + 1 份初始）
-- 報告作為管線可追溯性的永久記錄，不自動清除
-- `.gitignore` 中不排除此目錄（有意識納入版本控制）
+### 5.1 決策結論（2026-03-11，ADR-016 OQ-5）
+
+**採用策略：.gitignore 排除 VRR JSON 報告本體 + 90 天本地保留期限建議**
+
+| 選項 | 評估結果 | 說明 |
+|------|---------|------|
+| (a) .gitignore 排除 + 本地暫存 | **採用** | 框架現階段最適方案；VRR JSON 可能內嵌 Base64 截圖（數十 KB~數 MB 每份），隨 Sprint 累積造成 repo 持續膨脹 |
+| (b) 外部儲存（GCS/S3） | 延後 | 框架 v0.50.x 無雲端基礎設施；待有實際消費端專案後，若 VRR 審計需求確立再引入 |
+| (c) 永久保留納入 git | 不採用 | 違反 repo 輕量原則；截圖 Base64 屬二進位資料，不適合 git diff 追蹤 |
+
+**決策理由**：
+
+1. **repo 膨脹風險**：VRR JSON 格式（§8 Schema v2）允許截圖 Base64 嵌入，單份報告可達 5–15 MB；每 Sprint 若有 3–5 個 DESIGN Story，90 天（~11 個 Sprint）將累積 165–825 MB
+2. **YAGNI 原則**：外部儲存需要雲端基礎設施投入（認證、Bucket 配置、Lifecycle Policy），在 doc-only 框架階段過早引入
+3. **審計需求有限**：VRR 報告的主要用途是「本次 Sprint 的修正依據」，跨 Sprint 查閱歷史報告的需求頻率低
+
+### 5.2 實作策略
+
+- **VRR JSON 報告**：不納入 git（`.gitignore` 排除 `docs/vision-critic-reports/*.json`）
+- **本地保留期限建議**：90 天。開發者在本地清理超過 90 天的 VRR 報告，指令如下：
+
+```bash
+# 清理 90 天前的 VRR 報告（macOS/Linux）
+find docs/vision-critic-reports/ -name "*.json" -mtime +90 -delete
+```
+
+- **目錄結構與 README**：仍納入 git，確保目錄存在且儲存規範可被追蹤
+- **外部儲存引入觸發條件**：當框架建立雲端基礎設施（GCS/S3），且 VRR 跨 Sprint 審計需求確立後，透過新 ADR 決策引入
+
+### 5.3 原保留策略（US-128，已廢止）
+
+~~退件報告以 git 方式版本控制（commit 至 repo）~~
+~~報告作為管線可追溯性的永久記錄，不自動清除~~
+~~`.gitignore` 中不排除此目錄~~
+
+以上策略已由 ADR-016 OQ-5 決策取代（US-212，2026-03-11）。

@@ -822,7 +822,7 @@ Vision Critic Agent 消費 AI 透過 Figma MCP 生成的 Frame，以 Frame node 
 
 ---
 
-## 10. 退件報告自動儲存行為（US-128）
+## 10. 退件報告自動儲存行為（US-128，保留策略 US-212 更新）
 
 ### 10.1 概述
 
@@ -842,6 +842,8 @@ docs/vision-critic-reports/2026-03-06-us-151-retry1.json   # retryCount: 1
 docs/vision-critic-reports/2026-03-06-us-151-retry2.json   # retryCount: 2
 ```
 
+**重要**：VRR JSON 報告檔案已列入 `.gitignore`（`docs/vision-critic-reports/*.json`），**不納入 git 版本控制**。詳見 §10.4 保留策略。
+
 ### 10.3 儲存觸發條件
 
 | verdict | 自動儲存 | 說明 |
@@ -850,12 +852,25 @@ docs/vision-critic-reports/2026-03-06-us-151-retry2.json   # retryCount: 2
 | `CONDITIONAL_PASS` | 是 | 條件通過仍儲存，供後續追蹤改善建議 |
 | `FAIL` | 是 | 強制儲存，作為下一輪修正的輸入 |
 
-### 10.4 報告保留策略
+### 10.4 報告保留策略（ADR-016 OQ-5 決策，US-212，2026-03-11）
 
-- 退件報告納入 git 版本控制
-- 同一 Story 的所有重試報告均完整保留（最多 4 份：初始 + 3 次重試）
-- 報告不自動清除，作為管線可追溯性的永久歷史記錄
-- 報告目錄 `docs/vision-critic-reports/` 不列入 `.gitignore`
+**採用策略：.gitignore 排除 VRR JSON 報告本體 + 90 天本地保留期限建議**
+
+| 策略項目 | 說明 |
+|---------|------|
+| git 追蹤 | **不納入**：`docs/vision-critic-reports/*.json` 列入 `.gitignore`，VRR JSON 報告本體不 commit |
+| 本地保留期限 | **90 天建議**：超過 90 天的 VRR 報告可由開發者手動清理（指令見下） |
+| 目錄結構 | **納入 git**：`docs/vision-critic-reports/` 目錄與 `README.md` 仍版本控制，確保路徑規範可追蹤 |
+| 外部儲存 | **延後**：框架現階段（v0.50.x）無雲端基礎設施；待有實際消費端專案且跨 Sprint 審計需求確立後，透過新 ADR 引入 GCS/S3 |
+
+**本地清理指令**（90 天期限）：
+
+```bash
+# 清理 90 天前的 VRR 報告（macOS/Linux）
+find docs/vision-critic-reports/ -name "*.json" -mtime +90 -delete
+```
+
+**決策理由**：VRR JSON 允許嵌入 Base64 截圖（單份 5–15 MB），每 Sprint 若有 3–5 個 DESIGN Story，90 天將累積 165–825 MB，造成 repo 膨脹。外部儲存在 doc-only 框架階段為過早引入。完整決策記錄見 `docs/vision-critic-reports/README.md` §5。
 
 ---
 

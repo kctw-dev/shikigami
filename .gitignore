@@ -11,3 +11,10 @@ node_modules/
 .claude/settings.local.json
 .gemini/settings.json
 claude-talk-to-figma-mcp/
+
+# VRR 報告長期儲存策略（US-212 / ADR-016 OQ-5）
+# 決策：.gitignore 排除 VRR JSON 報告 + 90 天本地保留期限建議
+# 理由：VRR JSON 可能內嵌 Base64 截圖導致 repo 持續膨脹；
+#       框架現階段（v0.50.x）無雲端基礎設施，外部儲存延後至有實際需求時再引入。
+#       目錄結構與 README 仍納入 git（! 規則保留），僅排除報告本體。
+docs/vision-critic-reports/*.json
