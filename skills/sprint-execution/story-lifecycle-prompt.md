@@ -392,10 +392,28 @@ commit + 取得 commit SHA
 
 ### 執行流程
 
+<!-- US-209：Figma MCP Health Check pre-flight 步驟 — Sprint 79, ADR-016 OQ-4 -->
+
 ```
 story_type=DESIGN 偵測
   |
   v
+【Health Check pre-flight】Figma MCP 環境健康檢查（§4.5 pre-flight）
+  |-- 依賴 1 FAIL（Figma Desktop App 未啟動）
+  |     → 執行恢復步驟（見 skills/uiux-designer/SKILL.md §13 依賴 1）
+  |     → 修復後重新確認；若無法修復 → ESCALATE: DEPENDENCY_MISSING
+  |-- 依賴 2 FAIL（Plugin 未連接）
+  |     → 執行恢復步驟（見 skills/uiux-designer/SKILL.md §13 依賴 2）
+  |     → 修復後重新確認；若無法修復 → ESCALATE: DEPENDENCY_MISSING
+  |-- 依賴 3 FAIL（CLI Server 未啟動）
+  |     → 執行恢復步驟（見 skills/uiux-designer/SKILL.md §13 依賴 3）
+  |     → 修復後重新確認；若無法修復 → ESCALATE: DEPENDENCY_MISSING
+  |-- 依賴 4 FAIL（MCP 未連接）
+  |     → 執行恢復步驟（見 skills/uiux-designer/SKILL.md §13 依賴 4）
+  |     → 修復後重新確認；若無法修復 → ESCALATE: DEPENDENCY_MISSING
+  +-- 4 項依賴全 PASS（READY）
+        |
+        v
 確認 Design Foundation 就緒
   |-- Design System 不存在 → ESCALATE: DEPENDENCY_MISSING
   +-- 就緒
