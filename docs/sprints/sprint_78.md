@@ -12,9 +12,9 @@
 
 | Story | Issue | Size | Points | 狀態 | 備註 |
 |-------|-------|------|--------|------|------|
-| US-206：UI/UX Designer 角色建立 — Agent 定義 + Skill 定義 | #207 | M | 2 | 待開始 | doc-only, FEATURE |
-| US-207：框架整合更新 — Scrum Master 角色清單 + Sprint Execution DESIGN 路徑 | #207 | S | 1 | 待開始 | FEATURE |
-| US-208：棄用 Skill 清除 — 刪除 ux-agent / ui-agent | #207 | S | 1 | 待開始 | INFRA |
+| US-206：UI/UX Designer 角色建立 — Agent 定義 + Skill 定義 | #207 | M | 2 | 完成 | doc-only, FEATURE |
+| US-207：框架整合更新 — Scrum Master 角色清單 + Sprint Execution DESIGN 路徑 | #207 | S | 1 | 完成 | FEATURE |
+| US-208：棄用 Skill 清除 — 刪除 ux-agent / ui-agent | #207 | S | 1 | 完成 | INFRA |
 
 **Sprint 容量**：4 points
 
