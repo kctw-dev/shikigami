@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 79 Review 完成）
-**當前 Sprint**：Sprint 79（完成）
+**最後更新**：2026-03-11（Sprint 80 Planning 完成）
+**當前 Sprint**：Sprint 80（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 79](sprints/sprint_79.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 80](sprints/sprint_80.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 80 — 進行中
+
+**Sprint Goal**：Anti-Hallucination 第一步 — 建立 Agent 不確定性前置檢查機制，同步啟動 Discovery Phase 架構調查
+**期間**：2026-03-11 ~ 2026-03-18
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-214：不確定性前置檢查 — Agent 執行前強制假設列舉與驗證 | #215 | M | 2 | 待開始 |
+| US-215：Discovery Phase RESEARCH Spike — 架構方案調查與 ADR-018 草稿 | #217 | M | 2 | 待開始 |
 
 ---
 

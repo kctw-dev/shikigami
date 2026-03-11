@@ -1,11 +1,11 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.45.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.53.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-![Sprints](https://img.shields.io/badge/sprints-73%2B-orange?style=flat-square)
-![Skills](https://img.shields.io/badge/skills-25-purple?style=flat-square)
+![Sprints](https://img.shields.io/badge/sprints-79%2B-orange?style=flat-square)
+![Skills](https://img.shields.io/badge/skills-24-purple?style=flat-square)
 
-**為你的 AI 開發工具注入 7 個專業角色，組成有紀律的工程團隊。**
+**為你的 AI 開發工具注入 8 個專業角色，組成有紀律的工程團隊。**
 
 ```
 /plugin marketplace add KCTW/shikigami
@@ -54,11 +54,12 @@ Scrum Master 會建立 `CLAUDE.md` 與 `docs/` 目錄結構，完成後即可開
 
 你一個人開發，寫完的代碼沒人 review，架構決策靠直覺，安全問題等上線才發現。
 
-Shikigami 注入 7 個角色組成**互相制衡的治理網**：
+Shikigami 注入 8 個角色組成**互相制衡的治理網**：
 
 - QA 審你的代碼並挑戰架構決策
 - Security 審所有外部輸入
 - SRE 從維運角度評估部署可行性
+- UI/UX Designer 透過 Figma MCP 執行設計，Vision Critic 自審視覺品質
 
 **不需要記指令**，用自然語言說你要做什麼，Scrum Master 自動調度對應角色。
 
@@ -147,7 +148,7 @@ Architect：ADR-002 狀態 → Accepted
 
 ## 功能概覽
 
-### 7 個角色
+### 8 個角色
 
 | 角色 | 職責 |
 |---|---|
@@ -157,12 +158,13 @@ Architect：ADR-002 狀態 → Accepted
 | **QA Engineer** | 代碼審查、測試策略、品質把關 |
 | **Security Engineer** | 安全掃描、漏洞評估、OWASP 檢查 |
 | **SRE Engineer** | 部署檢查、監控配置、環境管理 |
+| **UI/UX Designer** | 設計系統維護、Figma 原型製作、視覺品質審查 |
 | **Stakeholder** | 最終仲裁、打破僵局 |
 
-**重點：它們互相制衡，不是 7 個獨立助手。**
+**重點：它們互相制衡，不是 8 個獨立助手。**
 
 <details>
-<summary>完整 25 個 Skills 列表</summary>
+<summary>完整 24 個 Skills 列表</summary>
 
 **Scrum 流程**
 
@@ -188,10 +190,12 @@ Architect：ADR-002 狀態 → Accepted
 | **architect** | Architect 角色知識框架、架構評估決策指引 |
 | **qa-engineer** | QA 角色知識框架、審查策略與 Story-Lifecycle 整合指引 |
 
-**工具整合**
+**設計與工具整合**
 
 | Skill | 說明 |
 |---|---|
+| **uiux-designer** | UI/UX Designer 角色定義、Design Foundation 流程、Figma MCP 整合 |
+| **vision-critic** | UI 截圖多維度視覺一致性評分，產出 PASS/FAIL 報告與可執行修正建議 |
 | **git-workflow** | 分支隔離、Worktree 管理、開發完成後的合併/PR 流程 |
 | **parallel-dispatch** | 多個獨立任務的平行 Subagent 派遣，含同檔案衝突偵測與自動序列化 |
 | **issue-management** | GitHub Issue 管理、自動分類、回覆、Issue 轉 Backlog |
@@ -200,7 +204,6 @@ Architect：ADR-002 狀態 → Accepted
 | **schedule** | Sprint 自動排程執行、cron 腳本生成、序列排程保護 |
 | **shoot** | 短衝模式、單 Story 快速執行、不起 Sprint 的輕量交付 |
 | **diagram** | 架構圖自動化生成（drawio-mcp-server stdio 整合、雙格式輸出、多雲圖標集） |
-| **vision-critic** | UI 截圖多維度視覺一致性評分，產出 PASS/FAIL 報告與可執行修正建議 |
 
 </details>
 
