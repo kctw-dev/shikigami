@@ -358,7 +358,7 @@ DESIGN Story 進入 Sprint
 
 | # | 問題 | 優先級 | 狀態 |
 |---|------|--------|------|
-| OQ-1 | Design Foundation 流程的具體 Skill 實作——應獨立為 `design-foundation` Skill 還是整合進 `uiux-designer` SKILL.md？SRE 建議整合以降低 Toil。 | 中 | Open |
+| OQ-1 | Design Foundation 流程的具體 Skill 實作——應獨立為 `design-foundation` Skill 還是整合進 `uiux-designer` SKILL.md？SRE 建議整合以降低 Toil。 | 中 | **Closed**（US-211，2026-03-11） |
 | OQ-2 | DESIGN Story 與 FEATURE Story 的 Sprint 內排序——DESIGN Story 是否必須在同 Sprint 的 FEATURE Story 之前完成（blocker 關係）？若 DESIGN Story 未在期限內完成的處理程序為何？此問題影響 Sprint 交付可靠性。 | 高 | Open |
 | OQ-3 | UI/UX Designer 的 Provider 路由——是否支援 Gemini CLI 雙軌派遣（§2.1）？Figma MCP 工具在 Gemini 環境是否可用？ | 低 | Open |
 | OQ-4 | Figma MCP 環境健康檢查 Runbook——DESIGN Story 啟動前需驗證 4 個依賴項（Figma Desktop、Plugin 連接、CLI Server、MCP 連接），定義快速檢查序列與各依賴失敗的恢復步驟。 | 高 | Open |
@@ -389,6 +389,35 @@ DESIGN Story 進入 Sprint
 4. （低）OQ-5 — VRR 報告保留策略
 
 **Architect 回應**：全部接受，已整合至開放問題。OQ-2 和 OQ-4 為高優先，須在實作 Story 進 Sprint 前解決。
+
+---
+
+## OQ 決策記錄
+
+### OQ-1 決策：Design Foundation Skill 歸屬（US-211，2026-03-11）
+
+**決策**：**整合進 `skills/uiux-designer/SKILL.md`**，不建立獨立的 `design-foundation` Skill。
+
+**理由**：
+
+1. **高耦合性**：Design Foundation 流程的執行者即 UI/UX Designer 本人（Designer 建立 Design System、Design Tokens、Component Library）。流程與角色的職責邊界完全重合，分離將導致 Skill 間的強依賴而非真正的關注點分離。
+
+2. **避免過度拆分（YAGNI）**：獨立 Skill 的必要條件是「同一流程被多個角色複用」。Design Foundation 當前僅由 UI/UX Designer 執行，不存在其他角色複用此流程的需求。分離只增加維護成本，不帶來架構收益。
+
+3. **SRE 建議採納**：ADR-016 SRE Review 明確建議整合（「整合以降低 Toil」），與 YAGNI 原則及 Shikigami 框架的 Token 成本控制方向一致。
+
+4. **現行實作已完整**：`skills/uiux-designer/SKILL.md` §3「Design Foundation 流程（Pre-Sprint 三方協作）」已完整定義：
+   - §3.1 三方職責分工（PO / Architect / Designer）
+   - §3.2 依賴鏈（五層依賴序列）
+   - §3.3 Design Foundation 產出物（Design System / Tokens / Component Library）
+   - §3.4 觸發時機（三個觸發條件）
+   - §3.5 與 sprint-planning §9 的對齊
+
+   AC2 條件（整合路徑下 §3 觸發機制完整定義）已於 US-206 交付時滿足，無需額外修改。
+
+**未來演進觸發條件**：若未來出現以下情況，可透過新 ADR 重新評估是否拆分為獨立 Skill：
+- 非 Designer 角色需要直接執行 Design Foundation 流程
+- Design Foundation 流程複雜度大幅增長，導致 `skills/uiux-designer/SKILL.md` 超過 600 行且閱讀困難
 
 ---
 
