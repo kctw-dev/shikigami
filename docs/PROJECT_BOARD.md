@@ -1,9 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-11（Sprint 77 Review 完成）
-**當前 Sprint**：Sprint 77（完成）
+**最後更新**：2026-03-11（Sprint 78 Planning 完成）
+**當前 Sprint**：Sprint 78（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 77](sprints/sprint_77.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 78](sprints/sprint_78.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 78 — 進行中
+
+**Sprint Goal**：全力落地 ADR-016 — 建立 UI/UX Designer 角色定義、整合進框架流程、清除已棄用設計 Skill
+**期間**：2026-03-11 ~ 2026-03-18
+**ADR 依賴**：ADR-016（Accepted）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-206：UI/UX Designer 角色建立 — Agent 定義 + Skill 定義 | #207 | M | 2 | 待開始 |
+| US-207：框架整合更新 — Scrum Master 角色清單 + Sprint Execution DESIGN 路徑 | #207 | S | 1 | 待開始 |
+| US-208：棄用 Skill 清除 — 刪除 ux-agent / ui-agent | #207 | S | 1 | 待開始 |
 
 ---
 
