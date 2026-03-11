@@ -80,6 +80,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 73 | 2026-03-11 | 3 points | 100% | 不規則 | Goal 達成，2/2 Stories PASS；US-192（S/1pt）+ US-193（M/2pt）；S71=2→S72=17→S73=3，S72→S73 下降 -82%（超出 ±20%），先升後降方向不一致→不規則；Retro Action #186 結案 + L2 API 驗證模板交付 |
 | Sprint 74 | 2026-03-11 | 8 points | 100% | 不規則 | Goal 達成，4/4 Stories PASS；US-194（M/2pt）+ US-195（M/2pt）+ US-196（S/1pt）+ US-197（L/3pt）；S72=17→S73=3→S74=8，S73→S74 回升 +167%（超出 ±20%），先降後升方向不一致→不規則；README 重設計 + API 契約 Hard Gate + E2E 測試基礎設施 |
 | Sprint 75 | 2026-03-11 | 5 points | 100% | 不規則 | Goal 達成，3/3 Stories PASS；US-200（S/1pt）+ US-198（M/2pt）+ US-199（M/2pt）；S73=3→S74=8→S75=5，S74→S75 下降 -37.5%（超出 ±20%），先升後降方向不一致→不規則；交付品質閉環三維度（CI/CD 通知 + E2E Gate + Issue 分階段回覆） |
+| Sprint 76 | 2026-03-11 | 5 points | 100% | 穩定 | Goal 達成，3/3 Stories PASS；US-201（S/1pt）+ US-202（M/2pt）+ US-204（M/2pt）；S74=8→S75=5→S76=5，S75→S76 持平 0%（±20% 內）→穩定；Story Type 分類系統 + Refinement Chair 制度 + Story Template 更新 |
 
 ---
 
@@ -131,6 +132,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 60 | N/A | N/A | 68M input / 131K output | N/A（無 Planning/Execution baseline） | N/A / N/A / N/A |
 | Sprint 72 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 75 | N/A | N/A | N/A | 10740K input / 15K output（Execution+Review 合計，無 Review baseline） | N/A / N/A / N/A |
+| Sprint 76 | N/A | N/A | N/A | 89837K input / 167K output（全 session 合計，無分環節 baseline） | N/A / N/A / N/A |
 
 ---
 

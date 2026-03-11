@@ -4,6 +4,27 @@
 
 ---
 
+## Sprint 76 — 2026-03-11
+
+**Sprint Goal**：建立 Story 分類與精化機制基礎 — 落地 Story Type 分類系統與 Refinement Chair 制度
+
+### Good
+
+1. Sprint 76 3/3 Stories PASS，5 Points，100% 完成率。連續 18 Sprint（S59-S76）100% 完成率
+2. Issue #199 Epic 拆分策略有效 — 4 個 Stories 拆分後選入 3 個（5pts），全序列執行避免 sprint-planning/SKILL.md 衝突
+3. QA 正確攔截 Architect 靜默替換 Story Type 分類（Issue #199 原始 6 種 vs Architect 改版），確保需求忠實度
+
+### Problem
+
+1. Sprint 76 三個 Story 均修改 skills/ 路徑但 Sprint 文件標注 `doc-only: YES`，與 Sprint 75 相同問題再次出現，PO 標注不精確持續發生
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- doc-only 標注不精確為已知問題（S75 Problem #1 同類），Sprint Planning QA 階段已增強確認，不另開 Issue
+
+---
+
 ## Sprint 75 — 2026-03-11
 
 **Sprint Goal**：強化交付品質閉環 — CI/CD 通知不遺漏 + E2E 結果納入流程判定 + Issue 回覆如實反映驗證狀態

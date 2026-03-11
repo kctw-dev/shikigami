@@ -4,6 +4,18 @@
 
 ---
 
+## Sprint 76（2026-03-11）
+
+**Sprint Goal**：建立 Story 分類與精化機制基礎 — 落地 Story Type 分類系統與 Refinement Chair 制度
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-201（Issue #201）：Story Type 分類系統定義 | S | 1 | Sprint 76 |
+| US-202（Issue #202）：Refinement 機制 | M | 2 | Sprint 76 |
+| US-204（Issue #203）：Story Template 更新 | M | 2 | Sprint 76 |
+
+---
+
 ## Sprint 75（2026-03-11）
 
 **Sprint Goal**：強化交付品質閉環 — CI/CD 通知不遺漏 + E2E 結果納入流程判定 + Issue 回覆如實反映驗證狀態
