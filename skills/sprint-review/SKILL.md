@@ -528,6 +528,31 @@ Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定�
    | **Problem**（需改進的事） | 遇到的問題、瓶頸或不順暢的地方 | Story 拆分粒度太大、安全審查太晚介入 |
    | **Action**（具體改進行動） | 針對 Problem 提出的可執行改善措施 | 下 Sprint 起 Story 點數上限設為 5 |
 
+2.5 **SPACE 五維度量測**
+
+   **執行時機**：步驟 2（Good/Problem/Action 收集）完成後，步驟 3（Action Item 建立 Issue）之前執行。
+
+   **誰量測**：Sprint Review 主持者（主 session）負責統計 P、C、E 數值，並邀請 PO/Stakeholder 在 Sprint Review 結束前評分 S 維度；A 維度直接引用本 Sprint 的完成率，無需重新計算。
+
+   **資料來源**：
+
+   | 維度 | 資料來源 |
+   |------|---------|
+   | S（Satisfaction） | PO 或 Stakeholder 在 Sprint Review Demo 結束後現場評分（口頭確認後記錄） |
+   | P（Performance） | 從本 Sprint 的不確定性三問記錄、外部抽樣審查記錄中統計幻覺攔截次數與漏網次數 |
+   | A（Activity） | 引用 `docs/km/Metrics_Log.md` 主表格本 Sprint 的「完成率」欄位，不重複計算 |
+   | C（Communication） | 從本 Sprint 的 Retro 記錄與 QA 互審記錄中統計跨 Agent 交叉確認發現的問題數 |
+   | E（Efficiency） | 從本 Sprint 的 Checkpoint 記錄統計 `[CHECKPOINT-FAIL]` 數量（斷鏈次數）加上使用者手動介入修正的次數 |
+
+   **記錄時機**：Sprint Retrospective 步驟 2（Good/Problem/Action 收集）完成後，於代理人校準儀式（步驟 5）之前量測並記錄。
+
+   **執行步驟**：
+
+   1. 主 session 從本 Sprint 對話記錄、Checkpoint 記錄、Retro 記錄中統計 P、C、E 的原始數值。
+   2. 邀請 PO/Stakeholder 口頭確認 S（滿意度 1–5）。
+   3. 將 A 欄位標注為引用本 Sprint 完成率（不另填數值，格式：「= 完成率 X%」）。
+   4. 填入 `docs/km/Metrics_Log.md` 的 `## SPACE 五維度指標` 表格，新增對應 Sprint 的一列記錄。
+
 3. **每個 Action 建立為 GitHub Issue**
 
    透過 `issue-management` Skill 將每個 Action Item 建立為 GitHub Issue，方便追蹤：

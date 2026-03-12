@@ -90,6 +90,28 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 
 ---
 
+## SPACE 五維度指標
+
+SPACE 框架量化代理人行為品質，作為 Sprint Velocity 與完成率之外的補充維度。每個 Sprint Review/Retro 結束時填寫一列。
+
+### 維度量測公式
+
+| 維度 | 名稱 | 量測公式 / 說明 |
+|------|------|----------------|
+| **S** | Satisfaction（滿意度） | 1–5 滿意度量表，由 PO/Stakeholder 在 Sprint Review 結束時評分，衡量 Sprint 產出品質符合期待的程度（1=完全不符，5=完全符合） |
+| **P** | Performance（性能）    | 幻覺攔截次數 ÷ 漏網次數；幻覺攔截次數 = 本 Sprint 中不確定性三問或外部抽樣審查攔截到的 agent 腦補事件數；漏網次數 = Sprint Review 中事後發現的腦補問題數；衡量系統攔截 agent 腦補的能力 |
+| **A** | Activity（活動量）     | 完成率；**引用 Metrics_Log.md 主表格「完成率」欄位，不重複定義**；完成率 = Done 數 ÷ 計畫總數 × 100% |
+| **C** | Communication（溝通）  | 互審發現問題數；C = 本 Sprint 中跨 Agent 交叉確認（PO / Developer / QA 互審）時發現的潛在問題數量；衡量 agent 交叉確認抓到的潛在問題數量 |
+| **E** | Efficiency（效率）     | 斷鏈次數 + 人工介入次數；斷鏈次數 = 流程中止或跳步事件數（消費 `[CHECKPOINT-FAIL]` 記錄）；人工介入次數 = 需要使用者手動修正的次數；數值越低表示效率越高 |
+
+### SPACE 五維度記錄表
+
+| Sprint 編號 | 日期 | S | P | A | C | E | 備註 |
+|------------|------|---|---|---|---|---|------|
+| Sprint N | YYYY-MM-DD | - | - | - | - | - | 範例列（尚無實際數據） |
+
+---
+
 ## Token 成本記錄
 
 Sprint 整體 Token 消耗記錄，與 Velocity 記錄粒度對齊（Sprint 為單位）。

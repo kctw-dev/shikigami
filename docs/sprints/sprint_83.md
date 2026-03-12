@@ -108,8 +108,8 @@
 
 #### Done 定義
 
-- 所有 AC（AC1-AC5）驗證通過
-- `docs/km/Metrics_Log.md` 及 `skills/sprint-review/SKILL.md` 已更新並通過靜態驗證
+- [x] 所有 AC（AC1-AC5）驗證通過
+- [x] `docs/km/Metrics_Log.md` 及 `skills/sprint-review/SKILL.md` 已更新並通過靜態驗證
 
 ---
 
