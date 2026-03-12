@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 81 Review 完成）
-**當前 Sprint**：Sprint 81（完成）
+**最後更新**：2026-03-12（Sprint 82 Planning 完成）
+**當前 Sprint**：Sprint 82（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 81](sprints/sprint_81.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 82](sprints/sprint_82.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 82 — 進行中
+
+**Sprint Goal**：奠定「組織記憶」基礎 — 建立 Decision Journal 與代理人校準機制，解決跨 Sprint 價值觀漂移問題，並統一跨角色交付標準查閱點。
+**期間**：2026-03-12 ~ 2026-03-19
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-219：Decision Journal — 衝突決策思考過程與價值觀取捨記錄 | #219 | M | 2 | 待開始 |
+| US-218：代理人校準機制 — 定期價值觀歸納審查與漂移偵測 | #218 | M | 2 | 待開始 |
+| US-204：統一合約位置 — 跨角色共用的交付標準應有單一查閱點 | #204 | M | 2 | 待開始 |
+
+**Sprint 容量**：6 points
 
 ---
 
