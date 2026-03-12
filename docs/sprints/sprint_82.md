@@ -12,9 +12,9 @@
 
 | Story | Issue | Size | Points | 狀態 | 備註 |
 |-------|-------|------|--------|------|------|
-| US-219：Decision Journal — 衝突決策思考過程與價值觀取捨記錄 | #219 | M | 2 | 待開始 | doc-only, FEATURE |
-| US-218：代理人校準機制 — 定期價值觀歸納審查與漂移偵測 | #218 | M | 2 | 待開始 | doc-only, FEATURE, 搭配 US-219 |
-| US-204：統一合約位置 — 跨角色共用的交付標準應有單一查閱點 | #204 | M | 2 | 待開始 | doc-only, FEATURE, 待 US-218 完成 |
+| US-219：Decision Journal — 衝突決策思考過程與價值觀取捨記錄 | #219 | M | 2 | 完成 | doc-only, FEATURE |
+| US-218：代理人校準機制 — 定期價值觀歸納審查與漂移偵測 | #218 | M | 2 | 完成 | doc-only, FEATURE, 搭配 US-219 |
+| US-204：統一合約位置 — 跨角色共用的交付標準應有單一查閱點 | #204 | M | 2 | 完成 | doc-only, FEATURE, 待 US-218 完成 |
 
 **Sprint 容量**：6 points
 
