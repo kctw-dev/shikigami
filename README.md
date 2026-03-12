@@ -1,8 +1,8 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.60.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.61.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-![Sprints](https://img.shields.io/badge/sprints-86%2B-orange?style=flat-square)
+![Sprints](https://img.shields.io/badge/sprints-87%2B-orange?style=flat-square)
 ![Skills](https://img.shields.io/badge/skills-25-purple?style=flat-square)
 
 **為你的 AI 開發工具注入 8 個專業角色，涵蓋 Discovery → Definition → Delivery 全產品生命週期。**

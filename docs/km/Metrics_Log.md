@@ -91,6 +91,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 84 | 2026-03-12 | 7 points | 100% | 不規則 | Goal 達成，4/4 Stories PASS；US-221（M/2pt）+ US-226（M/2pt）+ US-227（S/1pt）+ US-228（M/2pt）；S82=6→S83=4→S84=7，S83→S84 上升 +75%（超出 ±20%），先降後升方向不一致→不規則；知識品質閉環四維度交付（知識老化偵測 + SBE 範例 + 兩層索引 + Quality Observer） |
 | Sprint 85 | 2026-03-12 | 3 points | 100% | 不規則 | Goal 達成，2/2 Stories PASS；US-234（S/1pt）+ US-235（M/2pt）；S83=4→S84=7→S85=3，S84→S85 下降 -57%（超出 ±20%），先升後降方向不一致→不規則；ADR-018 裁決（Option A Accepted）+ Discovery Skill Phase 0 獨立入口建立 |
 | Sprint 86 | 2026-03-12 | 5 points | 100% | 不規則 | Goal 達成，2/2 Stories PASS；US-236（M/2pt）+ US-237（L/3pt）；S84=7→S85=3→S86=5，S85→S86 上升 +67%（超出 ±20%），先降後升方向不一致→不規則；Discovery Ecosystem 閉環建立 + SRE Phase 1 事故回應框架交付 |
+| Sprint 87 | 2026-03-12 | 5 points | 100% | 穩定 | Goal 達成，2/2 Stories PASS；US-238（M/2pt）+ US-239（L/3pt）；S85=3→S86=5→S87=5，S86→S87 持平 0%（±20% 內）→穩定；效能基準管理框架 + Solo Mode 角色封裝規範交付 |
 
 ---
 
@@ -138,6 +139,7 @@ Quality Observer 消費 SPACE 五維度記錄表作為觀察數據來源，同�
 | Sprint 84 | 2026-03-12 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（無 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
 | Sprint 85 | 2026-03-12 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（無 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
 | Sprint 86 | 2026-03-12 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（外部抽樣 2/2 CONFIRM，0 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
+| Sprint 87 | 2026-03-12 | 5 | 0/0 | 100% | 1 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=1（US-239 外部抽樣 DISPUTE 1 次，修復後 CONFIRM）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
 
 ---
 
@@ -154,6 +156,7 @@ Sprint 整體 Token 消耗記錄，與 Velocity 記錄粒度對齊（Sprint 為�
 | Sprint 60 | 68M | 131K | N/A（cache 比例不明，無法精確估算） | Claude Code JSONL |
 | Sprint 80 | 85414K | 155K | N/A（cache 比例不明，無法精確估算） | Claude Code JSONL |
 | Sprint 85 | N/A | N/A | N/A | 不可用 |
+| Sprint 87 | 231394K | 427K | N/A（cache 比例不明，無法精確估算） | Claude Code JSONL |
 
 ---
 
@@ -199,6 +202,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 83 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 84 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 85 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
+| Sprint 87 | N/A | N/A | N/A | 231394K input / 427K output（全 session 合計，context compact 跨環節，無分環節 baseline） | N/A / N/A / N/A |
 
 ---
 

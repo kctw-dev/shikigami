@@ -38,3 +38,18 @@ maintainer: Developer（每次 Sprint Retrospective 步驟 5 校準儀式後手�
 ---
 
 <!-- 校準記錄從此行以下依 Sprint 編號升序追加 -->
+
+### Sprint 87 校準記錄
+
+**日期**：2026-03-12
+
+**Agent 歸納的價值觀**：
+1. 品質先於速度 — 寧可一個 Sprint 少做一個 Story，也不跳過 QA 雙階段審查或外部抽樣
+2. 文件即代碼 — .md 是給 agent 消費的，文件品質等同程式品質，SPEC 與 POC 必須交叉驗證
+3. 漸進式架構演進 — 先 Definition 再 Delivery，不因框架仍在 doc-only 階段而急於寫程式碼
+
+**本 Sprint 最重要決策**：Solo Mode 設計為 SPEC + POC 雙檔案架構，確保角色封裝規則有具體 QA 場景驗證
+
+**Stakeholder 修正**：待確認
+
+**漂移判定**：待確認
