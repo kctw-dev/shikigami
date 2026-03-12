@@ -213,6 +213,14 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
 [步驟 4] 執行任務（實作）
         |
         v
+[步驟 4.5] 測試執行 + Systematic Debugging（見 §8.3）
+  執行本地測試（unit test / integration test）
+  |-- 測試全部通過 → 繼續
+  +-- 測試失敗 → invoke shikigami:systematic-debugging（根因排查）
+        |-- 修復成功 → 重新執行測試，通過後繼續
+        +-- 修復失敗 → exit code 非 0，Shoot_Log.md 無 PASS 記錄，終止
+        |
+        v
 [步驟 5] QA Post-check 審查（第二階段 Hard Gate）
   |-- FAIL --> exit code 非 0，Shoot_Log.md 無 PASS 記錄，不執行 shoot: commit
   +-- PASS
@@ -232,7 +240,9 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
         v
 [步驟 6.5] CI Gate — 等待 CI 狀態（見 §8.2）
   |-- CI PASS → 繼續
-  |-- CI FAIL → exit code 非 0，Shoot_Log.md 不寫 PASS，輸出失敗資訊，終止
+  |-- CI FAIL → invoke shikigami:systematic-debugging（CI FAIL 根因排查）
+  |     |-- 修復成功 → 重新 commit + push，回到 CI Gate 等待
+  |     +-- 修復失敗 → exit code 非 0，Shoot_Log.md 不寫 PASS，輸出失敗資訊，終止
   +-- CI 不可用 → 輸出 [WARN]，依降級行為繼續（見 §8.2）
         |
         v
@@ -369,7 +379,7 @@ fi
 | 情況 | CONCLUSION 值 | 行為 |
 |------|---------------|------|
 | CI PASS | `success` | 繼續，寫 Shoot_Log.md PASS |
-| CI FAIL | `failure` / `cancelled` / `timed_out` | **不寫 PASS**，輸出失敗資訊，exit code 非 0，終止 |
+| CI FAIL | `failure` / `cancelled` / `timed_out` | 觸發 `invoke shikigami:systematic-debugging`（CI FAIL 根因排查）；修復成功 → 重新 commit + push + 等待 CI；修復失敗 → **不寫 PASS**，輸出失敗資訊，exit code 非 0，終止 |
 | CI 不可用 | — | 依降級行為處理（見下方） |
 
 ### CI FAIL 輸出格式（AC3）
@@ -408,6 +418,34 @@ CI 不可用情境包括：`gh` CLI 未安裝、未認證、repo 無 CI workflow
 <HARD-GATE>
 **CI Gate Hard Gate（/shoot）**：git push 完成後，CI PASS 才允許寫入 Shoot_Log.md PASS。CI FAIL → exit code 非 0，Shoot_Log.md 不寫 PASS 記錄，不輸出完成訊息。CI 不可用時採降級行為（輸出 WARN，繼續執行）。
 </HARD-GATE>
+
+---
+
+## 8.3 測試執行 + Systematic Debugging（步驟 4.5）
+
+<!-- Sprint 90 — 新增寫完程式立即測試 + systematic debugging 觸發點 -->
+
+在步驟 4（實作）完成後、步驟 5（QA Post-check）之前，**立即執行本地測試**，確保程式碼在 commit 前就通過測試，不等到 CI Gate 才發現問題。
+
+### 執行步驟
+
+1. **執行本地測試**：跑 unit test / integration test（依專案測試框架）
+2. **測試全部通過** → 繼續步驟 5（QA Post-check）
+3. **測試失敗** → 觸發 `invoke shikigami:systematic-debugging`，告知目的為「shoot 實作後測試失敗根因排查」
+4. **修復後重新測試**：systematic debugging 完成修復後，重新執行測試
+   - 通過 → 繼續步驟 5
+   - 仍失敗 → exit code 非 0，Shoot_Log.md 無 PASS 記錄，終止
+
+### 與 CI Gate（§8.2）的關係
+
+步驟 4.5 在 commit **之前**攔截測試失敗，§8.2 CI Gate 在 push **之後**攔截 CI 環境特有的失敗（如環境差異、依賴衝突）。兩者互補：
+
+| 觸發點 | 時機 | 抓的問題 |
+|--------|------|---------|
+| 步驟 4.5（本地測試） | commit 前 | 邏輯錯誤、回歸、型別錯誤 |
+| §8.2 CI Gate | push 後 | 環境差異、CI 專屬檢查（lint rules、coverage threshold） |
+
+兩處測試失敗均可觸發 `invoke shikigami:systematic-debugging` 進行根因排查。
 
 ---
 
