@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 83 Review 完成）
-**當前 Sprint**：Sprint 83（完成）
+**最後更新**：2026-03-12（Sprint 84 Planning 完成）
+**當前 Sprint**：Sprint 84（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 83](sprints/sprint_83.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 84](sprints/sprint_84.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 84（進行中）
+
+> Sprint Goal：建立內部品質體系的知識基礎架構 — SBE 範例體系、兩層索引機制、Quality Observer 角色與知識老化偵測
+
+| Story ID | 標題 | Size | Points | 狀態 |
+|----------|------|------|--------|------|
+| US-221 | 知識老化偵測 | M | 2 | 待開始 |
+| US-226 | SBE 範例體系 | M | 2 | 待開始 |
+| US-227 | 兩層索引機制 | S | 1 | 待開始 |
+| US-228 | Quality Observer | M | 2 | 待開始 |
 
 ---
 
