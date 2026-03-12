@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 89 完成）
-**當前 Sprint**：Sprint 89（完成）
+**最後更新**：2026-03-12（Sprint 90 Planning 完成）
+**當前 Sprint**：Sprint 90（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 89](sprints/sprint_89.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 90](sprints/sprint_90.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 90（進行中）
+
+> Sprint Goal：CI/CD 可觀測性 + QA 流程補強 — Deploy 通知模板建立 + Systematic Debugging 自動觸發時機定義
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-247：Systematic Debugging 自動觸發時機 — Sprint Review/Deploy/Bug Fix 三觸發點定義 | #240 | S | 1 | 待開始 |
+| US-246：CI/CD Deploy 通知 Workflow 模板 — deploy-notify.yml + Deploy Board 初始化 | #239 | S | 1 | 待開始 |
+
+**Sprint 容量**：2 points
 
 ---
 
