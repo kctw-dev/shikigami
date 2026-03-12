@@ -4,6 +4,17 @@
 
 ---
 
+## Sprint 83（2026-03-12）
+
+**Sprint Goal**：強化 Sprint 流程可靠性 — 建立 Checkpoint 強制重讀機制防止流程跳步，並導入 SPACE 五維度指標量化代理人行為品質。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-229（Issue #229）：Checkpoint 強制重讀步驟 — subagent 返回後強制重讀流程定義，防止流程跳步 | M | 2 | Sprint 83 |
+| US-225（Issue #225）：SPACE 五維度指標 — 以 SPACE 框架量化代理人行為品質 | M | 2 | Sprint 83 |
+
+---
+
 ## Sprint 82（2026-03-12）
 
 **Sprint Goal**：奠定「組織記憶」基礎 — 建立 Decision Journal 與代理人校準機制，解決跨 Sprint 價值觀漂移問題，並統一跨角色交付標準查閱點。

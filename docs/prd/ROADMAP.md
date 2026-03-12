@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-12（Sprint 82 — 3/3 Stories 完成，Decision Journal + 代理人校準 + 統一合約位置，組織記憶基礎三維度交付）
+> 最後更新：2026-03-12（Sprint 83 — 2/2 Stories 完成，Checkpoint 強制重讀機制 + SPACE 五維度指標，Sprint 流程可靠性雙軌交付）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.56.0**（Sprint 82）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.57.0**（Sprint 83）。
 
 | 版號 | 含義 |
 |------|------|
@@ -372,6 +372,8 @@ Sprint Review 時自動產出：
 | US-219 | Decision Journal — 衝突決策思考過程與價值觀取捨記錄 | Sprint 82 ✅ |
 | US-218 | 代理人校準機制 — 定期價值觀歸納審查與漂移偵測 | Sprint 82 ✅ |
 | US-204 | 統一合約位置 — 跨角色共用的交付標準應有單一查閱點 | Sprint 82 ✅ |
+| US-229 | Checkpoint 強制重讀步驟 — subagent 返回後強制重讀流程定義，防止流程跳步 | Sprint 83 ✅ |
+| US-225 | SPACE 五維度指標 — 以 SPACE 框架量化代理人行為品質 | Sprint 83 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 

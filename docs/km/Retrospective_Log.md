@@ -4,6 +4,28 @@
 
 ---
 
+## Sprint 83 — 2026-03-12
+
+**Sprint Goal**：強化 Sprint 流程可靠性 — 建立 Checkpoint 強制重讀機制防止流程跳步，並導入 SPACE 五維度指標量化代理人行為品質。
+
+### Good
+
+1. Sprint 83 2/2 Stories PASS，4 Points，100% 完成率。連續 25 Sprint（S59-S83）100% 完成率
+2. US-229 + US-225 完全平行執行成功（修改檔案無交集：sprint-execution/SKILL.md vs Metrics_Log.md + sprint-review/SKILL.md），平行分群策略持續有效
+3. 跨 Story 整合設計成熟——US-229 的 [CHECKPOINT-FAIL] 記錄直接作為 US-225 SPACE E 維度的資料來源，兩個 Story 在設計階段即確認資料流，實作時無需額外協調
+4. 外部抽樣審查 US-229 CONFIRM，自審品質穩定，連續多 Sprint DISPUTE 率 0%
+
+### Problem
+
+1. doc-only 標注判定不精確持續出現（S75/S76/S80/S81/S82/S83），Sprint 83 兩個 Story 均修改 skills/ 路徑（sprint-execution/SKILL.md、sprint-review/SKILL.md）但仍可能被 Planning 階段判定為 doc-only，主 session 正確處理，但 PO/QA Planning 攔截未到位
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- doc-only 判定不精確為已知 recurring pattern（S75/S76/S80/S81/S82/S83），sprint-execution SKILL.md §doc-only 規則已定義 skills/ 路徑負面案例排除，屬 Sprint Planning 執行面問題，不另開 Issue
+
+---
+
 ## Sprint 82 — 2026-03-12
 
 **Sprint Goal**：奠定「組織記憶」基礎 — 建立 Decision Journal 與代理人校準機制，解決跨 Sprint 價值觀漂移問題，並統一跨角色交付標準查閱點。
