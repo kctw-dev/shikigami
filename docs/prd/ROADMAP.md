@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-12（Sprint 89 完成 — 流程管理 MCP Server Phase 1 交付，ADR-019 Phase 1 落地）
+> 最後更新：2026-03-12（Sprint 90 完成 — Systematic Debugging 三觸發點 + Deploy 通知模板與 Deploy Board）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.63.0**（Sprint 89）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.64.0**（Sprint 90）。
 
 | 版號 | 含義 |
 |------|------|

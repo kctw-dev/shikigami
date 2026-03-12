@@ -1,10 +1,10 @@
 # BACKLOG_DONE 歷史歸檔
 
 **來源**：`docs/prd/BACKLOG_DONE.md`
-**最後更新**：2026-03-12（Sprint 76–78 歸檔）
-**歸檔範圍**：Sprint 1–78
+**最後更新**：2026-03-12（Sprint 85–87 歸檔）
+**歸檔範圍**：Sprint 1–87
 
-> 主文件現況：[BACKLOG_DONE.md](../../prd/BACKLOG_DONE.md)（保留 Sprint 79–81）
+> 主文件現況：[BACKLOG_DONE.md](../../prd/BACKLOG_DONE.md)（保留 Sprint 88–90）
 
 ---
 
@@ -2312,5 +2312,38 @@ As a Scrum Master running sprint review, I want deployment-readiness SKILL.md to
 | US-226 | SBE 範例體系 — Given/When/Then 結構化業務規則範例 | M | 2 |
 | US-227 | 兩層索引機制 — Context 管理的 meta-index 漸進載入策略 | S | 1 |
 | US-228 | Quality Observer — 獨立品質觀察角色與系統性診斷報告 | M | 2 |
+
+---
+
+## Sprint 85（2026-03-12）
+
+**Sprint Goal**：ADR-018 裁決（Accept Option A）+ Discovery Skill 實作
+
+| Story ID | 標題 | Size | Points |
+|----------|------|------|--------|
+| US-234 | ADR-018 裁決 — Accept Option A（獨立 Discovery Skill），回答 OQ-1/OQ-2 | S | 1 |
+| US-235 | Discovery Skill 實作 — Phase 0 獨立入口、Product Brief 格式定義、PO 確認關卡 | M | 2 |
+
+---
+
+## Sprint 86（2026-03-12）
+
+**Sprint Goal**：Discovery Ecosystem 第一里程碑 — 打通「用戶聲音 → 自動進入 Discovery」閉環 + SRE 事故回應基礎框架
+
+| Story ID | 標題 | Size | Points |
+|----------|------|------|--------|
+| US-236 | 用戶回饋自動流入 Discovery — Issue 自動轉 User Story 閉環 | M | 2 |
+| US-237 | SRE 完整化 Phase 1 — Incident Response Runbook + Post-mortem 框架 | L | 3 |
+
+---
+
+## Sprint 87（2026-03-12）
+
+**Sprint Goal**：部署品質雙軌強化 — 建立效能基準管理機制 + 定義 Shikigami 單人服務模式角色封裝規範
+
+| Story ID | 標題 | Size | Points |
+|----------|------|------|--------|
+| US-238 | 效能基準管理 — 部署前 Load Test 與效能回歸偵測 | M | 2 |
+| US-239 | 單人服務模式 — 角色獨立派遣至外部專案 | L | 3 |
 
 ---
