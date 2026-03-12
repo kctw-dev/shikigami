@@ -27,16 +27,21 @@ import {
   ErrorCode,
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
-import { resolve } from "node:path";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { ProcessManager } from "./process-manager.js";
+
+// ESM __dirname polyfill（Node.js < 21 中 import.meta.dirname 不可用）
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // ─── 環境設定 ─────────────────────────────────────────────────────────────────
 
 const SHIKIGAMI_ROOT = process.env.SHIKIGAMI_ROOT
   ? resolve(process.env.SHIKIGAMI_ROOT)
-  : resolve(import.meta.dirname, "../..");
+  : resolve(__dirname, "../..");
 
-const STATE_DIR = resolve(import.meta.dirname, "state");
+const STATE_DIR = resolve(__dirname, "state");
 
 // ─── 初始化 ProcessManager ────────────────────────────────────────────────────
 

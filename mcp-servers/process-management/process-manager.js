@@ -16,7 +16,12 @@
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { join, resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+// ESM __dirname polyfill（Node.js < 21 中 import.meta.dirname 不可用）
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // ─── Sprint 流程步驟定義 ──────────────────────────────────────────────────────
 
@@ -55,7 +60,7 @@ const SPRINT_STEPS = [
   },
 ];
 
-const STEP_NAMES = SPRINT_STEPS.map((s) => s.step);
+const LAST_STEP_INDEX = SPRINT_STEPS.length - 1;
 const STATE_FILE_NAME = "process-state.json";
 
 // ─── ProcessManager 類別 ─────────────────────────────────────────────────────
@@ -67,8 +72,8 @@ export class ProcessManager {
    * @param {string} options.shikiRoot — Shikigami 工作根目錄（用於 fallback 讀取 sprint 文件）
    */
   constructor({ stateDir, shikiRoot } = {}) {
-    this.stateDir = stateDir || resolve(import.meta.dirname, "state");
-    this.shikiRoot = shikiRoot || resolve(import.meta.dirname, "../..");
+    this.stateDir = stateDir || resolve(__dirname, "state");
+    this.shikiRoot = shikiRoot || resolve(__dirname, "../..");
     this.stateFile = join(this.stateDir, STATE_FILE_NAME);
 
     // 確保 stateDir 存在
@@ -115,8 +120,8 @@ export class ProcessManager {
     const prevIdx = this._state.currentStepIndex;
     const prevStep = SPRINT_STEPS[prevIdx];
 
-    // 已是最後步驟（sprint_complete）
-    if (prevIdx >= SPRINT_STEPS.length - 1) {
+    // 已是最後步驟（sprint_complete），不再推進
+    if (prevIdx >= LAST_STEP_INDEX) {
       return {
         success: true,
         previous_step: prevStep.step,
@@ -125,14 +130,14 @@ export class ProcessManager {
       };
     }
 
-    // 推進
+    // 推進至下一步
     const nextIdx = prevIdx + 1;
     this._state.currentStepIndex = nextIdx;
     this._state.lastAdvancedAt = new Date().toISOString();
     this._persistState();
 
     const nextStep = SPRINT_STEPS[nextIdx];
-    const isFinal = nextIdx === SPRINT_STEPS.length - 1;
+    const isFinal = nextIdx === LAST_STEP_INDEX;
 
     return {
       success: true,
