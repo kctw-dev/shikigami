@@ -12,3 +12,4 @@
 | 2026-03-08 | #174 | Gemini 3.1 Pro 實測評估 — haiku 替代可行性與程式碼生成能力調查 | PASS | 2749882 |
 | 2026-03-08 | direct | GEMINI.md 合併 gevo 行為增強規則 + 修正版本號 | PASS | 5c90c58 |
 | 2026-03-11 | #207 | ADR-016: UI/UX Designer 角色定義與 Design Foundation 流程 | PASS | a144301 |
+| 2026-03-12 | direct | 新增 CI FAIL systematic debugging 觸發點 | PASS | c4c0654 |
