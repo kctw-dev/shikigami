@@ -8,11 +8,11 @@
 
 | Story ID | Issue | 標題 | Size | Points | Type | 狀態 |
 |----------|-------|------|------|--------|------|------|
-| US-240 | #237 | TDD 需求理解驗證 — 寫不出測試自動觸發 REQUIREMENT_AMBIGUITY 升級 | S | 1 | FEATURE | TODO |
-| US-241 | #236 | shoot CI Gate — CI pass 才標 PASS | S | 1 | FEATURE | TODO |
-| US-242 | #206 | E2E workflow placeholder 修復 | S | 1 | INFRA | TODO |
-| US-243 | #231 | MCP 三層架構 — 知識庫/流程管理/品質觀察 MCP Server | M | 2 | RESEARCH | TODO |
-| US-244 | #198 | 前端 Story 設計資訊 Gate — Pre-check + 角色派遣 + 交付審查 | M | 2 | FEATURE | TODO |
+| US-240 | #237 | TDD 需求理解驗證 — 寫不出測試自動觸發 REQUIREMENT_AMBIGUITY 升級 | S | 1 | FEATURE | 完成 |
+| US-241 | #236 | shoot CI Gate — CI pass 才標 PASS | S | 1 | FEATURE | 完成 |
+| US-242 | #206 | E2E workflow placeholder 修復 | S | 1 | INFRA | 完成 |
+| US-243 | #231 | MCP 三層架構 — 知識庫/流程管理/品質觀察 MCP Server | M | 2 | RESEARCH | 完成 |
+| US-244 | #198 | 前端 Story 設計資訊 Gate — Pre-check + 角色派遣 + 交付審查 | M | 2 | FEATURE | 完成 |
 
 容量：7 points（3S + 2M）
 

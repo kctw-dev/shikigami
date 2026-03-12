@@ -13,11 +13,11 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-240：TDD 需求理解驗證 — 寫不出測試自動觸發 REQUIREMENT_AMBIGUITY 升級 | #237 | S | 1 | TODO |
-| US-241：shoot CI Gate — CI pass 才標 PASS | #236 | S | 1 | TODO |
-| US-242：E2E workflow placeholder 修復 | #206 | S | 1 | TODO |
-| US-243：MCP 三層架構 — 知識庫/流程管理/品質觀察 MCP Server | #231 | M | 2 | TODO |
-| US-244：前端 Story 設計資訊 Gate — Pre-check + 角色派遣 + 交付審查 | #198 | M | 2 | TODO |
+| US-240：TDD 需求理解驗證 — 寫不出測試自動觸發 REQUIREMENT_AMBIGUITY 升級 | #237 | S | 1 | 完成 |
+| US-241：shoot CI Gate — CI pass 才標 PASS | #236 | S | 1 | 完成 |
+| US-242：E2E workflow placeholder 修復 | #206 | S | 1 | 完成 |
+| US-243：MCP 三層架構 — 知識庫/流程管理/品質觀察 MCP Server | #231 | M | 2 | 完成 |
+| US-244：前端 Story 設計資訊 Gate — Pre-check + 角色派遣 + 交付審查 | #198 | M | 2 | 完成 |
 
 **Sprint 容量**：7 points
 
