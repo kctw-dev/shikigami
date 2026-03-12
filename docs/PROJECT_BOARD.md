@@ -74,6 +74,7 @@
 | 日期 | 標題 | Issue/Story | commit hash |
 |------|------|-------------|-------------|
 | 2026-03-12 | Sprint Review 精簡化 — 移除快思/慢想、歸檔觸發、Token 成本、Backlog .md 同步 | #243 | fadde69 |
+| 2026-03-12 | 清理 PRODUCT_BACKLOG.md / BACKLOG_DONE.md 殘留引用（ADR-010 對齊） | — | e98212b |
 
 ---
 
