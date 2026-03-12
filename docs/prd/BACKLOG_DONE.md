@@ -4,6 +4,19 @@
 
 ---
 
+## Sprint 84（2026-03-12）
+
+**Sprint Goal**：建立內部品質體系的知識基礎架構
+
+| Story ID | 標題 | Size | Points |
+|----------|------|------|--------|
+| US-221 | 知識老化偵測 — API 文件更新主動感知與 ground truth 保鮮機制 | M | 2 |
+| US-226 | SBE 範例體系 — Given/When/Then 結構化業務規則範例 | M | 2 |
+| US-227 | 兩層索引機制 — Context 管理的 meta-index 漸進載入策略 | S | 1 |
+| US-228 | Quality Observer — 獨立品質觀察角色與系統性診斷報告 | M | 2 |
+
+---
+
 ## Sprint 83（2026-03-12）
 
 **Sprint Goal**：強化 Sprint 流程可靠性 — 建立 Checkpoint 強制重讀機制防止流程跳步，並導入 SPACE 五維度指標量化代理人行為品質。
