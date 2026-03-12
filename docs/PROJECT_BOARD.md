@@ -13,8 +13,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-248：sprint-review S2.6 外部 Issue 階段 2 留言觸發時機修正 | #242 | S | 1 | 待開發 |
-| US-249：Subagent 結果暫存 — context compaction 後結果復原機制 | #208 | M | 2 | 待開發 |
+| US-248：sprint-review S2.6 外部 Issue 階段 2 留言觸發時機修正 | #242 | S | 1 | 完成 |
+| US-249：Subagent 結果暫存 — context compaction 後結果復原機制 | #208 | M | 2 | 完成 |
 
 **Sprint 容量**：3 points
 
