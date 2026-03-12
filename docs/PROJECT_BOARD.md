@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 86 Review 完成）
-**當前 Sprint**：Sprint 86（完成）
+**最後更新**：2026-03-12（Sprint 87 Planning 完成）
+**當前 Sprint**：Sprint 87（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 86](sprints/sprint_86.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 87](sprints/sprint_87.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 87（進行中）
+
+> Sprint Goal：部署品質雙軌強化 — 建立效能基準管理機制 + 定義 Shikigami 單人服務模式角色封裝規範
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-238：效能基準管理 — 部署前 Load Test 與效能回歸偵測 | #224 | M | 2 | 待開發 |
+| US-239：單人服務模式 — 角色獨立派遣至外部專案 | #230 | L | 3 | 待開發 |
+
+**Sprint 容量**：5 points
 
 ---
 
