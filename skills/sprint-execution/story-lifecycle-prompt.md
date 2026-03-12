@@ -136,6 +136,28 @@ story_type: "FEATURE"                      # 必填：Story 類型（FEATURE/DES
 | `INTEGRATION` | 跨系統整合、API 串接 | Architect |
 | `RESEARCH` | 探索性調查、POC、技術選型 | N/A（需 Spike Report） |
 
+### story_type 路由規則（US-244 AC2 補充）
+
+<!-- US-244 Story 類型識別規則補充 DESIGN 類派遣 — Sprint 88 -->
+
+**DESIGN type Story 的識別與派遣規則：**
+
+| 識別條件 | 派遣目標 | 說明 |
+|---------|---------|------|
+| `story_type=DESIGN` | **UI/UX Designer subagent**（`skills/uiux-designer/SKILL.md`） | 視覺設計、規格書、Figma Prototype 相關 Story |
+| `story_type=FEATURE` 且涉及前端修改 | **Developer subagent**（開發）+ **UIUX/QA 視覺一致性審查**（交付前） | FEATURE Story 中含 UI 實作需求，需在交付前進行視覺一致性審查（見 §4.7） |
+| 其他 `story_type` | Developer subagent（一般路徑） | 不涉及前端修改 |
+
+**DESIGN Story 識別標準（以下任一即判定為 DESIGN type）：**
+
+- Story 的主要交付物為 Figma Prototype、Design Spec、視覺規格文件
+- AC 描述的輸出物為設計稿、Design Token、Component Library 規格
+- 主 session 在 Sprint Planning 已標注 `story_type=DESIGN`
+
+> **注意**：`story_type=DESIGN` 必須在 Sprint Planning 時由 PO/Architect 明確標注。若 `story_type` 缺失但 AC 描述明顯為設計交付物，本 subagent 輸出告警 `[STORY-TYPE-SUGGEST] AC 描述為設計交付物，建議將 story_type 設為 DESIGN` 並 fallback 至 FEATURE 路徑執行（不自動改變 story_type）。
+
+---
+
 ### story_type Fallback 規則（AC5）
 
 **向後相容**：當 `story_type` 欄位缺失或值為空時，自動 fallback 至 `FEATURE` type，行為如下：
@@ -223,8 +245,8 @@ story_type: "FEATURE"                      # 必填：Story 類型（FEATURE/DES
   |
   v
 story_type 路由：
-  |-- story_type=DESIGN --> DESIGN 路徑（§4.5）
-  |     ├─ 確認 Design Foundation 就緒
+  |-- story_type=DESIGN --> DESIGN 路徑（§4.5）→ 派遣 UI/UX Designer subagent
+  |     ├─ 確認 Design Foundation 就緒（Design System、Tokens、Component Library）
   |     ├─ 製作 Figma Prototype（KCTW/talk-to-figma-mcp）
   |     ├─ Vision Critic 自審（≥80 分 PASS，最多 3 次）
   |     ├─ QA Contract Testability Review
