@@ -12,8 +12,8 @@
 
 | Story | Issue | Size | Points | 狀態 | 備註 |
 |-------|-------|------|--------|------|------|
-| US-229：Checkpoint 強制重讀步驟 — subagent 返回後強制重讀流程定義，防止流程跳步 | #229 | M | 2 | 待開始 | FEATURE |
-| US-225：SPACE 五維度指標 — 以 SPACE 框架量化代理人行為品質 | #225 | M | 2 | 待開始 | FEATURE |
+| US-229：Checkpoint 強制重讀步驟 — subagent 返回後強制重讀流程定義，防止流程跳步 | #229 | M | 2 | 完成 | FEATURE |
+| US-225：SPACE 五維度指標 — 以 SPACE 框架量化代理人行為品質 | #225 | M | 2 | 完成 | FEATURE |
 
 **Sprint 容量**：4 points
 
