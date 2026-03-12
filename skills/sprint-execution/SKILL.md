@@ -532,12 +532,6 @@ Sprint Backlog 還有 Story？
 
 ### 步驟詳解
 
-0. **Execution 環節開始前（取出第一個 Story 之前）記錄 baseline snapshot 至 `docs/km/Metrics_Log.md` Token Baseline Snapshots 表格**：
-   1. 列出 `~/.claude/projects/-home-kevin-shikigami/` 目錄下所有 JSONL 檔案，找出最新（依修改時間排序）的 JSONL
-   2. 讀取該 JSONL，對所有含 `message.usage` 欄位的記錄加總 `input_tokens`（含 `cache_read_input_tokens` 與 `cache_creation_input_tokens`）與 `output_tokens`，得到當前累計值
-   3. 在 Metrics_Log.md「Token Baseline Snapshots」表格新增一列：Sprint 編號填入本 Sprint 編號，環節名稱填「Execution」，兩個累計 token 欄位填入步驟 2 計算所得值
-   4. 若 JSONL 不可存取，兩欄填「N/A」並輸出「Token Baseline 不可用，需手動補充」
-
 1. **CI 狀態快掃**（ADR-011 Option A — Push-Based 事件觸發）：在取出 Story 之前，執行 GitHub Actions CI 狀態快速掃描，偵測最近 workflow 執行結果，讓團隊在 Sprint 執行前即時感知 CI 失敗。
 
    **執行指令：**
@@ -670,12 +664,6 @@ Sprint Backlog 還有 Story？
    | (a) 輸出精確字串 | subagent 輸出含 `[CONFLICT] 狀態衝突，跳過覆蓋：{story_id} 當前值={actual}，預期值={expected}` |
    | (b) 不執行任何檔案寫入 | subagent 偵測到衝突後，不對 sprint_N.md 執行任何 Edit 或 Write 操作 |
    | (c) 主 session log 可識別 | 主 session 接收 subagent 回傳輸出時，可從 log 中找到 `[CONFLICT]` 關鍵字，識別衝突事件 |
-
-   **記錄本次 Execution 環節 Token 消耗** *(慢想模式限定)*：所有 Story 完成後（即 Sprint Backlog 清空時），將本 Execution 環節累計 Token 消耗記錄至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格（對應 Execution token 欄）：
-   - **主要方法（優先）**：讀取 `~/.claude/projects/` 目錄下當前 session 的 JSONL 檔案，提取所有 `message.usage` 欄位中的 `input_tokens`、`cache_read_input_tokens`、`cache_creation_input_tokens` 與 `output_tokens`，依下列公式加總後填入 Metrics_Log.md 對應欄位：
-     - **有效 input tokens = input_tokens + cache_read_input_tokens + cache_creation_input_tokens**
-     - **output tokens = output_tokens**
-   - **次選（降級方法）**：若 JSONL 檔案不存在、路徑不可存取、或 `message.usage` 欄位解析失敗，則各 token 欄填「N/A」，佔比欄填「N/A」，並輸出精確字串「Token 資料不可用，需手動補充」。
 
    **更新完成後，立即執行 git commit + git push**（本步驟僅 commit `PROJECT_BOARD.md` 與 `sprint_N.md`；`Metrics_Log.md` 與 `Retrospective_Log.md` 由 sprint-review 負責 commit。其他 Knowledge Management 文件不適用本規範，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
 

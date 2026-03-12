@@ -14,24 +14,14 @@ Sprint Review + Retrospective 是 Sprint 的結束儀式，用於 **驗收成果
 
 兩個活動依序進行，產出的文件將直接影響下個 Sprint 的規劃。
 
----
+### 輸出風格
 
-## 1.1 快思/慢想模式
+Sprint Review 全程採用**精簡輸出**：
 
-Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定深度：
-
-### 快思模式
-
-- **觸發條件**：Velocity < 3 pts，或使用者傳入 `/fast` flag，或明確說「快速 Review」
-- **跳過或縮短的步驟**：
-  - 跳過 Token 成本摘要（§7 最後兩項 Token 相關檢查清單）
-  - 歸檔觸發檢查：僅在超過門檻時才執行，否則跳過
-- **執行流程**：交付物一致性審查 → Demo 驗收 → Retrospective Analytics → Retrospective 記錄 → 文件更新 → Commit
-
-### 慢想模式
-
-- **觸發條件**：Velocity >= 3 pts，或使用者傳入 `--deep` 參數，或明確說「完整 Review」
-- **執行流程**：交付物一致性審查 → Demo 驗收 → Retrospective Analytics → Retrospective 記錄 → 文件更新 → Token 成本記錄 → 歸檔觸發檢查 → Commit
+- 每個步驟輸出結論（PASS/FAIL + 一行摘要），不展開中間推理過程
+- Checklist 項目逐項打勾，不重述步驟定義
+- Subagent 回傳摘要直接採用，不二次解釋
+- 避免冗長格式化文字，節省 context 空間
 
 ---
 
@@ -44,8 +34,7 @@ Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定�
 > | PO Subagent（Demo 展示、AC 驗收） | `sonnet` | 需要情境理解與商業判斷 |
 > | Stakeholder Subagent（商業期待確認） | `sonnet` | 需要情境理解與商業判斷 |
 > | Analytics Subagent（§3 步驟 0 趨勢分析） | `haiku` | 統計分析，規則明確可程式化 |
-> | Metrics Subagent（Sprint Metrics + Token 成本） | `haiku` | 數值計算，規則明確可程式化 |
-> | 歸檔 Subagent（§6 Sprint 歸檔） | `haiku` | 文件剪貼操作，不需推理 |
+> | Metrics Subagent（Sprint Metrics） | `haiku` | 數值計算，規則明確可程式化 |
 >
 > 使用者無需手動切換模型，框架在派遣 subagent 時自動指定。
 
@@ -105,13 +94,12 @@ Sprint 38、39、40 連續三個 Retrospective 均發現「交付物文案不一
 
 - [ ] `docs/sprints/sprint_N.md` 中各 Story 的狀態標注（進行中 / 完成 / 未完成）與 `docs/PROJECT_BOARD.md` 中相同 Story 的狀態欄一致
 - [ ] `docs/prd/ROADMAP.md` 中里程碑描述的術語與 Sprint Backlog 中 Story 標題一致（例如：功能名稱、版本號描述不得有差異）
-- [ ] `docs/prd/PRODUCT_BACKLOG.md` 中已完成 Story 的狀態已移至 `docs/prd/BACKLOG_DONE.md`，兩文件間無重複或遺漏
 
 **二、狀態標注一致性**
 
 - [ ] Sprint Backlog 表格中每筆 Story 的「狀態」欄使用統一術語（「完成」、「進行中」、「未完成」三選一，不得混用「Done」、「PASS」等英文術語）
 - [ ] `docs/PROJECT_BOARD.md` 中 Sprint 進行中 / 完成的區塊劃分與實際 Sprint 狀態相符
-- [ ] 若有 Story 狀態為「未完成」，`docs/prd/PRODUCT_BACKLOG.md` 中已有對應的回填記錄（含未達標原因）
+- [ ] 若有 Story 狀態為「未完成」，對應 GitHub Issue 已回復 `status: backlog` label（含未達標原因留言）
 
 **三、Issue 連結有效性**
 
@@ -681,8 +669,6 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 | `docs/PROJECT_BOARD.md` | 已完成 Story 移至 Done 欄位；更新 Sprint 統計 |
 | `docs/km/Retrospective_Log.md` | 新增本 Sprint 的 Good / Problem / Action 記錄 |
 | `docs/km/Metrics_Log.md` | 追加本 Sprint Velocity、完成率、趨勢分析記錄 |
-| `docs/prd/PRODUCT_BACKLOG.md` | 未完成 Story 回填至 Backlog，標注未達標原因與重新排序 |
-| `docs/prd/BACKLOG_DONE.md` | 已完成 Story 從 Backlog 移至此處，按 Sprint 歸檔，保留完整 RICE 評分與 AC |
 | `docs/sprints/sprint_N.md` | 回寫 Sprint Backlog 表格中各 Story 最終驗收狀態（完成 / 未完成）|
 | `docs/prd/ROADMAP.md` | 更新版本里程碑狀態（進行中/已完成），反映本 Sprint 交付進度；確認版本 Tag 與里程碑一致 |
 
@@ -784,49 +770,9 @@ MX 完成狀態：
 
 ---
 
-## 6. 歸檔觸發檢查
-
-Sprint Review 完成、產出文件更新後，**派遣 subagent（`model: "haiku"`）** 執行歸檔觸發檢查與歸檔操作。主 session 僅接收歸檔結果摘要（歸檔了哪些 Sprint、更新了哪些文件），不直接操作歸檔文件。
-
-### 觸發條件
-
-- `docs/PROJECT_BOARD.md` 中已完成的歷史 Sprint 區塊（不含當前進行中 Sprint）超過 **5 個**
-- 或 `docs/km/Retrospective_Log.md` 中的 Sprint 記錄（含歸檔連結行以外的記錄）超過 **5 個**
-- 或 `docs/prd/BACKLOG_DONE.md` 中的歷史 Sprint 區塊（`## Sprint N` 標頭數量）超過 **5 個**
-
-滿足任一條件即觸發歸檔作業。
-
-### 歸檔規則
-
-- **保留範圍**：以當次 Sprint Review 為基準，保留**當前 Sprint + 最近 2 個 Sprint**的完整記錄
-- **移出範圍**：超出保留範圍的**所有**歷史 Sprint 記錄**一次性**移至對應歸檔文件（批量歸檔）
-
-### 歸檔目標路徑
-
-| 文件 | 歸檔目標 |
-|------|----------|
-| `docs/PROJECT_BOARD.md` | `docs/km/archive/PROJECT_BOARD_ARCHIVE.md` |
-| `docs/km/Retrospective_Log.md` | `docs/km/archive/RETRO_ARCHIVE.md` |
-| `docs/prd/BACKLOG_DONE.md` | `docs/km/archive/BACKLOG_DONE_ARCHIVE.md` |
-
-### 歸檔操作（由 subagent 執行）
-
-1. 計算超出保留範圍的 Sprint 數量（總數 - 3）
-2. 從主文件剪下所有超出保留範圍的 Sprint 完整區塊（保持原始格式不變，按 Sprint 編號升序排列）
-3. 附加至對應歸檔文件末尾
-4. 確認主文件底部有歸檔連結（`PROJECT_BOARD.md`）或頂部有歸檔連結（`Retrospective_Log.md`）
-5. 更新 `docs/km/archive/README.md` 的歸檔範圍欄位與最後更新日期
-6. 回傳摘要給主 session：歸檔了 Sprint X–Y 共 N 個、更新了哪些文件
-
----
-
 ## 7. 執行檢查清單
 
-> **模式選擇**：依 §1.1 說明，執行前先確認當前模式為**快思模式**或**慢想模式**。標注 *(慢想模式限定)* 的項目在快思模式下可跳過。標注 *(快思模式可跳過)* 的項目在快思模式下允許省略以節省時間。
-
 完成 Sprint Review & Retrospective 前，確認以下項目全部完成：
-
-- [ ] **模式確認**：依 §1.1 觸發條件判定當前執行模式（快思 / 慢想），並在執行前輸出「目前執行模式：快思模式 / 慢想模式」
 - [ ] **Systematic Debugging（Sprint Review 前，HARD-GATE）**：
   - Sprint Review 流程開始後、§1.5 交付物文案一致性審查前，**必須**先執行 systematic debugging，確認系統健康狀態再進入 Review 流程。
   - 觸發指令：`invoke shikigami:systematic-debugging`（告知目的為 Sprint Review 前系統健康確認）
@@ -864,12 +810,7 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent（`model: "haik
 - [ ] 上個 Sprint 的 `retro-action` Issues 已逐項檢查並更新狀態
 - [ ] 代理人校準儀式已完成（校準記錄已寫入 Calibration_Log.md，漂移判定已標注）
 - [ ] 連續兩個 Sprint 未關閉的 Action 已升級至 Stakeholder
-- [ ] `PRODUCT_BACKLOG.md` 已更新（未完成 Story 回填）
-- [ ] 已完成 Story 從 `PRODUCT_BACKLOG.md` 移至 `BACKLOG_DONE.md`，按 Sprint 歸檔
 - [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步；版本 Tag 與里程碑對齊確認完成，見「ROADMAP 更新操作指引」）
-- [ ] **歸檔觸發檢查**（見 §6）：確認 `PROJECT_BOARD.md` 與 `Retrospective_Log.md` 歷史 Sprint 區塊是否超過 5 個；若觸發則**派遣 subagent** 批量歸檔所有超出保留範圍的 Sprint 至 `docs/km/archive/`，主 session 僅接收摘要（快思模式下：未超過門檻可跳過）
-- [ ] **Token 成本摘要** *(慢想模式限定)*（見下方子節）
-- [ ] **記錄本次 Review 環節 Token 消耗至 `docs/km/Metrics_Log.md` Token 成本分環節記錄表格** *(慢想模式限定)*（對應 Review token 欄）：參照 `skills/sprint-execution/SKILL.md` §步驟詳解 步驟 7「記錄本次 Execution 環節 Token 消耗」的 Token 計算公式與降級方法執行，填入 Review token 欄。
 - [ ] **ROADMAP 里程碑對齊檢查**（見 §5.1）：在觸發 deployment-readiness 前，確認本 Sprint 交付是否使某個 ROADMAP 里程碑達成完成狀態，並將結果傳達給 deployment-readiness 作為版本 Tag 決策依據
 - [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag），並附帶 ROADMAP 里程碑對齊檢查結果（里程碑完成 → Major bump 候選；未完成 → Minor bump）
 - [ ] **E2E 驗證結果已確認**：`deployment-readiness` §5.2 L3 E2E 驗證結果已確認（PASS 記錄至 Checklist；若輸出 `[E2E-SOFT-GATE]` 則已取得 PO 確認並記錄決策）
@@ -944,56 +885,3 @@ Metrics subagent 自行讀取 `docs/km/Metrics_Log.md` 取得歷史 Velocity 資
 - **趨勢**：步驟 4 計算結果
 - **備註**：可選填，例如特殊情況說明或 Sprint Goal 達成狀態
 
-### Token 成本摘要指引
-
-Sprint Review 結束時，派遣 Metrics subagent（`model: "haiku"`）依下列步驟產出 Token 成本摘要。**主 session 不直接讀取 Metrics_Log.md**，由 subagent 讀取並回傳摘要。
-
-#### 步驟 1：讀取 Token 表格
-
-Metrics subagent 自行讀取 `docs/km/Metrics_Log.md`，找到「Token 成本記錄」區塊的表格。
-
-#### 步驟 2：Fallback 判斷
-
-若 Token 表格中**無本 Sprint 對應的記錄列**（Sprint 編號不存在），或 **Token 計數器不可存取**，則輸出精確字串：
-
-```
-Token 資料不可用，需手動補充
-```
-
-並結束本子節，不繼續執行步驟 3。
-
-#### 步驟 3：離群值分析
-
-**前置條件**：Token 表格中本 Sprint **之前**已有 3 列以上的完整記錄（完整記錄定義：輸入 token 與輸出 token 均為正整數 > 0，且估算成本非空白、非 `N/A`）。
-
-- 若不滿足前置條件，輸出：
-
-  ```
-  Token 歷史資料不足（需至少 3 個 Sprint 記錄），跳過離群值分析
-  ```
-
-- 若滿足前置條件，執行以下計算：
-
-  1. 計算本 Sprint **之前**所有完整記錄的**平均輸入 token** 與**平均輸出 token**
-  2. 對本 Sprint 的記錄執行比對：
-     - 若本 Sprint 輸入 token > 平均輸入 token × 2，標記輸入欄為 `[OUTLIER]`
-     - 若本 Sprint 輸出 token > 平均輸出 token × 2，標記輸出欄為 `[OUTLIER]`
-  3. 輸出摘要，範例格式：
-
-  ```
-  Token 成本摘要（Sprint N）
-  - 輸入 token：25000 [OUTLIER]（歷史平均：10500，超過 2 倍閾值）
-  - 輸出 token：3100
-  - 估算成本：$0.0312
-  - 資料來源：Claude Code API
-  ```
-
-  若無任何 `[OUTLIER]`，範例格式：
-
-  ```
-  Token 成本摘要（Sprint N）
-  - 輸入 token：9800
-  - 輸出 token：2900
-  - 估算成本：$0.0198
-  - 資料來源：Claude Code API
-  ```
