@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-12（Sprint 84 — 4/4 Stories 完成，知識老化偵測 + SBE 範例體系 + 兩層索引 + Quality Observer，知識品質閉環交付）
+> 最後更新：2026-03-12（Sprint 85 — US-234 ADR-018 裁決完成，選項 A 獨立 Discovery Skill 正式 Accepted）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -378,6 +378,7 @@ Sprint Review 時自動產出：
 | US-226 | SBE 範例體系 — Given/When/Then 結構化業務規則範例 | Sprint 84 ✅ |
 | US-227 | 兩層索引機制 — Context 管理的 meta-index 漸進載入策略 | Sprint 84 ✅ |
 | US-228 | Quality Observer — 獨立品質觀察角色與系統性診斷報告 | Sprint 84 ✅ |
+| US-234 | ADR-018 裁決 — Accept Option A（獨立 Discovery Skill），OQ-1/OQ-2 Closed | Sprint 85 ✅ |
 
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 

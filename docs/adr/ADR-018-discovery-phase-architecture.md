@@ -1,8 +1,8 @@
 # ADR-018：Discovery Phase 架構方案 — 獨立 Skill vs 擴充 backlog-management
 
-**狀態**：Proposed
+**狀態**：Accepted
 **日期**：2026-03-11
-**決策者**：Architect（待定）
+**決策者**：PO + Architect
 **關聯 Issue**：#217（US-215 Discovery Phase RESEARCH Spike）
 **關聯 ADR**：ADR-007（Story Lifecycle Subagent）、ADR-010（Backlog 管理演進）
 **關聯 Sprint**：Sprint 80
@@ -218,31 +218,52 @@ Discovery Phase 的結構化強化應以何種架構方式實作？
 
 ---
 
+## 決策
+
+**最終決策**：採用選項 A（獨立 Discovery Skill）
+
+**決策日期**：2026-03-12
+
+**決策者**：PO + Architect
+
+### 決策理由
+
+1. **概念分離優先於減少 Skill 數量**：PO 認為 backlog management（維護性）與 discovery（探索性）是本質上不同的概念，強行合併反而增加使用者認知負擔，違背框架「讓使用者輕鬆消化」的設計原則。
+
+2. **三階段框架支持獨立觸發**：PO 提出「Discovery → Definition → Delivery」三階段使用者學習曲線框架，Discovery Phase 作為第一階段，具有清晰的概念邊界，應有獨立的入口點。
+
+3. **完整五階段流水線**：最終確定的端對端管線為：
+   - Phase 0 Discovery（本 ADR 決策範疇）
+   - Phase 1 Definition
+   - Phase 2 Delivery
+   - Phase 3 Testing & Quality
+   - Phase 4 SRE
+
+4. **Architect 評估支持分離**：從 context 隔離角度，獨立 Skill 能防止 Discovery 語意污染 Grooming 流程，LLM 行為品質在分離架構下更具可預測性。
+
+---
+
 ## 開放問題
 
 | # | 問題 | 優先級 | 狀態 |
 |---|------|--------|------|
-| OQ-1 | Discovery Phase 是否確實需要在 Grooming 週期外獨立觸發？若現實中 Discovery 永遠只在里程碑啟動時觸發，選項 B 的分離劣勢不存在 | 高 | **Open** |
-| OQ-2 | backlog-management §2 與強化版 Discovery 的行為差異是否大到需要完全分離的 context？若 PO subagent 在同一 Skill 內可清晰區分，合併不造成 LLM 行為品質下降 | 高 | **Open** |
+| OQ-1 | Discovery Phase 是否確實需要在 Grooming 週期外獨立觸發？若現實中 Discovery 永遠只在里程碑啟動時觸發，選項 B 的分離劣勢不存在 | 高 | **Closed** — PO 決策：應分離。Discovery/Definition/Delivery 三階段各自獨立，Discovery 需要能在任何時間點獨立觸發（里程碑啟動 + Sprint 中段發現重大需求不確定性），並非永遠只在里程碑啟動時觸發。 |
+| OQ-2 | backlog-management §2 與強化版 Discovery 的行為差異是否大到需要完全分離的 context？若 PO subagent 在同一 Skill 內可清晰區分，合併不造成 LLM 行為品質下降 | 高 | **Closed** — Architect 評估：分離反而降低認知負擔。將 Discovery 塞在 backlog-management 中會造成語意混淆（「不知所云」），兩種流程的 context 性質差異（探索性 vs 維護性）大到值得完全分離，有助於 LLM 在各自 context 中維持更清晰的行為邊界。 |
 | OQ-3 | Product Brief 是否需要作為獨立文件保存（`docs/discovery/`），或僅作為 GitHub Issue body 的一部分？此問題影響產出物管理，但不影響架構選擇 | 中 | **Open** |
 | OQ-4 | 與 US-214（不確定性三問機制）的整合點——Discovery Phase 的假設外顯化步驟與 US-214 的三問機制是否應共享同一格式標準，避免兩套平行的假設記錄機制 | 中 | **Open** |
 
 ---
 
-## 初步傾向（非最終決策）
+## 最終決策說明（Sprint 85 US-234 更新）
 
-基於以下觀察，在最終決策前供 PO 與 Architect 參考：
+本 ADR 已於 2026-03-12 完成最終裁決，選擇選項 A（獨立 Discovery Skill）。
 
-1. **YAGNI 原則傾向選項 B**：目前無真實場景驗證「Discovery 必須在 Grooming 週期外獨立觸發」。選項 B 能實現所有功能性需求（Product Brief、PO 確認關卡、假設外顯化），且維護成本更低。
+原始研究階段（Sprint 80 US-215）的初步傾向為「YAGNI 原則傾向選項 B，待 OQ-1/OQ-2 回答後再決定」，此初步傾向為分析過程中的參考觀點，非最終決策。
 
-2. **長期演進傾向選項 A**：若 OQ-1 驗證後確認需要獨立觸發，從選項 B 演進到選項 A 的遷移成本可接受（建立新 Skill，降格 §2）。從選項 A 回到選項 B 的逆向演進同樣可行。
-
-3. **兩個選項的功能等價性**：Product Brief 格式、PO 確認關卡、假設外顯化機制在兩個選項中完全相同，差異僅在「放在哪裡」和「如何觸發」。這表示可以先選擇選項 B（較低成本），待 OQ-1 有答案後再決定是否遷移到選項 A。
-
-**建議決策路徑**：
-1. PO 確認 OQ-1（Discovery 是否需要獨立觸發的真實場景）
-2. Architect 評估 OQ-2（同一 Skill 內是否影響 LLM 行為品質）
-3. 兩個 OQ 均有答案後，本 ADR 升格為 Accepted 並更新決策
+**最終裁決結果**：PO 與 Architect 在 OQ-1/OQ-2 均有明確答案後，選擇選項 A，理由如下：
+- OQ-1（Closed）：Discovery 確實需要獨立觸發能力，三階段框架支持完全分離
+- OQ-2（Closed）：context 分離有助於 LLM 行為品質，合併反而造成語意混淆
+- 概念清晰度比維護成本更優先（「好上手」原則）
 
 ---
 
