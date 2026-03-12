@@ -178,13 +178,13 @@ Shikigami Agent（Claude Code）
 
 ## 開放問題
 
-| # | 問題 | 優先級 | 狀態 |
-|---|------|--------|------|
-| OQ-1 | Metrics_Log.md 格式在歷史 Sprint 有差異（Sprint 27-31 備註格式不同），MCP Server 解析準確率需 POC 實際驗證 | 高 | Open |
-| OQ-2 | 寫入型 MCP tool 是否需要人工確認步驟？若是，確認機制如何在 stdio transport 中實作？ | 高 | Open |
-| OQ-3 | MCP Server 在 CI 環境的行為策略——是否與 ADR-013 CI 跳過原則對齊，或需要 stub？ | 中 | Open |
-| OQ-4 | 三個 MCP Server 是否應獨立 npm package 或合併為 monorepo 結構？ | 中 | Open — POC 驗證後決定 |
-| OQ-5 | ADR-012 多 GCE 環境的 MCP Server 安裝步驟是否需要統一 setup script？ | 低 | Open |
+| # | 問題 | 優先級 | 狀態 | 結論 |
+|---|------|--------|------|------|
+| OQ-1 | Metrics_Log.md 格式在歷史 Sprint 有差異（Sprint 27-31 備註格式不同），MCP Server 解析準確率需 POC 實際驗證 | 高 | **Closed — Phase 3 延後處理** | 知識庫 MCP Server（Phase 3）才需要解析 Metrics_Log。Phase 1（流程管理）不讀取 Metrics_Log，不阻擋。Phase 3 實作時以 POC 驗證解析準確率 |
+| OQ-2 | 寫入型 MCP tool 是否需要人工確認步驟？若是，確認機制如何在 stdio transport 中實作？ | 高 | **Closed — 不需要人工確認** | 流程管理 MCP Server 的寫入操作（`advance_step`）由 agent 在 Skill 流程中自動呼叫，等同現有的「更新 PROJECT_BOARD.md」操作。Skill 流程本身已有 Checkpoint 機制（US-229）防止誤操作。額外的人工確認步驟會破壞自動化流程連續性。安全由 C2（狀態持久化到檔案）保障——即使誤寫入，檔案可回溯 |
+| OQ-3 | MCP Server 在 CI 環境的行為策略——是否與 ADR-013 CI 跳過原則對齊，或需要 stub？ | 中 | **Closed — 對齊 ADR-013 跳過原則** | MCP Server 為本地開發輔助工具，CI 環境不啟動。CI 中 MCP tool call 失敗時，agent 依 C1 fallback 機制降級回檔案系統操作，行為等同現有 CI 流程 |
+| OQ-4 | 三個 MCP Server 是否應獨立 npm package 或合併為 monorepo 結構？ | 中 | **Closed — 單一 `mcp-servers/` 目錄，各 Server 獨立子目錄** | POC 已驗證此結構（`mcp-servers/quality-observer/`）。C3（零外部依賴）使各 Server 無 node_modules，子目錄即為獨立單元。無需 npm workspace 或 monorepo 工具 |
+| OQ-5 | ADR-012 多 GCE 環境的 MCP Server 安裝步驟是否需要統一 setup script？ | 低 | **Closed — Phase 1 不需要** | C3（零外部依賴）消除了 `npm install` 步驟。`.mcp.json` 宣告式設定由 Claude Code 自動載入。Phase 1 安裝步驟 = clone repo 即可。多 GCE 環境 setup script 需求延後至 Phase 3 評估 |
 
 ---
 
@@ -192,8 +192,8 @@ Shikigami Agent（Claude Code）
 
 | 文件 / 目錄 | 變更類型 | 說明 |
 |------------|---------|------|
-| `mcp-servers/quality-observer/` | **新建（POC 已完成）** | 品質觀察 MCP Server POC |
-| `mcp-servers/process-management/` | **新建（Phase 2）** | 流程管理 MCP Server |
+| `mcp-servers/process-management/` | **新建（Phase 1）** | 流程管理 MCP Server（狀態機） |
+| `mcp-servers/quality-observer/` | **新建（Phase 2，POC 已完成）** | 品質觀察 MCP Server POC |
 | `mcp-servers/knowledge-base/` | **新建（Phase 3）** | 知識庫 MCP Server |
 | `.mcp.json` | **修改** | 新增三個 MCP Server 設定 |
 | `skills/sprint-review/SKILL.md` | **修改（可選）** | 更新 Metrics 查詢步驟，指向 MCP tool |
