@@ -51,6 +51,36 @@ Sprint Review 支援兩種執行模式，依 Velocity 或使用者指定決定�
 
 ---
 
+## 1.3 合約載入（US-204）
+
+<!-- US-204 統一合約位置 — Sprint 82 -->
+
+Sprint Review 開始前，Review 主 session 須載入相關的共用交付合約，作為驗收基準。
+
+### 載入指令
+
+```
+Read: contracts/README.md
+Read: contracts/sow-delivery-contract.md        （若本 Sprint 有 SOW 相關 Story）
+Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修改 Story）
+```
+
+### 載入時機
+
+| 情境 | 須載入的合約 |
+|------|------------|
+| Sprint Review 中驗收含 SOW 交付物的 Story | `contracts/sow-delivery-contract.md` |
+| Sprint Review 中驗收含 Metrics、Points 數值更新的 Story | `contracts/numerical-consistency-contract.md` |
+| PO Subagent Demo 驗收前（含跨文件一致性審查） | `contracts/numerical-consistency-contract.md` |
+
+### 注意事項
+
+- 合約載入為**Sprint Review 流程開始後、§1.5 交付物文案一致性審查前**執行
+- 合約的「檢查清單」可作為 §1.5 跨文件一致性審查的補充基準
+- 合約完整定義位於 `contracts/` 目錄，SKILL.md 中僅記錄載入步驟
+
+---
+
 ## 1.5 交付物文案一致性審查（Sprint Review 前執行）
 
 <!-- US-86：回應 Sprint 38-40 連續 Retro Problem — Issue #81 -->

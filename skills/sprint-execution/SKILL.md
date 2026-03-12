@@ -164,6 +164,36 @@ git push
 
 ---
 
+## 2.9 合約載入（US-204）
+
+<!-- US-204 統一合約位置 — Sprint 82 -->
+
+Sprint Execution 開始前，Developer 須載入相關的共用交付合約，確認交付標準後再進行 Story 開發。
+
+### 載入指令
+
+```
+Read: contracts/README.md
+Read: contracts/sow-delivery-contract.md        （若 Story 涉及 SOW 文件）
+Read: contracts/numerical-consistency-contract.md（若 Story 涉及數值修改）
+```
+
+### 載入時機
+
+| 情境 | 須載入的合約 |
+|------|------------|
+| Story AC 涉及 SOW 文件建立或審查 | `contracts/sow-delivery-contract.md` |
+| Story AC 涉及 Metrics、Points、Velocity 等數值修改 | `contracts/numerical-consistency-contract.md` |
+| 不確定適用哪份合約 | 先讀取 `contracts/README.md` 查閱合約清單 |
+
+### 注意事項
+
+- 合約載入為**Story 實作前**的必要步驟（取出 AC 後、開始 TDD 前執行）
+- 若合約與 AC 有衝突，以 AC 為準，並在 commit message 中標注差異說明
+- 合約完整定義位於 `contracts/` 目錄，SKILL.md 中僅記錄載入步驟
+
+---
+
 ## 3. 執行流程
 
 ```
