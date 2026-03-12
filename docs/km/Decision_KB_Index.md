@@ -1,7 +1,7 @@
 # Decision Knowledge Base Index
 
 **建立日期**：2026-05-11
-**最後更新**：2026-03-11（新增 ADR-017）
+**最後更新**：2026-03-12（新增 Decision Journal 索引區段，US-219）
 **維護者**：Developer（手動維護，每次新增或更新 ADR 時同步更新本文件）
 **ADR 目錄**：`docs/adr/`
 
@@ -36,6 +36,8 @@
 | Knowledge Ingestion / API 幻覺 / Anti-Hallucination | ADR-017 |
 | WebFetch / api-knowledge / ground truth | ADR-017 |
 | Context Hub / chub / MCP Knowledge Ingestion | ADR-017 |
+| Decision Journal / 衝突決策 / 價值觀取捨 | DJ-001 |
+| 平行執行 / 共用文件保護 / Subagent 協調 | DJ-001 |
 
 #### 依狀態篩選
 
@@ -241,6 +243,19 @@
 
 ---
 
+## Decision Journal 索引
+
+本區段索引 `docs/km/Decision_Journal.md` 中的衝突決策記錄（DJ 系列）。
+DJ 記錄聚焦於**非架構性的價值觀取捨**與**執行層面的衝突決策**，與 ADR 的架構決策互補。
+
+**完整記錄**：[Decision_Journal.md](./Decision_Journal.md)
+
+| DJ 編號 | 日期 | 情境摘要 | 關聯 ADR/Issue |
+|---------|------|---------|---------------|
+| [DJ-001](./Decision_Journal.md#dj-001) | 2026-03-12 | 平行執行 vs. 循序執行：US-218 與 US-219 共用索引文件的衝突處理策略 | US-218、US-219、Sprint 82 |
+
+---
+
 ## 維護指引
 
 新增 ADR 時，請依序執行：
@@ -248,4 +263,11 @@
 1. 在 ADR 彙整表新增一行（含標題、狀態、日期、關聯 Story/Issue）
 2. 在決策影響追蹤區段新增對應條目（至少一筆影響路徑記錄）
 3. 更新「依關鍵字篩選」與「依狀態篩選」表格
+4. 記錄本次更新日期於本文件頂部「最後更新」欄位
+
+新增 DJ 時，請依序執行：
+
+1. 在 `Decision_Journal.md` 新增 `### DJ-NNN` 區塊（含五個必要欄位）
+2. 在本文件「Decision Journal 索引」表格新增一行
+3. 在「依關鍵字篩選」表格新增對應關鍵字映射
 4. 記錄本次更新日期於本文件頂部「最後更新」欄位
