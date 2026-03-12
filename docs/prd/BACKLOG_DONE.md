@@ -4,6 +4,16 @@
 
 ---
 
+## Sprint 89（2026-03-12）
+
+**Sprint Goal**：實作流程管理 MCP Server Phase 1，驗證 context compaction recovery 可行性，解決 Sprint 87/88 連續斷鏈問題
+
+| Story ID | 標題 | Size | Points |
+|----------|------|------|--------|
+| US-245 | 流程管理 MCP Server Phase 1 — Sprint 流程狀態機 | M | 2 |
+
+---
+
 ## Sprint 87（2026-03-12）
 
 **Sprint Goal**：部署品質雙軌強化 — 建立效能基準管理機制 + 定義 Shikigami 單人服務模式角色封裝規範
