@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 90 Review 完成）
-**當前 Sprint**：Sprint 90（完成）
+**最後更新**：2026-03-12（Sprint 91 Planning 完成）
+**當前 Sprint**：Sprint 91（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 90](sprints/sprint_90.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 91](sprints/sprint_91.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 91（進行中）
+
+> Sprint Goal：透過 SKILL.md 瘦身與角色 Prompt 拆分，將框架 context 消耗削減約 75%
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-246：SKILL.md 瘦身：移除 agent 已知的工具教學與重複樣板 | #245 | L | 3 | 待開始 |
+| US-245：SKILL.md 角色專屬 Prompt 拆分 — 減少 subagent context 消耗 | #244 | M | 2 | 待開始 |
+
+**Sprint 容量**：5 points
 
 ---
 
