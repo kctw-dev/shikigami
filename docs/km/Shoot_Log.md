@@ -13,3 +13,4 @@
 | 2026-03-08 | direct | GEMINI.md 合併 gevo 行為增強規則 + 修正版本號 | PASS | 5c90c58 |
 | 2026-03-11 | #207 | ADR-016: UI/UX Designer 角色定義與 Design Foundation 流程 | PASS | a144301 |
 | 2026-03-12 | direct | 新增 CI FAIL systematic debugging 觸發點 | PASS | c4c0654 |
+| 2026-03-12 | direct | /shoot 流程新增步驟 4.5 測試執行 + systematic debugging 觸發點 | PASS | a61646e |
