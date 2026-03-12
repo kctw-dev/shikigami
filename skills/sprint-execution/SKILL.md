@@ -239,6 +239,18 @@ Sprint Backlog 中取出 Story
         |
         v
   ┌─────────────────────────────────────────────────────────────┐
+  │  Checkpoint: 重讀流程定義（US-229）                          │
+  │                                                             │
+  │  (a) 重讀 skills/sprint-execution/SKILL.md §3 流程步驟定義  │
+  │  (b) 比對下一步驟是否符合流程定義（驗證無跳躍或遺漏）         │
+  │  (c) 記錄 [CHECKPOINT-PASS] 或 [CHECKPOINT-FAIL] 標記       │
+  │                                                             │
+  │       |-- [CHECKPOINT-FAIL] --> 失敗處理（見 §3.1）         │
+  │       +-- [CHECKPOINT-PASS]                                 │
+  └─────────────────────────────────────────────────────────────┘
+        |
+        v
+  ┌─────────────────────────────────────────────────────────────┐
   │  外部抽樣審查決策（ADR-007 §AC3 Phase 2）                    │
   │                                                             │
   │  評估抽樣觸發條件（詳見 story-lifecycle-prompt.md §AC3）：   │
@@ -279,6 +291,98 @@ Sprint Backlog 還有 Story？
 | REQUIREMENT_AMBIGUITY | 暫停 Sprint 執行，升級至 PO 釐清 AC |
 | DEPENDENCY_MISSING | 暫停 Sprint 執行，解決依賴後重試 |
 | SECURITY_CRITICAL | 暫停 Sprint 執行，觸發 security-review Skill |
+
+### §3.1 Checkpoint 重讀流程定義
+
+<!-- US-229 Checkpoint 強制重讀步驟 — Sprint 83 -->
+
+每個 Story-Lifecycle subagent 回傳 PASS 後，在進入「外部抽樣審查決策」前，**強制執行以下 Checkpoint 步驟**，確保主 session 不發生流程跳步或遺漏。
+
+#### 三個子動作
+
+**(a) 重讀當前 Sprint 執行流程步驟清單**
+
+重讀 `skills/sprint-execution/SKILL.md` §3 的完整流程步驟定義（包含流程圖與「步驟詳解」各步驟），確認主 session 對目前執行位置有準確的認識。
+
+**(b) 比對下一步驟是否符合流程定義**
+
+驗證主 session 即將執行的下一步驟與 §3 流程圖定義一致：
+- 確認當前步驟（接收 subagent 回傳 → PASS）之後應執行「外部抽樣審查決策」
+- 確認未跳過任何中間節點（如 Checkpoint 本身）
+- 確認未因 context 壓縮或推斷而遺漏任何定義步驟
+
+**(c) 記錄 Checkpoint 通過/未通過狀態**
+
+輸出 `[CHECKPOINT-PASS]` 或 `[CHECKPOINT-FAIL]` 標記（格式見下方「§3.1.2 Checkpoint 記錄格式」），供 SPACE E（Efficiency）維度統計斷鏈次數。
+
+---
+
+#### §3.1.1 Checkpoint 失敗處理流程
+
+當比對結果發現流程異常時，依失敗類型執行以下處置：
+
+**失敗類型 A：偵測到流程跳躍（Flow Jump）**
+
+> 定義：主 session 即將執行的步驟，在流程定義中並非當前步驟的直接後繼節點（即跳過了一或多個中間節點）。
+
+處置方案：
+1. 輸出 `[CHECKPOINT-FAIL]` 標記（含失敗類型：`跳躍`）
+2. 回退至正確的下一步驟（依 §3 流程圖定義）
+3. 記錄跳躍事件：記錄「預期步驟」與「實際意圖步驟」
+4. **自動修正後繼續執行**：從正確步驟重新繼續，不暫停等待人工確認（跳躍為可自動修正的異常）
+
+**失敗類型 B：偵測到流程遺漏（Step Omission）**
+
+> 定義：流程定義中應執行的某一步驟，在主 session 的執行軌跡中被略過（如未執行 CI 快掃即直接派遣 subagent）。
+
+處置方案：
+1. 輸出 `[CHECKPOINT-FAIL]` 標記（含失敗類型：`遺漏`）
+2. **補執行遺漏步驟**：依流程定義的正確順序，補充執行被遺漏的步驟
+3. 記錄遺漏事件：記錄「遺漏的步驟名稱」與「遺漏原因（若可判斷）」
+4. 補執行完成後，繼續原定流程（不暫停等待人工確認）
+
+**決策邏輯：Checkpoint 失敗後是否繼續執行**
+
+| 失敗類型 | 決策 | 說明 |
+|---------|------|------|
+| 跳躍（Flow Jump） | **自動修正後繼續** | 跳躍通常源自 context 推斷，可回退至正確步驟後安全繼續 |
+| 遺漏（Step Omission） | **補執行後繼續** | 補充執行遺漏步驟後，流程完整性恢復，可安全繼續 |
+| 重複失敗（同一 Story 連續 2 次 CHECKPOINT-FAIL） | **暫停等待人工確認** | 連續失敗代表系統性流程認知問題，需人工確認後方可繼續 |
+
+---
+
+#### §3.1.2 Checkpoint 記錄格式
+
+**`[CHECKPOINT-PASS]` 標記格式：**
+
+```
+[CHECKPOINT-PASS] Sprint={Sprint編號} Story={Story編號} 當前步驟=接收subagent回傳→PASS 下一步驟=外部抽樣審查決策
+```
+
+| 欄位 | 說明 |
+|------|------|
+| `Sprint` | 當前 Sprint 編號（例如 83） |
+| `Story` | 當前 Story 編號（例如 US-229） |
+| `當前步驟` | 剛完成的流程節點名稱 |
+| `下一步驟` | 即將執行的流程節點名稱（應與流程圖定義一致） |
+
+**`[CHECKPOINT-FAIL]` 標記格式：**
+
+```
+[CHECKPOINT-FAIL] Sprint={Sprint編號} Story={Story編號} 預期步驟={預期步驟名稱} 實際步驟={實際意圖步驟名稱} 失敗類型={跳躍|遺漏}
+```
+
+| 欄位 | 說明 |
+|------|------|
+| `Sprint` | 當前 Sprint 編號 |
+| `Story` | 當前 Story 編號 |
+| `預期步驟` | 依流程定義，當前位置的正確下一步驟 |
+| `實際步驟` | 主 session 實際打算執行的步驟（異常值） |
+| `失敗類型` | `跳躍`（Flow Jump）或 `遺漏`（Step Omission） |
+
+> **SPACE E（Efficiency）消費規則**：每個 `[CHECKPOINT-FAIL]` 標記計入 SPACE E 維度「斷鏈次數」，供 Sprint Review 時量測流程可靠性指標。
+
+---
 
 ### 步驟詳解
 
@@ -750,6 +854,15 @@ Story Type 系統與 doc-only 判定規則（見下方「doc-only Story 識別�
 | 度量：Metrics_Log.md 本 Sprint 數據已更新 | [ ] |
 | 反回歸：既有測試全部仍然通過 | [ ] |
 | 技術債：取捷徑情況已用 `[TECH-DEBT]` 標記並更新 Tech_Debt_Registry.md | [ ] |
+
+### 6.1 執行流程 Checkpoint 檢查項
+
+<!-- US-229 Checkpoint 強制重讀步驟 — Sprint 83 -->
+
+每個 Story-Lifecycle subagent 回傳 PASS 後，主 session 必須完成以下 Checkpoint 相關檢查：
+
+- [ ] **每個 Story-Lifecycle subagent 回傳後，Checkpoint 重讀步驟已執行**：已依 §3.1 三個子動作，重讀 `skills/sprint-execution/SKILL.md` §3 流程定義、比對下一步驟一致性，並輸出 Checkpoint 標記。
+- [ ] **Checkpoint 結果已記錄（PASS 或 FAIL + 處置）**：已輸出 `[CHECKPOINT-PASS]` 或 `[CHECKPOINT-FAIL]` 標記（格式見 §3.1.2）；若為 FAIL，已依 §3.1.1 執行對應失敗處置方案並記錄處置結果。
 
 ---
 

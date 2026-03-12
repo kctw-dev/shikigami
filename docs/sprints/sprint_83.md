@@ -61,8 +61,8 @@
 
 #### Done 定義
 
-- 所有 AC（AC1-AC5）驗證通過
-- `skills/sprint-execution/SKILL.md` 已更新並通過靜態驗證
+- [x] 所有 AC（AC1-AC5）驗證通過
+- [x] `skills/sprint-execution/SKILL.md` 已更新並通過靜態驗證
 
 ---
 
