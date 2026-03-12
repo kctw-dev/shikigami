@@ -4,6 +4,18 @@
 
 ---
 
+## Sprint 82（2026-03-12）
+
+**Sprint Goal**：奠定「組織記憶」基礎 — 建立 Decision Journal 與代理人校準機制，解決跨 Sprint 價值觀漂移問題，並統一跨角色交付標準查閱點。
+
+| Story | Size | Points | 完成 Sprint |
+|-------|------|--------|------------|
+| US-219（Issue #219）：Decision Journal — 衝突決策思考過程與價值觀取捨記錄 | M | 2 | Sprint 82 |
+| US-218（Issue #218）：代理人校準機制 — 定期價值觀歸納審查與漂移偵測 | M | 2 | Sprint 82 |
+| US-204（Issue #204）：統一合約位置 — 跨角色共用的交付標準應有單一查閱點 | M | 2 | Sprint 82 |
+
+---
+
 ## Sprint 81（2026-03-12）
 
 **Sprint Goal**：Anti-Hallucination 第二步 — 落地 Knowledge Ingestion：整合 Context Hub MCP，建立 API 文件強制內化機制，完成雙軌 Anti-Hallucination 閉環。
@@ -40,39 +52,4 @@
 
 ---
 
-## Sprint 78（2026-03-11）
-
-**Sprint Goal**：全力落地 ADR-016 — 建立 UI/UX Designer 角色定義、整合進框架流程、清除已棄用設計 Skill
-
-| Story | Size | Points | 完成 Sprint |
-|-------|------|--------|------------|
-| US-206（Issue #207）：UI/UX Designer 角色建立 — Agent 定義 + Skill 定義 | M | 2 | Sprint 78 |
-| US-207（Issue #207）：框架整合更新 — Scrum Master 角色清單 + Sprint Execution DESIGN 路徑 | S | 1 | Sprint 78 |
-| US-208（Issue #207）：棄用 Skill 清除 — 刪除 ux-agent / ui-agent | S | 1 | Sprint 78 |
-
----
-
-## Sprint 77（2026-03-11）
-
-**Sprint Goal**：延續 Issue #199 Epic 完成 + E2E 測試管理規範建立 — 完成角色 Refinement 職責定義並建立 E2E Test Case 分層管理標準
-
-| Story | Size | Points | 完成 Sprint |
-|-------|------|--------|------------|
-| US-203（Issue #205）：角色定義更新 — 7 個角色 Refinement 職責 | M | 2 | Sprint 77 |
-| US-205（Issue #200）：E2E Test Case 管理規範 — 建立分層標記與目錄結構標準 | M | 2 | Sprint 77 |
-
----
-
-## Sprint 76（2026-03-11）
-
-**Sprint Goal**：建立 Story 分類與精化機制基礎 — 落地 Story Type 分類系統與 Refinement Chair 制度
-
-| Story | Size | Points | 完成 Sprint |
-|-------|------|--------|------------|
-| US-201（Issue #201）：Story Type 分類系統定義 | S | 1 | Sprint 76 |
-| US-202（Issue #202）：Refinement 機制 | M | 2 | Sprint 76 |
-| US-204（Issue #203）：Story Template 更新 | M | 2 | Sprint 76 |
-
----
-
-> 歷史完成記錄：[BACKLOG_DONE_ARCHIVE](../km/archive/BACKLOG_DONE_ARCHIVE.md)（Sprint 1–75）
+> 歷史完成記錄：[BACKLOG_DONE_ARCHIVE](../km/archive/BACKLOG_DONE_ARCHIVE.md)（Sprint 1–78）

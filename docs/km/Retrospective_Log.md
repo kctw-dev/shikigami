@@ -4,6 +4,30 @@
 
 ---
 
+## Sprint 82 — 2026-03-12
+
+**Sprint Goal**：奠定「組織記憶」基礎 — 建立 Decision Journal 與代理人校準機制，解決跨 Sprint 價值觀漂移問題，並統一跨角色交付標準查閱點。
+
+### Good
+
+1. Sprint 82 3/3 Stories PASS，6 Points，100% 完成率。連續 24 Sprint（S59-S82）100% 完成率
+2. Phase 1 平行執行成功（US-219 + US-218 無檔案衝突），Phase 2 序列依賴（US-204 與 US-218 共用 sprint-review/SKILL.md）正確處理，三維度組織記憶基礎一次性完整交付
+3. Decision Journal（DJ-001 範例 + KB 索引）、代理人校準儀式（三子步驟 + 漂移偵測）、統一合約位置（contracts/ 目錄 + 雙角色載入）三個 doc-only FEATURE Story 品質穩定，外部抽樣無 DISPUTE
+4. Velocity 連續三 Sprint 上升（S80=4→S81=5→S82=6），團隊節奏穩定回升
+
+### Problem
+
+1. doc-only 標注判定不精確持續出現（S75/S76/S80/S81/S82），Sprint 82 三個 Story 均修改 skills/ 路徑（sprint-review/SKILL.md、sprint-execution/SKILL.md）但仍被 Planning 階段判定為 doc-only，主 session 正確覆寫，但 PO/QA Planning 攔截未到位
+2. Sprint Planning PO Round 1 選入的三個 Issue 均缺乏正式 AC，QA 首輪回報 NEEDS_REVISION 後需 PO 額外補充 AC 至 Issue body，增加一輪 Planning 往返
+
+### Action Items
+
+本 Sprint 無新增 Action Items。上述 Problem 說明：
+- Problem 1：doc-only 判定不精確為已知 recurring pattern（S75/S76/S80/S81/S82），sprint-execution SKILL.md §doc-only 規則已定義 skills/ 路徑負面案例排除，屬 Sprint Planning 執行面問題，不另開 Issue
+- Problem 2：AC 補充為 Backlog Bridge 機制下的正常流程（Issue 從 backlog-intake 自動建立時不含正式 AC），PO 在 Planning 時補充屬預期行為
+
+---
+
 ## Sprint 81 — 2026-03-12
 
 **Sprint Goal**：Anti-Hallucination 第二步 — 落地 Knowledge Ingestion：整合 Context Hub MCP，建立 API 文件強制內化機制，完成雙軌 Anti-Hallucination 閉環。
@@ -67,28 +91,6 @@
 
 本 Sprint 無新增 Action Items。上述 Problem 說明：
 - ADR 開放問題狀態未同步為已知 subagent 行為邊界問題（subagent context 中未包含 ADR 狀態更新指令），已於本次 Review 手動補正，不另開 Issue
-
----
-
-## Sprint 78 — 2026-03-11
-
-**Sprint Goal**：全力落地 ADR-016 — 建立 UI/UX Designer 角色定義、整合進框架流程、清除已棄用設計 Skill
-
-### Good
-
-1. Sprint 78 3/3 Stories PASS，4 Points，100% 完成率。連續 20 Sprint（S59-S78）100% 完成率
-2. ADR-016 一次性全量交付 — Agent 定義、Skill 定義（415 行）、框架整合（scrum-master + sprint-execution + story-lifecycle-prompt）、棄用 Skill 清除，四面向一個 Sprint 內完成
-3. Phase 1（US-206 + US-208）平行執行成功，Phase 2（US-207）序列依賴正確識別，Architect 平行分群策略有效
-4. 第 8 個 Scrum 角色（UI/UX Designer）無縫整合進既有框架，RACI 矩陣更新、DESIGN type 執行路徑、story-lifecycle-prompt 分支均一次到位
-
-### Problem
-
-1. Subagent 狀態跨 session context compaction 遺失 — Story-Lifecycle subagent 執行完畢後，若主 session 因 context 壓縮而丟失 agent ID，無法 resume 已完成的 subagent，需重新執行（已開 Issue #208 追蹤）
-
-### Action Items
-
-本 Sprint 無新增 Action Items。上述 Problem 說明：
-- Subagent 狀態遺失問題已於本 Sprint 開立 Issue #208 追蹤，屬 Claude Code 平台限制，框架端無法直接修復
 
 ---
 

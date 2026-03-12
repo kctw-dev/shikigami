@@ -86,6 +86,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 79 | 2026-03-11 | 5 points | 100% | 上升趨勢 | Goal 達成，5/5 Stories PASS；US-209（S/1pt）+ US-210（S/1pt）+ US-211（S/1pt）+ US-212（S/1pt）+ US-213（S/1pt）；S77=4→S78=4→S79=5，S78→S79 上升 +25%，連續穩定至上升→上升趨勢；ADR-016 OQ 全部 Closed |
 | Sprint 80 | 2026-03-11 | 4 points | 100% | 穩定 | Goal 達成，2/2 Stories PASS；US-214（M/2pt）+ US-215（M/2pt）；S78=4→S79=5→S80=4，S79→S80 微降 -20%（±20% 內）→穩定；Anti-Hallucination 不確定性三問 + ADR-018 Discovery Phase 草稿 |
 | Sprint 81 | 2026-03-12 | 5 points | 100% | 不規則 | Goal 達成，2/2 Stories PASS；US-216（L/3pt）+ US-220（M/2pt）；S79=5→S80=4→S81=5，S80→S81 上升 +25%（超出 ±20%），先降後升方向不一致→不規則；Knowledge Ingestion via MCP + 錯誤追溯鏈（根因分類）全數交付 |
+| Sprint 82 | 2026-03-12 | 6 points | 100% | 上升趨勢 | Goal 達成，3/3 Stories PASS；US-219（M/2pt）+ US-218（M/2pt）+ US-204（M/2pt）；S80=4→S81=5→S82=6，S81→S82 上升 +20%，連續兩期上升（S80→S81 +25%，S81→S82 +20%）→上升趨勢；組織記憶基礎三維度交付（Decision Journal + 代理人校準 + 統一合約） |
 
 ---
 
@@ -142,6 +143,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 77 | N/A | 2287K input / 7K output | 5562K input / 8K output | 7849K input / 15K output（Execution+Review，無 Planning baseline） | N/A / N/A / N/A |
 | Sprint 78 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 81 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
+| Sprint 82 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 
 ---
 
