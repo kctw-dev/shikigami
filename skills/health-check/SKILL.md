@@ -15,7 +15,7 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 
 ## 2. 診斷流程
 
-依序執行以下 5 項檢查，每項獨立評估，最終彙整為 Overall Status。
+依序執行以下 6 項檢查，每項獨立評估，最終彙整為 Overall Status。
 
 ### 檢查 1：必要文件完整性
 
@@ -145,6 +145,11 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 ### 5. Retro Action Items — {PASS / OVERDUE}
 {PASS: 無逾期 Action Items}
 {OVERDUE: 列出逾期項目 + 修復建議}
+
+### 6. 知識新鮮度 — {PASS / WARN / FAIL}
+{PASS: 所有已內化知識均在新鮮度閾值內}
+{WARN: 列出 STALE 條目 + 修復建議}
+{FAIL: 列出 EXPIRED 條目 + 修復建議}
 ```
 
 ### Overall Status 判定規則
@@ -164,9 +169,9 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 ### 4.1 正常執行流程
 
 1. 主 session 派遣一個 **Health Check Subagent**，並提供以下指令：
-   - 依序執行 §2 定義的 5 項診斷檢查
+   - 依序執行 §2 定義的 6 項診斷檢查
    - 使用 Read、Glob、Grep 工具讀取所有必要文件；執行 `gh run list` 取得 CI 狀態
-   - 依照 §3 定義的格式產出完整報告字串（含 Overall Status 標題、5 個子檢查區塊、各自的 PASS/FAIL/WARN/OVERDUE 判定標籤）
+   - 依照 §3 定義的格式產出完整報告字串（含 Overall Status 標題、6 個子檢查區塊、各自的 PASS/FAIL/WARN/OVERDUE 判定標籤）
 2. Subagent 完成後，將完整報告字串回傳給主 session
 3. 主 session 直接輸出 Subagent 回傳的報告，不再對內容做任何修改
 4. 若 Overall Status 為 CRITICAL，建議使用者優先修復後再繼續開發
@@ -231,6 +236,54 @@ health-check subagent 執行失敗，診斷結果不可用，請重試或手動�
 ```
 
 腳本位置：`scripts/validate-orphans.sh`
+
+### 檢查 6：知識新鮮度檢查
+
+<!-- US-221 知識老化偵測 — Sprint 84 -->
+
+讀取 `docs/km/Knowledge_Staleness_Detection.md` 中定義的「已內化知識清單」（Ingested Knowledge Inventory），對每個已內化文件條目驗證其新鮮度。
+
+**檢查邏輯：**
+
+1. 讀取 `docs/km/Knowledge_Staleness_Detection.md` §2 的已內化知識清單
+2. 對每個條目取得其「最後驗證時間戳」（`last_verified_at`）欄位
+3. 計算距今天數（今日日期 − last_verified_at）
+4. 依以下閾值判定新鮮度狀態：
+
+| 距今天數 | 新鮮度狀態 |
+|---------|-----------|
+| ≤ 30 天 | FRESH（新鮮） |
+| 31–90 天 | STALE（陳舊） |
+| > 90 天 | EXPIRED（過期） |
+
+**判定規則：**
+- 所有條目均為 FRESH → PASS
+- 有任何條目為 STALE（但無 EXPIRED）→ WARN（列出 STALE 條目清單）
+- 有任何條目為 EXPIRED → FAIL（列出 EXPIRED 條目清單）
+- `docs/km/Knowledge_Staleness_Detection.md` 不存在 → WARN（「知識老化偵測文件不存在，無法執行新鮮度檢查」）
+
+**WARN / FAIL 時的修復建議：**
+- STALE 條目：「{文件名稱} 已 {天數} 天未驗證（STALE），建議於本 Sprint 內重新爬取並比對差異。」
+- EXPIRED 條目：「{文件名稱} 已 {天數} 天未驗證（EXPIRED），依知識老化偵測三層機制，應立即觸發定時重新爬取並更新 last_verified_at。」
+
+**整合報告格式：**
+
+```
+### 6. 知識新鮮度 — {PASS / WARN / FAIL}
+{PASS: 所有已內化知識均在新鮮度閾值內}
+{WARN: 列出 STALE 條目 + 修復建議}
+{FAIL: 列出 EXPIRED 條目 + 修復建議}
+```
+
+**對 Overall Status 的影響：**
+
+| 新鮮度結果 | Overall Status 影響 |
+|-----------|-------------------|
+| PASS | 無影響 |
+| WARN（STALE） | 升格為 WARNING（若原為 HEALTHY） |
+| FAIL（EXPIRED） | 升格為 CRITICAL |
+
+---
 
 ### 6.5 處置流程（AC3）
 

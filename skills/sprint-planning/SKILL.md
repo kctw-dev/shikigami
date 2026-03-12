@@ -733,3 +733,34 @@ PO 在 Refinement 完成後需確認或更新以下項目：
 | 更新後的 Story 草稿 | 反映 Refinement 中達成的範圍共識，AC 清單已更新 |
 | 拆分 Story（若適用） | 若 Architect 建議拆分，PO 建立對應的新 Story，納入下次排序 |
 | READY 確認 | READY 結論後，PO 確認 Story 可進入 Sprint Planning PO Round 1 |
+
+---
+
+## 12. SBE 範例體系（Specification by Example）
+
+<!-- US-226 SBE 範例體系 — Sprint 84 -->
+
+Sprint Planning 流程中的業務規則（Hard Gate、Refinement 觸發條件、排程模式限制等）均以 **SBE 範例**作為 ground truth 表達，並衍生為對應的測試案例。
+
+### 12.1 SBE 使用時機
+
+| 時機 | 說明 | 負責角色 |
+|------|------|---------|
+| **新增 Hard Gate 或業務規則** | 在 `docs/definition/sbe-examples/sprint-lifecycle/` 建立對應的 `.sbe.md` 文件，以 Given/When/Then 格式明確化規則的前置條件、觸發事件與預期結果 | Architect |
+| **QA 驗收標準確認（§6 Step 3）** | QA subagent 執行路徑驗證與 AC 驗收時，可直接引用對應的 SBE Scenario 作為驗證依據，避免重複定義驗收邏輯 | QA |
+| **修改既有流程規則** | 更新流程規則時，必須同步更新對應的 SBE 文件（SBE 為 ground truth，下游文件從 SBE 衍生） | 修改者 |
+| **Discovery Phase 需求探索** | Product Brief 中的業務假設與驗證方法，可以 SBE 格式預先表達，作為後續 Story AC 的雛形 | PO + Architect |
+
+### 12.2 Sprint Planning 相關 SBE 文件
+
+| SBE 文件 | 對應業務規則 |
+|---------|-----------|
+| `docs/definition/sbe-examples/sprint-lifecycle/sprint_planning_scheduled_mode.sbe.md` | §3.1 排程模式 HARD-GATE（S-size 限制） |
+| `docs/definition/sbe-examples/sprint-lifecycle/sprint_planning_refinement_gate.sbe.md` | §9.2 Refinement 觸發條件與豁免規則 |
+
+### 12.3 SBE 格式標準
+
+SBE 文件格式定義、欄位說明、轉換規則詳見：
+
+- `docs/definition/sbe-examples/SBE_FORMAT.md`：Given/When/Then 標準格式
+- `docs/definition/sbe-examples/SBE_TO_TEST_RULES.md`：SBE → 測試案例轉換規則

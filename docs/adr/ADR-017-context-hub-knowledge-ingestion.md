@@ -367,6 +367,40 @@ MCP server 回傳的知識片段屬於不信任外部資料（來源為使用者
 | AC 未引用任何 API URL | 無影響 | 步驟 7.5 不觸發，零影響 |
 | 大型 API 文件（>50 端點） | N/A | Agent 僅查詢 AC 相關端點，MCP server 按需回傳片段 |
 
+### 對 SBE 知識庫載入策略的影響（兩層索引機制）
+
+**關聯 Story**：US-227
+
+本 ADR 確立的 Token 效率原則（按需載入、最小化 context 佔用）同樣適用於 SBE 業務規則知識庫的載入策略。`docs/definition/sbe-examples/` 目錄採用**兩層索引機制**實現 SBE 知識的漸進載入：
+
+```
+Layer 1：docs/definition/sbe-examples/meta-index.md
+    │
+    │ context 佔用：極小（模組名 + 一句話摘要）
+    │ 作用：Agent 掃描所有模組，定位相關模組
+    ▼
+Layer 2：docs/definition/sbe-examples/<module>/index.md
+    │
+    │ context 佔用：中等（範例清單 + 簡要描述）
+    │ 作用：Agent 在模組內定位具體 SBE 範例
+    ▼
+Layer 3：docs/definition/sbe-examples/<module>/<name>.sbe.md
+    │
+    │ context 佔用：完整（Given/When/Then 業務規則全文）
+    │ 作用：Agent 依照 SBE 範例執行，作為 ground truth
+    ▼
+Agent 執行
+```
+
+此三層漸進載入策略與本 ADR 的 MCP 按需查詢原則（Token 效率最優）精神一致：不預載全量知識，而是依任務需要按需取用。兩者共同構成 Shikigami 框架的知識載入策略基礎。
+
+**載入策略對比**：
+
+| 知識類型 | 載入機制 | 精準控制手段 |
+|---------|---------|------------|
+| 外部 API 知識 | Context Hub MCP tool call | 僅查詢 AC 引用的端點 |
+| SBE 業務規則知識 | 兩層索引漸進載入 | meta-index → 模組 index → 具體範例 |
+
 ---
 
 ## 實作路線圖
@@ -494,3 +528,5 @@ Onboarding Skill（`skills/onboarding/SKILL.md`）新增 MCP 設定驗證步驟�
 - ADR-015：Figma 整合架構決策（MCP 整合模式先例，`.mcp.json` 宣告式設定）
 - [andrewyng/context-hub](https://github.com/andrewyng/context-hub)：Context Hub CLI 工具
 - OWASP Top 10 for LLM Applications — LLM01: Prompt Injection（外部內容注入風險）
+- `docs/definition/sbe-examples/meta-index.md`：SBE 範例庫 Meta-Index（兩層索引機制 Layer 1）
+- `docs/definition/sbe-examples/sprint-lifecycle/index.md`：Sprint Lifecycle 模組 SBE Index（兩層索引機制 Layer 2）

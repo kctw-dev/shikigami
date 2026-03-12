@@ -553,6 +553,33 @@ Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定�
    3. 將 A 欄位標注為引用本 Sprint 完成率（不另填數值，格式：「= 完成率 X%」）。
    4. 填入 `docs/km/Metrics_Log.md` 的 `## SPACE 五維度指標` 表格，新增對應 Sprint 的一列記錄。
 
+2.6 **Quality Observer 診斷報告**
+
+   <!-- US-228 Sprint 84 — Quality Observer 診斷報告使用時機 -->
+
+   **執行時機**：步驟 2.5（SPACE 五維度量測）完成後、步驟 3（Action Item 建立 Issue）之前執行。
+
+   **目的**：基於本 Sprint 的 SPACE 數據，從系統性行為模式角度產出品質診斷，補充 Good/Problem/Action 收集所未能涵蓋的跨 Sprint 模式識別。
+
+   **與 SPACE 量測的關係**：Quality Observer 消費步驟 2.5 填入的 SPACE 數值（P、C、E 維度），轉化為三維度行為模式診斷（幻覺頻率、斷鏈模式、角色協作效率）。SPACE 記錄表是數據來源，Quality Observer 診斷報告是模式詮釋層。
+
+   **執行步驟**：
+
+   1. 讀取本 Sprint 的 SPACE 數據（P、C、E 欄位）及前三個 Sprint 的歷史 SPACE 數據（用於趨勢計算）。
+   2. 依 `docs/km/Quality_Observer.md` 的診斷報告格式，逐一填入三維度觀察數值與模式識別描述。
+   3. 判定各維度警示狀態，給出綜合診斷結論（健康 / 輕度警示 / 嚴重警示）。
+   4. 輸出完整診斷報告（格式見 `docs/km/Quality_Observer.md`「診斷報告格式」區塊）。
+
+   **診斷報告的後續使用**：
+   - 若診斷結論為**健康**：記錄至本 Sprint Retrospective_Log.md 對應區塊的附錄即可，無需額外行動。
+   - 若診斷結論為**輕度警示**：將改善建議列為 Retrospective Action Item 候選，由主 session 決定是否納入步驟 3 建立 GitHub Issue。
+   - 若診斷結論為**嚴重警示**：須立即將改善建議提交為 Retrospective Action Item，並標注優先級為高；若涉及結構性斷鏈或連續性幻覺，需升級至 Architect/PO 決策。
+
+   **注意事項**：
+   - Quality Observer 診斷報告聚焦於**行為模式**，不記錄個別 bug 或具體缺陷內容（那是 QA 的職責）
+   - 若本 Sprint 為系統首次使用 Quality Observer（尚無歷史 SPACE 數據），前三 Sprint 平均欄位填「資料不足」
+   - 診斷報告不阻塞步驟 3 的執行；即使無警示，也應完成報告輸出
+
 3. **每個 Action 建立為 GitHub Issue**
 
    透過 `issue-management` Skill 將每個 Action Item 建立為 GitHub Issue，方便追蹤：

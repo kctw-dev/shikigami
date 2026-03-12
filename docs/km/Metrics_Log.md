@@ -105,6 +105,27 @@ SPACE 框架量化代理人行為品質，作為 Sprint Velocity 與完成率之
 | **C** | Communication（溝通）  | 互審發現問題數；C = 本 Sprint 中跨 Agent 交叉確認（PO / Developer / QA 互審）時發現的潛在問題數量；衡量 agent 交叉確認抓到的潛在問題數量 |
 | **E** | Efficiency（效率）     | 斷鏈次數 + 人工介入次數；斷鏈次數 = 流程中止或跳步事件數（消費 `[CHECKPOINT-FAIL]` 記錄）；人工介入次數 = 需要使用者手動修正的次數；數值越低表示效率越高 |
 
+### Quality Observer 觀察數據來源對照表
+
+<!-- US-228 Sprint 84 — Quality Observer 整合 SPACE 五維度 -->
+
+Quality Observer 消費 SPACE 五維度記錄表作為觀察數據來源，同時補充三維度行為模式診斷。以下對照表說明各 SPACE 維度與 Quality Observer 三維度的對應關係。
+
+| SPACE 維度 | Quality Observer 對應維度 | 資料流方向 | 說明 |
+|-----------|--------------------------|-----------|------|
+| **P（Performance）** | 幻覺頻率（Hallucination Frequency） | SPACE → QO | P 維度的「攔截次數 / 漏網次數」直接作為幻覺頻率的原始數據；QO 補充模式分類（數值腦補 / 文件腦補 / 狀態腦補） |
+| **E（Efficiency）** | 斷鏈模式（Chain Break Pattern） | SPACE → QO | E 維度的「斷鏈次數 + 人工介入次數」直接作為斷鏈模式的原始數據；QO 補充斷鏈觸發點與模式類型分析 |
+| **C（Communication）** | 角色協作效率（Role Collaboration Efficiency） | SPACE → QO | C 維度的「互審發現問題數」直接作為角色協作效率的原始數據；QO 補充協作模式觀察與形式化警示判定 |
+| **S（Satisfaction）** | 綜合診斷（參考維度） | SPACE → QO | S 維度的 Stakeholder 滿意度作為 QO 診斷結論的外部校驗基準；滿意度持續下降而 P/C/E 無警示時，觸發 QO 盲點審查 |
+| **A（Activity）** | 不直接對應 | SPACE 自維護 | A 維度（完成率）不對應 QO 觀察維度；QO 可在備注中記錄完成率異常與行為模式的相關性 |
+
+**補充說明**：
+- Quality Observer 以 SPACE 記錄表為**消費端**，不重複記錄已在 SPACE 表格中存在的數值
+- Quality Observer 在 SPACE 數據基礎上補充的是**行為模式詮釋**，而非數值本身
+- 若 QO 診斷發現 SPACE 數據記錄有誤（例如漏計幻覺事件），須回寫修正至 SPACE 記錄表
+
+---
+
 ### SPACE 五維度記錄表
 
 | Sprint 編號 | 日期 | S | P | A | C | E | 備註 |
