@@ -197,138 +197,17 @@ Checklist 中任一項目未勾選，不得執行部署。
 
 ---
 
-## 5.1 L2 API 整合驗證步驟模板
+## 5.1 L2 API 整合驗證
 
-**目的**：在版本 tag 前自動驗證關鍵 API 端點的 response schema，補足 unit test 無法覆蓋的跨服務整合驗證。
+**目的**：在版本 tag 前驗證關鍵 API 端點的 response schema，補足 unit test 無法覆蓋的跨服務整合驗證。
 
-> **使用方式**：消費端專案將此模板複製至部署腳本或 CI workflow，並自行填入 `ENDPOINTS` 清單與各端點的預期欄位。
+### 驗證步驟摘要
 
-### 前置條件
+1. **定義端點清單**：在部署腳本或 CI workflow 中配置待驗證端點（格式：`METHOD PATH REQUIRED_FIELDS`）
+2. **執行 Schema 驗證**：對每個端點發送請求，確認回應包含所有必要欄位且非 null
+3. **收集結果**：逐端點記錄 PASS/FAIL，任一失敗即整體 FAIL
 
-- 目標環境（Staging / Production）API 服務已啟動
-- 具備 API 呼叫權限（Token / API Key 已設定於環境變數）
-- `curl` 與 `jq` 已安裝於執行環境
-
-### 驗證步驟
-
-#### 步驟 1：定義待驗證端點清單
-
-消費端專案自行填入以下變數（請勿硬編碼至 SKILL.md，僅在部署腳本或 CI workflow 中配置）：
-
-```bash
-# ============================================================
-# 消費端自行填入區域（此段不應出現在 SKILL.md，僅作範例說明）
-# ============================================================
-
-# 基礎 URL（由環境變數注入，勿硬編碼）
-BASE_URL="${API_BASE_URL}"          # 例：https://api.example.com
-AUTH_HEADER="${API_AUTH_HEADER}"    # 例：Authorization: Bearer ${TOKEN}
-
-# 待驗證端點清單（格式：METHOD PATH REQUIRED_FIELD1,REQUIRED_FIELD2,...）
-ENDPOINTS=(
-  "GET  /health          status,version"
-  "GET  /api/v1/ping     pong"
-  # 在此新增更多端點
-)
-```
-
-#### 步驟 2：執行 L2 API Schema 驗證
-
-使用以下腳本逐一驗證端點回應是否包含必要欄位：
-
-```bash
-#!/usr/bin/env bash
-# l2-api-validation.sh — L2 API 整合驗證腳本
-# 用法：BASE_URL=https://api.example.com AUTH_HEADER="Authorization: Bearer <token>" bash l2-api-validation.sh
-
-set -euo pipefail
-
-FAIL=0
-
-validate_endpoint() {
-  local method="$1"
-  local path="$2"
-  local required_fields="$3"  # 逗號分隔欄位名稱
-
-  local url="${BASE_URL}${path}"
-  local response
-
-  echo "  [CHECK] ${method} ${url}"
-
-  response=$(curl --silent --fail \
-    --request "${method}" \
-    --header "${AUTH_HEADER}" \
-    --header "Accept: application/json" \
-    "${url}") || {
-    echo "  [FAIL]  HTTP 請求失敗：${method} ${path}"
-    FAIL=1
-    return
-  }
-
-  # 驗證每個必要欄位是否存在且非 null
-  IFS=',' read -ra fields <<< "${required_fields}"
-  for field in "${fields[@]}"; do
-    local value
-    value=$(echo "${response}" | jq -r ".${field} // empty")
-    if [[ -z "${value}" ]]; then
-      echo "  [FAIL]  缺少必要欄位：${field}（路徑：${path}）"
-      FAIL=1
-    else
-      echo "  [OK]    欄位存在：${field} = ${value}"
-    fi
-  done
-}
-
-echo "=== L2 API 整合驗證開始 ==="
-echo "目標 BASE_URL：${BASE_URL}"
-echo ""
-
-for entry in "${ENDPOINTS[@]}"; do
-  read -r method path fields <<< "${entry}"
-  validate_endpoint "${method}" "${path}" "${fields}"
-done
-
-echo ""
-if [[ "${FAIL}" -eq 0 ]]; then
-  echo "=== L2 驗證通過：所有端點 schema 驗證成功 ==="
-  exit 0
-else
-  echo "=== L2 驗證失敗：發現一個或多個端點 schema 不符 ==="
-  exit 1
-fi
-```
-
-#### 步驟 3：範例 — 單一端點 curl + jq 快速驗證
-
-若只需手動驗證單一端點，可直接複製以下 snippet：
-
-```bash
-# 範例：驗證 /health 端點回應包含 status 與 version 欄位
-curl --silent --fail \
-  --request GET \
-  --header "Authorization: Bearer ${API_TOKEN}" \
-  --header "Accept: application/json" \
-  "${API_BASE_URL}/health" \
-| jq '
-  if (.status != null and .version != null)
-  then "PASS: status=\(.status), version=\(.version)"
-  else error("FAIL: 缺少必要欄位 status 或 version")
-  end
-'
-
-# 範例：驗證 /api/v1/users 回應為陣列且包含 id 欄位
-curl --silent --fail \
-  --request GET \
-  --header "Authorization: Bearer ${API_TOKEN}" \
-  --header "Accept: application/json" \
-  "${API_BASE_URL}/api/v1/users" \
-| jq '
-  if (type == "array" and length > 0 and .[0].id != null)
-  then "PASS: 回應為陣列，首筆資料 id=\(.[0].id)"
-  else error("FAIL: 回應格式不符預期")
-  end
-'
-```
+> **前置條件**：目標環境 API 已啟動、具備 API 呼叫權限、`curl` 與 `jq` 已安裝。
 
 ### 驗證結果判斷
 
@@ -348,62 +227,11 @@ L2 驗證結果必須記錄於部署就緒檢查的 Checklist 備注欄。
 
 ## 5.2 L3 E2E 端對端驗證步驟（Soft Gate）
 
-**目的**：在版本 tag 後透過 Playwright E2E 測試驗證完整使用者流程，補足 L2 API 驗證無法涵蓋的 UI 互動與跨服務整合場景。
+**目的**：在版本 tag 後透過 Playwright E2E 測試驗證完整使用者流程。
 
-> **注意**：L3 E2E 驗證為 **Soft Gate**。E2E 測試失敗時輸出 `[E2E-SOFT-GATE]`，需 PO 確認後方可繼續。建議在 Staging 環境完成 L2 API 驗證後執行。
+> **注意**：L3 E2E 驗證為 **Soft Gate**。失敗時輸出 `[E2E-SOFT-GATE]`，需 PO 確認後方可繼續。
 
-> **模板路徑**：
-> - Playwright workflow 模板：`.github/workflows/e2e.yml`
-> - CI 環境 Firebase 登入腳本模板：`docs/templates/ci-firebase-login.js`
-
-### 前置條件
-
-- Staging / Production 環境服務已啟動並通過 L2 API 驗證
-- 消費端專案已安裝 Playwright（`@playwright/test`）
-- GitHub 倉庫已設定必要 Secrets（`YOUR_TEST_URL` 等）
-- 若需要登入驗證：Firebase Service Account 已設定於 CI Secrets
-
-### 啟用步驟
-
-#### 步驟 1：複製 Playwright E2E Workflow 模板
-
-將 `.github/workflows/e2e.yml` 複製至消費端專案的 `.github/workflows/` 目錄，並替換佔位符：
-
-| 佔位符 | 說明 | 範例值 |
-|--------|------|--------|
-| `YOUR_NODE_VERSION` | Node.js 版本 | `"20"` |
-| `YOUR_TEST_URL` | 測試目標服務 URL（設定於 GitHub Secrets） | `https://staging.example.com` |
-| `YOUR_PLAYWRIGHT_REPORT_DIR` | Playwright 報告輸出目錄 | `playwright-report/` |
-| `YOUR_PLAYWRIGHT_TRACES_DIR` | Playwright traces 輸出目錄 | `test-results/` |
-
-#### 步驟 2（若需登入）：設定 CI Firebase 登入腳本
-
-若 E2E 測試需要通過 Firebase Authentication 登入，複製 `docs/templates/ci-firebase-login.js` 並替換佔位符：
-
-| 佔位符 / 環境變數 | 說明 |
-|-------------------|------|
-| `YOUR_PROJECT_ID` | Firebase 專案 ID |
-| `YOUR_TEST_USER_UID` | 測試用 Firebase UID（需在 Firebase Auth 中已存在） |
-| `FIREBASE_SERVICE_ACCOUNT_JSON` | Service Account JSON（設定於 CI Secrets，切勿硬編碼） |
-| `FIREBASE_WEB_API_KEY` | Firebase Web API Key（設定於 CI Secrets） |
-
-在 E2E 測試前執行腳本取得 ID Token：
-
-```bash
-# 在 workflow 步驟中捕獲 ID Token
-ID_TOKEN=$(node scripts/ci-firebase-login.js)
-export TEST_ID_TOKEN="${ID_TOKEN}"
-```
-
-#### 步驟 3：執行 E2E 測試並收集報告
-
-tag-only workflow 會自動觸發（push `v*` tag 時）。手動執行方式：
-
-```bash
-npx playwright test
-```
-
-測試報告與 traces 會自動上傳至 GitHub Actions Artifact，保留 30 天（失敗的 traces 保留 7 天）。
+> **模板參照**：Playwright workflow 模板 `.github/workflows/e2e.yml`、Firebase 登入腳本 `docs/templates/ci-firebase-login.js`。依模板內佔位符說明設定即可。
 
 ### 驗證結果判斷
 
@@ -412,8 +240,6 @@ npx playwright test
 | 所有測試 PASS | L3 E2E 驗證通過 | 記錄至部署 Checklist 備注欄 |
 | 測試失敗 | L3 E2E 驗證失敗 | 輸出 `[E2E-SOFT-GATE]`，記錄失敗原因，需 PO 確認後方可繼續 |
 | CI 環境問題 | 環境未就緒 | 確認 Secrets 設定與服務狀態 |
-
-> **提醒**：L3 驗證失敗為 Soft Gate，輸出 `[E2E-SOFT-GATE]` 後須記錄失敗原因，由 PO 確認是否繼續；建議排入下個 Sprint 追蹤。
 
 ---
 
@@ -430,49 +256,24 @@ npx playwright test
 
 部署後若任一 Signal 超出閾值，立即啟動回滾程序。
 
-### 6.1 Golden Signals 人工可操作監控 Checklist
+### 6.1 Golden Signals 部署後監控規則
 
-部署後 SRE subagent 依序執行以下逐項檢查，確認每項狀態後打勾：
+部署後 SRE subagent 依序檢查以下四類指標，任一超出閾值時依「異常處置」欄動作執行：
 
-#### Latency（延遲）檢查
-
-- [ ] **查詢 P50 延遲**：確認在基線值 ±20% 範圍內
-  - 基線值（填入）：\_\_\_ ms | 目前值：\_\_\_ ms
-  - 超出閾值時：檢查慢查詢日誌、N+1 查詢問題、資料庫索引使用情況
-- [ ] **查詢 P95 延遲**：確認未超過 SLO 定義的 P95 目標
-  - SLO 目標（填入）：\_\_\_ ms | 目前值：\_\_\_ ms
-  - 超出閾值時：分析長尾延遲來源（逾時請求、GC pause、鎖競爭）
-- [ ] **查詢 P99 延遲**：確認未出現顯著上升（相較部署前）
-  - 超出閾值時：啟動回滾評估，P99 突升通常預示系統壓力問題
-
-#### Traffic（流量）檢查
-
-- [ ] **查詢目前 QPS/RPS**：確認與預期流量模式一致
-  - 預期值（填入）：\_\_\_ req/s | 目前值：\_\_\_ req/s
-  - 流量過低時：確認 Load Balancer 路由配置、服務發現是否正常
-  - 流量異常高時：確認是否有 DDoS 攻擊、Bot 流量或功能引起的重試風暴
-- [ ] **確認流量分布正常**：無異常地區集中或特定端點 spike
-
-#### Errors（錯誤率）檢查
-
-- [ ] **查詢 5xx 錯誤率**：確認低於告警閾值（通常 < 0.1%）
-  - 告警閾值（填入）：\_\_\_ % | 目前值：\_\_\_ %
-  - 超出閾值時：立即查看錯誤日誌，確認錯誤類型（資料庫錯誤？外部依賴？程式 bug？）
-- [ ] **查詢 4xx 錯誤率**：排除正常的 404（資源不存在），確認無異常 4xx spike
-- [ ] **確認錯誤類型分布**：新版本是否引入新的錯誤類型
-  - 新錯誤類型出現時：對比部署前後的錯誤日誌，定位變更影響
-
-#### Saturation（飽和度）檢查
-
-- [ ] **CPU 使用率**：確認低於 70%（警戒線），若超過 80% 立即告警
-  - 目前值：\_\_\_ % | 警戒閾值：70%
-- [ ] **Memory 使用率**：確認低於 80%，關注是否有持續上升趨勢（記憶體洩漏）
-  - 目前值：\_\_\_ % | 警戒閾值：80%
-  - 持續上升時：確認有無記憶體洩漏，考慮滾動重啟
-- [ ] **Connection Pool 使用率**：確認低於 80%，避免連線耗盡
-  - 目前值：\_\_\_ % | 警戒閾值：80%
-- [ ] **磁碟使用率**：確認低於 85%，關注日誌磁碟（高流量部署可能快速填滿）
-  - 目前值：\_\_\_ % | 警戒閾值：85%
+| 類別 | 檢查項目 | 閾值 | 異常處置 |
+|------|---------|------|---------|
+| **Latency** | P50 延遲 | 基線值 ±20% | 檢查慢查詢、N+1、索引 |
+| | P95 延遲 | ≤ SLO P95 目標 | 分析長尾來源（逾時、GC pause、鎖競爭） |
+| | P99 延遲 | 未顯著上升 | 啟動回滾評估 |
+| **Traffic** | QPS/RPS | 與預期流量一致 | 過低：查 LB/服務發現；過高：查 DDoS/重試風暴 |
+| | 流量分布 | 無異常集中 | 確認地區/端點分布 |
+| **Errors** | 5xx 錯誤率 | < 0.1% | 立即查錯誤日誌，定位錯誤類型 |
+| | 4xx 錯誤率 | 無異常 spike（排除正常 404） | 對比部署前後差異 |
+| | 錯誤類型分布 | 無新錯誤類型 | 對比部署前後錯誤日誌 |
+| **Saturation** | CPU | < 70%（警戒）/ 80%（告警） | 確認擴容或優化需求 |
+| | Memory | < 80% 且無持續上升 | 確認記憶體洩漏，考慮滾動重啟 |
+| | Connection Pool | < 80% | 確認連線洩漏，限流或重啟 |
+| | 磁碟 | < 85% | 關注日誌磁碟填充速度 |
 
 ### 6.2 告警閾值設定建議
 
@@ -511,71 +312,26 @@ npx playwright test
 
 SLI（Service Level Indicator）是量測 SLO 達標的具體指標。每個 SLO 必須對應至少一個可量測的 SLI。
 
-#### 可用性 SLI
+| SLI | 公式 | 量測來源 |
+|-----|------|---------|
+| **可用性** | `(總請求數 - 5xx 錯誤數) / 總請求數 × 100%` | `http_requests_total`、`http_requests_total{status=~"5.."}` |
+| **延遲** | `延遲 < 閾值的請求數 / 總請求數 × 100%` | histogram_quantile（P50/P95/P99） |
+| **MTTR** | `Σ(解除時間 - 偵測時間) / 事故總數` | Post-mortem 記錄（SEV-1/SEV-2） |
 
-**定義**：成功請求數 / 總請求數 × 100%
+**Error Budget 計算**：`(1 - SLO 目標) × 總量測時間`（例：99.9% SLO，30 天 → 43.2 分鐘）。已消耗百分比 = 累計停機 / Error Budget × 100%。
 
-**量測方式**：
-```
-可用性 SLI = (總請求數 - 5xx 錯誤數) / 總請求數 × 100%
-```
+> **效能基準交叉參照**：延遲 SLI 基線值應與 §14 效能基準保持一致。Load Test 更新基線時需同步更新本節 SLO 閾值。模板：`docs/templates/performance-baseline-template.md`。
 
-**量測步驟**：
-1. 從監控系統查詢指定時間窗口的總請求數（`http_requests_total`）
-2. 查詢同期的 5xx 錯誤請求數（`http_requests_total{status=~"5.."}`）
-3. 計算可用性 = (總請求 - 5xx 錯誤) / 總請求 × 100%
-4. 與 SLO 目標（例：99.9%）比較
+### 7.2 SLO 達標追蹤（部署前）
 
-**Error Budget 計算**：
-```
-Error Budget = (1 - SLO 目標) × 總量測時間
-例：99.9% SLO，30 天窗口 → Error Budget = 0.1% × 43,200 分鐘 = 43.2 分鐘
-```
+部署前 SRE subagent 必須查詢以下指標並記錄於 Checklist 備注欄：
 
-**本月 Error Budget 消耗量測**：
-- 查詢本月累計停機時間（5xx 錯誤率超過閾值的持續時間）
-- 計算已消耗 Error Budget 百分比 = 累計停機 / Error Budget × 100%
-
-#### 延遲 SLI
-
-**定義**：X% 請求的延遲低於目標閾值
-
-**量測方式**：
-```
-延遲 SLI = 延遲 < 閾值的請求數 / 總請求數 × 100%
-例：P95 延遲 SLO 目標 500ms → SLI = 延遲 < 500ms 的請求比例
-```
-
-**量測步驟**：
-1. 查詢延遲直方圖（histogram_quantile 或 percentile 函數）
-2. 確認 P50、P95、P99 各百分位數值
-3. 與 SLO 定義的目標閾值比較
-
-> **效能基準交叉參照**：延遲 SLI 的量測基線值（P50 / P95 / P99 目標閾值）應與 §14 效能基準管理中定義的基線值保持一致。每次 Load Test 後若基線值更新，需同步更新本節的 SLO 閾值設定。模板參考：`docs/templates/performance-baseline-template.md`。
-
-#### MTTR SLI
-
-**定義**：平均修復時間（從事故偵測到服務恢復的平均時間）
-
-**量測方式**：
-```
-MTTR = Σ(事故解除時間 - 事故偵測時間) / 事故總數
-```
-
-**量測步驟**：
-1. 從 Post-mortem 記錄彙整本月/本季所有 SEV-1、SEV-2 事故
-2. 計算每次事故的 TTR（Time to Recovery）= 解除時間 - 偵測時間
-3. 計算平均值（MTTR）
-4. 與目標（< 30 分鐘）比較
-
-### 7.2 SLO 達標追蹤 Checklist（部署前）
-
-- [ ] 查詢本月已消耗 Error Budget 百分比：\_\_\_ %
-- [ ] 確認 Error Budget 狀態（充足 > 50% / 緊張 20-50% / 耗盡 < 20%）
-- [ ] 查詢近 7 天可用性 SLI：\_\_\_ %（目標：> 99.9%）
-- [ ] 查詢近 7 天 P95 延遲：\_\_\_ ms（目標：< \_\_\_ ms）
-- [ ] 查詢近 3 個月 MTTR：\_\_\_ 分鐘（目標：< 30 分鐘）
-- [ ] 根據 Error Budget 狀態決定部署策略（見 Error Budget 決策規則）
+| 查詢項目 | 目標 |
+|---------|------|
+| 本月 Error Budget 消耗百分比 | 依 Error Budget 決策規則判定部署策略 |
+| 近 7 天可用性 SLI | > 99.9% |
+| 近 7 天 P95 延遲 | < SLO 定義閾值 |
+| 近 3 個月 MTTR | < 30 分鐘 |
 
 <HARD-GATE>
 SLI 量測結果必須記錄於部署就緒 Checklist 備注欄。
@@ -595,11 +351,7 @@ Error Budget 耗盡時禁止功能部署，PO Override 不適用此規則。
 | **優雅降級** | 部分功能不可用時，核心功能維持運作 | 確認降級策略、使用者體驗影響 |
 | **健康檢查端點** | 提供標準化健康檢查介面 | 確認 liveness / readiness probe 配置 |
 
-### 8.1 斷路器（Circuit Breaker）實作 Checklist
-
-斷路器防止對異常依賴服務的持續呼叫，避免級聯故障（Cascading Failure）。
-
-#### 斷路器三種狀態
+### 8.1 斷路器（Circuit Breaker）設定規則
 
 ```
 Closed（正常）→ 錯誤率超過閾值 → Open（斷路）→ 半開計時器到期 → Half-Open（試探）
@@ -608,22 +360,16 @@ Closed（正常）→ 錯誤率超過閾值 → Open（斷路）→ 半開計時
                                                       |── 試探成功 → Closed ←┘
 ```
 
-#### 斷路器設定 Checklist
+#### 斷路器核心設定
 
-- [ ] **定義被保護的外部依賴清單**（資料庫、第三方 API、微服務）
-  - 依賴 1：\_\_\_ | 依賴 2：\_\_\_ | 依賴 3：\_\_\_
-- [ ] **設定斷路閾值（Open 條件）**
-  - 錯誤率閾值：\_\_\_ %（建議：50%，在固定時間窗口 N 秒內）
-  - 最小請求數：\_\_\_ 次（建議：10 次，避免冷啟動誤斷）
-- [ ] **設定 Open 狀態持續時間**（進入 Half-Open 的等待時間）
-  - 等待時間：\_\_\_ 秒（建議：30-60 秒，依依賴服務恢復速度調整）
-- [ ] **設定 Half-Open 試探策略**
-  - 試探請求數：\_\_\_ 次（建議：1-3 次）
-  - 成功恢復條件：全部試探請求成功 → 回到 Closed
-  - 失敗條件：任一試探失敗 → 回到 Open（重置等待計時器）
-- [ ] **定義斷路時的降級行為**（見 §8.2 降級策略 Checklist）
-- [ ] **確認斷路器狀態可觀測**：斷路器狀態變化應觸發監控告警
-- [ ] **測試斷路器行為**：在 Staging 環境模擬依賴服務異常，確認斷路器正確觸發
+| 設定項目 | 建議值 | 說明 |
+|---------|--------|------|
+| 斷路閾值（錯誤率） | 50%（固定時間窗口內） | Open 觸發條件 |
+| 最小請求數 | 10 次 | 避免冷啟動誤斷 |
+| Open 持續時間 | 30-60 秒 | 依依賴服務恢復速度調整 |
+| Half-Open 試探數 | 1-3 次 | 全部成功 → Closed；任一失敗 → Open |
+
+**部署前必須確認**：外部依賴清單已定義、降級行為已對應（§8.2）、斷路器狀態可觀測、Staging 環境已測試斷路器觸發行為。
 
 #### 斷路器告警設定
 
@@ -633,54 +379,37 @@ Closed（正常）→ 錯誤率超過閾值 → Open（斷路）→ 半開計時
 | 斷路器 Open 持續 > 5 分鐘 | SEV-1 | 升級 Incident，確認降級方案是否有效 |
 | 斷路器頻繁開關（震盪） | SEV-3 | 調整閾值或修復依賴服務不穩定問題 |
 
-### 8.2 降級策略（Graceful Degradation）實作 Checklist
+### 8.2 降級策略（Graceful Degradation）規則
 
-降級策略確保當部分依賴異常時，核心功能仍能運作，降低使用者影響。
+#### 功能分級與降級策略類型
 
-#### 降級策略設計 Checklist
+| 功能分級 | 定義 | 可用降級策略 |
+|---------|------|------------|
+| 核心功能 | 絕對不能降級 | — |
+| 可降級功能 | 依賴異常時可降低服務品質 | Cache Fallback、靜態回應 |
+| 可停用功能 | 依賴異常時可暫停 | 功能停用（需 UI 提示） |
 
-- [ ] **識別核心功能 vs. 非核心功能**
-  - 核心功能（絕對不能降級）：\_\_\_
-  - 可降級功能（依賴異常時可降低服務質量）：\_\_\_
-  - 可完全停用功能（依賴異常時可暫停）：\_\_\_
+#### 降級策略驗證要點
 
-- [ ] **為每個可降級功能定義降級策略**
+| 策略類型 | 驗證要點 |
+|---------|---------|
+| Cache Fallback | TTL 合理、暖機充足、一致性影響可接受 |
+| 靜態回應 | 不洩漏敏感資訊、不造成資料不一致 |
+| 功能停用 | UI 有降級提示、不影響核心流程 |
 
-| 功能 | 依賴服務 | 降級策略 | 使用者感知 |
-|------|---------|---------|---------|
-| [功能名稱] | [依賴服務] | [Cache Fallback / 靜態回應 / 功能停用] | [影響描述] |
-| [功能名稱] | [依賴服務] | [Cache Fallback / 靜態回應 / 功能停用] | [影響描述] |
+**部署前必須確認**：Staging 環境已測試降級策略、PO 已確認降級體驗可接受、降級狀態有監控告警、降級模式 SLO 目標已定義、恢復流程已定義。
 
-- [ ] **Cache Fallback 策略**（若使用快取作為降級方案）
-  - 確認快取 TTL 設定合理（不會服務過期資料太久）
-  - 確認快取在依賴異常前已有足夠的暖機時間
-  - 確認快取資料的一致性影響可接受
+### 8.3 可靠性架構部署前必要項目
 
-- [ ] **靜態回應策略**（若使用預設值作為降級回應）
-  - 定義各端點的安全靜態回應（不洩漏敏感資訊）
-  - 確認靜態回應不會造成使用者資料不一致
-
-- [ ] **功能停用策略**（若決定暫停特定功能）
-  - 確認 UI 有適當的降級提示訊息（「功能暫時不可用」）
-  - 確認停用功能不會影響核心使用流程
-
-#### 降級觸發 Checklist（部署前驗證）
-
-- [ ] 降級策略已在 Staging 環境測試（模擬依賴服務下線）
-- [ ] 降級模式下的使用者體驗已由 PM/PO 確認可接受
-- [ ] 降級狀態有對應的監控告警（確認降級模式被觸發時能感知）
-- [ ] 降級後的核心 SLO 目標已重新定義（降級模式下的可用性目標）
-- [ ] 降級恢復流程已定義（依賴服務恢復後如何自動/手動退出降級模式）
-
-### 8.3 可靠性架構部署前 Checklist
-
-- [ ] **冗餘設計**：關鍵服務副本數 ≥ 2，確認跨節點/跨可用區分布
-- [ ] **斷路器**：所有外部依賴已設定斷路器（見 §8.1）
-- [ ] **降級策略**：所有可降級功能已定義降級策略並測試（見 §8.2）
-- [ ] **健康檢查**：`/healthz`（liveness）和 `/readyz`（readiness）端點已實作
-- [ ] **Timeout 設定**：所有外部呼叫已設定合理 Timeout（避免無限等待）
-- [ ] **Retry 策略**：已設定 Exponential Backoff with Jitter，避免重試風暴
-- [ ] **負載測試**：已在 Staging 環境執行負載測試，確認服務在預期流量下穩定
+| 項目 | 驗證標準 |
+|------|---------|
+| 冗餘設計 | 關鍵服務副本數 ≥ 2，跨節點/跨可用區 |
+| 斷路器 | 所有外部依賴已設定（見 §8.1） |
+| 降級策略 | 所有可降級功能已定義並測試（見 §8.2） |
+| 健康檢查 | `/healthz`（liveness）+ `/readyz`（readiness）已實作 |
+| Timeout | 所有外部呼叫已設定合理 Timeout |
+| Retry 策略 | Exponential Backoff with Jitter |
+| 負載測試 | Staging 環境已執行，服務在預期流量下穩定 |
 
 <HARD-GATE>
 斷路器缺失或降級策略未定義的依賴服務，部署前必須補充，否則不得執行 Production 部署。
@@ -728,44 +457,9 @@ Toil（重複性手動操作）不得超過 50% 工時。
 
 ### 偵測步驟
 
-1. **掃描現有 workflow 設定**
-
-   執行下列指令，列出消費端專案所有 workflow 的 runner 配置：
-
-   ```bash
-   grep -rn "runs-on:" .github/workflows/
-   ```
-
-2. **判斷是否全部跑在 self-hosted runner**
-
-   檢查輸出結果：
-   - 若所有 `runs-on:` 值均包含 `self-hosted`，則進入步驟 3
-   - 若已有 workflow 使用 `ubuntu-latest` 或其他 GitHub-hosted runner，則跳過本節
-
-3. **自動提示 CI/CD 拆分建議**
-
-   當偵測到現有 workflow 全部跑在 self-hosted runner 時，SRE subagent 必須輸出以下警示：
-
-   ```
-   [CI/CD 拆分建議]
-   偵測到所有 GitHub Actions workflow 均配置於 self-hosted runner。
-
-   Self-hosted runner 適合事件驅動型任務（issue_comment、webhook），
-   但不適合 compute-heavy 任務（測試套件、建置、依賴安裝）。
-   全部使用 self-hosted runner 可能導致：
-   - 測試執行時 OOM（記憶體不足）
-   - CI 失敗率上升
-
-   建議依 docs/ci-cd-guide/README.md 決策樹拆分 workflow：
-   - Compute-heavy 任務 → GitHub-hosted runner（ubuntu-latest）
-   - Event-driven 任務  → Self-hosted runner
-
-   模板參考：docs/ci-cd-guide/notify-comment.yml
-   ```
-
-4. **記錄偵測結果**
-
-   將偵測結果記錄於部署就緒檢查的 Checklist 備注欄，供後續追蹤。
+1. 掃描 `grep -rn "runs-on:" .github/workflows/`，列出所有 workflow 的 runner 配置
+2. 若所有 `runs-on:` 均為 `self-hosted`，輸出 `[CI/CD 拆分建議]` 警示：建議依 `docs/ci-cd-guide/README.md` 決策樹將 compute-heavy 任務移至 GitHub-hosted runner（OOM 風險），event-driven 任務保留 self-hosted
+3. 記錄偵測結果於部署 Checklist 備注欄
 
 ### 決策規則
 
@@ -863,42 +557,12 @@ Post-mortem 是事故解除後的系統性復盤，目的是找出根本原因�
 
 ### 13.2 Post-mortem 執行 SOP
 
-#### 步驟 1：召開 Post-mortem 會議
+1. **召開會議**：事故解除後 24-48 小時內，SEV-1 時長 60-90 分鐘，SEV-2/3 時長 30-60 分鐘，由非事故直接涉入者主持
+2. **填寫文件**：複製 `docs/templates/post-mortem-template.md`，依模板完成時間軸、5 Whys（≥ 3 層）、影響評估、Action Items、復盤摘要
+3. **Action Items 追蹤**：會議當天錄入 Sprint Backlog；立即修復（< 1 週）本 Sprint 追蹤，短期排入下 Sprint，長期列入 ROADMAP
+4. **歸檔**：命名 `docs/incidents/INC-YYYYMMDD-NNN-postmortem.md`，更新 `docs/km/Metrics_Log.md`（事故編號、MTTR、根因類別）
 
-- **時間**：事故解除後 24-48 小時內（確保記憶新鮮，緊急修復已完成）
-- **參與者**：Incident Commander、相關 SRE、Engineering Lead（視需要）
-- **時長**：60-90 分鐘（SEV-1），30-60 分鐘（SEV-2/SEV-3）
-- **主持人**：建議由非事故直接涉入者主持，確保客觀性
-
-#### 步驟 2：填寫 Post-mortem 文件
-
-使用 `docs/templates/post-mortem-template.md`，依序完成：
-
-1. **事故時間軸**（§1）：重建完整事故歷程，從第一個異常信號到解除
-2. **5 Whys 分析**（§2）：逐層追問根本原因，不少於 3 層 Why
-3. **影響評估**（§3）：量化使用者影響與 SLO 消耗
-4. **Action Items**（§4）：制定防止再發的具體改善行動
-5. **復盤討論摘要**（§5）：記錄 What went well / What could be improved
-
-#### 步驟 3：Action Items 追蹤
-
-- Action Items 在會議當天錄入 Sprint Backlog（即時建立對應 Story/Task）
-- 立即修復項目（< 1 週）：本 Sprint 內追蹤
-- 短期改善項目：排入下個 Sprint 或本 Sprint 剩餘工作
-- 長期防護項目：列入 ROADMAP 技術債
-
-#### 步驟 4：Post-mortem 歸檔
-
-- 命名格式：`docs/incidents/INC-YYYYMMDD-NNN-postmortem.md`
-- 發布至相關 Slack Channel，確保團隊學習共享
-- 更新 `docs/km/Metrics_Log.md`：記錄事故編號、MTTR、根因類別
-
-### 13.3 Post-mortem 文件使用指引
-
-1. 複製 `docs/templates/post-mortem-template.md` 建立事故 Post-mortem
-2. 命名格式：`docs/incidents/INC-YYYYMMDD-NNN-postmortem.md`
-3. 5 Whys 分析：每個 Why 的答案必須具體，避免「流程不完善」等模糊陳述
-4. Action Items 必須使用 SMART 原則（Specific / Measurable / Achievable / Relevant / Time-bound）
+> **品質要求**：5 Whys 答案必須具體（禁止「流程不完善」等模糊陳述），Action Items 須符合 SMART 原則。
 
 ### 13.4 Post-mortem 品質 Checklist
 
@@ -946,73 +610,19 @@ Action Items 未錄入 Sprint Backlog，下個 Sprint Review 將標記為未追�
 
 ### 14.2 Load Test 觸發時機指引
 
-以下三種場景必須執行 Load Test，SRE subagent 需確認觸發條件後依步驟執行：
+| 場景 | 觸發條件 | 測試範圍 | 結果處理 |
+|------|---------|---------|---------|
+| **部署前** | Sprint Review 通過 + 涉及核心 API/DB 變更 | 與上次基線相同參數（VU、時長、端點） | 比對 §14.1 基線 → Critical 阻擋部署 |
+| **效能相關 PR** | PR 修改 DB/快取/演算法，或 Label 含 `perf`/`load-test-required`，或 P95 已接近 Warning 80% | 受影響端點局部測試（≥ 5 分鐘，50 VU） | Warning → PR Comment `[PERF-WARNING]`；Critical → `[PERF-BLOCK]` 阻擋合併 |
+| **定期排程** | Sprint 倒數第 2 個工作日，或距上次 > 14 天 | 所有已定義基線端點完整測試 | Warning → 建立效能改善 Story；Critical → 當天排入修復；連續 2 次接近 Warning → 主動排入優化 |
 
----
-
-#### 場景一：部署前 Load Test
-
-**觸發條件**：
-- Sprint Review 驗收通過，準備執行 Production 部署前
-- 部署內容涉及核心 API 端點或資料庫查詢邏輯變更
-
-**執行步驟**：
-1. 確認 Staging 環境已部署待部署版本
-2. 執行基準 Load Test（與上次基線量測相同參數：VU 數、持續時間、端點清單）
-3. 收集 P50 / P95 / P99 延遲、錯誤率、吞吐量（RPS）
-4. 與 §14.1 基線值比對，判定是否觸發告警（見 §14.3）
-5. 記錄結果於部署 Checklist 備注欄，更新 §5「效能基準驗證通過」項目
-6. 若 Critical 閾值未觸發，繼續部署流程；若觸發，阻擋部署並排查效能回歸
-
----
-
-#### 場景二：效能相關 PR 的 Load Test
-
-**觸發條件**（滿足以下任一條件時觸發）：
-- PR 修改了資料庫查詢、快取策略、演算法複雜度相關邏輯
-- PR 標籤（Label）包含 `perf`、`performance` 或 `load-test-required`
-- PR 涉及的端點在上次 Load Test 中的 P95 延遲已接近 Warning 閾值（>80% 閾值）
-
-**執行步驟**：
-1. 在 PR Review 階段，由 Reviewer 判定是否觸發（依上述條件）
-2. 部署 PR 分支至 Staging 環境（可使用 Preview 部署）
-3. 執行針對受影響端點的局部 Load Test（最少 5 分鐘，50 VU）
-4. 對比 PR 分支結果與 main 分支基線值，計算偏差百分比
-5. 若偏差超過 Warning 閾值，在 PR Comment 標注 `[PERF-WARNING]` 並要求作者說明
-6. 若偏差超過 Critical 閾值，在 PR Comment 標注 `[PERF-BLOCK]`，阻擋 PR 合併直至效能問題解決
-
----
-
-#### 場景三：定期排程 Load Test
-
-**觸發條件**：
-- 每個 Sprint 結束前（Sprint 倒數第 2 個工作日）
-- 或距離上次 Load Test 超過 14 天（無論 Sprint 進度）
-
-**執行步驟**：
-1. 執行完整 Load Test 套件（涵蓋所有已定義基線的端點）
-2. 逐一對比各指標與 §14.1 中的基線值
-3. 識別效能趨勢：連續 2 次排程 Load Test 顯示同一指標接近 Warning 閾值時，主動排入下個 Sprint 效能優化任務
-4. 若所有指標在 Warning 閾值內：更新 `docs/performance/` 中的 Load Test 記錄（附日期與環境）
-5. 若有指標超過 Warning 閾值：建立效能改善 Story，排入下個 Sprint Backlog
-6. 若有指標超過 Critical 閾值：立即升級，不等待 Sprint 邊界，當天排入修復
+**共通流程**：收集 P50/P95/P99 延遲、錯誤率、RPS → 與 §14.1 基線比對（§14.3 偏差公式）→ 記錄結果於部署 Checklist 備注欄。
 
 ---
 
 ### 14.3 效能回歸偵測告警閾值定義
 
-#### 比對邏輯
-
-每次 Load Test 完成後，依下列公式計算各指標的偏差百分比：
-
-```
-偏差百分比 = (當次量測值 - 基線值) / 基線值 × 100%
-```
-
-- 偏差百分比為**正值**（當次值 > 基線值）：效能退化，需依下表判定告警等級
-- 偏差百分比為**負值**（當次值 < 基線值）：效能改善，記錄並評估是否更新基線值
-
-#### 偏差百分比閾值
+**比對公式**：`偏差% = (當次值 - 基線值) / 基線值 × 100%`。正值為退化（依下表告警），負值為改善（評估更新基線）。
 
 | 指標類型 | Warning 閾值 | Critical 閾值 | 建議動作 |
 |---------|------------|--------------|---------|
@@ -1038,15 +648,9 @@ Load Test 結果觸發 Critical 閾值時，禁止繼續部署流程。
 Load Test 結果必須記錄於部署就緒 Checklist 備注欄，§5「效能基準驗證通過」項目需附量測結果摘要。
 </HARD-GATE>
 
-### 14.4 Load Test 與 §8.3 負載測試 Checklist 整合說明
+### 14.4 Load Test 整合流程
 
-§8.3 負載測試 Checklist 項目「已在 Staging 環境執行負載測試，確認服務在預期流量下穩定」與本節整合如下：
-
-- **§8.3 負責**：確認「是否已執行負載測試」這個動作（Go / No-Go 決策）
-- **§14 負責**：定義「如何執行、如何量測、如何判定結果」的完整規格
-- **§5 負責**：「效能基準驗證通過」為部署前的最終確認項目，需 §14.3 比對結果支持
-
-SRE subagent 在部署前應依序：§14.2（觸發 Load Test）→ §14.3（比對告警閾值）→ §8.3（打勾負載測試完成）→ §5（打勾效能基準驗證通過）。
+部署前執行順序：§14.2（觸發 Load Test）→ §14.3（比對告警閾值）→ §8.3（打勾負載測試完成）→ §5（打勾效能基準驗證通過）。
 
 ---
 
@@ -1065,38 +669,10 @@ Deploy Board 是 GitHub Issue 形式的部署狀態看板，追蹤 Staging/Produ
 
 ### 15.2 部署前設定步驟
 
-#### 步驟 1：初始化 Deploy Board Issue
-
-執行初始化腳本，在 GitHub 倉庫建立看板 Issue：
-
-```bash
-# 複製腳本並填入消費端參數後執行
-bash scripts/deploy-board-init.sh
-```
-
-腳本完成後，記下輸出的 Issue 編號，設定為 Repository Variable：
-
-| Variable 名稱 | 說明 |
-|--------------|------|
-| `DEPLOY_BOARD_ISSUE_NUMBER` | Deploy Board Issue 的編號（由初始化腳本輸出） |
-
-#### 步驟 2：部署 deploy-notify.yml Workflow
-
-將 `docs/templates/deploy-notify.yml` 複製至消費端專案的 `.github/workflows/` 目錄，並替換以下佔位符：
-
-| 佔位符 | 說明 | 範例值 |
-|--------|------|--------|
-| `YOUR_DEPLOY_WORKFLOW_NAME` | 被監聽的 Staging deploy workflow 名稱 | `"Deploy to Staging"` |
-| `YOUR_PROD_DEPLOY_WORKFLOW_NAME` | 被監聽的 Production deploy workflow 名稱 | `"Deploy to Production"` |
-| `YOUR_SERVICE_NAME` | 無法自動判斷時的服務名稱 fallback | `"Backend"` |
-
-#### 步驟 3：設定 GH_TOKEN Secret
-
-在 GitHub 倉庫 Settings > Secrets and variables > Actions 設定：
-
-| Secret 名稱 | 說明 |
-|------------|------|
-| `GH_TOKEN` | 具備 `issues:write` 權限的 Personal Access Token 或 GitHub App token |
+1. 執行 `docs/templates/deploy-board-init.sh` 初始化 Deploy Board Issue
+2. 將輸出的 Issue 編號設定為 Repository Variable `DEPLOY_BOARD_ISSUE_NUMBER`
+3. 複製 `docs/templates/deploy-notify.yml` 至 `.github/workflows/`，依模板內佔位符說明替換
+4. 設定 `GH_TOKEN` Secret（需 `issues:write` 權限）
 
 > **注意**：`workflow_run` 觸發的 context 不提供 `contents:read` 權限，因此 deploy-notify.yml **不可進行 checkout**。Board 更新操作直接透過 `gh` CLI 完成。
 

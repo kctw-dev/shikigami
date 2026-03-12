@@ -1,0 +1,247 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://shikigami.dev/schemas/vrr/v2",
+  "title": "Visual Review Report",
+  "description": "Vision Critic Agent 輸出的視覺一致性審查報告（ADR-015 Figma 架構版）",
+  "type": "object",
+  "required": [
+    "$schema", "metadata", "verdict",
+    "layoutConsistencyScore", "designTokenComplianceScore", "componentSpecComplianceScore",
+    "totalScore", "hardGateViolations"
+  ],
+  "additionalProperties": false,
+  "properties": {
+
+    "$schema": {
+      "type": "string",
+      "const": "https://shikigami.dev/schemas/vrr/v2",
+      "description": "VRR Schema 版本識別符"
+    },
+
+    "metadata": {
+      "type": "object",
+      "required": ["reviewId", "storyId", "frameId", "retryCount", "reviewedAt", "visionCriticVersion"],
+      "additionalProperties": false,
+      "properties": {
+        "reviewId": {
+          "type": "string",
+          "description": "審查唯一識別符（格式：VCR-{StoryID}-{timestamp}）"
+        },
+        "storyId": {
+          "type": "string",
+          "description": "關聯 User Story ID（如 US-151）"
+        },
+        "frameId": {
+          "type": "string",
+          "description": "被審查的 Figma Frame node ID"
+        },
+        "frameName": {
+          "type": "string",
+          "description": "被審查的 Figma Frame 名稱（選填）"
+        },
+        "retryCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "當前為第幾次審查（0 = 首次，最多 3 次）"
+        },
+        "reviewedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "審查時間（ISO 8601 格式）"
+        },
+        "visionCriticVersion": {
+          "type": "string",
+          "description": "執行此審查的 Vision Critic Skill 版本（如 v2.0.0）"
+        }
+      }
+    },
+
+    "verdict": {
+      "type": "string",
+      "enum": ["PASS", "CONDITIONAL_PASS", "FAIL"],
+      "description": "最終審查判定結果"
+    },
+
+    "layoutConsistencyScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "維度一：佈局一致性分數（0–100）；權重 35%（§5.1）"
+    },
+
+    "designTokenComplianceScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "維度二：Design Token 符合度分數（0–100）；權重 40%（§5.2）"
+    },
+
+    "componentSpecComplianceScore": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "維度三：元件規範符合度分數（0–100）；權重 25%（§5.3）"
+    },
+
+    "totalScore": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "加權總分（= 佈局×0.35 + Design Token×0.40 + 元件×0.25）；PASS 閾值 ≥ 80"
+    },
+
+    "hardGateViolations": {
+      "type": "array",
+      "description": "Hard Gate 違規清單（任一項目存在時強制 FAIL，不論總分）",
+      "items": {
+        "type": "object",
+        "required": ["gateId", "description", "requiredAction"],
+        "additionalProperties": false,
+        "properties": {
+          "gateId": {
+            "type": "string",
+            "enum": ["HG-1", "HG-2", "HG-3"],
+            "description": "Hard Gate 識別符（§6.3）"
+          },
+          "description": {
+            "type": "string",
+            "description": "違規詳情"
+          },
+          "requiredAction": {
+            "type": "string",
+            "description": "必要修正行動說明"
+          },
+          "mcpFix": {
+            "type": "string",
+            "description": "推薦的修正 MCP 工具名稱（選填）"
+          },
+          "mcpFixExample": {
+            "type": "object",
+            "description": "修正 MCP 工具的參數範例（選填）"
+          }
+        }
+      }
+    },
+
+    "layoutConsistencyFindings": {
+      "type": "array",
+      "description": "維度一：佈局一致性的具體發現（FAIL/CONDITIONAL_PASS 時必須提供）",
+      "items": { "$ref": "#/definitions/Finding" }
+    },
+
+    "designTokenComplianceFindings": {
+      "type": "array",
+      "description": "維度二：Design Token 符合度的具體發現（FAIL/CONDITIONAL_PASS 時必須提供）",
+      "items": { "$ref": "#/definitions/Finding" }
+    },
+
+    "componentSpecComplianceFindings": {
+      "type": "array",
+      "description": "維度三：元件規範符合度的具體發現（FAIL/CONDITIONAL_PASS 時必須提供）",
+      "items": { "$ref": "#/definitions/Finding" }
+    },
+
+    "recommendations": {
+      "type": "array",
+      "description": "改善建議清單（CONDITIONAL_PASS 必須提供；FAIL 時附上供修正用），依 HIGH/MEDIUM/LOW 優先級排序",
+      "items": {
+        "type": "object",
+        "required": ["priority", "dimension", "action"],
+        "additionalProperties": false,
+        "properties": {
+          "priority": {
+            "type": "string",
+            "enum": ["HIGH", "MEDIUM", "LOW"],
+            "description": "改善優先級"
+          },
+          "isRequired": {
+            "type": "boolean",
+            "description": "是否為必要修正（FAIL 時為 true；CONDITIONAL_PASS 時為 false）"
+          },
+          "dimension": {
+            "type": "string",
+            "enum": ["layoutConsistency", "designTokenCompliance", "componentSpecCompliance"],
+            "description": "關聯維度"
+          },
+          "action": {
+            "type": "string",
+            "description": "具體修正行動說明"
+          },
+          "details": {
+            "type": "string",
+            "description": "詳細說明（選填）"
+          },
+          "mcpOperationSequence": {
+            "type": "array",
+            "description": "修正所需的 MCP 工具呼叫序列（選填）",
+            "items": {
+              "type": "object",
+              "required": ["step", "tool", "params"],
+              "properties": {
+                "step": { "type": "integer" },
+                "tool": { "type": "string" },
+                "params": { "type": "object" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "passedChecks": {
+      "type": "array",
+      "description": "通過審查的項目清單（PASS 時提供作為正面確認）",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+
+  "definitions": {
+    "Finding": {
+      "type": "object",
+      "required": ["severity", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "severity": {
+          "type": "string",
+          "enum": ["ERROR", "WARNING", "INFO"],
+          "description": "問題嚴重度（ERROR = 直接扣分；WARNING = 部分扣分；INFO = 輕微扣分）"
+        },
+        "affectedNode": {
+          "type": "string",
+          "description": "受影響的節點名稱（選填）"
+        },
+        "affectedNodeId": {
+          "type": "string",
+          "description": "受影響的節點 ID（選填）"
+        },
+        "description": {
+          "type": "string",
+          "description": "問題描述（具體、可操作，含數值）"
+        },
+        "expectedValue": {
+          "type": "string",
+          "description": "期望值（如 Design Token 值或規格數值）"
+        },
+        "actualValue": {
+          "type": "string",
+          "description": "Figma 中觀測到的實際值"
+        },
+        "deductionReason": {
+          "type": "string",
+          "description": "扣分原因說明（選填）"
+        },
+        "mcpFix": {
+          "type": "string",
+          "description": "推薦的修正 MCP 工具名稱（選填）"
+        },
+        "mcpFixParams": {
+          "type": "object",
+          "description": "修正 MCP 工具的參數（選填）"
+        }
+      }
+    }
+  }
+}

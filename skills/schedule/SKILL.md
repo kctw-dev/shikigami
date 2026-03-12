@@ -97,82 +97,11 @@ requiredTools:
 | 6 | 無重複排程 | `crontab -l \| grep <skill-name>_cron.sh` | 警告並阻擋，提示先執行 `--remove` |
 | 7 | group 衝突偵測（有 `--sequential-group` 時） | 檢查 crontab 中是否已有同 group 的排程正在執行（lock file 存在且被持有） | 阻擋，輸出 `[FAIL] group 衝突：同群組 <group-name> 已有 Skill 排程中`，建議先 `--remove` 衝突 Skill |
 
-**group 衝突偵測實作（US-36 AC3）**：
+**group 衝突偵測規則（US-36 AC3）**：嘗試以 `flock -n` 取得 group lock（`/tmp/shikigami-group-<hash>-<group>.lock`），若被佔用則輸出 `[FAIL]` 並 return 1。僅在指定 `--sequential-group` 時執行（檢查 7）。
 
-```bash
-preflight_check_group_conflict() {
-  local group_name="$1"
-  local project_hash="$2"
-  local group_lock="/tmp/shikigami-group-${project_hash}-${group_name}.lock"
+**skill name / group name 白名單驗證**（Retro #53, US-36 Issue #50）：skill name 與 group name 使用相同正則 `^[a-z0-9][a-z0-9-]{0,63}$`。允許小寫英文、數字、連字號；首字元不可為連字號；最長 64 字元。非法輸入時 Pre-flight 立即阻擋，不生成任何檔案。group name 在 `--sequential-group` 指定時驗證（檢查 0.5）。
 
-  # 若 group lock 檔案存在且被持有（flock -n 失敗），表示有衝突
-  if [[ -f "$group_lock" ]]; then
-    exec 202>"${group_lock}"
-    if ! flock -n 202; then
-      echo "[FAIL] group 衝突：同群組 '${group_name}' 已有 Skill 排程執行中"
-      echo "[INFO] 請先移除衝突的 Skill 排程後重新部署：/schedule <skill> --remove"
-      return 1
-    fi
-    # 釋放測試用 fd
-    exec 202>&-
-  fi
-  echo "[PASS] group '${group_name}' 無衝突"
-}
-```
-
-**注意**：group 衝突偵測僅在指定 `--sequential-group` 時執行（檢查 7），無 `--sequential-group` 時跳過此項。
-
-**skill name 白名單驗證（Retro #53）**：
-
-```bash
-validate_skill_name() {
-  local name="$1"
-  if [[ ! "$name" =~ ^[a-z0-9][a-z0-9-]{0,63}$ ]]; then
-    echo "[FAIL] skill name 不合法：'${name}'"
-    echo "[INFO] 允許字元：小寫英文、數字、連字號（不可開頭為連字號，最長 64 字元）"
-    return 1
-  fi
-}
-```
-
-**group name 白名單驗證（US-36 Issue #50）**：
-
-```bash
-validate_group_name() {
-  local name="$1"
-  if [[ ! "$name" =~ ^[a-z0-9][a-z0-9-]{0,63}$ ]]; then
-    echo "[FAIL] group name 不合法：'${name}'"
-    echo "[INFO] 允許字元：小寫英文、數字、連字號（不可開頭為連字號，最長 64 字元）"
-    return 1
-  fi
-}
-```
-
-**驗證規則說明**：
-- 允許：小寫英文字母（`a-z`）、數字（`0-9`）、連字號（`-`）
-- 不允許：大寫字母、底線、空格、路徑分隔符（`/`、`\`）、特殊字元、空字串
-- 首字元必須為小寫英文或數字（不可為連字號）
-- 最大長度 64 字元（含首字元）
-- 非法輸入時 Pre-flight 立即阻擋，不生成任何檔案
-- group name 與 skill name 使用相同正則白名單，在 `--sequential-group` 指定時執行（檢查 0.5）
-
-**認證驗證實作（ADR-005 決策域四）**：
-
-```bash
-preflight_check_auth() {
-  unset ANTHROPIC_API_KEY  # 強制 OAuth 路徑
-  if ! which claude >/dev/null 2>&1; then
-    echo "[FAIL] claude CLI 不可用"
-    return 1
-  fi
-  if ! claude auth status >/dev/null 2>&1; then
-    echo "[FAIL] claude OAuth 認證無效或已過期"
-    echo "[INFO] 請執行：claude auth login"
-    return 1
-  fi
-  echo "[PASS] OAuth 認證有效"
-}
-```
+**認證驗證規則（ADR-005 決策域四）**：先 `unset ANTHROPIC_API_KEY` 強制 OAuth 路徑，再依序檢查 `which claude` 與 `claude auth status`，任一失敗則阻擋。
 
 **--dry-run 只執行 Pre-flight 檢測**，所有 Pre-flight 通過後輸出「Pre-flight 通過，dry-run 模式不部署任何檔案」，不執行後續部署步驟。
 
@@ -195,20 +124,7 @@ preflight_check_auth() {
 
 ### allowedTools 白名單（ADR-005 決策域三）
 
-從目標 Skill 的 `SKILL.md` frontmatter 解析 `requiredTools` 清單，組裝為 `--allowedTools` 參數：
-
-```bash
-parse_required_tools() {
-  local skill_md="$1"
-  awk '
-    /^---/ { fm_count++; next }
-    fm_count == 1 && /^requiredTools:/ { in_list=1; next }
-    fm_count == 1 && in_list && /^  - / { gsub(/^  - /, ""); print; next }
-    fm_count == 1 && in_list && !/^  - / { in_list=0 }
-    fm_count == 2 { exit }
-  ' "$skill_md"
-}
-```
+從目標 Skill 的 `SKILL.md` frontmatter 使用 awk 解析 `requiredTools` YAML 清單，組裝為 `--allowedTools` 參數。
 
 **預設白名單**（Skill 無 `requiredTools` 聲明時使用）：
 
@@ -221,15 +137,6 @@ MCP 工具（如 `mcp__github__*`）不納入預設白名單，必須在 Skill �
 ### 排程 PR 建立規範（US-54 AC3）
 
 排程腳本執行完成後，若有需要建立 PR（例如 sprint-execution 產生變更），**必須**在 PR 建立指令中附加 `--label "scheduled"` label，以便 Scrum Master 在互動 Session 啟動時能夠偵測並提醒審核。
-
-**標準 PR 建立指令模板**：
-
-```bash
-gh pr create \
-  --title "[SCHEDULED] {{SKILL_NAME}} — $(date '+%Y-%m-%d %H:%M')" \
-  --body "自動排程執行結果（Skill: {{SKILL_NAME}}，Interval: {{INTERVAL}}）" \
-  --label "scheduled"
-```
 
 **規則**：
 - 所有由排程腳本（`*_cron.sh`）觸發的 PR 建立操作，必須帶有 `--label "scheduled"`
@@ -246,12 +153,7 @@ gh pr create \
 /tmp/shikigami-schedule-<project-hash>-<skill-name>.lock
 ```
 
-其中 `<project-hash>` 為專案目錄路徑 MD5 前 8 碼：
-
-```bash
-PROJECT_HASH=$(echo "$PROJECT_DIR" | md5sum | cut -c1-8)
-LOCK_FILE="/tmp/shikigami-schedule-${PROJECT_HASH}-${SKILL_NAME}.lock"
-```
+`<project-hash>` 為專案目錄路徑 MD5 前 8 碼。
 
 **設計理由**：同一台機器上的不同 Shikigami 專案排程相同 Skill 時，因 project-hash 不同而使用不同鎖，互不干涉（ADR-005 Stakeholder Review 修訂一）。
 
@@ -337,15 +239,7 @@ claude -p "/schedule sprint-execution --interval 1h --sequential-group sprint-cy
 .claude/worktrees/scheduled-sprint-execution-20260303-090000
 ```
 
-**建立指令**：
-
-```bash
-TIMESTAMP=$(date '+%Y%m%d-%H%M%S')
-WORKTREE_PATH="${PROJECT_DIR}/.claude/worktrees/scheduled-${SKILL_NAME}-${TIMESTAMP}"
-git worktree add "$WORKTREE_PATH" HEAD
-```
-
-timestamp 格式 `YYYYMMDD-HHMMSS` 確保每次觸發路徑唯一，不重複建立。
+使用 `git worktree add <path> HEAD` 建立。timestamp 格式 `YYYYMMDD-HHMMSS` 確保每次觸發路徑唯一。
 
 ### 步驟 (b)：commit + push 至 scheduled branch
 
@@ -363,34 +257,11 @@ scheduled/<skill>/<date>
 scheduled/sprint-execution/20260303
 ```
 
-**執行指令**：
-
-```bash
-BRANCH_NAME="scheduled/${SKILL_NAME}/$(date '+%Y%m%d')"
-cd "$WORKTREE_PATH"
-git checkout -b "$BRANCH_NAME"
-git add -A
-git commit -m "[SCHEDULED] ${SKILL_NAME} — $(date '+%Y-%m-%d %H:%M')"
-git push origin "$BRANCH_NAME"
-```
-
-push 完成後依 §5「排程 PR 建立規範」建立帶有 `--label "scheduled"` 的 PR。
+在 worktree 內 `git checkout -b` 建立分支、`git add -A`、commit（訊息格式 `[SCHEDULED] ${SKILL_NAME} — <timestamp>`）、push。push 完成後依 §5「排程 PR 建立規範」建立帶有 `--label "scheduled"` 的 PR。
 
 ### 步驟 (c)：worktree 清除
 
-worktree 執行完成後（無論成功或失敗）必須清除，不保留殘留：
-
-```bash
-cleanup_worktree() {
-  if [[ -d "$WORKTREE_PATH" ]]; then
-    git worktree remove --force "$WORKTREE_PATH"
-    echo "[INFO] worktree 已清除：${WORKTREE_PATH}"
-  fi
-}
-
-# 無論成功或失敗均清除（trap 確保執行）
-trap cleanup_worktree EXIT
-```
+worktree 執行完成後（無論成功或失敗）必須清除。使用 `trap cleanup_worktree EXIT` 確保 `git worktree remove --force` 在任何退出路徑均執行。
 
 ### 衝突防護規則
 
@@ -400,19 +271,7 @@ trap cleanup_worktree EXIT
 | (b) timestamp 防重複 | worktree 路徑含 timestamp（格式 `YYYYMMDD-HHMMSS`）確保每次觸發建立不同路徑，不重複建立 |
 | (c) 失敗處理 | worktree 建立失敗時 exit 1 並寫入 log 錯誤記錄，不保留殘留 worktree |
 
-**失敗處理實作**：
-
-```bash
-setup_worktree() {
-  if ! git worktree add "$WORKTREE_PATH" HEAD 2>>"${LOG_FILE}"; then
-    echo "[ERROR] worktree 建立失敗：${WORKTREE_PATH}" | tee -a "${LOG_FILE}"
-    # 清除可能的殘留
-    git worktree remove --force "$WORKTREE_PATH" 2>/dev/null || true
-    exit 1
-  fi
-  echo "[INFO] worktree 建立成功：${WORKTREE_PATH}" >> "${LOG_FILE}"
-}
-```
+**失敗處理**：`git worktree add` 失敗時 log 錯誤、`git worktree remove --force` 清除殘留、exit 1。
 
 ---
 
@@ -444,39 +303,11 @@ setup_worktree() {
 
 **步驟 2：建立 PR**
 
-```bash
-gh pr create \
-  --title "[SCHEDULED] ${SKILL_NAME} — $(date '+%Y-%m-%d %H:%M')" \
-  --body "## 排程自動執行結果
-
-**Skill**：${SKILL_NAME}
-**Interval**：${INTERVAL}
-**Sprint**：${SPRINT_NUMBER}
-**Story ID**：${STORY_ID}
-**分支**：${BRANCH_NAME}
-**執行時間**：$(date '+%Y-%m-%d %H:%M:%S')
-
-## Quality Gate 檢查結果
-
-- [x] CI 驗證通過（bash syntax check + 現有測試）
-- [x] PR body 包含 Story ID 與 Sprint 編號
-- [x] merge 前確認無衝突（non-conflicting）
-
-## 變更摘要
-
-排程執行 \`${SKILL_NAME}\` 產生的自動變更，請審查後 merge 或 reject。" \
-  --label "scheduled" \
-  --base main
-```
+使用 `gh pr create --title "[SCHEDULED] ${SKILL_NAME} — <timestamp>" --label "scheduled" --base main`，body 須包含：Skill 名稱、Interval、Sprint 編號、Story ID、分支名、執行時間、Quality Gate 結果、變更摘要。
 
 **步驟 3：PR 建立後通知**
 
-PR 建立成功後記錄至 log：
-
-```bash
-echo "[INFO] PR 已建立：$(gh pr view --json url -q '.url')" >> "${LOG_FILE}"
-echo "[INFO] Quality Gate 檢查：全部通過" >> "${LOG_FILE}"
-```
+PR URL 與 Quality Gate 結果寫入 `${LOG_FILE}`。
 
 ### Quality Gate 檢查項目
 
@@ -488,68 +319,15 @@ echo "[INFO] Quality Gate 檢查：全部通過" >> "${LOG_FILE}"
 | (b) | **PR body 包含 Story ID 與 Sprint 編號標注** — 確保可追溯性 | 驗證 PR body 中含有 `Story ID` 欄位（非空）與 `Sprint` 欄位（非空），格式如 `US-NN` 與 `Sprint NN` | 若環境變數 `STORY_ID` 或 `SPRINT_NUMBER` 未設定則以 `UNKNOWN` 填入並在 log 中警告 |
 | (c) | **Merge 前確認無衝突（non-conflicting）** — 確保分支可乾淨合併至主分支 | 執行 `git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main` 並檢查是否有衝突標記（`<<<<<<`） | 記錄衝突檔案清單至 log，不建立 PR，通知人工解衝突後重跑 |
 
-**完整 quality-gate 檢查實作**：
-
-```bash
-run_quality_gate() {
-  local worktree_path="$1"
-  local branch_name="$2"
-  local qa_pass=true
-
-  # (a) CI 驗證：bash syntax check
-  echo "[QA] 執行 CI 驗證（bash syntax check）..." >> "${LOG_FILE}"
-  while IFS= read -r -d '' sh_file; do
-    if ! bash -n "$sh_file" 2>>"${LOG_FILE}"; then
-      echo "[FAIL] syntax error：${sh_file}" >> "${LOG_FILE}"
-      qa_pass=false
-    fi
-  done < <(find "$worktree_path" -name "*.sh" -newer "${worktree_path}/.git" -print0 2>/dev/null)
-
-  # (b) PR body 可追溯性：Story ID + Sprint 編號
-  echo "[QA] 驗證 Story ID 與 Sprint 編號..." >> "${LOG_FILE}"
-  if [[ -z "${STORY_ID:-}" ]] || [[ -z "${SPRINT_NUMBER:-}" ]]; then
-    echo "[WARN] STORY_ID 或 SPRINT_NUMBER 未設定，將以 UNKNOWN 填入 PR body" >> "${LOG_FILE}"
-  fi
-
-  # (c) 無衝突檢查
-  echo "[QA] 檢查 merge 衝突..." >> "${LOG_FILE}"
-  local merge_base
-  merge_base=$(git -C "$worktree_path" merge-base HEAD origin/main 2>/dev/null || echo "")
-  if [[ -n "$merge_base" ]]; then
-    local conflict_check
-    conflict_check=$(git -C "$worktree_path" merge-tree "$merge_base" HEAD origin/main 2>/dev/null || echo "")
-    if echo "$conflict_check" | grep -q '<<<<<<<'; then
-      echo "[FAIL] 偵測到 merge 衝突，請手動解衝突後重跑排程" >> "${LOG_FILE}"
-      qa_pass=false
-    fi
-  fi
-
-  if [[ "$qa_pass" == "true" ]]; then
-    echo "[QA] Quality Gate 全部通過" >> "${LOG_FILE}"
-    return 0
-  else
-    echo "[QA] Quality Gate 未通過，不建立 PR" >> "${LOG_FILE}"
-    return 1
-  fi
-}
-```
-
-**設計理由**：三條規則分別對應三個核心品質維度：(a) 代碼正確性、(b) 可追溯性（Sprint 管理需求）、(c) 整合安全性。任一維度失敗均可能在 merge 後造成系統問題，因此採取保守策略（失敗即阻擋），由人工介入解決後再行提交。
+**實作要點**：(a) 用 `find -name "*.sh" -newer .git -print0` 找新增/修改的 sh 檔並逐一 `bash -n` 驗證；(b) 檢查 `STORY_ID` / `SPRINT_NUMBER` 環境變數，空值以 `UNKNOWN` 填入並警告；(c) 用 `git merge-tree` 檢查衝突標記（`<<<<<<`）。任一失敗 return 1，不建立 PR。
 
 ---
 
 ## 6. 冪等 crontab 寫入（AC4）
 
-移除含同名腳本的既有 entry 後重新寫入，確保多次執行不產生重複：
+移除含同名腳本的既有 entry 後重新寫入，確保多次執行不產生重複。
 
-```bash
-# 生成腳本路徑（skill-name 中的連字號轉底線）
-SCRIPT_TOKEN=$(echo "$SKILL_NAME" | tr '-' '_')
-CRON_ENTRY="$CRON_EXPR $PROJECT_DIR/scripts/${SCRIPT_TOKEN}_cron.sh"
-
-# 冪等寫入
-(crontab -l 2>/dev/null | grep -v "${SCRIPT_TOKEN}_cron.sh"; echo "# shikigami-schedule: ${SKILL_NAME}"; echo "$CRON_ENTRY") | crontab -
-```
+**規則**：skill-name 連字號轉底線作為 `SCRIPT_TOKEN`，先 `grep -v` 移除舊 entry，再 append 新 entry（含 `# shikigami-schedule:` 註解行），pipe 至 `crontab -`。
 
 ---
 
@@ -566,29 +344,7 @@ CRON_ENTRY="$CRON_EXPR $PROJECT_DIR/scripts/${SCRIPT_TOKEN}_cron.sh"
 
 **回滾順序（原子性）**：先還原 crontab 快照，再刪除生成的腳本。先還原 crontab 是為了防止在回滾窗口期觸發損毀腳本。
 
-```bash
-CRONTAB_BACKUP=$(mktemp /tmp/shikigami-crontab-backup-XXXXXX.bak)
-chmod 600 "$CRONTAB_BACKUP"
-SCRIPT_GENERATED=false
-
-rollback() {
-  echo "[ERROR] 部署驗證失敗，開始回滾..."
-  # Step 1：還原 crontab（優先）
-  if [[ -f "$CRONTAB_BACKUP" ]]; then
-    crontab "$CRONTAB_BACKUP" && echo "[INFO] crontab 已還原"
-  fi
-  # Step 2：刪除生成的腳本
-  if [[ "$SCRIPT_GENERATED" == "true" ]] && [[ -f "$SCRIPT_PATH" ]]; then
-    rm -f "$SCRIPT_PATH" && echo "[INFO] 腳本已刪除：${SCRIPT_PATH}"
-  fi
-}
-
-# 建立快照
-crontab -l 2>/dev/null > "$CRONTAB_BACKUP" || true
-trap rollback ERR
-```
-
-**回滾後系統狀態**：crontab 無新 entry、腳本已刪除。
+**回滾實作要點**：部署前 `mktemp` 建立 crontab 快照（chmod 600），`trap rollback ERR` 確保失敗時自動觸發。回滾函數先 `crontab "$CRONTAB_BACKUP"` 還原，再 `rm -f` 刪除腳本。回滾後系統狀態：crontab 無新 entry、腳本已刪除。
 
 ---
 
@@ -662,18 +418,7 @@ Pre-flight 全部通過。dry-run 模式，不部署任何檔案。
 - 無 `--sequential-group` 設定時記錄 `group=none`
 - SKIPPED 和 END 不需要額外的 group 欄位（已在對應 START 記錄中呈現）
 
-**查看 log**：
-
-```bash
-# 查看最新 log
-tail -f logs/schedule-sprint-execution.log
-
-# 查看所有 Skill 的 log
-ls logs/schedule-*.log
-
-# 過濾失敗執行
-grep "exit: [^0]" logs/schedule-sprint-execution.log
-```
+**查看 log**：`tail -f logs/schedule-<skill-name>.log`；過濾失敗：`grep "exit: [^0]" logs/schedule-*.log`
 
 ---
 
@@ -727,37 +472,15 @@ grep "exit: [^0]" logs/schedule-sprint-execution.log
 
 ### OAuth Token 過期
 
-OAuth token 有效期限到期後排程執行會失敗（log 中出現認證錯誤）。處理方式：
-
-```bash
-claude auth login  # 重新認證
-```
+Token 過期時排程失敗（log 出現認證錯誤），執行 `claude auth login` 重新認證。
 
 ### Skill 演進後更新排程
 
-若 Skill 的 `requiredTools` 有新增，需重新執行 schedule 讓腳本更新 `--allowedTools`：
-
-```bash
-# 先移除舊排程
-claude -p "/schedule sprint-execution --remove"
-# 重新建立（使用新的 requiredTools）
-claude -p "/schedule sprint-execution --interval 5m"
-```
-
-生成的腳本含 `requiredTools-hash` 版本標記，可用於比對 Skill 是否已演進：
-
-```bash
-# 查看當前排程腳本的 requiredTools-hash
-grep "requiredTools-hash" scripts/sprint_execution_cron.sh
-```
+`requiredTools` 變更後需 `--remove` 再重新 `/schedule`，腳本內含 `requiredTools-hash` 可比對版本。
 
 ### Lock File 管理
 
-Lock file 存放於 `/tmp/`，重開機後自動清除。若需手動查看：
-
-```bash
-ls /tmp/shikigami-schedule-*.lock
-```
+Lock file 存放於 `/tmp/`，重開機後自動清除。
 
 ---
 
@@ -780,175 +503,26 @@ ls /tmp/shikigami-schedule-*.lock
 
 ### 範例 (a)：README 統計自動更新排程
 
-**情境說明**
+`/schedule readme-update --interval 1h` — 每小時自動更新 README 徽章統計並 commit。
 
-專案 README 的徽章統計（Issue 數量、PR 狀態、Sprint 進度等）需要定期自動更新，避免資訊過時。透過 `readme-update` Skill（或同等功能 Skill）設定排程，每小時自動重新整理統計數據並 commit。
+**前提條件**：OAuth 認證有效、目標 Skill 已存在、flock 可用、專案目錄可寫（同 §4 Pre-flight 檢測項目）。
 
-**前提條件**
-
-在執行 `/schedule` 前，必須確認以下條件全部通過：
-
-| 條件 | 驗證指令 | 說明 |
-|------|----------|------|
-| OAuth 認證有效 | `claude auth status` | 排程腳本使用 OAuth 而非 API Key；token 無效時排程執行會失敗 |
-| 目標 Skill 已存在 | `ls skills/readme-update/SKILL.md` | Pre-flight 檢查 5 會驗證 `skills/<skill-name>/SKILL.md` 存在；Skill 不存在時阻擋部署 |
-| flock 指令可用 | `which flock` | 互斥鎖依賴 flock；macOS 需 `brew install util-linux` |
-| 專案目錄可寫 | `test -w $PWD && echo OK` | 腳本生成與 log 寫入皆需寫入權限 |
-
-**OAuth 認證確認步驟**：
-
-```bash
-# 確認 OAuth 狀態（應顯示 "Logged in" 而非 API Key）
-claude auth status
-
-# 若未登入，執行以下指令重新認證
-claude auth login
-```
-
-**完整 `/schedule` 指令語法**：
-
-```bash
-# 設定 README 自動更新排程（每小時執行一次）
-claude -p "/schedule readme-update --interval 1h"
-```
-
-**預期成功輸出**：
-
-```
-── QA Pre-flight ──────────────────────
-  [PASS] skill name 字元白名單通過
-  [PASS] claude CLI 可用
-  [PASS] flock 可用
-  [PASS] OAuth 認證有效（非無效 API key）
-  [PASS] 專案目錄存在且可寫
-  [PASS] /readme-update skill 已註冊
-  [PASS] 無衝突的排程已存在
-
-── 部署 ───────────────────────────────
-  ✓ 腳本已生成：scripts/readme_update_cron.sh
-  ✓ 執行權限已設定（chmod +x）
-  ✓ Log 目錄已確認：logs/
-  ✓ Crontab 已寫入
-
-✓ 排程啟用完成 — readme-update 每 1 小時執行
-
-── 摘要 ───────────────────────────────
-  腳本路徑：scripts/readme_update_cron.sh
-  Crontab 項目：0 * * * * /home/user/proj/scripts/readme_update_cron.sh
-  Log 路徑：logs/schedule-readme-update.log
-```
-
-**驗證排程已生效**：
-
-```bash
-# 確認 crontab 已寫入
-crontab -l | grep readme_update
-
-# 監控執行 log
-tail -f logs/schedule-readme-update.log
-```
-
-**移除排程（如需停止自動更新）**：
-
-```bash
-claude -p "/schedule readme-update --remove"
-```
+移除排程：`/schedule readme-update --remove`
 
 ---
 
 ### 範例 (b)：Daily Standup 自動排程
 
-**情境說明**
+`/schedule daily-standup --interval 1h` — 每小時觸發 standup report 生成。
 
-每日 Standup 需在固定時間觸發 `daily-standup` Skill，自動整理昨日進度、今日計畫與阻礙事項，生成 standup report 並 commit 至版本控制。
+**注意**：`/schedule` 不接受原始 cron 表達式（如 `0 9 * * 1-5`）。若需精確時間觸發，選擇 `--interval 1h` 並在 Skill 內部加入時間條件判斷（如 `[ $(date +%H) -eq 9 ] || exit 0`）。
 
-**前提條件**
-
-與範例 (a) 相同：OAuth 認證有效、目標 Skill `daily-standup` 已存在、flock 可用、專案目錄可寫。
-
-**Cron 時間設定說明**
-
-`/schedule` 支援四種固定 interval，對應 cron 表達式如下：
-
-| 參數 | Cron 表達式 | 適用情境 |
-|------|------------|---------|
-| `--interval 1m` | `* * * * *` | 高頻監控（不建議用於 standup） |
-| `--interval 5m` | `*/5 * * * *` | 快速迭代任務 |
-| `--interval 15m` | `*/15 * * * *` | 中頻任務 |
-| `--interval 1h` | `0 * * * *` | 低頻定期任務（適合 standup） |
-
-**注意**：`/schedule` 不接受原始 cron 表達式（如 `0 9 * * 1-5`）。若需精確指定每日 09:00 觸發，應選擇 `--interval 1h` 並在 Skill 內部加入時間條件判斷（如 `[ $(date +%H) -eq 9 ] || exit 0`）。
-
-**完整 `/schedule` 指令語法**：
-
-```bash
-# 設定 Daily Standup 每小時觸發排程
-claude -p "/schedule daily-standup --interval 1h"
-```
-
-**若需與 sprint-execution 序列執行（避免共享檔案衝突）**：
-
-```bash
-# 將 daily-standup 綁定至 sprint-cycle 群組，確保不與 sprint-execution 平行
-claude -p "/schedule daily-standup --interval 1h --sequential-group sprint-cycle"
-claude -p "/schedule sprint-execution --interval 1h --sequential-group sprint-cycle"
-```
-
-**預期成功輸出**：
-
-```
-── QA Pre-flight ──────────────────────
-  [PASS] skill name 字元白名單通過
-  [PASS] claude CLI 可用
-  [PASS] flock 可用
-  [PASS] OAuth 認證有效（非無效 API key）
-  [PASS] 專案目錄存在且可寫
-  [PASS] /daily-standup skill 已註冊
-  [PASS] 無衝突的排程已存在
-
-── 部署 ───────────────────────────────
-  ✓ 腳本已生成：scripts/daily_standup_cron.sh
-  ✓ 執行權限已設定（chmod +x）
-  ✓ Log 目錄已確認：logs/
-  ✓ Crontab 已寫入
-
-✓ 排程啟用完成 — daily-standup 每 1 小時執行
-
-── 摘要 ───────────────────────────────
-  腳本路徑：scripts/daily_standup_cron.sh
-  Crontab 項目：0 * * * * /home/user/proj/scripts/daily_standup_cron.sh
-  Log 路徑：logs/schedule-daily-standup.log
-```
-
-**驗證排程已生效**：
-
-```bash
-# 確認 crontab 已寫入
-crontab -l | grep daily_standup
-
-# 先以 dry-run 確認環境就緒（不部署任何檔案）
-claude -p "/schedule daily-standup --dry-run"
-
-# 監控執行 log
-tail -f logs/schedule-daily-standup.log
-```
+**序列執行**（避免與 sprint-execution 共享檔案衝突）：兩者均綁定 `--sequential-group sprint-cycle`。
 
 ---
 
 ### 範例 (c)：Issue 管理自動化排程（issue-management）
 
-**情境說明**
+`/schedule issue-management --interval 1h` — 每小時掃描 GitHub Issues 執行入庫、分類、回覆。移除：`/schedule issue-management --remove`。
 
-Product Owner 希望定期掃描 GitHub Issues 並執行入庫、分類、回覆等管理操作，在 Sprint 週期之間維持 Issue 的即時處理。透過 `issue-management` Skill 設定 cron 排程，每小時自動執行。
-
-```bash
-# 設定 issue-management 自動排程（每小時執行一次）
-claude -p "/schedule issue-management --interval 1h"
-
-# 移除排程
-claude -p "/schedule issue-management --remove"
-```
-
-**注意事項**：
-- issue-management 執行時依賴 gh CLI OAuth 認證（除 claude CLI OAuth 外），兩者均可能因 token 過期而失敗，需定期確認認證狀態
-- 新 Issue 入庫已由 GitHub Action（`new-issue-intake.yml`）即時處理，排程主要用於批次補齊與 comment 回覆
+**注意**：依賴 gh CLI OAuth 與 claude CLI OAuth 兩者認證，需定期確認。新 Issue 入庫已由 GitHub Action（`new-issue-intake.yml`）即時處理，排程用於批次補齊。

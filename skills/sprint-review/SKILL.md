@@ -118,20 +118,7 @@ Sprint 38、39、40 連續三個 Retrospective 均發現「交付物文案不一
 
 ### 審查結果記錄
 
-審查完成後，在主 session 中輸出以下格式的審查摘要：
-
-```
-## 交付物文案一致性審查結果（Sprint N）
-
-審查時間：YYYY-MM-DD
-審查狀態：PASS / FAIL
-
-不一致項目（若有）：
-- [文件路徑]：[具體不一致描述]
-
-修正動作（若有）：
-- [已執行的修正描述]
-```
+審查完成後，輸出審查摘要：標題「交付物文案一致性審查結果（Sprint N）」、審查時間、審查狀態（PASS/FAIL）、不一致項目與修正動作（若有）。
 
 **FAIL 處理**：若發現任何不一致，立即修正後重新勾選對應項目，確認全部 PASS 後才進入 §2 Sprint Review 流程。
 
@@ -145,54 +132,9 @@ Sprint Review 的目的是驗收本 Sprint 交付的成果，確認是否符合�
 
 <!-- US-187：回應 Sprint Review 缺少生產環境部署驗證步驟 — Issue #179 -->
 
-在 PO Subagent 展示 Demo 前，執行主 session 須確認生產環境已部署最新代碼，確保 Stakeholder 看到的是最新版本。
+確認生產環境已部署最新 commit，確保 Stakeholder 看到的是最新版本。若未部署 → 觸發 `deployment-readiness`，等待完成後才進入步驟 1（PO Demo）。
 
-#### 驗證步驟
-
-1. **取得最新 commit hash**
-
-   ```bash
-   git log --oneline -1
-   ```
-
-   記錄輸出的 commit hash（例：`abc1234 feat: 更新功能 X`）。
-
-2. **確認生產環境部署狀態（Cloud Run）**
-
-   若專案有 Cloud Run 部署，執行以下指令確認生產環境 image 包含最新 commit：
-
-   ```bash
-   # 確認最後部署時間是否晚於最後 Story commit 時間
-   gcloud run services describe <SERVICE_NAME> --region=<REGION> \
-     --format="value(status.conditions[0].lastTransitionTime,spec.template.metadata.annotations)"
-   ```
-
-   **判斷標準**：滿足以下任一條件即視為部署已完成：
-   - 生產環境 image digest 包含最新 commit hash
-   - 最後部署時間晚於 `git log --oneline -1` 對應 commit 的時間戳
-
-3. **未部署時自動觸發部署**
-
-   若確認生產環境未部署最新代碼，**在 Demo 展示前**先觸發 `deployment-readiness` skill 確保 Demo 基於最新代碼：
-
-   ```
-   觸發 deployment-readiness：確保 <最新 commit hash> 已部署至生產環境後再執行 Sprint Review Demo
-   ```
-
-   等待 `deployment-readiness` 完成並確認部署成功後，才進入步驟 1（PO Subagent Demo）。
-
-#### 驗證結果輸出格式
-
-```
-## Pre-Demo 部署驗證結果
-
-最新 commit：<hash> <訊息>
-Cloud Run 部署狀態：已部署 / 未部署 / 不適用（無 Cloud Run）
-最後部署時間：YYYY-MM-DDTHH:MM:SSZ（若適用）
-驗證結論：PASS（可進行 Demo）/ FAIL（已觸發 deployment-readiness，等待完成）
-```
-
-> **注意**：若專案無 Cloud Run 部署，跳過步驟 2，直接輸出「不適用（無 Cloud Run）」並繼續。
+**輸出**：一行結論 — `PASS（可進行 Demo）` 或 `FAIL（已觸發 deployment-readiness）`。
 
 ---
 
@@ -336,54 +278,19 @@ gh issue view <issue-number> --json author --jq '.author.login'
 
 根據 Issue 建立者判斷結果，執行對應操作：
 
-**情況一：內部 Issue（建立者為 `github-actions[bot]` 或 body 含 `backlog-intake`）**
+| 情況 | 步驟 1（共通） | 步驟 2 |
+|------|--------------|--------|
+| **內部 Issue** | `gh issue edit` 加 `done` label、移除 `in-sprint` label | `gh issue close` 並留言「Sprint N Review 驗收通過（PASS）。Story 已完成交付。」 |
+| **外部 Issue（階段 1）** | 同上 | `gh issue comment` 留言通知，**不執行 close** |
+| **外部 Issue（階段 2）** | — | 部署驗證通過後，`gh issue comment` 補充留言「已通過端對端驗證，功能已正式交付。請測試確認後關閉此 Issue。」 |
 
-維持現行邏輯，自動關閉 Issue：
-
-```bash
-# 步驟 1：套用 done label 並移除 in-sprint label
-gh issue edit <issue-number> --add-label "done" --remove-label "status: in-sprint"
-
-# 步驟 2：關閉 Issue，留言記錄完成 Sprint
-gh issue close <issue-number> -c "Sprint N Review 驗收通過（PASS）。Story 已完成交付。"
-```
-
-**情況二：外部 Issue（Stakeholder 或其他外部使用者建立）**
-
-Issue 保持 Open，僅加 label 並留言通知，等待 Stakeholder 確認後自行關閉：
-
-```bash
-# 步驟 1：套用 done label 並移除 in-sprint label
-gh issue edit <issue-number> --add-label "done" --remove-label "status: in-sprint"
-
-# 步驟 2：留言通知，Issue 保持 Open（不執行 gh issue close）
-gh issue comment <issue-number> --body "Sprint N Review 驗收通過（PASS）。程式碼已完成內部審查，待部署驗證後正式交付。"
-```
-
-> **重要**：外部 Issue 不得執行 `gh issue close`。Issue 保持 Open 讓外部 Stakeholder 有機會在測試確認後自行關閉，避免在其尚未驗證前強制關閉。
-
-**情況二（階段 2）：部署驗證通過後**
-
-部署驗證完成（`deployment-readiness` 執行成功）後，對外部 Issue 補充留言：
-
-```bash
-# 部署驗證通過後，對外部 Issue 發送階段 2 通知
-gh issue comment <issue-number> --body "已通過端對端驗證，功能已正式交付。請測試確認後關閉此 Issue。"
-```
+> **重要**：外部 Issue 不得執行 `gh issue close`。Issue 保持 Open 讓外部 Stakeholder 有機會在測試確認後自行關閉。
 
 ### Story FAIL — 操作步驟
 
-對每個未通過驗收（FAIL）的 Story，Issue **保持 open**，執行以下操作：
+Issue **保持 open**，執行 `gh issue edit` 移除 `in-sprint` label 並加 `status: backlog` label，同時 `gh issue comment` 留言記錄未完成原因。
 
-```bash
-# 移除 in-sprint label，回復 backlog 狀態（等待下次 Sprint 選取）
-gh issue edit <issue-number> --remove-label "status: in-sprint" --add-label "status: backlog"
-
-# 留言記錄未完成原因（保持 open 狀態）
-gh issue comment <issue-number> --body "Sprint N Review 驗收未通過（FAIL）：[未達標原因]。Issue 保持 open，等待下次 Sprint 選取。"
-```
-
-> **重要**：Story FAIL 時 Issue **不得關閉**。open 狀態確保此 Story 在下次 Sprint Planning 的 `gh issue list --label "status: backlog"` 查詢中可見，能被重新納入 Sprint。
+> **重要**：Story FAIL 時 Issue **不得關閉**。open 狀態確保此 Story 在下次 Sprint Planning 可被重新選取。
 
 ### 操作格式一致性
 
@@ -426,81 +333,27 @@ Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定�
 
    #### ① Good 趨勢 — 分析規則
 
-   1. 讀取所有 Sprint 的 `### Good` 區塊，逐條提取 Good 條列。
-   2. 以**語義主題**為單位歸類（關鍵字相近即視為同一主題，不要求精確字串比對）。
-   3. 出現 **2 次以上**的主題，輸出：
-      - 主題關鍵字（簡短描述）
-      - 出現次數
-      - 最近出現的 Sprint 編號
-   4. 無重複主題時，輸出「無重複 Good 趨勢」。
-
-   範例輸出：
-   ```
-   - **QA 審查品質**：出現 2 次（最近：Sprint 3）
-   - **角色制衡有效**：出現 2 次（最近：Sprint 2）
-   ```
+   1. 讀取所有 Sprint 的 `### Good` 區塊，以**語義主題**歸類（關鍵字相近即同一主題）。
+   2. 出現 **2 次以上**的主題，輸出：主題關鍵字、出現次數、最近出現 Sprint。
+   3. 無重複主題時，輸出「無重複 Good 趨勢」。
 
    #### ② Problem 趨勢 — 分析規則
 
-   1. 讀取所有 Sprint 的 `### Problem` 區塊，逐條提取 Problem 條列。
-   2. 以**語義主題**為單位歸類（關鍵字相近即視為同一主題）。
-   3. 出現 **2 次以上**的主題，輸出：
-      - 主題關鍵字（簡短描述）
-      - 出現次數
-      - 首次出現的 Sprint 編號
-      - 最近出現的 Sprint 編號
-      - 若「未解決」（定義：重複出現且最近一次無對應 Closed Action Item）：加上「跨 N 個 Sprint 未解決」
-   4. **連續出現**判斷與警示：
-      - **連續情境**（最近一次仍在最新的 Sprint 出現，且間無中斷）：醒目標注 `> ⚠️ **重複問題（連續 N 個 Sprint）**`
-      - **間斷情境**（中間有 Sprint 未出現，或最近一次不是最新 Sprint）：輸出「曾連續 N 個 Sprint（Sprint X-Y）」，說明是否已解決，**不觸發醒目警示**
-   5. 無重複主題時，輸出「無重複 Problem 趨勢」。
-
-   範例輸出（連續情境）：
-   ```
-   - **ROADMAP 與 Backlog 不同步**：出現 2 次（首次：Sprint 2，最近：Sprint 3）
-     > ⚠️ **重複問題（連續 2 個 Sprint）**
-   ```
-
-   範例輸出（間斷情境）：
-   ```
-   - **Sprint Review 自動觸發**：出現 2 次（首次：Sprint 1，最近：Sprint 2）
-     曾連續 2 個 Sprint（Sprint 1-2），已於 Sprint 3 關閉
-   ```
+   1. 讀取所有 Sprint 的 `### Problem` 區塊，以**語義主題**歸類。
+   2. 出現 **2 次以上**的主題，輸出：主題關鍵字、出現次數、首次與最近出現 Sprint、若未解決加註「跨 N 個 Sprint 未解決」。
+   3. **連續出現**判斷：連續情境（最新 Sprint 仍出現且無中斷）→ 醒目標注 `> ⚠️ **重複問題（連續 N 個 Sprint）**`；間斷情境 → 說明是否已解決，不觸發警示。
+   4. 無重複主題時，輸出「無重複 Problem 趨勢」。
 
    #### ③ Action Items 關閉速度 — 分析規則
 
-   1. 讀取所有 Sprint 的 `### Action Items` 表格，收集所有 Action Item。
-   2. 對每個 Closed Item，計算**關閉速度** = 關閉 Sprint 編號 − 建立 Sprint 編號（Sprint 數差）。
-   3. 輸出：
-      - 平均關閉速度（Sprint 數，四捨五入至一位小數）
-      - 最快關閉速度（Sprint 數 + 對應 Item 簡述）
-      - 最慢關閉速度（Sprint 數 + 對應 Item 簡述）
-   4. 若無任何 Closed Item，輸出「尚無已關閉 Action Item」。
-   5. 對所有 **Open** 狀態的 Item，計算逾期 Sprint 數 = 目前 Sprint 編號 − 建立 Sprint 編號，並標注「逾期 N 個 Sprint」。
-
-   範例輸出：
-   ```
-   - 平均關閉速度：1.0 個 Sprint
-   - 最快：1 個 Sprint（Action：不阻塞原則強化，Sprint 1 建立，Sprint 2 關閉）
-   - 最慢：2 個 Sprint（Action：Sprint Review 自動觸發，Sprint 1 建立，Sprint 3 關閉）
-   ```
+   1. 收集所有 Sprint 的 Action Item，對 Closed Item 計算**關閉速度** = 關閉 Sprint − 建立 Sprint。
+   2. 輸出：平均（四捨五入至一位小數）、最快、最慢關閉速度。無 Closed Item 時輸出「尚無已關閉 Action Item」。
+   3. 對 **Open** Item 計算逾期 Sprint 數並標注。
 
    #### ④ 待關閉 Items — 分析規則
 
-   1. 列出所有狀態為 **Open**（非 Closed）的 Action Item。
-   2. 每個 Item 輸出：
-      - Item 內容（Action 欄）
-      - Owner
-      - 建立 Sprint
-      - 逾期 Sprint 數
-   3. 無 Open Item 時，輸出「目前無待關閉 Action Items」。
-
-   範例輸出：
-   ```
-   | Action | Owner | 建立 Sprint | 逾期 |
-   |--------|-------|-------------|------|
-   | Health Check 自動掛鉤 | Developer | Sprint 2 | 逾期 1 個 Sprint |
-   ```
+   1. 列出所有 Open Action Item：Item 內容、Owner、建立 Sprint、逾期 Sprint 數。
+   2. 無 Open Item 時，輸出「目前無待關閉 Action Items」。
 
    ---
 
@@ -570,15 +423,7 @@ Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定�
 
 3. **每個 Action 建立為 GitHub Issue**
 
-   透過 `issue-management` Skill 將每個 Action Item 建立為 GitHub Issue，方便追蹤：
-
-   ```bash
-   gh issue create --title "retro: Story 拆分粒度控制在 5 點以內" \
-     --body "**來源**：Sprint N Retrospective\n**Owner**：PO\n**驗收方式**：下 Sprint Planning 時檢查" \
-     --label "retro-action"
-   ```
-
-   **命名規則**：Issue 標題以 `retro:` 前綴，統一套用 `retro-action` label。
+   透過 `issue-management` Skill 建立，標題以 `retro:` 前綴，套用 `retro-action` label，body 含來源 Sprint、Owner、驗收方式。
 
 4. **同步記錄至 `docs/km/Retrospective_Log.md`**
 
@@ -633,15 +478,11 @@ Action Items 透過 **GitHub Issues** 追蹤（`retro-action` label），具備�
    - Body 包含：來源 Sprint、Owner、驗收方式
 
 2. **Sprint Review 時逐項檢查**
-   - 每次 Sprint Review 開始前，列出所有 open 的 `retro-action` Issues：
-     ```bash
-     gh issue list --label "retro-action" --state open
-     ```
-   - 逐項確認執行狀況
+   - 每次 Sprint Review 開始前，列出所有 open 的 `retro-action` Issues 並逐項確認執行狀況
 
 3. **結論判定**
-   - **已完成** → 執行 `gh issue close -c "Sprint N 驗收通過：[結論描述]"` 關閉 Issue 並留言記錄結論
-   - **未完成** → 保持 open，執行 `gh issue edit --add-label deferred` 加上 `deferred` label
+   - **已完成** → 關閉 Issue 並留言記錄結論
+   - **未完成** → 保持 open，加上 `deferred` label
 
 4. **升級機制**
    - 連續兩個 Sprint 仍為 open 的 `retro-action` Issue 自動升級至 Stakeholder
@@ -649,14 +490,7 @@ Action Items 透過 **GitHub Issues** 追蹤（`retro-action` label），具備�
 
 ### 狀態流轉
 
-```
-gh issue create (retro-action)
-  → Open
-    → gh issue close (已完成驗收)
-    → 加 deferred label（延遲一個 Sprint）
-      → gh issue close（第二個 Sprint 完成驗收）
-      → 升級至 Stakeholder（連續兩個 Sprint 未關閉）
-```
+`Open → Close（已完成驗收）` 或 `Open → deferred（延遲一個 Sprint） → Close / 升級至 Stakeholder`
 
 ---
 
@@ -779,11 +613,7 @@ MX 完成狀態：
   - Systematic debugging 結果為 PASS 後，方可繼續 §1.5 及後續步驟。
   - 若 debugging 發現問題（如 403 錯誤、deploy 失敗、環境不對稱、功能未生效），須先修復後再繼續 Review。
   - [ ] systematic debugging 已執行並回傳 PASS（或已修復發現問題）
-- [ ] **Pre-Demo 部署驗證**（§2 Pre-Demo，Demo 展示前執行）：
-  - [ ] 執行 `git log --oneline -1` 取得最新 commit hash
-  - [ ] 確認生產環境部署狀態（Cloud Run 或標記「不適用」）
-  - [ ] 若未部署：已觸發 `deployment-readiness` 並等待完成後才繼續 Demo
-  - [ ] 輸出「Pre-Demo 部署驗證結果」摘要（PASS 或 FAIL + 處理說明）
+- [ ] **Pre-Demo 部署驗證**（依 §2 Pre-Demo 規則執行，輸出 PASS 或 FAIL）
 - [ ] **交付物文案一致性審查**（§1.5，Sprint Review 前執行）：
   - [ ] 跨文件術語一致性審查通過（sprint_N.md / PROJECT_BOARD.md 狀態欄一致）
   - [ ] 狀態標注一致性審查通過（統一使用「完成 / 進行中 / 未完成」中文術語）
@@ -797,13 +627,12 @@ MX 完成狀態：
 - [ ] Stakeholder Subagent 已確認商業期待符合度
 - [ ] 通過驗收的 Story 已移至 `PROJECT_BOARD.md` Done 欄位（含完成日期、Sprint 編號、Sprint 統計數據更新）
 - [ ] `docs/sprints/sprint_N.md` Sprint Backlog 表格中每筆 Story 的狀態欄已回寫最終驗收結果（完成 / 未完成，未完成者標注原因）
-- [ ] **Story Issue 狀態回寫**（§2.6，ADR-010 生命週期閉環）：
-  - [ ] 每個 PASS Story：已執行 `gh issue view <number> --json author --jq '.author.login'` 查詢 Issue 建立者，判斷為內部或外部 Issue
-  - [ ] 每個 PASS Story（內部 Issue — 建立者為 `github-actions[bot]` 或 body 含 `backlog-intake`）：已執行 `gh issue edit <number> --add-label "done" --remove-label "status: in-sprint"` 套用 done label，並執行 `gh issue close <number> -c "Sprint N Review 驗收通過（PASS）。Story 已完成交付。"` 關閉 Issue
-  - [ ] 每個 PASS Story（外部 Issue — Stakeholder 或其他外部建立者）：已執行 `gh issue edit <number> --add-label "done" --remove-label "status: in-sprint"` 套用 done label，並執行階段 1 留言（見 §2.6 情況二）；**Issue 保持 Open，不執行 close**
-    - [ ] 階段 1 留言已發送：`gh issue comment <number> --body "Sprint N Review 驗收通過（PASS）。程式碼已完成內部審查，待部署驗證後正式交付。"`
-    - [ ] 階段 2 留言已發送（部署驗證通過後）：`gh issue comment <number> --body "已通過端對端驗證，功能已正式交付。請測試確認後關閉此 Issue。"`
-  - [ ] 每個 FAIL Story：Issue 保持 open，已執行 `gh issue edit <number> --remove-label "status: in-sprint" --add-label "status: backlog"` 回復 backlog 狀態，並留言記錄未完成原因
+- [ ] **Story Issue 狀態回寫**（依 §2.6 操作規則執行，ADR-010 生命週期閉環）：
+  - [ ] 每個 PASS Story：已查詢 Issue 建立者並判斷內部/外部
+  - [ ] 內部 Issue：已套用 done label、移除 in-sprint label、關閉 Issue
+  - [ ] 外部 Issue：已套用 done label、移除 in-sprint label、發送階段 1 留言（Issue 保持 Open）
+  - [ ] 外部 Issue 階段 2：部署驗證通過後已發送階段 2 留言
+  - [ ] 每個 FAIL Story：已依 §2.6 回復 backlog 狀態並留言記錄原因
 - [ ] 未達 DoD 的 Story 已移回 Backlog 並標注原因
 - [ ] `Retrospective_Log.md` 已新增 Good / Problem / Action 記錄
 - [ ] 每個 Action Item 已建立為 GitHub Issue（`retro-action` label）
@@ -816,12 +645,7 @@ MX 完成狀態：
 - [ ] **E2E 驗證結果已確認**：`deployment-readiness` §5.2 L3 E2E 驗證結果已確認（PASS 記錄至 Checklist；若輸出 `[E2E-SOFT-GATE]` 則已取得 PO 確認並記錄決策）
 - [ ] Sprint Metrics 計算並追加至 `docs/km/Metrics_Log.md`（見下方計算指引）
 - [ ] 是否有本 Sprint 值得記錄的角色制衡案例？若有，更新 `docs/km/ROLE_BALANCE_CASES.md`
-- [ ] **產出文件（`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`、`sprint_N.md`）完成最後修改後，立即執行 git commit + git push**（僅限 Sprint 狀態文件；`Retrospective_Log.md` 與 `Metrics_Log.md` 雖位於 `docs/km/` 路徑，但屬 Sprint 狀態文件，適用本規範；`sprint_N.md` 為 Sprint 執行記錄，亦適用本規範。其他 Knowledge Management 文件如 `ROLE_BALANCE_CASES.md`、`Tech_Debt_Registry.md` 等不適用，避免觸發 ADR-003 Out-of-Sprint Hard Gate）：
-  ```bash
-  git add docs/PROJECT_BOARD.md docs/km/Retrospective_Log.md docs/km/Metrics_Log.md docs/sprints/sprint_N.md
-  git commit -m "docs: Sprint N Review — 更新看板、Retro 記錄與 Metrics"
-  git push
-  ```
+- [ ] **產出文件完成最後修改後，立即 git commit + push**（範圍：`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`、`sprint_N.md`。其他 KM 文件如 `ROLE_BALANCE_CASES.md` 等不適用，避免觸發 ADR-003 Out-of-Sprint Hard Gate）
 
 ### Sprint Metrics 計算指引
 
@@ -871,17 +695,5 @@ Metrics subagent 自行讀取 `docs/km/Metrics_Log.md` 取得歷史 Velocity 資
 
 #### 步驟 6：追加記錄至 Metrics_Log.md
 
-在 `docs/km/Metrics_Log.md` 的表格末尾追加一列：
-
-```
-| Sprint N | YYYY-MM-DD | V points | X% | 趨勢 | 備註 |
-```
-
-欄位說明：
-- **Sprint 編號**：`Sprint N`
-- **日期**：當日日期（YYYY-MM-DD）
-- **Velocity**：步驟 2 計算結果，格式為「N points」
-- **完成率**：步驟 3 計算結果，格式為「N%」或「N/A」
-- **趨勢**：步驟 4 計算結果
-- **備註**：可選填，例如特殊情況說明或 Sprint Goal 達成狀態
+在 `docs/km/Metrics_Log.md` 表格末尾追加一列：`| Sprint N | YYYY-MM-DD | V points | X% | 趨勢 | 備註 |`
 

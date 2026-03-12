@@ -137,26 +137,8 @@ ADR-015（2026-03-06 Accepted）：**AI 直接透過 Figma MCP 審查 Figma Fram
 
 ### 4.3 截圖取得流程
 
-#### 主要路徑：`export_node_as_image`（claude-talk-to-figma-mcp）
-
-```
-Step A：使用 get_node_info 取得目標 Frame 的 node ID 並確認節點存在
-Step B：使用 export_node_as_image 匯出截圖
-         - nodeId：[目標 Frame 的 node ID]
-         - format：PNG
-         - scale：2（2x 高解析度，確保細節可辨識）
-Step C：取得 base64 PNG 字串，以 <figma_screenshot> XML 標記包裹後傳入 Vision Critic Agent prompt
-```
-
-#### 備援路徑：`get_screenshot`（官方 Figma MCP Server）
-
-當主要路徑失敗時（WebSocket 斷線、Plugin 未連接），使用官方 MCP：
-
-```
-Step A：確認 http://127.0.0.1:3845/sse 可存取（Figma Desktop 運行中）
-Step B：使用官方 Figma MCP 的 get_screenshot 工具，傳入目標 Frame 的 node ID 或 URL
-Step C：取得截圖資料，以 <figma_screenshot> XML 標記包裹後傳入 Agent
-```
+- **主要路徑**：使用 `export_node_as_image`（claude-talk-to-figma），參數 format=PNG、scale=2。取得 base64 PNG 後以 `<figma_screenshot>` XML 標記包裹。
+- **備援路徑**：主要路徑失敗時（WebSocket 斷線），改用官方 Figma MCP 的 `get_screenshot` 工具。
 
 #### 截圖規格要求
 
@@ -191,72 +173,42 @@ Vision Critic Agent 對 Figma Frame 執行**三維度視覺比對**，每個維�
 
 ---
 
-### 5.1 維度一：佈局一致性（權重 35%）
+### 5.1 統一評分矩陣
+
+三個維度共用相同的 0–100 分量表結構。以下為統一評分矩陣與各維度的差異判定標準：
+
+| 分數範圍 | 維度一：佈局一致性（35%） | 維度二：Design Token 符合度（40%） | 維度三：元件規範符合度（25%） |
+|---------|----------------------|-------------------------------|--------------------------|
+| 90–100 | Auto Layout 完整設定；間距完全對應 Spacing Scale；對齊符合規格 | 所有顏色屬性已綁定 Variable；字型符合 Typography Token；間距已綁定或使用 Scale 值 | 所有 UI 元件為 Component Instance；尺寸、圓角、Auto Layout 完全符合規格 |
+| 70–89 | Auto Layout 已設定；間距偏差 ≤ 4px；1–2 個子 Frame 對齊偏差 | 主要互動元件已綁定 Variable；1–2 個次要節點 hardcode 但色碼值偏差 ≤ 5% | 主要元件使用 Instance；1 個次要元件屬性偏差（如圓角差 ≤ 2px） |
+| 50–69 | Auto Layout 已設定但間距偏差 5–16px；3+ 子元素對齊不一致 | 綁定不完整；3+ 節點 hardcode；字型大小偏差 ≤ 2px | 部分元件用 Instance，部分自繪 Frame；尺寸偏差 ≤ 8px |
+| 0–49 | 主 Frame 未設定 Auto Layout（**Hard Gate HG-3**）；或偏差 > 16px | 無任何 Variable 綁定（**Hard Gate HG-1**）；或色碼偏差 > 10% | 主要元件未使用 Instance（**Hard Gate HG-2**）；或尺寸偏差 > 8px |
+
+### 5.2 維度一：佈局一致性（權重 35%）
 
 **評估目標**：Figma Frame 的 Auto Layout 結構是否符合設計規格，間距是否遵循 Spacing Scale，對齊方式是否正確。
 
 **資料來源**：截圖視覺 + `get_node_info` / `get_nodes_info` 結構資料（`layoutMode`、`itemSpacing`、`padding*` 屬性）。
 
-**評分矩陣**：
-
-| 分數範圍 | 判定說明 |
-|---------|---------|
-| 90–100 | 所有 Frame 已設定 Auto Layout；間距值完全對應 Spacing Scale；主軸對齊與交叉軸對齊符合元件規格 |
-| 70–89 | Auto Layout 已設定；間距偏差 ≤ 4px（1 個 Tailwind 基礎單位）；1–2 個子 Frame 對齊方式偏差但不影響視覺層級 |
-| 50–69 | Auto Layout 已設定但間距偏差 5–16px；3 個以上子元素對齊不一致；間距值未使用 Spacing Scale（直接 hardcode） |
-| 0–49 | 主 Frame 或主要子 Frame 未設定 Auto Layout（觸發 Hard Gate）；或間距值偏差 > 16px，整體視覺節奏嚴重混亂 |
-
 **具體稽核項目**：
 
-| 稽核項目 | 通過標準 | MCP 驗證工具 |
-|---------|---------|------------|
-| 主 Frame Auto Layout 方向 | 符合 Frame 模板規格（Desktop 主 Frame = VERTICAL） | `get_node_info` → `layoutMode` |
-| Header 子 Frame | HORIZONTAL Auto Layout，itemSpacing = 16px，paddingLeft/Right = 24px | `get_node_info` → `layoutMode`、`itemSpacing`、`padding*` |
-| Main-Content 子 Frame | VERTICAL Auto Layout，itemSpacing = 48px，paddingTop/Bottom = 80px | `get_node_info` → `layoutMode`、`itemSpacing`、`padding*` |
-| 元件 Auto Layout | Button = HORIZONTAL/CENTER/gap 8px；Card = VERTICAL/MIN/gap 16px/padding 24px | `get_node_info` → 各元件節點屬性 |
-| 間距值合規性 | 所有 itemSpacing 和 padding 值均在 Spacing Scale 允許值清單內 | 截圖視覺比對 + `get_node_info` |
+| 稽核項目 | 通過標準 |
+|---------|---------|
+| 主 Frame Auto Layout 方向 | Desktop 主 Frame = VERTICAL |
+| Header 子 Frame | HORIZONTAL，itemSpacing = 16px，paddingLeft/Right = 24px |
+| Main-Content 子 Frame | VERTICAL，itemSpacing = 48px，paddingTop/Bottom = 80px |
+| 元件 Auto Layout | Button = HORIZONTAL/CENTER/gap 8px；Card = VERTICAL/MIN/gap 16px/padding 24px |
+| 間距值合規性 | 所有 itemSpacing 和 padding 值均在 Spacing Scale 允許值清單內 |
 
-**Spacing Scale 允許值清單**（來自 `design-tokens.json`）：
+**Spacing Scale 允許值清單**（來自 `design-tokens.json`）：`0, 1, 2, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96`（px）
 
-```
-0px, 1px, 2px, 4px, 8px, 12px, 16px, 24px, 32px, 40px, 48px, 64px, 80px, 96px
-```
+### 5.3 維度二：Design Token 符合度（權重 40%）
 
----
-
-### 5.2 維度二：Design Token 符合度（權重 40%）
-
-**評估目標**：Figma 節點的顏色、字型、間距屬性是否透過 Figma Variable 綁定，而非直接 hardcode 數值。本維度權重最高（40%），因其直接影響設計系統的一致性與可維護性。
+**評估目標**：Figma 節點的顏色、字型、間距屬性是否透過 Figma Variable 綁定（非 hardcode）。權重最高，直接影響設計系統一致性與可維護性。
 
 **資料來源**：`get_variables`（Variable 清單）+ `get_node_info`（`boundVariables` 屬性確認）。
 
-**評分矩陣**：
-
-| 分數範圍 | 判定說明 |
-|---------|---------|
-| 90–100 | 所有顏色屬性已綁定 Figma Variable；字型大小與字重符合 Typography Token；間距屬性已綁定或使用 Spacing Scale 值 |
-| 70–89 | 主要互動元件（Button 背景色、Input 邊框色）已綁定 Variable；1–2 個次要節點使用 hardcode 但色碼值與 Token 定義一致（偏差 ≤ 5%） |
-| 50–69 | 主要元件有 Variable 綁定但不完整；3 個以上節點使用 hardcode 值；字型大小偏差 ≤ 2px |
-| 0–49 | 無任何 Variable 綁定（觸發 Hard Gate）；或大量顏色 hardcode 且色碼值與 Token 定義偏差 > 10% |
-
-**Variable 綁定驗證方法**：
-
-使用 `get_node_info` 讀取節點的 `boundVariables` 屬性。若節點有 Variable 綁定，`boundVariables.fills[0].id` 應對應 Variable ID，而非空值：
-
-```json
-// Variable 已綁定的節點屬性示例（通過）
-{
-  "boundVariables": {
-    "fills": [{ "type": "VARIABLE_ALIAS", "id": "VariableID:color/primary/500" }]
-  }
-}
-
-// 未綁定 Variable 的節點（hardcode，需扣分）
-{
-  "fills": [{ "type": "SOLID", "color": { "r": 0.231, "g": 0.510, "b": 0.965 } }],
-  "boundVariables": {}
-}
-```
+**Variable 綁定驗證**：使用 `get_node_info` 讀取節點 `boundVariables` 屬性，確認 `boundVariables.fills[0].id` 對應 Variable ID 而非空物件。
 
 **13 個 Figma Variables 驗證清單**（來自 `design-tokens.json`）：
 
@@ -276,57 +228,19 @@ Vision Critic Agent 對 Figma Frame 執行**三維度視覺比對**，每個維�
 | `color/neutral/200` | `#e5e7eb` | Input 邊框色、Card Outlined 邊框色 |
 | `color/neutral/400` | `#9ca3af` | Placeholder 文字色 |
 
----
+### 5.4 維度三：元件規範符合度（權重 25%）
 
-### 5.3 維度三：元件規範符合度（權重 25%）
+**評估目標**：UI 元件是否引用 Component Library 中的 Component Instance，屬性是否符合 `docs/design/component-library-spec.md` 定義的規格。
 
-**評估目標**：Frame 中使用的 UI 元件是否引用 Component Library 中的 Component Instance，元件屬性是否符合 `docs/design/component-library-spec.md` 定義的規格（尺寸、圓角、Auto Layout 結構）。
+**資料來源**：截圖視覺 + `get_local_components`（元件清單）+ `get_node_info`（節點類型與屬性）。
 
-**資料來源**：截圖視覺 + `get_local_components`（元件清單）+ `get_node_info`（元件節點類型與屬性）。
+**元件規格稽核摘要**（完整規格見 `component-library-spec.md`）：
 
-**評分矩陣**：
-
-| 分數範圍 | 判定說明 |
-|---------|---------|
-| 90–100 | 所有 UI 元件均為 Component Instance（非自繪 Frame）；元件尺寸、圓角、Auto Layout 完全符合規格；Instance 命名符合 `figma-structure-guide.md` §2.5 規則 |
-| 70–89 | 主要元件（Button、Card）使用 Component Instance；1 個次要元件屬性偏差（如圓角差 ≤ 2px）；無自繪重複元件 |
-| 50–69 | 部分元件使用 Instance，部分使用自繪 Frame；元件尺寸偏差 ≤ 8px |
-| 0–49 | 主要元件（Button、Input、Card）未使用 Component Instance（觸發 Hard Gate）；或元件尺寸嚴重偏差（> 8px） |
-
-**具體稽核項目**（對應 `component-library-spec.md`）：
-
-**Button 規格稽核**：
-
-| 稽核項目 | 通過標準 |
-|---------|---------|
-| 高度 | 40px（允許偏差 ±2px） |
-| Padding 水平 | 16px（對應 `spacing.4`） |
-| Padding 垂直 | 8px（對應 `spacing.2`） |
-| 圓角 | 6px（對應 `borderRadius.md`） |
-| 字型大小 | 16px（對應 `typography.fontSize.base`） |
-| 字重 | 600（對應 `typography.fontWeight.semibold`） |
-| 元件類型 | COMPONENT 或 INSTANCE（非普通 FRAME） |
-
-**Input 規格稽核**：
-
-| 稽核項目 | 通過標準 |
-|---------|---------|
-| 輸入框高度 | 40px（允許偏差 ±2px） |
-| 圓角 | 4px（對應 `borderRadius.base`） |
-| 字型大小 | 16px |
-| Auto Layout（輸入框） | HORIZONTAL，paddingLeft/Right = 12px，paddingTop/Bottom = 8px |
-| 元件類型 | COMPONENT 或 INSTANCE |
-
-**Card 規格稽核**：
-
-| 稽核項目 | 通過標準 |
-|---------|---------|
-| 圓角 | 8px（對應 `borderRadius.lg`） |
-| Padding 全向 | 24px（對應 `spacing.6`） |
-| Auto Layout 方向 | VERTICAL |
-| itemSpacing | 16px（對應 `spacing.4`） |
-| 最小高度 | 200px |
-| 元件類型 | COMPONENT 或 INSTANCE |
+| 元件 | 高度 | 圓角 | Padding | Auto Layout | 元件類型 |
+|------|------|------|---------|-------------|---------|
+| Button | 40px (±2px) | 6px | H:16px V:8px | HORIZONTAL/CENTER/gap 8px | COMPONENT 或 INSTANCE |
+| Input | 40px (±2px) | 4px | H:12px V:8px | HORIZONTAL | COMPONENT 或 INSTANCE |
+| Card | ≥200px | 8px | 全向 24px | VERTICAL/gap 16px | COMPONENT 或 INSTANCE |
 
 ---
 
@@ -407,9 +321,9 @@ Vision Critic Agent 對 Figma Frame 執行**三維度視覺比對**，每個維�
    │   - text：節點結構 + Variable 綁定 + 設計規格參照（XML 隔離）
    │
 9. 呼叫 Claude Sonnet 4.6（多模態模式）執行三維度視覺審查
-   │   - 維度一：佈局一致性（§5.1）
-   │   - 維度二：Design Token 符合度（§5.2）
-   │   - 維度三：元件規範符合度（§5.3）
+   │   - 維度一：佈局一致性（§5.2）
+   │   - 維度二：Design Token 符合度（§5.3）
+   │   - 維度三：元件規範符合度（§5.4）
    │
 10. 執行 Hard Gate 檢查（§6.3）
     │
@@ -432,257 +346,7 @@ Vision Critic Agent 對 Figma Frame 執行**三維度視覺比對**，每個維�
 
 ### 8.1 Schema 定義
 
-Vision Critic Agent 的輸出為**視覺審查報告（Visual Review Report，VRR）**，遵循以下 JSON Schema：
-
-```json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://shikigami.dev/schemas/vrr/v2",
-  "title": "Visual Review Report",
-  "description": "Vision Critic Agent 輸出的視覺一致性審查報告（ADR-015 Figma 架構版）",
-  "type": "object",
-  "required": [
-    "$schema", "metadata", "verdict",
-    "layoutConsistencyScore", "designTokenComplianceScore", "componentSpecComplianceScore",
-    "totalScore", "hardGateViolations"
-  ],
-  "additionalProperties": false,
-  "properties": {
-
-    "$schema": {
-      "type": "string",
-      "const": "https://shikigami.dev/schemas/vrr/v2",
-      "description": "VRR Schema 版本識別符"
-    },
-
-    "metadata": {
-      "type": "object",
-      "required": ["reviewId", "storyId", "frameId", "retryCount", "reviewedAt", "visionCriticVersion"],
-      "additionalProperties": false,
-      "properties": {
-        "reviewId": {
-          "type": "string",
-          "description": "審查唯一識別符（格式：VCR-{StoryID}-{timestamp}）"
-        },
-        "storyId": {
-          "type": "string",
-          "description": "關聯 User Story ID（如 US-151）"
-        },
-        "frameId": {
-          "type": "string",
-          "description": "被審查的 Figma Frame node ID"
-        },
-        "frameName": {
-          "type": "string",
-          "description": "被審查的 Figma Frame 名稱（選填）"
-        },
-        "retryCount": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 3,
-          "description": "當前為第幾次審查（0 = 首次，最多 3 次）"
-        },
-        "reviewedAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "審查時間（ISO 8601 格式）"
-        },
-        "visionCriticVersion": {
-          "type": "string",
-          "description": "執行此審查的 Vision Critic Skill 版本（如 v2.0.0）"
-        }
-      }
-    },
-
-    "verdict": {
-      "type": "string",
-      "enum": ["PASS", "CONDITIONAL_PASS", "FAIL"],
-      "description": "最終審查判定結果"
-    },
-
-    "layoutConsistencyScore": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100,
-      "description": "維度一：佈局一致性分數（0–100）；權重 35%（§5.1）"
-    },
-
-    "designTokenComplianceScore": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100,
-      "description": "維度二：Design Token 符合度分數（0–100）；權重 40%（§5.2）"
-    },
-
-    "componentSpecComplianceScore": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100,
-      "description": "維度三：元件規範符合度分數（0–100）；權重 25%（§5.3）"
-    },
-
-    "totalScore": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 100,
-      "description": "加權總分（= 佈局×0.35 + Design Token×0.40 + 元件×0.25）；PASS 閾值 ≥ 80"
-    },
-
-    "hardGateViolations": {
-      "type": "array",
-      "description": "Hard Gate 違規清單（任一項目存在時強制 FAIL，不論總分）",
-      "items": {
-        "type": "object",
-        "required": ["gateId", "description", "requiredAction"],
-        "additionalProperties": false,
-        "properties": {
-          "gateId": {
-            "type": "string",
-            "enum": ["HG-1", "HG-2", "HG-3"],
-            "description": "Hard Gate 識別符（§6.3）"
-          },
-          "description": {
-            "type": "string",
-            "description": "違規詳情"
-          },
-          "requiredAction": {
-            "type": "string",
-            "description": "必要修正行動說明"
-          },
-          "mcpFix": {
-            "type": "string",
-            "description": "推薦的修正 MCP 工具名稱（選填）"
-          },
-          "mcpFixExample": {
-            "type": "object",
-            "description": "修正 MCP 工具的參數範例（選填）"
-          }
-        }
-      }
-    },
-
-    "layoutConsistencyFindings": {
-      "type": "array",
-      "description": "維度一：佈局一致性的具體發現（FAIL/CONDITIONAL_PASS 時必須提供）",
-      "items": { "$ref": "#/definitions/Finding" }
-    },
-
-    "designTokenComplianceFindings": {
-      "type": "array",
-      "description": "維度二：Design Token 符合度的具體發現（FAIL/CONDITIONAL_PASS 時必須提供）",
-      "items": { "$ref": "#/definitions/Finding" }
-    },
-
-    "componentSpecComplianceFindings": {
-      "type": "array",
-      "description": "維度三：元件規範符合度的具體發現（FAIL/CONDITIONAL_PASS 時必須提供）",
-      "items": { "$ref": "#/definitions/Finding" }
-    },
-
-    "recommendations": {
-      "type": "array",
-      "description": "改善建議清單（CONDITIONAL_PASS 必須提供；FAIL 時附上供修正用），依 HIGH/MEDIUM/LOW 優先級排序",
-      "items": {
-        "type": "object",
-        "required": ["priority", "dimension", "action"],
-        "additionalProperties": false,
-        "properties": {
-          "priority": {
-            "type": "string",
-            "enum": ["HIGH", "MEDIUM", "LOW"],
-            "description": "改善優先級"
-          },
-          "isRequired": {
-            "type": "boolean",
-            "description": "是否為必要修正（FAIL 時為 true；CONDITIONAL_PASS 時為 false）"
-          },
-          "dimension": {
-            "type": "string",
-            "enum": ["layoutConsistency", "designTokenCompliance", "componentSpecCompliance"],
-            "description": "關聯維度"
-          },
-          "action": {
-            "type": "string",
-            "description": "具體修正行動說明"
-          },
-          "details": {
-            "type": "string",
-            "description": "詳細說明（選填）"
-          },
-          "mcpOperationSequence": {
-            "type": "array",
-            "description": "修正所需的 MCP 工具呼叫序列（選填）",
-            "items": {
-              "type": "object",
-              "required": ["step", "tool", "params"],
-              "properties": {
-                "step": { "type": "integer" },
-                "tool": { "type": "string" },
-                "params": { "type": "object" }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "passedChecks": {
-      "type": "array",
-      "description": "通過審查的項目清單（PASS 時提供作為正面確認）",
-      "items": {
-        "type": "string"
-      }
-    }
-  },
-
-  "definitions": {
-    "Finding": {
-      "type": "object",
-      "required": ["severity", "description"],
-      "additionalProperties": false,
-      "properties": {
-        "severity": {
-          "type": "string",
-          "enum": ["ERROR", "WARNING", "INFO"],
-          "description": "問題嚴重度（ERROR = 直接扣分；WARNING = 部分扣分；INFO = 輕微扣分）"
-        },
-        "affectedNode": {
-          "type": "string",
-          "description": "受影響的節點名稱（選填）"
-        },
-        "affectedNodeId": {
-          "type": "string",
-          "description": "受影響的節點 ID（選填）"
-        },
-        "description": {
-          "type": "string",
-          "description": "問題描述（具體、可操作，含數值）"
-        },
-        "expectedValue": {
-          "type": "string",
-          "description": "期望值（如 Design Token 值或規格數值）"
-        },
-        "actualValue": {
-          "type": "string",
-          "description": "Figma 中觀測到的實際值"
-        },
-        "deductionReason": {
-          "type": "string",
-          "description": "扣分原因說明（選填）"
-        },
-        "mcpFix": {
-          "type": "string",
-          "description": "推薦的修正 MCP 工具名稱（選填）"
-        },
-        "mcpFixParams": {
-          "type": "object",
-          "description": "修正 MCP 工具的參數（選填）"
-        }
-      }
-    }
-  }
-}
-```
+Vision Critic Agent 的輸出為**視覺審查報告（Visual Review Report，VRR）**。Schema 定義見 `schemas/vision-critic-report.json`（VRR v2）。
 
 ### 8.2 審查報告輸出範例
 
@@ -724,7 +388,6 @@ Vision Critic Agent 的輸出為**視覺審查報告（Visual Review Report，VR
     "reviewId": "VCR-US-151-20260306T110000Z",
     "storyId": "US-151",
     "frameId": "123:456",
-    "frameName": "US-151-VisionCritic-Desktop",
     "retryCount": 1,
     "reviewedAt": "2026-03-06T11:00:00+08:00",
     "visionCriticVersion": "v2.0.0"
@@ -737,31 +400,17 @@ Vision Critic Agent 的輸出為**視覺審查報告（Visual Review Report，VR
   "hardGateViolations": [
     {
       "gateId": "HG-1",
-      "description": "目標 Frame 中無任何節點綁定 Figma Variable，所有顏色屬性均為 hardcode hex 值",
-      "requiredAction": "至少為主要元件的一個顏色屬性套用 Variable 綁定（建議 Button 背景色綁定 color/primary/500）",
-      "mcpFix": "apply_variable_to_node",
-      "mcpFixExample": {
-        "nodeId": "[Button Frame node ID]",
-        "property": "fills",
-        "variableName": "color/primary/500"
-      }
+      "description": "無任何節點綁定 Figma Variable",
+      "requiredAction": "為主要元件套用 Variable 綁定（如 Button 背景色綁定 color/primary/500）"
     }
   ],
   "designTokenComplianceFindings": [
     {
       "severity": "ERROR",
       "affectedNode": "Button/Primary",
-      "affectedNodeId": "node-id-button",
-      "description": "Button/Primary Frame 背景色為 hardcode #3b82f6，未綁定 Variable color/primary/500",
-      "expectedValue": "Figma Variable: color/primary/500 (#3b82f6)",
-      "actualValue": "#3b82f6（hardcode，boundVariables.fills 為空）",
-      "deductionReason": "應綁定 color/primary/500，但 boundVariables.fills 為空",
-      "mcpFix": "apply_variable_to_node",
-      "mcpFixParams": {
-        "nodeId": "node-id-button",
-        "property": "fills",
-        "variableName": "color/primary/500"
-      }
+      "description": "背景色為 hardcode #3b82f6，未綁定 Variable color/primary/500",
+      "expectedValue": "Variable: color/primary/500",
+      "actualValue": "#3b82f6（hardcode）"
     }
   ],
   "recommendations": [
@@ -769,19 +418,7 @@ Vision Critic Agent 的輸出為**視覺審查報告（Visual Review Report，VR
       "priority": "HIGH",
       "isRequired": true,
       "dimension": "designTokenCompliance",
-      "action": "為 Button/Primary 的 fills 屬性套用 Figma Variable 綁定 color/primary/500",
-      "details": "解除 HG-1 Hard Gate 強制 FAIL 條件",
-      "mcpOperationSequence": [
-        {
-          "step": 1,
-          "tool": "apply_variable_to_node",
-          "params": {
-            "nodeId": "[Button/Primary node ID]",
-            "property": "fills",
-            "variableName": "color/primary/500"
-          }
-        }
-      ]
+      "action": "為 Button/Primary 的 fills 屬性套用 Variable 綁定 color/primary/500"
     }
   ]
 }
