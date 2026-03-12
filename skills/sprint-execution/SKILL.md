@@ -1012,11 +1012,26 @@ Story Type 系統與 doc-only 判定規則（見下方「doc-only Story 識別�
 
 ---
 
-## 7. Systematic Debugging 觸發指引（Deploy 後 / Bug 修復後）
+## 7. Systematic Debugging 觸發指引（CI FAIL / Deploy 後 / Bug 修復後）
 
 <!-- US-247 Sprint 90 — Deploy 後與 Bug 修復後 systematic debugging 觸發指引 -->
+<!-- v0.64.1 patch — 新增 CI FAIL 觸發點 -->
 
-Sprint Execution 流程中，以下兩個時機建議觸發 systematic debugging，確認系統健康並防止回歸。
+Sprint Execution 流程中，以下時機建議觸發 systematic debugging，確認系統健康並防止回歸。
+
+### 7.0 CI FAIL 時（建議）
+
+**觸發時機**：§3 CI 狀態快掃偵測到 `FAIL`，或 §8.2 CI Gate 回傳 `FAIL` 時。
+
+**目的**：CI 失敗可能源自環境問題、依賴衝突、隱性回歸等非顯而易見的原因。systematic debugging 能系統化排查 CI 失敗根因，避免開發者僅靠肉眼看 log 而遺漏深層問題。
+
+**觸發方式**：
+```
+invoke shikigami:systematic-debugging
+（告知目的為 CI FAIL 根因排查，並提供失敗 workflow 名稱與 run URL）
+```
+
+**建議，非強制**：若 CI 失敗原因明確（如 lint 錯誤、型別錯誤等一目了然的編譯問題），Developer 可自行修復不觸發。若為間歇性失敗、環境相關、或連續 2 次以上相同 workflow FAIL，強烈建議觸發。
 
 ### 7.1 Deploy 後（建議）
 
