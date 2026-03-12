@@ -23,15 +23,16 @@
 | v0.34.0 | 輕量化與品質強化 | Sprint 57–60 | Vision Critic 同步 ADR-015 Figma 架構 + Sprint Review 流程精簡化 + 模型分層策略調查與 Phase 1/2 落地（subagent 自動模型指定）+ Plugin 載入 TROUBLESHOOTING 文件化 + Metrics 計算視窗限制（30 Sprint）+ 方法論適用性自動評估（BDD/DDD 建議） |
 | v0.41.0 | 方法論強化 | Sprint 61–73 | QA Spec/Code 雙階段審查強化 + Scrum Master 自動排程精煉 + 多平台穩定化 + Gemini CLI / Cursor 平台整合 |
 | v0.45.0 | 使用者體驗強化 | Sprint 74 | README 資訊架構重設計 + API 契約 Hard Gate + E2E 測試基礎設施 |
+| v0.50.0 | 流程可靠性與品質閉環 | Sprint 75–84 | Story-Lifecycle Subagent 架構落地 + ADR-016 UI/UX Designer 角色 + ADR-017 Context Hub Knowledge Ingestion + ADR-018 Discovery Phase 草稿 + Anti-Hallucination 雙軌閉環（不確定性前置檢查 + Knowledge Ingestion）+ 組織記憶基礎（Decision Journal + 代理人校準 + 統一合約位置）+ Checkpoint 強制重讀機制 + SPACE 五維度指標 + 知識品質閉環（知識老化偵測 + SBE 範例體系 + 兩層索引 + Quality Observer） |
 
 ---
 
-## 累積數據（截至 Sprint 73）
+## 累積數據（截至 Sprint 84）
 
-- 73 個 Sprint 中完成 72 個以上（完成率 ~98%）
-- 15 個 ADR（架構決策紀錄）
+- 84 個 Sprint 完成率 ~99%
+- 18 個 ADR（架構決策紀錄）
 - 8 個自動化驗證腳本 + GitHub Actions CI Pipeline
-- 25 個 Skills / 7 Agents / 4 Commands
+- 24 個 Skills / 8 Agents / 4 Commands
 
 ---
 
@@ -51,7 +52,7 @@
 
 | 文件 | 說明 |
 |------|------|
-| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-015） |
+| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-018） |
 | `docs/sprints/` | Sprint 規劃與執行紀錄 |
 | `docs/km/Retrospective_Log.md` | 每次犯的錯都記下來，不重複犯 |
 | `docs/km/Metrics_Log.md` | Velocity 趨勢與完成率追蹤 |
