@@ -8,8 +8,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-246：SKILL.md 瘦身：移除 agent 已知的工具教學與重複樣板 | #245 | L | 3 | 待開始 |
-| US-245：SKILL.md 角色專屬 Prompt 拆分 — 減少 subagent context 消耗 | #244 | M | 2 | 待開始 |
+| US-246：SKILL.md 瘦身：移除 agent 已知的工具教學與重複樣板 | #245 | L | 3 | 完成 |
+| US-245：SKILL.md 角色專屬 Prompt 拆分 — 減少 subagent context 消耗 | #244 | M | 2 | 完成 |
 
 ## 執行順序
 
