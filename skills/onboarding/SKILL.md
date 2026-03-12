@@ -27,11 +27,11 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
 
 執行步驟：
 1. 讀取框架根目錄，確認 `templates/` 目錄存在
-2. 確認以下 4 個範本文件皆存在：
+2. 確認以下範本文件皆存在：
    - `templates/PRODUCT_BACKLOG.md`
    - `templates/ROADMAP.md`
    - `templates/PROJECT_BOARD.md`
-   - `templates/BACKLOG_DONE.md`
+   - `templates/BACKLOG_DONE.md`（選用，ADR-010 後 Backlog 由 GitHub Issues 管理，此為歷史文物）
 
 **判定規則**：
 - `templates/` 不存在 → **立即中止**，輸出錯誤：
@@ -40,11 +40,15 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
   Onboarding 需要此目錄作為初始文件來源。
   請確認 Shikigami 框架安裝完整，或從官方 repository 補回 templates/。
   ```
-- 個別範本文件缺失 → **立即中止**，逐一列出缺失的文件：
+- 個別**必要**範本文件缺失（`PRODUCT_BACKLOG.md`、`ROADMAP.md`、`PROJECT_BOARD.md`）→ **立即中止**，逐一列出缺失的文件：
   ```
   [錯誤] 以下範本文件缺失，無法繼續：
   - templates/PRODUCT_BACKLOG.md  ← 缺失
   請確認 Shikigami 框架安裝完整。
+  ```
+- `templates/BACKLOG_DONE.md` 缺失 → **警告後繼續**（選用文件，ADR-010 後 Backlog 由 GitHub Issues 管理）：
+  ```
+  [警告] templates/BACKLOG_DONE.md 不存在，跳過複製（選用文件）。
   ```
 - 全部存在 → 繼續執行
 
@@ -146,16 +150,16 @@ gh label list --json name --limit 100
 
 ### 2.3 複製初始文件
 
-**目的**：將 4 個核心範本複製至 `docs/prd/`，作為專案文件起點。
+**目的**：將核心範本複製至 `docs/prd/`，作為專案文件起點。
 
 依序處理：
 
-| 來源 | 目的地 |
-|------|--------|
-| `templates/PRODUCT_BACKLOG.md` | `docs/prd/PRODUCT_BACKLOG.md` |
-| `templates/ROADMAP.md` | `docs/prd/ROADMAP.md` |
-| `templates/PROJECT_BOARD.md` | `docs/PROJECT_BOARD.md` |
-| `templates/BACKLOG_DONE.md` | `docs/prd/BACKLOG_DONE.md` |
+| 來源 | 目的地 | 備註 |
+|------|--------|------|
+| `templates/PRODUCT_BACKLOG.md` | `docs/prd/PRODUCT_BACKLOG.md` | 選用，ADR-010 後 Backlog 由 GitHub Issues 管理 |
+| `templates/ROADMAP.md` | `docs/prd/ROADMAP.md` | |
+| `templates/PROJECT_BOARD.md` | `docs/PROJECT_BOARD.md` | |
+| `templates/BACKLOG_DONE.md` | `docs/prd/BACKLOG_DONE.md` | 選用，ADR-010 後 Backlog 由 GitHub Issues 管理，此為歷史文物 |
 
 對每個文件：
 - 目的地不存在 → 複製，輸出：`[複製] templates/XXX.md → docs/.../XXX.md`

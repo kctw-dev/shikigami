@@ -230,7 +230,7 @@ Scrum Master：觸發 shikigami:dispel
 1. **建立輸出目錄**：建立 `docs/dispel/`，若已存在則詢問是否覆蓋。
 2. **並行分析**：六個 subagent 各自從角色視角分析當前 repo，產出獨立報告。每個 subagent 遵循對應角色的分析框架（第 4 節）。
 3. **彙整摘要**：讀取六份報告，產出 `summary.md`（一頁摘要，30 秒可讀完）與 `recommendations.md`（具體行動項目，可直接轉為 Backlog Stories）。
-4. **銜接 Sprint**：`recommendations.md` 的行動項目格式與 `PRODUCT_BACKLOG.md` 的 User Story 格式對齊，便於直接匯入 Backlog。
+4. **銜接 Sprint**：`recommendations.md` 的行動項目格式與 GitHub Issues 的 User Story 格式對齊，便於透過 `/issue-management` Backlog Bridge 直接匯入至 GitHub Issues。
 
 ---
 
@@ -295,6 +295,6 @@ Scrum Master：觸發 shikigami:dispel
 
 | 銜接 | 說明 |
 |------|------|
-| `/dispel` → `/sprint` | 解咒完成後，recommendations.md 的行動項目匯入 Backlog，啟動 Sprint |
+| `/dispel` → `/sprint` | 解咒完成後，recommendations.md 的行動項目透過 `/issue-management` Backlog Bridge 匯入至 GitHub Issues，啟動 Sprint |
 | dispel vs systematic-debugging | dispel = Legacy/不活躍 codebase 全面考古；systematic-debugging = 活躍開發中的特定 bug/測試失敗 |
-| dispel → backlog-management | recommendations.md 的行動項目可直接由 PO 評分後排入 Backlog |
+| dispel → `/issue-management` | recommendations.md 的行動項目可直接由 PO 評分後，透過 `/issue-management` Backlog Bridge 排入 GitHub Issues Backlog |

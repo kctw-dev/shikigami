@@ -19,25 +19,26 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 
 ### 檢查 1：必要文件完整性
 
-掃描以下 5 個核心文件：
+掃描以下核心文件：
 
-| 文件 | 路徑 | 說明 |
-|------|------|------|
-| CLAUDE.md | `./CLAUDE.md`（專案根目錄） | 框架啟動設定 |
-| PROJECT_BOARD | `docs/PROJECT_BOARD.md` | Sprint 進度看板 |
-| PRODUCT_BACKLOG | `docs/prd/PRODUCT_BACKLOG.md` | 產品待辦清單 |
-| ROADMAP | `docs/prd/ROADMAP.md` | 版本里程碑規劃 |
-| Metrics_Log | `docs/km/Metrics_Log.md` | Sprint 度量紀錄 |
+| 文件 | 路徑 | 說明 | 必要性 |
+|------|------|------|--------|
+| CLAUDE.md | `./CLAUDE.md`（專案根目錄） | 框架啟動設定 | 必要 |
+| PROJECT_BOARD | `docs/PROJECT_BOARD.md` | Sprint 進度看板 | 必要 |
+| ROADMAP | `docs/prd/ROADMAP.md` | 版本里程碑規劃 | 必要 |
+| Metrics_Log | `docs/km/Metrics_Log.md` | Sprint 度量紀錄 | 必要 |
+| PRODUCT_BACKLOG | `docs/prd/PRODUCT_BACKLOG.md` | 歷史快照，ADR-010 後由 GitHub Issues 取代 | 選用封存 |
+| BACKLOG_DONE | `docs/prd/BACKLOG_DONE.md` | 歷史快照，ADR-010 後由 GitHub Issues 取代 | 選用封存 |
 
 **判定規則**：
-- 文件不存在 → FAIL
-- 文件存在但為空（0 bytes）→ FAIL
-- 文件存在且有內容 → PASS
+- 必要文件不存在 → FAIL
+- 必要文件存在但為空（0 bytes）→ FAIL
+- 必要文件存在且有內容 → PASS
+- 選用封存文件（PRODUCT_BACKLOG、BACKLOG_DONE）不存在 → 忽略（不影響判定）
 
 **FAIL 時的修復建議**：
 - CLAUDE.md 缺失：「請從 `templates/CLAUDE.md.template` 複製並填入專案資訊」
 - PROJECT_BOARD 缺失：「請執行 `/sprint` 建立 Sprint」
-- PRODUCT_BACKLOG 缺失：「請執行 Product Discovery 建立 Backlog」
 - ROADMAP 缺失：「請建立 `docs/prd/ROADMAP.md` 定義版本里程碑」
 - Metrics_Log 缺失：「將在下次 Sprint Review 時由 Metrics 計算自動建立」
 
@@ -48,19 +49,21 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 
 ### 檢查 2：孤兒 Story 偵測
 
-掃描 `docs/sprints/` 下所有 `sprint_N.md` 文件，提取其中列出的 Story ID（如 US-07、US-T01 等），反向驗證每個 Story 存在於以下任一文件：
-- `docs/prd/PRODUCT_BACKLOG.md`
-- `docs/prd/BACKLOG_DONE.md`
+掃描 `docs/sprints/` 下所有 `sprint_N.md` 文件，提取其中列出的 Story ID（如 US-07、US-T01 等），反向驗證每個 Story 存在於以下任一來源：
+- `docs/prd/PRODUCT_BACKLOG.md`（歷史快照，ADR-010 後由 GitHub Issues 取代，檔案可能不存在）
+- `docs/prd/BACKLOG_DONE.md`（歷史快照，ADR-010 後由 GitHub Issues 取代，檔案可能不存在）
+- GitHub Issues（ADR-010 後的主要來源，若上述檔案不存在則改以 `gh issue list` 查詢）
 
 **判定規則**：
-- Sprint 文件中的 Story 在 Backlog 或 Done 中找到對應 → PASS
-- Sprint 文件中的 Story 在兩處都找不到 → WARN（列出孤兒 Story + 來源 Sprint）
+- Sprint 文件中的 Story 在上述任一來源找到對應 → PASS
+- Sprint 文件中的 Story 在所有來源都找不到 → WARN（列出孤兒 Story + 來源 Sprint）
+- `PRODUCT_BACKLOG.md` 與 `BACKLOG_DONE.md` 不存在 → 不視為錯誤，改以 GitHub Issues 查詢
 
-**WARN 時的修復建議**：「Story {ID} 出現在 sprint_{N}.md 但不在 Backlog 或 Done 中。請確認是否遺漏登記或已被刪除。」
+**WARN 時的修復建議**：「Story {ID} 出現在 sprint_{N}.md 但不在 Backlog、Done 或 GitHub Issues 中。請確認是否遺漏登記或已被刪除。」
 
 ### 檢查 3：ADR 一致性
 
-掃描 `docs/prd/PRODUCT_BACKLOG.md` 中所有 Story 的 ADR 欄位。
+掃描所有 Story 的 ADR 欄位。ADR-010 後 GitHub Issues 為 Backlog 主要來源；若 `docs/prd/PRODUCT_BACKLOG.md` 存在則一併掃描（歷史快照），不存在則略過該檔案。
 
 **判定規則**：
 - ADR 欄位為「—」或空白 → 本 Story 不需要 ADR，跳過
@@ -125,7 +128,10 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 ### 1. 必要文件完整性 — {PASS / FAIL}
 - CLAUDE.md: {PASS / FAIL}
 - PROJECT_BOARD.md: {PASS / FAIL}
-- PRODUCT_BACKLOG.md: {PASS / FAIL}
+- ROADMAP.md: {PASS / FAIL}
+- Metrics_Log.md: {PASS / FAIL}
+- PRODUCT_BACKLOG.md: {PRESENT / ABSENT}（選用封存，ADR-010 後由 GitHub Issues 取代，不影響判定）
+- BACKLOG_DONE.md: {PRESENT / ABSENT}（選用封存，ADR-010 後由 GitHub Issues 取代，不影響判定）
 {若有 FAIL，列出修復建議}
 
 ### 2. 孤兒 Story 偵測 — {PASS / WARN}
