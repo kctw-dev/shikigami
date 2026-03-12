@@ -51,7 +51,8 @@ gh repo view --json nameWithOwner -q '.nameWithOwner'
 ├── 回覆 Issue 留言 → 第 9 節 Comment
 ├── 分類無標籤 Issues → 第 10 節 Triage
 ├── Issue 轉 Backlog User Story → 第 11 節 Backlog Bridge
-└── 前端 Story 識別與 AC 注入規則 → 第 12 節（由 Backlog Bridge 自動觸發）
+├── 前端 Story 識別與 AC 注入規則 → 第 12 節（由 Backlog Bridge 自動觸發）
+└── Issue → Discovery Phase 閉環路由圖 → 第 14 節
 ```
 
 ---
@@ -250,6 +251,41 @@ Triage 分類結果
 
 **原則**：Sprint 進行中不插入新需求。所有進 Backlog 的 issue 由 PO 在下次 Sprint Planning 時排序決定是否納入。P0 緊急修復除外（由 Stakeholder 決策中斷當前 Sprint）。
 
+### 10.2 Discovery 觸發路徑（feature-request 閾值自動建議）
+
+`feature-request` label 的 Issue 在通過 Backlog Bridge 入庫後，系統將持續追蹤其互動熱度。當同一個 `feature-request` Issue 達到以下任一閾值時，系統**自動建議**啟動 `/discovery-phase`：
+
+| 觸發條件 | 閾值 | 說明 |
+|---------|------|------|
+| Thumbs-up reactions（👍） | **≥ 3** | 代表多名使用者主動表達需求強度 |
+| Comments 數量 | **≥ 5** | 代表使用者持續討論，需求有深度探索空間 |
+
+**自動建議流程**：
+
+```
+feature-request Issue 達閾值
+  │
+  ├─ 在 Backlog Grooming（/backlog-management §3）匯總時偵測
+  ├─ PO subagent 輸出建議：「Issue #N 已達 Discovery 觸發閾值，建議啟動 /discovery-phase」
+  ├─ 附加 label：`discovery-candidate`（標示已達閾值，待 PO 決策）
+  └─ PO 決策：啟動 /discovery-phase（Issue 觸發入口，見 discovery-phase §2 Step 1）
+               或 維持 Backlog 等待下次 Sprint Planning 排序
+```
+
+**閾值偵測指令**（於 Grooming 或手動檢查時執行）：
+
+```bash
+# 取得所有 feature-request Issues 並篩選達閾值者
+gh issue list --label "feature-request" --state open \
+  --json number,title,url,reactionGroups,comments --limit 200 \
+  | jq '[.[] | select(
+      (.reactionGroups[] | select(.content == "THUMBS_UP") | .reactors.totalCount) >= 3
+      or .comments >= 5
+    )]'
+```
+
+**注意**：Discovery 觸發僅為「建議」，最終決策由 PO 執行。PO 可選擇啟動 `/discovery-phase` 或維持 Backlog 等待排序。
+
 ---
 
 ## 11. Backlog Bridge — Issue 入庫（ADR-010 單層 Issue 架構）
@@ -446,7 +482,83 @@ gh CLI 認證失效時，不得嘗試任何寫入操作。必須中止流程並�
 
 ---
 
-## 14. 與其他 Skill 的關係
+## 14. 閉環路徑：Issue → Discovery Phase 完整路由圖
+
+使用者回饋透過 Issue 系統流入，經由標準化路由最終閉環至 Discovery Phase，形成完整的回饋→需求探索閉環。
+
+### 14.1 完整路由圖
+
+```
+使用者回饋（GitHub Issue）
+  │
+  ▼
+[§10 Triage — 分類無標籤 Issues]
+  │  PO subagent 判定類型，套用 label
+  │
+  ├─ feature-request ──────────────────────────────────────────┐
+  │                                                             │
+  ▼                                                             │
+[§11 Backlog Bridge — Issue 入庫]                               │
+  │  改寫 Issue body（Story template + RICE 評分）              │
+  │  套用 labels：auto-triaged, status: backlog, priority: X   │
+  │                                                             │
+  ▼                                                             │
+[/backlog-management §3 Grooming — Sprint 中段]                 │
+  │  匯總 feature-request 趨勢（數量、重複主題、投票數排序）       │
+  │  偵測達閾值 Issues（§10.2：≥3 thumbs-up 或 ≥5 comments）    │
+  │                                                             │
+  ├─ 未達閾值 ─→ 維持 Backlog，等待 Sprint Planning 排序         │
+  │                                                             │
+  └─ 達閾值 ──────────────────────────────────────────────────▶│
+                                                               │
+  ◀──────────────────────────────────────────────────────────┘
+  │
+  ▼
+[/discovery-phase — Phase 0 產品探索]
+  │  Issue 觸發入口（見 discovery-phase §2 Step 1 Issue 觸發）
+  │  Step 1 背景分析 → Step 2 假設外顯化 → Step 3 Product Brief
+  │  → Step 4 技術可行性 → Step 5 PO 簽核 → Step 6 轉化 Backlog
+  │
+  ▼
+[GitHub Issue — Discovery 產出]
+  │  新開 Issue（含 Product Brief 引用）
+  │  套用 feature-request label
+  │
+  ▼
+[/backlog-management §3 Grooming — RICE 評分與優先級排序]
+  │
+  ▼
+[/sprint-planning — Sprint 週期選取]
+  │
+  ▼
+[/sprint-execution — Story 開發]
+  │
+  ▼
+Issue Close（對應 feature-request Issue 關閉）
+```
+
+### 14.2 路由節點說明
+
+| 節點 | Skill / 章節 | 職責 |
+|------|-------------|------|
+| Triage | §10 | 為無 label Issue 分類，判定為 `feature-request` |
+| Backlog Bridge | §11 | 將 Issue 轉換為 Story template，入庫至 Backlog |
+| Grooming 匯總 | /backlog-management §3 | Sprint 中段匯總回饋趨勢，偵測 Discovery 觸發閾值 |
+| Discovery Phase | /discovery-phase | 深度探索需求，產出 Product Brief 並簽核 |
+| Sprint Planning | /sprint-planning | 從 Groomed Backlog 選取 Stories 進入 Sprint |
+
+### 14.3 閉環驗證條件
+
+一個完整的 Issue 閉環需滿足：
+
+- [ ] 原始 `feature-request` Issue 已完成 Backlog Bridge 入庫（帶 `backlog-intake-done` label）
+- [ ] Discovery Phase 已產出對應 Product Brief（狀態：PO 已簽核）
+- [ ] Discovery 產出的 GitHub Issue 已完成 RICE 評分並排入 Backlog
+- [ ] 對應 Story 完成開發後，原始 `feature-request` Issue 附留言說明閉環結果並關閉
+
+---
+
+## 15. 與其他 Skill 的關係
 
 | 情境 | 觸發 |
 |------|------|
@@ -460,7 +572,7 @@ gh CLI 認證失效時，不得嘗試任何寫入操作。必須中止流程並�
 
 ---
 
-## 15. Subagent 派遣
+## 16. Subagent 派遣
 
 | 子流程 | 主要 Agent | 審核 Agent |
 |--------|-----------|-----------|
