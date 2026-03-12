@@ -83,7 +83,9 @@ Story 驗收判定完成後，依判定結果回寫 GitHub Issue 狀態。在 §
 |------|--------------|--------|
 | **內部 Issue** | `gh issue edit` 加 `done` label、移除 `in-sprint` label | `gh issue close` 並留言 |
 | **外部 Issue（階段 1）** | 同上 | `gh issue comment` 留言通知，**不執行 close** |
-| **外部 Issue（階段 2）** | — | 部署驗證通過後補充留言 |
+| **外部 Issue（階段 2）** | — | 觸發條件：**deployment-readiness PASS 且 E2E PASS**，方可執行 `gh issue comment` 補充留言 |
+
+> **負面條件**：若 deployment-readiness 尚未完成（FAIL 或未執行），階段 2 留言**不得補發**，即使 Sprint Review 主流程已結束亦不例外。禁止在主流程結束前預先補發。
 
 ### Story FAIL — 操作步驟
 
@@ -155,7 +157,7 @@ Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 g
 - [ ] **Story Issue 狀態回寫**（§2.6，HARD-GATE）：
   - [ ] PASS Story：已查詢 Issue 建立者、判斷內部/外部、執行對應操作
   - [ ] 內部 Issue：done label + 移除 in-sprint + 關閉
-  - [ ] 外部 Issue：done label + 移除 in-sprint + 階段 1 留言（保持 Open）+ 階段 2 留言
+  - [ ] 外部 Issue：done label + 移除 in-sprint + 階段 1 留言（保持 Open）
   - [ ] FAIL Story：已回復 backlog 狀態並留言
 - [ ] 未達 DoD Story 已移回 Backlog 並標注原因
 - [ ] `Retrospective_Log.md` 已新增記錄
@@ -167,6 +169,7 @@ Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 g
 - [ ] **ROADMAP 里程碑對齊檢查**（§5.1）
 - [ ] 觸發 `deployment-readiness`（附帶里程碑對齊結果）
 - [ ] **E2E 驗證結果已確認**
+- [ ] 外部 Issue 階段 2 留言（**僅在 deployment-readiness PASS 且 E2E PASS 後執行**；否則不補發）
 - [ ] Sprint Metrics 已計算並追加至 `Metrics_Log.md`（詳見 `po-review-prompt.md`）
 - [ ] 角色制衡案例檢查（若有，更新 `ROLE_BALANCE_CASES.md`）
 - [ ] **產出文件 git commit + push**（HARD-GATE）
