@@ -24,15 +24,16 @@
 | v0.41.0 | 方法論強化 | Sprint 61–73 | QA Spec/Code 雙階段審查強化 + Scrum Master 自動排程精煉 + 多平台穩定化 + Gemini CLI / Cursor 平台整合 |
 | v0.45.0 | 使用者體驗強化 | Sprint 74 | README 資訊架構重設計 + API 契約 Hard Gate + E2E 測試基礎設施 |
 | v0.50.0 | 流程可靠性與品質閉環 | Sprint 75–84 | Story-Lifecycle Subagent 架構落地 + ADR-016 UI/UX Designer 角色 + ADR-017 Context Hub Knowledge Ingestion + ADR-018 Discovery Phase 草稿 + Anti-Hallucination 雙軌閉環（不確定性前置檢查 + Knowledge Ingestion）+ 組織記憶基礎（Decision Journal + 代理人校準 + 統一合約位置）+ Checkpoint 強制重讀機制 + SPACE 五維度指標 + 知識品質閉環（知識老化偵測 + SBE 範例體系 + 兩層索引 + Quality Observer） |
+| v0.59.0 | Discovery Phase 落地 | Sprint 85 | ADR-018 裁決 Accepted（Option A 獨立 Discovery Skill）+ Discovery Phase Skill 實作（6-step flow + Product Brief 標準化 + 3 Hard Gates + 假設外顯化）+ 五階段流水線 Phase 0 入口建立 |
 
 ---
 
-## 累積數據（截至 Sprint 84）
+## 累積數據（截至 Sprint 85）
 
-- 84 個 Sprint 完成率 ~99%
+- 85 個 Sprint 完成率 ~99%
 - 18 個 ADR（架構決策紀錄）
 - 8 個自動化驗證腳本 + GitHub Actions CI Pipeline
-- 24 個 Skills / 8 Agents / 4 Commands
+- 25 個 Skills / 8 Agents / 4 Commands
 
 ---
 

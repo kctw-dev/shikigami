@@ -1,11 +1,11 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.58.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.59.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-![Sprints](https://img.shields.io/badge/sprints-84%2B-orange?style=flat-square)
-![Skills](https://img.shields.io/badge/skills-24-purple?style=flat-square)
+![Sprints](https://img.shields.io/badge/sprints-85%2B-orange?style=flat-square)
+![Skills](https://img.shields.io/badge/skills-25-purple?style=flat-square)
 
-**為你的 AI 開發工具注入 8 個專業角色，組成有紀律的工程團隊。**
+**為你的 AI 開發工具注入 8 個專業角色，涵蓋 Discovery → Definition → Delivery 全產品生命週期。**
 
 ```
 /plugin marketplace add KCTW/shikigami
@@ -52,28 +52,28 @@ Scrum Master 會建立 `CLAUDE.md` 與 `docs/` 目錄結構，完成後即可開
 
 ## 這能解決什麼問題？
 
-你一個人開發，寫完的代碼沒人 review，架構決策靠直覺，安全問題等上線才發現。
+你一個人開發，需求靠腦補、寫完的代碼沒人 review，架構決策靠直覺，安全問題等上線才發現。
 
-Shikigami 注入 8 個角色組成**互相制衡的治理網**：
+Shikigami 注入 8 個角色，覆蓋產品從**探索到上線**的完整流程：
 
-- QA 審你的代碼並挑戰架構決策
-- Security 審所有外部輸入
-- SRE 從維運角度評估部署可行性
-- UI/UX Designer 透過 Figma MCP 執行設計，Vision Critic 自審視覺品質
+- **Discovery**：PO 驅動產品探索，Product Brief 標準化格式 + 假設外顯化 + PO 確認關卡
+- **Definition**：Backlog 管理、Sprint Planning、架構決策（ADR）
+- **Delivery**：TDD 開發、QA 雙階段審查、Security 掃描、SRE 部署
+- **Design**：UI/UX Designer 透過 Figma MCP 執行設計，Vision Critic 自審視覺品質
 
-**不需要記指令**，用自然語言說你要做什麼，Scrum Master 自動調度對應角色。
+角色之間**互相制衡**，不是 8 個獨立助手。**不需要記指令**，用自然語言說你要做什麼，Scrum Master 自動調度。
 
 ---
 
 ## 使用情境
 
-### 情境 1：我想快速開始一個新功能，不想從頭規劃
+### 情境 1：我有一個模糊的想法，想確認該不該做
 
 ```
-我想加一個使用者登入功能
+我想加一個使用者登入功能，但不確定要用哪種方式
 ```
 
-Shikigami 自動調度 PO 分析需求、Architect 評估技術可行性、QA 確認驗收標準，產出完整的 User Story 與 Sprint 計畫。你不需要輸入任何結構化的命令。
+Shikigami 觸發 Discovery Phase：PO 產出 Product Brief（問題陳述 + 商業假設 + 驗證方法），Architect 評估技術可行性，PO 簽核後自動轉為 Backlog Issues。從探索到可執行 Story，全程結構化。
 
 ### 情境 2：我想讓 AI 執行代碼審查，而不只是給建議
 
@@ -164,23 +164,29 @@ Architect：ADR-002 狀態 → Accepted
 **重點：它們互相制衡，不是 8 個獨立助手。**
 
 <details>
-<summary>完整 24 個 Skills 列表</summary>
+<summary>完整 25 個 Skills 列表</summary>
 
-**Scrum 流程**
+**Discovery（產品探索）**
+
+| Skill | 說明 |
+|---|---|
+| **discovery-phase** | Product Discovery 獨立入口、Product Brief 標準化格式、假設外顯化、PO 確認關卡 |
+
+**Definition（需求定義與 Sprint 管理）**
 
 | Skill | 說明 |
 |---|---|
 | **scrum-master** | 自動調度 Agent Scrum Team 的角色分工與 Sprint 流程 |
 | **sprint-planning** | 啟動新 Sprint、從 Backlog 選取 Stories、規劃 Sprint 目標 |
-| **sprint-execution** | 執行 Sprint Stories、功能實作、處理 Sprint Backlog |
-| **sprint-review** | Sprint 結束時進行回顧與驗收、評估 Sprint 成果 |
-| **backlog-management** | 新需求管理、需求變更、Backlog 梳理、產品探索 |
+| **backlog-management** | Backlog 梳理、需求變更管理 |
 | **escalation** | 團隊衝突無法解決、重大產品轉向、升級鏈啟動 |
 
-**工程實踐**
+**Delivery（開發與交付）**
 
 | Skill | 說明 |
 |---|---|
+| **sprint-execution** | 執行 Sprint Stories、功能實作、處理 Sprint Backlog |
+| **sprint-review** | Sprint 結束時進行回顧與驗收、評估 Sprint 成果 |
 | **architecture-decision** | 技術決策、架構審查、技術選型、ADR 撰寫 |
 | **quality-gate** | 代碼審查、功能驗收、PR 檢查、品質指標檢測 |
 | **security-review** | 外部輸入處理、API 安全、配置安全、漏洞評估 |
@@ -190,12 +196,17 @@ Architect：ADR-002 狀態 → Accepted
 | **architect** | Architect 角色知識框架、架構評估決策指引 |
 | **qa-engineer** | QA 角色知識框架、審查策略與 Story-Lifecycle 整合指引 |
 
-**設計與工具整合**
+**Design（設計）**
 
 | Skill | 說明 |
 |---|---|
 | **uiux-designer** | UI/UX Designer 角色定義、Design Foundation 流程、Figma MCP 整合 |
 | **vision-critic** | UI 截圖多維度視覺一致性評分，產出 PASS/FAIL 報告與可執行修正建議 |
+
+**工具整合**
+
+| Skill | 說明 |
+|---|---|
 | **git-workflow** | 分支隔離、Worktree 管理、開發完成後的合併/PR 流程 |
 | **parallel-dispatch** | 多個獨立任務的平行 Subagent 派遣，含同檔案衝突偵測與自動序列化 |
 | **issue-management** | GitHub Issue 管理、自動分類、回覆、Issue 轉 Backlog |
