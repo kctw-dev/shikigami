@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 82 Review 完成）
-**當前 Sprint**：Sprint 82（完成）
+**最後更新**：2026-03-12（Sprint 83 Planning 完成）
+**當前 Sprint**：Sprint 83（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 82](sprints/sprint_82.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 83](sprints/sprint_83.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 83 — 進行中
+
+**Sprint Goal**：強化 Sprint 流程可靠性 — 建立 Checkpoint 強制重讀機制防止流程跳步，並導入 SPACE 五維度指標量化代理人行為品質。
+**期間**：2026-03-12 ~ 2026-03-19
+**ADR 依賴**：無
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-229：Checkpoint 強制重讀步驟 — subagent 返回後強制重讀流程定義，防止流程跳步 | #229 | M | 2 | 待開始 |
+| US-225：SPACE 五維度指標 — 以 SPACE 框架量化代理人行為品質 | #225 | M | 2 | 待開始 |
+
+**Sprint 容量**：4 points
 
 ---
 
