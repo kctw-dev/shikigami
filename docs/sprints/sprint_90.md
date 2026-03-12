@@ -10,8 +10,8 @@
 
 | Story ID | 標題 | Issue | Size | Points | 狀態 |
 |----------|------|-------|------|--------|------|
-| US-247 | Systematic Debugging 自動觸發時機 — Sprint Review/Deploy/Bug Fix 三觸發點定義 | #240 | S | 1 | 待開始 |
-| US-246 | CI/CD Deploy 通知 Workflow 模板 — deploy-notify.yml + Deploy Board 初始化 | #239 | S | 1 | 待開始 |
+| US-247 | Systematic Debugging 自動觸發時機 — Sprint Review/Deploy/Bug Fix 三觸發點定義 | #240 | S | 1 | 完成 |
+| US-246 | CI/CD Deploy 通知 Workflow 模板 — deploy-notify.yml + Deploy Board 初始化 | #239 | S | 1 | 完成 |
 
 **Sprint 容量**：2 points
 
