@@ -1337,6 +1337,43 @@ TC-4 觸發（當前 Story 連續 2 次 self-review FAIL）
 
 ## §9 輸出格式（Output Schema）
 
+<!-- US-249 Subagent 結果暫存 — context compaction 後結果復原機制 — Sprint 92 -->
+
+### §9.0 暫存寫入（回傳前必執行）
+
+**在回傳標準化摘要給主 session 之前**，必須先將結果寫入暫存文件，供主 session 在 context compaction 後復原使用。
+
+**觸發時機**：所有執行路徑均適用（一般路徑、doc-only 路徑、DESIGN 路徑），無豁免。
+
+**執行步驟**：
+
+```
+1. 確認暫存目錄存在：docs/sprints/subagent-results/
+   若目錄不存在 → 建立目錄（mkdir -p docs/sprints/subagent-results/）
+
+2. 將標準化摘要寫入：docs/sprints/subagent-results/{story_id}.md
+   （複用 §9 PASS / FAIL / ESCALATE 回傳格式，內容與回傳主 session 的摘要一致）
+
+3. 暫存寫入完成後，繼續回傳摘要給主 session（不阻塞主流程）
+
+4. 若暫存寫入失敗（磁碟錯誤等），輸出 [CACHE-WRITE-FAIL] 告警，繼續回傳摘要（不阻塞）
+```
+
+**暫存文件格式**（與 §9 回傳格式一致）：
+
+```markdown
+# Subagent Result — {story_id}
+
+<!-- 自動產生，供 context compaction 後結果復原使用 -->
+<!-- 寫入時間：{ISO 8601 timestamp} -->
+
+{複製 §9 PASS / FAIL / ESCALATE 的完整回傳內容}
+```
+
+**注意**：暫存文件不加入 git commit（僅為執行期暫存），在 Sprint Review 完成並 git commit 後可安全清除（見 SKILL.md §3.2 暫存文件清除時機）。
+
+---
+
 完成所有步驟後，回傳以下標準化摘要給主 session：
 
 ```yaml

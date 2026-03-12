@@ -327,6 +327,10 @@ Sprint Backlog 中取出 Story
   |
   v
 接收 Story-Lifecycle subagent 回傳
+  |-- context 中無回傳結果（context compaction 導致丟失）
+  |     → [CACHE-RECOVERY] 掃描 docs/sprints/subagent-results/{story_id}.md
+  |           |-- 檔案存在 → 讀取暫存結果，繼續處置（輸出 [CACHE-RECOVERY-OK]）
+  |           +-- 檔案不存在 → 輸出 [CACHE-RECOVERY-FAIL]，視同 ESCALATE: CONTEXT_OVERFLOW
   |-- ESCALATE --> 依升級類型處置（見下方升級表）
   |-- FAIL     --> 記錄失敗原因，更新看板，繼續下一 Story
   +-- PASS
@@ -527,6 +531,41 @@ Sprint Backlog 還有 Story？
    **更新完成後，立即 git commit + push**（僅 commit `PROJECT_BOARD.md` 與 `sprint_N.md`；`Metrics_Log.md` 與 `Retrospective_Log.md` 由 sprint-review 負責。commit message 格式：`docs: Sprint N — [Story ID] 狀態更新為已完成`）。
 
    接著檢查終止條件：Sprint Backlog 中仍有待辦 Story → 取出下一個 Story 繼續執行；Sprint Backlog 已清空（所有 Story 完成）→ **立即 invoke shikigami:sprint-review**，不詢問使用者、不跳回「下一個 Story」流程。
+
+---
+
+### §3.2 Subagent 結果暫存文件管理（US-249）
+
+<!-- US-249 Subagent 結果暫存 — context compaction 後結果復原機制 — Sprint 92 -->
+
+Story-Lifecycle subagent 在回傳摘要前，會將結果寫入 `docs/sprints/subagent-results/{story_id}.md` 暫存文件（見 story-lifecycle-prompt.md §9.0）。
+
+#### 暫存文件用途
+
+| 情境 | 行為 |
+|------|------|
+| 正常情況（context 完整） | 主 session 直接使用 subagent 回傳的摘要，暫存文件為備援 |
+| context compaction 後（回傳丟失） | 主 session 掃描 `docs/sprints/subagent-results/` 讀取對應暫存檔，復原結果（見 §3 流程 `[CACHE-RECOVERY]`） |
+
+#### 暫存文件清除時機
+
+<HARD-GATE>
+**禁止在 Sprint Review git commit 完成前清除暫存文件。** 暫存文件在整個 Sprint 執行週期中必須保留，以防執行過程中任何時刻發生 context compaction。
+</HARD-GATE>
+
+暫存文件在以下時機**可安全清除**：
+
+1. Sprint Review 完成，`docs/km/Retrospective_Log.md` 與 `docs/km/Metrics_Log.md` 已 git commit
+2. 確認主 session 已讀取所有需要的 subagent 結果（PROJECT_BOARD.md 狀態已更新）
+
+清除指令（Sprint Review 完成後，由主 session 或 sprint-review Skill 執行）：
+
+```bash
+# 清除本 Sprint 所有暫存文件
+rm -f docs/sprints/subagent-results/*.md
+```
+
+> 若 `docs/sprints/subagent-results/` 目錄為空或不存在，略過清除步驟（非錯誤）。
 
 ---
 
