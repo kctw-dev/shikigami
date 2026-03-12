@@ -39,6 +39,23 @@ maintainer: Developer（每次 Sprint Retrospective 步驟 5 校準儀式後手�
 
 <!-- 校準記錄從此行以下依 Sprint 編號升序追加 -->
 
+### Sprint 90 校準記錄
+
+**日期**：2026-03-12
+
+**Agent 歸納的價值觀**：
+1. 實戰驅動框架演進 — 框架功能來源於真實專案實戰經驗，不做假設性需求
+2. 文件即代碼，.md 是給 agent 消費的 — 所有 SKILL.md、模板、流程定義以 agent 可消費格式撰寫
+3. 同概念工作應打包，AI 團隊沒有工作量限制 — 相關概念 Story 合併同一 Sprint 交付
+
+**本 Sprint 最重要決策**：將 Systematic Debugging 在 Sprint Review 前定義為 HARD-GATE（強制觸發），依據 CloneAI Sprint 73-74 實戰觀察
+
+**Stakeholder 修正**：無
+
+**漂移判定**：無漂移
+
+---
+
 ### Sprint 89 校準記錄
 
 **日期**：2026-03-12
