@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 91 Planning 完成）
-**當前 Sprint**：Sprint 91（進行中）
+**最後更新**：2026-03-12（Sprint 91 Review 完成）
+**當前 Sprint**：Sprint 91（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 91](sprints/sprint_91.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 91（進行中）
+## Sprint 91（完成）
 
 > Sprint Goal：透過 SKILL.md 瘦身與角色 Prompt 拆分，將框架 context 消耗削減約 75%
+> **結果**：Goal 達成（2/2 Stories PASS）。Velocity 5 points，完成率 100%。SKILL.md 瘦身 -1601 行（31.9%）+ 角色 Prompt 拆分（sprint-planning/sprint-review 各拆為 SKILL.md + 3 個角色 prompt）。
+> **Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
@@ -17,6 +19,11 @@
 | US-245：SKILL.md 角色專屬 Prompt 拆分 — 減少 subagent context 消耗 | #244 | M | 2 | 完成 |
 
 **Sprint 容量**：5 points
+
+## Sprint 91 統計
+- Velocity：5 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-12
 
 ---
 

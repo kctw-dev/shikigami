@@ -4,6 +4,26 @@
 
 ---
 
+## Sprint 91
+
+**日期**：2026-03-12
+**Sprint Goal**：透過 SKILL.md 瘦身與角色 Prompt 拆分，將框架 context 消耗削減約 75%
+
+### Good
+- 連續 33 Sprint 100% 完成率（S59-S91），穩定性紀錄再次更新
+- SKILL.md 瘦身 31.9%（-1601 行），50 個 HARD-GATE 全數保留，品質門禁零損失
+- 角色 Prompt 拆分成功：sprint-planning + sprint-review 各拆為 SKILL.md + 3 個角色 prompt，subagent 僅載入必要 context
+- 平行 subagent 執行高效：US-246 五路平行（5 個 SKILL.md 各一）+ US-245 雙路平行（2 個 skill 各一），零衝突
+- 序列依賴設計正確：US-246 先瘦身再 US-245 拆分，避免拆分時嵌入冗餘內容
+
+### Problem
+- 無
+
+### Action Items
+- 無
+
+---
+
 ## Sprint 90
 
 **日期**：2026-03-12
