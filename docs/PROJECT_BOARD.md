@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 91 Review 完成）
-**當前 Sprint**：Sprint 91（完成）
+**最後更新**：2026-03-12（Sprint 92 Planning 完成）
+**當前 Sprint**：Sprint 92（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 91](sprints/sprint_91.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 92](sprints/sprint_92.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 92（進行中）
+
+> Sprint Goal：強化框架可靠性 — 修正外部 Issue 通知時機與 Subagent 結果持久化
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-248：sprint-review S2.6 外部 Issue 階段 2 留言觸發時機修正 | #242 | S | 1 | 待開發 |
+| US-249：Subagent 結果暫存 — context compaction 後結果復原機制 | #208 | M | 2 | 待開發 |
+
+**Sprint 容量**：3 points
 
 ---
 
