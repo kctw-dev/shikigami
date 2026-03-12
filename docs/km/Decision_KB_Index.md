@@ -1,7 +1,7 @@
 # Decision Knowledge Base Index
 
 **建立日期**：2026-05-11
-**最後更新**：2026-03-12（新增 Decision Journal 索引區段，US-219）
+**最後更新**：2026-03-12（ADR-019 Accepted — MCP 三層架構）
 **維護者**：Developer（手動維護，每次新增或更新 ADR 時同步更新本文件）
 **ADR 目錄**：`docs/adr/`
 
@@ -36,6 +36,8 @@
 | Knowledge Ingestion / API 幻覺 / Anti-Hallucination | ADR-017 |
 | WebFetch / api-knowledge / ground truth | ADR-017 |
 | Context Hub / chub / MCP Knowledge Ingestion | ADR-017 |
+| MCP / 三層架構 / 狀態機 / 流程管理 / 品質觀察 / 知識庫 | ADR-019 |
+| context compaction / 流程斷裂 / 外部狀態 | ADR-019 |
 | Decision Journal / 衝突決策 / 價值觀取捨 | DJ-001 |
 | 平行執行 / 共用文件保護 / Subagent 協調 | DJ-001 |
 
@@ -43,7 +45,7 @@
 
 | 狀態 | ADR 列表 |
 |------|---------|
-| **Accepted**（正式採用） | ADR-001、ADR-002、ADR-003、ADR-004、ADR-005、ADR-006、ADR-007、ADR-008、ADR-009、ADR-010、ADR-016、ADR-017 |
+| **Accepted**（正式採用） | ADR-001、ADR-002、ADR-003、ADR-004、ADR-005、ADR-006、ADR-007、ADR-008、ADR-009、ADR-010、ADR-016、ADR-017、ADR-019 |
 | **Proposed**（起草中，待審查） | ADR-011 |
 | **Deprecated**（已棄用） | — |
 
@@ -57,6 +59,7 @@
 | 2026-03-03 | ADR-008、ADR-009、ADR-010 |
 | 2026-05-11 | ADR-011 |
 | 2026-03-11 | ADR-016、ADR-017 |
+| 2026-03-12 | ADR-019 |
 
 ---
 
@@ -77,6 +80,7 @@
 | [ADR-011](../adr/ADR-011-github-actions-integration.md) | GitHub Actions 整合架構決策 | Proposed | 2026-05-11 | Issue #46、Issue #76、US-81（Sprint 38） |
 | [ADR-016](../adr/ADR-016-uiux-designer-role.md) | UI/UX Designer 角色定義與 Design Foundation 流程 | Accepted | 2026-03-11 | Issue #207 |
 | [ADR-017](../adr/ADR-017-context-hub-knowledge-ingestion.md) | Context Hub 整合架構決策 — Knowledge Ingestion 機制 | Accepted | 2026-03-11 | Issue #216 |
+| [ADR-019](../adr/ADR-019-mcp-three-layer-architecture.md) | MCP 三層架構 — 知識庫 / 流程管理 / 品質觀察 MCP Server | Accepted | 2026-03-12 | Issue #231（US-243） |
 
 ---
 
@@ -240,6 +244,23 @@
 | 目錄結構 | `docs/km/api-knowledge/` | fallback 模式知識庫目錄（僅 MCP 不可用時產生） |
 | ADR | ADR-006 | Injection 防護延伸至 MCP server 回傳內容（`<api_knowledge>` XML 隔離標記） |
 | ADR | ADR-015 | 與 Figma MCP 整合模式對齊，共用 `.mcp.json` 宣告式設定 |
+
+---
+
+### ADR-019：MCP 三層架構 — 知識庫 / 流程管理 / 品質觀察 MCP Server
+
+**核心決策**：採用選項 A（漸進式 MCP 三層架構），在現有 plugin 架構之上以補強模式引入三個 MCP Server。Phase 順序：Phase 1 流程管理 → Phase 2 品質觀察 → Phase 3 知識庫。審查附帶條件：fallback 機制（C1）、狀態持久化到檔案（C2）、零外部依賴（C3）。
+
+| 影響類型 | 路徑 | 說明 |
+|---------|------|------|
+| 目錄結構 | `mcp-servers/quality-observer/` | 品質觀察 MCP Server POC（已完成） |
+| 目錄結構 | `mcp-servers/process-management/`（Phase 1 新建） | 流程管理 MCP Server（狀態機） |
+| 目錄結構 | `mcp-servers/knowledge-base/`（Phase 3 新建） | 知識庫 MCP Server |
+| MCP 設定 | `.mcp.json` | 新增三個 MCP Server 設定（漸進式） |
+| Skills | `skills/sprint-review/SKILL.md`（可選） | Metrics 查詢步驟指向 MCP tool |
+| Skills | `skills/sprint-execution/SKILL.md`（可選） | 流程狀態查詢指向 MCP tool |
+| ADR | ADR-006 | MCP tool 輸出須以 `<mcp_tool_output>` XML 標記包裹（Injection 防護） |
+| ADR | ADR-013 | 繼承 stdio transport 與 `.mcp.json` 宣告式設定 |
 
 ---
 

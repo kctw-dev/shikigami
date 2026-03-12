@@ -1,8 +1,8 @@
 # ADR-019：MCP 三層架構 — 知識庫 / 流程管理 / 品質觀察 MCP Server
 
-**狀態**：Draft
+**狀態**：Accepted
 **日期**：2026-03-12
-**決策者**：待定（PO + Architect）
+**決策者**：Architect（審查）+ QA Decision Challenger + SRE Review
 **關聯 Issue**：#231（US-243 MCP 三層架構評估 Spike）
 **關聯 ADR**：ADR-006（Prompt Injection 防護）、ADR-012（多環境認證架構）、ADR-013（diagram MCP 整合）、ADR-018（Discovery Phase 架構）
 **關聯 Sprint**：Sprint 88（US-243 RESEARCH Spike）
@@ -67,10 +67,10 @@ Shikigami Agent（Claude Code）
 
 在現有 plugin 架構之上，以**補強模式（Augmentation）**引入三個 MCP Server。現有 Skill 不受破壞性修改，MCP tools 作為高效數據存取介面逐步替代部分全文載入場景。
 
-採用漸進式導入序列：
+採用漸進式導入序列（Sprint 88 Review 後調整優先序）：
 
-1. **Phase 1**：品質觀察 MCP Server（POC 已驗證，最獨立）
-2. **Phase 2**：流程管理 MCP Server（解決平行執行狀態衝突）
+1. **Phase 1**：流程管理 MCP Server（解決 context compaction 後流程斷裂 — Sprint 87/88 連續事故佐證）
+2. **Phase 2**：品質觀察 MCP Server（POC 已驗證，最獨立）
 3. **Phase 3**：知識庫 MCP Server（最高複雜度，待 Phase 1/2 驗證後實作）
 
 #### .mcp.json 擴充
@@ -204,20 +204,32 @@ Shikigami Agent（Claude Code）
 
 ## 決策
 
-**狀態**：Draft — 待 PO + Architect 確認
+**狀態**：Accepted
 
-**草稿傾向**：選項 A（漸進式 MCP 三層架構），以 Phase 1（品質觀察 MCP Server）作為起點，依 POC 驗證結果決定 Phase 2/3 的實作時機。
+**選擇**：選項 A（漸進式 MCP 三層架構），Phase 優先序調整為流程管理先行。
+
+**Phase 優先序（調整後）**：
+1. Phase 1：流程管理 MCP Server（原 Phase 2，提升優先級）
+2. Phase 2：品質觀察 MCP Server（原 Phase 1，POC 已完成）
+3. Phase 3：知識庫 MCP Server（不變）
 
 **理由**：
-1. Token 效率問題隨 Sprint 數量持續惡化，選項 B 為迴避而非解決
-2. ADR-013 已確立 stdio MCP 整合為框架技術方向，選項 A 在同一路徑上延伸，技術一致性高
-3. 品質觀察 MCP Server POC 已驗證基本技術可行性（US-243 Sprint 88）
-4. 漸進式 Phase 導入控制 over-engineering 風險，符合框架一貫的 YAGNI 原則執行方式
+1. Sprint 87-88 連續同類事故（context compaction 後流程斷裂）證明「流程狀態寄生於 context window」是系統性風險
+2. Plugin-only 架構（Option B）與輕量封裝（Option C）均無法從根本解決 compaction 後狀態丟失
+3. MCP 三層架構將 agent 的流程遵循從「記憶依賴」轉為「查詢驅動」
+4. ADR-013 已確立 stdio MCP 整合為框架技術方向，技術一致性高
+5. 品質觀察 MCP Server POC 已驗證基本技術可行性（US-243 Sprint 88）
+6. 漸進式 Phase 導入控制 over-engineering 風險
 
-**等待決策的條件**：
-- OQ-1（Metrics 解析準確率）的 POC 實際驗證結果
-- PO 對維護負擔增加的可接受性評估
-- Architect 對寫入操作安全策略（OQ-2）的設計建議
+**審查附帶條件（必須滿足）**：
+
+| # | 來源 | 條件 | 說明 |
+|---|------|------|------|
+| C1 | QA Decision Challenger | Fallback 機制 | MCP Server 不可達時，agent 必須能降級回檔案系統 checkpoint 模式繼續運作，不可硬故障 |
+| C2 | SRE | 狀態持久化到檔案系統 | 每個 MCP Server 的狀態以檔案為 source of truth，進程僅為快取層。crash 後重啟即恢復 |
+| C3 | SRE | 零外部依賴 | MCP Server 僅使用 Node.js 內建模組，不引入 npm 依賴，消除 onboarding 摩擦 |
+
+**Phase 1 驗收標準**：模擬 context compaction 後，agent 仍能透過 `get_current_step` 正確執行剩餘流程步驟
 
 ---
 
