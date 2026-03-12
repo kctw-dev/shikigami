@@ -355,13 +355,15 @@ Sprint Backlog 還有 Story？
 
 **升級類型處置表（主 session 職責）：**
 
-| 升級類型 | 主 session 處置 |
-|----------|----------------|
-| DESIGN_ISSUE | 暫停 Sprint 執行，升級至 Architect 評估 |
-| CONTEXT_OVERFLOW | 觸發 ADR-007 §AC4 fallback 策略（Phase 2 實作） |
-| REQUIREMENT_AMBIGUITY | 暫停 Sprint 執行，升級至 PO 釐清 AC |
-| DEPENDENCY_MISSING | 暫停 Sprint 執行，解決依賴後重試 |
-| SECURITY_CRITICAL | 暫停 Sprint 執行，觸發 security-review Skill |
+<!-- US-240 新增 REQUIREMENT_AMBIGUITY 觸發來源說明 — Sprint 88 -->
+
+| 升級類型 | 主 session 處置 | 常見觸發來源 |
+|----------|----------------|-------------|
+| DESIGN_ISSUE | 暫停 Sprint 執行，升級至 Architect 評估 | 同一審查階段連續失敗 3 次 |
+| CONTEXT_OVERFLOW | 觸發 ADR-007 §AC4 fallback 策略（Phase 2 實作） | subagent context 接近上限 |
+| REQUIREMENT_AMBIGUITY | 暫停 Sprint 執行，升級至 PO 釐清 AC | (1) AC 描述不一致、前後矛盾、無法判斷完成標準；(2) **TDD 測試可寫性失敗**：AC 觸發 TC-W1 ~ TC-W5（描述模糊無法寫 assertion、缺少輸入輸出定義、涉及未定義外部依賴、AC 間邏輯矛盾、完成標準無法量測），詳見 story-lifecycle-prompt.md §3「測試可寫性檢查」 |
+| DEPENDENCY_MISSING | 暫停 Sprint 執行，解決依賴後重試 | 依賴的 ADR、SDD、前置 Story 或 DESIGN Contract 不存在或未完成 |
+| SECURITY_CRITICAL | 暫停 Sprint 執行，觸發 security-review Skill | 發現未受防護的外部輸入、硬編碼 API 金鑰等 Critical 安全問題 |
 
 ### §3.1 Checkpoint 重讀流程定義
 
