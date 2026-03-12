@@ -1,0 +1,29 @@
+{
+  "name": "@shikigami/mcp-quality-observer",
+  "version": "0.1.0",
+  "description": "Shikigami Quality Observer MCP Server — 提供品質指標的結構化查詢工具（US-243 POC）",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "shikigami-quality-observer": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "SHIKIGAMI_ROOT=../.. node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "mcp",
+    "shikigami",
+    "quality-observer",
+    "scrum",
+    "metrics"
+  ],
+  "author": "KCTW",
+  "license": "MIT"
+}
