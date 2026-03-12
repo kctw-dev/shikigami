@@ -8,8 +8,8 @@
 
 | Story ID | 標題 | Size | Points | 狀態 |
 |----------|------|------|--------|------|
-| US-236 | 用戶回饋自動流入 Discovery — Issue 自動轉 User Story 閉環 | M | 2 | 待開始 |
-| US-237 | SRE 完整化 Phase 1 — Incident Response Runbook + Post-mortem 框架 | L | 3 | 待開始 |
+| US-236 | 用戶回饋自動流入 Discovery — Issue 自動轉 User Story 閉環 | M | 2 | 完成 |
+| US-237 | SRE 完整化 Phase 1 — Incident Response Runbook + Post-mortem 框架 | L | 3 | 完成 |
 
 容量：5 points（1M + 1L）
 
