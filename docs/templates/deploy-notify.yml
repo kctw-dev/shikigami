@@ -1,0 +1,156 @@
+# Deploy 通知 Workflow 模板
+# ============================================================
+# 使用方式：
+#   1. 將此檔案複製至消費端專案的 .github/workflows/deploy-notify.yml
+#   2. 將所有 YOUR_XXX 佔位符替換為實際值
+#   3. 在 GitHub 倉庫設定中新增對應的 Secrets
+#   4. 確認 Deploy Board Issue 已透過 deploy-board-init.sh 建立
+# ============================================================
+#
+# 觸發時機：workflow_run（監聽指定 deploy workflow 完成）
+# 背景說明（來自 CloneAI Sprint 73-74 實戰）：
+#   - workflow_run 觸發的 context 不提供 contents:read 權限，不可 checkout
+#   - Board 更新若同時觸發多個 workflow 會有 race condition，使用 concurrency 串行化
+#   - gcloud --update-env-vars 的逗號解析問題：需用 '^::^' 自訂分隔符（與本 workflow 無直接關係）
+#
+# 必要 Secrets（在 GitHub 倉庫 Settings > Secrets and variables > Actions 設定）：
+#   GH_TOKEN：具備 issues:write 權限的 Personal Access Token 或 GitHub App token
+#             （預設的 GITHUB_TOKEN 在 workflow_run context 下可能權限受限）
+#
+# 必要 Variables（建議設定為 Repository Variables）：
+#   DEPLOY_BOARD_ISSUE_NUMBER：Deploy Board 看板 Issue 的編號
+#                              （由 deploy-board-init.sh 建立後填入）
+# ============================================================
+
+name: Deploy Board Notify
+
+on:
+  workflow_run:
+    # 監聽的 deploy workflow 名稱（替換為消費端實際的 workflow 名稱）
+    workflows:
+      - "YOUR_DEPLOY_WORKFLOW_NAME"   # 例："Deploy to Staging"
+      - "YOUR_PROD_DEPLOY_WORKFLOW_NAME"  # 例："Deploy to Production"
+    types:
+      - completed
+
+# ── concurrency：防止多個 workflow_run 同時更新 Board 造成 race condition ──
+# group 名稱必須唯一，此處以 workflow 名稱 + 觸發 run id 為 key
+concurrency:
+  group: deploy-board-update
+  cancel-in-progress: false  # 不取消進行中的更新，確保每次通知都執行
+
+jobs:
+  update-deploy-board:
+    name: Update Deploy Board
+    runs-on: ubuntu-latest
+
+    # workflow_run 觸發時不提供 contents:read，僅需 issues:write
+    permissions:
+      issues: write
+
+    # 只在 deploy workflow 完成時執行（success 或 failure 都要更新 Board）
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure' }}
+
+    steps:
+      # ── 1. 判斷環境與服務類型 ──────────────────────────────
+      - name: Determine deploy context
+        id: context
+        run: |
+          WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
+          CONCLUSION="${{ github.event.workflow_run.conclusion }}"
+          RUN_URL="${{ github.event.workflow_run.html_url }}"
+
+          echo "workflow_name=${WORKFLOW_NAME}" >> "$GITHUB_OUTPUT"
+          echo "conclusion=${CONCLUSION}" >> "$GITHUB_OUTPUT"
+          echo "run_url=${RUN_URL}" >> "$GITHUB_OUTPUT"
+
+          # 根據 workflow 名稱判斷環境（消費端可依需求調整判斷邏輯）
+          if echo "${WORKFLOW_NAME}" | grep -qi "staging"; then
+            echo "environment=Staging" >> "$GITHUB_OUTPUT"
+          elif echo "${WORKFLOW_NAME}" | grep -qi "production\|prod"; then
+            echo "environment=Production" >> "$GITHUB_OUTPUT"
+          else
+            echo "environment=Unknown" >> "$GITHUB_OUTPUT"
+          fi
+
+          # 根據 workflow 名稱判斷服務類型（消費端可依需求調整）
+          if echo "${WORKFLOW_NAME}" | grep -qi "backend\|api"; then
+            echo "service=Backend" >> "$GITHUB_OUTPUT"
+          elif echo "${WORKFLOW_NAME}" | grep -qi "frontend\|web\|ui"; then
+            echo "service=Frontend" >> "$GITHUB_OUTPUT"
+          elif echo "${WORKFLOW_NAME}" | grep -qi "e2e\|test"; then
+            echo "service=E2E" >> "$GITHUB_OUTPUT"
+          else
+            echo "service=YOUR_SERVICE_NAME" >> "$GITHUB_OUTPUT"
+          fi
+
+          # 設定狀態 Emoji（消費端可自行調整）
+          if [[ "${CONCLUSION}" == "success" ]]; then
+            echo "status_icon=✅" >> "$GITHUB_OUTPUT"
+          else
+            echo "status_icon=❌" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ── 2. 更新 Deploy Board Issue ─────────────────────────
+      # 注意：workflow_run 觸發的 context 不提供 checkout 權限
+      #       此步驟直接使用 gh CLI 更新 Issue，不需要 checkout
+      - name: Update Deploy Board Issue
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ vars.DEPLOY_BOARD_ISSUE_NUMBER }}
+          ENVIRONMENT: ${{ steps.context.outputs.environment }}
+          SERVICE: ${{ steps.context.outputs.service }}
+          CONCLUSION: ${{ steps.context.outputs.conclusion }}
+          STATUS_ICON: ${{ steps.context.outputs.status_icon }}
+          RUN_URL: ${{ steps.context.outputs.run_url }}
+          WORKFLOW_NAME: ${{ steps.context.outputs.workflow_name }}
+        run: |
+          # 取得目前 Issue body
+          CURRENT_BODY=$(gh issue view "${ISSUE_NUMBER}" \
+            --repo "${REPO}" \
+            --json body \
+            --jq '.body')
+
+          TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M UTC')
+
+          # 建立更新摘要（附加至 Issue body 末尾的日誌區段）
+          UPDATE_LINE="| ${TIMESTAMP} | ${ENVIRONMENT} | ${SERVICE} | ${STATUS_ICON} ${CONCLUSION} | [Run](${RUN_URL}) |"
+
+          # 判斷是否已有日誌區段，若無則新增
+          if echo "${CURRENT_BODY}" | grep -q "## 部署日誌"; then
+            NEW_BODY=$(echo "${CURRENT_BODY}" | sed "s|<!-- LOG_PLACEHOLDER -->|${UPDATE_LINE}\n<!-- LOG_PLACEHOLDER -->|")
+          else
+            NEW_BODY="${CURRENT_BODY}
+
+          ## 部署日誌
+
+          | 時間 | 環境 | 服務 | 狀態 | 連結 |
+          |------|------|------|------|------|
+          ${UPDATE_LINE}
+          <!-- LOG_PLACEHOLDER -->"
+          fi
+
+          # 更新 Issue body
+          gh issue edit "${ISSUE_NUMBER}" \
+            --repo "${REPO}" \
+            --body "${NEW_BODY}"
+
+          echo "Deploy Board Issue #${ISSUE_NUMBER} 已更新：${ENVIRONMENT} / ${SERVICE} → ${CONCLUSION}"
+
+      # ── 3. 留言通知（可選）────────────────────────────────
+      # 若需要在 Issue 留言通知（而非僅更新 body），取消此步驟的註解
+      # - name: Comment on Deploy Board Issue
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      #     REPO: ${{ github.repository }}
+      #     ISSUE_NUMBER: ${{ vars.DEPLOY_BOARD_ISSUE_NUMBER }}
+      #     ENVIRONMENT: ${{ steps.context.outputs.environment }}
+      #     SERVICE: ${{ steps.context.outputs.service }}
+      #     STATUS_ICON: ${{ steps.context.outputs.status_icon }}
+      #     CONCLUSION: ${{ steps.context.outputs.conclusion }}
+      #     RUN_URL: ${{ steps.context.outputs.run_url }}
+      #   run: |
+      #     gh issue comment "${ISSUE_NUMBER}" \
+      #       --repo "${REPO}" \
+      #       --body "${STATUS_ICON} **${ENVIRONMENT} / ${SERVICE}** deploy ${CONCLUSION} — [查看 Run](${RUN_URL})"

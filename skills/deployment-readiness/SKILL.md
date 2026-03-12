@@ -1047,3 +1047,64 @@ Load Test 結果必須記錄於部署就緒 Checklist 備注欄，§5「效能�
 - **§5 負責**：「效能基準驗證通過」為部署前的最終確認項目，需 §14.3 比對結果支持
 
 SRE subagent 在部署前應依序：§14.2（觸發 Load Test）→ §14.3（比對告警閾值）→ §8.3（打勾負載測試完成）→ §5（打勾效能基準驗證通過）。
+
+---
+
+## 15. Deploy Board — 部署狀態看板
+
+**新增於**：Sprint 90（US-246，CI/CD Deploy 通知 Workflow）
+
+Deploy Board 是 GitHub Issue 形式的部署狀態看板，追蹤 Staging/Production × Backend/Frontend/E2E 共 6 格的即時狀態，由 `deploy-notify.yml` workflow 自動更新。
+
+### 15.1 Deploy Board 模板參照
+
+| 模板 | 路徑 | 用途 |
+|------|------|------|
+| Deploy 通知 Workflow | `docs/templates/deploy-notify.yml` | CI workflow，監聽 deploy workflow 完成並自動更新 Board |
+| Deploy Board 初始化腳本 | `docs/templates/deploy-board-init.sh` | 一次性腳本，建立 6 格看板 Issue |
+
+### 15.2 部署前設定步驟
+
+#### 步驟 1：初始化 Deploy Board Issue
+
+執行初始化腳本，在 GitHub 倉庫建立看板 Issue：
+
+```bash
+# 複製腳本並填入消費端參數後執行
+bash scripts/deploy-board-init.sh
+```
+
+腳本完成後，記下輸出的 Issue 編號，設定為 Repository Variable：
+
+| Variable 名稱 | 說明 |
+|--------------|------|
+| `DEPLOY_BOARD_ISSUE_NUMBER` | Deploy Board Issue 的編號（由初始化腳本輸出） |
+
+#### 步驟 2：部署 deploy-notify.yml Workflow
+
+將 `docs/templates/deploy-notify.yml` 複製至消費端專案的 `.github/workflows/` 目錄，並替換以下佔位符：
+
+| 佔位符 | 說明 | 範例值 |
+|--------|------|--------|
+| `YOUR_DEPLOY_WORKFLOW_NAME` | 被監聽的 Staging deploy workflow 名稱 | `"Deploy to Staging"` |
+| `YOUR_PROD_DEPLOY_WORKFLOW_NAME` | 被監聽的 Production deploy workflow 名稱 | `"Deploy to Production"` |
+| `YOUR_SERVICE_NAME` | 無法自動判斷時的服務名稱 fallback | `"Backend"` |
+
+#### 步驟 3：設定 GH_TOKEN Secret
+
+在 GitHub 倉庫 Settings > Secrets and variables > Actions 設定：
+
+| Secret 名稱 | 說明 |
+|------------|------|
+| `GH_TOKEN` | 具備 `issues:write` 權限的 Personal Access Token 或 GitHub App token |
+
+> **注意**：`workflow_run` 觸發的 context 不提供 `contents:read` 權限，因此 deploy-notify.yml **不可進行 checkout**。Board 更新操作直接透過 `gh` CLI 完成。
+
+### 15.3 已知陷阱（來自 CloneAI Sprint 73-74 實戰）
+
+| 陷阱 | 說明 | 解法 |
+|------|------|------|
+| `workflow_run` 無 checkout 權限 | 此觸發類型的 context 不提供 `contents:read`，無法執行 `actions/checkout` | 直接使用 `gh` CLI 操作，不需要 checkout |
+| Board 更新 race condition | 多個 deploy workflow 同時完成時，並發更新 Issue body 可能造成資料遺失 | deploy-notify.yml 使用 `concurrency` group 串行化更新 |
+| gcloud `--update-env-vars` 逗號解析 | gcloud CLI 的逗號分隔符在某些環境變數值含逗號時解析錯誤 | 改用 `'^::^'` 自訂分隔符（與 Board 無直接關係，但同批 Sprint 經驗） |
+| Firebase Custom Token E2E admin API | Custom Token 需加 `admin` claim 才能呼叫 admin API | 在 `createCustomToken` 時傳入 `{ admin: true }` additionalClaims |

@@ -131,6 +131,9 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 | 升級鏈走完仍無解 | `invoke shikigami:escalation` |
 | 偵測到 `SHIKIGAMI_SCHEDULED=1` 環境變數且 Skill 為 `sprint-execution` | worktree 隔離執行模式（見 schedule SKILL.md §5.7），不觸發互動式提醒 |
 | 偵測到 `scheduled/*` 分支且無對應 open PR | 自動建立 PR + quality-gate 檢查（見 schedule SKILL.md §5.8） |
+| **Sprint Review 流程開始前**（進入 §1.5 交付物一致性審查前） | `invoke shikigami:systematic-debugging`（**HARD-GATE**，確認系統健康後才繼續 Review；見 `sprint-review/SKILL.md` §7） |
+| **deployment-readiness 完成後**（服務部署至生產環境後） | `invoke shikigami:systematic-debugging`（建議，post-deploy health check；見 `sprint-execution/SKILL.md` §7.1） |
+| **Bug 修復完成後**（通過 Spec Compliance + Code Quality Review 後） | `invoke shikigami:systematic-debugging`（建議，確認無回歸；見 `sprint-execution/SKILL.md` §7.2） |
 
 **原則**：Scrum Master 不只是被動路由器，也是**主動的流程守門員**。當偵測到流程轉折點時，自動推進到下一個環節，不等使用者提醒。
 

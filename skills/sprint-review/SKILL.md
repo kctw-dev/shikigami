@@ -827,6 +827,12 @@ Sprint Review 完成、產出文件更新後，**派遣 subagent（`model: "haik
 完成 Sprint Review & Retrospective 前，確認以下項目全部完成：
 
 - [ ] **模式確認**：依 §1.1 觸發條件判定當前執行模式（快思 / 慢想），並在執行前輸出「目前執行模式：快思模式 / 慢想模式」
+- [ ] **Systematic Debugging（Sprint Review 前，HARD-GATE）**：
+  - Sprint Review 流程開始後、§1.5 交付物文案一致性審查前，**必須**先執行 systematic debugging，確認系統健康狀態再進入 Review 流程。
+  - 觸發指令：`invoke shikigami:systematic-debugging`（告知目的為 Sprint Review 前系統健康確認）
+  - Systematic debugging 結果為 PASS 後，方可繼續 §1.5 及後續步驟。
+  - 若 debugging 發現問題（如 403 錯誤、deploy 失敗、環境不對稱、功能未生效），須先修復後再繼續 Review。
+  - [ ] systematic debugging 已執行並回傳 PASS（或已修復發現問題）
 - [ ] **Pre-Demo 部署驗證**（§2 Pre-Demo，Demo 展示前執行）：
   - [ ] 執行 `git log --oneline -1` 取得最新 commit hash
   - [ ] 確認生產環境部署狀態（Cloud Run 或標記「不適用」）

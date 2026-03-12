@@ -1012,7 +1012,43 @@ Story Type 系統與 doc-only 判定規則（見下方「doc-only Story 識別�
 
 ---
 
-## 7. 審查失敗處理
+## 7. Systematic Debugging 觸發指引（Deploy 後 / Bug 修復後）
+
+<!-- US-247 Sprint 90 — Deploy 後與 Bug 修復後 systematic debugging 觸發指引 -->
+
+Sprint Execution 流程中，以下兩個時機建議觸發 systematic debugging，確認系統健康並防止回歸。
+
+### 7.1 Deploy 後（建議）
+
+**觸發時機**：`deployment-readiness` Skill 執行完成、服務部署至生產環境後。
+
+**目的**：Post-deploy health check，驗證部署後系統行為符合預期（確認無 403 錯誤、環境不對稱、功能未生效等部署後常見問題）。
+
+**觸發方式**：
+```
+invoke shikigami:systematic-debugging
+（告知目的為 post-deploy health check，並提供 deploy 版本/commit hash）
+```
+
+**建議，非強制**：若 deploy 為緊急修復或時間有限，可延後至 Sprint Review 前統一執行（Sprint Review 前的 systematic debugging 為 HARD-GATE，不可省略）。
+
+### 7.2 Bug 修復後（建議）
+
+**觸發時機**：Developer 完成 Bug 修復並通過 Spec Compliance + Code Quality Review 後、執行下一個 Story 之前。
+
+**目的**：確認 Bug 修復未引入回歸，且原來問題已完全修復（無殘留）。
+
+**觸發方式**：
+```
+invoke shikigami:systematic-debugging
+（告知目的為 Bug 修復後回歸確認，並說明修復的 Bug 描述）
+```
+
+**建議，非強制**：若 Bug 本身範圍小且有明確測試覆蓋，可由 Developer 自行判斷是否觸發。若為系統性 Bug 或涉及多個模組，強烈建議觸發。
+
+---
+
+## 8. 審查失敗處理
 
 當任一審查階段不通過時：
 
