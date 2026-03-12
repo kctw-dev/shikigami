@@ -1,0 +1,91 @@
+# QA Prompt — Sprint Planning
+
+本文件定義 QA Engineer 在 Sprint Planning 中的職責、驗收規則與輸出格式。由主 session（SKILL.md）引用，QA subagent 執行時載入。
+
+---
+
+## AC 驗收確認規則
+
+逐一確認 Stories 的 Acceptance Criteria 是否明確且可被自動化測試驗證。若驗收標準模糊，退回 PO 補充後重新評估。詳細決策標準（AC 驗證策略、Spec Compliance review 決策、Code Quality review 策略）請參閱 [QA Engineer 角色決策指引](../qa-engineer/SKILL.md)。
+
+---
+
+## 路徑驗證規則（AC 路徑存在性檢查）
+
+- 若 Story 的 AC 中包含具體檔案路徑（例如 `docs/xxx.md`、`skills/xxx/SKILL.md`），QA **須執行 Glob 或 ls 確認路徑存在**，並在回報中標注：
+  - `Path verification: PASS` — 路徑存在
+  - `Path verification: FAIL` — 路徑不存在
+  - `Path verification: N/A` — AC 未引用任何具體路徑
+- 若結果為 `FAIL`：QA 標記該 Story 為 `NEEDS_REVISION`，Story 退回 PO 修正路徑後重新提交。
+- 若 AC 不引用任何路徑：填 `N/A`，不需執行 Glob/ls。
+
+---
+
+## Type-specific DoR 與 DoD
+
+### Type-specific DoR（Definition of Ready）
+
+以下表格定義每種 Type 進入 Sprint 前必須滿足的 Ready 條件（每種至少 3 項）：
+
+| Type | DoR 條件 | 說明 |
+|------|---------|------|
+| **FEATURE** | AC 以可測試格式撰寫（Given-When-Then 或等效格式） | 每條 AC 必須明確描述輸入、操作與預期結果 |
+| **FEATURE** | API 契約已由 Architect 確認（涉及 API 時）| Contract Owner 已產出 API 契約（狀態 Reviewed 或 Accepted），或確認「不適用」 |
+| **FEATURE** | 無未解決的前置依賴 | 依 Refinement Q1 確認，所有前置 Story 已完成或可在本 Sprint 完成 |
+| **FEATURE** | 技術評估已完成（Architect Round 2） | T-shirt size 已確認，ADR 需求已評估 |
+| **DESIGN** | 設計稿或 Wireframe 已有初稿 | 不需最終版，但需有足夠細節供開發參考 |
+| **DESIGN** | UI/UX Designer 已確認設計規格 | Contract Owner（UI/UX Designer）已簽核設計方向 |
+| **DESIGN** | 相關設計系統（Design Token、元件規格）已確認 | 若修改既有元件，需確認與現有 Design System 的相容性 |
+| **INFRA** | SRE 已確認基礎設施變更範圍 | Contract Owner（SRE）已理解並確認變更影響 |
+| **INFRA** | 相關環境配置已識別（dev/staging/prod） | 需明確哪些環境受影響，並確認變更時間窗口 |
+| **INFRA** | Rollback 策略已定義 | 若部署失敗，已有明確回滾方案 |
+| **SECURITY** | 安全威脅已識別（Threat Model 或 AC 中明確） | 至少描述潛在威脅向量與受影響範圍 |
+| **SECURITY** | Security Engineer 已確認修復方案方向 | Contract Owner（Security Engineer）已審查修復策略 |
+| **SECURITY** | 相關 CVE/漏洞 ID 或 OWASP 類別已標注 | 修復對象有明確參考依據（如 CVE-XXXX-XXXXX 或 OWASP A01） |
+| **INTEGRATION** | 外部系統 API 文件已可存取 | 第三方 API 規格或 Webhook 文件已確認可讀取 |
+| **INTEGRATION** | 跨系統 API 契約已由 Architect 定義 | Contract Owner（Architect）已產出跨系統協議文件（狀態 Reviewed 或 Accepted） |
+| **INTEGRATION** | 外部系統可用性已確認（dev/staging 端點） | 整合測試所需的端點可存取，或已有 Mock/Stub 替代方案 |
+| **RESEARCH** | 調查範圍與問題陳述已明確 | Spike Report 的預期問題清單已定義 |
+| **RESEARCH** | 時間盒（Time-box）已設定 | 調查有明確截止時間，避免無限期探索 |
+| **RESEARCH** | 預期輸出格式已定義（Spike Report 結構） | 至少定義：調查結論、建議後續行動、技術風險評估 |
+
+### Type-specific DoD（Definition of Done）
+
+#### 通用 DoD 基準（來自 sprint-execution/SKILL.md §6）
+
+所有 Type 均須通過以下通用 DoD 條件：
+
+| 層次 | 條件 | 自檢 |
+|------|------|------|
+| 功能 | 所有 Acceptance Criteria 通過 | [ ] |
+| 測試 | 單元測試 + 整合測試全部通過（0 failed） | [ ] |
+| 安全 | 外部輸入通過安全驗證與去活化處理（或 N/A） | [ ] |
+| 文件 | 設計文件對應章節已更新，代碼含設計文件引用 | [ ] |
+| 設定 | 無硬編碼金鑰，配置透過環境變數管理 | [ ] |
+| 度量 | Metrics_Log.md 本 Sprint 數據已更新 | [ ] |
+| 反回歸 | 既有測試全部仍然通過 | [ ] |
+| 技術債 | 取捷徑情況已用 `[TECH-DEBT]` 標記並更新 Tech_Debt_Registry.md（或 N/A） | [ ] |
+
+#### Type-specific DoD 附加條件
+
+| Type | 附加 DoD 條件 | 標記 |
+|------|-------------|------|
+| **FEATURE** | API 契約變更已同步更新至 Sprint Planning 技術評估表格（涉及 API 時）| [Type-specific] |
+| **FEATURE** | SA 圖表（docs/sa/）已更新（涉及 API/Entity/業務流程變更時） | [Type-specific] |
+| **DESIGN** | 最終設計稿或規格書已提交至指定設計資源路徑 | [Type-specific] |
+| **DESIGN** | UI/UX Designer（Contract Owner）已執行最終驗收 | [Type-specific] |
+| **DESIGN** | 測試：單元測試 + 整合測試（**豁免**，doc_only=true 時無程式碼交付物） | [Type-specific] |
+| **INFRA** | Rollback 已在 staging 環境驗證（或記錄豁免理由） | [Type-specific] |
+| **INFRA** | SRE（Contract Owner）已執行基礎設施變更驗收 | [Type-specific] |
+| **INFRA** | 所有受影響環境（dev/staging/prod）的配置變更已同步 | [Type-specific] |
+| **SECURITY** | 安全修復已通過對應的安全掃描工具驗證（或記錄手動驗證步驟） | [Type-specific] |
+| **SECURITY** | Security Engineer（Contract Owner）已執行安全審查驗收 | [Type-specific] |
+| **SECURITY** | OWASP 對照項目已在 AC 中標記為解決（適用時） | [Type-specific] |
+| **INTEGRATION** | 跨系統整合已在 staging 環境端到端驗證 | [Type-specific] |
+| **INTEGRATION** | API 契約（Architect 定義）已完整實作，無偏差 | [Type-specific] |
+| **INTEGRATION** | 外部系統異常（超時、錯誤碼）的處理邏輯已測試 | [Type-specific] |
+| **RESEARCH** | Spike Report 已產出，含調查結論、建議後續行動、技術風險評估 | [Type-specific] |
+| **RESEARCH** | 測試：單元測試 + 整合測試（**豁免**，RESEARCH 無程式碼交付物） | [Type-specific] |
+| **RESEARCH** | Spike Report 已由 PO/Architect 閱覽並確認納入後續 Backlog 規劃 | [Type-specific] |
+
+> **doc_only 豁免說明**：DESIGN 與 RESEARCH type 因無程式碼交付物，「測試：單元測試 + 整合測試」項目自動豁免（標記 N/A）。其他通用 DoD 項目仍須遵守。

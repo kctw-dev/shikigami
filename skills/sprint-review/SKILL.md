@@ -7,46 +7,20 @@ description: "Use when sprint ends, conducting sprint review and retrospective, 
 
 ## 1. 概述
 
-Sprint Review + Retrospective 是 Sprint 的結束儀式，用於 **驗收成果** 和 **持續改進**。
-
-- **Sprint Review**：展示本 Sprint 的可運行成果，確認是否達成 Sprint Goal。
-- **Sprint Retrospective**：團隊回顧流程與協作，找出改進行動。
-
-兩個活動依序進行，產出的文件將直接影響下個 Sprint 的規劃。
-
-### 輸出風格
-
-Sprint Review 全程採用**精簡輸出**：
-
-- 每個步驟輸出結論（PASS/FAIL + 一行摘要），不展開中間推理過程
-- Checklist 項目逐項打勾，不重述步驟定義
-- Subagent 回傳摘要直接採用，不二次解釋
-- 避免冗長格式化文字，節省 context 空間
-
----
+Sprint Review（驗收成果）+ Retrospective（持續改進），依序進行。全程採用**精簡輸出**：每步驟輸出結論（PASS/FAIL + 一行摘要），Checklist 逐項打勾，不展開中間推理。
 
 ## 模型選用建議
 
-> **Sprint Review 的 subagent 依角色複雜度分層使用不同模型。**
->
-> | 角色 / 步驟 | 模型 | 說明 |
-> |------------|------|------|
-> | PO Subagent（Demo 展示、AC 驗收） | `sonnet` | 需要情境理解與商業判斷 |
-> | Stakeholder Subagent（商業期待確認） | `sonnet` | 需要情境理解與商業判斷 |
-> | Analytics Subagent（§3 步驟 0 趨勢分析） | `haiku` | 統計分析，規則明確可程式化 |
-> | Metrics Subagent（Sprint Metrics） | `haiku` | 數值計算，規則明確可程式化 |
->
-> 使用者無需手動切換模型，框架在派遣 subagent 時自動指定。
+| 角色 / 步驟 | 模型 | 說明 |
+|------------|------|------|
+| PO Subagent（Demo 展示、AC 驗收） | `sonnet` | 需要情境理解與商業判斷 |
+| Stakeholder Subagent（商業期待確認） | `sonnet` | 需要情境理解與商業判斷 |
+| Analytics Subagent（§3 步驟 0 趨勢分析） | `haiku` | 統計分析，規則明確可程式化 |
+| Metrics Subagent（Sprint Metrics） | `haiku` | 數值計算，規則明確可程式化 |
 
----
+## 1.3 合約載入
 
-## 1.3 合約載入（US-204）
-
-<!-- US-204 統一合約位置 — Sprint 82 -->
-
-Sprint Review 開始前，Review 主 session 須載入相關的共用交付合約，作為驗收基準。
-
-### 載入指令
+Sprint Review 開始前載入共用交付合約作為驗收基準：
 
 ```
 Read: contracts/README.md
@@ -54,646 +28,145 @@ Read: contracts/sow-delivery-contract.md        （若本 Sprint 有 SOW 相關 
 Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修改 Story）
 ```
 
-### 載入時機
-
-| 情境 | 須載入的合約 |
-|------|------------|
-| Sprint Review 中驗收含 SOW 交付物的 Story | `contracts/sow-delivery-contract.md` |
-| Sprint Review 中驗收含 Metrics、Points 數值更新的 Story | `contracts/numerical-consistency-contract.md` |
-| PO Subagent Demo 驗收前（含跨文件一致性審查） | `contracts/numerical-consistency-contract.md` |
-
-### 注意事項
-
-- 合約載入為**Sprint Review 流程開始後、§1.5 交付物文案一致性審查前**執行
-- 合約的「檢查清單」可作為 §1.5 跨文件一致性審查的補充基準
-- 合約完整定義位於 `contracts/` 目錄，SKILL.md 中僅記錄載入步驟
-
----
+載入時機：Sprint Review 流程開始後、§1.5 審查前。
 
 ## 1.5 交付物文案一致性審查（Sprint Review 前執行）
 
-<!-- US-86：回應 Sprint 38-40 連續 Retro Problem — Issue #81 -->
-<!-- ADR-003 合規：此子節依 ADR-003 Hard Gate 規範，於 Sprint 41 US-86 授權修改 -->
-
-### 根因說明與預防措施
-
-Sprint 38、39、40 連續三個 Retrospective 均發現「交付物文案不一致」問題，根因分析如下：
-
-- **根因**：各 Story 的 Sprint Review 文件、PROJECT_BOARD.md、sprint_N.md、ROADMAP.md 等多文件並行更新時，跨文件的術語（如 Story 狀態標注、Issue 連結、版本號）未經統一審查即提交，導致不同文件間出現不一致。
-- **預防措施**：在 Sprint Review 正式開始前（Demo 展示前），強制執行「交付物文案一致性審查」，確保所有交付物在展示前已達到跨文件一致性。
-
-### 審查觸發時機
-
-**執行時機**：Sprint Review 流程開始後、PO Subagent 展示 Demo 前（§2 步驟 1 之前）。此審查為 Done 定義的一部分，未通過審查前不得宣告 Sprint 完成。
-
 ### 審查 Checklist
 
-執行主 session 依序完成以下審查項目：
+- [ ] **跨文件術語一致性**：sprint_N.md 各 Story 狀態與 PROJECT_BOARD.md 一致；ROADMAP.md 術語與 Sprint Backlog 一致
+- [ ] **狀態標注一致性**：統一使用「完成 / 進行中 / 未完成」中文術語；PROJECT_BOARD.md 區塊劃分正確；未完成 Story 的 Issue 已回復 `status: backlog` label
+- [ ] **Issue 連結有效性**：sprint_N.md Issue # 填寫完整；Issue 狀態符合預期；Retrospective Log Action Items 連結有效
+- [ ] **版本與里程碑一致性**：ROADMAP.md 里程碑狀態與交付進度相符；版本 Tag 描述一致
+- [ ] **CI 狀態確認**：`gh run list --limit 1 --json conclusion` 最新為 `success`
 
-**一、跨文件術語一致性**
-
-- [ ] `docs/sprints/sprint_N.md` 中各 Story 的狀態標注（進行中 / 完成 / 未完成）與 `docs/PROJECT_BOARD.md` 中相同 Story 的狀態欄一致
-- [ ] `docs/prd/ROADMAP.md` 中里程碑描述的術語與 Sprint Backlog 中 Story 標題一致（例如：功能名稱、版本號描述不得有差異）
-
-**二、狀態標注一致性**
-
-- [ ] Sprint Backlog 表格中每筆 Story 的「狀態」欄使用統一術語（「完成」、「進行中」、「未完成」三選一，不得混用「Done」、「PASS」等英文術語）
-- [ ] `docs/PROJECT_BOARD.md` 中 Sprint 進行中 / 完成的區塊劃分與實際 Sprint 狀態相符
-- [ ] 若有 Story 狀態為「未完成」，對應 GitHub Issue 已回復 `status: backlog` label（含未達標原因留言）
-
-**三、Issue 連結有效性**
-
-- [ ] `docs/sprints/sprint_N.md` Sprint Backlog 表格中各 Story 的 Issue # 欄位填寫完整（非空白）
-- [ ] 對應的 GitHub Issue 存在且狀態符合預期：進行中 Story 的 Issue 應為 open；完成 Story 的 Issue 應已執行 §2.6 關閉流程
-- [ ] Retrospective Log 中 Action Items 的 Issue 連結（若有）均指向存在的 GitHub Issue
-
-**四、版本與里程碑一致性**
-
-- [ ] `docs/prd/ROADMAP.md` 里程碑狀態與本 Sprint 交付進度相符（已完成里程碑已標注完成 Sprint）
-- [ ] 若本 Sprint 有版本 Tag 操作（deployment-readiness 執行後），版本號在 ROADMAP 與 `docs/PROJECT_BOARD.md` 中的描述一致
-
-**五、CI 狀態確認**
-
-- [ ] CI 最新 run 狀態為 PASS（執行 `gh run list --limit 1 --json conclusion` 確認最新 conclusion 為 `success`；若 CI FAIL 則在進入 Demo 前先處理 CI 失敗）
-
-### 審查結果記錄
-
-審查完成後，輸出審查摘要：標題「交付物文案一致性審查結果（Sprint N）」、審查時間、審查狀態（PASS/FAIL）、不一致項目與修正動作（若有）。
-
-**FAIL 處理**：若發現任何不一致，立即修正後重新勾選對應項目，確認全部 PASS 後才進入 §2 Sprint Review 流程。
+**FAIL 處理**：發現不一致立即修正，全部 PASS 後才進入 §2。
 
 ---
 
 ## 2. Sprint Review 流程
 
-Sprint Review 的目的是驗收本 Sprint 交付的成果，確認是否符合商業期待。
+### Pre-Demo 部署驗證
 
-### Pre-Demo 部署驗證（Demo 展示前必要前置條件）
-
-<!-- US-187：回應 Sprint Review 缺少生產環境部署驗證步驟 — Issue #179 -->
-
-確認生產環境已部署最新 commit，確保 Stakeholder 看到的是最新版本。若未部署 → 觸發 `deployment-readiness`，等待完成後才進入步驟 1（PO Demo）。
-
-**輸出**：一行結論 — `PASS（可進行 Demo）` 或 `FAIL（已觸發 deployment-readiness）`。
-
----
+確認生產環境已部署最新 commit。未部署 → 觸發 `deployment-readiness`，完成後才進入步驟 1。
 
 ### 步驟
 
-1. **PO Subagent 展示 Demo 結果**
-   - PO subagent prompt 中指定 `docs/sprints/sprint_N.md` 完整路徑，由 **PO subagent 自行讀取** Sprint 成果內容；**主 session 不直接讀取 sprint_N.md**
-   - **【源碼路徑】** PO subagent 驗收 Story 時，須從 **repo working directory**（即 `skills/` 目錄下的實際檔案）讀取最新源碼，例如：讀取 `skills/sprint-review/SKILL.md` 應使用 working directory 下的完整絕對路徑
-   - **【禁止項】** 不得依賴 plugin cache 版本。plugin cache 可能快取已過期的舊版本，若以 cache 版本驗收，將導致誤判「已完成」的 Story 為 FAIL
-   - 針對每個已完成的 User Story，展示可運行的功能
-   - Demo 應基於實際程式碼執行結果，而非文件描述
-   - 逐一對照 Acceptance Criteria 確認通過狀態
+1. **PO Subagent 展示 Demo 結果** — 角色 prompt：`skills/sprint-review/po-review-prompt.md`
+2. **Stakeholder Subagent 確認商業期待** — 角色 prompt：`skills/sprint-review/stakeholder-prompt.md`
+3. **更新 `docs/PROJECT_BOARD.md`（已完成欄位）** — 通過驗收 Story 移至 Done，記錄完成日期與 Sprint 編號，更新 Sprint 統計數據
+4. **未達 DoD 的 Story 處理** — 詳見 `po-review-prompt.md`
+5. **回寫 `docs/sprints/sprint_N.md` Story 最終狀態** — 詳見 `po-review-prompt.md`
 
-2. **Stakeholder Subagent 確認商業期待**
-   - Stakeholder subagent prompt 中指定 `docs/sprints/sprint_N.md` 完整路徑，由 **Stakeholder subagent 自行讀取** Sprint 成果；**主 session 不直接讀取 sprint_N.md**
-   - 檢視 Demo 結果是否符合原始商業需求
-   - 確認交付物是否達到預期的商業價值
-   - 提出回饋意見或調整方向
+## 2.5 Sprint 外完成項目掃描
 
-3. **更新 `docs/PROJECT_BOARD.md`（已完成欄位）**
-   - 將通過驗收的 Story 移至「Done」欄位
-   - 記錄完成日期與 Sprint 編號
-   - 更新 Sprint 統計數據（Velocity、完成率）
-
-   **輸出格式規範**：Done 欄位每筆 Story 需包含以下欄位：
-
-   ```markdown
-   | Story ID | 標題 | Sprint | 完成日期 | Points |
-   |----------|------|--------|----------|--------|
-   | US-XX    | 功能標題 | Sprint N | YYYY-MM-DD | X |
-   ```
-
-   **Sprint 統計欄位**（PROJECT_BOARD.md 頂部或底部統計區塊）更新格式：
-
-   ```markdown
-   ## Sprint N 統計
-   - Velocity：X points
-   - 完成率：X%（完成 Y / 計畫 Z）
-   - 日期：YYYY-MM-DD
-   ```
-
-4. **未達 DoD 的 Story 處理**
-   - 未通過 Definition of Done 的 Story 移回 Backlog
-   - 必須標注未達標的具體原因（例：測試未通過、安全驗證失敗、文件未更新）
-   - PO Subagent 重新評估優先級，決定是否納入下個 Sprint
-
-5. **回寫 `docs/sprints/sprint_N.md` Story 最終狀態**
-   - 目標路徑：`docs/sprints/sprint_N.md`（N 為本 Sprint 編號）
-   - 將 Sprint Backlog 表格中每個 Story 的「狀態」欄更新為最終驗收結果
-
-   **操作步驟**：
-   1. 讀取 `docs/sprints/sprint_N.md` 的 Sprint Backlog 表格
-   2. 依 PO Subagent 驗收結果，逐一更新每筆 Story 的狀態欄：
-      - 通過驗收 → 狀態改為「完成」
-      - 未通過 DoD → 狀態改為「未完成」，並在備注欄補充未達標原因
-   3. 若 Sprint 備注欄不存在，在狀態欄括號內簡記原因，例如：「未完成（測試未通過）」
-
-   **必要輸出格式**（Sprint Backlog 表格更新後格式）：
-
-   ```markdown
-   | Story ID | 標題 | Size | Points | 狀態 |
-   |----------|------|------|--------|------|
-   | US-XX    | 功能標題 | S | 1 | 完成 |
-   | US-YY    | 另一功能 | M | 2 | 未完成（測試未通過） |
-   ```
-
-   **注意**：sprint_N.md 狀態回寫需在 PROJECT_BOARD.md 更新完成後執行，確保兩處狀態一致。
-
----
-
-## 2.5 Sprint 外完成項目掃描（/shoot 短衝記錄）
-
-Sprint Review 進行時，掃描 `docs/km/Shoot_Log.md` 取得本 Sprint 期間的短衝記錄，列入「Sprint 外完成項目」區塊。
-
-### 掃描步驟
-
-1. 檢查 `docs/km/Shoot_Log.md` 是否存在
-2. 若存在，篩選本 Sprint 期間（依日期欄位）且結果為 `PASS` 的記錄
-3. 列出所有符合條件的短衝記錄
-
-### 輸出格式
-
-**有短衝記錄時**：
-
-```markdown
-## Sprint 外完成項目（/shoot 短衝記錄）
-
-| 日期 | 來源 | 標題 | commit hash |
-|------|------|------|-------------|
-| YYYY-MM-DD | direct | 修復登入頁面 CORS 問題 | abc1234 |
-| YYYY-MM-DD | #42 | 更新文件錯字 | def5678 |
-```
-
-**無短衝記錄時**：
-
-```
-本 Sprint 無短衝記錄
-```
-
-### 計入規則
-
-- 短衝記錄**不計入 Velocity**（不影響 Sprint Points 統計）
-- 短衝記錄僅作為「Sprint 外完成項目」附加呈現
-- `docs/km/Shoot_Log.md` 不存在時，直接輸出「本 Sprint 無短衝記錄」，不視為錯誤
-
----
+掃描 `docs/km/Shoot_Log.md` 取得本 Sprint 期間 PASS 的短衝記錄，列入「Sprint 外完成項目」。短衝記錄**不計入 Velocity**。檔案不存在時輸出「本 Sprint 無短衝記錄」。
 
 ## 2.6 Story Issue 狀態回寫（ADR-010 生命週期閉環）
 
-Story 驗收判定完成後，須依判定結果回寫對應 GitHub Issue 的狀態。此步驟在 §2 步驟 5（回寫 sprint_N.md 狀態）**之後**、§3 Retrospective **之前**執行。
-
-### 前提
-
-本節適用於以 GitHub Issue 形式管理的 Backlog Stories（ADR-010 體系）。Story 的 GitHub Issue 編號從 `docs/sprints/sprint_N.md` 中各 Story 的「Issue」欄位取得（或從 Issue 標題比對取得）。
+Story 驗收判定完成後，依判定結果回寫 GitHub Issue 狀態。在 §2 步驟 5 之後、§3 之前執行。
 
 ### 操作規則
 
 | 驗收判定 | Issue 操作 | 說明 |
 |---------|-----------|------|
-| Story PASS（已完成） | 依 Issue 建立者判斷（見下方「Issue 建立者判斷」）執行對應操作 | 內部 Issue 自動關閉；外部 Issue 保持 Open，僅加 label + 留言 |
-| Story FAIL（未完成） | Issue 保持 open，不執行任何關閉操作 | 未完成的 Story 回流 Backlog，Issue 維持 open 狀態等待下次 Sprint 選取 |
+| Story PASS | 依 Issue 建立者判斷執行對應操作 | 內部 Issue 自動關閉；外部 Issue 保持 Open |
+| Story FAIL | Issue 保持 open | 回流 Backlog，等待下次 Sprint 選取 |
 
 ### Issue 建立者判斷
 
-Story PASS 時，在執行任何操作前，必須先判斷 Issue 的建立者類型：
-
-**判斷方式：**
-
-```bash
-# 查詢 Issue 建立者
-gh issue view <issue-number> --json author --jq '.author.login'
-```
-
-**內部 Issue（自動建立）定義：** 滿足以下任一條件即視為內部 Issue：
-- Issue 建立者 login 為 `github-actions[bot]`
-- Issue body 含有 `backlog-intake` 字串（由 backlog-intake workflow 自動建立的標記）
-
-**外部 Issue（Stakeholder 建立）定義：** 不符合上述任一內部條件的 Issue，一律視為外部 Issue。
+**內部 Issue**：建立者為 `github-actions[bot]` 或 body 含 `backlog-intake`。其餘為**外部 Issue**。
 
 ### Story PASS — 操作步驟
 
-根據 Issue 建立者判斷結果，執行對應操作：
-
 | 情況 | 步驟 1（共通） | 步驟 2 |
 |------|--------------|--------|
-| **內部 Issue** | `gh issue edit` 加 `done` label、移除 `in-sprint` label | `gh issue close` 並留言「Sprint N Review 驗收通過（PASS）。Story 已完成交付。」 |
+| **內部 Issue** | `gh issue edit` 加 `done` label、移除 `in-sprint` label | `gh issue close` 並留言 |
 | **外部 Issue（階段 1）** | 同上 | `gh issue comment` 留言通知，**不執行 close** |
-| **外部 Issue（階段 2）** | — | 部署驗證通過後，`gh issue comment` 補充留言「已通過端對端驗證，功能已正式交付。請測試確認後關閉此 Issue。」 |
-
-> **重要**：外部 Issue 不得執行 `gh issue close`。Issue 保持 Open 讓外部 Stakeholder 有機會在測試確認後自行關閉。
+| **外部 Issue（階段 2）** | — | 部署驗證通過後補充留言 |
 
 ### Story FAIL — 操作步驟
 
-Issue **保持 open**，執行 `gh issue edit` 移除 `in-sprint` label 並加 `status: backlog` label，同時 `gh issue comment` 留言記錄未完成原因。
-
-> **重要**：Story FAIL 時 Issue **不得關閉**。open 狀態確保此 Story 在下次 Sprint Planning 可被重新選取。
-
-### 操作格式一致性
-
-label 操作格式與 `skills/sprint-planning/SKILL.md` §5 保持一致，均使用 `gh issue edit --add-label / --remove-label` 單行指令格式。
+Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，留言記錄未完成原因。
 
 ---
 
 ## 3. Sprint Retrospective 流程
 
-Sprint Retrospective 的目的是團隊自省，找出可改進之處並制定具體行動。
-
 ### 步驟
 
-0. **Retrospective Analytics — 展示歷史趨勢分析報告**
-
-   **觸發時機**：Retrospective 開始時第一步執行，**報告展示完畢前不得開始收集 Good / Problem / Action**。
-
-   **指令**：派遣 Analytics subagent（`model: "haiku"`），在 prompt 中指定 `docs/km/Retrospective_Log.md` 完整路徑，由 **Analytics subagent 自行讀取**該檔案，依下列規則分析並回傳完整報告。**主 session 不直接讀取 Retrospective_Log.md**，僅接收 subagent 回傳的分析報告。
-
-   #### 前置檢查
-
-   - 若 `docs/km/Retrospective_Log.md` **不存在**：輸出「尚無 Retrospective 記錄」，正常結束 Analytics，繼續進行步驟 1。
-   - 若檔案存在但只有 **1 個 Sprint 記錄**：頻率統計區塊輸出「資料不足（需至少 2 個 Sprint）」；Action Items 關閉速度與待關閉 Items 區塊正常計算輸出。
-
-   #### 報告格式（四區塊，缺一不可）
-
-   輸出標題格式如下，四個區塊依序呈現：
-
-   ```
-   ## Retrospective Analytics 報告（Sprint N 前）
-
-   ### ① Good 趨勢
-
-   ### ② Problem 趨勢
-
-   ### ③ Action Items 關閉速度
-
-   ### ④ 待關閉 Items
-   ```
-
-   #### ① Good 趨勢 — 分析規則
-
-   1. 讀取所有 Sprint 的 `### Good` 區塊，以**語義主題**歸類（關鍵字相近即同一主題）。
-   2. 出現 **2 次以上**的主題，輸出：主題關鍵字、出現次數、最近出現 Sprint。
-   3. 無重複主題時，輸出「無重複 Good 趨勢」。
-
-   #### ② Problem 趨勢 — 分析規則
-
-   1. 讀取所有 Sprint 的 `### Problem` 區塊，以**語義主題**歸類。
-   2. 出現 **2 次以上**的主題，輸出：主題關鍵字、出現次數、首次與最近出現 Sprint、若未解決加註「跨 N 個 Sprint 未解決」。
-   3. **連續出現**判斷：連續情境（最新 Sprint 仍出現且無中斷）→ 醒目標注 `> ⚠️ **重複問題（連續 N 個 Sprint）**`；間斷情境 → 說明是否已解決，不觸發警示。
-   4. 無重複主題時，輸出「無重複 Problem 趨勢」。
-
-   #### ③ Action Items 關閉速度 — 分析規則
-
-   1. 收集所有 Sprint 的 Action Item，對 Closed Item 計算**關閉速度** = 關閉 Sprint − 建立 Sprint。
-   2. 輸出：平均（四捨五入至一位小數）、最快、最慢關閉速度。無 Closed Item 時輸出「尚無已關閉 Action Item」。
-   3. 對 **Open** Item 計算逾期 Sprint 數並標注。
-
-   #### ④ 待關閉 Items — 分析規則
-
-   1. 列出所有 Open Action Item：Item 內容、Owner、建立 Sprint、逾期 Sprint 數。
-   2. 無 Open Item 時，輸出「目前無待關閉 Action Items」。
-
-   ---
-
+0. **Retrospective Analytics** — 角色 prompt：`skills/sprint-review/analytics-prompt.md`。報告展示完畢前不得開始收集 Good / Problem / Action。
 1. **在 `docs/km/Retrospective_Log.md` 新增記錄**
-   - 以 Sprint 編號為標題新增一筆記錄
-   - 記錄日期與參與角色
-
-2. **使用 Good / Problem / Action 格式**
-
-   | 分類 | 說明 | 範例 |
-   |------|------|------|
-   | **Good**（保持做的事） | 本 Sprint 中做得好、值得繼續保持的實踐 | TDD 流程順暢、ADR 文件品質提升 |
-   | **Problem**（需改進的事） | 遇到的問題、瓶頸或不順暢的地方 | Story 拆分粒度太大、安全審查太晚介入 |
-   | **Action**（具體改進行動） | 針對 Problem 提出的可執行改善措施 | 下 Sprint 起 Story 點數上限設為 5 |
-
-2.5 **SPACE 五維度量測**
-
-   **執行時機**：步驟 2（Good/Problem/Action 收集）完成後，步驟 3（Action Item 建立 Issue）之前執行。
-
-   **誰量測**：Sprint Review 主持者（主 session）負責統計 P、C、E 數值，並邀請 PO/Stakeholder 在 Sprint Review 結束前評分 S 維度；A 維度直接引用本 Sprint 的完成率，無需重新計算。
-
-   **資料來源**：
-
-   | 維度 | 資料來源 |
-   |------|---------|
-   | S（Satisfaction） | PO 或 Stakeholder 在 Sprint Review Demo 結束後現場評分（口頭確認後記錄） |
-   | P（Performance） | 從本 Sprint 的不確定性三問記錄、外部抽樣審查記錄中統計幻覺攔截次數與漏網次數 |
-   | A（Activity） | 引用 `docs/km/Metrics_Log.md` 主表格本 Sprint 的「完成率」欄位，不重複計算 |
-   | C（Communication） | 從本 Sprint 的 Retro 記錄與 QA 互審記錄中統計跨 Agent 交叉確認發現的問題數 |
-   | E（Efficiency） | 從本 Sprint 的 Checkpoint 記錄統計 `[CHECKPOINT-FAIL]` 數量（斷鏈次數）加上使用者手動介入修正的次數 |
-
-   **記錄時機**：Sprint Retrospective 步驟 2（Good/Problem/Action 收集）完成後，於代理人校準儀式（步驟 5）之前量測並記錄。
-
-   **執行步驟**：
-
-   1. 主 session 從本 Sprint 對話記錄、Checkpoint 記錄、Retro 記錄中統計 P、C、E 的原始數值。
-   2. 邀請 PO/Stakeholder 口頭確認 S（滿意度 1–5）。
-   3. 將 A 欄位標注為引用本 Sprint 完成率（不另填數值，格式：「= 完成率 X%」）。
-   4. 填入 `docs/km/Metrics_Log.md` 的 `## SPACE 五維度指標` 表格，新增對應 Sprint 的一列記錄。
-
-2.6 **Quality Observer 診斷報告**
-
-   <!-- US-228 Sprint 84 — Quality Observer 診斷報告使用時機 -->
-
-   **執行時機**：步驟 2.5（SPACE 五維度量測）完成後、步驟 3（Action Item 建立 Issue）之前執行。
-
-   **目的**：基於本 Sprint 的 SPACE 數據，從系統性行為模式角度產出品質診斷，補充 Good/Problem/Action 收集所未能涵蓋的跨 Sprint 模式識別。
-
-   **與 SPACE 量測的關係**：Quality Observer 消費步驟 2.5 填入的 SPACE 數值（P、C、E 維度），轉化為三維度行為模式診斷（幻覺頻率、斷鏈模式、角色協作效率）。SPACE 記錄表是數據來源，Quality Observer 診斷報告是模式詮釋層。
-
-   **執行步驟**：
-
-   1. 讀取本 Sprint 的 SPACE 數據（P、C、E 欄位）及前三個 Sprint 的歷史 SPACE 數據（用於趨勢計算）。
-   2. 依 `docs/km/Quality_Observer.md` 的診斷報告格式，逐一填入三維度觀察數值與模式識別描述。
-   3. 判定各維度警示狀態，給出綜合診斷結論（健康 / 輕度警示 / 嚴重警示）。
-   4. 輸出完整診斷報告（格式見 `docs/km/Quality_Observer.md`「診斷報告格式」區塊）。
-
-   **診斷報告的後續使用**：
-   - 若診斷結論為**健康**：記錄至本 Sprint Retrospective_Log.md 對應區塊的附錄即可，無需額外行動。
-   - 若診斷結論為**輕度警示**：將改善建議列為 Retrospective Action Item 候選，由主 session 決定是否納入步驟 3 建立 GitHub Issue。
-   - 若診斷結論為**嚴重警示**：須立即將改善建議提交為 Retrospective Action Item，並標注優先級為高；若涉及結構性斷鏈或連續性幻覺，需升級至 Architect/PO 決策。
-
-   **注意事項**：
-   - Quality Observer 診斷報告聚焦於**行為模式**，不記錄個別 bug 或具體缺陷內容（那是 QA 的職責）
-   - 若本 Sprint 為系統首次使用 Quality Observer（尚無歷史 SPACE 數據），前三 Sprint 平均欄位填「資料不足」
-   - 診斷報告不阻塞步驟 3 的執行；即使無警示，也應完成報告輸出
-
-3. **每個 Action 建立為 GitHub Issue**
-
-   透過 `issue-management` Skill 建立，標題以 `retro:` 前綴，套用 `retro-action` label，body 含來源 Sprint、Owner、驗收方式。
-
-4. **同步記錄至 `docs/km/Retrospective_Log.md`**
-
-   在 Retrospective Log 中記錄 Action Items 與對應的 Issue 編號：
-
-   ```markdown
-   ### Action Items
-
-   | # | Action | Owner | 驗收方式 | Issue |
-   |---|--------|-------|----------|-------|
-   | 1 | Story 拆分粒度控制在 5 點以內 | PO | 下 Sprint Planning 時檢查 | #15 |
-   | 2 | 安全審查提前至設計階段 | Security Engineer | 下 Sprint 有 Security Review 紀錄 | #16 |
-   ```
-
-5. **代理人校準儀式**
-
-   **執行時機**：步驟 4（同步記錄至 `docs/km/Retrospective_Log.md`）完成後，Retrospective 結束前執行。
-
-   **目的**：定期審查 Agent 對 Stakeholder 核心價值觀的理解，偵測語義漂移，確保代理人行為持續對齊 Stakeholder 意圖。
-
-   **子步驟**：
-
-   (a) **Agent 列出歸納的 Stakeholder 三個核心價值觀**
-      - Agent 依本 Sprint 互動記錄與歷史 Retrospective，歸納 Stakeholder 最重視的三個核心價值觀，以條列方式呈現，例如：
-        1. 交付速度優先於零風險保證
-        2. 文件即代碼，文件品質等同程式品質
-        3. 系統性除錯優先於快速補丁
-
-   (b) **Agent 列出本 Sprint 最重要的一個決策及其依據**
-      - Agent 指出本 Sprint 中最具代表性的一個決策（技術選型、流程調整、優先級取捨等），並說明做出此決策的理由與依據。
-
-   (c) **Stakeholder 確認或修正**
-      - Stakeholder 逐一審閱 (a) 列出的三個價值觀與 (b) 的決策依據。
-      - **漂移偵測判定標準**：
-        - Stakeholder 修正任一項價值觀描述 → **偵測到漂移**
-        - 三項均確認無修正 → **無漂移**
-      - 若判定為**偵測到漂移**，將差異點寫入 `docs/km/Decision_Journal.md`，依 US-219 AC2 格式建立新記錄，情境欄位標注「來源：Sprint N 校準儀式」。
-      - 校準結果（含漂移判定與修正內容）記錄至 `docs/km/Calibration_Log.md`，格式為 H3 區塊（`### Sprint N 校準記錄`），必要欄位：`**日期**`、`**Agent 歸納的價值觀**`（條列三項）、`**Stakeholder 修正**`、`**漂移判定**`。
-
----
+2. **使用 Good / Problem / Action 格式收集回饋**
+3. **SPACE 五維度量測** — 詳見 `analytics-prompt.md`
+4. **Quality Observer 診斷報告** — 詳見 `analytics-prompt.md`
+5. **每個 Action 建立為 GitHub Issue** — 透過 `issue-management` Skill，標題 `retro:` 前綴，`retro-action` label
+6. **同步記錄至 `docs/km/Retrospective_Log.md`**
+7. **代理人校準儀式** — 角色 prompt：`skills/sprint-review/stakeholder-prompt.md`
 
 ## 4. Action Items 驗收機制
 
-Action Items 透過 **GitHub Issues** 追蹤（`retro-action` label），具備完整的生命週期管理。
-
-### 規則
-
-1. **建立為 GitHub Issue**
-   - 每個 Action Item 透過 `issue-management` 建立為 Issue
-   - 標題格式：`retro: [行動描述]`
-   - Label：`retro-action`
-   - Body 包含：來源 Sprint、Owner、驗收方式
-
-2. **Sprint Review 時逐項檢查**
-   - 每次 Sprint Review 開始前，列出所有 open 的 `retro-action` Issues 並逐項確認執行狀況
-
-3. **結論判定**
-   - **已完成** → 關閉 Issue 並留言記錄結論
-   - **未完成** → 保持 open，加上 `deferred` label
-
-4. **升級機制**
-   - 連續兩個 Sprint 仍為 open 的 `retro-action` Issue 自動升級至 Stakeholder
-   - Stakeholder 決定：強制執行、調整方案、或關閉（`not planned`）
-
-### 狀態流轉
-
-`Open → Close（已完成驗收）` 或 `Open → deferred（延遲一個 Sprint） → Close / 升級至 Stakeholder`
+透過 GitHub Issues 追蹤（`retro-action` label）：
+1. 每個 Action Item 透過 `issue-management` 建立為 Issue
+2. 每次 Sprint Review 開始前，列出所有 open 的 `retro-action` Issues 並逐項確認
+3. 已完成 → 關閉 Issue；未完成 → 加 `deferred` label
+4. 連續兩個 Sprint 仍為 open → 升級至 Stakeholder
 
 ---
 
 ## 5. 產出文件
 
-Sprint Review & Retrospective 完成後，必須更新以下文件：
-
 | 文件 | 更新內容 |
 |------|----------|
-| `docs/PROJECT_BOARD.md` | 已完成 Story 移至 Done 欄位；更新 Sprint 統計 |
-| `docs/km/Retrospective_Log.md` | 新增本 Sprint 的 Good / Problem / Action 記錄 |
-| `docs/km/Metrics_Log.md` | 追加本 Sprint Velocity、完成率、趨勢分析記錄 |
-| `docs/sprints/sprint_N.md` | 回寫 Sprint Backlog 表格中各 Story 最終驗收狀態（完成 / 未完成）|
-| `docs/prd/ROADMAP.md` | 更新版本里程碑狀態（進行中/已完成），反映本 Sprint 交付進度；確認版本 Tag 與里程碑一致 |
+| `docs/PROJECT_BOARD.md` | 已完成 Story 移至 Done；更新 Sprint 統計 |
+| `docs/km/Retrospective_Log.md` | 新增 Good / Problem / Action 記錄 |
+| `docs/km/Metrics_Log.md` | 追加 Velocity、完成率、趨勢分析 |
+| `docs/sprints/sprint_N.md` | 回寫各 Story 最終驗收狀態 |
+| `docs/prd/ROADMAP.md` | 更新版本里程碑狀態 |
 
-### ROADMAP 更新操作指引
+### 5.1 ROADMAP 里程碑對齊檢查
 
-**目標路徑**：`docs/prd/ROADMAP.md`
+執行時機：產出文件更新完成後、觸發 deployment-readiness 前。
 
-**操作步驟**：
-
-1. 讀取 `docs/prd/ROADMAP.md` 的版本里程碑區塊（通常格式為 `## MX — 版本描述`）
-2. 找到本 Sprint 對應的里程碑區塊（若有）
-3. 依本 Sprint 交付成果更新狀態：
-   - 本 Sprint 交付的 Story 條目，將狀態標注改為「已完成」或補充 Sprint 完成記錄
-   - 若里程碑下所有 Story 均已完成，將里程碑狀態改為「已完成（Sprint N）」
-   - 若里程碑仍有未完成項目，保持「進行中」並更新完成進度描述
-
-4. **版本 Tag 與 ROADMAP 里程碑對齊檢查**（必要步驟）：
-   - 確認 `deployment-readiness` 產生的版本 Tag（例：`v0.X.Y`）與 ROADMAP 里程碑版本號一致
-   - 若版本 Tag 對應里程碑首次達成（例：vX.0.0 的里程碑 MX 全部完成），在 ROADMAP 對應里程碑標注：「達成版本：vX.0.0（Sprint N）」
-   - 若版本 Tag 為 Patch 版本（vX.Y.Z，Z > 0），不需更新里程碑完成狀態，僅在對應里程碑的備注欄追加：「修訂記錄：vX.Y.Z（Sprint N）」
-
-**必要輸出格式**（里程碑狀態更新後格式）：
-
-```markdown
-## MX — 里程碑標題
-
-**狀態**：已完成（Sprint N）/ 進行中
-
-| Story ID | 標題 | 狀態 | 完成 Sprint |
-|----------|------|------|-------------|
-| US-XX    | 功能標題 | 已完成 | Sprint N |
-| US-YY    | 另一功能 | 進行中 | — |
-```
-
-若里程碑無表格格式，至少確保里程碑標題下方有狀態行與版本 Tag 對齊記錄。
+1. 讀取 `docs/prd/ROADMAP.md`，確認各里程碑當前狀態
+2. 逐一檢查活躍里程碑完成狀態，對照本 Sprint 交付 Stories
+3. 判斷里程碑是否完成：完成 → Major bump 候選（需 PO 確認）；未完成 → Minor bump 候選
+4. 更新里程碑狀態（若完成）
+5. 將對齊檢查結果附帶至 deployment-readiness 觸發指令
 
 ---
 
-## 5.1 ROADMAP 里程碑對齊檢查
+## 6. 歸檔觸發檢查
 
-本子節定義「觸發 deployment-readiness 前」必須執行的 ROADMAP 里程碑對齊檢查。此步驟的輸出決定 deployment-readiness 的版本 Tag 決策類型（Major bump 或 Minor bump）。
-
-### 執行時機
-
-執行時機：**產出文件更新完成後、觸發 deployment-readiness 前**。
-
-### 執行步驟
-
-1. **讀取 `docs/prd/ROADMAP.md`**，確認各里程碑當前狀態
-
-2. **逐一檢查活躍里程碑的完成狀態**：
-   - 找出狀態為「進行中」的里程碑
-   - 對照本 Sprint 交付的 Stories，確認這些 Stories 是否為該里程碑的最後缺口
-   - 若里程碑下的所有 Stories 均已標記完成，則該里程碑達成完成狀態
-
-3. **判斷是否有里程碑因本 Sprint 交付而完成**：
-
-   ```
-   里程碑完成？
-     ├── 否 → 版本 Tag 決策類型：Minor bump 候選
-     │         傳達給 deployment-readiness：「本 Sprint 無里程碑完成，建議 Minor bump」
-     └── 是 → 向 PO 確認里程碑完成
-               ├── PO 確認 → 版本 Tag 決策類型：Major bump 候選
-               │            傳達給 deployment-readiness：「里程碑 MX 完成，PO 確認，建議 Major bump」
-               └── PO 未確認 → 版本 Tag 決策類型：Minor bump 候選
-                              傳達給 deployment-readiness：「里程碑 MX 完成但 PO 未確認，建議 Minor bump」
-   ```
-
-4. **更新 `docs/prd/ROADMAP.md` 里程碑狀態**（若里程碑完成）：
-   - 將里程碑狀態改為「已完成（Sprint N）」
-   - 補充版本 Tag 對齊記錄（格式見 §5 ROADMAP 更新操作指引）
-
-5. **將對齊檢查結果附帶至 deployment-readiness 觸發指令**：
-   - 明確傳達「Major bump 候選」或「Minor bump 候選」判斷結果
-   - deployment-readiness 依此結果套用 `skills/deployment-readiness/SKILL.md` §4 版本 Tag 決策規則
-
-### 輸出格式
-
-執行里程碑對齊檢查後，輸出以下格式的摘要：
-
-```
-## ROADMAP 里程碑對齊檢查結果（Sprint N）
-
-檢查時間：YYYY-MM-DD
-活躍里程碑：MX — <里程碑標題>
-
-本 Sprint 交付 Stories：
-- US-XX（已完成）— 屬於 MX
-- US-YY（已完成）— 屬於 MX
-
-MX 完成狀態：
-- 已完成 Stories：N / 總計 M
-- 未完成 Stories：（若有，列出）
-- 里程碑完成：是 / 否
-
-版本 Tag 決策類型：Major bump 候選 / Minor bump 候選
-傳達給 deployment-readiness：<決策說明>
-```
+Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 git commit + push。範圍：`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`、`sprint_N.md`。其他 KM 文件不適用，避免觸發 ADR-003 Hard Gate。
 
 ---
 
 ## 7. 執行檢查清單
 
-完成 Sprint Review & Retrospective 前，確認以下項目全部完成：
-- [ ] **Systematic Debugging（Sprint Review 前，HARD-GATE）**：
-  - Sprint Review 流程開始後、§1.5 交付物文案一致性審查前，**必須**先執行 systematic debugging，確認系統健康狀態再進入 Review 流程。
-  - 觸發指令：`invoke shikigami:systematic-debugging`（告知目的為 Sprint Review 前系統健康確認）
-  - Systematic debugging 結果為 PASS 後，方可繼續 §1.5 及後續步驟。
-  - 若 debugging 發現問題（如 403 錯誤、deploy 失敗、環境不對稱、功能未生效），須先修復後再繼續 Review。
-  - [ ] systematic debugging 已執行並回傳 PASS（或已修復發現問題）
-- [ ] **Pre-Demo 部署驗證**（依 §2 Pre-Demo 規則執行，輸出 PASS 或 FAIL）
-- [ ] **交付物文案一致性審查**（§1.5，Sprint Review 前執行）：
-  - [ ] 跨文件術語一致性審查通過（sprint_N.md / PROJECT_BOARD.md 狀態欄一致）
-  - [ ] 狀態標注一致性審查通過（統一使用「完成 / 進行中 / 未完成」中文術語）
-  - [ ] Issue 連結有效性審查通過（Issue # 填寫完整、狀態符合預期）
-  - [ ] 版本與里程碑一致性審查通過（ROADMAP 里程碑狀態與交付進度相符）
-  - [ ] 審查結果摘要已輸出（PASS 或 FAIL + 修正說明）
-- [ ] **Retrospective Analytics 報告**（§3 步驟 0）：
-  - [ ] Analytics 報告已展示（四區塊完整：Good 趨勢、Problem 趨勢、Action 關閉速度、待關閉 Items）
-  - [ ] Analytics 完成後，才開始收集 Good / Problem / Action
+- [ ] **Systematic Debugging（HARD-GATE）**：Sprint Review 前執行 `invoke shikigami:systematic-debugging`，PASS 後方可繼續
+- [ ] **Pre-Demo 部署驗證**（PASS 或 FAIL）
+- [ ] **交付物文案一致性審查**（§1.5 全部 PASS）
+- [ ] **Retrospective Analytics 報告**（§3 步驟 0，四區塊完整）
 - [ ] PO Subagent 已展示所有已完成 Story 的 Demo
 - [ ] Stakeholder Subagent 已確認商業期待符合度
-- [ ] 通過驗收的 Story 已移至 `PROJECT_BOARD.md` Done 欄位（含完成日期、Sprint 編號、Sprint 統計數據更新）
-- [ ] `docs/sprints/sprint_N.md` Sprint Backlog 表格中每筆 Story 的狀態欄已回寫最終驗收結果（完成 / 未完成，未完成者標注原因）
-- [ ] **Story Issue 狀態回寫**（依 §2.6 操作規則執行，ADR-010 生命週期閉環）：
-  - [ ] 每個 PASS Story：已查詢 Issue 建立者並判斷內部/外部
-  - [ ] 內部 Issue：已套用 done label、移除 in-sprint label、關閉 Issue
-  - [ ] 外部 Issue：已套用 done label、移除 in-sprint label、發送階段 1 留言（Issue 保持 Open）
-  - [ ] 外部 Issue 階段 2：部署驗證通過後已發送階段 2 留言
-  - [ ] 每個 FAIL Story：已依 §2.6 回復 backlog 狀態並留言記錄原因
-- [ ] 未達 DoD 的 Story 已移回 Backlog 並標注原因
-- [ ] `Retrospective_Log.md` 已新增 Good / Problem / Action 記錄
-- [ ] 每個 Action Item 已建立為 GitHub Issue（`retro-action` label）
-- [ ] 上個 Sprint 的 `retro-action` Issues 已逐項檢查並更新狀態
-- [ ] 代理人校準儀式已完成（校準記錄已寫入 Calibration_Log.md，漂移判定已標注）
-- [ ] 連續兩個 Sprint 未關閉的 Action 已升級至 Stakeholder
-- [ ] `ROADMAP.md` 已更新（版本里程碑狀態同步；版本 Tag 與里程碑對齊確認完成，見「ROADMAP 更新操作指引」）
-- [ ] **ROADMAP 里程碑對齊檢查**（見 §5.1）：在觸發 deployment-readiness 前，確認本 Sprint 交付是否使某個 ROADMAP 里程碑達成完成狀態，並將結果傳達給 deployment-readiness 作為版本 Tag 決策依據
-- [ ] 觸發 `deployment-readiness`，由 SRE subagent 執行版本 Tag 流程（bump version + git tag），並附帶 ROADMAP 里程碑對齊檢查結果（里程碑完成 → Major bump 候選；未完成 → Minor bump）
-- [ ] **E2E 驗證結果已確認**：`deployment-readiness` §5.2 L3 E2E 驗證結果已確認（PASS 記錄至 Checklist；若輸出 `[E2E-SOFT-GATE]` 則已取得 PO 確認並記錄決策）
-- [ ] Sprint Metrics 計算並追加至 `docs/km/Metrics_Log.md`（見下方計算指引）
-- [ ] 是否有本 Sprint 值得記錄的角色制衡案例？若有，更新 `docs/km/ROLE_BALANCE_CASES.md`
-- [ ] **產出文件完成最後修改後，立即 git commit + push**（範圍：`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`、`sprint_N.md`。其他 KM 文件如 `ROLE_BALANCE_CASES.md` 等不適用，避免觸發 ADR-003 Out-of-Sprint Hard Gate）
-
-### Sprint Metrics 計算指引
-
-Sprint Review 結束時，派遣 Metrics subagent（`model: "haiku"`）執行以下計算並將結果追加至 `docs/km/Metrics_Log.md`。**主 session 不直接讀取 sprint_N.md 或 Metrics_Log.md**，所有讀取與計算均由 Metrics subagent 負責，subagent 回傳計算結果後由主 session 確認並指示 subagent 寫入。
-
-#### 步驟 1：讀取本 Sprint 資料
-
-Metrics subagent 自行讀取 `docs/sprints/sprint_N.md`（N 為本 Sprint 編號），收集交付成果表格。
-
-#### 步驟 2：Velocity 計算
-
-統計狀態欄標記為「完成」或「Done」的 Stories，依 T-shirt Sizing 換算 Story Points：
-
-| Size | Points |
-|------|--------|
-| S    | 1      |
-| M    | 2      |
-| L    | 3      |
-
-**Velocity = 所有 Done Stories 的 Points 加總**
-
-#### 步驟 3：完成率計算
-
-- **分子**：狀態為 Done 的 Story 數量
-- **分母**：Sprint Backlog 所有 Story 數量（含未完成）
-- **完成率 = (Done 數 / 計畫總數) × 100%**
-- **特殊情況**：若分母為 0，輸出「N/A」
-
-#### 步驟 4：趨勢分析
-
-Metrics subagent 自行讀取 `docs/km/Metrics_Log.md` 取得歷史 Velocity 資料，**僅讀取最近 30 個 Sprint 記錄**（若歷史記錄不足 30 個，則讀取全部）作為計算視窗：
-
-- **Sprint 1–2（資料不足）**：輸出「資料不足」，不進行趨勢判斷
-- **Sprint 3+（啟用趨勢）**：取最近三筆 Velocity，依下列優先順序判定：
-  1. **連升**：最近 2 個 Sprint 的 Velocity 逐步上升 → 輸出「上升趨勢」
-  2. **連降**：最近 2 個 Sprint 的 Velocity 逐步下降 → 輸出「下降趨勢」
-  3. **穩定**：波動在 ±20% 以內（不符合連升或連降） → 輸出「穩定」
-  4. **其他**：無法歸入以上三類 → 輸出「不規則」
-
-#### 步驟 5：歷史回溯（首次建立或檔案為空時）
-
-若 `docs/km/Metrics_Log.md` 不存在或內容為空（無任何資料列），Metrics subagent 執行以下操作：
-
-1. 掃描 `docs/sprints/` 目錄下所有 `sprint_N.md`（依 N 升序），由 Metrics subagent 自行讀取各 sprint 檔案
-2. 對每個 sprint 檔案執行步驟 2–3，計算歷史 Velocity 與完成率
-3. 依序寫入 Metrics_Log.md 表格，趨勢欄填入「資料不足」（Sprint 1–2）或依步驟 4 計算
-
-#### 步驟 6：追加記錄至 Metrics_Log.md
-
-在 `docs/km/Metrics_Log.md` 表格末尾追加一列：`| Sprint N | YYYY-MM-DD | V points | X% | 趨勢 | 備註 |`
-
+- [ ] 通過驗收 Story 已移至 `PROJECT_BOARD.md` Done 欄位
+- [ ] `sprint_N.md` Story 狀態欄已回寫最終驗收結果
+- [ ] **Story Issue 狀態回寫**（§2.6，HARD-GATE）：
+  - [ ] PASS Story：已查詢 Issue 建立者、判斷內部/外部、執行對應操作
+  - [ ] 內部 Issue：done label + 移除 in-sprint + 關閉
+  - [ ] 外部 Issue：done label + 移除 in-sprint + 階段 1 留言（保持 Open）+ 階段 2 留言
+  - [ ] FAIL Story：已回復 backlog 狀態並留言
+- [ ] 未達 DoD Story 已移回 Backlog 並標注原因
+- [ ] `Retrospective_Log.md` 已新增記錄
+- [ ] 每個 Action Item 已建立為 GitHub Issue
+- [ ] 上個 Sprint 的 `retro-action` Issues 已逐項檢查
+- [ ] 代理人校準儀式已完成
+- [ ] 連續兩個 Sprint 未關閉 Action 已升級至 Stakeholder
+- [ ] `ROADMAP.md` 已更新
+- [ ] **ROADMAP 里程碑對齊檢查**（§5.1）
+- [ ] 觸發 `deployment-readiness`（附帶里程碑對齊結果）
+- [ ] **E2E 驗證結果已確認**
+- [ ] Sprint Metrics 已計算並追加至 `Metrics_Log.md`（詳見 `po-review-prompt.md`）
+- [ ] 角色制衡案例檢查（若有，更新 `ROLE_BALANCE_CASES.md`）
+- [ ] **產出文件 git commit + push**（HARD-GATE）
