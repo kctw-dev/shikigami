@@ -89,6 +89,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 82 | 2026-03-12 | 6 points | 100% | 上升趨勢 | Goal 達成，3/3 Stories PASS；US-219（M/2pt）+ US-218（M/2pt）+ US-204（M/2pt）；S80=4→S81=5→S82=6，S81→S82 上升 +20%，連續兩期上升（S80→S81 +25%，S81→S82 +20%）→上升趨勢；組織記憶基礎三維度交付（Decision Journal + 代理人校準 + 統一合約） |
 | Sprint 83 | 2026-03-12 | 4 points | 100% | 不規則 | Goal 達成，2/2 Stories PASS；US-229（M/2pt）+ US-225（M/2pt）；S81=5→S82=6→S83=4，S82→S83 下降 -33.3%（超出 ±20%），先升後降方向不一致→不規則；Checkpoint 強制重讀機制 + SPACE 五維度指標雙軌交付 |
 | Sprint 84 | 2026-03-12 | 7 points | 100% | 不規則 | Goal 達成，4/4 Stories PASS；US-221（M/2pt）+ US-226（M/2pt）+ US-227（S/1pt）+ US-228（M/2pt）；S82=6→S83=4→S84=7，S83→S84 上升 +75%（超出 ±20%），先降後升方向不一致→不規則；知識品質閉環四維度交付（知識老化偵測 + SBE 範例 + 兩層索引 + Quality Observer） |
+| Sprint 85 | 2026-03-12 | 3 points | 100% | 不規則 | Goal 達成，2/2 Stories PASS；US-234（S/1pt）+ US-235（M/2pt）；S83=4→S84=7→S85=3，S84→S85 下降 -57%（超出 ±20%），先升後降方向不一致→不規則；ADR-018 裁決（Option A Accepted）+ Discovery Skill Phase 0 獨立入口建立 |
 
 ---
 
@@ -134,6 +135,7 @@ Quality Observer 消費 SPACE 五維度記錄表作為觀察數據來源，同�
 | Sprint N | YYYY-MM-DD | - | - | - | - | - | 範例列（尚無實際數據） |
 | Sprint 83 | 2026-03-12 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網事件）；A=引用主表完成率 100%；C=0（外部抽樣 1/1 CONFIRM，無 DISPUTE 發現）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
 | Sprint 84 | 2026-03-12 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（無 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
+| Sprint 85 | 2026-03-12 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（無 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
 
 ---
 
@@ -149,6 +151,7 @@ Sprint 整體 Token 消耗記錄，與 Velocity 記錄粒度對齊（Sprint 為�
 | Sprint 11 | N/A | N/A | N/A | 不可用 |
 | Sprint 60 | 68M | 131K | N/A（cache 比例不明，無法精確估算） | Claude Code JSONL |
 | Sprint 80 | 85414K | 155K | N/A（cache 比例不明，無法精確估算） | Claude Code JSONL |
+| Sprint 85 | N/A | N/A | N/A | 不可用 |
 
 ---
 
@@ -193,6 +196,7 @@ Sprint 環節 Token 消耗記錄，依 Planning / Execution / Review 分別記�
 | Sprint 82 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 83 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 | Sprint 84 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
+| Sprint 85 | N/A | N/A | N/A | N/A | N/A / N/A / N/A |
 
 ---
 

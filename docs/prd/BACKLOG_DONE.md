@@ -4,6 +4,17 @@
 
 ---
 
+## Sprint 85（2026-03-12）
+
+**Sprint Goal**：ADR-018 裁決（Accept Option A）+ Discovery Skill 實作
+
+| Story ID | 標題 | Size | Points |
+|----------|------|------|--------|
+| US-234 | ADR-018 裁決 — Accept Option A（獨立 Discovery Skill），回答 OQ-1/OQ-2 | S | 1 |
+| US-235 | Discovery Skill 實作 — Phase 0 獨立入口、Product Brief 格式定義、PO 確認關卡 | M | 2 |
+
+---
+
 ## Sprint 84（2026-03-12）
 
 **Sprint Goal**：建立內部品質體系的知識基礎架構

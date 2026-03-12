@@ -4,6 +4,24 @@
 
 ---
 
+## Sprint 85
+
+**日期**：2026-03-12
+**Sprint Goal**：ADR-018 裁決（Accept Option A）+ Discovery Skill 實作
+
+### Good
+- 連續 27 Sprint 100% 完成率（S59-S85），框架穩定性持續驗證
+- ADR-018 從 Proposed 到 Accepted 一個 Sprint 完成，PO 決策脈絡清晰（三階段框架 Discovery → Definition → Delivery）
+- 五階段流水線 Phase 0 落地：Discovery Skill 建立順利，3 個 Hard Gate + 7 section Product Brief 標準化格式一次到位
+
+### Problem
+- doc-only Story 仍占 Sprint 大部分容量（S75/S76/S80-S85），框架仍在 Definition 階段
+
+### Action Items
+- 無（doc-only 為已知模式，後續 Sprint 自然轉入 Delivery 階段）
+
+---
+
 ## Sprint 84
 
 **日期**：2026-03-12

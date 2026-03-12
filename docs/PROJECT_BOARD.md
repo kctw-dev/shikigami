@@ -1,24 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 85 Planning 完成）
-**當前 Sprint**：Sprint 85（進行中）
+**最後更新**：2026-03-12（Sprint 85 Review 完成）
+**當前 Sprint**：Sprint 85（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 85](sprints/sprint_85.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 85 — 進行中
+## Sprint 85（完成）
 
-**Sprint Goal**：ADR-018 裁決（Accept Option A）+ Discovery Skill 實作
-**期間**：2026-03-12 ~
-**ADR 依賴**：ADR-018（Proposed → Accepted）
+> Sprint Goal：ADR-018 裁決（Accept Option A）+ Discovery Skill 實作
+> **結果**：Goal 達成（2/2 Stories PASS）。Velocity 3 points，完成率 100%。ADR-018 正式 Accepted + Discovery Skill Phase 0 建立。
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-234：ADR-018 裁決 — Accept Option A（獨立 Discovery Skill），回答 OQ-1/OQ-2 | #234 | S | 1 | 完成 |
 | US-235：Discovery Skill 實作 — Phase 0 獨立入口、Product Brief 格式定義、PO 確認關卡 | #235 | M | 2 | 完成 |
-
-**Sprint 容量**：3 points
 
 ---
 
