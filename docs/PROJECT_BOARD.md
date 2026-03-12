@@ -69,4 +69,12 @@
 
 ---
 
+## 短衝記錄
+
+| 日期 | 標題 | Issue/Story | commit hash |
+|------|------|-------------|-------------|
+| 2026-03-12 | Sprint Review 精簡化 — 移除快思/慢想、歸檔觸發、Token 成本、Backlog .md 同步 | #243 | fadde69 |
+
+---
+
 > 歷史 Sprint 記錄：[PROJECT_BOARD_ARCHIVE](km/archive/PROJECT_BOARD_ARCHIVE.md)（Sprint 1–87）
