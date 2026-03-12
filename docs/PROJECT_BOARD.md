@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 87 Planning 完成）
-**當前 Sprint**：Sprint 87（進行中）
+**最後更新**：2026-03-12（Sprint 88 Planning 完成）
+**當前 Sprint**：Sprint 88（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 87](sprints/sprint_87.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 88](sprints/sprint_88.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 88（進行中）
+
+> Sprint Goal：框架品質全面強化 — TDD 需求理解升級 + Shoot CI Gate + E2E 修復 + MCP 三層架構評估 + 前端設計 Gate
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-240：TDD 需求理解驗證 — 寫不出測試自動觸發 REQUIREMENT_AMBIGUITY 升級 | #237 | S | 1 | TODO |
+| US-241：shoot CI Gate — CI pass 才標 PASS | #236 | S | 1 | TODO |
+| US-242：E2E workflow placeholder 修復 | #206 | S | 1 | TODO |
+| US-243：MCP 三層架構 — 知識庫/流程管理/品質觀察 MCP Server | #231 | M | 2 | TODO |
+| US-244：前端 Story 設計資訊 Gate — Pre-check + 角色派遣 + 交付審查 | #198 | M | 2 | TODO |
+
+**Sprint 容量**：7 points
 
 ---
 
