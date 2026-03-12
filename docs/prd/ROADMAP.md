@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-12（Sprint 87 完成 — 效能基準管理框架 + Solo Mode 角色封裝規範）
+> 最後更新：2026-03-12（Sprint 88 完成 — TDD 需求理解升級 + Shoot CI Gate + E2E 修復 + MCP 三層架構評估 + 前端設計 Gate）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.61.0**（Sprint 87）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.62.0**（Sprint 88）。
 
 | 版號 | 含義 |
 |------|------|
