@@ -7,27 +7,23 @@ description: "Use when new feature requests arrive, requirements change, backlog
 
 ## 1. 概述
 
-Backlog Management 合併 **Product Discovery** 與 **Backlog Grooming** 兩個流程，由 **Product Owner (PO)** 主導需求管理的全生命週期。
+Backlog Management 負責 **Backlog Grooming** 流程，由 **Product Owner (PO)** 主導 Backlog 的維護與優先級管理。
 
-- **Product Discovery**：在里程碑啟動時執行，從願景文件中發掘需求、識別功能缺口與技術債，並透過 RICE 框架收斂排序，產出可執行的 Product Backlog。
+> **注意**：Product Discovery 流程已獨立為 `/discovery-phase` Skill（ADR-018 裁決）。里程碑啟動時請先執行 `/discovery-phase`，產出的 GitHub Issues 再由本 Skill 的 §3 Backlog Grooming 接手維護。
+
 - **Backlog Grooming**：在 Sprint 中段定期執行，維護 Backlog 的健康度——移除過時 Story、補充新 Story、調整優先級、確保驗收標準清晰。
 
 **目標**：確保 Product Backlog 始終反映最新的產品策略與優先級，讓每次 Sprint Planning 都能從健康的 Backlog 中選取 Stories。
 
 ---
 
-## 2. Product Discovery 流程（里程碑啟動時）
+## 2. Product Discovery 流程
 
-以下步驟必須逐項完成，不可跳過：
-
-- [ ] **PO subagent** 分析願景文件（PRD、產品文件），理解里程碑目標與產品方向
-- [ ] **PO subagent** 盤點現有功能缺口與技術債，比對目前產品狀態與目標之間的差距
-- [ ] **PO + Architect subagent 討論**：探討功能可能性與技術可行性，識別潛在風險與依賴
-- [ ] **Architect subagent** 識別需要 ADR（Architecture Decision Record）的 Story，標注「需要 ADR」
-- [ ] **PO subagent** 使用 RICE 框架對所有候選 Story 進行評分與排序，收斂為優先級清單
-- [ ] **PO subagent** 為每個新需求直接開 GitHub Issue，套用原始 Issue labels（`feature-request` / `bug` / `question`），並更新 `docs/prd/ROADMAP.md`
-
-**產出**：GitHub Issues（新需求開 Issue + 套用 label），不再寫入 `PRODUCT_BACKLOG.md`。里程碑規劃仍以 `docs/prd/ROADMAP.md` 為準。
+> **注意**：完整的 Product Discovery 流程已獨立為 `/discovery-phase` Skill（ADR-018 裁決）。
+>
+> 請使用 `/discovery-phase` 執行完整的產品探索流程，包含 Product Brief 標準化格式、假設外顯化機制與 PO 確認關卡。
+>
+> 本 Skill 的 §3 Backlog Grooming 仍負責 Discovery 產出物的後續維護。
 
 ---
 
@@ -201,14 +197,7 @@ gh issue list --label "auto-triaged" --state open \
 
 ## 8. Subagent 派遣順序
 
-### Product Discovery（里程碑啟動）
-
-```
-1. PO        → 分析願景文件、盤點功能缺口與技術債
-2. PO + Arch → 討論功能可能性與技術可行性
-3. Architect → 識別需要 ADR 的 Story
-4. PO        → RICE 評分排序、產出 Backlog 與 Roadmap
-```
+> **注意**：Product Discovery 流程已獨立為 `/discovery-phase` Skill，里程碑啟動時請使用 `/discovery-phase`。
 
 ### Backlog Grooming（Sprint 中段）
 
@@ -221,6 +210,5 @@ gh issue list --label "auto-triaged" --state open \
 
 **派遣說明**：
 
-1. **PO（分析階段）**：讀取 PRD 與產品相關文件，理解里程碑目標。同時透過 `gh issue list --label "status: backlog" --state open` 盤點現有 Backlog Issues 與已知技術債，建立候選 Story 清單。
-2. **PO + Architect（協作階段）**：PO 提出功能需求，Architect 評估技術可行性。雙方共同討論每個候選 Story 的實現方式與潛在風險。Architect 在此階段標注需要 ADR 的 Story。
-3. **PO（收斂階段）**：根據 Architect 的回饋，使用 RICE 框架為每個 Story 評分排序，以 `gh issue edit` 套用 MoSCoW priority labels（`priority: must/should/could`）並更新 Issue body 中的 RICE 評分表格。里程碑規劃更新至 ROADMAP.md。
+1. **PO（Pre-flight 掃描）**：執行 Pre-flight 錯誤恢復掃描，偵測並修復 label / milestone 不一致狀態，確保 Backlog 健康度。
+2. **PO（Grooming 主流程）**：透過 `gh issue list --label "status: backlog" --state open` 盤點 Backlog Issues，關閉過時 Story，調整 RICE 分數與優先級 labels，確認 Acceptance Criteria。
