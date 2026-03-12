@@ -188,6 +188,7 @@ PO Override 必須標注 [PO-OVERRIDE] 於 commit message，且同步記錄至 M
 | 環境變數已設定 | [ ] |
 | 監控告警已配置 | [ ] |
 | 部署文件已更新 | [ ] |
+| 效能基準驗證通過（見 §14） | [ ] |
 
 <HARD-GATE>
 Checklist 中任一項目未勾選，不得執行部署。
@@ -549,6 +550,8 @@ Error Budget = (1 - SLO 目標) × 總量測時間
 1. 查詢延遲直方圖（histogram_quantile 或 percentile 函數）
 2. 確認 P50、P95、P99 各百分位數值
 3. 與 SLO 定義的目標閾值比較
+
+> **效能基準交叉參照**：延遲 SLI 的量測基線值（P50 / P95 / P99 目標閾值）應與 §14 效能基準管理中定義的基線值保持一致。每次 Load Test 後若基線值更新，需同步更新本節的 SLO 閾值設定。模板參考：`docs/templates/performance-baseline-template.md`。
 
 #### MTTR SLI
 
@@ -913,3 +916,134 @@ SRE subagent 在提交 Post-mortem 前確認：
 Post-mortem 文件未完成，不得將事故標記為完全解決。
 Action Items 未錄入 Sprint Backlog，下個 Sprint Review 將標記為未追蹤事項。
 </HARD-GATE>
+
+---
+
+## 14. 效能基準管理
+
+**新增於**：Sprint 87（US-238，效能基準管理 Phase 1）
+
+本節定義效能基準（Performance Baseline）的格式規格、Load Test 觸發時機，以及效能回歸偵測的告警邏輯。與 §8.3 負載測試 Checklist 整合：§8.3 確認「負載測試已執行」，本節定義「如何量測、記錄與比對基線值」。
+
+### 14.1 效能基準（Baseline）定義格式規格
+
+每個受管理的效能指標必須以下列格式記錄於 `docs/templates/performance-baseline-template.md`（填寫後複製至 `docs/performance/` 目錄存檔）：
+
+| 欄位 | 說明 | 範例 |
+|------|------|------|
+| **指標名稱** | 明確描述被量測的指標，需唯一可識別 | `API P95 延遲 — /api/v1/search` |
+| **量測方法** | 具體說明如何取得數據，包含工具指令或查詢語法 | `k6 load test，`histogram_quantile(0.95, ...)` |
+| **基線值** | 在正常負載下量測到的參考值，附量測時間與環境 | `320ms（Staging，2026-03-01，100 VU 持續 10 分鐘）` |
+| **告警閾值 — Warning** | 偏離基線值的警告邊界（百分比或絕對值） | `> 基線值 +20%（> 384ms）` |
+| **告警閾值 — Critical** | 偏離基線值的嚴重邊界，超過時阻擋部署或觸發事故 | `> 基線值 +50%（> 480ms）` |
+| **量測工具** | 使用的 Load Test 或監控工具名稱與版本 | `k6 v0.50.0、Grafana Dashboard ID: 12345` |
+
+#### 基線值更新規則
+
+- **更新時機**：Load Test 結果顯示持續優化（基線值降低 ≥ 10%）時，由 SRE subagent 更新基線值
+- **更新流程**：填寫新基線值 → 記錄量測時間與環境 → 同步更新 §7.1 延遲 SLI 閾值（若適用） → Commit 變更
+- **版本追蹤**：每次基線更新須在文件末尾的「變更記錄」區段附上日期與變更原因
+
+### 14.2 Load Test 觸發時機指引
+
+以下三種場景必須執行 Load Test，SRE subagent 需確認觸發條件後依步驟執行：
+
+---
+
+#### 場景一：部署前 Load Test
+
+**觸發條件**：
+- Sprint Review 驗收通過，準備執行 Production 部署前
+- 部署內容涉及核心 API 端點或資料庫查詢邏輯變更
+
+**執行步驟**：
+1. 確認 Staging 環境已部署待部署版本
+2. 執行基準 Load Test（與上次基線量測相同參數：VU 數、持續時間、端點清單）
+3. 收集 P50 / P95 / P99 延遲、錯誤率、吞吐量（RPS）
+4. 與 §14.1 基線值比對，判定是否觸發告警（見 §14.3）
+5. 記錄結果於部署 Checklist 備注欄，更新 §5「效能基準驗證通過」項目
+6. 若 Critical 閾值未觸發，繼續部署流程；若觸發，阻擋部署並排查效能回歸
+
+---
+
+#### 場景二：效能相關 PR 的 Load Test
+
+**觸發條件**（滿足以下任一條件時觸發）：
+- PR 修改了資料庫查詢、快取策略、演算法複雜度相關邏輯
+- PR 標籤（Label）包含 `perf`、`performance` 或 `load-test-required`
+- PR 涉及的端點在上次 Load Test 中的 P95 延遲已接近 Warning 閾值（>80% 閾值）
+
+**執行步驟**：
+1. 在 PR Review 階段，由 Reviewer 判定是否觸發（依上述條件）
+2. 部署 PR 分支至 Staging 環境（可使用 Preview 部署）
+3. 執行針對受影響端點的局部 Load Test（最少 5 分鐘，50 VU）
+4. 對比 PR 分支結果與 main 分支基線值，計算偏差百分比
+5. 若偏差超過 Warning 閾值，在 PR Comment 標注 `[PERF-WARNING]` 並要求作者說明
+6. 若偏差超過 Critical 閾值，在 PR Comment 標注 `[PERF-BLOCK]`，阻擋 PR 合併直至效能問題解決
+
+---
+
+#### 場景三：定期排程 Load Test
+
+**觸發條件**：
+- 每個 Sprint 結束前（Sprint 倒數第 2 個工作日）
+- 或距離上次 Load Test 超過 14 天（無論 Sprint 進度）
+
+**執行步驟**：
+1. 執行完整 Load Test 套件（涵蓋所有已定義基線的端點）
+2. 逐一對比各指標與 §14.1 中的基線值
+3. 識別效能趨勢：連續 2 次排程 Load Test 顯示同一指標接近 Warning 閾值時，主動排入下個 Sprint 效能優化任務
+4. 若所有指標在 Warning 閾值內：更新 `docs/performance/` 中的 Load Test 記錄（附日期與環境）
+5. 若有指標超過 Warning 閾值：建立效能改善 Story，排入下個 Sprint Backlog
+6. 若有指標超過 Critical 閾值：立即升級，不等待 Sprint 邊界，當天排入修復
+
+---
+
+### 14.3 效能回歸偵測告警閾值定義
+
+#### 比對邏輯
+
+每次 Load Test 完成後，依下列公式計算各指標的偏差百分比：
+
+```
+偏差百分比 = (當次量測值 - 基線值) / 基線值 × 100%
+```
+
+- 偏差百分比為**正值**（當次值 > 基線值）：效能退化，需依下表判定告警等級
+- 偏差百分比為**負值**（當次值 < 基線值）：效能改善，記錄並評估是否更新基線值
+
+#### 偏差百分比閾值
+
+| 指標類型 | Warning 閾值 | Critical 閾值 | 建議動作 |
+|---------|------------|--------------|---------|
+| P95 延遲 | > +20% | > +50% | Warning：分析慢查詢；Critical：阻擋部署，立即排查 |
+| P99 延遲 | > +30% | > +80% | Warning：記錄並追蹤；Critical：阻擋部署，啟動 Incident Response |
+| 錯誤率 | > +50%（絕對值 > 0.05%） | > +100%（絕對值 > 0.1%） | Warning：檢查錯誤日誌；Critical：阻擋部署 |
+| 吞吐量（RPS） | < -15%（下降） | < -30%（下降） | Warning：確認資源使用率；Critical：阻擋部署，確認服務容量 |
+| P50 延遲 | > +25% | > +60% | Warning：追蹤趨勢；Critical：阻擋部署 |
+
+> **閾值說明**：表中百分比為相對基線值的偏差。閾值設定應參考 §6.2 Golden Signals 告警閾值，兩者保持一致；若針對特定服務有調整，在 `docs/performance/` 基線文件中標注覆蓋值。
+
+#### 告警動作
+
+| 告警等級 | 觸發動作 | 通知對象 | 阻擋部署？ |
+|---------|---------|---------|----------|
+| **Warning** | 在 Load Test 報告中標注 `[PERF-WARNING]`，建立效能追蹤 Task，排入下個 Sprint | SRE subagent、Engineering Lead | 否 |
+| **Critical** | 在 Load Test 報告中標注 `[PERF-CRITICAL]`，立即通知，禁止繼續部署流程 | SRE subagent、Engineering Lead、PO | **是** |
+| **改善** | 更新基線值記錄，同步 §7.1 延遲 SLI 閾值 | SRE subagent | — |
+
+<HARD-GATE>
+Load Test 結果觸發 Critical 閾值時，禁止繼續部署流程。
+必須完成效能回歸根因分析並修復後，重新執行 Load Test 且結果在 Warning 閾值以內，方可繼續部署。
+Load Test 結果必須記錄於部署就緒 Checklist 備注欄，§5「效能基準驗證通過」項目需附量測結果摘要。
+</HARD-GATE>
+
+### 14.4 Load Test 與 §8.3 負載測試 Checklist 整合說明
+
+§8.3 負載測試 Checklist 項目「已在 Staging 環境執行負載測試，確認服務在預期流量下穩定」與本節整合如下：
+
+- **§8.3 負責**：確認「是否已執行負載測試」這個動作（Go / No-Go 決策）
+- **§14 負責**：定義「如何執行、如何量測、如何判定結果」的完整規格
+- **§5 負責**：「效能基準驗證通過」為部署前的最終確認項目，需 §14.3 比對結果支持
+
+SRE subagent 在部署前應依序：§14.2（觸發 Load Test）→ §14.3（比對告警閾值）→ §8.3（打勾負載測試完成）→ §5（打勾效能基準驗證通過）。
