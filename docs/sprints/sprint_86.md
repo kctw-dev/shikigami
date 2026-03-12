@@ -1,6 +1,8 @@
 # Sprint 86
 
-> 狀態：進行中
+> 狀態：完成
+> 結果：Goal 達成（2/2 Stories PASS）。Velocity 5 points，完成率 100%。
+> Stakeholder 驗收：接受
 > 日期：2026-03-12
 > Sprint Goal：Discovery Ecosystem 第一里程碑 — 打通「用戶聲音 → 自動進入 Discovery」閉環 + SRE 事故回應基礎框架
 

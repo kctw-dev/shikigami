@@ -1,20 +1,29 @@
 # Project Board
 
-**最後更新**：2026-03-12（Sprint 86 Planning 完成）
-**當前 Sprint**：Sprint 86（進行中）
+**最後更新**：2026-03-12（Sprint 86 Review 完成）
+**當前 Sprint**：Sprint 86（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 86](sprints/sprint_86.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 86（進行中）
+## Sprint 86（完成）
 
 > Sprint Goal：Discovery Ecosystem 第一里程碑 — 打通「用戶聲音 → 自動進入 Discovery」閉環 + SRE 事故回應基礎框架
+> **結果**：Goal 達成（2/2 Stories PASS）。Velocity 5 points，完成率 100%。Discovery Ecosystem 閉環建立（Issue → Triage → Backlog Bridge → Discovery Phase）+ SRE 事故回應基礎框架交付（Incident Response Runbook + Post-mortem + Golden Signals + SLO/SLI + 斷路器/降級）。
+> **Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-236：用戶回饋自動流入 Discovery — Issue 自動轉 User Story 閉環 | #223 | M | 2 | 完成 |
 | US-237：SRE 完整化 Phase 1 — Incident Response Runbook + Post-mortem 框架 | #222 | L | 3 | 完成 |
+
+**Sprint 容量**：5 points
+
+## Sprint 86 統計
+- Velocity：5 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-12
 
 ---
 

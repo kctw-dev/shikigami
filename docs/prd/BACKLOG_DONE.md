@@ -4,6 +4,17 @@
 
 ---
 
+## Sprint 86（2026-03-12）
+
+**Sprint Goal**：Discovery Ecosystem 第一里程碑 — 打通「用戶聲音 → 自動進入 Discovery」閉環 + SRE 事故回應基礎框架
+
+| Story ID | 標題 | Size | Points |
+|----------|------|------|--------|
+| US-236 | 用戶回饋自動流入 Discovery — Issue 自動轉 User Story 閉環 | M | 2 |
+| US-237 | SRE 完整化 Phase 1 — Incident Response Runbook + Post-mortem 框架 | L | 3 |
+
+---
+
 ## Sprint 85（2026-03-12）
 
 **Sprint Goal**：ADR-018 裁決（Accept Option A）+ Discovery Skill 實作
