@@ -285,6 +285,11 @@ TDD 開發循環（§3）：Red → Green → Refactor（每小步一個 commit�
 ║  │    │           |-- FAIL --> 禁止 commit，修復       ║
 ║  │    │           +-- PASS                            ║
 ║  │    +-- 無 CI/CD 路徑變更 → SKIP                    ║
+║  ├─ UIUX/QA 視覺一致性審查（§4.7，前端 FEATURE Story 時）║
+║  │    |-- [VCR-SKIP] 非前端 Story → 略過              ║
+║  │    |-- [VCR-FAIL] → 修復循環（最多 3 次）           ║
+║  │    │      第 3 次仍 FAIL → ESCALATE: DESIGN_ISSUE  ║
+║  │    +-- [VCR-PASS]                                  ║
 ║  └─ Security self-review（§7，條件觸發）             ║
 ║         |-- FAIL --> 修復或升級                       ║
 ║         +-- PASS / SKIP                               ║
@@ -681,6 +686,84 @@ DESIGN Blocker 檢查 — {story_id}
 
 - 本檢查為**防呆機制**：正常情況下主 session 的排序邏輯（`SKILL.md §4.6`）應確保 DESIGN Story 先於依賴其 Contract 的 FEATURE Story 執行。本檢查作為第二道防線，處理排序邏輯未能覆蓋的邊界情況（如主 session 錯誤排序、手動觸發等）。
 - **[MOCK-CONTRACT] 豁免**：若 FEATURE Story 備注欄含有 `[MOCK-CONTRACT]` 標記（主 session 明確決定以模擬資料降級執行），跳過本檢查，輸出告警提示後繼續執行。
+
+---
+
+## §4.7 前端 FEATURE Story 視覺一致性審查（US-244 AC3）
+
+<!-- US-244 前端 Story 交付視覺一致性審查 — Sprint 88 -->
+
+**觸發條件**：`story_type=FEATURE` 且 Story 被識別為前端 Story（涉及 UI 元件、頁面、視覺設計的修改）時，在雙階段自審（Spec Compliance + Code Quality）通過後、DoD 自檢前，執行 UIUX/QA 視覺一致性審查。
+
+> **注意**：`story_type=DESIGN` 的 Story 走 §4.5 專屬路徑（Vision Critic 自審 + QA Contract Testability Review），不適用本節。本節僅適用於 **FEATURE type 的前端修改 Story**。
+
+### 前端 Story 識別（§4.7 內部判斷）
+
+進入此步驟時，重新確認 Story 是否為前端 Story（與 `SKILL.md §2.10` 識別標準一致）：
+
+- AC 描述含 UI 元件相關詞語（頁面、元件、視覺、版面、畫面、介面等）
+- AC 描述含前端技術詞語（React、Vue、CSS、樣式、RWD 等）
+- 故事標題或 AC 明確描述「前端修改」、「UI 實作」等
+
+**若不符合前端 Story 識別標準** → `[VCR-SKIP]` 跳過視覺一致性審查，直接進入 DoD 自檢
+
+### 審查流程
+
+```
+前端 Story 識別：符合 → 執行視覺一致性審查
+  |
+  v
+Step 1：設計規格確認
+  - 確認是否有參照設計規格（Figma Prototype 連結 / Design Spec / Design Token）
+  - 若有 → 依規格進行視覺對比；若無 → 以 Design Token 為基準驗證
+  |
+  v
+Step 2：UIUX 視覺一致性審查（Developer 自審，代 UIUX 角色視角）
+  審查項目：
+  - [ ] VCR-1：元件樣式符合 Design Token（顏色、字體、間距）
+  - [ ] VCR-2：版面結構符合設計規格（或現有 Design System 慣例）
+  - [ ] VCR-3：互動行為與 AC 描述一致（hover、focus、disabled 等狀態）
+  - [ ] VCR-4：響應式設計（RWD）邊界條件已處理（若 Story 涉及 RWD）
+  |
+  v
+Step 3：QA 視覺回歸確認（Developer 自審，代 QA 角色視角）
+  審查項目：
+  - [ ] VCR-5：修改後的 UI 與既有頁面視覺風格一致，無明顯衝突
+  - [ ] VCR-6：新增 UI 元件不破壞既有版面（無意外 overflow、遮蔽等問題）
+  |
+  v
+整體結論
+  |-- 所有 VCR-1 ~ VCR-6 通過（或 N/A）→ [VCR-PASS] 視覺一致性審查通過
+  +-- 任一項目 FAIL → [VCR-FAIL] 修復後重新審查（最多 3 次）
+        第 3 次仍 FAIL → 回傳 ESCALATE: DESIGN_ISSUE（建議 UIUX Designer 介入）
+```
+
+### 審查清單格式
+
+```
+UIUX/QA 視覺一致性審查 — {story_id}
+
+Story 類型：前端 FEATURE Story
+設計規格參照：{Figma Prototype URL / Design Token 路徑 / N/A}
+
+UIUX 視覺一致性審查：
+- [ ] VCR-1：元件樣式符合 Design Token → {PASS/FAIL/N/A + 說明}
+- [ ] VCR-2：版面結構符合設計規格 → {PASS/FAIL/N/A + 說明}
+- [ ] VCR-3：互動行為與 AC 描述一致 → {PASS/FAIL/N/A + 說明}
+- [ ] VCR-4：響應式設計邊界條件 → {PASS/FAIL/N/A + 說明}
+
+QA 視覺回歸確認：
+- [ ] VCR-5：視覺風格一致性 → {PASS/FAIL/N/A + 說明}
+- [ ] VCR-6：版面完整性（無破壞既有版面）→ {PASS/FAIL/N/A + 說明}
+
+整體結論：[VCR-PASS] / [VCR-FAIL]
+```
+
+### 降級策略
+
+- 若無 Design Token（`docs/design/design-tokens.json` 不存在） → VCR-1 改為「與現有 UI 元件樣式一致」替代驗證
+- 若 Story 僅修改邏輯（AC 確認無 UI 渲染變更） → `[VCR-SKIP]` 跳過
+- 所有降級情境均輸出對應標記，不阻塞但記錄至 DoD 自檢
 
 ---
 
