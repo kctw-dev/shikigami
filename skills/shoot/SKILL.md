@@ -227,10 +227,16 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
   +-- 無 CI/CD 變更 → SKIP
         |
         v
-[步驟 6] 更新 docs/km/Shoot_Log.md 與 docs/PROJECT_BOARD.md
+[步驟 6] git commit（以 shoot: 前綴）+ git push
         |
         v
-[步驟 7] git commit（以 shoot: 前綴）
+[步驟 6.5] CI Gate — 等待 CI 狀態（見 §8.2）
+  |-- CI PASS → 繼續
+  |-- CI FAIL → exit code 非 0，Shoot_Log.md 不寫 PASS，輸出失敗資訊，終止
+  +-- CI 不可用 → 輸出 [WARN]，依降級行為繼續（見 §8.2）
+        |
+        v
+[步驟 7] 更新 docs/km/Shoot_Log.md（寫入 PASS）與 docs/PROJECT_BOARD.md
         |
         v
 [步驟 8] 瘦身歸檔檢查（若 Shoot_Log.md > 20 筆則觸發歸檔）
@@ -333,6 +339,74 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
 
 <HARD-GATE>
 **CI/CD 雙審查 Hard Gate（/shoot）**：偵測到 CI/CD 路徑變更時，QA regression check 與 SRE infra config check **兩者均必須 PASS**，才允許執行 `shoot:` git commit。任一 FAIL → exit code 非 0，禁止 commit。
+</HARD-GATE>
+
+---
+
+## 8.2 CI Gate（US-241）
+
+<!-- US-241 shoot CI Gate — CI pass 才標 PASS — Sprint 88 -->
+
+在 `shoot:` commit + `git push` 完成後、寫 `Shoot_Log.md` PASS 前，執行 CI 狀態等待與驗證。
+
+### 執行步驟
+
+```bash
+# Step 1：取得最新的 CI run（push 後觸發的 workflow）
+CI_RUN=$(gh run list --limit 1 --json databaseId,name,status,conclusion,url \
+  2>/dev/null)
+
+# Step 2：若 run 尚在執行中，等待完成（最多 10 分鐘）
+RUN_ID=$(echo "$CI_RUN" | jq -r '.[0].databaseId // empty')
+if [[ -n "$RUN_ID" ]]; then
+  gh run watch "$RUN_ID" --exit-status 2>/dev/null
+  CONCLUSION=$(gh run view "$RUN_ID" --json conclusion -q '.conclusion' 2>/dev/null)
+fi
+```
+
+### CI Gate 判斷規則
+
+| 情況 | CONCLUSION 值 | 行為 |
+|------|---------------|------|
+| CI PASS | `success` | 繼續，寫 Shoot_Log.md PASS |
+| CI FAIL | `failure` / `cancelled` / `timed_out` | **不寫 PASS**，輸出失敗資訊，exit code 非 0，終止 |
+| CI 不可用 | — | 依降級行為處理（見下方） |
+
+### CI FAIL 輸出格式（AC3）
+
+```
+── CI Gate ────────────────────────────
+  [FAIL] CI 檢查未通過，中止寫入 Shoot_Log PASS
+  Workflow：<workflow 名稱>
+  Run URL ：<run URL>
+  結論    ：<conclusion>
+
+[ERROR] CI Gate FAIL，終止執行
+  - exit code：1（非 0）
+  - Shoot_Log.md 未更新（無 PASS 記錄）
+```
+
+### CI 不可用時的降級行為（AC4）
+
+CI 不可用情境包括：`gh` CLI 未安裝、未認證、repo 無 CI workflow 配置、`gh run list` 回傳空結果。
+
+| 情境 | 偵測條件 | 降級行為 |
+|------|---------|---------|
+| `gh` CLI 未安裝 | `command -v gh` 失敗 | 輸出 `[WARN] gh CLI 未安裝，跳過 CI Gate`，繼續寫 PASS |
+| `gh` CLI 未認證 | `gh auth status` 失敗 | 輸出 `[WARN] gh CLI 未認證，跳過 CI Gate`，繼續寫 PASS |
+| repo 無 CI workflow | `gh run list` 回傳 `[]` | 輸出 `[WARN] 無 CI workflow，跳過 CI Gate`，繼續寫 PASS |
+| `gh run list` 執行失敗 | exit code 非 0 | 輸出 `[WARN] CI 狀態查詢失敗，跳過 CI Gate`，繼續寫 PASS |
+
+降級輸出格式：
+
+```
+── CI Gate ────────────────────────────
+  [WARN] <降級原因>，跳過 CI Gate
+  CI Gate 已略過，手動確認 CI 狀態後再繼續
+```
+
+<HARD-GATE>
+**CI Gate Hard Gate（/shoot）**：git push 完成後，CI PASS 才允許寫入 Shoot_Log.md PASS。CI FAIL → exit code 非 0，Shoot_Log.md 不寫 PASS 記錄，不輸出完成訊息。CI 不可用時採降級行為（輸出 WARN，繼續執行）。
 </HARD-GATE>
 
 ---
@@ -478,15 +552,21 @@ fi
   [PASS] 測試覆蓋
   [PASS] 迴歸檢查
 
-── 文件更新 ───────────────────────────
-  ✓ Shoot_Log.md 已更新
-  ✓ PROJECT_BOARD.md 短衝記錄已更新
+── git commit + push ─────────────────
   ✓ git commit：shoot: 修復 CSS 問題（abc1234）
+  ✓ git push 完成
+
+── CI Gate ────────────────────────────
+  [PASS] CI 檢查通過（workflow: CI / run: https://github.com/.../runs/123）
+
+── 文件更新 ───────────────────────────
+  ✓ Shoot_Log.md 已更新（PASS）
+  ✓ PROJECT_BOARD.md 短衝記錄已更新
 
 ✓ 短衝完成 — 修復 CSS 問題
 ```
 
-### FAIL 場景
+### FAIL 場景 — QA Pre-flight
 
 ```
 ── QA Pre-flight ──────────────────────
@@ -496,6 +576,32 @@ fi
   - exit code：1（非 0）
   - Shoot_Log.md 未更新（無 PASS 記錄）
   - git commit 未執行
+```
+
+### FAIL 場景 — CI Gate
+
+```
+── CI Gate ────────────────────────────
+  [FAIL] CI 檢查未通過，中止寫入 Shoot_Log PASS
+  Workflow：CI
+  Run URL ：https://github.com/org/repo/actions/runs/456
+  結論    ：failure
+
+[ERROR] CI Gate FAIL，終止執行
+  - exit code：1（非 0）
+  - Shoot_Log.md 未更新（無 PASS 記錄）
+```
+
+### CI 不可用場景（降級）
+
+```
+── CI Gate ────────────────────────────
+  [WARN] gh CLI 未安裝，跳過 CI Gate
+  CI Gate 已略過，手動確認 CI 狀態後再繼續
+
+── 文件更新 ───────────────────────────
+  ✓ Shoot_Log.md 已更新（PASS，CI Gate 略過）
+  ✓ PROJECT_BOARD.md 短衝記錄已更新
 ```
 
 ---
