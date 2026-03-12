@@ -15,8 +15,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-234：ADR-018 裁決 — Accept Option A（獨立 Discovery Skill），回答 OQ-1/OQ-2 | #234 | S | 1 | 待辦 |
-| US-235：Discovery Skill 實作 — Phase 0 獨立入口、Product Brief 格式定義、PO 確認關卡 | #235 | M | 2 | 待辦 |
+| US-234：ADR-018 裁決 — Accept Option A（獨立 Discovery Skill），回答 OQ-1/OQ-2 | #234 | S | 1 | 完成 |
+| US-235：Discovery Skill 實作 — Phase 0 獨立入口、Product Brief 格式定義、PO 確認關卡 | #235 | M | 2 | 完成 |
 
 **Sprint 容量**：3 points
 
