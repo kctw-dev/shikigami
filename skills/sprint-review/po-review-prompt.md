@@ -23,6 +23,29 @@ PO Subagent 負責展示本 Sprint 的可運行成果，逐一驗收每個 Story
 
 **禁止項**：不得依賴 plugin cache 版本。plugin cache 可能快取已過期的舊版本，若以 cache 版本驗收，將導致誤判「已完成」的 Story 為 FAIL。
 
+## 邊界案例驗證結果
+
+Demo 報告必須包含「邊界案例驗證結果」區塊，由 QA Subagent 主導執行後填入。格式如下：
+
+```markdown
+### 邊界案例驗證結果（Sprint N）
+
+| 邊界案例 | 輸入 | 預期行為 | 實際行為 | 判定 |
+|---------|------|---------|---------|------|
+| CJK 冷門字輸入 | 「龘」、「靐」 | 顯示對應內容或優雅降級 | {實際輸出} | PASS / FAIL |
+| 空值輸入 | ""、null | 顯示提示訊息或預設值 | {實際輸出} | PASS / FAIL |
+| 時間邊界 | 跨日、跨月、跨年時間點 | 正確處理邊界 | {實際輸出} | PASS / FAIL |
+| 超長輸入 | > 500 字元 | 截斷或拒絕且不崩潰 | {實際輸出} | PASS / FAIL |
+| 特殊符號 | HTML/SQL 特殊字元 | 安全處理，不注入 | {實際輸出} | PASS / FAIL |
+
+**QA 發現摘要**：{PASS 數}/{測試總數}，{若有 FAIL 列出問題描述}
+```
+
+**執行規則**：
+- 本環節由 QA Subagent 主導，PO Subagent 協助提供 Story 的邊界案例背景
+- 各 Story 至少測試 3 個邊界案例（從 `skills/qa-engineer/SKILL.md §5` 清單選取）
+- 邊界案例測試 FAIL 不自動導致 Story FAIL，由 PO 判斷是否影響驗收（嚴重 FAIL 例外）
+
 ## 未達 DoD 的 Story 處理
 
 - 未通過 Definition of Done 的 Story 移回 Backlog

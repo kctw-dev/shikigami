@@ -53,10 +53,11 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 ### 步驟
 
 1. **PO Subagent 展示 Demo 結果** — 角色 prompt：`skills/sprint-review/po-review-prompt.md`
-2. **Stakeholder Subagent 確認商業期待** — 角色 prompt：`skills/sprint-review/stakeholder-prompt.md`
-3. **更新 `docs/PROJECT_BOARD.md`（已完成欄位）** — 通過驗收 Story 移至 Done，記錄完成日期與 Sprint 編號，更新 Sprint 統計數據
-4. **未達 DoD 的 Story 處理** — 詳見 `po-review-prompt.md`
-5. **回寫 `docs/sprints/sprint_N.md` Story 最終狀態** — 詳見 `po-review-prompt.md`
+2. **QA 主導邊界案例測試** — 在 Happy Path Demo 完成後，由 QA Subagent 執行「邊界案例測試」環節，測試清單參照 `skills/qa-engineer/SKILL.md §5 常見邊界案例清單`。QA 主導測試並產出邊界案例驗證結果，於步驟 3 前完成報告。
+3. **Stakeholder Subagent 確認商業期待** — 角色 prompt：`skills/sprint-review/stakeholder-prompt.md`
+4. **更新 `docs/PROJECT_BOARD.md`（已完成欄位）** — 通過驗收 Story 移至 Done，記錄完成日期與 Sprint 編號，更新 Sprint 統計數據
+5. **未達 DoD 的 Story 處理** — 詳見 `po-review-prompt.md`
+6. **回寫 `docs/sprints/sprint_N.md` Story 最終狀態** — 詳見 `po-review-prompt.md`
 
 ## 2.5 Sprint 外完成項目掃描
 
@@ -151,6 +152,7 @@ Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 g
 - [ ] **交付物文案一致性審查**（§1.5 全部 PASS）
 - [ ] **Retrospective Analytics 報告**（§3 步驟 0，四區塊完整）
 - [ ] PO Subagent 已展示所有已完成 Story 的 Demo
+- [ ] **QA 邊界案例測試**（§2 步驟 2）：QA 已執行邊界案例測試環節，並產出「邊界案例驗證結果」報告
 - [ ] Stakeholder Subagent 已確認商業期待符合度
 - [ ] 通過驗收 Story 已移至 `PROJECT_BOARD.md` Done 欄位
 - [ ] `sprint_N.md` Story 狀態欄已回寫最終驗收結果
