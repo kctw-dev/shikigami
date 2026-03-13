@@ -12,7 +12,7 @@
 |---------------|---------|-----------------|---------|
 | **PO** | Backlog 排序、Story 選取、Discovery Phase | Product Manager、Agile PO、UX Researcher、Discovery、Roadmap Communication | ★★★ 高 |
 | **Architect** | ADR、技術評估、平行分群 | RAG Architect、Database Designer、Migration Architect、API Design Reviewer | ★★☆ 中 |
-| **Developer** | TDD、Story-Lifecycle 閉環 | Fullstack、Codebase Onboarding、Git Worktree Manager | ★☆☆ 低 |
+| **Developer** | TDD、Story-Lifecycle 閉環 | Database Designer、Migration Architect、Performance Profiler、Tech Debt Tracker、Monorepo Navigator、Agent Designer、Changelog Generator | ★★★ 高 |
 | **QA** | AC 驗證、Spec/Code Quality Review | Playwright Pro（12 skills）、API Test Suite Builder、PR Review Expert | ★★★ 高 |
 | **Security** | Security Review、OWASP 檢查 | Skill Security Auditor、Env Secrets Manager、SecOps | ★★☆ 中 |
 | **SRE** | 部署、監控、Incident Response | Observability Designer、Performance Profiler、Incident Commander、Runbook Generator | ★★★ 高 |
@@ -125,15 +125,30 @@
 
 ---
 
-### 2.7 Developer（強化潛力：★☆☆）
+### 2.7 Developer（強化潛力：★★★）
 
-現有 Developer 角色已有完整的 TDD 閉環 + Story-Lifecycle subagent 封裝，外部 skills 能補充的有限。
+Developer 是最核心的執行角色，POWERFUL tier 有多個 skills 可直接強化開發品質與效率。
 
-| 外部 Skill | 能力 | 備注 |
-|-----------|------|------|
-| **Codebase Onboarding** | 新專案快速上手 | 可參考用於 /dispel skill |
-| **Git Worktree Manager** | Worktree 管理 | Claude Code 已內建 |
-| **Tech Debt Tracker** | 技術債追蹤 | 已有 Tech_Debt_Registry.md |
+**現有痛點**：
+- Story 涉及資料庫時缺少結構化設計指引
+- 效能敏感 Story 缺少 profiling 手段
+- 技術債追蹤仍為手動
+- 消費端大型 codebase 導航效率待提升
+
+**可借鑑 Skills：**
+
+| 外部 Skill | 能力 | 對應強化方向 |
+|-----------|------|------------|
+| **Database Designer / Schema Designer** | DB 設計、Schema 演進策略 | Story 涉及資料庫時的設計品質，避免 Schema 設計缺陷進入 Sprint |
+| **Migration Architect** | 資料庫/架構遷移策略規劃 | 遷移類 Story 的實作品質與風險控制 |
+| **Performance Profiler** | Node/Python/Go profiling、bundle analysis、load testing | 效能敏感 Story 的 TDD 補充（效能測試） |
+| **Tech Debt Tracker** | 技術債自動識別、分類、優先排序 | Tech_Debt_Registry.md 的自動化維護，從手動標記升級為主動偵測 |
+| **Monorepo Navigator** | 大型 codebase 快速定位與理解 | 消費端大型專案的開發效率提升 |
+| **Codebase Onboarding** | 新專案快速上手流程 | /dispel（Legacy 考古）skill 的強化 |
+| **Agent Designer / Workflow Designer** | Agent 設計模式與工作流最佳化 | Subagent 自身的架構品質提升 |
+| **Changelog Generator** | 自動生成結構化 changelog | deployment-readiness 版本發布流程強化 |
+
+**建議**：Database Designer 和 Migration Architect 可整合進 Architect 技術評估階段的 Developer 諮詢環節（§10 Refinement），讓 Developer 在 Story 開始前就有結構化的 DB 設計指引。Performance Profiler 的 profiling 思維可作為非功能性 AC 的實作參考。Tech Debt Tracker 的自動偵測模式可升級現有手動 `[TECH-DEBT]` 標記流程。
 
 ---
 
@@ -155,6 +170,9 @@
 | **P1** | PO | UX Researcher 使用者研究框架 | US-250 QA 角色升級時，引入使用者視角 checklist |
 | **P1** | SRE | Observability Designer + Incident Commander | 未來 #222 SRE 完整化 Story 實作參考 |
 | **P2** | Security | Dependency Auditor license compliance | Security Review 補充項目 |
+| **P1** | Developer | Database Designer + Migration Architect | Refinement 階段 DB 設計指引 |
+| **P1** | Developer | Tech Debt Tracker 自動偵測模式 | Tech_Debt_Registry.md 自動化 |
+| **P2** | Developer | Performance Profiler | 效能敏感 Story 的非功能性測試 |
 | **P2** | Architect | RAG Architect | Knowledge Ingestion 演進參考 |
 
 ---
@@ -173,6 +191,6 @@
 
 ## 5. 結論
 
-177+ skills 中，約 **25 個**（14%）與 Shikigami 現有角色有直接強化關係。最大受益者是 **QA**（4 個 skills 可借鑑）、**SRE**（5 個）和 **PO**（5 個）。
+177+ skills 中，約 **33 個**（19%）與 Shikigami 現有角色有直接強化關係。最大受益者是 **Developer**（8 個 skills 可借鑑）、**QA**（4 個）、**SRE**（5 個）和 **PO**（5 個）。
 
 Sprint 93 正在做的 #247 品質強化全家桶，可以在實作 US-250（QA 升級）、US-253（Smoke Test）、US-254（探索性測試）時，參考 Playwright Pro 和 API Test Suite Builder 的設計模式，不需要直接安裝這些 skills，而是將其思維融入框架自有角色的 prompt 中。
