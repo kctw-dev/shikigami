@@ -206,6 +206,74 @@ test_ac3_stable_version_fail() {
 }
 
 # ---------------------------------------------------------------------------
+# TC-07：AC2 jq 缺失 — 輸出含安裝建議的錯誤訊息，exit 1
+# ---------------------------------------------------------------------------
+
+# 建立一個不含 jq 的 PATH，用於模擬 jq 不存在的環境
+make_no_jq_path() {
+  # 過濾掉含有 jq 可執行檔的所有目錄
+  local filtered_path=""
+  local IFS=":"
+  for dir in $PATH; do
+    if [ -x "$dir/jq" ]; then
+      continue  # 跳過含有 jq 的目錄
+    fi
+    filtered_path="${filtered_path:+$filtered_path:}$dir"
+  done
+  echo "$filtered_path"
+}
+
+run_script_no_jq() {
+  local dir="$1"
+  local no_jq_path
+  no_jq_path=$(make_no_jq_path)
+  if LAST_OUTPUT=$(cd "$dir" && PATH="$no_jq_path" bash "$SCRIPT_UNDER_TEST" 2>&1); then
+    LAST_EXIT_CODE=0
+  else
+    LAST_EXIT_CODE=$?
+  fi
+}
+
+test_ac2_jq_missing() {
+  local tmpdir
+  tmpdir=$(setup_env)
+  write_plugin_json    "$tmpdir" "0.1.0"
+  write_marketplace_json "$tmpdir" "0.1.0"
+
+  run_script_no_jq "$tmpdir"
+
+  assert_exit_code 1 "$LAST_EXIT_CODE" "TC-07 AC2 jq 缺失：exit 1"
+  assert_output_contains "jq" "$LAST_OUTPUT" "TC-07 AC2 jq 缺失：輸出含 jq 提示"
+  assert_output_contains "install" "$LAST_OUTPUT" "TC-07 AC2 jq 缺失：輸出含安裝建議"
+
+  rm -rf "$tmpdir"
+}
+
+# ---------------------------------------------------------------------------
+# TC-08：AC4 版本為空字串 — 腳本 FAIL（exit 1），而非靜默 PASS
+# ---------------------------------------------------------------------------
+test_ac4_empty_version_fail() {
+  local tmpdir
+  tmpdir=$(setup_env)
+
+  # 寫入含空 version 的 plugin.json（直接寫入空字串）
+  cat > "$tmpdir/.claude-plugin/plugin.json" <<'EOF'
+{
+  "name": "shikigami",
+  "version": ""
+}
+EOF
+  write_marketplace_json "$tmpdir" ""
+
+  run_script "$tmpdir"
+
+  assert_exit_code 1 "$LAST_EXIT_CODE" "TC-08 AC4 空字串版本：exit 1"
+  assert_output_contains "FAIL" "$LAST_OUTPUT" "TC-08 AC4 空字串版本：輸出含 FAIL 標記"
+
+  rm -rf "$tmpdir"
+}
+
+# ---------------------------------------------------------------------------
 # 執行所有測試
 # ---------------------------------------------------------------------------
 echo "=============================="
@@ -219,6 +287,8 @@ test_ac2_no_tag
 test_ac2_tag_match
 test_ac3_dev_version_warning
 test_ac3_stable_version_fail
+test_ac2_jq_missing
+test_ac4_empty_version_fail
 
 echo ""
 echo "=============================="
