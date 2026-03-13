@@ -1,21 +1,28 @@
 # Project Board
 
-**最後更新**：2026-03-13（Sprint 94 Planning 完成）
-**當前 Sprint**：Sprint 94（進行中）
+**最後更新**：2026-03-13（Sprint 94 Review 完成）
+**當前 Sprint**：Sprint 94（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 94](sprints/sprint_94.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 94（進行中）
+## Sprint 94（完成）
 
 > Sprint Goal：修復版號一致性測試技術債 — 確保 CI 驗證腳本在缺少 `jq` 環境下正確報告失敗，恢復 4 個 FAIL 測試至 PASS 狀態
+> **結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。jq preflight 存在性檢查 + 空字串版本防護 + TC-07/TC-08 新增測試案例，16/16 測試全 PASS。
+> **Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-256：retro: 修復版號一致性測試 — Sprint 93 既有 FAIL 技術債清理 | #253 | S | 1 | 完成 |
 
 **Sprint 容量**：1 point
+
+## Sprint 94 統計
+- Velocity：1 point
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-13
 
 ---
 

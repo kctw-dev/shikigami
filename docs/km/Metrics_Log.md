@@ -98,6 +98,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 91 | 2026-03-12 | 5 points | 100% | 不規則 | Goal 達成，2/2 Stories PASS；US-246（L/3pt）+ US-245（M/2pt）；S89=2→S90=2→S91=5，S90→S91 上升 +150%（超出 ±20%），先平後升→不規則；SKILL.md 瘦身 -1601 行（31.9%）+ 角色 Prompt 拆分（6 個 prompt 檔案建立） |
 | Sprint 92 | 2026-03-13 | 3 points | 100% | 不規則 | Goal 達成，2/2 Stories PASS；US-248（S/1pt）+ US-249（M/2pt）；S90=2→S91=5→S92=3，S91→S92 下降 -40%（超出 ±20%），先升後降方向不一致→不規則；外部 Issue 階段 2 留言觸發時機修正 + Subagent 結果暫存機制（CACHE-RECOVERY） |
 | Sprint 93 | 2026-03-13 | 6 points | 100% | 不規則 | Goal 達成，6/6 Stories PASS；US-250（S/1pt）+ US-251（S/1pt）+ US-252（S/1pt）+ US-253（S/1pt）+ US-254（S/1pt）+ US-255（S/1pt）；S91=5→S92=3→S93=6，S91→S92 下降 -40%，S92→S93 回升 +100%（超出 ±20%），先降後升方向不一致→不規則；QA 角色升級為使用者代言人 + AC 模板非功能屬性 + 資料品質 Gate + Smoke Test 要求 + 探索性測試 + SHIKIGAMI_MAX_PARALLEL 低記憶體控制 |
+| Sprint 94 | 2026-03-13 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-256（S/1pt）；S92=3→S93=6→S94=1，S93→S94 下降 -83.3%（超出 ±20%），先升後降方向不一致→不規則；版號一致性測試技術債修復（jq preflight + 空字串防護 + TC-07/TC-08） |
 
 ---
 
@@ -152,6 +153,7 @@ Quality Observer 消費 SPACE 五維度記錄表作為觀察數據來源，同�
 | Sprint 91 | 2026-03-12 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（doc-only Story，無外部抽樣）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
 | Sprint 92 | 2026-03-13 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（無外部抽樣 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
 | Sprint 93 | 2026-03-13 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（6 Story 均 doc-only 型框架改進，無外部抽樣 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
+| Sprint 94 | 2026-03-13 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（外部抽樣 1/1 CONFIRM，0 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
 
 ---
 
