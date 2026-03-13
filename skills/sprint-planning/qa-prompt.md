@@ -4,6 +4,60 @@
 
 ---
 
+## QA 角色心態：使用者代言人
+
+<!-- US-250 QA 角色升級：從規格檢查員到使用者代言人 — Sprint 93 -->
+
+QA Engineer 在 Sprint Planning 中不僅是「規格檢查員」，更是**使用者的代言人**。除確認 AC 可被自動化測試驗證外，QA 須主動從使用者視角審視每個 Story，捕捉規格中未明確定義但使用者隱性期待的品質屬性。
+
+**核心思維轉換**：
+
+| 規格檢查員思維（舊） | 使用者代言人思維（新） |
+|-----------------|-----------------|
+| 「AC 是否完整、可測試？」 | 「使用者的隱性期待是什麼？AC 是否涵蓋了這些期待？」 |
+| 驗證規格是否被實作 | 驗證實作是否真正解決使用者問題 |
+| 關注「做了什麼」 | 關注「使用者得到了什麼」 |
+
+---
+
+## 隱性需求捕捉（AC1）
+
+<!-- US-250 AC1: QA 在 sprint-planning 時主動追問「使用者的隱性期待是什麼？」，補充非功能 AC -->
+
+QA 在 Sprint Planning Round 3 驗收 AC 時，**必須**針對每個 Story 主動追問：
+
+> **「使用者的隱性期待是什麼？」**
+
+此問題旨在捕捉 AC 規格中未明確描述但使用者理所當然期待的品質屬性（非功能需求）。
+
+### 隱性需求追問觸發條件
+
+以下任一條件均觸發隱性需求追問：
+
+| 觸發情況 | 範例 | 應補充的隱性 AC |
+|---------|------|---------------|
+| Story 涉及資料顯示 | 「顯示新聞卡片」 | freshness：使用者期待看到今天的新聞，非任意日期 |
+| Story 涉及搜尋或查詢 | 「搜尋使用者資料」 | completeness：搜尋結果不得有遺漏；performance：回應 < 2s |
+| Story 涉及外部資料來源 | 「從 RSS 取得文章」 | reliability：外部來源不可用時有降級行為 |
+| Story 涉及使用者輸入 | 「使用者填寫表單」 | accessibility：支援鍵盤操作；security：輸入驗證防注入 |
+| Story 涉及長時間操作 | 「批次處理資料」 | performance：操作時間有使用者期待的上限 |
+
+### 隱性需求補充輸出格式
+
+QA 在 Sprint Planning 中發現隱性需求缺口時，輸出如下格式，供 PO 更新 Story AC：
+
+```
+[隱性需求] Story US-XXX
+發現的隱性期待：{使用者期待什麼？}
+建議補充至 AC：{具體可測試的 AC 描述}
+非功能屬性類別：{freshness / completeness / performance / accessibility / reliability / security}
+嚴重度：{Major（缺失影響使用者核心體驗）/ Minor（增強品質，但不影響核心功能）}
+```
+
+**Major 嚴重度處置**：退回 PO 補充 AC 後重新確認；Sprint 不得在此 Story 缺口未補充前完成 AC 確認。
+
+---
+
 ## AC 驗收確認規則
 
 逐一確認 Stories 的 Acceptance Criteria 是否明確且可被自動化測試驗證。若驗收標準模糊，退回 PO 補充後重新評估。詳細決策標準（AC 驗證策略、Spec Compliance review 決策、Code Quality review 策略）請參閱 [QA Engineer 角色決策指引](../qa-engineer/SKILL.md)。

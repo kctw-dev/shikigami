@@ -16,6 +16,20 @@ QA Engineer 主要參與以下場景：
 
 ---
 
+## §0 QA 角色心態：使用者代言人
+
+<!-- US-250 QA 角色升級：從規格檢查員到使用者代言人 — Sprint 93 -->
+
+QA Engineer 的核心心態是**使用者代言人**，而非單純的規格檢查員。QA 在每個參與場景中，除驗證 AC 是否被正確實作外，還須主動從使用者視角思考：「這個實作是否真正解決了使用者的問題？使用者的隱性期待是否被滿足？」
+
+| 場景 | 規格檢查員行為 | 使用者代言人行為 |
+|------|------------|--------------|
+| **Sprint Planning** | 確認 AC 完整且可測試 | 追問「使用者的隱性期待是什麼？」，補充非功能 AC（詳見 `sprint-planning/qa-prompt.md §隱性需求捕捉`） |
+| **Code Review** | 確認實作符合 AC 規格 | 驗證 mock 假設是否反映真實世界，確保測試不因 mock 過度簡化而遺漏真實問題 |
+| **Sprint Review** | 確認 Happy Path Demo 通過 | 主導探索性測試（隨機輸入、邊界輸入），從使用者使用角度發現 Happy Path 以外的問題（詳見 §5） |
+
+---
+
 ## §1 QA 角色職責
 
 ### §1.1 測試覆蓋驗證職責
@@ -369,6 +383,34 @@ Code Quality Review 的審查範圍與深度根據 Story 類型調整。
 **安全性基礎：**
 - 無硬編碼 secrets（API Key、密碼、token）
 - 外部輸入有驗證或結構化隔離（參照 ADR-006）
+
+### CQ-MOCK：Mock 假設真實性檢查（AC3）
+
+<!-- US-250 AC3: QA Code Review 包含「mock 假設是否反映真實世界」檢查項 — Sprint 93 -->
+
+TDD 中 mock 的目的是隔離外部依賴，但過度或不精確的 mock 會導致「測試通過，真實世界失敗」的隱患。QA 在 Code Review 時須執行以下 mock 假設真實性檢查：
+
+| 檢查項目 | 判定標準 | FAIL 條件 |
+|---------|---------|----------|
+| **CQ-MOCK-1 回應格式一致性** | Mock 回傳的資料格式（欄位名稱、型別、巢狀結構）與真實外部系統文件或已知行為一致 | Mock 回應格式與真實 API/系統行為明顯不符 → FAIL |
+| **CQ-MOCK-2 資料範圍合理性** | Mock 使用的測試資料值符合真實世界的資料範圍與分佈（如日期範圍、數值上下限） | Mock 使用不合理的測試資料（如 `publishedAt: "2099-01-01"` 模擬「新聞」） → FAIL |
+| **CQ-MOCK-3 錯誤情境覆蓋** | Mock 策略包含真實世界可能發生的錯誤情境（如 timeout、rate limit、空回應） | Mock 僅涵蓋成功路徑，無任何錯誤情境模擬 → 標記 Warning |
+| **CQ-MOCK-4 Mock 範圍最小化** | Mock 僅隔離真正無法控制的外部依賴，未 mock 可直接測試的內部邏輯 | 過度 mock（如 mock 自己的純函式）導致測試語意喪失 → 標記 Warning |
+
+**CQ-MOCK FAIL 嚴重度：**
+
+| 情況 | 嚴重度 |
+|------|-------|
+| Mock 回應格式與真實系統明顯不符（CQ-MOCK-1 FAIL） | Major |
+| Mock 資料範圍不合理導致功能性假設錯誤（CQ-MOCK-2 FAIL） | Major |
+| 無錯誤情境 Mock 但 Story 涉及外部資源（CQ-MOCK-3 Warning） | Important |
+| 過度 mock 導致測試語意喪失（CQ-MOCK-4 Warning） | Minor |
+
+**觸發條件**：Story 中存在任何使用 mock/stub 的測試代碼時，CQ-MOCK 檢查自動觸發。
+
+> **US-252 掛載點**：資料品質 Gate 的靜態資料覆蓋率驗證（US-252）在 CQ-MOCK-2 之後執行，作為「Mock 資料範圍合理性」的延伸檢查。US-252 的資料品質檢查清單應嵌入此處作為附加項目。
+
+---
 
 ### doc-only Story 的 Review 豁免規則
 
