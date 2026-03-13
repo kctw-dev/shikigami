@@ -53,10 +53,20 @@ is_dev_version() {
 }
 
 # ---------------------------------------------------------------------------
-# 前置檢查：確認必要檔案存在
+# 前置檢查：確認必要工具與檔案存在
 # ---------------------------------------------------------------------------
 preflight_check() {
   local error=0
+
+  # 檢查 jq 是否存在
+  if ! command -v jq &>/dev/null; then
+    echo "[ERROR] 必要工具 jq 未安裝。"
+    echo "  請先安裝 jq："
+    echo "    macOS:  brew install jq"
+    echo "    Ubuntu: sudo apt-get install jq"
+    echo "    Alpine: apk add jq"
+    exit 1
+  fi
 
   if [ ! -f "$PLUGIN_JSON" ]; then
     echo "[ERROR] 找不到 $PLUGIN_JSON"
@@ -88,6 +98,17 @@ check_ac1_json_consistency() {
 
   echo "  plugin.json      version: $PLUGIN_VERSION"
   echo "  marketplace.json version: $market_version"
+
+  # AC4：版本為空字串時 FAIL，而非靜默 PASS
+  if [ -z "$PLUGIN_VERSION" ]; then
+    print_fail "plugin.json 版號為空字串，無法驗證"
+    return
+  fi
+
+  if [ -z "$market_version" ]; then
+    print_fail "marketplace.json 版號為空字串，無法驗證"
+    return
+  fi
 
   if [ "$PLUGIN_VERSION" = "$market_version" ]; then
     print_pass "plugin.json 與 marketplace.json 版號一致 ($PLUGIN_VERSION)"

@@ -48,6 +48,44 @@ assert_output_contains() {
 # ---------------------------------------------------------------------------
 SCRIPT_UNDER_TEST="$(cd "$(dirname "$0")/.." && pwd)/scripts/validate-version.sh"
 
+# ---------------------------------------------------------------------------
+# 若系統未安裝 jq，建立全域 mock jq（僅建立一次）
+# mock jq 支援測試所需的最小子集：
+#   jq -r '.version' file
+#   jq -r '.plugins[0].version' file
+# ---------------------------------------------------------------------------
+_MOCK_BIN_DIR=""
+MOCK_JQ_PATH=""
+
+if ! command -v jq &>/dev/null; then
+  _MOCK_BIN_DIR=$(mktemp -d)
+  cat > "$_MOCK_BIN_DIR/jq" <<'MOCKJQ'
+#!/usr/bin/env bash
+# mock jq：實作測試所需的最小子集
+filter="$2"
+file="$3"
+content=$(cat "$file")
+case "$filter" in
+  '.version')
+    echo "$content" | grep -oP '"version"\s*:\s*"\K[^"]*' | head -1
+    ;;
+  '.plugins[0].version')
+    echo "$content" | grep -oP '"version"\s*:\s*"\K[^"]*' | head -1
+    ;;
+  *)
+    echo "" ;;
+esac
+MOCKJQ
+  chmod +x "$_MOCK_BIN_DIR/jq"
+  MOCK_JQ_PATH="$_MOCK_BIN_DIR"
+fi
+
+# 測試結束時清除 mock bin 目錄
+cleanup_mock() {
+  [ -n "$_MOCK_BIN_DIR" ] && rm -rf "$_MOCK_BIN_DIR"
+}
+trap cleanup_mock EXIT
+
 setup_env() {
   # 建立臨時目錄，模擬完整的 git repo + .claude-plugin 結構
   local tmpdir
@@ -91,9 +129,11 @@ EOF
 
 run_script() {
   # 在指定目錄下執行腳本，捕捉 exit code 與輸出
+  # 若有 MOCK_JQ_PATH，將其加入 PATH 前端以啟用 mock jq
   # 使用 if 結構避免 set -e 提前中止，同時正確取得非零 exit code
   local dir="$1"
-  if LAST_OUTPUT=$(cd "$dir" && bash "$SCRIPT_UNDER_TEST" 2>&1); then
+  local effective_path="${MOCK_JQ_PATH:+$MOCK_JQ_PATH:}$PATH"
+  if LAST_OUTPUT=$(cd "$dir" && PATH="$effective_path" bash "$SCRIPT_UNDER_TEST" 2>&1); then
     LAST_EXIT_CODE=0
   else
     LAST_EXIT_CODE=$?
@@ -224,6 +264,7 @@ make_no_jq_path() {
 }
 
 run_script_no_jq() {
+  # 執行腳本，但確保 jq 不在 PATH 中（無論系統是否安裝 jq）
   local dir="$1"
   local no_jq_path
   no_jq_path=$(make_no_jq_path)
