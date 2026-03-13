@@ -1,9 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-13（Sprint 92 Review 完成）
-**當前 Sprint**：Sprint 92（完成）
+**最後更新**：2026-03-13（Sprint 93 Planning 完成）
+**當前 Sprint**：Sprint 93（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 92](sprints/sprint_92.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 93](sprints/sprint_93.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 93（進行中）
+
+> Sprint Goal：強化框架品質深度 — 資料品質 Gate、隱性需求捕捉、Smoke Test、探索性測試與 QA 視角升級 + 低記憶體環境控制
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-250：QA 角色升級：從規格檢查員到使用者代言人 | #248 | S | 1 | 進行中 |
+| US-251：AC 模板補充非功能屬性指引 | #249 | S | 1 | 進行中 |
+| US-252：資料品質 Gate：補充靜態資料覆蓋率驗證機制 | #250 | S | 1 | 進行中 |
+| US-253：Smoke Test 要求：涉及外部資源的 Story 需真實資料驗證 | #251 | S | 1 | 進行中 |
+| US-254：Sprint Review 探索性測試：邊界案例與隨機輸入驗證 | #252 | S | 1 | 進行中 |
+| US-255：低記憶體環境平行 Subagent 數量上限控制 | #246 | S | 1 | 進行中 |
+
+**Sprint 容量**：6 points
 
 ---
 
