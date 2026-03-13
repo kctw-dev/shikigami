@@ -846,6 +846,19 @@ Code Quality Self-Review — {story_id}
   - (b) 確認 Story 描述的行為變更已反映在測試更新中（若測試仍驗證舊行為 → FAIL）
   - 判定標準：測試通過但與實作語意矛盾（如測試期望已刪除的欄位仍返回）→ FAIL
 
+外部資源 Smoke Test 檢查（CQ-SMOKE，條件觸發）：
+<!-- US-253 Smoke Test 要求 — Sprint 93 -->
+- [ ] CQ-SMOKE-0 外部資源識別：本 Story 是否涉及外部資源？
+  - 識別條件（滿足任一即視為涉及外部資源）：外部 API / RSS / 爬蟲 / Webhook / 雲端服務 API / 外部認證服務
+  - 若否 → CQ-SMOKE 整體標記為 N/A，不執行後續檢查
+- [ ] CQ-SMOKE-2 Smoke test 存在：交付物含至少 1 個 smoke test，或有 [SMOKE-EXEMPT] 標注
+  - FAIL 條件：Story 涉及外部資源，但無 smoke test 且無豁免標注
+- [ ] CQ-SMOKE-3 Smoke test 使用真實資料：smoke test 代碼不 mock 外部呼叫
+  - FAIL 條件：smoke test 仍使用 Mock/Stub 替代外部呼叫
+- [ ] CQ-SMOKE-4 假設覆蓋：smoke test 斷言覆蓋主要 mock 假設（格式、結構、時效性）
+  - FAIL 條件：斷言空洞（僅確認不報錯，未驗證實際回應內容）
+  - 完整判定標準參照 skills/qa-engineer/SKILL.md §1.16
+
 整體結論：PASS / FAIL
 ```
 

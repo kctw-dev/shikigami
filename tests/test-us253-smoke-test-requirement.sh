@@ -101,8 +101,8 @@ else
   fail "AC4-1: qa-engineer/SKILL.md 缺少「何時需要 Smoke Test」指引"
 fi
 
-# 指引應包含觸發條件
-if grep -q "觸發條件\|trigger\|識別標準\|判斷標準" "${QA_SKILL}" && grep -q -A5 "smoke\|Smoke" "${QA_SKILL}" | grep -q "觸發\|trigger\|標準\|識別"; then
+# 指引應包含觸發條件（何時需要 Smoke Test 段落含觸發條件說明）
+if grep -q "強制觸發\|何時需要.*Smoke\|Smoke.*觸發條件" "${QA_SKILL}"; then
   pass "AC4-2: qa-engineer/SKILL.md smoke test 指引含觸發條件說明"
 else
   fail "AC4-2: qa-engineer/SKILL.md smoke test 指引缺少觸發條件說明"
