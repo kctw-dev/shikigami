@@ -848,7 +848,7 @@ Code Quality Self-Review — {story_id}
 
 外部資源 Smoke Test 檢查（CQ-SMOKE，條件觸發）：
 <!-- US-253 Smoke Test 要求 — Sprint 93 -->
-- [ ] CQ-SMOKE-0 外部資源識別：本 Story 是否涉及外部資源？
+- [ ] CQ-SMOKE-1 外部資源識別：本 Story 是否涉及外部資源？
   - 識別條件（滿足任一即視為涉及外部資源）：外部 API / RSS / 爬蟲 / Webhook / 雲端服務 API / 外部認證服務
   - 若否 → CQ-SMOKE 整體標記為 N/A，不執行後續檢查
 - [ ] CQ-SMOKE-2 Smoke test 存在：交付物含至少 1 個 smoke test，或有 [SMOKE-EXEMPT] 標注
