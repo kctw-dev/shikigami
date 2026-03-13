@@ -89,6 +89,50 @@
 - API 端點是否有適當的認證 / 授權檢查？（如適用）
 - 是否有 Path Traversal、XSS、CSRF 風險？（如適用）
 
+### 6. 靜態資料覆蓋率 Hard Gate（US-252）
+
+<!-- US-252 資料品質 Gate：Code Quality Review 資料覆蓋率 Hard Gate — Sprint 93 -->
+
+**觸發條件**：Story 交付物中含靜態資料檔（`.ts`、`.json`、`.csv`、`.yaml` 等資料表格式），且資料集大小超過 100 條目。
+
+**執行步驟**：
+
+1. 確認 Story AC 中是否定義了資料覆蓋率目標（可量化數字）
+2. 統計資料集實際條目數（使用 `wc -l`、`jq length` 或 `grep -c`）
+3. 對比實際條目數與 AC 定義的覆蓋率目標
+4. 評估測試資料集的代表性（是否包含冷門字符、邊界值等）
+
+**CQ-DATA 檢查清單：**
+
+| 檢查項目 | 判定標準 | 結果 |
+|---------|---------|------|
+| **CQ-DATA-1** AC 中是否定義覆蓋率目標 | 有可量化目標 → PASS；模糊描述或缺失 → FAIL | {填入} |
+| **CQ-DATA-2** 實際覆蓋率是否達標 | 實際條目數 >= AC 目標 → PASS；不足 → **Hard Gate FAIL** | {填入} |
+| **CQ-DATA-3** Blast Radius 評估是否存在 | 含 Blast Radius 說明 → PASS；缺失 → Warning | {填入} |
+| **CQ-DATA-4** 測試集是否包含代表性邊界值 | 含冷門字符 / 邊界值測試 → PASS；僅熱門值 → Important | {填入} |
+
+**Hard Gate 規則**：
+
+> **CQ-DATA-2 FAIL 時，無論其他項目結果如何，Code Quality Review 整體判定為 FAIL，Story 不得標記為「完成」。必須補齊資料集後重新執行驗收流程。**
+
+**Blast Radius 量化閾值對照**（CQ-DATA-3 參考標準）：
+
+| 受影響使用者比例 | 嚴重度 | 建議處置 |
+|--------------|-------|--------|
+| < 1%（僅生僻邊界案例） | Low | 記錄為 Observation，下次 Grooming 評估補齊 |
+| 1%–10%（常見但非頻繁場景） | Medium | 必須在當前 Sprint 補齊或建立 Hotfix Story |
+| > 10%（影響大量使用者的常用場景） | High | Hard Gate FAIL，Story 不得上線 |
+
+**資料類型參考門檻**（詳細定義見 `skills/qa-engineer/SKILL.md §CQ-DATA`）：
+
+| 資料類型 | 最低門檻 |
+|---------|---------|
+| CJK 常用字資料集 | >= 3000 字 |
+| 筆劃資料集（Unicode CJK 基本區塊） | >= 20902 字 |
+| 姓名用字資料集 | >= 5000 字 |
+| 代碼對照表（ISO 標準） | 100%（完整對照） |
+| 自定義資料集 | 由 AC 明確定義 |
+
 ---
 
 ## 問題嚴重度分級
@@ -139,6 +183,7 @@
 | 複雜度控制 | {Good / Acceptable / Needs Improvement} |
 | 測試品質 | {Good / Acceptable / Needs Improvement} |
 | 安全性 | {Good / Acceptable / Needs Improvement} |
+| 靜態資料覆蓋率 | {PASS / Hard Gate FAIL / N/A（不涉及靜態資料檔）} |
 
 **總評**：{一句話總結代碼品質與是否通過}
 ```
@@ -151,11 +196,13 @@
 - 零個 Critical 問題
 - Important 問題累計不超過 2 個
 - 無明顯安全漏洞
+- 靜態資料覆蓋率 Hard Gate 通過（CQ-DATA-2 PASS 或 N/A）
 
 **FAIL 條件**（任一條件觸發）：
 - 存在任何 Critical 問題
 - Important 問題累計 3 個以上
 - 存在明顯安全漏洞
+- **靜態資料覆蓋率 Hard Gate FAIL（CQ-DATA-2 FAIL）**：資料集實際條目數未達 AC 定義目標，強制判定為 FAIL，不得標記 Story 為完成
 
 ---
 
