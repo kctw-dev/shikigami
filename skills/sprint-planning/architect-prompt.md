@@ -34,15 +34,36 @@
 
 根據 PO 回傳表格中的「獨立性評估」欄位，輸出平行派工分群建議，供主 session 後續調度使用。
 
+<!-- US-255 SHIKIGAMI_MAX_PARALLEL 平行數量上限控制 — Sprint 93 -->
+
+### SHIKIGAMI_MAX_PARALLEL 上限檢查
+
+平行分群前，Architect 須讀取 `SHIKIGAMI_MAX_PARALLEL` 環境變數，並在分群報告中標注：
+
+| 環境變數值 | 對分群建議的影響 |
+|-----------|---------------|
+| 未設定 | 不限制，依獨立性評估正常分群 |
+| `1` | 強制循序：Phase 1 改為單一循序佇列，所有 Story 依優先序排成一列，不出現平行分組 |
+| `N`（N ≥ 2） | Phase 1 每批次最多 N 個 Story；超出時自動拆分為多個子批次（Batch 1、Batch 2…） |
+
+報告中必須標注：**實際批次數**與**受限原因**（若有上限控制）。
+
 ### 輸出格式
 
 ```markdown
 ## 平行分群建議
 
+> **上限控制**：SHIKIGAMI_MAX_PARALLEL={N}，Phase 1 拆分為 {B} 批次（每批最多 {N} 個 Story）
+> （若未設定則輸出：SHIKIGAMI_MAX_PARALLEL 未設定，不限制平行數量）
+
 ### Phase 1（可平行執行）
 | Story ID | 標題 | T-shirt | 說明 |
 |----------|------|---------|------|
 | US-XX    | ...  | S       | 修改獨立檔案，無衝突 |
+
+> 若 SHIKIGAMI_MAX_PARALLEL 觸發拆批，在此區塊標注子批次：
+> **Batch 1**（同時執行）：US-XX, US-YY
+> **Batch 2**（等 Batch 1 完成後執行）：US-ZZ
 
 ### Phase 2（需序列執行）
 | Story ID | 標題 | T-shirt | 衝突原因 |
@@ -60,6 +81,7 @@
 - **Phase 1（可平行）**：PO 獨立性評估為「獨立」的 Story，可同時派遣給不同 Developer subagent 執行
 - **Phase 2（需序列）**：PO 獨立性評估標注衝突的 Story，需依建議順序逐一執行，避免 merge conflict
 - 若所有 Story 皆獨立，Phase 2 區塊可省略，填「無」
+- **SHIKIGAMI_MAX_PARALLEL=1 時**：Phase 1 與 Phase 2 合併為單一循序佇列，不出現平行分組（輸出「強制循序，無平行分群」）
 
 ---
 
