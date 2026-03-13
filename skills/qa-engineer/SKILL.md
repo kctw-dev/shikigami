@@ -53,6 +53,43 @@ QA Engineer 在每個 Story 的 QA Review 階段（包含 Story-Lifecycle self-r
 
 ---
 
+## §1.15 非功能屬性審查清單（AC Review 時比對）
+
+QA 在 Sprint Planning Round 3（AC 確認）與外部抽樣審查中，須檢查 Story 是否已定義非功能屬性，並於 Sprint Review 驗證實作是否符合所宣告的非功能標準。
+
+### 非功能屬性審查觸發條件
+
+以下任一情況均觸發非功能屬性審查：
+
+1. Story Issue body 含 `## 非功能性需求` 欄位且有填寫 NFR 條目
+2. Story 描述涉及資料擷取、外部 API 呼叫、使用者介面或效能敏感操作
+
+### 非功能屬性檢查清單
+
+QA 在 AC Review 時逐一比對：
+
+| # | 屬性類型 | 審查項目 | 判定標準 |
+|---|---------|---------|---------|
+| N1 | **freshness（資料新鮮度）** | Story 涉及動態資料時，是否定義資料的時效性要求（如「過去 24 小時」） | 有定義且可量化 → PASS；未定義但功能明顯依賴新鮮資料 → 要求 PO 補充 |
+| N2 | **completeness（完整性）** | 資料查詢或呈現類功能是否定義「不得遺漏」的覆蓋範圍要求 | 有定義涵蓋率或邊界條件 → PASS；無定義 → 建議補充 |
+| N3 | **performance（效能）** | 使用者互動或 API 呼叫類功能是否定義回應時間或吞吐量指標 | 有具體可量化指標（如 P95 < 2s）→ PASS；僅描述「快速」等模糊詞 → 標記 AMBIGUOUS |
+| N4 | **accessibility（無障礙）** | 前端 UI Story 是否定義無障礙合規標準（如 WCAG 2.1 AA）| 有標準引用 → PASS；前端 Story 未提及 → 提醒補充 |
+| N5 | **reliability（可靠性）** | 涉及外部資源依賴的 Story 是否定義失敗降級或重試策略 | 有降級策略或可用率目標 → PASS；無定義 → 建議補充 |
+| N6 | **security（安全性）** | 涉及外部輸入的 Story 是否定義輸入驗證或 XSS/Injection 防護要求 | 有對應安全 AC → PASS；缺失 → 標記 Security Review 必觸發 |
+
+### 非功能屬性缺失的判定與處置
+
+| 情況 | 嚴重度 | 處置 |
+|------|-------|------|
+| Story 明顯依賴非功能屬性（如新鮮資料、使用者輸入）但 `## 非功能性需求` 欄位為空或缺失 | Major | Sprint Planning Round 3 標記「**非功能屬性待補**」，退回 PO 補充後重新確認 |
+| 非功能屬性已填寫但標準模糊（如「應有良好效能」） | Minor | 標記 AMBIGUOUS，要求 PO 補充可量化指標 |
+| 非功能屬性已定義且可量化，實作與標準一致 | — | PASS，記錄於 Spec Compliance Review |
+| 非功能屬性已定義但實作未達標（如效能測試超標）| Critical | Spec Compliance FAIL，問題分類 `[NFR-VIOLATION]` |
+
+> **背景說明（US-251）**：本清單源自框架改進需求。原始問題案例：AC「新聞卡片顯示標題、連結、摘要」通過測試，但使用者期待「今天的新聞」（freshness 屬性），因未在 AC 中明確定義而被忽略。本清單確保此類隱性品質期待在 Sprint Planning 階段即被捕捉。
+
+---
+
 ## §1.2 AC 驗證策略
 
 ### 靜態 AC vs 動態 AC 識別規則

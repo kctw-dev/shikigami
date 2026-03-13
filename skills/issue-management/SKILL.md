@@ -355,6 +355,21 @@ PO subagent 根據 Issue 內容產生新 Issue body，格式：
 | AC-FE-2 | Design Tokens 符合性 | 所有設計值須引用 docs/design/design-tokens.json 具名 token，禁止 hardcode 數值 |
 -->
 
+## 非功能性需求
+
+<!-- 至少填寫一個非功能屬性，PO 在 Sprint Planning 前確認已填寫。示例屬性：
+- freshness（資料新鮮度）：如「顯示的新聞須為過去 24 小時內發布」
+- completeness（完整性）：如「搜尋結果涵蓋所有符合條件的項目，不得遺漏」
+- performance（效能）：如「頁面首次載入時間 < 2 秒（P95）」
+- accessibility（無障礙）：如「符合 WCAG 2.1 AA 標準」
+- reliability（可靠性）：如「API 可用率 ≥ 99.5%（每月統計）」
+- security（安全性）：如「所有外部輸入須通過 XSS 過濾」
+-->
+
+| # | 非功能屬性 | 指標或標準 |
+|---|-----------|---------|
+| NFR1 | <屬性名稱> | <可量化的標準或條件> |
+
 ## RICE 評分
 
 | 因子 | 分數 | 說明 |

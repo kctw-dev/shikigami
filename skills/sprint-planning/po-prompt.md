@@ -4,6 +4,21 @@
 
 ---
 
+## 非功能屬性審查（Sprint Planning 前置檢查）
+
+PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選 Story 的 Issue body 已填寫「非功能性需求」欄位，且至少包含一個非功能屬性（freshness、completeness、performance、accessibility、reliability、security 或其他可量化的品質屬性）。
+
+**檢查規則：**
+
+| 情況 | 處置 |
+|------|------|
+| `## 非功能性需求` 欄位存在且有填寫 NFR1（非 `<屬性名稱>`）| 通過，可繼續選入 Sprint |
+| `## 非功能性需求` 欄位不存在或僅含模板預設文字 | 在 Round 1 回傳表格標記「**非功能屬性待補**」，知會 PO 補齊後才可進入 Sprint |
+
+> **目的**：避免 Story 只定義「有沒有」（功能性），卻忽視「好不好」（品質屬性）。隱性的非功能期待（如「顯示今天的新聞」）若未明確列出，將無法在 QA 審查階段被捕捉。
+
+---
+
 ## PO Round 1：Backlog 掃描與 Story 選取
 
 ### 職責
