@@ -594,6 +594,106 @@ Refinement Chair 職責（本節）與 Sprint Planning Round 2 Architect subagen
 
 ---
 
+## §10 SDD 審查：領域模型與封裝設計
+
+<!-- Issue #256 — Architect SDD 審查補領域模型與封裝設計 -->
+
+### 目的
+
+確保 SDD（System Design Document）審查涵蓋業務邏輯的封裝設計，避免同一業務邏輯散佈在多處實作導致不一致。
+
+### 觸發條件
+
+Architect 在以下場景必須執行領域模型與封裝設計審查：
+
+| 條件 | 說明 |
+|------|------|
+| Story 涉及業務邏輯實作 | 非 doc-only、非純 UI、非純配置的 Story |
+| 同一業務概念出現在 2+ 個模組/Router | 主動要求提取至 Service 層 |
+| Story 涉及狀態轉換邏輯 | 要求統一的狀態對照表/處理器 |
+
+### SDD 審查清單（領域模型維度）
+
+Architect 在 SDD 審查時，除既有的端點規格、認證策略、DB index 檢查外，**必須額外檢查以下項目**：
+
+- [ ] **DM-1 業務邏輯封裝**：業務邏輯是否封裝在 Service 層（Router/Controller 只做 I/O 調度，不含業務判斷）
+- [ ] **DM-2 Single Source of Truth**：相同業務邏輯是否只有一個實作來源，不在多處重複實作
+- [ ] **DM-3 狀態轉換統一**：狀態轉換是否有統一的對照表或處理器，不散落在各 Router 各自硬寫
+
+### DM-1 判定標準
+
+| 情境 | 判定 | 處置 |
+|------|------|------|
+| Router 內含 if/elif 業務判斷邏輯超過 5 行 | FAIL | 要求提取至 Service 層 |
+| Router 僅做參數驗證、呼叫 Service、回傳結果 | PASS | 繼續 |
+| Router 內直接操作 DB（非透過 Repository/DAO） | FAIL | 要求建立 Repository 層 |
+
+### DM-2 判定標準
+
+| 情境 | 判定 | 處置 |
+|------|------|------|
+| 同一業務規則在 2+ 個檔案各自實作 | FAIL | 要求提取為共用函式或 Service |
+| 同一常數/對照表在 2+ 處定義 | FAIL | 要求提取至共用常數模組 |
+| 業務規則僅在一處定義，其他處引用 | PASS | 繼續 |
+
+### DM-3 判定標準
+
+| 情境 | 判定 | 處置 |
+|------|------|------|
+| 狀態轉換用 if/elif 硬寫在多個 handler 中 | FAIL | 要求建立統一狀態對照表/狀態機 |
+| 狀態轉換有統一對照表，所有 handler 引用同一來源 | PASS | 繼續 |
+| 新增狀態碼時需修改 3+ 處程式碼 | FAIL | 要求重構為單點修改 |
+
+### SDD 模板新增章節
+
+當 Story 觸發 DM-1/DM-2/DM-3 任一檢查時，SDD 必須包含「模組設計」章節：
+
+```markdown
+### 模組設計
+
+#### 責任劃分
+
+| 層級 | 責任 | 檔案 |
+|------|------|------|
+| Router/Controller | I/O 調度、參數驗證、回應格式化 | `routes/*.py` |
+| Service | 業務邏輯、狀態轉換、規則判斷 | `services/*.py` |
+| Repository/DAO | 資料存取、查詢封裝 | `repositories/*.py` |
+
+#### 業務邏輯 Single Source of Truth
+
+| 業務概念 | 負責模組 | 說明 |
+|---------|---------|------|
+| {概念名稱} | {Service 名稱} | {職責描述} |
+
+#### 狀態轉換對照（若適用）
+
+| 外部狀態碼 | 內部狀態 | 說明 |
+|-----------|---------|------|
+| {code} | {status} | {說明} |
+```
+
+### 輸出格式
+
+Architect 審查輸出新增領域模型維度：
+
+```
+── Architect 審查 ─────────────────────
+  [PASS/FAIL] 架構符合性確認
+  [PASS/FAIL] 無 ADR 觸發
+  [PASS/FAIL] Layer Compliance 共用常數/設定層級檢查
+  [PASS/FAIL] Layer Compliance 跨模組 import 方向檢查
+  [PASS/FAIL] Layer Compliance Single Source of Truth 檢查
+  [PASS/FAIL] DM-1 業務邏輯封裝檢查
+  [PASS/FAIL] DM-2 Single Source of Truth 檢查
+  [PASS/FAIL] DM-3 狀態轉換統一檢查
+```
+
+<HARD-GATE>
+**領域模型審查 Hard Gate**：DM-1、DM-2、DM-3 任一 FAIL 時，Architect 審查整體判定為 FAIL。Story 不得進入開發，須先修正 SDD 的模組設計。
+</HARD-GATE>
+
+---
+
 ## 參照文件
 
 - **ADR-003**：`docs/adr/ADR-003.md`（Framework Document Change 流程）

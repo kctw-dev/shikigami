@@ -17,7 +17,9 @@ requiredTools:
 
 ## 1. 概述
 
-`/shoot` 是跳過 Sprint 儀式的快速執行路徑，讓使用者可以快速完成小型任務。相較於完整 Sprint 流程，`/shoot` **保留** QA 雙階段審查與 Architect 技術審查（Hard Gate），但**跳過** Planning、Review、Retro、Metrics 等儀式。
+`/shoot` 是跳過 Sprint 儀式的快速執行路徑，讓使用者可以快速完成小型任務。相較於完整 Sprint 流程，`/shoot` **保留與 Sprint Execution 相同品質的 QA 機制**（測試可寫性檢查、Spec Compliance、Code Quality、外部獨立審查、Architect 技術審查），但**跳過** Planning、Review、Retro、Metrics 等儀式。
+
+**品質原則**：品質才是快。shoot 與 sprint-execution 的 QA 深度完全一致，只省 Sprint 儀式。
 
 **適用場景**：Bug 修復、Retro Action Item、小型功能增強（Size=S）。
 
@@ -200,12 +202,17 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
   +-- 解析成功
         |
         v
+[步驟 1.5] 測試可寫性檢查（TC-W1~W5 Hard Gate，見 §8.4）
+  |-- FAIL --> 回傳結構化問題清單，禁止進入實作，終止
+  +-- PASS
+        |
+        v
 [步驟 2] QA Pre-flight 審查（第一階段 Hard Gate）
   |-- FAIL --> exit code 非 0，Shoot_Log.md 無 PASS 記錄，不執行 shoot: commit
   +-- PASS
         |
         v
-[步驟 3] Architect 審查（技術審查 Hard Gate）
+[步驟 3] Architect 審查（技術審查 Hard Gate，含 DM-1/DM-2/DM-3）
   |-- FAIL --> exit code 非 0，Shoot_Log.md 無 PASS 記錄，不執行 shoot: commit
   +-- PASS
         |
@@ -221,9 +228,18 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
         +-- 修復失敗 → exit code 非 0，Shoot_Log.md 無 PASS 記錄，終止
         |
         v
-[步驟 5] QA Post-check 審查（第二階段 Hard Gate）
-  |-- FAIL --> exit code 非 0，Shoot_Log.md 無 PASS 記錄，不執行 shoot: commit
+[步驟 5] QA Post-check 審查（完整品質審查 Hard Gate，見 §8）
+  包含：Spec Compliance + Code Quality（CQ-NEW / CQ-MOCK / CQ-SMOKE / CQ-DATA）
+  |-- FAIL --> 內部修復，最多重試 3 次；3 次仍 FAIL → 終止
   +-- PASS
+        |
+        v
+[步驟 5.3] 外部獨立審查（100%，見 §8.5）
+  由獨立 QA subagent（非實作者）重新驗證 Spec Compliance + Code Quality
+  |-- CONFIRM → 繼續
+  +-- DISPUTE → 回傳缺陷清單，修復後強制第二輪外部審查
+        |-- 第二輪 CONFIRM → 繼續
+        +-- 第二輪 DISPUTE → 升級至 Architect，終止
         |
         v
 [步驟 5.5] CI/CD 雙審查 Gate（條件觸發，見 §8.1）
@@ -268,7 +284,9 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
 
 ---
 
-## 8. QA 雙階段審查（Hard Gate）
+## 8. QA 完整品質審查（與 Sprint Execution 對齊）
+
+<!-- Issue #257 — Shoot QA 補齊：與 Sprint Execution 品質對齊 -->
 
 ### 第一階段：QA Pre-flight
 
@@ -287,21 +305,50 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
   [PASS/FAIL] 架構影響檢查
 ```
 
-### 第二階段：QA Post-check
+### 第二階段：QA Post-check（Spec Compliance + Code Quality）
 
-實作完成後由 QA subagent 執行後審，確認：
+實作完成後由 QA subagent 執行完整品質審查，**與 sprint-execution story-lifecycle 的 §5-§6 審查標準一致**。
 
-- 所有 Acceptance Criteria 通過
-- 測試覆蓋完整
-- 無迴歸
+#### Spec Compliance 審查
+
+- 逐一讀取原始任務 AC / Issue 描述，對照實作逐條驗證
+- 邊界條件檢查（`[動態]` AC 執行、Edge case、錯誤路徑）
+- 行為範例驗證（`[行為]` AC 的 Given-When-Then 場景）
+
+#### Code Quality 審查
+
+**通用靜態分析**：命名可讀性、結構設計（函式 < 20 行）、測試品質（Arrange-Act-Assert）、安全性基礎
+
+**條件觸發的品質清單**（與 story-lifecycle-prompt.md §6 一致）：
+
+| 清單 | 觸發條件 | 檢查項目 |
+|------|---------|---------|
+| **CQ-NEW** | 新增程式碼 | CQ-NEW-1 測試覆蓋率、CQ-NEW-2 舊測試一致性 |
+| **CQ-MOCK** | 使用 Mock/Stub | CQ-MOCK-1 回應格式一致性、CQ-MOCK-2 資料範圍合理性、CQ-MOCK-3 錯誤情境覆蓋、CQ-MOCK-4 Mock 範圍最小化 |
+| **CQ-SMOKE** | 涉及外部資源 | CQ-SMOKE-1 外部資源識別、CQ-SMOKE-2 Smoke test 存在、CQ-SMOKE-3 使用真實資料、CQ-SMOKE-4 假設覆蓋 |
+| **CQ-DATA** | 涉及靜態資料檔 | CQ-DATA-1 覆蓋率指標定義、CQ-DATA-2 實際覆蓋率達標（**Hard Gate**）、CQ-DATA-3 Blast Radius 評估、CQ-DATA-4 測試集代表性 |
+
+完整判定標準請參照 `skills/sprint-execution/story-lifecycle-prompt.md` §6。
+
+#### 修復閉環
+
+- FAIL 時內部修復，不升級
+- 連續失敗 3 次 → 終止，exit code 非 0
 
 **輸出格式**：
 
 ```
 ── QA Post-check ──────────────────────
-  [PASS/FAIL] AC 驗收
-  [PASS/FAIL] 測試覆蓋
-  [PASS/FAIL] 迴歸檢查
+  Spec Compliance：
+    [PASS/FAIL] AC 逐條驗證
+    [PASS/FAIL] 邊界條件檢查
+    [PASS/FAIL] 行為範例驗證（若適用）
+  Code Quality：
+    [PASS/FAIL] 通用靜態分析
+    [PASS/FAIL] CQ-NEW 測試覆蓋（若適用）
+    [PASS/FAIL] CQ-MOCK Mock 假設驗證（若適用）
+    [PASS/FAIL] CQ-SMOKE Smoke 測試（若適用）
+    [PASS/FAIL] CQ-DATA 靜態資料覆蓋（若適用）
 ```
 
 ### Architect 審查
@@ -318,9 +365,15 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
 - [ ] Layer Compliance 跨模組 import 方向檢查：import 方向必須符合分層架構單向依賴原則，不得出現跨層或逆向 import
 - [ ] Layer Compliance Single Source of Truth 檢查：語意相同的常數或設定不得在多處重複定義，必須維持單一來源
 
+**領域模型審查**（DM checklist，見 `skills/architect/SKILL.md` §10）：
+
+- [ ] DM-1 業務邏輯封裝：業務邏輯封裝在 Service 層，Router 只做 I/O
+- [ ] DM-2 Single Source of Truth：相同業務邏輯只有一個實作來源
+- [ ] DM-3 狀態轉換統一：狀態轉換有統一對照表，不散落各處
+
 ### 任一 FAIL 時的三個可觀察驗收點
 
-當 QA Pre-flight、Architect 審查、QA Post-check 或 CI/CD 雙審查 Gate 任一回傳 FAIL 時：
+當 QA Pre-flight、Architect 審查、QA Post-check、外部獨立審查或 CI/CD 雙審查 Gate 任一回傳 FAIL 時：
 
 | 可觀察點 | 說明 |
 |---------|------|
@@ -455,6 +508,116 @@ CI 不可用情境包括：`gh` CLI 未安裝、未認證、repo 無 CI workflow
 
 ---
 
+## 8.4 測試可寫性檢查（步驟 1.5）
+
+<!-- Issue #257 — 移植 story-lifecycle-prompt.md §3 TC-W1~W5 -->
+
+在任務解析完成後、QA Pre-flight 之前，**檢查任務描述 / AC 是否可轉化為測試**。此步驟與 sprint-execution story-lifecycle 的測試可寫性檢查完全一致。
+
+### 檢查條件
+
+| 條件 | 判斷標準 | 說明 |
+|------|---------|------|
+| **TC-W1** | AC 描述模糊無法寫 assertion | 使用「適當」、「正確」、「合理」等主觀詞，無法轉化為可驗證斷言 |
+| **TC-W2** | AC 缺少輸入/輸出定義 | 未定義輸入資料格式、邊界值、或預期的輸出值/狀態碼/回應結構 |
+| **TC-W3** | AC 涉及未定義的外部依賴 | 依賴尚未定義的外部系統行為、API 契約、或第三方服務規格 |
+| **TC-W4** | AC 之間存在邏輯矛盾 | 多個 AC 相互排斥，無法同時滿足 |
+| **TC-W5** | AC 完成標準無法量測 | 驗收標準為主觀定性判斷，無法轉化為自動化測試 |
+
+### 處理流程
+
+- 任一 AC 觸發 TC-W1 ~ TC-W5 → 測試可寫性檢查 FAIL
+- 輸出結構化問題清單，要求釐清後重新執行
+- **禁止進入實作**（Hard Gate）
+
+### 輸出格式
+
+```
+── 測試可寫性檢查 ─────────────────────
+  [PASS] 所有 AC 可轉化為測試
+```
+
+FAIL 時：
+
+```
+── 測試可寫性檢查 ─────────────────────
+  [FAIL] 以下 AC 無法轉化為測試：
+    - AC2：觸發 TC-W1（「適當處理」無法寫 assertion）
+    - AC5：觸發 TC-W2（未定義預期回應格式）
+
+[ERROR] 測試可寫性檢查 FAIL，終止執行
+  請釐清以上問題後重新執行 /shoot
+```
+
+<HARD-GATE>
+**測試可寫性 Hard Gate（/shoot）**：TC-W1 ~ TC-W5 任一觸發 → 禁止進入實作，exit code 非 0。
+</HARD-GATE>
+
+---
+
+## 8.5 外部獨立審查（步驟 5.3）
+
+<!-- Issue #257 — 移植 sprint-execution/SKILL.md §3-4 外部抽樣機制 -->
+
+在 QA Post-check 通過後、CI/CD 雙審查 Gate 前，由**獨立 QA subagent**（非執行實作的 agent）重新驗證品質。
+
+### 與 Sprint Execution 的差異
+
+| 面向 | Sprint Execution | Shoot |
+|------|-----------------|-------|
+| 抽樣率 | 30% 基礎，風險升級至 100% | **固定 100%**（單任務，無抽樣意義） |
+| 審查內容 | Spec Compliance + Code Quality | **相同** |
+| DISPUTE 處理 | 回傳缺陷 → 修復 → 二審 | **相同** |
+| 審查 agent | 獨立 sonnet subagent | **相同** |
+
+### 執行流程
+
+1. 派遣獨立 QA subagent（model: sonnet），傳入：
+   - 原始任務描述 / AC
+   - 實作修改的檔案清單與 diff
+2. 獨立 subagent 執行 Spec Compliance + Code Quality 審查
+3. 回傳結果：**CONFIRM** 或 **DISPUTE**
+
+### CONFIRM 路徑
+
+記錄結果，繼續步驟 5.5（CI/CD 雙審查 Gate）。
+
+### DISPUTE 路徑
+
+1. 回傳結構化缺陷清單（含嚴重度：Critical / Major / Minor）
+2. 實作者修復缺陷
+3. **強制第二輪外部審查**（無論缺陷嚴重度）
+4. 第二輪結果：
+   - CONFIRM → 繼續
+   - DISPUTE → 升級至 Architect，exit code 非 0，終止
+
+### 輸出格式
+
+```
+── 外部獨立審查 ───────────────────────
+  [CONFIRM] Spec Compliance + Code Quality 通過
+```
+
+DISPUTE 時：
+
+```
+── 外部獨立審查 ───────────────────────
+  [DISPUTE] 發現以下缺陷：
+    - [Critical] AC3 實作偏離描述：預期回傳 404，實際回傳 500
+    - [Minor] 函式 processOrder 超過 20 行
+
+  修復中...
+
+── 外部獨立審查（第二輪） ─────────────
+  [CONFIRM] 缺陷已修復，品質通過
+```
+
+<HARD-GATE>
+**外部獨立審查 Hard Gate（/shoot）**：固定 100% 外部獨立審查。DISPUTE 後強制二審，二審仍 DISPUTE → 升級 Architect，exit code 非 0，禁止 commit。
+</HARD-GATE>
+
+---
+
 ## 9. 文件產出（AC5）
 
 每次 `/shoot` 成功完成後，同時更新以下兩份文件：
@@ -579,6 +742,9 @@ fi
   來源：direct
   標題：修復 CSS 問題
 
+── 測試可寫性檢查 ─────────────────────
+  [PASS] 所有 AC 可轉化為測試
+
 ── QA Pre-flight ──────────────────────
   [PASS] 任務範圍檢查
   [PASS] 安全疑慮檢查
@@ -590,14 +756,23 @@ fi
   [PASS] Layer Compliance 共用常數/設定層級檢查
   [PASS] Layer Compliance 跨模組 import 方向檢查
   [PASS] Layer Compliance Single Source of Truth 檢查
+  [PASS] DM-1 業務邏輯封裝檢查
+  [PASS] DM-2 Single Source of Truth 檢查
+  [PASS] DM-3 狀態轉換統一檢查
 
 ── 執行任務 ───────────────────────────
   ... 實作過程 ...
 
 ── QA Post-check ──────────────────────
-  [PASS] AC 驗收
-  [PASS] 測試覆蓋
-  [PASS] 迴歸檢查
+  Spec Compliance：
+    [PASS] AC 逐條驗證
+    [PASS] 邊界條件檢查
+  Code Quality：
+    [PASS] 通用靜態分析
+    [PASS] CQ-NEW 測試覆蓋
+
+── 外部獨立審查 ───────────────────────
+  [CONFIRM] Spec Compliance + Code Quality 通過
 
 ── git commit + push ─────────────────
   ✓ git commit：shoot: 修復 CSS 問題（abc1234）
