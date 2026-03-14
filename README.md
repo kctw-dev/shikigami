@@ -1,6 +1,6 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.69.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.69.3-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 ![Sprints](https://img.shields.io/badge/sprints-94%2B-orange?style=flat-square)
 ![Skills](https://img.shields.io/badge/skills-25-purple?style=flat-square)

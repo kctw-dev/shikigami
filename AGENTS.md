@@ -1,6 +1,6 @@
 # Shikigami — AI Agent Scrum Team Framework
 
-> 7 AI teammates, each with distinct responsibilities and mutual checks — giving your AI development tool a disciplined engineering team.
+> 8 AI teammates, each with distinct responsibilities and mutual checks — giving your AI development tool a disciplined engineering team.
 
 This file is the OpenCode entry point for the Shikigami framework (analogous to `CLAUDE.md` in Claude Code environments). It describes the framework structure, role definitions, and OpenCode-specific configuration.
 
@@ -8,9 +8,9 @@ This file is the OpenCode entry point for the Shikigami framework (analogous to 
 
 ## Framework Overview
 
-Shikigami is a **plugin framework** that injects 7 specialized roles (Shikigami) into your AI development tool. They form a **mutual governance network**: QA reviews your code and challenges architectural decisions, Security reviews external inputs, SRE evaluates deployment feasibility. Use natural language to describe what you want — the Scrum Master automatically dispatches the appropriate roles.
+Shikigami is a **plugin framework** that injects 8 specialized roles (Shikigami) into your AI development tool. They form a **mutual governance network**: QA reviews your code and challenges architectural decisions, Security reviews external inputs, SRE evaluates deployment feasibility, UI/UX Designer maintains design consistency. Use natural language to describe what you want — the Scrum Master automatically dispatches the appropriate roles.
 
-**Current version: v0.3.11** (21 Skills / 7 Agents / 4 Commands)
+**Current version: v0.69.3** (25 Skills / 8 Agents / 4 Commands)
 
 ---
 
@@ -25,7 +25,7 @@ OpenCode scans the following paths to discover SKILL.md files:
 skills/*/SKILL.md              ← fallback (git worktree)
 ```
 
-All 21 Shikigami Skills are accessible under `.opencode/skills/`:
+All 25 Shikigami Skills are accessible under `.opencode/skills/`:
 
 ```
 .opencode/skills/
@@ -49,14 +49,18 @@ All 21 Shikigami Skills are accessible under `.opencode/skills/`:
 ├── architect/SKILL.md
 ├── qa-engineer/SKILL.md
 ├── schedule/SKILL.md
-└── shoot/SKILL.md
+├── shoot/SKILL.md
+├── uiux-designer/SKILL.md
+├── vision-critic/SKILL.md
+├── discovery-phase/SKILL.md
+└── diagram/SKILL.md
 ```
 
 ---
 
 ## Role Definitions
 
-### 7 Roles (Shikigami)
+### 8 Roles (Shikigami)
 
 | Role | Responsibility | Trigger |
 |------|---------------|---------|
@@ -67,8 +71,10 @@ All 21 Shikigami Skills are accessible under `.opencode/skills/`:
 | **QA Engineer** | Code review, test strategy, quality gate | Feature completion, PR review, quality inspection |
 | **Security Engineer** | Security scanning, vulnerability assessment, OWASP checks | External input handling, API endpoints, configuration changes |
 | **SRE Engineer** | Deployment checks, monitoring configuration, environment management | Deployment preparation, version releases, environment changes |
+| **UI/UX Designer** | Design system maintenance, Figma prototyping, visual quality review | UI/UX design, Design Foundation, Design Token management |
+| **Stakeholder** | Final arbitration, deadlock resolution | Escalation chain exhausted, major product pivots |
 
-**Key principle: They check each other.** Not 7 independent assistants — a disciplined engineering team.
+**Key principle: They check each other.** Not 8 independent assistants — a disciplined engineering team.
 
 ---
 
@@ -135,7 +141,7 @@ Set project level in your project config to control AI team autonomy:
 
 | Document | Purpose |
 |----------|---------|
-| [README.md](./README.md) | Full feature description, role overview, 17 Skills |
+| [README.md](./README.md) | Full feature description, role overview, 25 Skills |
 | [Getting Started](docs/tutorial/GETTING_STARTED.md) | End-to-end onboarding from install to first Sprint |
 | [Troubleshooting](docs/tutorial/TROUBLESHOOTING.md) | 6 common failure scenarios with diagnosis and resolution |
 | [Product Backlog](docs/prd/PRODUCT_BACKLOG.md) | RICE-scored prioritized backlog |

@@ -1,0 +1,82 @@
+# Shikigami — Claude Code Plugin 開發指南
+
+## 專案資訊
+
+- **專案名稱**：Shikigami（式神）
+- **性質**：Claude Code Plugin — AI Agent Scrum Team 框架
+- **目前版本**：v0.69.3
+- **授權**：MIT
+- **Repository**：https://github.com/KCTW/shikigami
+
+## 技術棧
+
+- **Plugin 格式**：Claude Code Plugin（`.claude-plugin/plugin.json`）
+- **Agent 定義**：YAML frontmatter + Markdown body（`agents/*.md`）
+- **Skill 定義**：Markdown（`skills/*/SKILL.md`）
+- **Hook**：JSON 配置 + Shell script（`hooks/`）
+- **MCP Server**：Node.js（`mcp-servers/`）
+- **驗證腳本**：Bash（`scripts/validate-*.sh`）
+- **測試**：Shell script（`tests/test-*.sh`）
+- **多平台支援**：Claude Code / OpenCode / Gemini CLI / Cursor
+
+## 開發紅線
+
+1. **版號同步**：bump 版本時必須同時更新 `plugin.json`、`marketplace.json`、`gemini-extension.json`、`README.md` badge
+2. **語言慣例**：Skill / Agent 內容使用中文，檔名使用英文 kebab-case
+3. **Agent model**：所有 agent 統一使用 `model: sonnet`
+4. **禁止幻覺**：非發散階段（Discovery 以外）禁止生成未定義內容，遇未定義情況應回退詢問
+5. **TDD 雙重驗證**：寫不出測試代表需求不清，必須回退釐清而非強行實作
+6. **日期來源**：所有日期時間必須用 `date` 指令取得系統時間，不可靠 agent 推斷
+7. **.md 受眾**：`.md` 文件是給 agent 消費的，其他格式（PDF、HTML）才是給人看的
+
+## 目錄結構
+
+```
+.claude-plugin/
+├── plugin.json              # Plugin manifest（版號 source of truth）
+└── marketplace.json         # Marketplace 發布資訊
+
+agents/                      # 8 個角色定義
+skills/                      # 25 個 Skill
+hooks/                       # Session 初始化 hook
+commands/                    # 4 個 slash command
+mcp-servers/                 # MCP server 整合
+templates/                   # CLAUDE.md / GEMINI.md / SDD 模板
+scripts/                     # 驗證腳本（validate-*.sh）
+tests/                       # 測試腳本（test-*.sh）
+docs/
+├── adr/                     # 架構決策紀錄
+├── sdd/                     # 系統設計文件
+├── sprints/                 # Sprint 紀錄
+├── km/                      # 知識管理
+└── tutorial/                # 教學文件
+```
+
+## Commit 慣例
+
+使用 Conventional Commits：
+
+- `feat:` — 新功能（新 Skill、新 Agent、新流程）
+- `fix:` — Bug 修復
+- `chore:` — 版本 bump、維護
+- `docs:` — 文件更新
+- `shoot:` — Shoot 模式快速交付
+
+## 驗證
+
+修改後執行驗證腳本確認一致性：
+
+```bash
+bash scripts/validate-version.sh    # 版號一致性
+bash scripts/validate-agents.sh     # Agent 定義
+bash scripts/validate-skills.sh     # Skill 結構
+bash scripts/validate-json.sh       # JSON 格式
+bash scripts/validate-xrefs.sh      # 交叉引用
+```
+
+## AI 團隊行為
+
+- AI 團隊無工作量限制，同概念工作應打包一起做
+- 校準儀式自動完成，不等 Stakeholder 回覆
+- Sprint 外小修用 patch bump
+- Sprint Review 的 `gh issue` 操作委託 subagent，不在主 session 跑
