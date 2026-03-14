@@ -255,6 +255,7 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
         |
         v
 [步驟 6.5] CI Gate — 等待 CI 狀態（見 §8.2）
+  |-- Doc-only 變更 → SKIP，直接繼續
   |-- CI PASS → 繼續
   |-- CI FAIL → invoke shikigami:systematic-debugging（CI FAIL 根因排查）
   |     |-- 修復成功 → 重新 commit + push，回到 CI Gate 等待
@@ -417,6 +418,23 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
 <!-- US-241 shoot CI Gate — CI pass 才標 PASS — Sprint 88 -->
 
 在 `shoot:` commit + `git push` 完成後、寫 `Shoot_Log.md` PASS 前，執行 CI 狀態等待與驗證。
+
+### Doc-only 跳過規則
+
+若本次修改的檔案**全部**符合以下 pattern，視為 doc-only 變更，**跳過 CI Gate**：
+
+| Pattern | 說明 |
+|---------|------|
+| `docs/**` | 文件目錄 |
+| `*.md` | Markdown 文件 |
+| `skills/**/*.md` | Skill 定義文件 |
+| `agents/**/*.md` | Agent 定義文件 |
+
+輸出：
+```
+── CI Gate ────────────────────────────
+  [SKIP] Doc-only 變更，跳過 CI Gate
+```
 
 ### 執行步驟
 
