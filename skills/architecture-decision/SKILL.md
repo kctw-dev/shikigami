@@ -40,10 +40,10 @@ ADR 並非隨時都需要建立，以下兩個階段是主要的產出時機：
 **流程說明**：
 
 1. **標注需求**：PO 在 Backlog Grooming 或主 Agent 在分析 Story 時，識別出需要技術選型的 Story，標注「需要 ADR」。
-2. **Architect 產出 ADR**：Architect subagent 分析問題背景，列舉可行的技術選項，進行利弊分析，並產出初版 ADR 文件至 `docs/adr/ADR-xxx.md`。
-3. **Decision Challenger 挑戰**：QA subagent 以 Decision Challenger 身份，針對 Architect 最關鍵的決策進行挑戰（詳見第 5 節）。
-4. **SRE 審查**：SRE subagent 從維運角度審查決策的可行性，包括部署複雜度、監控需求、故障恢復等。
-5. **Architect 拍板**：Architect subagent 綜合 Decision Challenger 與 SRE 的意見，決定是否維持原案或調整決策，更新 ADR 狀態。
+2. **Architect 產出 ADR**：Architect subagent 分析問題背景，列舉可行的技術選項，進行利弊分析，並產出初版 ADR 文件至 `docs/adr/ADR-xxx.md`。詳細執行規則見 [`architect-prompt.md`](architect-prompt.md)。
+3. **Decision Challenger 挑戰**：QA subagent 以 Decision Challenger 身份，針對 Architect 最關鍵的決策進行挑戰。詳細執行規則見 [`qa-challenger-prompt.md`](qa-challenger-prompt.md)。
+4. **SRE 審查**：SRE subagent 從維運角度審查決策的可行性，包括部署複雜度、監控需求、故障恢復等。詳細執行規則見 [`sre-prompt.md`](sre-prompt.md)。
+5. **Architect 拍板**：Architect subagent 綜合 Decision Challenger 與 SRE 的意見，決定是否維持原案或調整決策，更新 ADR 狀態。詳細執行規則見 [`architect-prompt.md`](architect-prompt.md) 第二輪段落。
 6. **Story 解鎖**：ADR 狀態變更為 Accepted 後，對應的 Story 方可在 Sprint Planning 中選入 Sprint。
 
 ---
@@ -58,168 +58,33 @@ ADR 並非隨時都需要建立，以下兩個階段是主要的產出時機：
 
 ---
 
-## 5. Decision Challenger 機制
-
-Decision Challenger 是由 **QA Engineer subagent** 擔任的挑戰角色。其目的不是阻止決策，而是透過結構化的質疑過程，確保決策經得起考驗。
-
-**執行規則**：
-
-- **挑選最關鍵決策**：從 Architect 的 ADR 中，挑選最關鍵的一個決策進行挑戰（非全部決策）
-- **為被否決方案辯護**：為 Architect 否決的替代方案提出最強論述，扮演「魔鬼代言人」角色
-- **描述具體失敗情境**：提出具體的場景，說明若採用 Architect 的決策，在什麼情況下可能失敗或產生問題
-- **給出明確結論**：必須從以下三個選項中擇一
-  - **同意**：挑戰後仍認為 Architect 的決策正確
-  - **建議重新考慮**：發現值得深入探討的疑慮，建議 Architect 重新評估
-  - **強烈反對**：發現重大風險或明顯缺陷，強烈建議更換方案
-- **即使同意也必須挑戰**：Decision Challenger 的價值在於論證過程本身，而非結論。即使最終同意 Architect 的決策，仍必須完整執行挑戰流程，確保決策經過充分的壓力測試
-
----
-
-## 6. ADR 格式
-
-所有 ADR 文件存放於 `docs/adr/` 目錄，檔名格式為 `ADR-xxx.md`（xxx 為遞增編號）。
-
-ADR 文件必須遵循以下格式：
-
-```markdown
-# ADR-xxx: [決策標題]
-
-## 狀態：[Proposed / Accepted / Deprecated]
-
-## 背景
-[描述促使此決策的背景脈絡、面臨的問題或需求]
-
-## 決策
-[明確說明最終採用的技術方案與理由]
-
-## 選項分析
-### 選項 A: [名稱]
-- 優點：...
-- 缺點：...
-
-### 選項 B: [名稱]
-- 優點：...
-- 缺點：...
-
-（視需要增加更多選項）
-
-## 結果
-[預期此決策帶來的正面與負面影響]
-
-## 影響
-[此決策對系統架構、團隊流程、維運等方面的具體影響]
-```
-
-**狀態說明**：
-
-| 狀態 | 意義 |
-|------|------|
-| **Proposed** | Architect 已產出初版，尚未通過審查 |
-| **Accepted** | 通過 Decision Challenger 與 SRE 審查，正式採用 |
-| **Deprecated** | 已被後續決策取代，保留作為歷史紀錄 |
-
----
-
-## 7. 架構審查標準
-
-Architect 在評估技術選項時，必須依據以下標準進行審查：
-
-### 設計原則
-
-| 原則 | 說明 |
-|------|------|
-| **SOLID** | 單一職責、開放封閉、里氏替換、介面隔離、依賴反轉 |
-| **Clean Architecture** | 依賴方向由外向內，核心業務邏輯不依賴框架與基礎設施 |
-| **DRY** | Don't Repeat Yourself — 避免重複邏輯，提取共用模組 |
-| **KISS** | Keep It Simple, Stupid — 選擇最簡單能解決問題的方案 |
-| **YAGNI** | You Aren't Gonna Need It — 不為尚未確認的需求預先設計 |
-
-### 品質屬性
-
-| 屬性 | 審查重點 |
-|------|----------|
-| **可擴展性** | 方案是否能隨業務成長而水平/垂直擴展 |
-| **可維護性** | 方案是否易於理解、修改與除錯 |
-| **安全性** | 方案是否符合安全最佳實踐，是否引入已知風險 |
-
----
-
 ## 8. Subagent 派遣順序
 
 Architecture Decision 的 Subagent 調度遵循以下固定順序：
 
 ```
-1. Architect     → 評估技術選項、產出 ADR 初版
-2. QA (Challenger) → 挑戰最關鍵決策
-3. SRE           → 維運可行性審查
-4. Architect     → 綜合意見、拍板定案、更新 ADR 狀態
-5. Developer     → 同步更新 Decision_KB_Index.md
+1. Architect     → 評估技術選項、產出 ADR 初版（architect-prompt.md）
+2. QA (Challenger) → 挑戰最關鍵決策（qa-challenger-prompt.md）
+3. SRE           → 維運可行性審查（sre-prompt.md）
+4. Architect     → 綜合意見、拍板定案、更新 ADR 狀態（architect-prompt.md）
+5. Developer     → 同步更新 Decision_KB_Index.md（developer-prompt.md）
 ```
 
 **派遣說明**：
 
-1. **Architect（第一輪）**：分析 Story 的技術需求，調研可行方案，進行選項分析，產出 ADR 初版（狀態為 Proposed）。
-2. **QA — Decision Challenger**：閱讀 ADR，挑選最關鍵決策，執行完整的挑戰流程，產出挑戰結論。
-3. **SRE**：從維運角度審查 ADR，評估部署複雜度、監控需求、故障恢復機制、資源需求等。
-4. **Architect（第二輪）**：綜合 QA 與 SRE 的回饋，決定維持或調整方案，更新 ADR 文件並將狀態變更為 Accepted（或退回重新評估）。
-5. **Developer（ADR 索引同步）**：ADR 狀態確認為 Accepted 後，同步更新 `docs/km/Decision_KB_Index.md`（見第 9 節）。
+1. **Architect（第一輪）**：分析 Story 的技術需求，調研可行方案，進行選項分析，產出 ADR 初版（狀態為 Proposed）。執行細節見 [`architect-prompt.md`](architect-prompt.md)。
+2. **QA — Decision Challenger**：閱讀 ADR，挑選最關鍵決策，執行完整的挑戰流程，產出挑戰結論。執行細節見 [`qa-challenger-prompt.md`](qa-challenger-prompt.md)。
+3. **SRE**：從維運角度審查 ADR，評估部署複雜度、監控需求、故障恢復機制、資源需求等。執行細節見 [`sre-prompt.md`](sre-prompt.md)。
+4. **Architect（第二輪）**：綜合 QA 與 SRE 的回饋，決定維持或調整方案，更新 ADR 文件並將狀態變更為 Accepted（或退回重新評估）。執行細節見 [`architect-prompt.md`](architect-prompt.md)。
+5. **Developer（ADR 索引同步）**：ADR 狀態確認為 Accepted 後，同步更新 `docs/km/Decision_KB_Index.md`。執行細節見 [`developer-prompt.md`](developer-prompt.md)。
 
 ---
 
-## 9. Decision Knowledge Base 查詢
+## 10. 與其他 Skill 的關係
 
-### 概述
-
-Decision Knowledge Base 是所有 ADR 的集中索引，存放於 `docs/km/Decision_KB_Index.md`。提供三種查詢方式，讓 Developer 和 Product Owner 能快速定位相關的架構決策記錄。
-
-### 查詢方式
-
-#### 依關鍵字查詢
-
-在 `Decision_KB_Index.md` 的「依關鍵字篩選」表格中，依技術領域或元件名稱尋找相關 ADR。
-
-常用查詢範例：
-
-```
-查詢「Backlog」  → 找到 ADR-001、ADR-009、ADR-010
-查詢「注入防護」 → 找到 ADR-006
-查詢「排程」     → 找到 ADR-005
-查詢「Subagent」 → 找到 ADR-007
-```
-
-#### 依狀態查詢
-
-在 `Decision_KB_Index.md` 的「依狀態篩選」表格中，篩選特定狀態的 ADR：
-
-| 狀態 | 意義 | 查詢用途 |
-|------|------|---------|
-| **Accepted** | 正式採用，現行有效的架構決策 | 實作前確認設計依據 |
-| **Proposed** | 起草中，尚未完成審查流程 | 了解進行中的決策討論 |
-| **Deprecated** | 已被後續決策取代 | 追溯歷史決策演進脈絡 |
-
-#### 依日期查詢
-
-在 `Decision_KB_Index.md` 的「依日期篩選」表格中，找出特定時間段產出的 ADR。適用於回顧某個 Sprint 週期的架構決策。
-
-### 同步更新 Decision_KB_Index.md（ADR 建立流程步驟）
-
-當 ADR 狀態變更為 **Accepted** 後，必須執行以下更新步驟：
-
-```
-1. 讀取 Decision_KB_Index.md 當前版本（防止覆蓋衝突）
-2. 在「ADR 彙整表」新增一行：
-   - ADR 編號與檔案連結
-   - 標題
-   - 狀態（Accepted）
-   - 日期
-   - 關聯 Story / Issue
-3. 在「決策影響追蹤」區段新增條目：
-   - 核心決策摘要（一句話）
-   - 至少一筆影響路徑記錄（Skills 或文件路徑）
-4. 更新「依關鍵字篩選」表格（新增相關關鍵字）
-5. 更新「依狀態篩選」表格（將 ADR 加入 Accepted 列表）
-6. 更新「依日期篩選」表格
-7. 更新文件頂部「最後更新」日期
-```
-
-**注意**：本步驟屬於 ADR 建立流程的最終步驟，確保 Decision Knowledge Base 與 ADR 狀態保持同步。
+| 情境 | 觸發 |
+|------|------|
+| Discovery 階段引入新技術 | 由 Discovery Skill 觸發 architecture-decision |
+| Sprint Planning 識別技術選型需求 | 在 Story 進 Sprint 前完成 ADR |
+| ADR 完成後 Story 解鎖 | 回到 sprint-planning 繼續 Story 選入流程 |
+| ADR 影響現有架構設計 | 同步更新相關 SDD 文件（`docs/sdd/`） |
