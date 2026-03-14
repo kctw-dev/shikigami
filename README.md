@@ -40,6 +40,16 @@
 
 Scrum Master 會建立 `CLAUDE.md` 與 `docs/` 目錄結構，完成後即可開始。
 
+#### 啟用版本驗證 Git Hook（選用）
+
+Shikigami 提供 pre-commit hook，在 commit 前自動驗證版號一致性：
+
+```bash
+git config core.hooksPath .githooks
+```
+
+啟用後，每次 `git commit` 前會自動執行 `bash scripts/validate-version.sh`，版號不一致時阻止 commit。
+
 ### 其他平台
 
 | 平台 | 安裝指令 | 安裝指南 |

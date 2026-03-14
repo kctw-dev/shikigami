@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# .githooks/pre-commit
+# US-264：Git pre-commit hook — 版本號一致性驗證
+#
+# 啟用方式：
+#   git config core.hooksPath .githooks
+#
+# 功能：
+#   在 commit 前執行 scripts/validate-version.sh，
+#   若版號不一致（exit code 1）則阻止 commit。
+#
+# 冪等性：多次執行結果一致。
+
+set -uo pipefail
+
+# 取得 repo 根目錄（相容於不同呼叫方式）
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+VALIDATE_SCRIPT="$REPO_ROOT/scripts/validate-version.sh"
+
+echo "🔍 [pre-commit] 執行版號一致性驗證..."
+
+if [ ! -f "$VALIDATE_SCRIPT" ]; then
+  echo "[WARNING] 找不到 $VALIDATE_SCRIPT，跳過版號驗證"
+  exit 0
+fi
+
+if bash "$VALIDATE_SCRIPT"; then
+  echo "✅ [pre-commit] 版號驗證通過，允許 commit"
+  exit 0
+else
+  echo ""
+  echo "❌ [pre-commit] 版號驗證失敗，已阻止 commit"
+  echo ""
+  echo "   請修正版號不一致問題後重新 commit："
+  echo "   1. 確認 .claude-plugin/plugin.json"
+  echo "   2. 確認 .claude-plugin/marketplace.json"
+  echo "   3. 確認 gemini-extension.json"
+  echo "   4. 確認 README.md badge 版號"
+  echo ""
+  echo "   驗證指令：bash scripts/validate-version.sh"
+  exit 1
+fi
