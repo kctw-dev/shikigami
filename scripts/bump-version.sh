@@ -9,6 +9,9 @@
 #   .claude-plugin/marketplace.json
 #   gemini-extension.json
 #
+# 並清除 ~/.claude/plugins/cache/shikigami/shikigami/ 下的
+# 舊版 cache，強制 Claude Code 下次載入時重建。
+#
 # Exit code:
 #   0 = 全部更新成功
 #   1 = 輸入錯誤或更新失敗
@@ -24,6 +27,7 @@ readonly SCRIPT_NAME="bump-version.sh"
 readonly PLUGIN_JSON=".claude-plugin/plugin.json"
 readonly MARKETPLACE_JSON=".claude-plugin/marketplace.json"
 readonly GEMINI_EXTENSION_JSON="gemini-extension.json"
+readonly PLUGIN_CACHE_DIR="${HOME}/.claude/plugins/cache/shikigami/shikigami"
 
 # ---------------------------------------------------------------------------
 # 輔助函式
@@ -110,6 +114,27 @@ update_top_level_version() {
   fi
 }
 
+# 清除舊版 plugin cache，強制 Claude Code 下次載入時重建
+invalidate_plugin_cache() {
+  if [ ! -d "$PLUGIN_CACHE_DIR" ]; then
+    print_info "Plugin cache 目錄不存在，跳過清除"
+    return
+  fi
+
+  local count=0
+  for dir in "$PLUGIN_CACHE_DIR"/*/; do
+    [ -d "$dir" ] || continue
+    rm -rf "$dir"
+    count=$((count + 1))
+  done
+
+  if [ "$count" -gt 0 ]; then
+    print_ok "已清除 ${count} 個舊版 plugin cache"
+  else
+    print_info "沒有舊版 plugin cache 需要清除"
+  fi
+}
+
 # 更新 marketplace.json 的 .plugins[0].version 欄位
 update_marketplace_version() {
   local file="$1"
@@ -166,6 +191,9 @@ main() {
 
   # 更新 gemini-extension.json（頂層 .version）
   update_top_level_version "$GEMINI_EXTENSION_JSON" "$new_version"
+
+  # 清除舊版 plugin cache，強制下次載入時重建
+  invalidate_plugin_cache
 
   echo ""
   echo "=============================="
