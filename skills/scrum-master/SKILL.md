@@ -122,7 +122,7 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 
 | 條件 | 自動觸發 |
 |------|----------|
-| 新 session 開始（使用者首次互動） | `invoke shikigami:standup`（Daily Standup — 健康快篩 + Git 同步 + Sprint 進度）+ 排程 PR 偵測（見 §5.3） |
+| 新 session 開始（使用者首次互動） | 執行 `/standup` slash command（Daily Standup — 健康快篩 + Git 同步 + Sprint 進度）+ 排程 PR 偵測（見 §5.3） |
 | Sprint 中所有 Story 標記完成 | `invoke shikigami:sprint-review` |
 | sprint-review 驗收通過 | `invoke shikigami:deployment-readiness`（版本 Tag + 部署就緒） |
 | sprint-review 完成且 Backlog 有待選 Story | `invoke shikigami:sprint-planning`（下一個 Sprint） |

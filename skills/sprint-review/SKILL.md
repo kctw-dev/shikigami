@@ -135,7 +135,7 @@ Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，�
 2. 逐一檢查活躍里程碑完成狀態，對照本 Sprint 交付 Stories
 3. 判斷里程碑是否完成：完成 → Major bump 候選（需 PO 確認）；未完成 → Minor bump 候選
 4. 更新里程碑狀態（若完成）
-5. 將對齊檢查結果附帶至 deployment-readiness 觸發指令
+5. 將對齊檢查結果附帶至 `invoke shikigami:deployment-readiness` 觸發指令
 
 ---
 
@@ -169,7 +169,7 @@ Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 g
 - [ ] 連續兩個 Sprint 未關閉 Action 已升級至 Stakeholder
 - [ ] `ROADMAP.md` 已更新
 - [ ] **ROADMAP 里程碑對齊檢查**（§5.1）
-- [ ] 觸發 `deployment-readiness`（附帶里程碑對齊結果）
+- [ ] `invoke shikigami:deployment-readiness`（附帶 §5.1 里程碑對齊結果）
 - [ ] **E2E 驗證結果已確認**
 - [ ] 外部 Issue 階段 2 留言（**僅在 deployment-readiness PASS 且 E2E PASS 後執行**；否則不補發）
 - [ ] Sprint Metrics 已計算並追加至 `Metrics_Log.md`（詳見 `po-review-prompt.md`）
