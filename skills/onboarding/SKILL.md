@@ -41,12 +41,19 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
   Onboarding 需要此目錄作為初始文件來源。
   請確認 Shikigami 框架安裝完整，或從官方 repository 補回 templates/。
   ```
-- 個別**必要**範本文件缺失（`PRODUCT_BACKLOG.md`、`ROADMAP.md`、`PROJECT_BOARD.md`、`SDD-000-architecture.md`）→ **立即中止**，逐一列出缺失的文件：
-  ```
-  [錯誤] 以下範本文件缺失，無法繼續：
-  - templates/PRODUCT_BACKLOG.md  ← 缺失
-  請確認 Shikigami 框架安裝完整。
-  ```
+- 個別**必要**範本文件缺失（`PRODUCT_BACKLOG.md`、`ROADMAP.md`、`PROJECT_BOARD.md`、`SDD-000-architecture.md`）→ 依以下規則處理：
+  - `templates/SDD-000-architecture.md` 缺失但 `docs/sdd/SDD-000-architecture.md` **已存在** → **警告後繼續**（舊版升級豁免）：
+    ```
+    [警告] templates/SDD-000-architecture.md 不存在，但 docs/sdd/SDD-000-architecture.md 已存在。
+    跳過範本檢查，使用既有的全局架構文件。
+    注意：若既有文件缺少「觸發條件代碼」或「變更段落」欄位，建議手動對照最新範本補充。
+    ```
+  - 其他必要範本缺失 → **立即中止**，逐一列出缺失的文件：
+    ```
+    [錯誤] 以下範本文件缺失，無法繼續：
+    - templates/PRODUCT_BACKLOG.md  ← 缺失
+    請確認 Shikigami 框架安裝完整。
+    ```
 - `templates/BACKLOG_DONE.md` 缺失 → **警告後繼續**（選用文件，ADR-010 後 Backlog 由 GitHub Issues 管理）：
   ```
   [警告] templates/BACKLOG_DONE.md 不存在，跳過複製（選用文件）。
@@ -166,6 +173,10 @@ gh label list --json name --limit 100
 
 對每個文件：
 - 目的地不存在 → 複製，輸出：`[複製] templates/XXX.md → docs/.../XXX.md`
+  - **SDD-000 特殊處理**：複製完成後，執行以下替換與驗證步驟：
+    1. 使用 Bash 執行 `date +%Y-%m-%d` 取得系統日期
+    2. 使用 Edit 工具將文件中所有 `{日期}` 佔位符替換為實際日期（如 `2026-03-14`）
+    3. **驗證**：使用 Grep 確認文件中不存在 `{日期}` 字串；若仍存在，輸出 `[警告] SDD-000 的 {日期} 佔位符替換失敗，請手動填入日期`，並在 Onboarding 執行摘要中標記為需手動確認項目
 - 目的地已存在 → **不覆蓋**，輸出警告：
   ```
   [警告] docs/.../XXX.md 已存在，跳過複製。
@@ -254,10 +265,15 @@ gh label list --json name --limit 100
 2. **執行 /standup**
    確認框架狀態健康，開始每日工作節奏。
 
-3. **Sprint Planning**
+3. **填寫全局架構文件（SDD-000）**
+   `docs/sdd/SDD-000-architecture.md` 已建立。
+   **首次執行 Sprint Planning 前**，請填入至少一個核心 Entity 和 Service 作為基線，
+   確保後續開發工作可在 SDD 體系中定位（見 Architect SKILL.md §11 Hard Gate）。
+
+4. **Sprint Planning**
    執行 `/sprint` 開始第一個 Sprint，從 Product Backlog 選取 Stories。
 
-4. **GitHub Action 串接狀態**
+5. **GitHub Action 串接狀態**
    {GITHUB_ACTION_STATUS}
 ```
 

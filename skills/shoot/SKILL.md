@@ -202,6 +202,15 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
   +-- 解析成功
         |
         v
+[步驟 1.2] SDD-000 存在性檢查
+  確認 docs/sdd/SDD-000-architecture.md 是否存在
+  |-- 不存在 --> 建立 SDD-000（複製 templates/SDD-000-architecture.md + {日期} 替換）
+  |              建立完成後終止當前 shoot，輸出提示：
+  |              「SDD-000 已建立，請重新執行 /shoot」
+  |              exit code 0（建立成功，非錯誤終止）
+  +-- 存在 --> 繼續
+        |
+        v
 [步驟 1.5] 測試可寫性檢查（TC-W1~W5 Hard Gate，見 §8.4）
   |-- FAIL --> 回傳結構化問題清單，禁止進入實作，終止
   +-- PASS
@@ -426,9 +435,10 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
 | Pattern | 說明 |
 |---------|------|
 | `docs/**` | 文件目錄 |
-| `*.md` | Markdown 文件 |
+| `**/*.md` | 所有層級的 Markdown 文件 |
 | `skills/**/*.md` | Skill 定義文件 |
 | `agents/**/*.md` | Agent 定義文件 |
+| `templates/**/*.md` | 範本文件 |
 
 輸出：
 ```

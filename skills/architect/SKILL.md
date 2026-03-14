@@ -306,7 +306,7 @@ Architect 檢查 Story 是否符合以下任一條件，若符合則建議採用
 |---|---------|------|---------|
 | D1 | Story 引入新的核心領域概念 | 新增 Entity、Value Object、Aggregate 等業務物件 | 建立領域模型文件（`docs/sdd/domain-model-*.md`）+ **調用 `/diagram` 產出領域模型圖** |
 | D2 | Story 跨越多個模組且共享業務邏輯 | 多個 Skill/模組需要理解同一業務規則 | 定義 Bounded Context 邊界與統一語言 + **調用 `/diagram` 產出模組邊界圖** |
-| D3 | Story 涉及複雜業務規則 | 包含 3 個以上互相影響的業務條件判斷 | 建立領域規則文件，用表格或決策樹記錄規則 |
+| D3 | Story 涉及複雜業務規則 | 包含 3 個以上互相影響的業務條件判斷 | 建立領域規則文件，用表格或決策樹記錄規則 + **調用 `/diagram` 產出決策樹或規則流程圖** |
 | D4 | Story 修改的程式碼涉及 3+ 個 Entity 的互動 | 多物件交互容易產生隱含耦合 | **調用 `/diagram` 產出類別互動圖** + 建立 SDD |
 
 **不觸發 DDD 建議**：純 UI 修改、配置變更、doc-only Story、單一模組內部重構。
@@ -652,7 +652,7 @@ Architect 在 SDD 審查時，除既有的端點規格、認證策略、DB index
 ```markdown
 ### 模組設計
 
-> 全局領域模型與類別圖見 [docs/sdd/SDD-000-architecture.md](../sdd/architecture.md)
+> 全局領域模型與類別圖見 [SDD-000-architecture.md](./SDD-000-architecture.md)
 
 #### 責任劃分
 
@@ -726,7 +726,8 @@ Architect 在以下情境**必須調用 `/diagram` 更新全局架構文件中�
 | D2（跨模組共享邏輯） | 更新系統領域模型圖 + 元件圖 | `docs/sdd/SDD-000-architecture.md` 領域模型 + 元件圖段落 |
 | D4（3+ Entity 互動） | 更新類別圖 | `docs/sdd/SDD-000-architecture.md` 類別圖段落 |
 | B3（狀態轉換） | 在**對應 SDD** 中產出狀態機流程圖 | 各 SDD 自己的流程圖段落（非全局） |
-| DM-1/DM-2 審查觸發 | 更新類別圖（Service/Router 結構） | `docs/sdd/SDD-000-architecture.md` 類別圖段落 |
+| D3（複雜業務規則） | 在**對應 SDD** 中產出決策樹或規則流程圖 | 各 SDD 自己的流程圖段落（非全局） |
+| DM-1/DM-2/DM-3 審查觸發 | 更新類別圖（Service/Router 結構） | `docs/sdd/SDD-000-architecture.md` 類別圖段落 |
 | 新增外部服務依賴 | 更新元件圖 | `docs/sdd/SDD-000-architecture.md` 元件圖段落 |
 
 ### SDD 編號規則
@@ -739,7 +740,11 @@ Architect 在以下情境**必須調用 `/diagram` 更新全局架構文件中�
 | **SDD-001 ~ SDD-999** | 功能 SDD，依建立順序遞增 |
 | **SDD-NNN-NN** | 子文件（需要時延伸，如 `SDD-001-01`） |
 
-建立新 SDD 時，取目前最大編號 +1。
+**建立新 SDD 流程**：
+1. 掃描 `docs/sdd/SDD-*.md`，取目前最大編號 +1
+2. **重複防護**：建立前先驗證目標編號 `SDD-{NNN}` 在 `docs/sdd/` 中不存在，若已存在則取下一個可用編號
+3. **跳號不填補**：已刪除的編號（如 SDD-003 被移除後出現 001, 002, 004）不回填，新 SDD 繼續遞增
+4. **平行 Sprint 編號分配**：當多個 Story 需同時建立 SDD 時，由 Architect 在 Sprint Planning 階段預分配編號，避免競態衝突
 
 ### 各 SDD 與全局架構文件的分工
 
@@ -759,7 +764,16 @@ Architect 在以下情境**必須調用 `/diagram` 更新全局架構文件中�
 **全局架構文件 Hard Gate**：
 
 1. `docs/sdd/SDD-000-architecture.md` 不存在時，唯一允許的工作是**建立此文件**（Onboarding 或手動建立）。其他 Sprint Planning 與 Shoot 均不得啟動。
-2. SDD-000 存在但工作內容涉及的業務概念、Service、外部依賴**未在 SDD-000 中描述**時，必須先更新 SDD-000 再開工。工作內容必須能在全局架構文件中定位。
+2. **工作內容必須能在 SDD 體系中定位**。定位範圍為 `docs/sdd/SDD-*.md` 全部 SDD 文件：
+   - 全局概念（Entity、Service、系統邊界）→ 定位在 SDD-000
+   - 功能細節（API 流程、狀態轉換、業務規則）→ 定位在對應功能 SDD（SDD-001+）
+   - **最小定位標準**：概念名稱存在於某份 SDD 即 PASS，不要求完整描述
+   - 找不到 → FAIL，要求先建立或更新對應 SDD 再開工
+3. **豁免條件**（以下情境免除 Hard Gate 2 檢查）：
+   - doc-only 變更（僅修改文件，不涉及新業務概念）
+   - bug fix 或現有邏輯修正（**不引入新 Entity、新 Service 或新系統邊界**的修復與重構）
+   - Hotfix（Sev 1/2 事故緊急修復，**24 小時內補齊 SDD 定位**）
+4. **責任方**：由 Architect subagent 在步驟 3 審查時執行此檢查
 </HARD-GATE>
 
 ### 一致性檢查
@@ -769,6 +783,7 @@ Architect 在 SDD 審查時，額外檢查：
 - [ ] 各 SDD 引用的 Entity 是否存在於全局領域模型中
 - [ ] 各 SDD 引用的 Service 是否存在於全局類別圖中
 - [ ] 新增的外部依賴是否已更新至全局元件圖
+- [ ] **術語一致性**：SDD 中使用的術語是否與 SDD-000 §1.3 統一語言表一致（同一概念不得使用不同名稱）
 
 不一致時 Architect 審查輸出 FAIL，要求先更新全局架構文件。
 
