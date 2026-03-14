@@ -355,7 +355,7 @@ Architect Round 2 回傳新增以下區塊：
    - 核心概念定義（Entity / Value Object 列表）
    - 概念間關係（簡單表格或文字描述）
    - 統一語言詞彙表（術語 → 定義，避免同一概念多種稱呼）
-4. **Architect 必須更新全局架構文件**（見 §11），調用 `/diagram` 更新 `docs/sdd/architecture.md` 中的對應圖表
+4. **Architect 必須更新全局架構文件**（見 §11），調用 `/diagram` 更新 `docs/sdd/SDD-000-architecture.md` 中的對應圖表
 
 ---
 
@@ -652,7 +652,7 @@ Architect 在 SDD 審查時，除既有的端點規格、認證策略、DB index
 ```markdown
 ### 模組設計
 
-> 全局領域模型與類別圖見 [docs/sdd/architecture.md](../sdd/architecture.md)
+> 全局領域模型與類別圖見 [docs/sdd/SDD-000-architecture.md](../sdd/architecture.md)
 
 #### 責任劃分
 
@@ -675,7 +675,7 @@ Architect 在 SDD 審查時，除既有的端點規格、認證策略、DB index
 | {code} | {status} | {說明} |
 ```
 
-**注意**：各 SDD 只放自己的循序圖和流程圖，領域模型與類別圖統一引用 `docs/sdd/architecture.md`，不在個別 SDD 中重複繪製。
+**注意**：各 SDD 只放自己的循序圖和流程圖，領域模型與類別圖統一引用 `docs/sdd/SDD-000-architecture.md`，不在個別 SDD 中重複繪製。
 
 ### 輸出格式
 
@@ -704,11 +704,11 @@ Architect 審查輸出新增領域模型維度：
 
 ### 目的
 
-維護一份**系統級全局架構文件** `docs/sdd/architecture.md`，作為所有 SDD 共享的 Single Source of Truth。各個 SDD 只放自己的循序圖和流程圖，領域模型、類別圖、元件圖統一在全局架構文件中維護。
+維護一份**系統級全局架構文件** `docs/sdd/SDD-000-architecture.md`，作為所有 SDD 共享的 Single Source of Truth。各個 SDD 只放自己的循序圖和流程圖，領域模型、類別圖、元件圖統一在全局架構文件中維護。
 
 ### 全局架構文件結構
 
-`docs/sdd/architecture.md` 包含以下三張全局圖表：
+`docs/sdd/SDD-000-architecture.md` 包含以下三張全局圖表：
 
 | 圖表 | 內容 | 更新觸發 |
 |------|------|---------|
@@ -722,12 +722,24 @@ Architect 在以下情境**必須調用 `/diagram` 更新全局架構文件中�
 
 | 觸發條件 | 產出 | 更新目標 |
 |---------|------|---------|
-| D1（新領域概念） | 更新系統領域模型圖 | `docs/sdd/architecture.md` 領域模型段落 |
-| D2（跨模組共享邏輯） | 更新系統領域模型圖 + 元件圖 | `docs/sdd/architecture.md` 領域模型 + 元件圖段落 |
-| D4（3+ Entity 互動） | 更新類別圖 | `docs/sdd/architecture.md` 類別圖段落 |
+| D1（新領域概念） | 更新系統領域模型圖 | `docs/sdd/SDD-000-architecture.md` 領域模型段落 |
+| D2（跨模組共享邏輯） | 更新系統領域模型圖 + 元件圖 | `docs/sdd/SDD-000-architecture.md` 領域模型 + 元件圖段落 |
+| D4（3+ Entity 互動） | 更新類別圖 | `docs/sdd/SDD-000-architecture.md` 類別圖段落 |
 | B3（狀態轉換） | 在**對應 SDD** 中產出狀態機流程圖 | 各 SDD 自己的流程圖段落（非全局） |
-| DM-1/DM-2 審查觸發 | 更新類別圖（Service/Router 結構） | `docs/sdd/architecture.md` 類別圖段落 |
-| 新增外部服務依賴 | 更新元件圖 | `docs/sdd/architecture.md` 元件圖段落 |
+| DM-1/DM-2 審查觸發 | 更新類別圖（Service/Router 結構） | `docs/sdd/SDD-000-architecture.md` 類別圖段落 |
+| 新增外部服務依賴 | 更新元件圖 | `docs/sdd/SDD-000-architecture.md` 元件圖段落 |
+
+### SDD 編號規則
+
+所有 SDD 文件使用三位數流水號編號，檔名格式 `SDD-{NNN}-{名稱}.md`：
+
+| 編號 | 用途 |
+|------|------|
+| **SDD-000** | 全局架構文件（固定編號，領域模型、類別圖、元件圖） |
+| **SDD-001 ~ SDD-999** | 功能 SDD，依建立順序遞增 |
+| **SDD-NNN-NN** | 子文件（需要時延伸，如 `SDD-001-01`） |
+
+建立新 SDD 時，取目前最大編號 +1。
 
 ### 各 SDD 與全局架構文件的分工
 
@@ -739,7 +751,7 @@ Architect 在以下情境**必須調用 `/diagram` 更新全局架構文件中�
 
 ### 全局架構文件不存在時
 
-首次觸發時由 Architect 自動建立 `docs/sdd/architecture.md`，包含三個段落的骨架結構。後續每次觸發時增量更新，不重建。
+首次觸發時由 Architect 自動建立 `docs/sdd/SDD-000-architecture.md`，包含三個段落的骨架結構。後續每次觸發時增量更新，不重建。
 
 ### 一致性檢查
 

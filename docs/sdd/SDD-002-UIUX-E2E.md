@@ -1,4 +1,4 @@
-# SDD-UIUX-E2E：三層 Agent 管線端對端整合測試規格
+# SDD-002-UIUX-E2E：三層 Agent 管線端對端整合測試規格
 
 **關聯 Story**：US-108（Issue #115）
 **關聯 ADR**：ADR-014（Accepted）、ADR-006（Accepted）
@@ -1175,7 +1175,7 @@ Phase D（Full E2E 失敗場景）：
 
 ### 7.3 DoD 自檢清單
 
-- [x] AC1：`docs/sdd/SDD-UIUX-E2E.md` 已建立，定義三層管線（UX → UI → Vision Critic）的端對端測試規格（本文件）
+- [x] AC1：`docs/sdd/SDD-002-UIUX-E2E.md` 已建立，定義三層管線（UX → UI → Vision Critic）的端對端測試規格（本文件）
 - [x] AC2：測試案例模板已定義（§3），涵蓋完整資料流：User Story → SSD → 代碼 → 截圖 → VRR；五個測試案例（TEST-UIUX-E2E-01 ~ 05）均含完整 Step 定義
 - [x] AC3：mock 資料與預期輸出格式已定義（§4、§5），含 SSD mock、UI 代碼 mock、VRR mock（PASS/FAIL/CONDITIONAL_PASS 三種）；所有 mock token 路徑均在 `docs/design/design-tokens.json` v1.0.0 驗證
 - [x] AC4：降級策略已定義（§6），三層各自失敗處理方式完整說明（§6.1 UX 層、§6.2 UI 層、§6.3 Vision Critic 層、§6.4 總覽）

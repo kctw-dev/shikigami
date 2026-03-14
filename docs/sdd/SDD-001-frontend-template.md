@@ -1,4 +1,4 @@
-# SDD 前端模板（Frontend Story SDD Template）
+# SDD-001 前端模板（Frontend Story SDD Template）
 
 **版本**：1.1.0
 **最後更新**：2026-03-06
@@ -270,7 +270,7 @@
 
 - [design-tokens.json](../../design-tokens.json) — Design Token 標準定義（專案根目錄）
 - [ADR-014](../adrs/ADR-014-uiux-agent-architecture.md) — UIUX Agent 架構決策
-- [SDD-UIUX-E2E.md](SDD-UIUX-E2E.md) — UIUX 管線端對端整合測試設計
+- [SDD-002-UIUX-E2E.md](SDD-002-UIUX-E2E.md) — UIUX 管線端對端整合測試設計
 - [docs/design/design-tokens-versioning.md](../design/design-tokens-versioning.md) — Design Token 版本控制策略
 
 ---
