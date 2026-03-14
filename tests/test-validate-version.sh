@@ -112,6 +112,16 @@ write_plugin_json() {
 EOF
 }
 
+write_readme_badge() {
+  local dir="$1"
+  local version="$2"
+  cat > "$dir/README.md" <<EOF
+# Test Project
+
+![Version](https://img.shields.io/badge/version-v${version}-blue?style=flat-square)
+EOF
+}
+
 write_marketplace_json() {
   local dir="$1"
   local version="$2"
@@ -148,6 +158,7 @@ test_ac1_pass() {
   tmpdir=$(setup_env)
   write_plugin_json    "$tmpdir" "0.1.0"
   write_marketplace_json "$tmpdir" "0.1.0"
+  write_readme_badge   "$tmpdir" "0.1.0"
 
   run_script "$tmpdir"
 
@@ -165,6 +176,7 @@ test_ac1_fail() {
   tmpdir=$(setup_env)
   write_plugin_json    "$tmpdir" "0.1.0"
   write_marketplace_json "$tmpdir" "0.2.0"
+  write_readme_badge   "$tmpdir" "0.1.0"
 
   run_script "$tmpdir"
 
@@ -182,6 +194,7 @@ test_ac2_no_tag() {
   tmpdir=$(setup_env)
   write_plugin_json    "$tmpdir" "0.1.0"
   write_marketplace_json "$tmpdir" "0.1.0"
+  write_readme_badge   "$tmpdir" "0.1.0"
   # 不打任何 tag
 
   run_script "$tmpdir"
@@ -199,6 +212,7 @@ test_ac2_tag_match() {
   tmpdir=$(setup_env)
   write_plugin_json    "$tmpdir" "1.0.0"
   write_marketplace_json "$tmpdir" "1.0.0"
+  write_readme_badge   "$tmpdir" "1.0.0"
   git -C "$tmpdir" tag v1.0.0
 
   run_script "$tmpdir"
@@ -217,6 +231,7 @@ test_ac3_dev_version_warning() {
   tmpdir=$(setup_env)
   write_plugin_json    "$tmpdir" "0.1.0"
   write_marketplace_json "$tmpdir" "0.1.0"
+  write_readme_badge   "$tmpdir" "0.1.0"
   git -C "$tmpdir" tag v0.2.0  # tag 與 plugin.json 不一致
 
   run_script "$tmpdir"
@@ -235,6 +250,7 @@ test_ac3_stable_version_fail() {
   tmpdir=$(setup_env)
   write_plugin_json    "$tmpdir" "1.0.0"
   write_marketplace_json "$tmpdir" "1.0.0"
+  write_readme_badge   "$tmpdir" "1.0.0"
   git -C "$tmpdir" tag v1.1.0  # tag 與 plugin.json 不一致
 
   run_script "$tmpdir"
@@ -280,6 +296,7 @@ test_ac2_jq_missing() {
   tmpdir=$(setup_env)
   write_plugin_json    "$tmpdir" "0.1.0"
   write_marketplace_json "$tmpdir" "0.1.0"
+  write_readme_badge   "$tmpdir" "0.1.0"
 
   run_script_no_jq "$tmpdir"
 
@@ -305,11 +322,66 @@ test_ac4_empty_version_fail() {
 }
 EOF
   write_marketplace_json "$tmpdir" ""
+  write_readme_badge     "$tmpdir" "0.1.0"
 
   run_script "$tmpdir"
 
   assert_exit_code 1 "$LAST_EXIT_CODE" "TC-08 AC4 空字串版本：exit 1"
   assert_output_contains "FAIL" "$LAST_OUTPUT" "TC-08 AC4 空字串版本：輸出含 FAIL 標記"
+
+  rm -rf "$tmpdir"
+}
+
+# ---------------------------------------------------------------------------
+# TC-09：AC-README PASS — README.md badge 版號與 plugin.json 一致，exit 0
+# ---------------------------------------------------------------------------
+test_readme_badge_pass() {
+  local tmpdir
+  tmpdir=$(setup_env)
+  write_plugin_json      "$tmpdir" "0.69.3"
+  write_marketplace_json "$tmpdir" "0.69.3"
+  write_readme_badge     "$tmpdir" "0.69.3"
+
+  run_script "$tmpdir"
+
+  assert_exit_code 0 "$LAST_EXIT_CODE" "TC-09 README badge PASS：版號一致 exit 0"
+  assert_output_contains "PASS" "$LAST_OUTPUT" "TC-09 README badge PASS：輸出含 PASS 標記"
+
+  rm -rf "$tmpdir"
+}
+
+# ---------------------------------------------------------------------------
+# TC-10：AC-README FAIL — README.md badge 版號與 plugin.json 不一致，exit 1
+# ---------------------------------------------------------------------------
+test_readme_badge_fail() {
+  local tmpdir
+  tmpdir=$(setup_env)
+  write_plugin_json      "$tmpdir" "0.69.3"
+  write_marketplace_json "$tmpdir" "0.69.3"
+  write_readme_badge     "$tmpdir" "0.68.0"  # badge 版號舊，與 plugin.json 不一致
+
+  run_script "$tmpdir"
+
+  assert_exit_code 1 "$LAST_EXIT_CODE" "TC-10 README badge FAIL：版號不一致 exit 1"
+  assert_output_contains "FAIL" "$LAST_OUTPUT" "TC-10 README badge FAIL：輸出含 FAIL 標記"
+
+  rm -rf "$tmpdir"
+}
+
+# ---------------------------------------------------------------------------
+# TC-11：AC-README 缺少 README.md — FAIL，exit 1
+# ---------------------------------------------------------------------------
+test_readme_missing_fail() {
+  local tmpdir
+  tmpdir=$(setup_env)
+  write_plugin_json      "$tmpdir" "0.69.3"
+  write_marketplace_json "$tmpdir" "0.69.3"
+  # 故意不建立 README.md
+
+  run_script "$tmpdir"
+
+  assert_exit_code 1 "$LAST_EXIT_CODE" "TC-11 README 缺失 FAIL：exit 1"
+  assert_output_contains "FAIL" "$LAST_OUTPUT" "TC-11 README 缺失 FAIL：輸出含 FAIL 標記"
 
   rm -rf "$tmpdir"
 }
@@ -330,6 +402,9 @@ test_ac3_dev_version_warning
 test_ac3_stable_version_fail
 test_ac2_jq_missing
 test_ac4_empty_version_fail
+test_readme_badge_pass
+test_readme_badge_fail
+test_readme_missing_fail
 
 echo ""
 echo "=============================="

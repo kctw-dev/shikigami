@@ -18,6 +18,7 @@ set -uo pipefail
 readonly PLUGIN_JSON=".claude-plugin/plugin.json"
 readonly MARKETPLACE_JSON=".claude-plugin/marketplace.json"
 readonly GEMINI_EXTENSION_JSON="gemini-extension.json"
+readonly README_FILE="README.md"
 
 # ---------------------------------------------------------------------------
 # 狀態追蹤
@@ -142,6 +143,37 @@ check_ac1b_gemini_consistency() {
 }
 
 # ---------------------------------------------------------------------------
+# AC-README：比較 README.md badge 版號 vs plugin.json version
+# ---------------------------------------------------------------------------
+check_readme_badge_consistency() {
+  print_section "AC-README：README.md badge 版號一致性"
+
+  if [ ! -f "$README_FILE" ]; then
+    print_fail "找不到 $README_FILE，無法驗證 badge 版號"
+    return
+  fi
+
+  # 用 regex 提取 badge 版號
+  # 格式：![Version](https://img.shields.io/badge/version-v<VERSION>-blue...)
+  local badge_version
+  badge_version=$(grep -oP '!\[Version\]\(https://img\.shields\.io/badge/version-v\K[^-]+' "$README_FILE" | head -1)
+
+  echo "  plugin.json  version: $PLUGIN_VERSION"
+  echo "  README.md badge version: ${badge_version:-（未找到）}"
+
+  if [ -z "$badge_version" ]; then
+    print_fail "README.md 中找不到 Version badge，無法驗證版號"
+    return
+  fi
+
+  if [ "$PLUGIN_VERSION" = "$badge_version" ]; then
+    print_pass "README.md badge 與 plugin.json 版號一致 ($PLUGIN_VERSION)"
+  else
+    print_fail "版號不一致：plugin.json=$PLUGIN_VERSION，README.md badge=v$badge_version"
+  fi
+}
+
+# ---------------------------------------------------------------------------
 # AC2 + AC3：比較最新 semver git tag vs plugin.json version
 # ---------------------------------------------------------------------------
 check_ac2_git_tag_consistency() {
@@ -194,6 +226,9 @@ main() {
 
   # AC1b：gemini-extension.json vs plugin.json
   check_ac1b_gemini_consistency
+
+  # AC-README：README.md badge vs plugin.json
+  check_readme_badge_consistency
 
   # AC2 + AC3
   check_ac2_git_tag_consistency "$PLUGIN_VERSION"
