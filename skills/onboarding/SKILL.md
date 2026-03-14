@@ -32,6 +32,7 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
    - `templates/ROADMAP.md`
    - `templates/PROJECT_BOARD.md`
    - `templates/BACKLOG_DONE.md`（選用，ADR-010 後 Backlog 由 GitHub Issues 管理，此為歷史文物）
+   - `templates/SDD-000-architecture.md`
 
 **判定規則**：
 - `templates/` 不存在 → **立即中止**，輸出錯誤：
@@ -40,7 +41,7 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
   Onboarding 需要此目錄作為初始文件來源。
   請確認 Shikigami 框架安裝完整，或從官方 repository 補回 templates/。
   ```
-- 個別**必要**範本文件缺失（`PRODUCT_BACKLOG.md`、`ROADMAP.md`、`PROJECT_BOARD.md`）→ **立即中止**，逐一列出缺失的文件：
+- 個別**必要**範本文件缺失（`PRODUCT_BACKLOG.md`、`ROADMAP.md`、`PROJECT_BOARD.md`、`SDD-000-architecture.md`）→ **立即中止**，逐一列出缺失的文件：
   ```
   [錯誤] 以下範本文件缺失，無法繼續：
   - templates/PRODUCT_BACKLOG.md  ← 缺失
@@ -143,6 +144,7 @@ gh label list --json name --limit 100
 | `docs/adr/` | 架構決策紀錄 |
 | `docs/sprints/` | Sprint 紀錄文件 |
 | `docs/km/` | 知識管理（Retrospective Log） |
+| `docs/sdd/` | 系統設計文件（SDD） |
 
 對每個目錄：
 - 不存在 → 建立目錄，輸出：`[建立] docs/xxx/`
@@ -150,7 +152,7 @@ gh label list --json name --limit 100
 
 ### 2.3 複製初始文件
 
-**目的**：將核心範本複製至 `docs/prd/`，作為專案文件起點。
+**目的**：將核心範本複製至對應目錄，作為專案文件起點。
 
 依序處理：
 
@@ -160,6 +162,7 @@ gh label list --json name --limit 100
 | `templates/ROADMAP.md` | `docs/prd/ROADMAP.md` | |
 | `templates/PROJECT_BOARD.md` | `docs/PROJECT_BOARD.md` | |
 | `templates/BACKLOG_DONE.md` | `docs/prd/BACKLOG_DONE.md` | 選用，ADR-010 後 Backlog 由 GitHub Issues 管理，此為歷史文物 |
+| `templates/SDD-000-architecture.md` | `docs/sdd/SDD-000-architecture.md` | **必要**，全局架構文件（領域模型、類別圖、元件圖） |
 
 對每個文件：
 - 目的地不存在 → 複製，輸出：`[複製] templates/XXX.md → docs/.../XXX.md`

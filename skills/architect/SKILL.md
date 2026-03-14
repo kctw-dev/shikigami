@@ -749,9 +749,18 @@ Architect 在以下情境**必須調用 `/diagram` 更新全局架構文件中�
 | 類別圖（Service/Router 層結構） | 流程圖（該功能的業務邏輯步驟） |
 | 元件圖（系統邊界） | 狀態機圖（該功能的狀態轉換，B3 觸發） |
 
-### 全局架構文件不存在時
+### 全局架構文件生命週期
 
-首次觸發時由 Architect 自動建立 `docs/sdd/SDD-000-architecture.md`，包含三個段落的骨架結構。後續每次觸發時增量更新，不重建。
+- **建立時機**：Onboarding 時由範本 `templates/SDD-000-architecture.md` 複製建立（見 `skills/onboarding/SKILL.md` §2.3）
+- **更新時機**：上方觸發條件成立時，Architect 增量更新對應段落
+- **前置條件**：`docs/sdd/SDD-000-architecture.md` 不存在時，不得開工 — 必須先執行 Onboarding 或手動建立此文件
+
+<HARD-GATE>
+**全局架構文件 Hard Gate**：
+
+1. `docs/sdd/SDD-000-architecture.md` 不存在時，唯一允許的工作是**建立此文件**（Onboarding 或手動建立）。其他 Sprint Planning 與 Shoot 均不得啟動。
+2. SDD-000 存在但工作內容涉及的業務概念、Service、外部依賴**未在 SDD-000 中描述**時，必須先更新 SDD-000 再開工。工作內容必須能在全局架構文件中定位。
+</HARD-GATE>
 
 ### 一致性檢查
 
