@@ -75,6 +75,18 @@ model: sonnet
 - Reversibility（可逆性）
 - Continuous validation（持續驗證）
 
+### Layer Compliance 審查標準
+
+在 `/shoot` 流程的 Architect 審查 Gate 中，除一般架構合規外，必須額外執行 Layer Compliance（分層合規）審查，攔截以下三種違規模式：
+
+1. **常數層級錯置**：共用常數或設定值未置於正確的共用層（如 config 層、constants 模組），而是散落於業務邏輯層或個別模組中。違規時應要求實作者將常數移至適當層級。
+
+2. **import 方向違規**：模組間的 import 方向違反分層架構單向依賴原則（如業務層 import 呈現層、底層 import 上層）。違規時應要求實作者修正 import 依賴方向，確保架構邊界不被穿透。
+
+3. **語意常數重複定義**：語意相同或等價的常數在多個位置各自定義，違反 Single Source of Truth 原則。違規時應要求實作者合併為單一來源並統一引用。
+
+發現上述任一違規時，Architect 審查回傳 FAIL，並指出具體違規位置與修正方向。
+
 ## 跨角色協作
 
 - 與 QA 合作定義品質屬性
