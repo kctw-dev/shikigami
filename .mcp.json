@@ -13,7 +13,7 @@
       "command": "node",
       "args": ["mcp-servers/process-management/index.js"],
       "env": {
-        "SHIKIGAMI_ROOT": "${workspaceFolder}"
+        "SHIKIGAMI_ROOT": "${CLAUDE_PLUGIN_ROOT}"
       }
     }
   }
