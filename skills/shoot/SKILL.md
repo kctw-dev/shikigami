@@ -312,6 +312,12 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
 - 無需 ADR 觸發
 - 技術選型合規
 
+**Layer Compliance checklist**（分層合規檢查）：
+
+- [ ] Layer Compliance 共用常數/設定層級檢查：常數與設定值置於正確的共用層，不得散落於業務邏輯層或個別模組
+- [ ] Layer Compliance 跨模組 import 方向檢查：import 方向必須符合分層架構單向依賴原則，不得出現跨層或逆向 import
+- [ ] Layer Compliance Single Source of Truth 檢查：語意相同的常數或設定不得在多處重複定義，必須維持單一來源
+
 ### 任一 FAIL 時的三個可觀察驗收點
 
 當 QA Pre-flight、Architect 審查、QA Post-check 或 CI/CD 雙審查 Gate 任一回傳 FAIL 時：
@@ -581,6 +587,9 @@ fi
 ── Architect 審查 ─────────────────────
   [PASS] 架構符合性確認
   [PASS] 無 ADR 觸發
+  [PASS] Layer Compliance 共用常數/設定層級檢查
+  [PASS] Layer Compliance 跨模組 import 方向檢查
+  [PASS] Layer Compliance Single Source of Truth 檢查
 
 ── 執行任務 ───────────────────────────
   ... 實作過程 ...
