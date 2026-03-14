@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-13（Sprint 94 Review 完成）
-**當前 Sprint**：Sprint 94（完成）
+**最後更新**：2026-03-14（Sprint 95 Planning 完成）
+**當前 Sprint**：Sprint 95（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 94](sprints/sprint_94.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 95](sprints/sprint_95.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 95（進行中）
+
+> Sprint Goal：強化 Architect 審查 Gate 的分層合規性檢查能力
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-257：Architect 審查 Gate 加入 Layer Compliance 分層合規檢查 | #254 | S | 2 | 待辦 |
+
+**Sprint 容量**：2 points
 
 ---
 
