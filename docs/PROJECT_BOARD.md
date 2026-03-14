@@ -13,7 +13,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-257：Architect 審查 Gate 加入 Layer Compliance 分層合規檢查 | #254 | S | 2 | 待辦 |
+| US-257：Architect 審查 Gate 加入 Layer Compliance 分層合規檢查 | #254 | S | 2 | 完成 |
 
 **Sprint 容量**：2 points
 
