@@ -73,7 +73,7 @@
 
 **User Story**
 
-As a Product Owner overseeing UIUX Agent CLI output quality, I want to evaluate whether all three agent skills (shikigami:ux, shikigami:ui, shikigami:vision-critic) conform to established CLI output design principles, so that I have a baseline assessment to drive alignment work in US-129/130/131.
+As a Product Owner overseeing UIUX Agent CLI output quality, I want to evaluate whether all three agent skills (shikigami:uiux-designer, shikigami:uiux-designer, shikigami:vision-critic) conform to established CLI output design principles, so that I have a baseline assessment to drive alignment work in US-129/130/131.
 
 **Acceptance Criteria**
 
@@ -190,13 +190,13 @@ As a QA engineer validating the Vision Critic Agent, I want a working PoC script
 
 **User Story**
 
-As a Developer validating the UX Agent skill, I want to trigger shikigami:ux with a real User Story input and verify the skeleton document output conforms to the JSON Schema, so that the first layer of the UIUX pipeline is confirmed operational.
+As a Developer validating the UX Agent skill, I want to trigger shikigami:uiux-designer with a real User Story input and verify the skeleton document output conforms to the JSON Schema, so that the first layer of the UIUX pipeline is confirmed operational.
 
 **Acceptance Criteria**
 
 | # | 類型 | 條件 | 通過標準 |
 |---|------|------|----------|
-| AC1 | 動態 | 技能觸發 | 提供標準 User Story 輸入，觸發 shikigami:ux 技能執行 |
+| AC1 | 動態 | 技能觸發 | 提供標準 User Story 輸入，觸發 shikigami:uiux-designer 技能執行 |
 | AC2 | 動態 | Schema 驗證 | 輸出骨架文件 JSON 可通過 JSON Schema 驗證（US-105 定義的 Schema） |
 | AC3 | 靜態 | 執行記錄 | 驗證結果記錄於 `docs/sdd/SDD-UIUX-E2E.md` TC-001 執行記錄欄位 |
 
@@ -212,7 +212,7 @@ As a Developer validating the UX Agent skill, I want to trigger shikigami:ux wit
 
 **Done 定義**
 
-- [ ] shikigami:ux 技能已成功觸發並回傳骨架文件（AC1）
+- [ ] shikigami:uiux-designer 技能已成功觸發並回傳骨架文件（AC1）
 - [ ] 骨架文件 JSON 通過 Schema 驗證（AC2）
 - [ ] 執行記錄已寫入 SDD-UIUX-E2E.md TC-001（AC3）
 
@@ -230,13 +230,13 @@ As a Developer validating the UX Agent skill, I want to trigger shikigami:ux wit
 
 **User Story**
 
-As a Developer validating the UI Agent skill, I want to verify that shikigami:ui correctly injects Design Tokens from design-tokens.json when generating frontend code from a skeleton document, so that hardcoded values are eliminated and token references are confirmed.
+As a Developer validating the UI Agent skill, I want to verify that shikigami:uiux-designer correctly injects Design Tokens from design-tokens.json when generating frontend code from a skeleton document, so that hardcoded values are eliminated and token references are confirmed.
 
 **Acceptance Criteria**
 
 | # | 類型 | 條件 | 通過標準 |
 |---|------|------|----------|
-| AC1 | 動態 | 技能觸發 | 提供標準骨架文件 JSON 輸入，觸發 shikigami:ui 技能執行 |
+| AC1 | 動態 | 技能觸發 | 提供標準骨架文件 JSON 輸入，觸發 shikigami:uiux-designer 技能執行 |
 | AC2 | 動態 | Token 注入驗證 | 輸出的前端代碼不含 hardcode 顏色/間距數值，所有樣式引用 design-tokens.json 中的具名 token |
 | AC3 | 動態 | 多類別驗證 | 驗證至少 3 個 Design Token 類別（color、spacing、radius）正確注入 |
 | AC4 | 靜態 | 執行記錄 | 驗證結果記錄於 SDD-UIUX-E2E.md TC-001 執行記錄 |
@@ -253,7 +253,7 @@ As a Developer validating the UI Agent skill, I want to verify that shikigami:ui
 
 **Done 定義**
 
-- [ ] shikigami:ui 技能已成功觸發並回傳前端代碼（AC1）
+- [ ] shikigami:uiux-designer 技能已成功觸發並回傳前端代碼（AC1）
 - [ ] 前端代碼不含 hardcode 數值（AC2）
 - [ ] 至少 3 個 Token 類別注入驗證通過（AC3）
 - [ ] 執行記錄已寫入 SDD-UIUX-E2E.md（AC4）
@@ -473,7 +473,7 @@ As a Developer implementing multi-agent pipelines, I want OQ-5 Context Window ma
 
 **User Story**
 
-As a developer onboarding to the UIUX Agent workflow, I want comprehensive user documentation that explains how to invoke each agent in the three-layer pipeline, so that I can use shikigami:ux, shikigami:ui, and shikigami:vision-critic without reading the internal SKILL.md files.
+As a developer onboarding to the UIUX Agent workflow, I want comprehensive user documentation that explains how to invoke each agent in the three-layer pipeline, so that I can use shikigami:uiux-designer, shikigami:uiux-designer, and shikigami:vision-critic without reading the internal SKILL.md files.
 
 **Acceptance Criteria**
 
@@ -857,7 +857,7 @@ As a Developer using the Vision Critic Agent, I want rejection reports to be aut
 
 **User Story**
 
-As a Product Owner ensuring CLI output consistency, I want the UX Agent SKILL.md to be reviewed against CLI output design principles established in US-109, so that shikigami:ux CLI output conforms to the standard output format.
+As a Product Owner ensuring CLI output consistency, I want the UX Agent SKILL.md to be reviewed against CLI output design principles established in US-109, so that shikigami:uiux-designer CLI output conforms to the standard output format.
 
 **Acceptance Criteria**
 
@@ -871,7 +871,7 @@ As a Product Owner ensuring CLI output consistency, I want the UX Agent SKILL.md
 
 | 因子 | 分數 | 說明 |
 |------|------|------|
-| Reach | 3 | 影響所有使用 shikigami:ux 的場景 |
+| Reach | 3 | 影響所有使用 shikigami:uiux-designer 的場景 |
 | Impact | 2 | CLI 輸出一致性 |
 | Confidence | 1.0 | 依賴 US-109 評估報告 |
 | Effort | 2 | M-size；審查 + SKILL.md 更新 |
@@ -896,7 +896,7 @@ As a Product Owner ensuring CLI output consistency, I want the UX Agent SKILL.md
 
 **User Story**
 
-As a Product Owner ensuring CLI output consistency, I want the UI Agent SKILL.md to be reviewed against CLI output design principles, so that shikigami:ui CLI output conforms to the standard output format.
+As a Product Owner ensuring CLI output consistency, I want the UI Agent SKILL.md to be reviewed against CLI output design principles, so that shikigami:uiux-designer CLI output conforms to the standard output format.
 
 **Acceptance Criteria**
 
@@ -910,7 +910,7 @@ As a Product Owner ensuring CLI output consistency, I want the UI Agent SKILL.md
 
 | 因子 | 分數 | 說明 |
 |------|------|------|
-| Reach | 3 | 影響所有使用 shikigami:ui 的場景 |
+| Reach | 3 | 影響所有使用 shikigami:uiux-designer 的場景 |
 | Impact | 2 | CLI 輸出一致性 |
 | Confidence | 1.0 | 依賴 US-109 評估報告 |
 | Effort | 2 | M-size；審查 + SKILL.md 更新 |

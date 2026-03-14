@@ -210,8 +210,8 @@
 
 | 管線層 | 輸入 | 輸出 |
 |--------|------|------|
-| UX Agent（shikigami:ux） | User Story 文字 | 骨架文件 JSON |
-| UI Agent（shikigami:ui） | 骨架文件 JSON + design-tokens.json | 前端代碼 |
+| UX Agent（shikigami:uiux-designer） | User Story 文字 | 骨架文件 JSON |
+| UI Agent（shikigami:uiux-designer） | 骨架文件 JSON + design-tokens.json | 前端代碼 |
 | Vision Critic（shikigami:vision-critic） | 截圖 + 骨架文件 JSON | 視覺評分（0~100）|
 
 ---
@@ -236,8 +236,8 @@
 
 ### 5.3 UIUX Agent 管線通過（必要關卡）
 
-- [ ] UX Agent（shikigami:ux）骨架文件 Schema 合規（JSON Schema 驗證通過）
-- [ ] UI Agent（shikigami:ui）Design Token 注入驗證通過（無 hardcode 數值殘留）
+- [ ] UX Agent（shikigami:uiux-designer）骨架文件 Schema 合規（JSON Schema 驗證通過）
+- [ ] UI Agent（shikigami:uiux-designer）Design Token 注入驗證通過（無 hardcode 數值殘留）
 - [ ] Vision Critic（shikigami:vision-critic）視覺評分 PASS（評分 ≥ 通過閾值）
 
 ### 5.4 代碼品質

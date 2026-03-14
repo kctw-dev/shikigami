@@ -146,7 +146,7 @@
 
 | 排序 | Story | RICE | MoSCoW | Size | 來源 | 狀態 |
 |------|-------|------|--------|------|------|------|
-| 1 | US-63：Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-intake Skill） | 待定 | Should | M | GitHub Issue #46 子 Story #4 / Sprint 33 Planning | Done（Sprint 33） |
+| 1 | US-63：Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-management Skill） | 待定 | Should | M | GitHub Issue #46 子 Story #4 / Sprint 33 Planning | Done（Sprint 33） |
 | 2 | US-64：M5 條件 (a) 主動觸及強化 — 外部社群推廣文案製作（GitHub README badges + 技術文章草稿 + 主動 outreach 指引） | 待定 | Should | S | M5 條件 (a) 外部使用者觸及 / Sprint 33 Planning | Done（Sprint 33） |
 | 3 | US-65：US-T08（Intent Routing 測試）評估重開 — RICE 重新評分與 Sprint Planning 可行性確認 | — | Could | S | PRODUCT_BACKLOG.md 測試框架候選 / Sprint 33 Planning | Done（Sprint 33） |
 

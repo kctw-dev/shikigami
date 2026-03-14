@@ -20,11 +20,11 @@
 功能規格（User Story）
     │
     ▼  [Layer 1]
-UX Agent（shikigami:ux）
+UX Agent（shikigami:uiux-designer）
     │ 輸入：User Story 文字
     │ 輸出：SSD JSON（骨架文件，Schema v1）
     ▼  [Layer 2]
-UI Agent（shikigami:ui）
+UI Agent（shikigami:uiux-designer）
     │ 輸入：SSD JSON
     │ 輸出：前端代碼片段（React / HTML）
     ▼  [Playwright 截圖]
@@ -331,7 +331,7 @@ So that I can access my personal dashboard and saved workflows.
 
 ```typescript
 /**
- * @generated-by shikigami:ui
+ * @generated-by shikigami:uiux-designer
  * @ssd-schema https://shikigami.dev/schemas/ssd/v1
  * @ssd-story-id TEST-UIUX-E2E-01
  * @ui-agent-version v1.0.0
@@ -490,7 +490,7 @@ export function LoginPage() {
 
 **Step 2 通過標準**：
 
-- [ ] 代碼含 `@generated-by shikigami:ui` 注釋區塊
+- [ ] 代碼含 `@generated-by shikigami:uiux-designer` 注釋區塊
 - [ ] `@ssd-story-id` 與 SSD `metadata.storyId` 一致
 - [ ] 無 `#` 開頭色碼（hardcode 色彩違規）
 - [ ] 無 `p-[Xpx]`、`rounded-[Xpx]` 等任意值 Tailwind class

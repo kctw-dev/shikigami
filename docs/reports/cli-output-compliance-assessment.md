@@ -16,8 +16,8 @@
 
 | 技能 | 指令 | SKILL.md 路徑 |
 |------|------|---------------|
-| UX Agent | `shikigami:ux` / `/ux-agent` | `skills/ux-agent/SKILL.md` |
-| UI Agent | `shikigami:ui` / `/ui-agent` | `skills/ui-agent/SKILL.md` |
+| UX Agent | `shikigami:uiux-designer` / `/ux-agent` | `skills/ux-agent/SKILL.md` |
+| UI Agent | `shikigami:uiux-designer` / `/ui-agent` | `skills/ui-agent/SKILL.md` |
 | Vision Critic Agent | `shikigami:vision-critic` / `/vision-critic` | `skills/vision-critic/SKILL.md` |
 
 ---
@@ -112,7 +112,7 @@ CLI 工具應遵循 POSIX 退出碼慣例：
 
 ## 3. 各技能 CLI 輸出符合性評估
 
-### 3.1 UX Agent（`shikigami:ux`）
+### 3.1 UX Agent（`shikigami:uiux-designer`）
 
 #### 現有 CLI 輸出定義分析
 
@@ -147,7 +147,7 @@ CLI 工具應遵循 POSIX 退出碼慣例：
 
 ---
 
-### 3.2 UI Agent（`shikigami:ui`）
+### 3.2 UI Agent（`shikigami:uiux-designer`）
 
 #### 現有 CLI 輸出定義分析
 

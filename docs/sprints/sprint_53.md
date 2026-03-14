@@ -61,7 +61,7 @@
 
 **User Story**
 
-As a Developer subagent receiving a User Story, I want a well-defined UX Agent skill (shikigami:ux) that transforms User Story text into a structured semantic skeleton document (JSON), so that the UI Agent can reliably consume a machine-readable layout specification without ambiguity.
+As a Developer subagent receiving a User Story, I want a well-defined UX Agent skill (shikigami:uiux-designer) that transforms User Story text into a structured semantic skeleton document (JSON), so that the UI Agent can reliably consume a machine-readable layout specification without ambiguity.
 
 **背景**
 
@@ -71,7 +71,7 @@ ADR-014 Phase 2 的第一步：建立三層 Agent 管線的最上游——UX Age
 
 | # | 類型 | 條件 | 通過標準 |
 |---|------|------|----------|
-| AC1 | 靜態 | SKILL.md 建立 | 建立 `skills/ux-agent/SKILL.md`，定義 `shikigami:ux` 技能，輸入 User Story 文字，輸出語意化骨架文件（JSON） |
+| AC1 | 靜態 | SKILL.md 建立 | 建立 `skills/ux-agent/SKILL.md`，定義 `shikigami:uiux-designer` 技能，輸入 User Story 文字，輸出語意化骨架文件（JSON） |
 | AC2 | 靜態 | 骨架文件 JSON Schema | SKILL.md 中定義骨架文件 JSON Schema，涵蓋 sections（版面區塊）、component hierarchy（元件層級）、interactions（互動說明） |
 | AC3 | 靜態 | designToken 型別欄位 | 骨架文件 Schema 中定義 `designToken` 型別欄位，值格式為 `{category}.{key}` 字串（如 `color.primary.500`），對應 `docs/design/design-tokens.json` 具名路徑 |
 | AC4 | 靜態 | ADR-006 XML 隔離標記 | SKILL.md 輸入處理段落明確標示 ADR-006 XML 隔離標記套用點（User Story 文字輸入須以 XML tag 包覆隔離） |
@@ -88,7 +88,7 @@ ADR-014 Phase 2 的第一步：建立三層 Agent 管線的最上游——UX Age
 
 **Done 定義**
 
-- [ ] `skills/ux-agent/SKILL.md` 已建立，定義 shikigami:ux 技能（AC1）
+- [ ] `skills/ux-agent/SKILL.md` 已建立，定義 shikigami:uiux-designer 技能（AC1）
 - [ ] 骨架文件 JSON Schema 已定義，涵蓋 sections、component hierarchy、interactions（AC2）
 - [ ] designToken 型別欄位已定義，值格式為 `{category}.{key}`，對應 design-tokens.json（AC3）
 - [ ] ADR-006 XML 隔離標記套用點已標示（AC4）
@@ -191,7 +191,7 @@ ADR-014 OQ-3 標記為「中優先級、待解答」。Vision Critic Agent 的 P
 
 **User Story**
 
-As a Developer subagent implementing frontend code, I want a well-defined UI Agent skill (shikigami:ui) that transforms the UX Agent's skeleton document into frontend code using only Tailwind CSS and Shadcn UI, so that all generated UI components are constrained to approved libraries and design tokens without requiring manual review of every implementation choice.
+As a Developer subagent implementing frontend code, I want a well-defined UI Agent skill (shikigami:uiux-designer) that transforms the UX Agent's skeleton document into frontend code using only Tailwind CSS and Shadcn UI, so that all generated UI components are constrained to approved libraries and design tokens without requiring manual review of every implementation choice.
 
 **背景**
 
@@ -201,7 +201,7 @@ ADR-014 Phase 2 的第二步：建立三層 Agent 管線的實作層——UI Age
 
 | # | 類型 | 條件 | 通過標準 |
 |---|------|------|----------|
-| AC1 | 靜態 | SKILL.md 建立 | 建立 `skills/ui-agent/SKILL.md`，定義 `shikigami:ui` 技能，輸入 UX Agent 骨架文件（JSON），輸出前端代碼片段 |
+| AC1 | 靜態 | SKILL.md 建立 | 建立 `skills/ui-agent/SKILL.md`，定義 `shikigami:uiux-designer` 技能，輸入 UX Agent 骨架文件（JSON），輸出前端代碼片段 |
 | AC2 | 靜態 | Design Tokens 注入規則 | 定義 Design Tokens 注入規則：顏色、圓角、間距值必須引用 `docs/design/design-tokens.json` 具名 token，禁止 hardcode 數值 |
 | AC3 | 靜態 | 元件庫白名單約束 | 定義元件庫白名單約束（Tailwind CSS + Shadcn UI），與 US-104 §12 AC 注入條目對齊 |
 | AC4 | 靜態 | 輸入格式對齊 | 輸入格式定義與 US-105 骨架文件 JSON Schema 一致，UI Agent 可直接解析 UX Agent 輸出 |
@@ -218,7 +218,7 @@ ADR-014 Phase 2 的第二步：建立三層 Agent 管線的實作層——UI Age
 
 **Done 定義**
 
-- [ ] `skills/ui-agent/SKILL.md` 已建立，定義 shikigami:ui 技能（AC1）
+- [ ] `skills/ui-agent/SKILL.md` 已建立，定義 shikigami:uiux-designer 技能（AC1）
 - [ ] Design Tokens 注入規則已定義，禁止 hardcode 數值（AC2）
 - [ ] 元件庫白名單（Tailwind CSS + Shadcn UI）已定義，與 US-104 對齊（AC3）
 - [ ] 輸入格式與 US-105 JSON Schema 一致（AC4）

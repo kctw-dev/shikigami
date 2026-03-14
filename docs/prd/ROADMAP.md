@@ -256,7 +256,7 @@ Sprint Review 時自動產出：
 | US-60 | Issue #46 子 Story #3 — 排程衝刺程式碼入庫 QA 自動化（schedule + scrum-master/sprint-review SKILL.md） | Sprint 32 ✅ |
 | US-61 | M5 條件 (a) 外部使用者觸及強化 — Onboarding 低摩擦路徑最佳化（README + tutorial + M5 追蹤更新） | Sprint 32 ✅ |
 | US-62 | Issue #35 — Token 追蹤 Baseline Snapshot 機制（Metrics_Log.md + sprint-planning/execution SKILL.md） | Sprint 32 ✅ |
-| US-63 | Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-intake Skill） | Sprint 33 ✅ |
+| US-63 | Issue #46 子 Story #4 — 需求入庫自動化（PO Backlog Intake cron + shikigami:backlog-management Skill） | Sprint 33 ✅ |
 | US-64 | M5 條件 (a) 主動觸及強化 — 外部社群推廣文案製作（GitHub README badges + 技術文章草稿 + 主動 outreach 指引） | Sprint 33 ✅ |
 | US-65 | US-T08（Intent Routing 測試）評估重開 — RICE 重新評分（2.0，No-Go，Deferred） | Sprint 33 ✅ |
 | US-66 | Issue #46 最終收尾 — 四條排程流程驗收條件逐項確認、缺口補齊，Issue #46 CLOSED | Sprint 34 ✅ |
@@ -292,10 +292,10 @@ Sprint Review 時自動產出：
 | US-102 | ADR-014 起草 — UIUX Agent 架構決策（三方案對比，四階段分期策略，6 個後續 Story） | Sprint 51 ✅ |
 | US-103 | Design Tokens 定義檔建立（design-tokens.json + SDD 前端模板 + ADR-014 OQ-2 回填） | Sprint 52 ✅ |
 | US-104 | 元件庫白名單 AC 注入機制（issue-management SKILL.md 前端 Story 識別規則 + AC 自動注入） | Sprint 52 ✅ |
-| US-105 | UX Agent SKILL.md 實作（shikigami:ux 技能定義 + 骨架文件 JSON Schema + designToken 型別） | Sprint 53 ✅ |
+| US-105 | UX Agent SKILL.md 實作（shikigami:uiux-designer 技能定義 + 骨架文件 JSON Schema + designToken 型別） | Sprint 53 ✅ |
 | OQ-1 | Playwright 截圖可行性調查（ADR-014 OQ-1 填入：GCP self-hosted runner headless Chromium 可行） | Sprint 53 ✅ |
 | OQ-3 | Vision Critic 通過閾值量化決策（ADR-014 OQ-3 填入：三維加權評分 ≥80 PASS） | Sprint 53 ✅ |
-| US-106 | UI Agent SKILL.md 實作（shikigami:ui 技能定義 + Design Tokens 注入 + 元件庫白名單約束） | Sprint 53 ✅ |
+| US-106 | UI Agent SKILL.md 實作（shikigami:uiux-designer 技能定義 + Design Tokens 注入 + 元件庫白名單約束） | Sprint 53 ✅ |
 | US-107 | Vision Critic Agent SKILL.md 實作（shikigami:vision-critic 技能定義 + 視覺比對規則 + Playwright 截圖整合） | Sprint 53 ✅ |
 | US-108 | 三層 Agent 管線端對端整合測試設計（SDD-UIUX-E2E.md：5 測試案例 + 三層降級策略） | Sprint 53 ✅ |
 | US-149 | SDD 前端模板更新 — Figma 設計稿區塊 + Figma 驗證 Gate Phase 1/2 過渡期規則 | Sprint 55 ✅ |

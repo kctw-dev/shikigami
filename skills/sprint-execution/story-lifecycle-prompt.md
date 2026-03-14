@@ -407,13 +407,19 @@ commit + 取得 commit SHA
 
 ## §3 TDD 開發流程（強制，doc_only=false 時）
 
-你必須嚴格遵循 TDD 三步循環：
+<HARD-GATE>
+**Developer Prompt 載入 Hard Gate**：進入 TDD 循環前，必須使用 Read 工具完整讀取 `skills/sprint-execution/developer-prompt.md`，載入 Developer 角色的完整 TDD 流程、Commit 規範、設計原則與限制。此 Gate 不受 bypass=true 豁免。
+</HARD-GATE>
+
+載入 `developer-prompt.md` 後，依其定義的 TDD 三步循環（Red → Green → Refactor）、Commit 規範與設計原則執行開發。以下僅列出 story-lifecycle 特有的補充邏輯。
 
 ### Red（紅燈）
 
 <!-- US-240 TDD 測試可寫性檢查 — Sprint 88 -->
 
 #### 測試可寫性檢查（強制，Red 階段進入前執行）
+
+> **角色上下文**：測試可寫性檢查涉及 AC 品質判斷，若觸發 ESCALATE: REQUIREMENT_AMBIGUITY 需向 PO/Architect 提供結構化問題。進入此檢查前，應已透過 §3 Hard Gate 載入 `developer-prompt.md`；若升級路徑需引用 PO 或 Architect 視角，使用 Read 工具讀取 `agents/product-owner.md` 與 `agents/architect.md` 以理解其決策框架。
 
 在撰寫第一個失敗測試前，必須先對每個 AC 執行「測試可寫性檢查」，確認 AC 具備足夠的資訊可寫出有意義的斷言（assertion）。
 
@@ -471,9 +477,7 @@ commit + 取得 commit SHA
 **測試可寫性 Hard Gate**：任一 AC 觸發 TC-W1 ~ TC-W5，禁止進入 Red 階段撰寫測試，必須回傳 ESCALATE: REQUIREMENT_AMBIGUITY。此 Gate 不受 bypass=true 豁免。
 </HARD-GATE>
 
-1. 根據 Acceptance Criteria 寫出失敗的測試
-2. 執行測試，確認測試確實失敗
-3. Commit：`test: add failing test for {feature}`
+（Red 步驟詳見 `developer-prompt.md` §TDD 流程）
 
 ### Green（綠燈）
 
@@ -482,7 +486,7 @@ commit + 取得 commit SHA
 <HARD-GATE>
 **API 契約 Hard Gate（涉及 API 的 Story）**：
 
-進入 Green 實作前，必須確認當前 Story 的 API 契約狀態：
+進入 Green 實作前，必須使用 Read 工具讀取 `agents/architect.md`，載入 Architect 角色的 API 設計品質標準與架構審查清單，再確認當前 Story 的 API 契約狀態。此 Gate 不受 bypass=true 豁免。
 
 1. 讀取 Sprint Planning 產出的技術評估表格（位於 sprint_file 或 Architect 輸出），確認本 Story 的「API 契約」欄位值：
    - **「不適用」**：本 Story 不涉及 API 互動，跳過此 Gate，直接進入 Green 實作
@@ -502,38 +506,7 @@ commit + 取得 commit SHA
 > 3. 確保前端 type 欄位名稱與後端 key 名稱**完全一致**（區分大小寫）
 > 4. 若存在不一致，以後端 key 名稱為準修正前端 type，再繼續實作
 
-1. 寫出**最小量**的代碼讓測試通過
-2. 不要過度設計，只做剛好讓測試通過的事
-3. 執行所有測試，確認新測試通過、既有測試不受影響
-4. Commit：`feat: implement {feature}`
-
-### Refactor（重構）
-
-1. 在測試全過的保護下，改善代碼結構
-2. 消除重複、改善命名、簡化邏輯
-3. 再次執行所有測試，確認重構沒有破壞任何東西
-4. Commit：`refactor: improve {description}`
-
-**每個 TDD 循環都是一個獨立的 commit 序列。不要把多個功能塞進一個循環。**
-
-### Commit 規範
-
-```
-類型：
-- feat:     新功能
-- fix:      修復 Bug
-- test:     測試相關
-- refactor: 重構（不改變行為）
-- docs:     文件更新
-- chore:    雜務（設定、工具等）
-```
-
-### 設計原則
-
-- **SOLID**：單一職責、開放封閉、Liskov 替換、介面隔離、依賴反轉
-- **DRY**（Don't Repeat Yourself）：消除重複，但不要為了 DRY 犧牲可讀性
-- **KISS**（Keep It Simple, Stupid）：選擇最簡單的方案解決問題
-- **YAGNI**（You Ain't Gonna Need It）：不要實作目前不需要的功能
+（Green / Refactor 步驟、Commit 規範、設計原則詳見 `developer-prompt.md`）
 
 ---
 
@@ -693,6 +666,10 @@ DESIGN Blocker 檢查 — {story_id}
 
 <!-- US-244 前端 Story 交付視覺一致性審查 — Sprint 88 -->
 
+<HARD-GATE>
+**UIUX/QA 角色載入 Hard Gate**：進入視覺一致性審查前，必須使用 Read 工具讀取 `agents/uiux-designer.md`（UIUX 視覺一致性審查視角）與 `agents/qa-engineer.md`（QA 視覺回歸確認視角），載入兩個角色的完整決策權與方法論。此 Gate 不受 bypass=true 豁免。
+</HARD-GATE>
+
 **觸發條件**：`story_type=FEATURE` 且 Story 被識別為前端 Story（涉及 UI 元件、頁面、視覺設計的修改）時，在雙階段自審（Spec Compliance + Code Quality）通過後、DoD 自檢前，執行 UIUX/QA 視覺一致性審查。
 
 > **注意**：`story_type=DESIGN` 的 Story 走 §4.5 專屬路徑（Vision Critic 自審 + QA Contract Testability Review），不適用本節。本節僅適用於 **FEATURE type 的前端修改 Story**。
@@ -769,37 +746,15 @@ QA 視覺回歸確認：
 
 ## §5 Spec Compliance Self-Review（第一階段自審）
 
+<HARD-GATE>
+**Spec Reviewer Prompt 載入 Hard Gate**：進入 Spec Compliance Self-Review 前，必須使用 Read 工具完整讀取 `skills/sprint-execution/spec-reviewer-prompt.md`，載入 Spec Compliance Reviewer 角色的完整審查 Checklist、輸出格式與判定標準。此 Gate 不受 bypass=true 豁免。
+</HARD-GATE>
+
 **進入此階段時，必須先重設認知基準**：關閉所有開發過程中建立的假設，重新以第三方視角閱讀原始 AC 清單。
 
-### 審查步驟
+### 審查執行
 
-1. 逐一讀取原始 sprint_file 中的每個 AC 條目
-2. 對照實作結果，逐條驗證
-3. 填寫審查清單（見下方）
-
-### 審查清單
-
-```
-Spec Compliance Self-Review — {story_id}
-
-AC 逐條驗證：
-- [ ] AC1：{AC 描述} → 實作狀態：{PASS/FAIL + 說明}
-- [ ] AC2：{AC 描述} → 實作狀態：{PASS/FAIL + 說明}
-（依 AC 數量依序列出）
-
-邊界條件檢查：
-- [ ] 所有 [動態] 類型 AC 已執行（非僅靜態驗證）
-- [ ] Edge case 已處理（null、空字串、邊界值）
-- [ ] 錯誤路徑有對應測試
-
-行為範例驗證（若 Story 含 [行為] 類型 AC）：
-- [ ] 每個 [行為] AC 的所有 Given-When-Then 場景均已逐一驗證
-- [ ] 實作行為與 Given-When-Then 描述完全一致，無偏離
-- [ ] 無遺漏的執行路徑（AC 描述中隱含但未被場景覆蓋的路徑）
-（若 Story 無 [行為] AC，此區塊填 N/A）
-
-整體結論：PASS / FAIL
-```
+載入 `spec-reviewer-prompt.md` 後，依其定義的審查 Checklist（AC 逐項驗證、缺少的需求、多餘的功能、誤解的需求、行為範例驗證、前後端 API 欄位一致性檢查）與輸出格式執行自審。
 
 ### 修復閉環規則
 
@@ -811,56 +766,15 @@ AC 逐條驗證：
 
 ## §6 Code Quality Self-Review（第二階段自審）
 
+<HARD-GATE>
+**Quality Reviewer Prompt 載入 Hard Gate**：進入 Code Quality Self-Review 前，必須使用 Read 工具完整讀取 `skills/sprint-execution/quality-reviewer-prompt.md`，載入 Code Quality Reviewer 角色的完整評估維度、CQ-NEW、CQ-SMOKE、CQ-DATA 檢查與判定標準。此 Gate 不受 bypass=true 豁免。
+</HARD-GATE>
+
 **進入此階段時，同樣重設認知基準**：以全新視角審視代碼品質，不使用開發過程中建立的「這段代碼已夠好」的慣性判斷。
 
-### 審查清單
+### 審查執行
 
-```
-Code Quality Self-Review — {story_id}
-
-命名與可讀性：
-- [ ] 命名清晰表達意圖（變數、函式、類別）
-- [ ] 函式長度合理（建議 < 20 行）
-- [ ] 無魔術數字（使用常數）
-- [ ] 無 dead code 或 commented-out code
-
-結構與設計：
-- [ ] 單一職責：每個函式/類別只做一件事
-- [ ] 沒有重複邏輯（DRY）
-- [ ] 依賴明確，無隱性耦合
-
-測試品質：
-- [ ] 測試命名清楚描述測試情境
-- [ ] 測試之間互相獨立，無順序依賴
-- [ ] 使用 Arrange-Act-Assert 模式
-- [ ] Mock/Stub 使用適當，不過度 mock
-
-測試覆蓋（CQ-NEW）：
-- [ ] CQ-NEW-1 測試覆蓋率：確認以下三類場景均有對應測試
-  - API 端點：每個新增或修改的 API 端點有至少 1 個自動化測試（含 Happy Path 與錯誤路徑）
-  - 資料庫查詢：涉及 DB 操作的邏輯有對應的整合測試或 mock 測試
-  - 業務邏輯：核心業務規則有單元測試，覆蓋主流程與邊界條件
-  - 判定標準：上述三類場景中，任一存在但無測試覆蓋 → FAIL
-- [ ] CQ-NEW-2 舊測試一致性：確認現有測試未與當前實作產生矛盾
-  - (a) 檢查測試是否斷言已移除的 UI 元素或 API 端點（若存在此類測試 → FAIL）
-  - (b) 確認 Story 描述的行為變更已反映在測試更新中（若測試仍驗證舊行為 → FAIL）
-  - 判定標準：測試通過但與實作語意矛盾（如測試期望已刪除的欄位仍返回）→ FAIL
-
-外部資源 Smoke Test 檢查（CQ-SMOKE，條件觸發）：
-<!-- US-253 Smoke Test 要求 — Sprint 93 -->
-- [ ] CQ-SMOKE-1 外部資源識別：本 Story 是否涉及外部資源？
-  - 識別條件（滿足任一即視為涉及外部資源）：外部 API / RSS / 爬蟲 / Webhook / 雲端服務 API / 外部認證服務
-  - 若否 → CQ-SMOKE 整體標記為 N/A，不執行後續檢查
-- [ ] CQ-SMOKE-2 Smoke test 存在：交付物含至少 1 個 smoke test，或有 [SMOKE-EXEMPT] 標注
-  - FAIL 條件：Story 涉及外部資源，但無 smoke test 且無豁免標注
-- [ ] CQ-SMOKE-3 Smoke test 使用真實資料：smoke test 代碼不 mock 外部呼叫
-  - FAIL 條件：smoke test 仍使用 Mock/Stub 替代外部呼叫
-- [ ] CQ-SMOKE-4 假設覆蓋：smoke test 斷言覆蓋主要 mock 假設（格式、結構、時效性）
-  - FAIL 條件：斷言空洞（僅確認不報錯，未驗證實際回應內容）
-  - 完整判定標準參照 skills/qa-engineer/SKILL.md §1.16
-
-整體結論：PASS / FAIL
-```
+載入 `quality-reviewer-prompt.md` 後，依其定義的評估維度（SOLID、命名品質、複雜度控制、測試品質、測試覆蓋 CQ-NEW、外部資源 Smoke Test CQ-SMOKE、安全性基本檢查、靜態資料覆蓋率 CQ-DATA）與通過/不通過標準執行自審。
 
 ### 修復閉環規則
 
@@ -935,6 +849,10 @@ Story 類型：Bug Fix / API 修改 / 前端修改 / 其他 / N/A（doc_only）
 ## §6.8 CI/CD 雙審查 Gate（條件觸發）
 
 <!-- US-189 CI/CD 變更強制 QA + SRE 雙審查 Gate — Sprint 72 -->
+
+<HARD-GATE>
+**QA/SRE 角色載入 Hard Gate**：進入 CI/CD 雙審查前，必須使用 Read 工具讀取 `agents/qa-engineer.md`（QA regression check 視角）與 `agents/sre-engineer.md`（SRE infrastructure config 視角），載入兩個角色的完整決策權與方法論。此 Gate 不受 bypass=true 豁免。
+</HARD-GATE>
 
 **觸發條件**：commit 前，偵測到以下任一 CI/CD 相關路徑被修改時觸發。無相關路徑變更則 SKIP。
 
@@ -1063,6 +981,10 @@ SRE 審查（infrastructure config check）：PASS / FAIL / SKIP
 ---
 
 ## §7 Security Self-Review（第三階段自審，條件觸發）
+
+<HARD-GATE>
+**Security Engineer 角色載入 Hard Gate**：進入 Security Self-Review 前，必須使用 Read 工具讀取 `agents/security-engineer.md`，載入 Security Engineer 角色的完整決策權、安全審查方法論與檢查清單。此 Gate 不受 bypass=true 豁免。
+</HARD-GATE>
 
 **觸發條件（滿足任一即觸發）：**
 

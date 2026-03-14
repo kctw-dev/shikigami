@@ -80,7 +80,34 @@
 - 測試是否容易維護？（不脆弱，不依賴實作細節）
 - 是否有遺漏的邊界值測試？（null、空值、最大值、最小值）
 
-### 5. 安全性基本檢查
+### 5. 測試覆蓋（CQ-NEW）
+
+- [ ] **CQ-NEW-1 測試覆蓋率**：確認以下三類場景均有對應測試
+  - API 端點：每個新增或修改的 API 端點有至少 1 個自動化測試（含 Happy Path 與錯誤路徑）
+  - 資料庫查詢：涉及 DB 操作的邏輯有對應的整合測試或 mock 測試
+  - 業務邏輯：核心業務規則有單元測試，覆蓋主流程與邊界條件
+  - 判定標準：上述三類場景中，任一存在但無測試覆蓋 → FAIL
+- [ ] **CQ-NEW-2 舊測試一致性**：確認現有測試未與當前實作產生矛盾
+  - (a) 檢查測試是否斷言已移除的 UI 元素或 API 端點（若存在此類測試 → FAIL）
+  - (b) 確認 Story 描述的行為變更已反映在測試更新中（若測試仍驗證舊行為 → FAIL）
+  - 判定標準：測試通過但與實作語意矛盾（如測試期望已刪除的欄位仍返回）→ FAIL
+
+### 6. 外部資源 Smoke Test 檢查（CQ-SMOKE，條件觸發）
+
+<!-- US-253 Smoke Test 要求 — Sprint 93 -->
+
+- [ ] **CQ-SMOKE-1 外部資源識別**：本 Story 是否涉及外部資源？
+  - 識別條件（滿足任一即視為涉及外部資源）：外部 API / RSS / 爬蟲 / Webhook / 雲端服務 API / 外部認證服務
+  - 若否 → CQ-SMOKE 整體標記為 N/A，不執行後續檢查
+- [ ] **CQ-SMOKE-2 Smoke test 存在**：交付物含至少 1 個 smoke test，或有 [SMOKE-EXEMPT] 標注
+  - FAIL 條件：Story 涉及外部資源，但無 smoke test 且無豁免標注
+- [ ] **CQ-SMOKE-3 Smoke test 使用真實資料**：smoke test 代碼不 mock 外部呼叫
+  - FAIL 條件：smoke test 仍使用 Mock/Stub 替代外部呼叫
+- [ ] **CQ-SMOKE-4 假設覆蓋**：smoke test 斷言覆蓋主要 mock 假設（格式、結構、時效性）
+  - FAIL 條件：斷言空洞（僅確認不報錯，未驗證實際回應內容）
+  - 完整判定標準參照 skills/qa-engineer/SKILL.md §1.16
+
+### 7. 安全性基本檢查
 
 - 使用者輸入是否有 sanitization？
 - SQL 查詢是否使用參數化？（如適用）
@@ -89,7 +116,7 @@
 - API 端點是否有適當的認證 / 授權檢查？（如適用）
 - 是否有 Path Traversal、XSS、CSRF 風險？（如適用）
 
-### 6. 靜態資料覆蓋率 Hard Gate（US-252）
+### 8. 靜態資料覆蓋率 Hard Gate（US-252）
 
 <!-- US-252 資料品質 Gate：Code Quality Review 資料覆蓋率 Hard Gate — Sprint 93 -->
 
@@ -183,6 +210,8 @@
 | 複雜度控制 | {Good / Acceptable / Needs Improvement} |
 | 測試品質 | {Good / Acceptable / Needs Improvement} |
 | 安全性 | {Good / Acceptable / Needs Improvement} |
+| 測試覆蓋（CQ-NEW） | {PASS / FAIL} |
+| 外部資源 Smoke Test（CQ-SMOKE） | {PASS / FAIL / N/A} |
 | 靜態資料覆蓋率 | {PASS / Hard Gate FAIL / N/A（不涉及靜態資料檔）} |
 
 **總評**：{一句話總結代碼品質與是否通過}
@@ -196,12 +225,16 @@
 - 零個 Critical 問題
 - Important 問題累計不超過 2 個
 - 無明顯安全漏洞
+- 測試覆蓋 CQ-NEW-1、CQ-NEW-2 均 PASS
+- 外部資源 Smoke Test CQ-SMOKE 通過或 N/A
 - 靜態資料覆蓋率 Hard Gate 通過（CQ-DATA-2 PASS 或 N/A）
 
 **FAIL 條件**（任一條件觸發）：
 - 存在任何 Critical 問題
 - Important 問題累計 3 個以上
 - 存在明顯安全漏洞
+- **CQ-NEW FAIL**：任一場景類型存在但無測試覆蓋（CQ-NEW-1），或測試與實作語意矛盾（CQ-NEW-2）
+- **CQ-SMOKE FAIL**：Story 涉及外部資源但無 smoke test（CQ-SMOKE-2）、smoke test mock 外部呼叫（CQ-SMOKE-3）、或斷言空洞（CQ-SMOKE-4）
 - **靜態資料覆蓋率 Hard Gate FAIL（CQ-DATA-2 FAIL）**：資料集實際條目數未達 AC 定義目標，強制判定為 FAIL，不得標記 Story 為完成
 
 ---

@@ -246,8 +246,8 @@ Phase 1 全部 2 Stories（US-103/US-104）於 Sprint 52 完成，Velocity 2 poi
 
 | 工作項目 | 類型 | 說明 |
 |---------|------|------|
-| **UX Agent SKILL.md 實作** | 代碼 | 定義 `shikigami:ux` 技能：輸入 User Story，輸出語意化資訊架構骨架（版面區塊、元件層級、互動說明），無樣式 |
-| **UI Agent SKILL.md 實作** | 代碼 | 定義 `shikigami:ui` 技能：輸入 UX 骨架 + Design Tokens，輸出僅用 Tailwind CSS + Shadcn UI 的前端代碼 |
+| **UX Agent SKILL.md 實作** | 代碼 | 定義 `shikigami:uiux-designer` 技能：輸入 User Story，輸出語意化資訊架構骨架（版面區塊、元件層級、互動說明），無樣式 |
+| **UI Agent SKILL.md 實作** | 代碼 | 定義 `shikigami:uiux-designer` 技能：輸入 UX 骨架 + Design Tokens，輸出僅用 Tailwind CSS + Shadcn UI 的前端代碼 |
 | **Playwright 截圖整合** | 代碼 | 在 CI 工作流中加入 Playwright 截圖步驟，為 Phase 3 Vision Critic 準備基礎設施 |
 | **Agent 間溝通協議定義** | 文件 | 定義 UX → UI 的骨架文件格式規範（JSON Schema），確保兩 Agent 輸入/輸出相容 |
 
@@ -282,7 +282,7 @@ Phase 1 全部 2 Stories（US-103/US-104）於 Sprint 52 完成，Velocity 2 poi
 |---------|------|------|
 | **Reference-Driven Design 機制** | 代碼 | 建立 Reference 截圖庫（高質感設計範例），Vision Critic 自動引用作為審查基準 |
 | **微互動規格注入** | 文件 | 在 Design Tokens 中加入動畫規格（貝茲曲線、過場延遲），強制前端代碼遵循 |
-| **語氣 Agent** | 代碼 | 定義 `shikigami:tone` 技能：潤飾所有錯誤提示與 UI 文案，消除「機器人味」 |
+| **語氣 Agent** | 代碼 | 定義 tone 技能（未實作，Phase 4 構想）：潤飾所有錯誤提示與 UI 文案，消除「機器人味」 |
 | **PM Agent / Flow Agent / Spec Compiler Agent** | 代碼 | 上游設計 Agent 化：從一句話需求自動產出 Edge Cases 狀態機、頁面跳轉邏輯、結構化 JSON 規格書 |
 
 **Phase 4 屬長期演進，不排入近期 Sprint 規劃。**
