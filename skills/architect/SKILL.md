@@ -295,7 +295,7 @@ Architect 檢查 Story 是否符合以下任一條件，若符合則建議採用
 |---|---------|------|---------|
 | B1 | Story 含 `[動態]` AC 且有多條執行路徑 | AC 通過標準描述「當 X 時 Y，否則 Z」的分支邏輯 | 建議將該 AC 改為 `[行為]` 類型，以 Given-When-Then 明確描述各路徑 |
 | B2 | Story 涉及使用者可觀察的行為變更 | 新增或修改 CLI 輸出、告警訊息、錯誤處理等使用者面向行為 | 建議補充行為範例（Specification by Example） |
-| B3 | Story 涉及狀態轉換邏輯 | 狀態機、label 流轉、Story 生命週期等有 N 個狀態的轉換 | 建議用 Given-When-Then 逐一描述每個轉換路徑 |
+| B3 | Story 涉及狀態轉換邏輯 | 狀態機、label 流轉、Story 生命週期等有 N 個狀態的轉換 | 用 Given-When-Then 逐一描述每個轉換路徑 + **調用 `/diagram` 產出狀態機流程圖** |
 | B4 | AC 通過標準超過 80 字且含條件邏輯 | 複雜的通過標準用散文寫容易漏判 | 建議拆為多個 Given-When-Then 場景 |
 
 **不觸發 BDD 建議**：doc-only 且所有 AC 為 `[靜態]` 的 Story、簡單存在性檢查、格式修改。
@@ -304,10 +304,10 @@ Architect 檢查 Story 是否符合以下任一條件，若符合則建議採用
 
 | # | 觸發條件 | 說明 | 建議動作 |
 |---|---------|------|---------|
-| D1 | Story 引入新的核心領域概念 | 新增 Entity、Value Object、Aggregate 等業務物件 | 建議先建立領域模型文件（`docs/sdd/domain-model-*.md`） |
-| D2 | Story 跨越多個模組且共享業務邏輯 | 多個 Skill/模組需要理解同一業務規則 | 建議定義 Bounded Context 邊界與統一語言（Ubiquitous Language） |
-| D3 | Story 涉及複雜業務規則 | 包含 3 個以上互相影響的業務條件判斷 | 建議建立領域規則文件，用表格或決策樹記錄規則 |
-| D4 | Story 修改的程式碼涉及 3+ 個 Entity 的互動 | 多物件交互容易產生隱含耦合 | 建議繪製領域互動圖或建立 SDD |
+| D1 | Story 引入新的核心領域概念 | 新增 Entity、Value Object、Aggregate 等業務物件 | 建立領域模型文件（`docs/sdd/domain-model-*.md`）+ **調用 `/diagram` 產出領域模型圖** |
+| D2 | Story 跨越多個模組且共享業務邏輯 | 多個 Skill/模組需要理解同一業務規則 | 定義 Bounded Context 邊界與統一語言 + **調用 `/diagram` 產出模組邊界圖** |
+| D3 | Story 涉及複雜業務規則 | 包含 3 個以上互相影響的業務條件判斷 | 建立領域規則文件，用表格或決策樹記錄規則 |
+| D4 | Story 修改的程式碼涉及 3+ 個 Entity 的互動 | 多物件交互容易產生隱含耦合 | **調用 `/diagram` 產出類別互動圖** + 建立 SDD |
 
 **不觸發 DDD 建議**：純 UI 修改、配置變更、doc-only Story、單一模組內部重構。
 
@@ -355,6 +355,7 @@ Architect Round 2 回傳新增以下區塊：
    - 核心概念定義（Entity / Value Object 列表）
    - 概念間關係（簡單表格或文字描述）
    - 統一語言詞彙表（術語 → 定義，避免同一概念多種稱呼）
+4. **Architect 必須更新全局架構文件**（見 §11），調用 `/diagram` 更新 `docs/sdd/architecture.md` 中的對應圖表
 
 ---
 
@@ -651,6 +652,8 @@ Architect 在 SDD 審查時，除既有的端點規格、認證策略、DB index
 ```markdown
 ### 模組設計
 
+> 全局領域模型與類別圖見 [docs/sdd/architecture.md](../sdd/architecture.md)
+
 #### 責任劃分
 
 | 層級 | 責任 | 檔案 |
@@ -672,6 +675,8 @@ Architect 在 SDD 審查時，除既有的端點規格、認證策略、DB index
 | {code} | {status} | {說明} |
 ```
 
+**注意**：各 SDD 只放自己的循序圖和流程圖，領域模型與類別圖統一引用 `docs/sdd/architecture.md`，不在個別 SDD 中重複繪製。
+
 ### 輸出格式
 
 Architect 審查輸出新增領域模型維度：
@@ -686,11 +691,65 @@ Architect 審查輸出新增領域模型維度：
   [PASS/FAIL] DM-1 業務邏輯封裝檢查
   [PASS/FAIL] DM-2 Single Source of Truth 檢查
   [PASS/FAIL] DM-3 狀態轉換統一檢查
+  [PASS/FAIL] 全局架構文件一致性（見 §11）
 ```
 
 <HARD-GATE>
 **領域模型審查 Hard Gate**：DM-1、DM-2、DM-3 任一 FAIL 時，Architect 審查整體判定為 FAIL。Story 不得進入開發，須先修正 SDD 的模組設計。
 </HARD-GATE>
+
+---
+
+## §11 全局架構文件與圖表產出
+
+### 目的
+
+維護一份**系統級全局架構文件** `docs/sdd/architecture.md`，作為所有 SDD 共享的 Single Source of Truth。各個 SDD 只放自己的循序圖和流程圖，領域模型、類別圖、元件圖統一在全局架構文件中維護。
+
+### 全局架構文件結構
+
+`docs/sdd/architecture.md` 包含以下三張全局圖表：
+
+| 圖表 | 內容 | 更新觸發 |
+|------|------|---------|
+| **系統領域模型** | Entity 之間的關聯（如 User、Order、Credit、Job 等核心概念的關係） | D1/D2 觸發時 |
+| **類別圖** | Service 層、Router 層的結構與依賴方向 | DM-1/DM-2 審查觸發時 |
+| **元件圖** | 前端 / 後端 / DB / 外部服務的系統邊界 | 新增外部依賴或系統邊界變更時 |
+
+### 圖表產出規則
+
+Architect 在以下情境**必須調用 `/diagram` 更新全局架構文件中的對應圖表**：
+
+| 觸發條件 | 產出 | 更新目標 |
+|---------|------|---------|
+| D1（新領域概念） | 更新系統領域模型圖 | `docs/sdd/architecture.md` 領域模型段落 |
+| D2（跨模組共享邏輯） | 更新系統領域模型圖 + 元件圖 | `docs/sdd/architecture.md` 領域模型 + 元件圖段落 |
+| D4（3+ Entity 互動） | 更新類別圖 | `docs/sdd/architecture.md` 類別圖段落 |
+| B3（狀態轉換） | 在**對應 SDD** 中產出狀態機流程圖 | 各 SDD 自己的流程圖段落（非全局） |
+| DM-1/DM-2 審查觸發 | 更新類別圖（Service/Router 結構） | `docs/sdd/architecture.md` 類別圖段落 |
+| 新增外部服務依賴 | 更新元件圖 | `docs/sdd/architecture.md` 元件圖段落 |
+
+### 各 SDD 與全局架構文件的分工
+
+| 放在全局架構文件 | 放在各 SDD |
+|----------------|-----------|
+| 系統領域模型（全局 Entity 關聯） | 循序圖（該功能的 API 呼叫流程） |
+| 類別圖（Service/Router 層結構） | 流程圖（該功能的業務邏輯步驟） |
+| 元件圖（系統邊界） | 狀態機圖（該功能的狀態轉換，B3 觸發） |
+
+### 全局架構文件不存在時
+
+首次觸發時由 Architect 自動建立 `docs/sdd/architecture.md`，包含三個段落的骨架結構。後續每次觸發時增量更新，不重建。
+
+### 一致性檢查
+
+Architect 在 SDD 審查時，額外檢查：
+
+- [ ] 各 SDD 引用的 Entity 是否存在於全局領域模型中
+- [ ] 各 SDD 引用的 Service 是否存在於全局類別圖中
+- [ ] 新增的外部依賴是否已更新至全局元件圖
+
+不一致時 Architect 審查輸出 FAIL，要求先更新全局架構文件。
 
 ---
 
