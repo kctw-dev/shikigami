@@ -8,34 +8,22 @@
 
 | 版本 | 主題 | Sprint | 交付內容 |
 |------|------|--------|----------|
-| v0.1.0 | 核心框架 | Sprint 1 | 16 Skills + 7 Agents + 3 Commands + Issue Management |
-| v0.2.0 | 自我感知 | Sprint 2–4 | Onboarding + Health Check + Sprint Metrics |
-| v0.3.0 | 知識沉澱 | Sprint 4–6 | Retrospective Analytics + Tech Debt Registry + 5 驗證腳本 + Hard Gate 機制 |
-| v0.3.x | 穩定化 | Sprint 7–15 | dispel 解咒模式 + CI Pipeline + 制衡案例 + Issue 回覆自動化 + Bypass 機制 + Token 成本透明化 + 孤兒文件偵測 + 零讀取架構 + 角色權重自動調整 + 使用者文件（Tutorial + Troubleshooting） |
-| v0.5.x | 流程精煉 | Sprint 16–17 | 快思/慢想雙模式精簡化 + doc-only Story 執行保護 + 多平台可行性調查 + 歷史歸檔機制（PROJECT_BOARD + Retrospective_Log） |
-| v0.7.x | 自動化擴展 | Sprint 18–20 | schedule Skill（Sprint 自動排程執行）+ ADR-005 + shoot 短衝模式 + /shoot Command + 序列排程保護 + PO drift 修正 |
-| v0.9.x | 品質強化 | Sprint 21–24 | parallel-dispatch 同檔案衝突偵測 + Onboarding Labels + 提示注入防護（ADR-006）+ ADR-007 Story-Lifecycle Subagent + 外部抽樣審查機制 + Architect/QA 知識框架 Skill |
-| v0.13.0 | 多平台支援 | Sprint 25–29 | M5 完成條件終審 + OpenCode 平台整合（ADR-008）+ symlink 適配策略 + 五角色 Agent 移植 + INSTALL_OPENCODE.md 安裝指南 + Issue #3 正式結案 + Beta 使用者招募 |
-| v0.17.0 | 自動化閉環 | Sprint 30–33 | Issue #46 排程四條流程完成 + backlog-intake Skill + ADR-009 + M5 推廣行動 + Token Baseline Snapshot |
-| v0.29.0 | 多環境穩定化 + diagram 技能 | Sprint 34–50 | 多 GCE 認證指引（ADR-012）+ CI/CD workflow 拆分指引 + 版號三檔同步腳本 + 環境可攜性方案（Dotfiles Repo）+ ADR-013 diagram MCP 架構決策 + shikigami:diagram Skill（drawio-mcp-server stdio 整合）|
-| v0.29.1 | UIUX Agent 基礎建設 | Sprint 51–52 | ADR-014 UIUX Agent 架構決策 + Design Tokens 機器可讀規格（design-tokens.json）+ 前端 SDD 模板標準化 + issue-management 前端 Story AC 自動注入機制 |
-| v0.30.0 | Figma 整合管線 | Sprint 53–56 | ADR-015 Figma 整合架構決策 + UX/UI/Vision Critic 三層 Skill 定義 + Figma MCP Server 連線設定 + Component Library 規格 + Design Tokens Versioning + Figma 管線使用指南 + Vision Critic PoC 規格 + 設計師協作指南 |
-| v0.34.0 | 輕量化與品質強化 | Sprint 57–60 | Vision Critic 同步 ADR-015 Figma 架構 + Sprint Review 流程精簡化 + 模型分層策略調查與 Phase 1/2 落地（subagent 自動模型指定）+ Plugin 載入 TROUBLESHOOTING 文件化 + Metrics 計算視窗限制（30 Sprint）+ 方法論適用性自動評估（BDD/DDD 建議） |
-| v0.41.0 | 方法論強化 | Sprint 61–73 | QA Spec/Code 雙階段審查強化 + Scrum Master 自動排程精煉 + 多平台穩定化 + Gemini CLI / Cursor 平台整合 |
-| v0.45.0 | 使用者體驗強化 | Sprint 74 | README 資訊架構重設計 + API 契約 Hard Gate + E2E 測試基礎設施 |
-| v0.50.0 | 流程可靠性與品質閉環 | Sprint 75–84 | Story-Lifecycle Subagent 架構落地 + ADR-016 UI/UX Designer 角色 + ADR-017 Context Hub Knowledge Ingestion + ADR-018 Discovery Phase 草稿 + Anti-Hallucination 雙軌閉環（不確定性前置檢查 + Knowledge Ingestion）+ 組織記憶基礎（Decision Journal + 代理人校準 + 統一合約位置）+ Checkpoint 強制重讀機制 + SPACE 五維度指標 + 知識品質閉環（知識老化偵測 + SBE 範例體系 + 兩層索引 + Quality Observer） |
-| v0.59.0 | Discovery Phase 落地 | Sprint 85 | ADR-018 裁決 Accepted（Option A 獨立 Discovery Skill）+ Discovery Phase Skill 實作（6-step flow + Product Brief 標準化 + 3 Hard Gates + 假設外顯化）+ 五階段流水線 Phase 0 入口建立 |
-| v0.60.0 | Discovery Ecosystem + SRE 基礎 | Sprint 86 | Discovery Ecosystem 閉環（Issue → Triage → Backlog Bridge → Discovery Phase 完整路由）+ SRE 事故回應基礎框架（Incident Response Runbook + Post-mortem 模板 + Golden Signals 可操作清單 + SLO/SLI 量測指引 + 斷路器/降級實作 Checklist） |
-| v0.61.0 | 部署品質 + Solo Mode | Sprint 87 | 效能基準管理框架（三場景 Load Test + 偏差公式 + 告警閾值 + SLI 交叉參照 + 模板）+ 單人服務模式角色封裝規範（SOLO_MODE_SPEC + QA POC 雙檔案互驗） |
+| v0.1–0.9 | 核心建立與穩定化 | 1–24 | 25 Skills + 8 Agents 基礎架構、CI Pipeline、Hard Gate 機制、dispel 解咒模式、schedule/shoot 自動化、parallel-dispatch、使用者文件 |
+| v0.13–0.29 | 多平台 + 自動化閉環 | 25–50 | OpenCode 平台整合、排程四條流程、版號同步腳本、環境可攜性方案、diagram Skill（drawio MCP 整合） |
+| v0.30–0.41 | Design 體系 + 方法論強化 | 51–73 | UIUX Agent + Figma 整合管線 + Vision Critic、QA 雙階段審查強化、模型分層策略、Gemini CLI / Cursor 平台整合 |
+| v0.45–0.50 | 流程可靠性與品質閉環 | 74–84 | Story-Lifecycle Subagent 架構、Anti-Hallucination 雙軌閉環、Discovery Phase 草稿（ADR-018）、SPACE 五維度指標、知識品質閉環 |
+| v0.59–0.61 | Discovery + SRE + 部署品質 | 85–87 | Discovery Phase Skill 落地、Discovery Ecosystem 閉環、SRE 事故回應框架、效能基準管理、Solo Mode |
+| v0.64–0.66 | MCP 基礎建設 + Context 瘦身 | 88–92 | 流程管理 MCP Server Phase 1、TDD 需求理解度升級、SKILL.md 瘦身（~75% context 降低）、Subagent 結果快取 |
+| v0.68.0 | 品質深化 | 93–94 | QA 角色升級（→使用者代言人）、資料品質關卡、Smoke Test、探索性測試、低記憶體環境平行限制、版號測試技術債修復 |
 
 ---
 
-## 累積數據（截至 Sprint 87）
+## 累積數據（截至 Sprint 94）
 
-- 87 個 Sprint 完成率 ~99%
-- 18 個 ADR（架構決策紀錄）
-- 8 個自動化驗證腳本 + GitHub Actions CI Pipeline
-- 25 個 Skills / 8 Agents / 4 Commands
+- 94 個 Sprint 完成率 ~99%
+- 19 個 ADR（架構決策紀錄）
+- 13 個自動化驗證腳本 + GitHub Actions CI Pipeline
+- 25 個 Skills / 8 Agents
 
 ---
 
@@ -55,7 +43,7 @@
 
 | 文件 | 說明 |
 |------|------|
-| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-018） |
+| `docs/adr/` | 架構決策紀錄（ADR-001 ~ ADR-019） |
 | `docs/sprints/` | Sprint 規劃與執行紀錄 |
 | `docs/km/Retrospective_Log.md` | 每次犯的錯都記下來，不重複犯 |
 | `docs/km/Metrics_Log.md` | Velocity 趨勢與完成率追蹤 |

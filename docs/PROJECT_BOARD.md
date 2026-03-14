@@ -7,15 +7,22 @@
 
 ---
 
-## Sprint 95（進行中）
+## Sprint 95（完成）
 
 > Sprint Goal：強化 Architect 審查 Gate 的分層合規性檢查能力
+> **結果**：Goal 達成（1/1 Stories PASS）。Velocity 2 points，完成率 100%。Layer Compliance 分層合規檢查三層防線（QA WARN → Architect FAIL → 輸出範例同步），責任邊界清晰。
+> **Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | US-257：Architect 審查 Gate 加入 Layer Compliance 分層合規檢查 | #254 | S | 2 | 完成 |
 
 **Sprint 容量**：2 points
+
+## Sprint 95 統計
+- Velocity：2 points
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-14
 
 ---
 

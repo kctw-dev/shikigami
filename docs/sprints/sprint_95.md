@@ -3,7 +3,7 @@
 **Sprint Goal**：強化 Architect 審查 Gate 的分層合規性檢查能力
 **日期**：2026-03-14
 **容量**：2 points
-**狀態**：進行中
+**狀態**：完成
 
 ## Sprint Backlog
 

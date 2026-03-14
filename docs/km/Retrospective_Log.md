@@ -4,6 +4,23 @@
 
 ---
 
+## Sprint 95（2026-03-14）
+
+**Sprint Goal**：強化 Architect 審查 Gate 的分層合規性檢查能力
+**結果**：Goal 達成（1/1 Stories PASS）
+
+### Good
+- Layer Compliance 分層合規檢查三層防線設計（QA WARN → Architect FAIL → 輸出範例同步），責任邊界清晰
+- PO/Architect/QA 合併建議正確（同概念工作打包，3 Story → 1 Story），符合團隊工作原則
+
+### Problem
+- 無顯著問題
+
+### Action
+- 無 Action Items
+
+---
+
 ## Sprint 94
 
 **日期**：2026-03-13
