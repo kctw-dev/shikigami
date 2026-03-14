@@ -3,7 +3,7 @@
 **Sprint Goal**：強化框架品質護欄 — 版號驗證自動化、Skill 角色 prompt 拆分、UI/UX 設計前置 Gate，全面消除已知合規盲點
 **日期**：2026-03-14
 **容量**：9 points
-**狀態**：進行中
+**狀態**：完成
 
 ## Sprint Backlog
 
