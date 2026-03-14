@@ -13,12 +13,12 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| US-263：validate-version.sh 增強：README.md badge 版號檢查 | #259 | S | 1 | 待辦 |
-| US-264：版本驗證 Hook：commit 前自動檢查版號一致性 | #260 | M | 2 | 待辦 |
-| US-265：architecture-decision Skill 拆分：角色 prompt 檔案分離 | #261 | M | 2 | 待辦 |
-| US-266：deployment-readiness Skill 拆分：SRE / Security 角色 prompt 分離 | #262 | M | 2 | 待辦 |
-| US-267：UI/UX Designer 前置檢查：Design System / Design Token / Guideline 文件存在性驗證 | #258 | S | 1 | 待辦 |
-| US-268：演示模式 / 火力展示（Spike）：技術可行性報告 | #255 | S | 1 | 待辦 |
+| US-263：validate-version.sh 增強：README.md badge 版號檢查 | #259 | S | 1 | 完成 |
+| US-264：版本驗證 Hook：commit 前自動檢查版號一致性 | #260 | M | 2 | 完成 |
+| US-265：architecture-decision Skill 拆分：角色 prompt 檔案分離 | #261 | M | 2 | 完成 |
+| US-266：deployment-readiness Skill 拆分：SRE / Security 角色 prompt 分離 | #262 | M | 2 | 完成 |
+| US-267：UI/UX Designer 前置檢查：Design System / Design Token / Guideline 文件存在性驗證 | #258 | S | 1 | 完成 |
+| US-268：演示模式 / 火力展示（Spike）：技術可行性報告 | #255 | S | 1 | 完成 |
 
 **Sprint 容量**：9 points
 
