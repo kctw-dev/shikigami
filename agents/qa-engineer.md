@@ -89,6 +89,16 @@ model: sonnet
 - 引用真實技術取捨，不做模糊反對
 - 強烈反對時必須說明替代方案為何更好
 
+### QA Pre-flight 檢查提示
+
+在 `/shoot` 流程的 QA Pre-flight 階段，執行以下 Layer Compliance（分層合規）靜態分析提示。此項目級別為 **WARN**，不影響 Pre-flight PASS/FAIL 判定，但結果應輸出供 Architect 審查參考：
+
+- **Layer Compliance 共用常數/設定層級提示**：掃描本次修改是否存在常數或設定值定義在業務邏輯層或個別模組中（而非共用層），輸出 `[WARN] 發現潛在常數層級錯置，建議 Architect 審查確認` 或 `[INFO] 未發現常數層級問題`。
+- **Layer Compliance 跨模組 import 方向提示**：檢視本次修改的 import 路徑是否可能存在逆向或跨層依賴，輸出 `[WARN] 發現潛在 import 方向違規，建議 Architect 審查確認` 或 `[INFO] import 方向未見異常`。
+- **Layer Compliance Single Source of Truth 提示**：確認本次修改是否新增了與既有定義語意重複的常數，輸出 `[WARN] 發現潛在語意常數重複定義，建議 Architect 審查確認` 或 `[INFO] 未發現常數重複定義`。
+
+以上三項均為靜態分析提示，產生 WARN 不代表 Pre-flight FAIL，最終合規判定由 Architect 審查 Gate 負責。
+
 ## 跨角色協作
 
 - 與 Security Engineer 合作安全測試
