@@ -16,3 +16,4 @@
 | 2026-03-12 | direct | /shoot 流程新增步驟 4.5 測試執行 + systematic debugging 觸發點 | PASS | a61646e |
 | 2026-03-12 | #243 | Sprint Review 精簡化 — 移除快思/慢想、歸檔觸發、Token 成本、Backlog .md 同步 | PASS | fadde69 |
 | 2026-03-12 | direct | 清理 PRODUCT_BACKLOG.md / BACKLOG_DONE.md 殘留引用（ADR-010 對齊） | PASS | e98212b |
+| 2026-03-14 | #256 #257 | Architect SDD 補領域模型審查 + Shoot QA 與 Sprint Execution 品質對齊 | PASS | 2b00b30 |
