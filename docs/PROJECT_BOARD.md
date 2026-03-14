@@ -1,9 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-14（Sprint 95 Planning 完成）
-**當前 Sprint**：Sprint 95（進行中）
+**最後更新**：2026-03-14（Sprint 96 Planning 完成）
+**當前 Sprint**：Sprint 96（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 95](sprints/sprint_95.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 96](sprints/sprint_96.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 96（進行中）
+
+> Sprint Goal：強化框架品質護欄 — 版號驗證自動化、Skill 角色 prompt 拆分、UI/UX 設計前置 Gate，全面消除已知合規盲點
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| US-263：validate-version.sh 增強：README.md badge 版號檢查 | #259 | S | 1 | 待辦 |
+| US-264：版本驗證 Hook：commit 前自動檢查版號一致性 | #260 | M | 2 | 待辦 |
+| US-265：architecture-decision Skill 拆分：角色 prompt 檔案分離 | #261 | M | 2 | 待辦 |
+| US-266：deployment-readiness Skill 拆分：SRE / Security 角色 prompt 分離 | #262 | M | 2 | 待辦 |
+| US-267：UI/UX Designer 前置檢查：Design System / Design Token / Guideline 文件存在性驗證 | #258 | S | 1 | 待辦 |
+| US-268：演示模式 / 火力展示（Spike）：技術可行性報告 | #255 | S | 1 | 待辦 |
+
+**Sprint 容量**：9 points
 
 ---
 
