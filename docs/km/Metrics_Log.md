@@ -101,6 +101,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 94 | 2026-03-13 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-256（S/1pt）；S92=3→S93=6→S94=1，S93→S94 下降 -83.3%（超出 ±20%），先升後降方向不一致→不規則；版號一致性測試技術債修復（jq preflight + 空字串防護 + TC-07/TC-08） |
 | Sprint 95 | 2026-03-14 | 2 points | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-257（S/2pt）；S93=6→S94=1→S95=2，S94→S95 上升 +100%（超出 ±20%），先降後升方向不一致→不規則；Layer Compliance 分層合規檢查三層防線 |
 | Sprint 96 | 2026-03-14 | 9 points | 100% | 上升趨勢 | Goal 達成，6/6 Stories PASS；US-263（S/1pt）+ US-264（M/2pt）+ US-265（M/2pt）+ US-266（M/2pt）+ US-267（S/1pt）+ US-268（S/1pt）；S94=1→S95=2→S96=9，S95→S96 上升 +350%（超出 ±20%），連續兩期上升→上升趨勢；版號驗證雙層 Hook + Skill 角色 prompt 拆分（architecture-decision + deployment-readiness）+ UI/UX Design Foundation Gate + 演示模式 Spike Report |
+| Sprint 97 | 2026-03-15 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；#267（S/1pt）；S95=2→S96=9→S97=1，S96→S97 下降 -88.9%（超出 ±20%），先升後降方向不一致→不規則；ADR-021 pr-review-toolkit 外部 Plugin 整合架構定義（RESEARCH Spike） |
 
 ---
 
@@ -158,6 +159,7 @@ Quality Observer 消費 SPACE 五維度記錄表作為觀察數據來源，同�
 | Sprint 94 | 2026-03-13 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（外部抽樣 1/1 CONFIRM，0 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入）
 | Sprint 95 | 2026-03-14 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（doc-only Story，無外部抽樣）；E=0（無 CHECKPOINT-FAIL，無人工介入） |
 | Sprint 96 | 2026-03-14 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（無外部抽樣 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入）；Velocity 9pt 創近期新高 |
+| Sprint 97 | 2026-03-15 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0；A=100%；C=0（外部抽樣 1/1 CONFIRM）；E=0；RESEARCH Spike ADR-021 完成 |
 
 ---
 

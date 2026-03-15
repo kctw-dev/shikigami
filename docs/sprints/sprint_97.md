@@ -3,7 +3,7 @@
 **Sprint Goal**：定義 pr-review-toolkit 外部 Plugin 整合架構 — 為 #266 實作掃清前置依賴
 **日期**：2026-03-15
 **容量**：1 point
-**狀態**：進行中
+**狀態**：完成（Review PASS）
 
 ## Sprint Backlog
 
@@ -33,3 +33,25 @@
 ## Refinement 記錄
 
 - #267：S-size 豁免，無需 Refinement
+
+## Sprint Review 結果
+
+**日期**：2026-03-15
+**結論**：Goal 達成（1/1 PASS）
+
+### AC 驗收
+
+- AC1 PASS：整合模式（補充層）、三 agent 派遣方式、嚴重度四級對照表、doc-only 觸發規則
+- AC2 PASS：三種降級情境定義、WARN + 跳過 + 繼續行為、安裝提醒機制（按需觸發）
+- AC3 PASS：責任矩陣 — §8.5 負責 Spec Compliance、步驟 5.4 負責工程品質深度，無重疊
+- AC4 PASS：Spike Report 含 5 條結論 + 5 項優先序建議後續行動
+
+### Sprint Metrics
+
+- Velocity：1 point
+- 完成率：100%（完成 1 / 計畫 1）
+- DISPUTE 率：0%
+
+### 後置行動
+
+- #266 AC 需依 ADR-021 結論重新改寫 → 排入 Sprint 98

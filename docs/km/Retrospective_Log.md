@@ -4,6 +4,25 @@
 
 ---
 
+## Sprint 97（2026-03-15）
+
+**Sprint Goal**：定義 pr-review-toolkit 外部 Plugin 整合架構 — 為 #266 實作掃清前置依賴
+**結果**：Goal 達成（1/1 Stories PASS）
+
+### Good
+- ADR-020 實作過程中發現角色制審查的結構性盲區（跨檔案一致性、靜默失敗路徑、文件準確性），促成 pr-review-toolkit 整合決策
+- ADR-021 完整定義補充層整合架構，責任矩陣清晰劃分現有 §8.5 QA 審查與步驟 5.4 工程品質深度審查的職責邊界
+- 8 個 Agent 新增 color 欄位，提升狀態列視覺識別度
+
+### Problem
+- ADR-020 實作在三輪審查後才收斂（SDD-000 路徑錯誤、Spec Reviewer 輸入契約漏欄位、降級規則不一致），凸顯 commit 前缺乏系統化跨檔案一致性檢查
+- #266 在 Sprint Planning 被 Architect 和 QA 判定 NOT_READY，凸顯 Issue 開立時 AC 不夠完整（缺外部依賴定義、降級行為、嚴重度標準）
+
+### Action
+- 依 ADR-021 結論重寫 #266 AC，排入 Sprint 98（優先序 1）
+
+---
+
 ## Sprint 96（2026-03-14）
 
 **Sprint Goal**：強化框架品質護欄 — 版號驗證自動化、Skill 角色 prompt 拆分、UI/UX 設計前置 Gate

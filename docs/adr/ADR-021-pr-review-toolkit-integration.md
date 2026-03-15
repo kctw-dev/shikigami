@@ -1,6 +1,6 @@
 # ADR-021：pr-review-toolkit 外部 Plugin 整合架構
 
-**狀態**：Draft
+**狀態**：Accepted
 **日期**：2026-03-15
 **決策者**：Architect（架構定義）+ QA Decision Challenger
 **關聯 ADR**：ADR-003（Shoot 模式）

@@ -1,21 +1,28 @@
 # Project Board
 
-**最後更新**：2026-03-15（Sprint 97 Planning 完成）
-**當前 Sprint**：Sprint 97（進行中）
+**最後更新**：2026-03-15（Sprint 97 Review 完成）
+**當前 Sprint**：Sprint 98（待規劃）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 97](sprints/sprint_97.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 97（進行中）
+## Sprint 97（完成）
 
 > Sprint Goal：定義 pr-review-toolkit 外部 Plugin 整合架構 — 為 #266 實作掃清前置依賴
+> **結果**：Goal 達成（1/1 Stories PASS）。Velocity 1 point，完成率 100%。ADR-021 定義補充層整合模式（外部獨立審查後追加）、三 agent 平行派遣、嚴重度四級 Gate（CRITICAL/HIGH 阻擋）、降級行為（WARN + 跳過）、責任邊界（§8.5 Spec Compliance vs 步驟 5.4 工程品質深度）、Spike Report 含 5 項建議後續行動。
+> **Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | RESEARCH：ADR — pr-review-toolkit 外部 Plugin 整合架構定義 | #267 | S | 1 | 完成 |
 
 **Sprint 容量**：1 point
+
+## Sprint 97 統計
+- Velocity：1 point
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-15
 
 ---
 
