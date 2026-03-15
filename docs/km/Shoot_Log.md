@@ -19,3 +19,4 @@
 | 2026-03-14 | #256 #257 | Architect SDD 補領域模型審查 + Shoot QA 與 Sprint Execution 品質對齊 | PASS | 2b00b30 |
 | 2026-03-14 | #263 | Decision Table Testing 整合至 QA Engineer — 執行規程 + §1.17 流程節點 + §4 Refinement 對接 | PASS | dcd95d4 |
 | 2026-03-15 | #264 #265 | TDD 順序強制 Hard Gate + Sprint Review QA 缺陷修復複驗 Gate | PASS | 065b338 |
+| 2026-03-15 | direct | ADR-020 SDD 作為 AC 強制上游約束，建立 SDD → AC → TDD 追溯鏈 | PASS | ec9b05d |
