@@ -19,6 +19,7 @@ readonly PLUGIN_JSON=".claude-plugin/plugin.json"
 readonly MARKETPLACE_JSON=".claude-plugin/marketplace.json"
 readonly GEMINI_EXTENSION_JSON="gemini-extension.json"
 readonly README_FILE="README.md"
+readonly CLAUDE_MD="CLAUDE.md"
 
 # ---------------------------------------------------------------------------
 # 狀態追蹤
@@ -174,6 +175,35 @@ check_readme_badge_consistency() {
 }
 
 # ---------------------------------------------------------------------------
+# AC-CLAUDE：比較 CLAUDE.md 版號 vs plugin.json version
+# ---------------------------------------------------------------------------
+check_claude_md_consistency() {
+  print_section "AC-CLAUDE：CLAUDE.md vs plugin.json 版號一致性"
+
+  if [ ! -f "$CLAUDE_MD" ]; then
+    print_warning "找不到 $CLAUDE_MD，跳過版號檢查"
+    return
+  fi
+
+  local claude_version
+  claude_version=$(grep -oP '^\- \*\*目前版本\*\*：v\K[0-9]+\.[0-9]+\.[0-9]+' "$CLAUDE_MD" | head -1)
+
+  echo "  plugin.json  version: $PLUGIN_VERSION"
+  echo "  CLAUDE.md    version: ${claude_version:-（未找到）}"
+
+  if [ -z "$claude_version" ]; then
+    print_fail "CLAUDE.md 中找不到版號行，無法驗證"
+    return
+  fi
+
+  if [ "$PLUGIN_VERSION" = "$claude_version" ]; then
+    print_pass "CLAUDE.md 與 plugin.json 版號一致 ($PLUGIN_VERSION)"
+  else
+    print_fail "版號不一致：plugin.json=$PLUGIN_VERSION，CLAUDE.md=v$claude_version"
+  fi
+}
+
+# ---------------------------------------------------------------------------
 # AC2 + AC3：比較最新 semver git tag vs plugin.json version
 # ---------------------------------------------------------------------------
 check_ac2_git_tag_consistency() {
@@ -229,6 +259,9 @@ main() {
 
   # AC-README：README.md badge vs plugin.json
   check_readme_badge_consistency
+
+  # AC-CLAUDE：CLAUDE.md vs plugin.json
+  check_claude_md_consistency
 
   # AC2 + AC3
   check_ac2_git_tag_consistency "$PLUGIN_VERSION"

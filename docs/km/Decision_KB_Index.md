@@ -1,7 +1,7 @@
 # Decision Knowledge Base Index
 
-**建立日期**：2026-05-11
-**最後更新**：2026-03-12（ADR-019 Accepted — MCP 三層架構）
+**建立日期**：2026-03-04
+**最後更新**：2026-03-15（索引補齊 ADR-012~015、018；修正 ADR-011 狀態與日期）
 **維護者**：Developer（手動維護，每次新增或更新 ADR 時同步更新本文件）
 **ADR 目錄**：`docs/adr/`
 
@@ -30,6 +30,11 @@
 | backlog-intake / 需求入庫 | ADR-009 |
 | GitHub Issues / Source of Truth | ADR-010 |
 | GitHub Actions / CI/CD / 整合 | ADR-011 |
+| Claude Max / 認證 / 帳號輪替 / 用量限制 | ADR-012 |
+| Diagram / MCP / draw.io / 架構圖 | ADR-013 |
+| UIUX Agent / 前端品質 / 分層審查 | ADR-014 |
+| Figma / SSD / 管線轉型 | ADR-014、ADR-015 |
+| Discovery Phase / Product Brief / 需求探索 | ADR-018 |
 | UI/UX Designer / 設計角色 / Design Foundation | ADR-016 |
 | Figma / Prototype / Contract / Vision Critic | ADR-014、ADR-015、ADR-016 |
 | Design Tokens / Design System / Component Library | ADR-014、ADR-016 |
@@ -45,8 +50,8 @@
 
 | 狀態 | ADR 列表 |
 |------|---------|
-| **Accepted**（正式採用） | ADR-001、ADR-002、ADR-003、ADR-004、ADR-005、ADR-006、ADR-007、ADR-008、ADR-009、ADR-010、ADR-016、ADR-017、ADR-019 |
-| **Proposed**（起草中，待審查） | ADR-011 |
+| **Accepted**（正式採用） | ADR-001、ADR-002、ADR-003、ADR-004、ADR-005、ADR-006、ADR-007、ADR-008、ADR-009、ADR-010、ADR-011、ADR-012、ADR-013、ADR-014、ADR-015、ADR-016、ADR-017、ADR-018、ADR-019 |
+| **Proposed**（起草中，待審查） | — |
 | **Deprecated**（已棄用） | — |
 
 #### 依日期篩選
@@ -57,8 +62,10 @@
 | 2026-03-01 | ADR-002、ADR-003、ADR-004 |
 | 2026-03-02 | ADR-005、ADR-006、ADR-007 |
 | 2026-03-03 | ADR-008、ADR-009、ADR-010 |
-| 2026-05-11 | ADR-011 |
-| 2026-03-11 | ADR-016、ADR-017 |
+| 2026-03-04 | ADR-011 |
+| 2026-03-05 | ADR-012、ADR-013 |
+| 2026-03-06 | ADR-014、ADR-015 |
+| 2026-03-11 | ADR-016、ADR-017、ADR-018 |
 | 2026-03-12 | ADR-019 |
 
 ---
@@ -77,9 +84,14 @@
 | [ADR-008](../adr/ADR-008.md) | OpenCode 平台整合策略（Symlink 適配） | Accepted | 2026-03-03 | Issue #3、US-46（Sprint 26）、US-47（Sprint 27） |
 | [ADR-009](../adr/ADR-009.md) | Backlog Intake 自動化技術決策 | Accepted | 2026-03-03 | Issue #46、US-63（Sprint 33） |
 | [ADR-010](../adr/ADR-010.md) | Backlog Source of Truth — GitHub Issues 優先策略 | Accepted | 2026-03-03 | Issue #46、US-69 ~ US-73（Sprint 35） |
-| [ADR-011](../adr/ADR-011-github-actions-integration.md) | GitHub Actions 整合架構決策 | Proposed | 2026-05-11 | Issue #46、Issue #76、US-81（Sprint 38） |
+| [ADR-011](../adr/ADR-011-github-actions-integration.md) | GitHub Actions 整合架構決策 | Accepted | 2026-03-04 | Issue #46、Issue #76、US-81（Sprint 38） |
+| [ADR-012](../adr/ADR-012-max-account-rotation.md) | Claude Max 多開發環境認證架構決策 | Accepted | 2026-03-05 | Issue #86（US-92）、Issue #87（US-A） |
+| [ADR-013](../adr/ADR-013-diagram-skill-mcp-integration.md) | shikigami:diagram MCP 整合架構決策 | Accepted | 2026-03-05 | Issue #89、Issue #95（US-96） |
+| [ADR-014](../adr/ADR-014-uiux-agent-architecture.md) | UIUX Agent 架構決策 | Accepted | 2026-03-06 | Issue #100、Issue #95（US-102） |
+| [ADR-015](../adr/ADR-015-figma-integration.md) | UIUX 管線架構轉型 — Figma 整合取代三層 SSD 管線 | Accepted | 2026-03-06 | Issue #100 |
 | [ADR-016](../adr/ADR-016-uiux-designer-role.md) | UI/UX Designer 角色定義與 Design Foundation 流程 | Accepted | 2026-03-11 | Issue #207 |
 | [ADR-017](../adr/ADR-017-context-hub-knowledge-ingestion.md) | Context Hub 整合架構決策 — Knowledge Ingestion 機制 | Accepted | 2026-03-11 | Issue #216 |
+| [ADR-018](../adr/ADR-018-discovery-phase-architecture.md) | Discovery Phase 架構方案 — 獨立 Skill vs 擴充 backlog-management | Accepted | 2026-03-11 | Issue #217（US-215） |
 | [ADR-019](../adr/ADR-019-mcp-three-layer-architecture.md) | MCP 三層架構 — 知識庫 / 流程管理 / 品質觀察 MCP Server | Accepted | 2026-03-12 | Issue #231（US-243） |
 
 ---

@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # scripts/bump-version.sh
-# US-94：版號更新三檔同步腳本
+# US-94：版號更新四檔同步腳本
 #
 # 用法：bash scripts/bump-version.sh <MAJOR.MINOR.PATCH>
 #
-# 原子性地更新下列三個檔案的 version 欄位：
+# 原子性地更新下列四個檔案的 version 欄位：
 #   .claude-plugin/plugin.json
 #   .claude-plugin/marketplace.json
 #   gemini-extension.json
+#   CLAUDE.md
 #
 # 並清除 ~/.claude/plugins/cache/shikigami/shikigami/ 下的
 # 舊版 cache，強制 Claude Code 下次載入時重建。
@@ -27,6 +28,7 @@ readonly SCRIPT_NAME="bump-version.sh"
 readonly PLUGIN_JSON=".claude-plugin/plugin.json"
 readonly MARKETPLACE_JSON=".claude-plugin/marketplace.json"
 readonly GEMINI_EXTENSION_JSON="gemini-extension.json"
+readonly CLAUDE_MD="CLAUDE.md"
 readonly PLUGIN_CACHE_DIR="${HOME}/.claude/plugins/cache/shikigami/shikigami"
 
 # ---------------------------------------------------------------------------
@@ -135,6 +137,28 @@ invalidate_plugin_cache() {
   fi
 }
 
+# 更新 CLAUDE.md 的版號（**目前版本**：vX.Y.Z）
+update_claude_md_version() {
+  local file="$1"
+  local version="$2"
+
+  if [ ! -f "$file" ]; then
+    print_info "CLAUDE.md 不存在，跳過"
+    return
+  fi
+
+  local old_line
+  old_line=$(grep -n '^\- \*\*目前版本\*\*：v' "$file" || true)
+
+  if [ -z "$old_line" ]; then
+    print_info "CLAUDE.md 中未找到版號行，跳過"
+    return
+  fi
+
+  sed -i "s/^\(- \*\*目前版本\*\*：\)v[0-9]\+\.[0-9]\+\.[0-9]\+/\1v${version}/" "$file"
+  print_ok "$file：版號更新至 v${version}"
+}
+
 # 更新 marketplace.json 的 .plugins[0].version 欄位
 update_marketplace_version() {
   local file="$1"
@@ -180,7 +204,7 @@ main() {
   # 前置檢查
   preflight_check
 
-  print_info "開始更新三個版本檔案..."
+  print_info "開始更新四個版本檔案..."
   echo ""
 
   # 更新 plugin.json（頂層 .version）
@@ -191,6 +215,9 @@ main() {
 
   # 更新 gemini-extension.json（頂層 .version）
   update_top_level_version "$GEMINI_EXTENSION_JSON" "$new_version"
+
+  # 更新 CLAUDE.md 版號
+  update_claude_md_version "$CLAUDE_MD" "$new_version"
 
   # 清除舊版 plugin cache，強制下次載入時重建
   invalidate_plugin_cache
