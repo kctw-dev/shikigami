@@ -1,6 +1,6 @@
 # ADR-020：SDD 作為 AC 的強制上游約束 — 建立 SDD → AC → TDD 追溯鏈
 
-**狀態**：Draft
+**狀態**：Accepted
 **日期**：2026-03-15
 **決策者**：Architect（審查）+ PO（需求端確認）+ QA Decision Challenger
 **關聯 ADR**：ADR-003（Shoot 模式）
