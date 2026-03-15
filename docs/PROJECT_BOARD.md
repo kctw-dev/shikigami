@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-14（Sprint 96 Review 完成）
-**當前 Sprint**：Sprint 96（完成）
+**最後更新**：2026-03-15（Sprint 97 Planning 完成）
+**當前 Sprint**：Sprint 97（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 96](sprints/sprint_96.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 97](sprints/sprint_97.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 97（進行中）
+
+> Sprint Goal：定義 pr-review-toolkit 外部 Plugin 整合架構 — 為 #266 實作掃清前置依賴
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| RESEARCH：ADR — pr-review-toolkit 外部 Plugin 整合架構定義 | #267 | S | 1 | 進行中 |
+
+**Sprint 容量**：1 point
 
 ---
 
