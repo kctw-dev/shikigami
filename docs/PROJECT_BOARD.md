@@ -13,7 +13,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| INTEGRATION：整合 pr-review-toolkit 審查 agents 至 shoot / sprint-execution commit 前 Gate | #266 | M | 2 | 進行中 |
+| INTEGRATION：整合 pr-review-toolkit 審查 agents 至 shoot / sprint-execution commit 前 Gate | #266 | M | 2 | 完成 |
 
 **Sprint 容量**：2 points
 
