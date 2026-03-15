@@ -74,6 +74,7 @@ color: yellow
 - Cyclomatic complexity < 10（圈複雜度）
 - Duplication detection（重複偵測）
 - SOLID compliance（SOLID 合規）
+- Gateway bypass detection（Gateway 繞行偵測）：新增的直接 DB 寫入操作（如 INSERT、UPDATE、Increment 等）是否繞過了 SDD-000 §2.3 定義的 Gateway Service
 
 ### 安全審查（代碼層面）
 

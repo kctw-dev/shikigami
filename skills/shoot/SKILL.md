@@ -221,7 +221,7 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
   +-- PASS
         |
         v
-[步驟 3] Architect 審查（技術審查 Hard Gate，含 DM-1/DM-2/DM-3）
+[步驟 3] Architect 審查（技術審查 Hard Gate，含 DM-1/DM-2/DM-3/DM-4）
   |-- FAIL --> exit code 非 0，Shoot_Log.md 無 PASS 記錄，不執行 shoot: commit
   +-- PASS
         |
@@ -390,6 +390,7 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
 - [ ] DM-1 業務邏輯封裝：業務邏輯封裝在 Service 層，Router 只做 I/O
 - [ ] DM-2 Single Source of Truth：相同業務邏輯只有一個實作來源
 - [ ] DM-3 狀態轉換統一：狀態轉換有統一對照表，不散落各處
+- [ ] DM-4 共享寫入入口：共享資源有唯一寫入入口（Gateway），類別圖標示依賴方向
 
 ### 任一 FAIL 時的三個可觀察驗收點
 
@@ -929,6 +930,7 @@ fi
   [PASS] DM-1 業務邏輯封裝檢查
   [PASS] DM-2 Single Source of Truth 檢查
   [PASS] DM-3 狀態轉換統一檢查
+  [PASS] DM-4 共享寫入入口檢查
 
 ── 執行任務 ───────────────────────────
   ... 實作過程 ...

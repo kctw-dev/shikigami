@@ -620,6 +620,7 @@ Architect 在 SDD 審查時，除既有的端點規格、認證策略、DB index
 - [ ] **DM-1 業務邏輯封裝**：業務邏輯是否封裝在 Service 層（Router/Controller 只做 I/O 調度，不含業務判斷）
 - [ ] **DM-2 Single Source of Truth**：相同業務邏輯是否只有一個實作來源，不在多處重複實作
 - [ ] **DM-3 狀態轉換統一**：狀態轉換是否有統一的對照表或處理器，不散落在各 Router 各自硬寫
+- [ ] **DM-4 共享寫入入口**：當 2+ 個 Service/Module 寫入同一資料資源時，是否定義了唯一寫入入口（Gateway Service），且類別圖明確標示依賴方向
 
 ### DM-1 判定標準
 
@@ -645,9 +646,18 @@ Architect 在 SDD 審查時，除既有的端點規格、認證策略、DB index
 | 狀態轉換有統一對照表，所有 handler 引用同一來源 | PASS | 繼續 |
 | 新增狀態碼時需修改 3+ 處程式碼 | FAIL | 要求重構為單點修改 |
 
+### DM-4 判定標準
+
+| 情境 | 判定 | 處置 |
+|------|------|------|
+| 2+ 個 Service/Module 直接寫入同一 DB collection/欄位，無定義 Gateway | FAIL | 要求在 SDD-000 §2.3 定義 Gateway Service，並更新類別圖標示依賴方向 |
+| 共享資源有定義 Gateway Service，但新程式碼繞過 Gateway 直接寫入 | FAIL | 要求修改為透過 Gateway Service 操作 |
+| 共享資源有定義 Gateway Service，所有寫入均透過 Gateway | PASS | 繼續 |
+| 資源僅由單一 Service 寫入，無共享寫入 | PASS | 不適用，繼續 |
+
 ### SDD 模板新增章節
 
-當 Story 觸發 DM-1/DM-2/DM-3 任一檢查時，SDD 必須包含「模組設計」章節：
+當 Story 觸發 DM-1/DM-2/DM-3/DM-4 任一檢查時，SDD 必須包含「模組設計」章節：
 
 ```markdown
 ### 模組設計
@@ -673,6 +683,14 @@ Architect 在 SDD 審查時，除既有的端點規格、認證策略、DB index
 | 外部狀態碼 | 內部狀態 | 說明 |
 |-----------|---------|------|
 | {code} | {status} | {說明} |
+
+#### 共享資源寫入入口（若適用，DM-4 觸發時）
+
+> 全局 Gateway 對照表見 [SDD-000-architecture.md §2.3](./SDD-000-architecture.md)
+
+| 共享資源 | Gateway Service | 本 SDD 中的使用方式 |
+|---------|----------------|-------------------|
+| {資源名稱} | {Gateway Service 名稱} | {透過 Gateway 的哪個方法操作} |
 ```
 
 **注意**：各 SDD 只放自己的循序圖和流程圖，領域模型與類別圖統一引用 `docs/sdd/SDD-000-architecture.md`，不在個別 SDD 中重複繪製。
@@ -691,11 +709,12 @@ Architect 審查輸出新增領域模型維度：
   [PASS/FAIL] DM-1 業務邏輯封裝檢查
   [PASS/FAIL] DM-2 Single Source of Truth 檢查
   [PASS/FAIL] DM-3 狀態轉換統一檢查
+  [PASS/FAIL] DM-4 共享寫入入口檢查
   [PASS/FAIL] 全局架構文件一致性（見 §11）
 ```
 
 <HARD-GATE>
-**領域模型審查 Hard Gate**：DM-1、DM-2、DM-3 任一 FAIL 時，Architect 審查整體判定為 FAIL。Story 不得進入開發，須先修正 SDD 的模組設計。
+**領域模型審查 Hard Gate**：DM-1、DM-2、DM-3、DM-4 任一 FAIL 時，Architect 審查整體判定為 FAIL。Story 不得進入開發，須先修正 SDD 的模組設計。
 </HARD-GATE>
 
 ---
@@ -728,6 +747,7 @@ Architect 在以下情境**必須調用 `/diagram` 更新全局架構文件中�
 | B3（狀態轉換） | 在**對應 SDD** 中產出狀態機流程圖 | 各 SDD 自己的流程圖段落（非全局） |
 | D3（複雜業務規則） | 在**對應 SDD** 中產出決策樹或規則流程圖 | 各 SDD 自己的流程圖段落（非全局） |
 | DM-1/DM-2/DM-3 審查觸發 | 更新類別圖（Service/Router 結構） | `docs/sdd/SDD-000-architecture.md` 類別圖段落 |
+| DM-4 審查觸發 | 更新類別圖 + §2.3 Gateway 對照表 | `docs/sdd/SDD-000-architecture.md` 類別圖 + Gateway 段落 |
 | 新增外部服務依賴 | 更新元件圖 | `docs/sdd/SDD-000-architecture.md` 元件圖段落 |
 
 ### SDD 編號規則
