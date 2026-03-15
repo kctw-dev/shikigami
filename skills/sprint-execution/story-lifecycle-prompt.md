@@ -479,12 +479,6 @@ commit + 取得 commit SHA
 
 （Red 步驟詳見 `developer-prompt.md` §TDD 流程）
 
-<!-- #264 TDD 順序強制 Hard Gate -->
-
-<HARD-GATE>
-**TDD 順序 Hard Gate（Red-before-Green 強制）**：在 Red 階段完成前（即失敗測試尚未 commit），禁止修改任何實作檔案（非測試檔案）。違反順序等同 TDD 流程失效，必須回退：刪除實作變更、先完成測試 commit 後再重新進入 Green 階段。此 Gate 不受 bypass=true 豁免。
-</HARD-GATE>
-
 ### Green（綠燈）
 
 <!-- US-195 API 契約 Hard Gate — Sprint 74 -->
