@@ -290,9 +290,16 @@ TDD 開發循環（§3）：Red → Green → Refactor（每小步一個 commit�
 ║  │    |-- [VCR-FAIL] → 修復循環（最多 3 次）           ║
 ║  │    │      第 3 次仍 FAIL → ESCALATE: DESIGN_ISSUE  ║
 ║  │    +-- [VCR-PASS]                                  ║
-║  └─ Security self-review（§7，條件觸發）             ║
-║         |-- FAIL --> 修復或升級                       ║
-║         +-- PASS / SKIP                               ║
+║  ├─ Security self-review（§7，條件觸發）             ║
+║  │       |-- FAIL --> 修復或升級                       ║
+║  │       +-- PASS / SKIP                               ║
+║  └─ pr-review-toolkit 補充審查（§7.5，條件觸發）      ║
+║         |-- Plugin 未安裝 → [WARN] 跳過，繼續          ║
+║         |-- Doc-only → 僅執行 comment-analyzer          ║
+║         |-- 全部 PASS → 繼續                            ║
+║         +-- CRITICAL/HIGH → 修復 → 二審                 ║
+║               |-- PASS → 繼續                           ║
+║               +-- 仍 CRITICAL/HIGH → 升級 Architect     ║
 ╚══════════════════════════════════════════════════════╝
   |
   v
@@ -1031,6 +1038,38 @@ Security Self-Review — {story_id}
 
 - 發現 Critical 安全問題（如未受防護的外部輸入、硬編碼 API 金鑰）→ 回傳 `ESCALATE: SECURITY_CRITICAL`
 - 修復後重新執行此審查，同一階段連續失敗 **3 次** → 同上
+
+---
+
+## §7.5 pr-review-toolkit 補充審查（條件觸發，doc_only=false 時）
+
+<!-- Story #266 — 整合 pr-review-toolkit 審查 agents 至 commit 前 Gate -->
+
+在 Security Self-Review（§7）之後、DoD 自檢（§8）之前，追加 pr-review-toolkit 三個專業審查 agent 作為工程品質深度補充層。
+
+**設計 SSOT**：`docs/adr/ADR-021-pr-review-toolkit-integration.md`
+**實作 SSOT**：`skills/shoot/SKILL.md` §8.6（步驟 5.4）
+
+本節採引用式寫法，核心定義不重複於此：
+
+| 項目 | 引用來源 |
+|------|---------|
+| 三 agent 派遣方式 | shoot SKILL.md §8.6 + ADR-021 §1 |
+| 嚴重度對照表 | ADR-021 §1 嚴重度對照表 |
+| 嚴重度 Gate 規則 | ADR-021 §1（CRITICAL/HIGH 阻擋，MEDIUM/LOW 記錄） |
+| 修復閉環 | ADR-021 §1（二審仍 CRITICAL/HIGH → 升級 Architect） |
+| doc-only 條件觸發 | shoot SKILL.md §8.2 doc-only pattern（SSOT）+ ADR-021 §2 |
+| 降級行為 | shoot SKILL.md §8.2 降級模式（WARN + 跳過 + 繼續） |
+| 輸出格式 | ADR-021 §7（四種情境範例） |
+| 責任邊界 | ADR-021 §4 責任矩陣 |
+
+**觸發規則**：`doc_only=false` 時執行完整三 agent 派遣；`doc_only=true` 時僅執行 `comment-analyzer`。
+
+**Gate 行為摘要**：CRITICAL/HIGH → 阻擋（Hard Gate），MEDIUM/LOW → 記錄（Soft Gate）。Plugin 未安裝 → WARN + 跳過 + 繼續。
+
+<HARD-GATE>
+**pr-review-toolkit 補充審查 Hard Gate**：CRITICAL/HIGH 嚴重度阻擋 commit，修復後二審仍 CRITICAL/HIGH → 升級 Architect。Plugin 未安裝時採降級行為（WARN + 跳過 + 繼續），不阻擋流程。完整規則見 ADR-021 + shoot SKILL.md §8.6。
+</HARD-GATE>
 
 ---
 
