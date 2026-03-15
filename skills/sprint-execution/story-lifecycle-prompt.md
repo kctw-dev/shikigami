@@ -417,6 +417,18 @@ commit + 取得 commit SHA
 
 ---
 
+### 步驟 8：Live Log — Story 開始執行（US-269）
+
+<!-- US-269 演示模式 Live Log Streaming — Sprint 99 -->
+
+在進入 doc_only/TDD 路徑判斷前，寫入 Story 開始執行日誌（可選，失敗時靜默忽略）：
+
+```bash
+echo "[$(date +%H:%M:%S)] [${story_id}] 開始執行" >> docs/sprints/sprint.live.log 2>/dev/null || true
+```
+
+---
+
 ## §3 TDD 開發流程（強制，doc_only=false 時）
 
 <HARD-GATE>
@@ -426,6 +438,12 @@ commit + 取得 commit SHA
 載入 `developer-prompt.md` 後，依其定義的 TDD 三步循環（Red → Green → Refactor）、Commit 規範與設計原則執行開發。以下僅列出 story-lifecycle 特有的補充邏輯。
 
 ### Red（紅燈）
+
+<!-- US-269 Live Log — TDD Red -->
+在進入 Red 階段時寫入日誌（可選，失敗時靜默忽略）：
+```bash
+echo "[$(date +%H:%M:%S)] [${story_id}] TDD Red — 開始" >> docs/sprints/sprint.live.log 2>/dev/null || true
+```
 
 <!-- US-240 TDD 測試可寫性檢查 — Sprint 88 -->
 
@@ -499,6 +517,12 @@ commit + 取得 commit SHA
 
 ### Green（綠燈）
 
+<!-- US-269 Live Log — TDD Green -->
+在進入 Green 階段時寫入日誌（可選，失敗時靜默忽略）：
+```bash
+echo "[$(date +%H:%M:%S)] [${story_id}] TDD Green — 開始" >> docs/sprints/sprint.live.log 2>/dev/null || true
+```
+
 <!-- US-195 API 契約 Hard Gate — Sprint 74 -->
 
 <HARD-GATE>
@@ -523,6 +547,12 @@ commit + 取得 commit SHA
 > 2. 將前端 API response type / interface 的欄位名稱與後端 key 名稱逐一比對
 > 3. 確保前端 type 欄位名稱與後端 key 名稱**完全一致**（區分大小寫）
 > 4. 若存在不一致，以後端 key 名稱為準修正前端 type，再繼續實作
+
+<!-- US-269 Live Log — TDD Refactor -->
+在進入 Refactor 階段時寫入日誌（可選，失敗時靜默忽略）：
+```bash
+echo "[$(date +%H:%M:%S)] [${story_id}] TDD Refactor — 開始" >> docs/sprints/sprint.live.log 2>/dev/null || true
+```
 
 （Green / Refactor 步驟、Commit 規範、設計原則詳見 `developer-prompt.md`）
 
@@ -764,6 +794,12 @@ QA 視覺回歸確認：
 
 ## §5 Spec Compliance Self-Review（第一階段自審）
 
+<!-- US-269 Live Log — Spec Compliance Review 開始 -->
+在進入 Spec Compliance Self-Review 前寫入日誌（可選，失敗時靜默忽略）：
+```bash
+echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — 開始" >> docs/sprints/sprint.live.log 2>/dev/null || true
+```
+
 <HARD-GATE>
 **Spec Reviewer Prompt 載入 Hard Gate**：進入 Spec Compliance Self-Review 前，必須使用 Read 工具完整讀取 `skills/sprint-execution/spec-reviewer-prompt.md`，載入 Spec Compliance Reviewer 角色的完整審查 Checklist、輸出格式與判定標準。此 Gate 不受 bypass=true 豁免。
 </HARD-GATE>
@@ -773,6 +809,15 @@ QA 視覺回歸確認：
 ### 審查執行
 
 載入 `spec-reviewer-prompt.md` 後，依其定義的審查 Checklist（AC 逐項驗證、缺少的需求、多餘的功能、誤解的需求、行為範例驗證、前後端 API 欄位一致性檢查）與輸出格式執行自審。
+
+<!-- US-269 Live Log — Spec Compliance Review 結果 -->
+審查完成後寫入結果日誌（可選，失敗時靜默忽略），依審查結論輸出對應訊息：
+```bash
+# PASS 時：
+echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — PASS" >> docs/sprints/sprint.live.log 2>/dev/null || true
+# FAIL 時：
+echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — FAIL（修復循環）" >> docs/sprints/sprint.live.log 2>/dev/null || true
+```
 
 ### 修復閉環規則
 
@@ -784,6 +829,12 @@ QA 視覺回歸確認：
 
 ## §6 Code Quality Self-Review（第二階段自審）
 
+<!-- US-269 Live Log — Code Quality Review 開始 -->
+在進入 Code Quality Self-Review 前寫入日誌（可選，失敗時靜默忽略）：
+```bash
+echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — 開始" >> docs/sprints/sprint.live.log 2>/dev/null || true
+```
+
 <HARD-GATE>
 **Quality Reviewer Prompt 載入 Hard Gate**：進入 Code Quality Self-Review 前，必須使用 Read 工具完整讀取 `skills/sprint-execution/quality-reviewer-prompt.md`，載入 Code Quality Reviewer 角色的完整評估維度、CQ-NEW、CQ-SMOKE、CQ-DATA 檢查與判定標準。此 Gate 不受 bypass=true 豁免。
 </HARD-GATE>
@@ -793,6 +844,15 @@ QA 視覺回歸確認：
 ### 審查執行
 
 載入 `quality-reviewer-prompt.md` 後，依其定義的評估維度（SOLID、命名品質、複雜度控制、測試品質、測試覆蓋 CQ-NEW、外部資源 Smoke Test CQ-SMOKE、安全性基本檢查、靜態資料覆蓋率 CQ-DATA）與通過/不通過標準執行自審。
+
+<!-- US-269 Live Log — Code Quality Review 結果 -->
+審查完成後寫入結果日誌（可選，失敗時靜默忽略），依審查結論輸出對應訊息：
+```bash
+# PASS 時：
+echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — PASS" >> docs/sprints/sprint.live.log 2>/dev/null || true
+# FAIL 時：
+echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — FAIL（修復循環）" >> docs/sprints/sprint.live.log 2>/dev/null || true
+```
 
 ### 修復閉環規則
 
@@ -1324,7 +1384,20 @@ TC-4 觸發（當前 Story 連續 2 次 self-review FAIL）
 
 <!-- US-249 Subagent 結果暫存 — context compaction 後結果復原機制 — Sprint 92 -->
 
-### §9.0 暫存寫入（回傳前必執行）
+### §9.0 Live Log — 回傳結果（US-269）
+
+<!-- US-269 Live Log — 回傳結果 -->
+在執行暫存寫入前，先寫入最終結果日誌（可選，失敗時靜默忽略）：
+```bash
+# PASS 時：
+echo "[$(date +%H:%M:%S)] [${story_id}] 結果：PASS" >> docs/sprints/sprint.live.log 2>/dev/null || true
+# FAIL 時：
+echo "[$(date +%H:%M:%S)] [${story_id}] 結果：FAIL" >> docs/sprints/sprint.live.log 2>/dev/null || true
+# ESCALATE 時：
+echo "[$(date +%H:%M:%S)] [${story_id}] 結果：ESCALATE（${escalation_type}）" >> docs/sprints/sprint.live.log 2>/dev/null || true
+```
+
+### §9.1 暫存寫入（回傳前必執行）
 
 **在回傳標準化摘要給主 session 之前**，必須先將結果寫入暫存文件，供主 session 在 context compaction 後復原使用。
 

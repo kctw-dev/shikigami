@@ -576,7 +576,7 @@ Sprint Backlog 還有 Story？
 
 <!-- US-249 Subagent 結果暫存 — context compaction 後結果復原機制 — Sprint 92 -->
 
-Story-Lifecycle subagent 在回傳摘要前，會將結果寫入 `docs/sprints/subagent-results/{story_id}.md` 暫存文件（見 story-lifecycle-prompt.md §9.0）。
+Story-Lifecycle subagent 在回傳摘要前，會將結果寫入 `docs/sprints/subagent-results/{story_id}.md` 暫存文件（見 story-lifecycle-prompt.md §9.1）。
 
 #### 暫存文件用途
 
@@ -979,6 +979,53 @@ Sprint Execution 中各角色的具體決策標準請參閱以下文件：
 ---
 
 <!-- ADR-007 Phase 2 外部抽樣審查機制已於 Sprint 24 US-41 完成實作並通過 QA 驗收，詳見 `docs/adr/ADR-007-story-lifecycle-subagent.md`。 -->
+
+---
+
+## 9.2 Sprint Live Log（演示模式 — US-269）
+
+<!-- US-269 演示模式 Live Log Streaming — Sprint 99 -->
+
+Sprint Execution 支援 **Live Log Streaming** 功能，讓使用者在另一個 terminal 視窗即時觀看 Story-Lifecycle subagent 的工作進度，適用於技術評估會議、客戶展示、新成員 Onboarding 等場合。
+
+### 啟動方式
+
+在另一個 terminal 視窗執行：
+
+```bash
+tail -f docs/sprints/sprint.live.log
+```
+
+> **跨平台說明**：`tail -f` 在 Linux、macOS、WSL 均原生支援。Windows 原生環境需使用 Git Bash 或 WSL。
+
+### 日誌檔案路徑
+
+```
+docs/sprints/sprint.live.log
+```
+
+每次 Sprint 可覆蓋或輪替此檔案（執行前可手動清除舊日誌）。
+
+### 日誌格式範例
+
+```
+[18:15:01] [US-269] 開始執行
+[18:15:05] [US-269] TDD Red — 開始
+[18:15:45] [US-269] TDD Green — 開始
+[18:16:10] [US-269] TDD Refactor — 開始
+[18:16:23] [US-269] Spec Compliance Review — 開始
+[18:16:30] [US-269] Spec Compliance Review — PASS
+[18:16:31] [US-269] Code Quality Review — 開始
+[18:16:40] [US-269] Code Quality Review — PASS
+[18:16:41] [US-269] 結果：PASS
+```
+
+### 機制說明
+
+- **可選機制**：日誌寫入為 Story-Lifecycle subagent 的附加行為，不影響既有 Sprint Execution 邏輯
+- **容錯設計**：日誌寫入失敗時靜默忽略，不阻塞主流程
+- **Token 成本**：日誌寫入使用 shell 指令（`echo >> 檔案`），不消耗主 session context window
+- **實作位置**：日誌寫入指令定義於 `skills/sprint-execution/story-lifecycle-prompt.md` 各關鍵步驟
 
 ---
 
