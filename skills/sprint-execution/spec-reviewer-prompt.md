@@ -15,6 +15,7 @@
 - **Story 描述與 Acceptance Criteria**：{story_description}
 - **Developer 實作摘要**：{developer_summary}
 - **變更的檔案清單**：{changed_files}
+- **相關 SDD**：{related_sdds}（ADR-020：若有值，須執行 §6 SDD 一致性驗證）
 
 ---
 
@@ -90,7 +91,7 @@
    - 建議修復：{修復方向}
 ```
 
-若 Story 無 `related_sdds`，此區塊標記為 N/A。
+若 Story 無 `related_sdds`，或 `docs/sdd/SDD-000.md` 不存在（專案初期降級），此區塊標記為 N/A。
 
 ### 7. 前後端 API 欄位一致性檢查（全端 Story 適用）
 
@@ -175,6 +176,12 @@
    - 後端 key：`{backend_key}`
    - 前端欄位：`{frontend_field}`
    - 建議修復：將前端欄位名稱改為 `{backend_key}` 以與後端一致
+
+#### [SDD-VIOLATION] SDD 一致性不符（ADR-020，related_sdds 存在時）
+1. **SDD-XXX §N — {約束描述}**
+   - SDD 定義：{SDD 中的規格}
+   - 實際實作：{Developer 的實作}
+   - 建議修復：{修復方向}
 ```
 
 ---

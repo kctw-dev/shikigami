@@ -11,7 +11,7 @@
 根據以下資訊實作 Story：
 
 - **Story 描述與 Acceptance Criteria**：{story_description}
-- **相關設計文件（SDD）**：{related_sdds}（ADR-020：SDD 為 AC 的強制上游約束，測試須同時驗證 SDD 架構約束）
+- **相關設計文件（SDD）**：{related_sdds}（SDD 為 AC 的強制上游約束，測試須同時驗證 SDD 架構約束）
 - **相關 ADR**：{related_adrs}
 - **技術棧**：{tech_stack}
 
@@ -23,7 +23,7 @@
 
 ### Red（紅燈）
 1. 根據 Acceptance Criteria 寫出失敗的測試
-2. 若有 `related_sdds`，測試須同時涵蓋 SDD 定義的架構約束（ADR-020）：介面簽名、模組邊界、資料結構規格。確保測試不只驗 AC「做了什麼」，也驗 SDD「怎麼做」
+2. 若有 `related_sdds`，測試須同時涵蓋 SDD 定義的架構約束（ADR-020）：介面簽名、模組邊界、資料結構規格。確保測試不只驗 AC「做了什麼」，也驗 SDD「怎麼做」。若 `docs/sdd/SDD-000.md` 不存在（專案初期），此步驟跳過
 3. 執行測試，確認測試確實失敗
 4. Commit：`test: add failing test for {feature}`
 
@@ -296,6 +296,10 @@
 
 ### DoD 自檢
 - [x] 全部通過 / [ ] 有例外（說明原因）
+
+### SDD 約束覆蓋（ADR-020）
+- SDD-XXX §N {約束描述}：測試 {test_name} 驗證
+- （若無 related_sdds：N/A）
 
 ### 注意事項
 - {任何 Reviewer 需要特別注意的地方}
