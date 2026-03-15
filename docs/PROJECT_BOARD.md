@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-15（Sprint 98 Review 完成）
-**當前 Sprint**：Sprint 99（待規劃）
+**最後更新**：2026-03-15（Sprint 99 Planning 完成）
+**當前 Sprint**：Sprint 99（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 98](sprints/sprint_98.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 99](sprints/sprint_99.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 99（進行中）
+
+> Sprint Goal：強化框架架構知識基礎與可展示性 — 補充 SDD-000 核心架構內容以解除 PB-2/PB-4 兩條產品線阻塞，並落地演示模式 Live Log Streaming 以提升框架的人機協作可見度，兌現 M5「好上手、人機協作」里程碑承諾。
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| FEATURE：SDD-000 核心章節補充至最低可用狀態（解除 PB-2/PB-4 共同阻塞） | #270 | S | 1 | 待開發 |
+| FEATURE：演示模式 Live Log Streaming 實作（Phase 1：tail -f 即時日誌串流） | #269 | S | 1 | 待開發 |
+
+**Sprint 容量**：2 points
 
 ---
 
