@@ -4,6 +4,27 @@
 
 ---
 
+## Sprint 98（2026-03-15）
+
+**Sprint Goal**：將 pr-review-toolkit 三 agent 補充審查層實作至 shoot 與 sprint-execution commit 前 Gate
+**結果**：Goal 達成（1/1 Stories PASS）
+
+### Good
+- ADR-021 → #266 完整鏈條落地，設計決策與實作之間的路徑清晰，無歧義
+- shoot §8.6 與 sprint-execution §7.5 責任邊界劃分明確，引用式寫法避免體積膨脹，SSOT 集中管理
+- doc-only 條件觸發（comment-analyzer 執行 / code-reviewer + silent-failure-hunter 跳過）覆蓋邊界情境，降級行為完整
+
+### Problem
+- #266 實作後 silent-failure-hunter 在外部抽樣過程抓到 1 CRITICAL + 3 HIGH：嚴重度解析失敗邊界情境未定義、header 說明與實作行為矛盾、二審派遣範圍有歧義（僅修復對象 vs 全部 CRITICAL/HIGH agent）、缺輸出格式範例（邊界情境）
+- 凸顯即使有 TDD + QA 外部抽樣仍有盲區：文件規格類缺陷不易被角色制審查發現，pr-review-toolkit 的 comment-analyzer 更有優勢
+
+### Action
+- 嚴重度解析失敗情境已在實作中補充（降級行為表新增第 4 行），本 Sprint 內消化
+- 二審派遣範圍已明確為「回報 CRITICAL/HIGH 的 agent 全部重新審查」，非僅修復對象
+- 後續觀察 pr-review-toolkit 三 agent 在實際工作流程的命中率，評估是否需要微調嚴重度對照表
+
+---
+
 ## Sprint 97（2026-03-15）
 
 **Sprint Goal**：定義 pr-review-toolkit 外部 Plugin 整合架構 — 為 #266 實作掃清前置依賴

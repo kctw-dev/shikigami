@@ -102,6 +102,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 95 | 2026-03-14 | 2 points | 100% | 不規則 | Goal 達成，1/1 Stories PASS；US-257（S/2pt）；S93=6→S94=1→S95=2，S94→S95 上升 +100%（超出 ±20%），先降後升方向不一致→不規則；Layer Compliance 分層合規檢查三層防線 |
 | Sprint 96 | 2026-03-14 | 9 points | 100% | 上升趨勢 | Goal 達成，6/6 Stories PASS；US-263（S/1pt）+ US-264（M/2pt）+ US-265（M/2pt）+ US-266（M/2pt）+ US-267（S/1pt）+ US-268（S/1pt）；S94=1→S95=2→S96=9，S95→S96 上升 +350%（超出 ±20%），連續兩期上升→上升趨勢；版號驗證雙層 Hook + Skill 角色 prompt 拆分（architecture-decision + deployment-readiness）+ UI/UX Design Foundation Gate + 演示模式 Spike Report |
 | Sprint 97 | 2026-03-15 | 1 point | 100% | 不規則 | Goal 達成，1/1 Stories PASS；#267（S/1pt）；S95=2→S96=9→S97=1，S96→S97 下降 -88.9%（超出 ±20%），先升後降方向不一致→不規則；ADR-021 pr-review-toolkit 外部 Plugin 整合架構定義（RESEARCH Spike） |
+| Sprint 98 | 2026-03-15 | 2 points | 100% | 不規則 | Goal 達成，1/1 Stories PASS；#266（M/2pt）；S96=9→S97=1→S98=2，S97→S98 上升 +100%（超出 ±20%），先降後升方向不一致→不規則；shoot §8.6 步驟 5.4 + sprint-execution §7.5 pr-review-toolkit 補充審查層完整交付，ADR-021 → #266 落地，功能里程碑 v0.70.0 |
 
 ---
 

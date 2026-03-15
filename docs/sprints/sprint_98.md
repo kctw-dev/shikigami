@@ -3,7 +3,7 @@
 **Sprint Goal**：將 pr-review-toolkit 三 agent 補充審查層實作至 shoot 與 sprint-execution commit 前 Gate — 兌現 ADR-021 架構設計的工程品質深度承諾
 **日期**：2026-03-15
 **容量**：2 points
-**狀態**：進行中
+**狀態**：完成
 
 ## Sprint Backlog
 
@@ -47,3 +47,41 @@
 ## Backlog 異動記錄
 
 - **#266**（pr-review-toolkit 整合）：Sprint 97 因架構未定義退回 Backlog，ADR-021 Accepted 後 AC 重寫，Sprint 98 重新排入。
+
+---
+
+## Sprint Review 結果（2026-03-15）
+
+**Sprint Goal**：達成
+**Velocity**：2 points
+**完成率**：100%（1/1 Stories PASS）
+**DISPUTE 率**：0%
+
+### AC 驗收結果
+
+| AC | 描述 | 結果 |
+|----|------|------|
+| AC1 | shoot §8.6 步驟 5.4 補充審查層，三 agent 平行派遣，CRITICAL/HIGH Hard Gate | PASS |
+| AC2 | sprint-execution §7.5 補充審查層，與步驟 5.4 相同嚴重度 Gate 邏輯 | PASS |
+| AC3 | 嚴重度四級制 Gate（CRITICAL/HIGH 阻擋 / MEDIUM/LOW 記錄） | PASS |
+| AC4 | doc_only=true 時 comment-analyzer 執行，code-reviewer/silent-failure-hunter 跳過 | PASS |
+| AC5 | Plugin 未安裝降級行為（WARN + 跳過 + 繼續），不阻擋現有流程 | PASS |
+| AC6 | story-lifecycle-prompt.md 採引用式寫法，核心定義 SSOT 指向 shoot §8.6 + ADR-021 | PASS |
+
+**注意**：AC 編號與原 sprint_98.md 定義對齊（AC3=嚴重度 Gate / AC4=doc-only / AC5=降級行為 / AC6=引用式寫法；責任邊界清晰為 AC5 原文定義覆蓋）。
+
+### Sprint 外完成項目（2026-03-15）
+
+| 來源 | 標題 | 結果 |
+|------|------|------|
+| #264 #265 | TDD 順序強制 Hard Gate + Sprint Review QA 缺陷修復複驗 Gate | PASS |
+| direct | ADR-020 SDD 作為 AC 強制上游約束 — SDD → AC → TDD 追溯鏈 | PASS |
+
+### Issue #266 處理
+
+- 建立者：KCTW（內部 Issue）
+- 操作：`done` label 新增，`status: in-sprint` label 移除，Issue 已 Closed
+
+### Stakeholder 驗收
+
+接受
