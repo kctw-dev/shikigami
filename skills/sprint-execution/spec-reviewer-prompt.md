@@ -67,7 +67,32 @@
 
 > 若 Story 無 [行為] AC，此區塊標記為 N/A。
 
-### 6. 前後端 API 欄位一致性檢查（全端 Story 適用）
+### 6. SDD 一致性驗證（ADR-020，related_sdds 存在時）
+
+<!-- ADR-020 SDD 作為 AC 強制上游約束 -->
+
+若 Story 有 `related_sdds`，必須額外驗證實作是否符合 SDD 定義的架構約束：
+
+- [ ] 實作的介面簽名符合 SDD 定義（函式名稱、參數型別、回傳型別）
+- [ ] import 方向符合 SDD 定義的模組邊界（無逆向或跨層 import）
+- [ ] 資料結構符合 SDD 定義的 Entity / Value Object 規格
+- [ ] 狀態轉換符合 SDD 定義的狀態機（若適用）
+
+**判定標準**：任一 SDD 約束不符 → 整體審查 **FAIL**，標記為 `[SDD-VIOLATION]`。
+
+**輸出格式（FAIL 時）**：
+
+```
+#### [SDD-VIOLATION] SDD 一致性不符
+1. **SDD-XXX §N — {約束描述}**
+   - SDD 定義：{SDD 中的規格}
+   - 實際實作：{Developer 的實作}
+   - 建議修復：{修復方向}
+```
+
+若 Story 無 `related_sdds`，此區塊標記為 N/A。
+
+### 7. 前後端 API 欄位一致性檢查（全端 Story 適用）
 
 <!-- US-186 前後端欄位一致性檢查 — Sprint 72 -->
 

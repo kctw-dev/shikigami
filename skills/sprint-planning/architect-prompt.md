@@ -13,11 +13,11 @@
 ```markdown
 ## 技術評估結果
 
-| Story | T-shirt | ADR 需求 | API 契約 | 說明 |
-|-------|---------|---------|---------|------|
-| US-XX | M | 無需 ADR | **有**（見下方契約定義） | {說明} |
-| US-YY | S | 無需 ADR | **無**（需補充，阻擋開發） | {說明} |
-| US-ZZ | S | 無需 ADR | **不適用** | doc-only，無 API 互動 |
+| Story | T-shirt | ADR 需求 | API 契約 | Related SDDs | 說明 |
+|-------|---------|---------|---------|-------------|------|
+| US-XX | M | 無需 ADR | **有**（見下方契約定義） | SDD-000 §3, SDD-001 §2 | {說明} |
+| US-YY | S | 無需 ADR | **無**（需補充，阻擋開發） | SDD-000 §5 | {說明} |
+| US-ZZ | S | 無需 ADR | **不適用** | — | doc-only，無架構涉及 |
 ```
 
 **API 契約欄位說明**：
@@ -27,6 +27,24 @@
 | 有 | Architect 已產出 API 契約，Developer 可直接進入開發 |
 | 無 | Story 涉及 API 但 Architect 尚未產出契約，Story-Lifecycle Hard Gate 將阻擋開發 |
 | 不適用 | Story 不涉及 API 互動，Hard Gate 自動跳過 |
+
+**Related SDDs 欄位說明**（ADR-020）：
+
+Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義範圍內的模組、介面或資料結構，並標注對應的 SDD 章節。
+
+| 值 | 意義 |
+|----|------|
+| SDD-XXX §N | Story 涉及該 SDD 章節定義的架構範圍，`related_sdds` 為**必填**，AC 須包含 SDD 一致性驗收條件 |
+| — | Story 不涉及任何 SDD 定義範圍（doc-only、RESEARCH），`related_sdds` 可省略 |
+
+**SDD 覆蓋範圍檢查規則**：
+
+| 情境 | `related_sdds` 要求 |
+|------|-------------------|
+| Story 涉及 SDD 定義的模組/介面/資料結構 | **必填**，標注具體 SDD 章節 |
+| doc-only Story 且不涉及架構 | 可省略，填「—」 |
+| RESEARCH type Story | 可省略，填「—」 |
+| SDD-000 不存在（專案初期） | 全部可省略，降級為現行行為 |
 
 ---
 

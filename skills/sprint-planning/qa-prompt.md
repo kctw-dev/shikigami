@@ -75,6 +75,33 @@ QA 在 Sprint Planning 中發現隱性需求缺口時，輸出如下格式，供
 
 ---
 
+## SDD 引用檢查（ADR-020）
+
+<!-- ADR-020 SDD 作為 AC 強制上游約束 -->
+
+QA 在 Sprint Planning Round 3 驗收 AC 時，**必須**針對每個 Story 檢查 SDD 引用完整性：
+
+### 檢查規則
+
+| 條件 | 處置 |
+|------|------|
+| Architect 技術評估表格中 Related SDDs 欄位有值（非「—」） | 確認 Story AC 中是否包含「SDD 一致性」相關驗收條件。若缺失，退回 PO 補充 |
+| Architect 技術評估表格中 Related SDDs 欄位為「—」 | 跳過 SDD 引用檢查（doc-only / RESEARCH / 無 SDD 覆蓋） |
+| SDD-000 不存在 | 跳過 SDD 引用檢查（專案初期降級） |
+
+### 輸出格式
+
+```
+[SDD 引用檢查] Story US-XXX
+  Related SDDs：SDD-000 §3, SDD-001 §2
+  AC 中 SDD 一致性條件：{有 / 缺失}
+  結果：PASS / NEEDS_REVISION
+```
+
+**NEEDS_REVISION 處置**：退回 PO，要求在 AC 中補充 SDD 一致性驗收條件（例如：「實作須符合 SDD-000 §3 定義的介面簽名」）。
+
+---
+
 ## Type-specific DoR 與 DoD
 
 ### Type-specific DoR（Definition of Ready）
@@ -85,6 +112,7 @@ QA 在 Sprint Planning 中發現隱性需求缺口時，輸出如下格式，供
 |------|---------|------|
 | **FEATURE** | AC 以可測試格式撰寫（Given-When-Then 或等效格式） | 每條 AC 必須明確描述輸入、操作與預期結果 |
 | **FEATURE** | API 契約已由 Architect 確認（涉及 API 時）| Contract Owner 已產出 API 契約（狀態 Reviewed 或 Accepted），或確認「不適用」 |
+| **FEATURE** | SDD 引用已確認（涉及 SDD 定義範圍時，ADR-020）| Architect 已標注 Related SDDs，AC 包含 SDD 一致性驗收條件 |
 | **FEATURE** | 無未解決的前置依賴 | 依 Refinement Q1 確認，所有前置 Story 已完成或可在本 Sprint 完成 |
 | **FEATURE** | 技術評估已完成（Architect Round 2） | T-shirt size 已確認，ADR 需求已評估 |
 | **DESIGN** | 設計稿或 Wireframe 已有初稿 | 不需最終版，但需有足夠細節供開發參考 |

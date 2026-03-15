@@ -87,4 +87,13 @@ Architecture Decision 的 Subagent 調度遵循以下固定順序：
 | Discovery 階段引入新技術 | 由 Discovery Skill 觸發 architecture-decision |
 | Sprint Planning 識別技術選型需求 | 在 Story 進 Sprint 前完成 ADR |
 | ADR 完成後 Story 解鎖 | 回到 sprint-planning 繼續 Story 選入流程 |
-| ADR 影響現有架構設計 | 同步更新相關 SDD 文件（`docs/sdd/`） |
+| ADR 影響現有架構設計 | 同步更新相關 SDD 文件（`docs/sdd/`），並觸發受影響 Story AC 校準（ADR-020，見下方） |
+
+### SDD 變更連鎖校準（ADR-020）
+
+當 ADR 觸發 SDD 更新時，Architect 必須執行以下連鎖校準：
+
+1. **列出受影響 Story**：識別當前 Sprint 中 `related_sdds` 引用了被修改 SDD 章節的 Story
+2. **AC 重新校準**：與 PO 確認受影響 Story 的 AC 是否需要更新（SDD 約束變更可能使既有 AC 過時或不完整）
+3. **記錄校準結果**：在 Sprint 文件中記錄哪些 Story AC 被校準、校準原因
+4. **重新進入 TDD**：若受影響 Story 已開始實作，需從 TDD Red 階段重新開始（基於新 AC 重寫失敗測試）

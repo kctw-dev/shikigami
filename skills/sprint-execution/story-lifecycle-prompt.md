@@ -112,7 +112,7 @@ sprint_file: "docs/sprints/sprint_N.md"    # 必填：包含 AC 的 Sprint 文�
 project_board: "docs/PROJECT_BOARD.md"     # 必填：看板路徑（供狀態更新）
 related_adrs:                              # 可選：相關 ADR 路徑清單
   - "docs/adr/ADR-XXX.md"
-related_sdds:                              # 可選：相關設計文件路徑清單
+related_sdds:                              # 條件必填（ADR-020）：涉及 SDD 定義範圍時必填
   - "docs/sdd/SDD-XXX.md"
 doc_only: false                            # 必填：是否為 doc-only Story（影響 TDD 豁免）
 size: "M"                                  # 必填：Story Size（S/M/L），影響 fallback 策略觸發閾值
@@ -321,7 +321,10 @@ commit + 取得 commit SHA
 
 1. 讀取 `sprint_file` 路徑下的 Sprint 文件，取得 Story ID 對應的完整 AC 清單
 2. 讀取所有 `related_adrs` 路徑下的 ADR 文件（若有）
-3. 讀取所有 `related_sdds` 路徑下的 SDD 文件（若有）
+3. 讀取所有 `related_sdds` 路徑下的 SDD 文件（若有），並**提取 SDD 架構約束**（ADR-020）：
+   - 從 SDD 中識別與本 Story 相關的介面簽名、模組邊界（import 方向）、資料結構定義、狀態轉換規則
+   - 將提取的 SDD 約束作為 TDD Red 階段和 Spec Compliance Review 的額外驗證基準
+   - 若 `related_sdds` 為空且 Story 涉及架構範圍，輸出 `[WARN] related_sdds 為空但 Story 可能涉及 SDD 定義範圍，建議確認`
 4. 確認 `doc_only` 與 `bypass` 狀態，決定執行路徑
 5. 執行同檔案衝突偵測（規則參照 `developer-prompt.md`）
 6. **中斷信號確認**：確認主 session 無待處理的使用者留言或中斷指示。若主 session 傳入中斷信號，立即回傳 `ESCALATE: REQUIREMENT_AMBIGUITY`（附使用者留言內容），由主 session 決定是否繼續
