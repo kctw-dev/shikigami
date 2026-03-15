@@ -13,8 +13,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| FEATURE：SDD-000 核心章節補充至最低可用狀態（解除 PB-2/PB-4 共同阻塞） | #270 | S | 1 | 待開發 |
-| FEATURE：演示模式 Live Log Streaming 實作（Phase 1：tail -f 即時日誌串流） | #269 | S | 1 | 待開發 |
+| FEATURE：SDD-000 核心章節補充至最低可用狀態（解除 PB-2/PB-4 共同阻塞） | #270 | S | 1 | 完成 |
+| FEATURE：演示模式 Live Log Streaming 實作（Phase 1：tail -f 即時日誌串流） | #269 | S | 1 | 完成 |
 
 **Sprint 容量**：2 points
 
