@@ -18,3 +18,4 @@
 | 2026-03-12 | direct | 清理 PRODUCT_BACKLOG.md / BACKLOG_DONE.md 殘留引用（ADR-010 對齊） | PASS | e98212b |
 | 2026-03-14 | #256 #257 | Architect SDD 補領域模型審查 + Shoot QA 與 Sprint Execution 品質對齊 | PASS | 2b00b30 |
 | 2026-03-14 | #263 | Decision Table Testing 整合至 QA Engineer — 執行規程 + §1.17 流程節點 + §4 Refinement 對接 | PASS | dcd95d4 |
+| 2026-03-15 | #264 #265 | TDD 順序強制 Hard Gate + Sprint Review QA 缺陷修復複驗 Gate | PASS | 065b338 |
