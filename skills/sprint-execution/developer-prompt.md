@@ -23,7 +23,7 @@
 
 ### Red（紅燈）
 1. 根據 Acceptance Criteria 寫出失敗的測試
-2. 若有 `related_sdds`，測試須同時涵蓋 SDD 定義的架構約束（ADR-020）：介面簽名、模組邊界、資料結構規格。確保測試不只驗 AC「做了什麼」，也驗 SDD「怎麼做」。若 `docs/sdd/SDD-000.md` 不存在（專案初期），此步驟跳過
+2. 若有 `related_sdds`，測試須同時涵蓋 SDD 定義的架構約束（ADR-020）：介面簽名、模組邊界、資料結構規格。確保測試不只驗 AC「做了什麼」，也驗 SDD「怎麼做」。若 `docs/sdd/SDD-000-architecture.md` 不存在（專案初期），此步驟跳過
 3. 執行測試，確認測試確實失敗
 4. Commit：`test: add failing test for {feature}`
 

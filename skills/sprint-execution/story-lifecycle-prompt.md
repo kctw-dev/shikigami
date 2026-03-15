@@ -322,11 +322,11 @@ commit + 取得 commit SHA
 1. 讀取 `sprint_file` 路徑下的 Sprint 文件，取得 Story ID 對應的完整 AC 清單
 2. 讀取所有 `related_adrs` 路徑下的 ADR 文件（若有）
 3. 讀取所有 `related_sdds` 路徑下的 SDD 文件（若有），並**提取 SDD 架構約束**（ADR-020）：
-   - **SDD-000 不存在降級**：若 `docs/sdd/SDD-000.md` 不存在（專案初期），跳過整個 SDD 約束提取，降級為現行行為
+   - **SDD-000 不存在降級**：若 `docs/sdd/SDD-000-architecture.md` 不存在（專案初期），跳過整個 SDD 約束提取，降級為現行行為
    - 從 SDD 中識別與本 Story 相關的介面簽名、模組邊界（import 方向）、資料結構定義、狀態轉換規則
    - 將提取的 SDD 約束作為 TDD Red 階段和 Spec Compliance Review 的額外驗證基準
    - **SDD 路徑不存在**：若 `related_sdds` 列出的路徑 Read 失敗，輸出 `[ERROR] related_sdds 路徑不存在：{path}，無法提取 SDD 約束`，回傳 `ESCALATE: SDD_FILE_MISSING` 至主 session
-   - **related_sdds 為空但可能涉及 SDD**：若 `related_sdds` 為空且 Story type 為 FEATURE 或 INTEGRATION 且 AC 涉及介面/模組/資料結構修改，輸出 `[GATE] related_sdds 為空但 Story 可能涉及 SDD 定義範圍`，回傳 `ESCALATE: SDD_REFERENCE_MISSING` 至主 session，等待確認後方可繼續。若主 session 確認「此 Story 確實不涉及 SDD」，降級為現行行為；若確認「需補充 related_sdds」，Story 退回補充後重新派遣
+   - **related_sdds 為空但可能涉及 SDD**：若 `related_sdds` 為空且 Story type 為 FEATURE、INTEGRATION、SECURITY 或 INFRA 且 AC 涉及介面/模組/資料結構修改，輸出 `[GATE] related_sdds 為空但 Story 可能涉及 SDD 定義範圍`，回傳 `ESCALATE: SDD_REFERENCE_MISSING` 至主 session，等待確認後方可繼續。若主 session 確認「此 Story 確實不涉及 SDD」，降級為現行行為；若確認「需補充 related_sdds」，Story 退回補充後重新派遣
 4. 確認 `doc_only` 與 `bypass` 狀態，決定執行路徑
 5. 執行同檔案衝突偵測（規則參照 `developer-prompt.md`）
 6. **中斷信號確認**：確認主 session 無待處理的使用者留言或中斷指示。若主 session 傳入中斷信號，立即回傳 `ESCALATE: REQUIREMENT_AMBIGUITY`（附使用者留言內容），由主 session 決定是否繼續

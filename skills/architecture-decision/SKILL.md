@@ -91,7 +91,7 @@ Architecture Decision 的 Subagent 調度遵循以下固定順序：
 
 ### SDD 變更連鎖校準（ADR-020）
 
-當 ADR 觸發 SDD 更新時，Architect 必須執行以下連鎖校準。若專案尚無 SDD（`docs/sdd/SDD-000.md` 不存在），連鎖校準不適用。
+當 ADR 觸發 SDD 更新時，Architect 必須執行以下連鎖校準。若專案尚無 SDD（`docs/sdd/SDD-000-architecture.md` 不存在），連鎖校準不適用。
 
 1. **列出受影響 Story**：檢查 Sprint 文件（`docs/sprints/sprint_N.md`）中各 Story 的 `related_sdds` 欄位，識別引用了被修改 SDD 章節的 Story
 2. **AC 重新校準**：與 PO 確認受影響 Story 的 AC 是否需要更新（SDD 約束變更可能使既有 AC 過時或不完整）
@@ -109,4 +109,4 @@ Architecture Decision 的 Subagent 調度遵循以下固定順序：
     - {story_id}: 從 Red 階段重新開始 / 尚未開始實作（不影響）
 ```
 
-**失敗處理**：若無法確定受影響範圍（Sprint 文件缺失或 `related_sdds` 欄位不完整），輸出 `[SDD-CASCADE-INCOMPLETE]` 並 ESCALATE 至主 session
+**失敗處理**：若無法確定受影響範圍（Sprint 文件缺失或 `related_sdds` 欄位不完整），輸出 `[SDD-CASCADE-INCOMPLETE]` 並 ESCALATE 至主 session。主 session 收到後：(a) 暫停所有尚未開始實作的當前 Sprint Story；(b) 請 Architect 手動列出可能受影響的 Story；(c) 完成手動列舉後重新執行連鎖校準

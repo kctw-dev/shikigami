@@ -91,7 +91,9 @@
    - 建議修復：{修復方向}
 ```
 
-若 Story 無 `related_sdds`，或 `docs/sdd/SDD-000.md` 不存在（專案初期降級），此區塊標記為 N/A。
+若 Story 無 `related_sdds`，或 `docs/sdd/SDD-000-architecture.md` 不存在（專案初期降級），此區塊標記為 N/A。
+
+若 `related_sdds` 路徑 Read 失敗（檔案不存在或已更名）：整體審查 **FAIL**，標記 `[SDD-FILE-MISSING]`，建議修復：確認 `related_sdds` 路徑是否正確，或更新至有效 SDD 路徑。
 
 ### 7. 前後端 API 欄位一致性檢查（全端 Story 適用）
 
