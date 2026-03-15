@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 # scripts/bump-version.sh
-# US-94：版號更新四檔同步腳本
+# US-94：版號更新五檔同步腳本
 #
 # 用法：bash scripts/bump-version.sh <MAJOR.MINOR.PATCH>
 #
-# 原子性地更新下列四個檔案的 version 欄位：
+# 原子性地更新下列五個檔案的 version 欄位：
 #   .claude-plugin/plugin.json
 #   .claude-plugin/marketplace.json
 #   gemini-extension.json
 #   CLAUDE.md
+#   README.md（Version badge）
 #
 # 並清除 ~/.claude/plugins/cache/shikigami/shikigami/ 下的
 # 舊版 cache，強制 Claude Code 下次載入時重建。
@@ -29,6 +30,7 @@ readonly PLUGIN_JSON=".claude-plugin/plugin.json"
 readonly MARKETPLACE_JSON=".claude-plugin/marketplace.json"
 readonly GEMINI_EXTENSION_JSON="gemini-extension.json"
 readonly CLAUDE_MD="CLAUDE.md"
+readonly README_MD="README.md"
 readonly PLUGIN_CACHE_DIR="${HOME}/.claude/plugins/cache/shikigami/shikigami"
 
 # ---------------------------------------------------------------------------
@@ -159,6 +161,25 @@ update_claude_md_version() {
   print_ok "$file：版號更新至 v${version}"
 }
 
+# 更新 README.md 的 Version badge（img.shields.io/badge/version-vX.Y.Z-blue）
+update_readme_badge_version() {
+  local file="$1"
+  local version="$2"
+
+  if [ ! -f "$file" ]; then
+    print_info "README.md 不存在，跳過"
+    return
+  fi
+
+  if ! grep -q 'img\.shields\.io/badge/version-v' "$file"; then
+    print_info "README.md 中未找到 Version badge，跳過"
+    return
+  fi
+
+  sed -i "s|badge/version-v[0-9]\+\.[0-9]\+\.[0-9]\+|badge/version-v${version}|" "$file"
+  print_ok "$file：badge 版號更新至 v${version}"
+}
+
 # 更新 marketplace.json 的 .plugins[0].version 欄位
 update_marketplace_version() {
   local file="$1"
@@ -204,7 +225,7 @@ main() {
   # 前置檢查
   preflight_check
 
-  print_info "開始更新四個版本檔案..."
+  print_info "開始更新五個版本檔案..."
   echo ""
 
   # 更新 plugin.json（頂層 .version）
@@ -218,6 +239,9 @@ main() {
 
   # 更新 CLAUDE.md 版號
   update_claude_md_version "$CLAUDE_MD" "$new_version"
+
+  # 更新 README.md badge 版號
+  update_readme_badge_version "$README_MD" "$new_version"
 
   # 清除舊版 plugin cache，強制下次載入時重建
   invalidate_plugin_cache
