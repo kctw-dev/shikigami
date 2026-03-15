@@ -1041,7 +1041,7 @@ Security Self-Review — {story_id}
 
 ---
 
-## §7.5 pr-review-toolkit 補充審查（條件觸發，doc_only=false 時）
+## §7.5 pr-review-toolkit 補充審查（條件觸發，doc_only 影響派遣範圍）
 
 <!-- Story #266 — 整合 pr-review-toolkit 審查 agents 至 commit 前 Gate -->
 
@@ -1059,8 +1059,8 @@ Security Self-Review — {story_id}
 | 嚴重度 Gate 規則 | ADR-021 §1（CRITICAL/HIGH 阻擋，MEDIUM/LOW 記錄） |
 | 修復閉環 | ADR-021 §1（二審仍 CRITICAL/HIGH → 升級 Architect） |
 | doc-only 條件觸發 | shoot SKILL.md §8.2 doc-only pattern（SSOT）+ ADR-021 §2 |
-| 降級行為 | shoot SKILL.md §8.2 降級模式（WARN + 跳過 + 繼續） |
-| 輸出格式 | ADR-021 §7（四種情境範例） |
+| 降級行為 | shoot SKILL.md §8.6 降級行為（原則複用 §8.2 WARN + 跳過 + 繼續模式） |
+| 輸出格式 | shoot SKILL.md §8.6（五種情境範例，基於 ADR-021 §7） |
 | 責任邊界 | ADR-021 §4 責任矩陣 |
 
 **觸發規則**：`doc_only=false` 時執行完整三 agent 派遣；`doc_only=true` 時僅執行 `comment-analyzer`。

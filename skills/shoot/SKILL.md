@@ -698,8 +698,8 @@ Agent 3: subagent_type: "pr-review-toolkit:comment-analyzer"
 
 CRITICAL/HIGH 阻擋時：
 1. 修復問題
-2. 重新派遣對應 agent 進行第二輪審查
-3. 第二輪仍有 CRITICAL/HIGH → **升級至 Architect，終止**
+2. 重新派遣**所有**第一輪回報 CRITICAL/HIGH 的 agent 進行第二輪審查（非僅修復對象的單一 agent）
+3. 第二輪仍有任一 agent 回報 CRITICAL/HIGH → **升級至 Architect，終止**
 
 ### doc-only 條件觸發
 
@@ -722,12 +722,13 @@ CRITICAL/HIGH 阻擋時：
 | Plugin 未安裝 | 輸出 `[WARN]`，跳過步驟 5.4，繼續 |
 | 部分 agent 不可用 | 該 agent 輸出 `[WARN]`，其餘 agent 正常執行 |
 | Agent 回應異常 | 該 agent 輸出 `[WARN]`，其餘 agent 正常執行 |
+| Agent 回應正常但嚴重度解析失敗（無法提取任何嚴重度項目） | 視為回應異常，該 agent 輸出 `[WARN]`，不視為 `[PASS]` |
 
 **設計原則**：pr-review-toolkit 是**增強層**，非**必要層**。未安裝不阻擋流程，品質底線由步驟 5.3 的外部獨立審查保障。
 
 ### 輸出格式
 
-四種情境範例（詳見 ADR-021 §7 輸出格式）：
+五種情境範例（基於 ADR-021 §7 輸出格式，新增 doc-only CRITICAL 情境）：
 
 **正常 PASS**：
 ```
@@ -756,6 +757,20 @@ CRITICAL/HIGH 阻擋時：
 ── pr-review-toolkit 補充審查 ────────
   code-reviewer：      [SKIP] Doc-only 變更
   silent-failure-hunter：[SKIP] Doc-only 變更
+  comment-analyzer：    [PASS] 無 Critical Issues
+```
+
+**doc-only + comment-analyzer CRITICAL（阻擋）**：
+```
+── pr-review-toolkit 補充審查 ────────
+  code-reviewer：      [SKIP] Doc-only 變更
+  silent-failure-hunter：[SKIP] Doc-only 變更
+  comment-analyzer：    [FAIL] 發現 Critical Issues
+    - [CRITICAL] docs/adr/ADR-021.md L45: 文件描述與實際行為不符
+
+  修復中...
+
+── pr-review-toolkit 補充審查（第二輪）──
   comment-analyzer：    [PASS] 無 Critical Issues
 ```
 
