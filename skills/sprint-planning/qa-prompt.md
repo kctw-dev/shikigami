@@ -87,7 +87,8 @@ QA 在 Sprint Planning Round 3 驗收 AC 時，**必須**針對每個 Story 檢�
 |------|------|
 | Architect 技術評估表格中 Related SDDs 欄位有值（非「—」） | 確認 Story AC 中是否包含「SDD 一致性」相關驗收條件。若缺失，退回 PO 補充 |
 | Architect 技術評估表格中 Related SDDs 欄位為「—」 | 跳過 SDD 引用檢查（doc-only / RESEARCH / 無 SDD 覆蓋） |
-| SDD-000 不存在 | 跳過 SDD 引用檢查（專案初期降級） |
+| `docs/sdd/SDD-000-architecture.md` 不存在 | 跳過 SDD 引用檢查（專案初期降級） |
+| Related SDDs 欄位引用的 SDD 路徑不存在 | 標記 `NEEDS_REVISION`，通知 Architect 確認 SDD 路徑 |
 
 ### 輸出格式
 

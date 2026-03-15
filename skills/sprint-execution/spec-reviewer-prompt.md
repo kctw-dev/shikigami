@@ -93,7 +93,7 @@
 
 若 Story 無 `related_sdds`，或 `docs/sdd/SDD-000-architecture.md` 不存在（專案初期降級），此區塊標記為 N/A。
 
-若 `related_sdds` 路徑 Read 失敗（檔案不存在或已更名）：整體審查 **FAIL**，標記 `[SDD-FILE-MISSING]`，建議修復：確認 `related_sdds` 路徑是否正確，或更新至有效 SDD 路徑。
+若 `related_sdds` 路徑 Read 失敗（檔案不存在或已更名）：整體審查 **FAIL**，標記 `[SDD-FILE-MISSING]`，建議修復：確認 `related_sdds` 路徑是否正確，或更新至有效 SDD 路徑。（注：此情境正常應在 Story Lifecycle 啟動階段由 `ESCALATE: SDD_FILE_MISSING` 攔截，此處為防禦性檢查。）
 
 ### 7. 前後端 API 欄位一致性檢查（全端 Story 適用）
 
@@ -184,6 +184,11 @@
    - SDD 定義：{SDD 中的規格}
    - 實際實作：{Developer 的實作}
    - 建議修復：{修復方向}
+
+#### [SDD-FILE-MISSING] SDD 檔案不存在（防禦性檢查）
+1. **{related_sdds 路徑}**
+   - 狀況：Read 失敗，檔案不存在或已更名
+   - 建議修復：確認路徑是否正確，或通知 Architect 更新 `related_sdds`
 ```
 
 ---

@@ -44,7 +44,7 @@ Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義�
 | Story 涉及 SDD 定義的模組/介面/資料結構 | **必填**，標注具體 SDD 章節 |
 | doc-only Story 且不涉及架構 | 可省略，填「—」 |
 | RESEARCH type Story | 可省略，填「—」 |
-| SDD-000 不存在（專案初期） | 全部可省略，降級為現行行為 |
+| `docs/sdd/SDD-000-architecture.md` 不存在（專案初期） | 全部可省略，降級為現行行為 |
 
 ---
 
