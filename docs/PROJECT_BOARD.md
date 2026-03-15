@@ -1,9 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-15（Sprint 97 Review 完成）
-**當前 Sprint**：Sprint 98（待規劃）
+**最後更新**：2026-03-15（Sprint 98 Planning 完成）
+**當前 Sprint**：Sprint 98
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 97](sprints/sprint_97.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 98](sprints/sprint_98.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 98（進行中）
+
+> Sprint Goal：將 pr-review-toolkit 三 agent 補充審查層實作至 shoot 與 sprint-execution commit 前 Gate — 兌現 ADR-021 架構設計的工程品質深度承諾
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| INTEGRATION：整合 pr-review-toolkit 審查 agents 至 shoot / sprint-execution commit 前 Gate | #266 | M | 2 | 進行中 |
+
+**Sprint 容量**：2 points
+
+## Sprint 98 統計
+- Velocity：—（進行中）
+- 完成率：—（進行中）
+- 日期：2026-03-15
 
 ---
 
