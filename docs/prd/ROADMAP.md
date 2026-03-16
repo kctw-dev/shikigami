@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-13（Sprint 94 完成 — 版號一致性測試技術債修復）
+> 最後更新：2026-03-15（Sprint 99 完成 — SDD-000 核心章節 + 演示模式 Live Log Streaming）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.68.0**（Sprint 94）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.71.0**（Sprint 99）。
 
 | 版號 | 含義 |
 |------|------|
@@ -385,6 +385,18 @@ Sprint Review 時自動產出：
 | US-238 | 效能基準管理 — 部署前 Load Test 與效能回歸偵測 | Sprint 87 ✅ |
 | US-239 | 單人服務模式 — 角色獨立派遣至外部專案 | Sprint 87 ✅ |
 
+| US-257 | Architect 審查 Gate 加入 Layer Compliance 分層合規檢查 | Sprint 95 ✅ |
+| US-263 | validate-version.sh 增強：README.md badge 版號檢查 | Sprint 96 ✅ |
+| US-264 | 版本驗證 Hook：commit 前自動檢查版號一致性 | Sprint 96 ✅ |
+| US-265 | architecture-decision Skill 拆分：角色 prompt 檔案分離 | Sprint 96 ✅ |
+| US-266 | deployment-readiness Skill 拆分：SRE / Security 角色 prompt 分離 | Sprint 96 ✅ |
+| US-267 | UI/UX Designer 前置檢查：Design System / Design Token / Guideline 文件存在性驗證 | Sprint 96 ✅ |
+| US-268 | 演示模式 / 火力展示（Spike）：技術可行性報告 | Sprint 96 ✅ |
+| ADR-021 | pr-review-toolkit 外部 Plugin 整合架構定義 | Sprint 97 ✅ |
+| US-269 | 整合 pr-review-toolkit 審查 agents 至 shoot / sprint-execution commit 前 Gate | Sprint 98 ✅ |
+| US-270 | SDD-000 核心章節補充至最低可用狀態（解除 PB-2/PB-4 共同阻塞） | Sprint 99 ✅ |
+| US-271 | 演示模式 Live Log Streaming 實作（Phase 1：tail -f 即時日誌串流） | Sprint 99 ✅ |
+
 **完成條件**：至少 1 位外部使用者完成安裝並走完一個 Sprint、Issue #3 **已結案（Sprint 29）**、Issue #5 **已結案（Sprint 64）**、Issue #4 有明確結論
 
 ### 多模型 CLI 路由結案記錄（Sprint 61–64，Issue #159，2026-03-08）
@@ -431,6 +443,35 @@ Sprint 25 延後條件（Cursor v2.5+ Task tool API 開放）已達成，執行�
 
 ---
 
+---
+
+### Discovery Phase 產出（2026-03-15，Issue #271 觸發）
+
+**觸發源**：Issue #271 — gstack vs Shikigami 競品分析與整合機會
+
+gstack（YC CEO Garry Tan，12K+ stars）競品分析識別出三個候選需求，經 Discovery Phase 六步驟流程（PO 背景分析 → 假設外顯化 → Product Brief → Architect 技術評估 → PO 簽核 → Backlog 轉化），產出以下決議：
+
+| Product Brief | PO 決議 | 技術判斷 | 理由 |
+|--------------|---------|---------|------|
+| **Browser Automation — Playwright MCP 整合** | 批准（Brief 需修正） | 有條件可行（需 Spike） | Issue #271 評為 Critical；但 ROADMAP 交叉比對發現 Playwright 基礎已在 Sprint 53-75 建立（OQ-1 可行性驗證 + Vision Critic 截圖 + E2E SOP），實際需求是「統一整合」而非「從零建立」。Spike 範圍縮小為 Playwright MCP 在 subagent 中的穩定性驗證 |
+| **互動式審查模式（Interactive Review Mode）** | 批准 | 可行 | 與 M5「人機協作」策略對齊。在 quality-gate HARD-GATE 中加入結構化決策點（A/B/C 選項），讓使用者可「有意識地接受風險並記錄」，而非被迫繞過 QA 機制 |
+| **統一 Ship 管線（Unified Ship Pipeline）** | 擱置 | 有條件可行（需 ADR） | 商業假設不確定性最高（使用者是否遇到此痛點未驗證）+ M5 方向是「精簡」而非「新增流程」。與現有 /shoot 職責重疊需釐清。建議等使用者主動反映痛點後再重新評估 |
+
+**Product Brief 存放路徑**：`docs/discovery/PB-2026-03-15-*.md`
+
+**後續 Stories（待排入 Sprint）**：
+
+| 候選 Story | 來源 Brief | 前置依賴 | 預估 Size |
+|-----------|-----------|---------|----------|
+| Spike：Playwright MCP subagent 穩定性驗證 | Browser Automation | 無 | S |
+| Browser Automation Skill 建立 + QA/UX/SRE Agent 擴充 | Browser Automation | Spike 通過 | M-L |
+| quality-gate CRITICAL 互動決策點設計與實作 | Interactive Review Mode | 無 | M |
+| 決策記錄機制（quality-gate-decisions.md）+ 防濫用設計 | Interactive Review Mode | 上一條 | S |
+
+**ROADMAP 交叉比對備忘**：Browser Automation Brief 低估了現有基礎——OQ-1（Sprint 53）已驗證 Playwright 截圖可行性、Vision Critic（US-107/151）已整合 Playwright、E2E SOP（US-196/197/199，Sprint 74-75）已建立測試框架。Brief 第 1、4、7 區段需更新以反映此基礎。
+
+---
+
 ## v1.0.0 正式版 — 遠期
 
 **主題**：穩定、可信賴、可推薦給他人使用的 AI Scrum Team
@@ -469,18 +510,22 @@ Sprint 25 延後條件（Cursor v2.5+ Task tool API 開放）已達成，執行�
 
 ```
 v0.1.0 核心框架        v0.2.0 自我感知        v0.3.0 知識沉澱
-Sprint 1              Sprint 2–3             Sprint 4–6            版號凍結 v0.3.x
-──────────────────────┬──────────────────────┬─────────────────────┬──────────────────
+Sprint 1              Sprint 2–3             Sprint 4–6
+──────────────────────┬──────────────────────┬─────────────────────┐
 Issue Mgmt            │ Onboard + Health     │ Retro Analytics     │
 專案等級 + ADR-001    │ Check + Metrics      │ Tech Debt + ADR KB  │
 ──────────────────────┴──────────────────────┴─────────────────────┘
 已交付 ✅              已交付 ✅               已交付 ✅
 
-                        M5 穩定化（進行中）                          v1.0.0
-                        Sprint 7+                                    TBD
-                        ────────────────────────────────────────────┬─────
-                        dispel + CI + 制衡案例 + Issue 回覆 +       │ 官方
-                        Bypass + 安裝驗證 + 多平台 + 使用者文件     │ 上架
-                        ────────────────────────────────────────────┴─────
-                        v0.3.x patch bump                            v1.0.0
+M4 外部整合            M5 穩定化（進行中）                          v1.0.0
+Sprint 39–41          Sprint 7–99+                                  ~2028
+──────────────────────┬────────────────────────────────────────────┬─────
+CI/CD + DORA          │ dispel + 多平台 + UX Agent + Vision Critic │ 官方
++ Notification        │ + 演示模式 + pr-review-toolkit 整合        │ 上架
+                      │                                            │
+                      │ ← Discovery Phase（Issue #271 gstack 競品）│
+                      │   → Browser Automation（Playwright MCP）   │
+                      │   → Interactive Review Mode（quality-gate）│
+──────────────────────┴────────────────────────────────────────────┴─────
+已交付 ✅              v0.71.0（Sprint 99）                         v1.0.0
 ```

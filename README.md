@@ -3,7 +3,7 @@
 ![Version](https://img.shields.io/badge/version-v0.71.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 ![Sprints](https://img.shields.io/badge/sprints-94%2B-orange?style=flat-square)
-![Skills](https://img.shields.io/badge/skills-25-purple?style=flat-square)
+![Skills](https://img.shields.io/badge/skills-26-purple?style=flat-square)
 
 **為你的 AI 開發工具注入 8 個專業角色，涵蓋 Discovery → Definition → Delivery 全產品生命週期。**
 
@@ -174,7 +174,7 @@ Architect：ADR-002 狀態 → Accepted
 **重點：它們互相制衡，不是 8 個獨立助手。**
 
 <details>
-<summary>完整 25 個 Skills 列表</summary>
+<summary>完整 26 個 Skills 列表</summary>
 
 **Discovery（產品探索）**
 

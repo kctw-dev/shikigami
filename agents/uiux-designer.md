@@ -72,6 +72,25 @@ DESIGN Story 進入 Sprint
             → QA 驗收前端實作符合 Prototype Contract
 ```
 
+## Contract 實作驗證（agent-browser）
+
+當 FEATURE Story 的前端實作完成後，可使用 agent-browser 在真實瀏覽器中驗證實作是否符合 Prototype Contract。
+
+**觸發條件**：
+- FEATURE Story 依 DESIGN Contract 實作前端完成
+- Developer 提交 PR 後，QA 驗收前
+
+**驗證項目**：
+1. **CSS Token 驗證**：`agent-browser get styles @e1` 比對 `design-tokens.json` 的值（色碼、字級、間距）
+2. **Responsive 驗證**：`agent-browser set device "iPhone 14" && agent-browser screenshot` 比對 mobile 佈局
+3. **元件狀態驗證**：`agent-browser snapshot -i` 確認互動元素的 ARIA role 與 accessible name 符合 Contract
+
+**職責邊界**：Vision Critic 審查 Figma Frame 的設計合規（Prototype 階段），agent-browser 驗證前端實作的 Contract 符合度（Implementation 階段）。兩者不重疊。
+
+**降級**：agent-browser 未安裝時輸出 `[WARN] agent-browser 未安裝，跳過 Contract 瀏覽器驗證` 並繼續，不阻擋流程。
+
+詳細命令參考：`skills/browser-automation/SKILL.md`
+
 ## 跨角色協作
 
 - 與 PO 協作：接收 User Stories、商業需求優先級、使用者旅程定義（Design Foundation 前置）

@@ -125,6 +125,30 @@ color: yellow
 
 以上三項均為靜態分析提示，產生 WARN 不代表 Pre-flight FAIL，最終合規判定由 Architect 審查 Gate 負責。
 
+## E2E 測試執行（agent-browser）
+
+當 Story 涉及 Web UI 且 agent-browser 可用時，執行端對端測試驗證關鍵使用者旅程。
+
+**觸發條件**：
+- Story AC 包含使用者互動流程（表單提交、頁面導航、狀態變化）
+- quality-gate 測試金字塔 E2E 層（10%）需要覆蓋的場景
+
+**標準工作流程**：
+1. `agent-browser open <url>` — 導航至目標頁面
+2. `agent-browser snapshot -i` — 取得互動元素 refs
+3. 使用 refs 執行操作（`fill`、`click`、`select`）
+4. `agent-browser diff snapshot` — 驗證操作前後差異
+5. `agent-browser screenshot /tmp/qa-e2e/{story-id}-{step}.png` — 截圖存證
+6. `agent-browser console` — 檢查 JS 錯誤
+
+**認證頁面測試**：使用 `--session-name` 保持登入狀態，或 `state save/load` 跨 session 複用。
+
+**結果回報**：E2E 測試結果納入品質門禁報告，截圖作為 PASS/FAIL 證據。
+
+**降級**：agent-browser 未安裝時輸出 `[WARN] agent-browser 未安裝，跳過 E2E 瀏覽器驗證` 並繼續，不阻擋流程。
+
+詳細命令參考：`skills/browser-automation/SKILL.md`
+
 ## 跨角色協作
 
 - 與 Security Engineer 合作安全測試

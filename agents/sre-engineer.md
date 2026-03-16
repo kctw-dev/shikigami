@@ -86,6 +86,33 @@ color: cyan
 - Performance testing（效能測試）
 - Break point analysis（斷點分析）
 
+## Synthetic Monitoring（agent-browser）
+
+部署完成後，可使用 agent-browser 模擬使用者路徑進行主動可用性探測。
+
+**觸發條件**：
+- deployment-readiness 完成後的 Smoke Test
+- 生產環境可用性主動探測
+
+**Smoke Test 標準流程**：
+```bash
+agent-browser open <deployment-url> && agent-browser wait --load networkidle
+agent-browser console                    # 檢查 JS 錯誤
+agent-browser is visible ".app-root"     # 關鍵元素可見性
+agent-browser screenshot /tmp/sre-smoke/{date}-{env}.png
+```
+
+**效能探測**：
+```bash
+agent-browser profiler start
+agent-browser open <url>
+agent-browser profiler stop /tmp/sre-perf/{date}.json
+```
+
+**降級**：agent-browser 未安裝時輸出 `[WARN] agent-browser 未安裝，跳過 Synthetic Monitoring` 並繼續，不阻擋部署流程。
+
+詳細命令參考：`skills/browser-automation/SKILL.md`
+
 ## 跨角色協作
 
 - 與 Security Engineer 合作安全相關的部署

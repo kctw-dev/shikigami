@@ -37,7 +37,7 @@
 └── marketplace.json         # Marketplace 發布資訊
 
 agents/                      # 8 個角色定義
-skills/                      # 25 個 Skill
+skills/                      # 26 個 Skill
 hooks/                       # Session 初始化 hook
 commands/                    # 4 個 slash command
 mcp-servers/                 # MCP server 整合
