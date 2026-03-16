@@ -352,8 +352,11 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
 
 #### 修復閉環
 
-- FAIL 時內部修復，不升級
-- 連續失敗 3 次 → 終止，exit code 非 0
+- FAIL 時若為 **Critical** 缺陷，進入 CRITICAL 互動決策點（選項 A/B/C，規則參見 `skills/quality-gate/SKILL.md` §7.1）
+- 選擇 A（修復）後內部修復，不升級
+- 選擇 B/C 強制寫入 `docs/km/quality-gate-decisions.md`（格式參見 `skills/quality-gate/SKILL.md` §7.2）
+- 連續失敗 3 次（選擇 A 後仍 FAIL）→ 終止，exit code 非 0
+- 同一任務連續選擇 B/C 超過 2 次 → 升級 Architect 審查
 
 **輸出格式**：
 

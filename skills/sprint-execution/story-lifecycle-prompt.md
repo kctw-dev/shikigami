@@ -856,9 +856,11 @@ echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — FAIL（修復循
 
 ### 修復閉環規則
 
-- 若 FAIL：在本 subagent 內部修復，不升級主 session
-- 修復後重新執行此審查
-- 同一審查階段連續失敗 **3 次** → 回傳 `ESCALATE: DESIGN_ISSUE`
+- 若 FAIL 且為 **Critical** 缺陷：進入 CRITICAL 互動決策點（選項 A/B/C，規則參見 `skills/quality-gate/SKILL.md` §7.1）
+- 選擇 A（修復）：在本 subagent 內部修復，不升級主 session，修復後重新執行此審查
+- 選擇 B/C：強制寫入 `docs/km/quality-gate-decisions.md`（格式參見 `skills/quality-gate/SKILL.md` §7.2），流程繼續
+- 同一審查階段連續失敗 **3 次**（選擇 A 後仍 FAIL）→ 回傳 `ESCALATE: DESIGN_ISSUE`
+- 同一 Story 連續選擇 B/C 超過 2 次 → 升級 Architect 審查
 
 ---
 

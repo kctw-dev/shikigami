@@ -24,7 +24,7 @@ QA 品質門禁 Skill，由 **QA Engineer** 主導的品質檢查流程。確保
 
 <HARD-GATE>
 品質門禁標準為強制性要求。任何未達標的代碼不得合併至主分支。
-關鍵缺陷數量必須為零，無例外。
+關鍵缺陷必須經過處置才能繼續（CRITICAL 缺陷的處置方式參見 §7.1 互動決策點）。
 </HARD-GATE>
 
 ---
@@ -157,20 +157,70 @@ QA subagent 進行代碼審查時，必須逐項檢查以下清單：
 
 ### 判定規則
 
-- 存在任何 **Critical** 缺陷 → 門禁 **FAIL**，必須修復後重新審查
+- 存在任何 **Critical** 缺陷 → 進入 **CRITICAL 互動決策點**（見 §7.1）
 - 僅有 **Important** 缺陷 → 門禁 **條件通過**，強烈建議修復
 - 僅有 **Suggestion** → 門禁 **PASS**，建議改進但不阻擋
+
+### §7.1 CRITICAL 互動決策點
+
+當 QA 發現 CRITICAL 缺陷時，**不直接 FAIL**，而是向使用者提出結構化選項：
+
+```
+[CRITICAL] 發現 N 個關鍵缺陷：
+  - [Critical] {file}:{line}: {問題描述}
+
+請選擇處置方式：
+  A. 修復後重新審查（推薦）
+  B. 降級為 Important，本次繼續（需提供降級理由，強制記錄）
+  C. 接受風險並繼續（需在 GitHub 建立 Issue，強制記錄）
+```
+
+**選項規則**：
+
+| 選項 | 條件 | 後續動作 |
+|------|------|---------|
+| **A. 修復** | 無條件可選（推薦） | Developer 修復 → 重新審查 |
+| **B. 降級** | 非 Security 類 CRITICAL 可選 | 強制記錄至 `docs/km/quality-gate-decisions.md`，附降級理由 |
+| **C. 接受風險** | 必須提供 GitHub Issue 編號 | 強制記錄至 `docs/km/quality-gate-decisions.md`，附 Issue 編號 |
+
+**Security 類 CRITICAL 限制**：涉及安全漏洞（SQL Injection、XSS、認證繞過等）的 CRITICAL 缺陷，**不允許選擇 B（降級）**，只能 A（修復）或 C（接受風險並建立 Security Issue）。
+
+**防濫用機制**：
+- 同一個 Story/PR 連續選擇 B 或 C **超過 2 次**，強制升級至 Architect 審查
+- 若 `docs/km/quality-gate-decisions.md` 中 C 選擇率 > 20%，觸發設計回顧
+
+**HARD-GATE 語意調整**：本互動決策點不取消 HARD-GATE，而是將「必須修復才能繼續」擴充為「必須做出有記錄的知情決策才能繼續」。未做選擇 = 門禁 FAIL，不得繼續。
+
+### §7.2 決策記錄格式
+
+選擇 B 或 C 時，強制寫入 `docs/km/quality-gate-decisions.md`：
+
+```markdown
+## {日期} — {Story/PR 標識}
+
+| 欄位 | 內容 |
+|------|------|
+| 問題描述 | {CRITICAL 缺陷描述} |
+| 選擇 | B（降級）/ C（接受風險） |
+| 理由 | {使用者提供的理由} |
+| 後續行動 | {Issue 編號或修復計劃} |
+| 審查者 | QA Engineer |
+```
+
+此文件為追溯用途，供 Sprint Review 時檢視品質決策歷史。
 
 ---
 
 ## 8. 審查失敗處理
 
-當品質門禁不通過時：
+當品質門禁發現問題時：
 
 1. QA subagent 產出具體問題清單，每個問題標注嚴重度（Critical / Important / Suggestion）
-2. Developer subagent 接收問題清單進行修復
-3. 修復完成後，重新執行品質門禁審查
-4. 同一門禁連續失敗 3 次，升級至 Architect 評估是否存在設計層面的問題
+2. **Critical 問題**：進入 §7.1 CRITICAL 互動決策點，使用者選擇 A/B/C
+3. 選擇 A（修復）：Developer subagent 接收問題清單進行修復，修復完成後重新執行品質門禁審查
+4. 選擇 B/C：強制寫入決策記錄（§7.2），流程繼續
+5. 同一門禁連續失敗 3 次（選擇 A 後仍 FAIL），升級至 Architect 評估是否存在設計層面的問題
+6. 同一 Story/PR 連續選擇 B/C 超過 2 次，強制升級至 Architect 審查
 
 ---
 
