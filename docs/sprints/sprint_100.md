@@ -11,8 +11,8 @@
 |-------|-------|------|--------|------|
 | INFRA：Story-Lifecycle subagent 完成後強制 git commit Hard Gate | #307 | S | 1 | 完成 |
 | FEATURE：story-lifecycle-prompt: 測試修復批量執行策略 | #304 | S | 1 | 完成 |
-| FEATURE：KM 第三方 API 文件驗證機制 — 禁止腦補 enum 值 | #276 | M | 2 | 進行中 |
-| INFRA：Bug：Sprint Planning 多 session 並行編號衝突修復 | #277 | S | 1 | 進行中 |
+| FEATURE：KM 第三方 API 文件驗證機制 — 禁止腦補 enum 值 | #276 | M | 2 | 完成 |
+| INFRA：Bug：Sprint Planning 多 session 並行編號衝突修復 | #277 | S | 1 | 完成 |
 | INFRA：CI/CD: 所有 workflow 加入 cancel-in-progress | #306 | S | 1 | 完成 |
 
 ## Acceptance Criteria
