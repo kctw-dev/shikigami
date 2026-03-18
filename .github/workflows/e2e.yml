@@ -27,6 +27,10 @@ on:
         required: false
         default: "staging"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   e2e:
     name: Playwright E2E Tests
