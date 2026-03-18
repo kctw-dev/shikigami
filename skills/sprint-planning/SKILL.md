@@ -94,6 +94,10 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 | `docs/PROJECT_BOARD.md` | 更新。將選入 Stories 移至「Sprint Backlog」欄位 |
 | GitHub Issues labels/milestone | `status: in-sprint` label + Sprint Milestone |
 
+### 並行衝突防護
+
+PO Round 2 建立 `sprint_N.md` 前，必須執行 **git pull + 檔案存在性檢查 + 自動遞增** 機制，防止多 session 同時執行 Sprint Planning 時產生重複編號。衝突發生時輸出 `[SPRINT-CONFLICT]` WARN 日誌並自動遞增編號。完整流程見 [po-prompt.md](./po-prompt.md) § 並行衝突防護流程。
+
 ### Commit + Push 規範
 
 ```bash

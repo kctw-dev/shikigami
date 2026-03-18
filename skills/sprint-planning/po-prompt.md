@@ -55,7 +55,7 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 ### 職責
 
 1. 根據 Architect 與 QA 的回饋，最終確認 Sprint Backlog
-2. 建立 `docs/sprints/sprint_N.md`（N 為遞增的 Sprint 編號）
+2. 建立 `docs/sprints/sprint_N.md`（N 為遞增的 Sprint 編號）— **建立前必須執行並行衝突防護流程（見下方）**
 3. 更新 `docs/PROJECT_BOARD.md`，反映新 Sprint 的 Stories 配置
 4. 為所有選入的 Issues 執行 GitHub 操作：
    - 套用 `status: in-sprint` label（移除 `status: backlog`）
@@ -63,6 +63,28 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 5. 回傳最終 Sprint Backlog 結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果）
 
 **主 session 不直接讀取 PROJECT_BOARD.md，僅接收 subagent 回傳的摘要。**
+
+---
+
+### 並行衝突防護流程（建立 sprint_N.md 前必須執行）
+
+多個 session 可能同時執行 Sprint Planning，導致重複編號衝突。PO Round 2 在建立 sprint_N.md 之前，**必須**依下列步驟取得安全的 Sprint 編號：
+
+```
+1. 執行 git pull（同步最新狀態，取得其他 session 已 commit 的 sprint 文件）
+2. 掃描 docs/sprints/ 取得所有 sprint_N.md 的最大編號 max_N
+   指令：ls docs/sprints/sprint_*.md 2>/dev/null | grep -oP 'sprint_\K\d+' | sort -n | tail -1
+3. 計算下一個 Sprint 編號：next_N = max_N + 1
+4. 檢查 docs/sprints/sprint_{next_N}.md 是否已存在：
+   - 若不存在 → 使用此編號，繼續建立文件
+   - 若已存在 → 自動遞增編號（next_N += 1），重複檢查直至找到未使用的編號，並輸出：
+     [SPRINT-CONFLICT] sprint_{原編號}.md 已存在，自動遞增至 sprint_{next_N}.md
+5. 建立 docs/sprints/sprint_{next_N}.md
+6. 立即執行 git add docs/sprints/sprint_{next_N}.md docs/PROJECT_BOARD.md && git commit
+   （縮小競態窗口，讓後續 session 的 git pull 能看到此次建立的文件）
+```
+
+> **注意**：此防護流程僅在無衝突時增加一次 `git pull`，不影響正常流程效能。
 
 ---
 

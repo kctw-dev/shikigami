@@ -4,7 +4,7 @@
 
 - **專案名稱**：Shikigami（式神）
 - **性質**：Claude Code Plugin — AI Agent Scrum Team 框架
-- **目前版本**：v0.72.0
+- **目前版本**：v0.72.1
 - **授權**：MIT
 - **Repository**：https://github.com/KCTW/shikigami
 
@@ -38,9 +38,9 @@
 
 agents/                      # 8 個角色定義
 skills/                      # 26 個 Skill
-hooks/                       # Session 初始化 hook
+hooks/                       # Hook 配置（hooks.json + session-start/）
 commands/                    # 4 個 slash command
-mcp-servers/                 # MCP server 整合
+mcp-servers/                 # MCP server（quality-observer：品質指標查詢，stdio transport）
 templates/                   # CLAUDE.md / GEMINI.md / SDD 模板
 scripts/                     # 驗證腳本（validate-*.sh）
 tests/                       # 測試腳本（test-*.sh）
@@ -72,7 +72,27 @@ bash scripts/validate-agents.sh     # Agent 定義
 bash scripts/validate-skills.sh     # Skill 結構
 bash scripts/validate-json.sh       # JSON 格式
 bash scripts/validate-xrefs.sh      # 交叉引用
+bash scripts/validate-commands.sh   # Command 定義
+bash scripts/validate-gemini.sh     # Gemini 配置
+bash scripts/validate-orphans.sh    # 孤立檔案偵測
 ```
+
+## 常用工作流
+
+```bash
+# 跑全部測試
+bash tests/test-*.sh
+
+# 跑單一測試
+bash tests/test-shoot-skill.sh
+
+# 跑全部驗證
+for f in scripts/validate-*.sh; do bash "$f"; done
+```
+
+- **新增 Skill**：透過 `/shoot` 或 `/sprint-execution` 流程，不可手動直接建立
+- **新增 Agent**：同上，走團隊流程
+- **Bump 版號**：同時更新 `plugin.json`、`marketplace.json`、`gemini-extension.json`、`CLAUDE.md`、`README.md` badge
 
 ## AI 團隊行為
 
