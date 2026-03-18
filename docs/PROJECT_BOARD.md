@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-15（Sprint 99 Review 完成）
-**當前 Sprint**：Sprint 99（已完成）
+**最後更新**：2026-03-18（Sprint 100 Planning 完成）
+**當前 Sprint**：Sprint 100（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 99](sprints/sprint_99.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 100](sprints/sprint_100.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 100（進行中）
+
+> Sprint Goal：強化框架執行可靠性與 Anti-Hallucination 能力 — 補齊 story-lifecycle-prompt.md 執行漏洞（git commit 缺失、測試批量修復）、KM 文件 API 參數腦補防護、Sprint Planning 並行衝突修復、CI workflow 最佳實踐
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| INFRA：Story-Lifecycle subagent 完成後強制 git commit Hard Gate | #307 | S | 1 | 待辦 |
+| FEATURE：story-lifecycle-prompt: 測試修復批量執行策略 | #304 | S | 1 | 待辦 |
+| FEATURE：KM 第三方 API 文件驗證機制 — 禁止腦補 enum 值 | #276 | M | 2 | 待辦 |
+| INFRA：Bug：Sprint Planning 多 session 並行編號衝突修復 | #277 | S | 1 | 待辦 |
+| INFRA：CI/CD: 所有 workflow 加入 cancel-in-progress | #306 | S | 1 | 待辦 |
+
+**Sprint 容量**：6 points
 
 ---
 
