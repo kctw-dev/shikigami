@@ -1152,6 +1152,48 @@ Security Self-Review — {story_id}
 
 ---
 
+## §8.05 HARD-GATE：Git Commit 強制執行（US-272）
+
+<!-- US-272 Story-Lifecycle subagent 完成後強制 git commit Hard Gate — Sprint 100 -->
+
+<HARD-GATE>
+**完成後強制 Git Commit Hard Gate**：subagent 完成所有開發與審查（§3–§7.5 全部通過）後，在進入 DoD 自檢（§8）前，**必須**依序執行以下 git 操作，確保所有修改均已提交：
+
+```
+git add <所有修改的檔案>
+git commit -m "<type>: #<issue_number> <story_id> <描述>"
+git status -s
+```
+
+**Commit Message 格式（Conventional Commits）**：
+- `feat:` — 新功能 Story（FEATURE type）
+- `fix:` — Bug 修復 Story
+- `chore:` — INFRA / 維護 Story
+- `docs:` — doc-only Story
+
+範例：
+```
+feat: #123 US-99 實作使用者登入 API
+chore: #307 US-272 Story-Lifecycle 強制 git commit Hard Gate
+```
+
+**`git status -s` 驗證規則**：
+- 若輸出中有非 `??`（untracked）的行（如 `M`、`D`、`A`），表示仍有 unstaged 或 uncommitted 改動
+- 必須再次執行 `git add` + `git commit` 直到所有非 `??` 行清除
+
+**失敗處理規則**：
+- 若 `git commit` 失敗（pre-commit hook 失敗、權限問題、衝突等），**必須**輸出：
+  ```
+  [COMMIT-FAIL] 原因: {錯誤訊息}，影響: {affected_files}
+  ```
+- 並回傳 `ESCALATE: DESIGN_ISSUE`（附上 `[COMMIT-FAIL]` 錯誤詳情），由主 session 決定後續處置
+- 不得靜默忽略 commit 失敗繼續執行後續步驟
+
+此 Gate 不受 `bypass=true` 豁免。
+</HARD-GATE>
+
+---
+
 ## §8.1 Done 定義 Checkbox 更新（必要步驟）
 
 **觸發時機**：Story 通過雙階段審查（Spec Compliance + Code Quality self-review 均 PASS）後、`PROJECT_BOARD.md` 狀態更新為完成前。
