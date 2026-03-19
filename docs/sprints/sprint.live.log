@@ -60,3 +60,4 @@
 [00:10:49] [US-315] TDD Red — 撰寫 tests/test-pr-flow.sh
 [00:11:37] [US-315] TDD Green — 實作 protect-main.sh + 更新 hooks.json + SKILL.md
 [00:17:23] [US-315] TDD Green 完成 — 13/13 tests PASS
+[00:18:24] [US-315] Phase 2 完成 — commit 2fcbe87，subagent-results/US-315.md 更新
