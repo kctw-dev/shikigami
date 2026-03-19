@@ -9,8 +9,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| INFRA：版號策略 — 當日 minor 降級 patch | #305 | S | 1 | 待開發 |
-| FEATURE：Sprint 儀式會議紀錄自動產生（#317 P1） | #317 | M | 2 | 待開發 |
+| INFRA：版號策略 — 當日 minor 降級 patch | #305 | S | 1 | 完成 |
+| FEATURE：Sprint 儀式會議紀錄自動產生（#317 P1） | #317 | M | 2 | 完成 |
 
 ## Acceptance Criteria
 
