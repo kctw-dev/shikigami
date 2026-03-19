@@ -9,7 +9,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| INFRA：分散式鎖機制 — silent failure 與跨機器互斥缺陷修復（18 項） | #316 | L | 3 | 進行中 |
+| INFRA：分散式鎖機制 — silent failure 與跨機器互斥缺陷修復（18 項） | #316 | L | 3 | 完成 |
 
 ## Acceptance Criteria
 
