@@ -26,12 +26,30 @@ if [[ -z "$TOOL_INPUT" ]]; then
   exit 0
 fi
 
-# 從 JSON 解析 command 欄位（支援 jq 與 grep 兩種方式）
+# 從 JSON 解析 command 欄位（支援 jq 與 POSIX sed 兩種方式）
+CMD=""
+PARSE_WARN=false
 if command -v jq &>/dev/null; then
-  CMD=$(echo "$TOOL_INPUT" | jq -r '.command // ""' 2>/dev/null || echo "")
+  # #16 修復：jq 解析失敗時偵測並輸出 WARN
+  # 使用 || true 防止 set -e 觸發，再檢查輸出是否有效
+  JQ_OUT=$(echo "$TOOL_INPUT" | jq -r '.command // ""' 2>/dev/null || echo "__JQ_PARSE_ERROR__")
+  if [[ "$JQ_OUT" == "__JQ_PARSE_ERROR__" ]]; then
+    PARSE_WARN=true
+  else
+    CMD="$JQ_OUT"
+  fi
 else
-  # fallback：用 grep 提取 "command":"..." 值
-  CMD=$(echo "$TOOL_INPUT" | grep -oP '"command"\s*:\s*"\K[^"]+' 2>/dev/null || echo "")
+  # #10 修復：改用 POSIX sed（macOS 不支援 grep 的 Perl regex 模式）
+  CMD=$(echo "$TOOL_INPUT" | sed -n 's/.*"command"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' 2>/dev/null | head -1 || echo "")
+  if [[ -z "$CMD" ]]; then
+    PARSE_WARN=true
+  fi
+fi
+
+if [[ "$PARSE_WARN" == "true" ]]; then
+  # #16 修復：JSON 解析失敗時 log WARN，保守放行
+  echo "[WARN] protect-main.sh: JSON 解析失敗，放行（保守策略）" >&2
+  exit 0
 fi
 
 if [[ -z "$CMD" ]]; then

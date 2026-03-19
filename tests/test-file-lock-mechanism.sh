@@ -390,6 +390,102 @@ else
   skip "release-file-lock.sh 不存在，跳過參數驗證"
 fi
 
+
+# ── #316 新增：無鎖模式假陽性修復（#4）──────────────────────────
+
+section "#316 AC-3 #4：無鎖模式應輸出 [FILE-LOCK-DEGRADED]"
+
+if [[ -f "$ACQUIRE_SCRIPT" ]]; then
+  # 確認無鎖模式不再輸出 [FILE-LOCK-OK]，改輸出 [FILE-LOCK-DEGRADED]
+  if grep -q 'FILE-LOCK-DEGRADED' "$ACQUIRE_SCRIPT"; then
+    pass "#316 #4：acquire-file-lock.sh 含 [FILE-LOCK-DEGRADED] 輸出"
+  else
+    fail "#316 #4：acquire-file-lock.sh 無鎖模式仍輸出 [FILE-LOCK-OK]（應改為 [FILE-LOCK-DEGRADED]）"
+  fi
+
+  # 確認 no-lock-fallback 情境下不再有 [FILE-LOCK-OK]
+  if grep -q 'no-lock-fallback.*FILE-LOCK-OK\|FILE-LOCK-OK.*no-lock-fallback' "$ACQUIRE_SCRIPT"; then
+    fail "#316 #4：acquire-file-lock.sh 無鎖模式仍有 [FILE-LOCK-OK] 假陽性"
+  else
+    pass "#316 #4：acquire-file-lock.sh 無鎖模式已修正（無 [FILE-LOCK-OK] 假陽性）"
+  fi
+fi
+
+# ── #316 新增：local-only 模式寫 metadata（#9）───────────────────
+
+section "#316 AC-5 #9：local-only 模式也寫 metadata"
+
+if [[ -f "$ACQUIRE_SCRIPT" ]]; then
+  # 確認 local-only 降級模式中也有 metadata 寫入
+  if grep -q 'local.only\|local_only\|flock.only\|flock-only' "$ACQUIRE_SCRIPT"; then
+    # 找到降級模式區塊後確認有 META_FILE 寫入
+    if awk '/local.only|flock.only|flock-only/,/exit 0/' "$ACQUIRE_SCRIPT" 2>/dev/null | grep -q 'META_FILE\|meta_file'; then
+      pass "#316 #9：acquire-file-lock.sh local-only 模式寫入 metadata"
+    else
+      fail "#316 #9：acquire-file-lock.sh local-only 模式未寫入 metadata"
+    fi
+  else
+    fail "#316 #9：acquire-file-lock.sh 找不到 local-only 模式區塊"
+  fi
+fi
+
+# ── #316 新增：unfetched SHA 保守拒絕（acquire 端）──────────────
+
+section "#316 AC-1：acquire-file-lock.sh unfetched SHA 保守拒絕"
+
+if [[ -f "$ACQUIRE_SCRIPT" ]]; then
+  # 確認不再使用 || echo "0" 作為 commit time fallback
+  if grep -q '|| echo "0"' "$ACQUIRE_SCRIPT"; then
+    fail "#316 #7：acquire-file-lock.sh 仍有 || echo \"0\" fallback"
+  else
+    pass "#316 #7：acquire-file-lock.sh 不再使用 || echo \"0\" fallback"
+  fi
+
+  # 確認有 git fetch origin 嘗試
+  if grep -q 'git fetch origin' "$ACQUIRE_SCRIPT"; then
+    pass "#316 #7：acquire-file-lock.sh 含 git fetch origin 嘗試"
+  else
+    fail "#316 #7：acquire-file-lock.sh 缺少 git fetch origin"
+  fi
+fi
+
+# ── #316 新增：release-file-lock.sh 遠端確認後刪 metadata（#3）──
+
+section "#316 AC-2 #3：release-file-lock.sh 遠端確認後才刪 metadata"
+
+if [[ -f "$RELEASE_SCRIPT" ]]; then
+  if grep -q 'DELETE_EXIT\|PUSH_EXIT\|delete_exit\|push_exit' "$RELEASE_SCRIPT"; then
+    pass "#316 #3：release-file-lock.sh 有 push --delete exit code 檢查"
+  else
+    fail "#316 #3：release-file-lock.sh 缺少 push --delete exit code 檢查"
+  fi
+fi
+
+# ── #316 新增：hash fallback WARN（#17）──────────────────────────
+
+section "#316 AC-7 #17：hash fallback 應輸出 WARN"
+
+if [[ -f "$ACQUIRE_SCRIPT" ]]; then
+  # fallback hash 不再靜默，應有 WARN
+  if grep -q 'fallback.*WARN\|WARN.*fallback\|fallback.*warn' "$ACQUIRE_SCRIPT" 2>/dev/null || \
+     awk '/fallback/,/echo/' "$ACQUIRE_SCRIPT" 2>/dev/null | grep -q 'WARN'; then
+    pass "#316 #17：acquire-file-lock.sh hash fallback 有 WARN"
+  else
+    fail "#316 #17：acquire-file-lock.sh hash fallback 靜默（缺少 WARN）"
+  fi
+fi
+
+# ── #316 新增：[FILE-LOCK-DEGRADED] 輸出格式 ─────────────────────
+
+section "#316：[FILE-LOCK-DEGRADED] 輸出格式驗證"
+
+OUTPUT_DEGRADED="[FILE-LOCK-DEGRADED] refs/file-locks/test123 (no-lock-mode)"
+if echo "$OUTPUT_DEGRADED" | grep -q "\[FILE-LOCK-DEGRADED\]"; then
+  pass "[FILE-LOCK-DEGRADED] 格式正確"
+else
+  fail "[FILE-LOCK-DEGRADED] 格式錯誤：$OUTPUT_DEGRADED"
+fi
+
 # ── 結果摘要 ────────────────────────────────────────────────────
 
 echo ""

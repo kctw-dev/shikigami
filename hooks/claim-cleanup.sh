@@ -94,14 +94,28 @@ while IFS=$'\t' read -r SHA REF_NAME; do
       echo "[CLAIM-CLEANUP] $REF_NAME 已過期 ${AGE_HOURS}h ${AGE_MINUTES}m，清理中..."
 
       # 優先使用 release-issue.sh（維持展示層一致性）
+      CLEANUP_OK=false
       if [[ -f "$RELEASE_SCRIPT" ]]; then
-        bash "$RELEASE_SCRIPT" "$ISSUE_ID" 2>/dev/null || \
-          git push origin --delete "$REF_NAME" 2>/dev/null || \
-          echo "[WARN] $REF_NAME 清理失敗，繼續"
+        bash "$RELEASE_SCRIPT" "$ISSUE_ID" 2>/dev/null
+        if [[ $? -eq 0 ]]; then
+          CLEANUP_OK=true
+        else
+          # release-issue.sh 失敗，嘗試直接刪除
+          git push origin --delete "$REF_NAME" 2>/dev/null && CLEANUP_OK=true
+        fi
       else
         # release-issue.sh 不可用時，直接刪除遠端 ref
-        git push origin --delete "$REF_NAME" 2>/dev/null || \
-          echo "[WARN] $REF_NAME 清理失敗，繼續"
+        git push origin --delete "$REF_NAME" 2>/dev/null && CLEANUP_OK=true
+      fi
+
+      # #15 修復：cleanup 後驗證 ref 是否真的刪除
+      if [[ "$CLEANUP_OK" == "true" ]]; then
+        VERIFY=$(git ls-remote origin "$REF_NAME" 2>/dev/null || echo "")
+        if [[ -n "$VERIFY" ]]; then
+          echo "[WARN] $REF_NAME 清理後驗證失敗（ref 仍存在），可能有競態"
+        fi
+      else
+        echo "[WARN] $REF_NAME 清理失敗，繼續"
       fi
 
       CLEANED_COUNT=$((CLEANED_COUNT + 1))

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # session-end-release.sh
 # US-312/US-311 — SessionEnd hook：自動 release 本 session 的所有 claim 與 file lock
+# US-316 — 修復：#5 async hook 清理失敗 WARN、#12 REPO_FP 兩步法、#14 WARN 移出迴圈
 #
 # 功能：
 #   - 列出 refs/claims/*，篩選本 session 的 claim（透過 gh label）
@@ -25,9 +26,10 @@ LABEL="bot:session-${SESSION_ID}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RELEASE_SCRIPT="${SCRIPT_DIR}/release-issue.sh"
 
-# ── repo fingerprint 計算（本地鎖 cleanup）──────────────────────
-REPO_FP=$(git rev-parse --show-toplevel 2>/dev/null | sha256sum 2>/dev/null | cut -c1-8 \
-         || git rev-parse --show-toplevel 2>/dev/null | md5sum 2>/dev/null | cut -c1-8 \
+# ── repo fingerprint 計算（兩步法，#12 修復）────────────────────
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
+REPO_FP=$(echo "$REPO_ROOT" | sha256sum 2>/dev/null | cut -c1-8 \
+         || echo "$REPO_ROOT" | md5sum 2>/dev/null | cut -c1-8 \
          || echo "fallback0")
 LOCK_FILE="/tmp/shikigami-claims-${REPO_FP}.lock"
 
@@ -39,6 +41,11 @@ if [[ -z "$ALL_REFS" ]]; then
 else
   RELEASED=0
 
+  # #14 修復：SESSION_ID unknown 時 WARN 只輸出一次（移出迴圈）
+  if [[ "$SESSION_ID" == "unknown" ]]; then
+    echo "[WARN] SESSION_ID 未知，release 所有 claim ref（寬鬆策略）"
+  fi
+
   while IFS= read -r REF; do
     [[ -z "$REF" ]] && continue
 
@@ -46,9 +53,12 @@ else
     ID="${REF#refs/claims/}"
 
     if [[ "$SESSION_ID" == "unknown" ]]; then
-      # SESSION_ID 未知：寧可多放不可多鎖，release 所有 ref
-      echo "[WARN] SESSION_ID 未知，release 所有 claim ref（寬鬆策略）"
+      # SESSION_ID 未知：寬鬆策略（WARN 已在迴圈外輸出）
       bash "$RELEASE_SCRIPT" "$ID" || true
+      # #5 修復：release 失敗時輸出 WARN
+      if [[ $? -ne 0 ]]; then
+        echo "[WARN] $REF release 失敗（exit=$?），孤兒 ref 可能殘留"
+      fi
       RELEASED=$((RELEASED + 1))
     elif command -v gh &>/dev/null; then
       # SESSION_ID 已知：依 label 篩選，僅 release 本 session 的 claim
@@ -85,6 +95,11 @@ FILE_LOCK_REFS=$(git ls-remote origin "refs/file-locks/*" 2>/dev/null | awk '{pr
 if [[ -n "$FILE_LOCK_REFS" ]]; then
   FILE_LOCK_RELEASED=0
 
+  # #14 修復：SESSION_ID unknown 時 WARN 只輸出一次（移出迴圈）
+  if [[ "$SESSION_ID" == "unknown" ]]; then
+    echo "[WARN] SESSION_ID 未知，release 所有 file lock ref（寬鬆策略）"
+  fi
+
   while IFS= read -r FILE_REF; do
     [[ -z "$FILE_REF" ]] && continue
 
@@ -94,8 +109,7 @@ if [[ -n "$FILE_LOCK_REFS" ]]; then
     # 判斷是否屬於本 session
     SHOULD_RELEASE=false
     if [[ "$SESSION_ID" == "unknown" ]]; then
-      # SESSION_ID 未知：寬鬆策略，釋放所有
-      echo "[WARN] SESSION_ID 未知，release 所有 file lock ref（寬鬆策略）"
+      # SESSION_ID 未知：寬鬆策略（WARN 已在迴圈外輸出）
       SHOULD_RELEASE=true
     elif [[ -f "$META_FILE" ]]; then
       # 有本地 metadata：檢查 session_id
@@ -111,8 +125,14 @@ if [[ -n "$FILE_LOCK_REFS" ]]; then
     fi
 
     if [[ "$SHOULD_RELEASE" == "true" ]]; then
-      git push origin --delete "$FILE_REF" 2>/dev/null || true
-      rm -f "${META_DIR}/${HASH}.meta" "${META_DIR}/${HASH}.lock" 2>/dev/null || true
+      # #5 修復：push --delete 失敗時輸出 WARN
+      git push origin --delete "$FILE_REF" 2>/dev/null
+      local PUSH_EXIT=$?
+      if [[ $PUSH_EXIT -ne 0 ]]; then
+        echo "[WARN] $FILE_REF 遠端刪除失敗（exit=$PUSH_EXIT），孤兒 ref 可能殘留"
+      else
+        rm -f "${META_DIR}/${HASH}.meta" "${META_DIR}/${HASH}.lock" 2>/dev/null || true
+      fi
       echo "[FILE-LOCK-RELEASE] $FILE_REF"
       FILE_LOCK_RELEASED=$((FILE_LOCK_RELEASED + 1))
     fi

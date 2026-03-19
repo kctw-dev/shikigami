@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # release-file-lock.sh
 # US-311 AC-2 — 釋放檔案級別鎖定（刪除遠端 ref + 清除本地 metadata）
+# US-316 — 修復：#3 遠端確認刪除後才清本地 metadata
 #
 # 用法：bash hooks/release-file-lock.sh <relative_file_path>
 #
@@ -39,9 +40,17 @@ META_FILE="${META_DIR}/${HASH}.meta"
 LOCK_FILE="${META_DIR}/${HASH}.lock"
 
 # ── 1. 刪除遠端 ref ──────────────────────────────────────────────
-git push origin --delete "$REF" 2>/dev/null || true
+# #3 修復：檢查 exit code，只有遠端確認刪除後才清本地 metadata
+git push origin --delete "$REF" 2>/dev/null
+DELETE_EXIT=$?
+if [[ $DELETE_EXIT -ne 0 ]]; then
+  echo "[WARN] $REF 遠端刪除失敗（exit=$DELETE_EXIT），跳過本地 metadata 清除"
+  # 不清除本地 metadata（保留供診斷），仍輸出 RELEASE（不阻塞）
+  echo "[FILE-LOCK-RELEASE] $REF（遠端刪除失敗，本地 metadata 保留）"
+  exit 0
+fi
 
-# ── 2. 清除本地 metadata 和 lock 檔案 ───────────────────────────
+# ── 2. 遠端確認刪除成功後才清除本地 metadata 和 lock 檔案 ────────
 if [[ -f "$META_FILE" ]]; then
   rm -f "$META_FILE" 2>/dev/null || true
 fi

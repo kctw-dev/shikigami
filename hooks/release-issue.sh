@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # release-issue.sh
 # US-312 — 釋放單一 Issue 的 Claim（刪除遠端 ref + 清除展示層）
+# US-316 — 修復：#2 push --delete 失敗不再假成功
 #
 # 用法：bash hooks/release-issue.sh <issue_id>
 #
@@ -29,7 +30,12 @@ if command -v gh &>/dev/null; then
 fi
 
 # ── 1. 刪除遠端 ref ─────────────────────────────────────────────
-git push origin --delete "$REF" 2>/dev/null || true
+# #2 修復：檢查 exit code，失敗時輸出 WARN 而非假裝成功
+git push origin --delete "$REF" 2>/dev/null
+DELETE_EXIT=$?
+if [[ $DELETE_EXIT -ne 0 ]]; then
+  echo "[WARN] $REF 遠端刪除失敗（exit=$DELETE_EXIT），可能已被他人清除或無網路"
+fi
 
 # ── 2. 展示層清除（gh 可選，AC-5）──────────────────────────────
 if [[ -n "$GH_USER" ]]; then

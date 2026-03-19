@@ -319,6 +319,117 @@ else
   fail "hooks.json 不存在"
 fi
 
+
+# ── #316 新增：unfetched SHA 保守拒絕測試 ─────────────────────────
+
+section "#316 AC-1：unfetched SHA 保守拒絕（不 fallback 為 '0'）"
+
+# 驗證 claim-issue.sh 中 COMMIT_TIME fallback 不再是 echo "0"
+CLAIM_SCRIPT="$REPO_ROOT/hooks/claim-issue.sh"
+if [[ -f "$CLAIM_SCRIPT" ]]; then
+  # 確認不再使用 || echo "0" 作為 commit time fallback
+  if grep -q '|| echo "0"' "$CLAIM_SCRIPT"; then
+    fail "#316 #7：claim-issue.sh 仍有 || echo \"0\" fallback（應改為保守拒絕）"
+  else
+    pass "#316 #7：claim-issue.sh 不再使用 || echo \"0\" fallback"
+  fi
+
+  # 確認有 git fetch 嘗試邏輯
+  if grep -q 'git fetch origin' "$CLAIM_SCRIPT"; then
+    pass "#316 #7：claim-issue.sh 含 git fetch origin 取得 commit"
+  else
+    fail "#316 #7：claim-issue.sh 缺少 git fetch origin 嘗試"
+  fi
+else
+  fail "claim-issue.sh 不存在"
+fi
+
+# ── #316 新增：stale delete 失敗 WARN 測試 ────────────────────────
+
+section "#316 AC-5 #1：stale delete 失敗應輸出 WARN"
+
+if [[ -f "$CLAIM_SCRIPT" ]]; then
+  # 驗證 stale delete 失敗不再靜默（不再是 || true without WARN）
+  # 期望看到某種 WARN 或 STALE-DELETE-FAIL 標記
+  if grep -q 'STALE.*WARN\|WARN.*stale\|\[WARN\].*強制清除\|stale.*delete.*WARN' "$CLAIM_SCRIPT" 2>/dev/null || \
+     grep -A2 'git push origin --delete.*ISSUE_REF\|push.*delete.*ISSUE_REF' "$CLAIM_SCRIPT" 2>/dev/null | grep -q 'WARN'; then
+    pass "#316 #1：stale delete 失敗有 WARN 提示"
+  else
+    # 更簡單的檢查：確認 stale 刪除失敗時有 WARN
+    STALE_SECTION=$(awk '/Stale lock.*強制清除/,/清除後繼續/' "$CLAIM_SCRIPT" 2>/dev/null || echo "")
+    if echo "$STALE_SECTION" | grep -q "WARN"; then
+      pass "#316 #1：stale delete 失敗有 WARN 提示"
+    else
+      fail "#316 #1：stale delete 失敗缺少 WARN（仍是 || true 靜默）"
+    fi
+  fi
+fi
+
+# ── #316 新增：release 假成功修復測試 ─────────────────────────────
+
+section "#316 AC-2：release 失敗不應假成功"
+
+RELEASE_ISSUE_SCRIPT="$REPO_ROOT/hooks/release-issue.sh"
+if [[ -f "$RELEASE_ISSUE_SCRIPT" ]]; then
+  # 確認 push --delete 後有 exit code 檢查（不再是 || true）
+  if grep -q '|| true' "$RELEASE_ISSUE_SCRIPT" && ! grep -q 'PUSH_EXIT\|push_exit\|DELETE_EXIT' "$RELEASE_ISSUE_SCRIPT"; then
+    fail "#316 #2：release-issue.sh push --delete 後仍使用 || true（無 exit code 檢查）"
+  else
+    pass "#316 #2：release-issue.sh push --delete 後有 exit code 檢查或 WARN"
+  fi
+fi
+
+RELEASE_FILE_LOCK_SCRIPT="$REPO_ROOT/hooks/release-file-lock.sh"
+if [[ -f "$RELEASE_FILE_LOCK_SCRIPT" ]]; then
+  # 確認本地 metadata 清除在遠端確認後才執行
+  # 簡單驗證：不再先清 metadata 後才推送
+  if grep -q 'PUSH_EXIT\|DELETE_EXIT\|delete_exit' "$RELEASE_FILE_LOCK_SCRIPT"; then
+    pass "#316 #3：release-file-lock.sh 遠端確認後才清本地 metadata"
+  else
+    fail "#316 #3：release-file-lock.sh 缺少遠端刪除 exit code 檢查"
+  fi
+fi
+
+# ── #316 新增：REPO_FP 統一兩步法測試 ────────────────────────────
+
+section "#316 AC-4：REPO_FP 統一兩步法"
+
+check_repo_fp_twostep() {
+  local FILE="$1"
+  local NAME="$2"
+  if [[ -f "$FILE" ]]; then
+    # 兩步法：先 REPO_ROOT=$(git rev-parse ...) 再 hash
+    if grep -q 'REPO_ROOT=.*git rev-parse\|REPO_ROOT=\$(' "$FILE"; then
+      pass "#316 REPO_FP：$NAME 使用兩步法（REPO_ROOT → hash）"
+    else
+      fail "#316 REPO_FP：$NAME 缺少兩步法（REPO_ROOT 變數）"
+    fi
+  else
+    fail "$NAME 不存在"
+  fi
+}
+
+check_repo_fp_twostep "$CLAIM_SCRIPT" "claim-issue.sh"
+check_repo_fp_twostep "$REPO_ROOT/hooks/session-end-release.sh" "session-end-release.sh"
+
+# acquire-file-lock.sh 已有兩步法，確認仍存在
+check_repo_fp_twostep "$REPO_ROOT/hooks/acquire-file-lock.sh" "acquire-file-lock.sh"
+
+# ── #316 新增：flock/claim_remote 失敗分離測試（#8）─────────────
+
+section "#316 AC-5 #8：flock 與 claim_remote 失敗訊息分離"
+
+if [[ -f "$CLAIM_SCRIPT" ]]; then
+  # 確認 flock 失敗和 claim_remote 失敗有不同的輸出
+  FLOCK_BLOCKED=$(grep -o '\[CLAIM-BLOCKED\].*flock.*\|.*flock.*\[CLAIM-BLOCKED\]' "$CLAIM_SCRIPT" 2>/dev/null || echo "")
+  REMOTE_BLOCKED=$(grep -o '\[CLAIM-BLOCKED\].*push.*\|.*push.*\[CLAIM-BLOCKED\]' "$CLAIM_SCRIPT" 2>/dev/null || echo "")
+  if grep -q '本地 flock' "$CLAIM_SCRIPT" && grep -q 'race condition\|push 失敗\|remote' "$CLAIM_SCRIPT"; then
+    pass "#316 #8：claim-issue.sh flock 與 claim_remote 失敗訊息分離"
+  else
+    fail "#316 #8：claim-issue.sh flock 與 claim_remote 失敗訊息未分離"
+  fi
+fi
+
 # ── 結果摘要 ────────────────────────────────────────────────────
 
 echo ""

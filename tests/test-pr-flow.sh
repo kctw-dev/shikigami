@@ -142,6 +142,45 @@ else
   fail "sprint-execution SKILL.md §2.12 未包含 checkpoint 豁免標注"
 fi
 
+
+# ── #316 新增：protect-main.sh POSIX 相容性（#10）────────────────
+echo ""
+echo "── #316 #10：protect-main.sh POSIX grep 相容性 ─────────────────"
+
+# 確認 protect-main.sh 不使用 grep -oP（macOS 不支援）
+if grep -q 'grep.*-oP\|-oP.*grep' "$PROTECT_SCRIPT" 2>/dev/null; then
+  fail "#316 #10：protect-main.sh 仍使用 grep -oP（macOS 不相容）"
+else
+  pass "#316 #10：protect-main.sh 不使用 grep -oP（POSIX 相容）"
+fi
+
+# 確認使用 sed 作為 fallback
+if grep -q 'sed' "$PROTECT_SCRIPT" 2>/dev/null; then
+  pass "#316 #10：protect-main.sh 含 sed fallback（POSIX）"
+else
+  fail "#316 #10：protect-main.sh 缺少 sed fallback"
+fi
+
+# ── #316 新增：protect-main.sh JSON 解析失敗 WARN（#16）──────────
+echo ""
+echo "── #316 #16：protect-main.sh JSON 解析失敗 WARN ────────────────"
+
+# malformed JSON 應輸出 WARN 而非靜默放行
+MALFORMED_OUTPUT=$(CLAUDE_TOOL_INPUT='{"command": malformed}' bash "$PROTECT_SCRIPT" 2>&1 || true)
+# 預期：WARN 或直接 exit 0（無法解析 command → 放行）
+# 修復後應輸出 WARN
+if echo "$MALFORMED_OUTPUT" | grep -qi "warn\|WARN"; then
+  pass "#316 #16：malformed JSON 觸發 WARN 而非靜默放行"
+else
+  # 如果 exit 0 也可接受（保守放行），但至少應有 WARN log
+  MALFORMED_EXIT=$(CLAUDE_TOOL_INPUT='{"command": malformed}' bash "$PROTECT_SCRIPT" > /dev/null 2>&1; echo $?)
+  if [[ "$MALFORMED_EXIT" == "0" ]]; then
+    fail "#316 #16：protect-main.sh malformed JSON 靜默放行（缺 WARN）"
+  else
+    pass "#316 #16：protect-main.sh malformed JSON 有處理（exit $MALFORMED_EXIT）"
+  fi
+fi
+
 # ── 摘要 ──────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -149,3 +188,4 @@ echo "test-pr-flow.sh 結果：PASS=$PASS FAIL=$FAIL"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 [[ $FAIL -eq 0 ]] && exit 0 || exit 1
+
