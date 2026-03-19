@@ -3,6 +3,7 @@
 # US-311 AC-2/AC-3 — 取得檔案級別鎖定（遠端 ref 互斥鎖 + 本地 flock）
 # US-316 — 修復：#4 無鎖模式假陽性、#7 unfetched SHA、#9 local-only 寫 metadata、
 #           #11 flock fd redirection、#17 hash fallback WARN
+# US-316 DISPUTE — AC-18 修復：路徑長度 fallback 碰撞，改用 base64 路徑編碼
 #
 # 用法：bash hooks/acquire-file-lock.sh <relative_file_path> [issue_id]
 #
@@ -38,9 +39,18 @@ elif command -v md5sum &>/dev/null; then
   # macOS fallback：使用 md5sum
   HASH=$(echo "$REL_PATH" | md5sum 2>/dev/null | cut -c1-16)
 else
-  # #17 修復：hash fallback 加 WARN（不再靜默使用常數）
-  echo "[WARN] acquire-file-lock.sh: sha256sum 與 md5sum 均不可用，hash 使用路徑長度 fallback（鎖不可靠）"
-  HASH=$(printf '%016d' ${#REL_PATH})
+  # AC-18 修復（DISPUTE）：路徑長度 fallback 碰撞（同長度不同路徑），改用 base64 編碼路徑
+  echo "[WARN] acquire-file-lock.sh: sha256sum 與 md5sum 均不可用，hash 使用 base64 fallback（鎖不可靠）"
+  if command -v base64 &>/dev/null; then
+    HASH=$(echo "$REL_PATH" | base64 | tr -d '=/+\n' | cut -c1-16)
+  else
+    # base64 亦不可用：sanitize 路徑字串直接作為 ref name（去除非 alphanumeric 字元）
+    HASH=$(echo "$REL_PATH" | tr -cd 'a-zA-Z0-9_-' | cut -c1-16)
+  fi
+  # 確保 HASH 非空（極端情況：路徑全為特殊字元）
+  if [[ -z "$HASH" ]]; then
+    HASH=$(printf '%016d' $$)
+  fi
 fi
 
 REF="refs/file-locks/${HASH}"
