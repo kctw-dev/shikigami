@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-19（Sprint 100 Review 完成）
-**當前 Sprint**：Sprint 100（已完成）
+**最後更新**：2026-03-19（Sprint 101 Planning 完成）
+**當前 Sprint**：Sprint 101（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 100](sprints/sprint_100.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 101](sprints/sprint_101.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 101（進行中）
+
+> Sprint Goal：落地多 Session 並行協調機制，防止跨 session 重複領取 Issue/Story
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| INFRA：多 Session 並行開發 — Issue/Story 級別協調機制 | #312 | M | 2 | 進行中 |
+
+**Sprint 容量**：2 points
 
 ---
 
