@@ -98,6 +98,25 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 
 PO Round 2 建立 `sprint_N.md` 前，必須執行 **git pull + 檔案存在性檢查 + 自動遞增** 機制，防止多 session 同時執行 Sprint Planning 時產生重複編號。衝突發生時輸出 `[SPRINT-CONFLICT]` WARN 日誌並自動遞增編號。完整流程見 [po-prompt.md](./po-prompt.md) § 並行衝突防護流程。
 
+### Sprint Planning Claim/Release（US-312）
+
+PO Round 2 開始（建立 `sprint_N.md`）前，執行 Sprint Planning claim：
+
+```bash
+claim_issue "sprint-${N}-planning"
+# [CLAIM-OK]      → 繼續 Sprint Planning
+# [CLAIM-BLOCKED] → 已有其他 session 正在 Planning，輸出 WARN 後繼續（不阻塞）
+```
+
+Sprint Planning 完成（git commit + push）後，執行 release：
+
+```bash
+release_issue "sprint-${N}-planning"
+# [CLAIM-RELEASE] refs/claims/sprint-${N}-planning
+```
+
+claim/release 失敗不阻塞 Sprint Planning（gh CLI 不可用時同樣降級容錯）。完整 claim 機制定義見 `skills/sprint-execution/SKILL.md` §2.11。
+
 ### Commit + Push 規範
 
 ```bash

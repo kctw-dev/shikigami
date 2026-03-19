@@ -202,6 +202,15 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
   +-- 解析成功
         |
         v
+[步驟 1.1] Claim Issue（US-312，有 GitHub Issue number 時）
+  若任務來源為 #N 或 US-XX（可對應 Issue），執行：
+  claim_issue <issue_number>
+  |-- [CLAIM-OK]      --> 繼續執行（已取得 issue 鎖）
+  |-- [CLAIM-BLOCKED] --> 輸出 [WARN]，繼續執行（不阻塞 shoot）
+  +-- git push 失敗   --> 輸出 [WARN]，繼續執行（保守策略）
+  無 Issue number（direct 模式）→ 跳過 claim
+        |
+        v
 [步驟 1.2] SDD-000 存在性檢查
   確認 docs/sdd/SDD-000-architecture.md 是否存在
   |-- 不存在 --> 建立 SDD-000（複製 templates/SDD-000-architecture.md + {日期} 替換）
@@ -283,6 +292,14 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
         |
         v
 [步驟 7] 更新 docs/km/Shoot_Log.md（寫入 PASS）與 docs/PROJECT_BOARD.md
+        |
+        v
+[步驟 7.5] Release Issue（US-312，有 GitHub Issue number 時）
+  若步驟 1.1 執行了 claim，執行：
+  release_issue <issue_number>
+  → [CLAIM-RELEASE] refs/claims/<issue_number>
+  失敗不阻塞（|| true）
+  無 Issue number → 跳過 release
         |
         v
 [步驟 8] 瘦身歸檔檢查（若 Shoot_Log.md > 20 筆則觸發歸檔）

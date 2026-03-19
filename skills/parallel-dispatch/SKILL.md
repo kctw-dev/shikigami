@@ -66,6 +66,29 @@ Step 4: 收集結果
 
 ### Step 3：使用 Task tool 平行派遣
 
+**派遣前執行 Batch Claim（US-312）**：對每個子任務（有對應 Issue number 時）執行 claim：
+
+```bash
+# 逐一 claim 所有子任務
+CLAIMED=()
+for ID in "${TASK_IDS[@]}"; do
+  RESULT=$(claim_issue "$ID")
+  if echo "$RESULT" | grep -q "\[CLAIM-OK\]"; then
+    CLAIMED+=("$ID")
+  else
+    echo "[CLAIM-BLOCKED] $ID — 已被占用，放棄全部已 claim 的任務"
+    # 衝突：rollback 已 claim 的任務
+    for PREV_ID in "${CLAIMED[@]}"; do
+      release_issue "$PREV_ID"
+    done
+    echo "[PARALLEL-DISPATCH-ABORT] Claim 衝突，中止本次派遣"
+    exit 1
+  fi
+done
+```
+
+任一 claim 失敗 → 全部放棄已 claim 的，回報衝突後中止派遣。
+
 在同一個訊息中發出多個 Task 呼叫，讓所有 Agent 同時啟動。不要等一個完成再派下一個。
 
 ### Step 4：收集結果
@@ -75,6 +98,16 @@ Step 4: 收集結果
 2. 檢查衝突（是否編輯了相同檔案）
 3. 執行完整測試套件
 4. 整合變更
+
+**Step 4 完成後執行 Batch Release（US-312）**：逐一 release 所有已 claim 的子任務：
+
+```bash
+for ID in "${CLAIMED[@]}"; do
+  release_issue "$ID"
+done
+```
+
+release 失敗不阻塞（|| true）。完整 claim 機制定義見 `skills/sprint-execution/SKILL.md` §2.11。
 
 ---
 
