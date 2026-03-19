@@ -9,7 +9,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| FEATURE：Sprint Git Flow 改為 PR-based — 禁止直推 main | #315 | L | 3 | 待開發 |
+| FEATURE：Sprint Git Flow 改為 PR-based — 禁止直推 main | #315 | L | 3 | 完成 |
 
 ## Acceptance Criteria
 
