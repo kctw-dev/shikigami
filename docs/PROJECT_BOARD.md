@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-19（Sprint 103 Review 完成）
-**當前 Sprint**：Sprint 103（完成）
+**最後更新**：2026-03-19（Sprint 104 Planning 完成）
+**當前 Sprint**：Sprint 104（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 103](sprints/sprint_103.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 104](sprints/sprint_104.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 104（進行中）
+
+> Sprint Goal：Sprint Git Flow 改為 PR-based — 禁止直推 main，引入 code review 環節提升程式碼品質
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| FEATURE：Sprint Git Flow 改為 PR-based — 禁止直推 main | #315 | L | 3 | 待開發 |
+
+**Sprint 容量**：3 points
 
 ---
 
