@@ -14,9 +14,9 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| INFRA：修復 test-sprint-planning-skill.sh | #308 | S | 1 | 待辦 |
-| INFRA：US-275 邊界補齊 | #309 | S | 1 | 待辦 |
-| RESEARCH：評估既有測試技術債清理 | #310 | S | 1 | 待辦 |
+| INFRA：修復 test-sprint-planning-skill.sh | #308 | S | 1 | 完成 |
+| INFRA：US-275 邊界補齊 | #309 | S | 1 | 完成 |
+| RESEARCH：評估既有測試技術債清理 | #310 | S | 1 | 完成 |
 
 **Sprint 容量**：3 points
 
