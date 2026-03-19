@@ -105,7 +105,7 @@ GH_WARN_OUTPUT=$(bash -c '
   gh_assign 999
 ' 2>/dev/null)
 
-if echo "$GH_WARN_OUTPUT" | grep -qE "\[WARN\]|"; then
+if echo "$GH_WARN_OUTPUT" | grep -q "\[WARN\]"; then
   pass "gh CLI 不可用時輸出 WARN，不阻塞"
 else
   fail "gh CLI 降級容錯異常：$GH_WARN_OUTPUT"
@@ -116,7 +116,7 @@ GH_LABEL_OUTPUT=$(bash -c '
   gh issue edit 999 --add-label "bot:session-test" 2>/dev/null || echo "[WARN] gh label 失敗，繼續"
 ' 2>/dev/null)
 
-if echo "$GH_LABEL_OUTPUT" | grep -qE "\[WARN\]|"; then
+if echo "$GH_LABEL_OUTPUT" | grep -q "\[WARN\]"; then
   pass "gh label 不可用時輸出 WARN，不阻塞"
 else
   fail "gh label 降級容錯異常：$GH_LABEL_OUTPUT"
