@@ -46,3 +46,4 @@
 [22:54:42] [US-313] TDD Red — 寫測試 test-checkpoint-resume.sh
 [22:58:00] [US-313] TDD Green — 實作 AC-3 claim-cleanup.sh
 [23:00:04] [US-313] TDD Green — 所有測試通過，開始 commit
+[23:02:51] [US-313] Phase 2 完成 — AC-2 斷點續跑 + AC-3 孤兒 Claim 清理 PASS
