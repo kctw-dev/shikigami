@@ -437,6 +437,17 @@ TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 ## 3. 執行流程
 
 ```
+Sprint Checkpoint 偵測（AC-2 斷點續跑，§2.12）
+  |-- docs/sprints/sprint-checkpoint.json 不存在
+  |     → [CHECKPOINT-NEW] 正常開始（無先前 checkpoint）
+  |-- 存在且所有 Story status = "completed"
+  |     → [CHECKPOINT-DONE] 所有 Story 已完成，觸發 sprint-review
+  +-- 存在且有未完成 Story（status = "in-progress" 或 "pending"）
+        → [CHECKPOINT-RESUME] 偵測到未完成 checkpoint，從斷點繼續
+        → 跳過所有 status = "completed" 的 Story（已完成，不重做）
+        → 從第一個 status ≠ "completed" 的 Story 開始執行
+  |
+  v
 Issue 快掃（gh issue list --state open --limit 10）
   |-- gh 失敗 --> 靜默略過，繼續下一步（不阻塞）
   +-- 成功 --> 篩出需回覆的 issue → PO 草稿 → QA 審核 → 發布
