@@ -383,6 +383,57 @@ check_claim() {
 
 ---
 
+## 2.12 Sprint 進度 Checkpoint（US-313）
+
+<!-- US-313 Sprint 進度 Checkpoint 機制 — Sprint 102 -->
+
+每個 Story 完成（看板更新 + git commit + push）後，主 session 自動將當前 Sprint 進度寫入 `docs/sprints/sprint-checkpoint.json`，實現持久化 checkpoint，供 context 恢復或進度查詢使用。
+
+### Checkpoint 寫入時機
+
+**每個 Story 完成後**（§3 步驟 7 git commit + push 完成之後）立即執行。
+
+### Checkpoint 格式
+
+```json
+{
+  "sprint": 102,
+  "stories": [
+    {"id": "US-313", "status": "completed", "completed_at": "2026-03-19T18:15:01+08:00"},
+    {"id": "US-314", "status": "in-progress", "completed_at": null},
+    {"id": "US-315", "status": "pending", "completed_at": null}
+  ],
+  "current_step": "story-completed",
+  "updated_at": "2026-03-19T18:15:01+08:00"
+}
+```
+
+### 欄位說明
+
+| 欄位 | 說明 |
+|------|------|
+| `sprint` | Sprint 編號（從 PROJECT_BOARD.md 提取） |
+| `stories[].id` | Story 識別碼（如 `US-313`） |
+| `stories[].status` | `completed` / `in-progress` / `pending` |
+| `stories[].completed_at` | 完成時間（ISO 8601，未完成為 `null`） |
+| `current_step` | 當前步驟描述（如 `story-completed`、`sprint-review-triggered`） |
+| `updated_at` | checkpoint 最後更新時間（ISO 8601） |
+
+### 寫入方式
+
+```bash
+# 時間戳使用系統時間
+TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+# 寫入 docs/sprints/sprint-checkpoint.json（完整覆寫）
+```
+
+### 容錯設計
+
+- 寫入失敗時**靜默略過**，輸出 `[CHECKPOINT-WRITE-WARN] checkpoint 寫入失敗，繼續執行`，不阻塞主流程
+- checkpoint 為輔助持久化機制，非流程控制依據
+
+---
+
 ## 3. 執行流程
 
 ```
@@ -495,6 +546,12 @@ Claim Story（§2.11，多 Session 並行協調）
 Release Story（§2.11，多 Session 並行協調）
   bash hooks/release-issue.sh <story_id>  → [CLAIM-RELEASE] refs/claims/<story_id>
   失敗不阻塞（|| true）
+  |
+  v
+寫入 Sprint Checkpoint（§2.12）
+  更新 docs/sprints/sprint-checkpoint.json（sprint 編號、所有 Story 狀態、時間戳）
+  |-- 寫入失敗 --> [CHECKPOINT-WRITE-WARN] 靜默略過，不阻塞
+  +-- 寫入成功 --> 繼續
   |
   v
 Sprint Backlog 還有 Story？
@@ -652,7 +709,9 @@ Sprint Backlog 還有 Story？
 
    **更新完成後，立即 git commit + push**（僅 commit `PROJECT_BOARD.md` 與 `sprint_N.md`；`Metrics_Log.md` 與 `Retrospective_Log.md` 由 sprint-review 負責。commit message 格式：`docs: Sprint N — [Story ID] 狀態更新為已完成`）。
 
-   接著檢查終止條件：Sprint Backlog 中仍有待辦 Story → 取出下一個 Story 繼續執行；Sprint Backlog 已清空（所有 Story 完成）→ **立即 invoke shikigami:sprint-review**，不詢問使用者、不跳回「下一個 Story」流程。
+   git push 完成後，**寫入 Sprint Checkpoint**（§2.12）：更新 `docs/sprints/sprint-checkpoint.json`，記錄 Sprint 編號、所有 Story 狀態（completed/in-progress/pending）、completed_at 時間戳（僅本 Story），以及 `updated_at`。寫入失敗時靜默略過（`[CHECKPOINT-WRITE-WARN]`），不阻塞主流程。
+
+   接著進行 Release Story（§2.11）後，檢查終止條件：Sprint Backlog 中仍有待辦 Story → 取出下一個 Story 繼續執行；Sprint Backlog 已清空（所有 Story 完成）→ **立即 invoke shikigami:sprint-review**，不詢問使用者、不跳回「下一個 Story」流程。
 
 ---
 
