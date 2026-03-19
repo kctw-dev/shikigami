@@ -1,13 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-20（Sprint 105 Planning 完成）
-**當前 Sprint**：Sprint 105（進行中）
+**最後更新**：2026-03-20（Sprint 106 Planning 完成）
+**當前 Sprint**：Sprint 106（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 105](sprints/sprint_105.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 106](sprints/sprint_106.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 105（進行中）
+## Sprint 106（進行中）
+
+> Sprint Goal：建立版號智慧策略與首階段績效可視化（會議紀錄）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| INFRA：版號策略 — 當日 minor 降級 patch | #305 | S | 1 | 待開發 |
+| FEATURE：Sprint 儀式會議紀錄自動產生（#317 P1） | #317 | M | 2 | 待開發 |
+
+**Sprint 容量**：3 points
+
+---
+
+## Sprint 105（完成）
 
 > Sprint Goal：修復分散式鎖核心缺陷，確保跨機器多 Session 互斥可靠性
 
