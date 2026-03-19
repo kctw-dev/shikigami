@@ -12,3 +12,12 @@
 [12:07:47] [US-312] TDD Red — 測試腳本完成，8 項預期失敗，進入 Green 階段
 [12:11:19] [US-312] TDD Green — 25/25 PASS，進入 Refactor 階段
 [12:12:20] [US-312] TDD Refactor — 驗證完成，開始三階段自審
+[12:13:52] [US-312] 結果：PASS — AC1-AC9 全數通過，25/25 測試通過
+[12:13:52] [US-312] 完成
+[12:16:45] [US-312] DISPUTE 修復開始
+[12:22:41] [US-312] DISPUTE 修復完成 — 4 缺陷全數修復，測試 PASS 26/26
+[19:17:20] [US-308] 開始修復測試腳本 - 將 SKILL_FILE 指向 po-prompt.md
+[19:17:46] [US-308] 測試修復完成 — 12 PASS / 0 FAIL
+[19:19:06] [US-309] 開始 — 讀取 po-prompt.md 並確認修改點
+[19:19:24] [US-309] 修改完成 — AC1 empty fallback + AC2 git pull warn
+[19:19:33] [US-309] 測試通過 PASS=12 FAIL=0
