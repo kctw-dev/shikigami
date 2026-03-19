@@ -1,25 +1,13 @@
 # Project Board
 
-**最後更新**：2026-03-20（Sprint 105 Planning 完成）
-**當前 Sprint**：Sprint 105（進行中）
+**最後更新**：2026-03-19（Sprint 104 Planning 完成）
+**當前 Sprint**：Sprint 104（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 105](sprints/sprint_105.md) → 本看板 | [Tutorial](tutorial/README.md)
-
----
-
-## Sprint 105（進行中）
-
-> Sprint Goal：分散式鎖機制 silent failure 與跨機器互斥缺陷修復 — 18 項 CRITICAL/HIGH/MEDIUM 缺陷全數清除
-
-| Story | Issue | Size | Points | 狀態 |
-|-------|-------|------|--------|------|
-| INFRA：分散式鎖機制 — silent failure 與跨機器互斥缺陷修復（18 項） | #316 | L | 3 | 進行中 |
-
-**Sprint 容量**：3 points
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 104](sprints/sprint_104.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 104（完成）
+## Sprint 104（進行中）
 
 > Sprint Goal：Sprint Git Flow 改為 PR-based — 禁止直推 main，引入 code review 環節提升程式碼品質
 
