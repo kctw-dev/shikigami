@@ -103,7 +103,7 @@ PO Round 2 建立 `sprint_N.md` 前，必須執行 **git pull + 檔案存在性�
 PO Round 2 開始（建立 `sprint_N.md`）前，執行 Sprint Planning claim：
 
 ```bash
-claim_issue "sprint-${N}-planning"
+bash hooks/claim-issue.sh "sprint-${N}-planning"
 # [CLAIM-OK]      → 繼續 Sprint Planning
 # [CLAIM-BLOCKED] → 已有其他 session 正在 Planning，輸出 WARN 後繼續（不阻塞）
 ```
@@ -111,7 +111,7 @@ claim_issue "sprint-${N}-planning"
 Sprint Planning 完成（git commit + push）後，執行 release：
 
 ```bash
-release_issue "sprint-${N}-planning"
+bash hooks/release-issue.sh "sprint-${N}-planning"
 # [CLAIM-RELEASE] refs/claims/sprint-${N}-planning
 ```
 

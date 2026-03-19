@@ -336,59 +336,27 @@ Sprint Execution 取出 Story 後、派遣 Story-Lifecycle subagent 前，對識
 
 ### Claim 流程
 
+使用獨立腳本執行 claim（三層協調：本地 flock + 遠端 ref + 展示層）：
+
 ```bash
-REPO_FP=$(git rev-parse --show-toplevel | sha256sum | cut -c1-8)
-LOCK_FILE="/tmp/shikigami-claims-${REPO_FP}.lock"
-
-claim_issue() {
-  local ID=$1
-  # 1. 本地鎖（flock 可用時）
-  if command -v flock &>/dev/null; then
-    flock -n "$LOCK_FILE" -c "claim_remote $ID" || echo "[CLAIM-BLOCKED] 本地鎖取得失敗"
-  else
-    claim_remote "$ID"  # flock 不可用，跳過本地鎖
-  fi
-}
-
-claim_remote() {
-  local ID=$1
-  # Stale lock 偵測：ref 存在超過 2h → 強制清除後重新 claim
-  EXISTING=$(git ls-remote origin "refs/claims/$ID" 2>/dev/null)
-  if [[ -n "$EXISTING" ]]; then
-    COMMIT_SHA=$(echo "$EXISTING" | awk '{print $1}')
-    COMMIT_TIME=$(git show -s --format=%ct "$COMMIT_SHA" 2>/dev/null || echo 0)
-    NOW=$(date +%s)
-    AGE=$(( (NOW - COMMIT_TIME) / 3600 ))
-    if [[ $AGE -ge 2 ]]; then
-      git push origin --delete "refs/claims/$ID" 2>/dev/null
-      echo "[CLAIM-STALE] refs/claims/$ID 已過期 ${AGE}h，強制清除"
-    else
-      echo "[CLAIM-BLOCKED] refs/claims/$ID 已被占用"
-      return 1
-    fi
-  fi
-  # 推 ref（同名 ref 已存在則拒絕 = 已被占用）
-  git push origin HEAD:refs/claims/$ID 2>/dev/null || { echo "[CLAIM-BLOCKED]"; return 1; }
-  # 展示層（gh 可選，AC-5）
-  gh issue edit "$ID" --add-assignee "$(gh api user -q '.login' 2>/dev/null)" 2>/dev/null \
-    || echo "[WARN] gh assign 失敗，繼續"
-  gh issue edit "$ID" --add-label "bot:session-${CLAUDE_SESSION_ID:-unknown}" 2>/dev/null \
-    || echo "[WARN] gh label 失敗，繼續"
-  echo "[CLAIM-OK] refs/claims/$ID"
-}
+# claim issue（取得 story 鎖）
+bash hooks/claim-issue.sh <issue_id>
+# 輸出：[CLAIM-OK] / [CLAIM-BLOCKED] / [CLAIM-STALE]
 ```
+
+詳細實作見 `hooks/claim-issue.sh`。
 
 ### Release 流程
 
+使用獨立腳本執行 release：
+
 ```bash
-release_issue() {
-  local ID=$1
-  git push origin --delete "refs/claims/$ID" 2>/dev/null || true
-  gh issue edit "$ID" --remove-assignee "$(gh api user -q '.login' 2>/dev/null)" 2>/dev/null || true
-  gh issue edit "$ID" --remove-label "bot:session-${CLAUDE_SESSION_ID:-unknown}" 2>/dev/null || true
-  echo "[CLAIM-RELEASE] refs/claims/$ID"
-}
+# release issue（釋放 story 鎖）
+bash hooks/release-issue.sh <issue_id>
+# 輸出：[CLAIM-RELEASE]
 ```
+
+詳細實作見 `hooks/release-issue.sh`。SessionEnd 自動 release 見 `hooks/session-end-release.sh`（呼叫 `release-issue.sh`）。
 
 ### Check 流程
 
@@ -451,7 +419,7 @@ Sprint Backlog 中取出 Story
   |
   v
 Claim Story（§2.11，多 Session 並行協調）
-  claim_issue <story_id>
+  bash hooks/claim-issue.sh <story_id>
   |-- [CLAIM-OK]      --> 繼續執行（已取得 story 鎖）
   |-- [CLAIM-BLOCKED] --> 輸出告警，跳至下一個 Story（本 Story 由他人執行）
   +-- git push 失敗   --> 輸出 [WARN]，繼續執行（保守策略：不阻塞）
@@ -525,7 +493,7 @@ Claim Story（§2.11，多 Session 並行協調）
   |
   v（不觸發抽樣 / CONFIRM 完成後匯合）
 Release Story（§2.11，多 Session 並行協調）
-  release_issue <story_id>  → [CLAIM-RELEASE] refs/claims/<story_id>
+  bash hooks/release-issue.sh <story_id>  → [CLAIM-RELEASE] refs/claims/<story_id>
   失敗不阻塞（|| true）
   |
   v

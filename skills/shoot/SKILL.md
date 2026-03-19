@@ -204,7 +204,7 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
         v
 [步驟 1.1] Claim Issue（US-312，有 GitHub Issue number 時）
   若任務來源為 #N 或 US-XX（可對應 Issue），執行：
-  claim_issue <issue_number>
+  bash hooks/claim-issue.sh <issue_number>
   |-- [CLAIM-OK]      --> 繼續執行（已取得 issue 鎖）
   |-- [CLAIM-BLOCKED] --> 輸出 [WARN]，繼續執行（不阻塞 shoot）
   +-- git push 失敗   --> 輸出 [WARN]，繼續執行（保守策略）
@@ -296,7 +296,7 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
         v
 [步驟 7.5] Release Issue（US-312，有 GitHub Issue number 時）
   若步驟 1.1 執行了 claim，執行：
-  release_issue <issue_number>
+  bash hooks/release-issue.sh <issue_number>
   → [CLAIM-RELEASE] refs/claims/<issue_number>
   失敗不阻塞（|| true）
   無 Issue number → 跳過 release

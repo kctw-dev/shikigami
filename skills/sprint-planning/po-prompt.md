@@ -73,7 +73,7 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 ```
 1. 執行 git pull（同步最新狀態，取得其他 session 已 commit 的 sprint 文件）
 1.5 執行 Sprint Planning Claim（US-312）：
-   claim_issue "sprint-${next_N}-planning"
+   bash hooks/claim-issue.sh "sprint-${next_N}-planning"
    [CLAIM-OK]      → 繼續（已取得 planning 鎖）
    [CLAIM-BLOCKED] → 輸出 [WARN] 已有其他 session 正在 Planning，繼續執行（不阻塞）
    claim 失敗（git push 失敗）→ 輸出 [WARN]，繼續執行（保守策略）
@@ -89,7 +89,7 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 7. 立即執行 git add docs/sprints/sprint_{next_N}.md docs/PROJECT_BOARD.md && git commit
    （縮小競態窗口，讓後續 session 的 git pull 能看到此次建立的文件）
 8. 執行 Sprint Planning Release（US-312）：
-   release_issue "sprint-${next_N}-planning"
+   bash hooks/release-issue.sh "sprint-${next_N}-planning"
    → [CLAIM-RELEASE] refs/claims/sprint-${next_N}-planning
    失敗不阻塞（|| true）
 ```

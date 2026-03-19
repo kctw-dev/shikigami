@@ -72,14 +72,14 @@ Step 4: 收集結果
 # 逐一 claim 所有子任務
 CLAIMED=()
 for ID in "${TASK_IDS[@]}"; do
-  RESULT=$(claim_issue "$ID")
+  RESULT=$(bash hooks/claim-issue.sh "$ID")
   if echo "$RESULT" | grep -q "\[CLAIM-OK\]"; then
     CLAIMED+=("$ID")
   else
     echo "[CLAIM-BLOCKED] $ID — 已被占用，放棄全部已 claim 的任務"
     # 衝突：rollback 已 claim 的任務
     for PREV_ID in "${CLAIMED[@]}"; do
-      release_issue "$PREV_ID"
+      bash hooks/release-issue.sh "$PREV_ID"
     done
     echo "[PARALLEL-DISPATCH-ABORT] Claim 衝突，中止本次派遣"
     exit 1
@@ -103,7 +103,7 @@ done
 
 ```bash
 for ID in "${CLAIMED[@]}"; do
-  release_issue "$ID"
+  bash hooks/release-issue.sh "$ID"
 done
 ```
 
