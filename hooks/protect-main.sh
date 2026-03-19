@@ -47,9 +47,10 @@ else
 fi
 
 if [[ "$PARSE_WARN" == "true" ]]; then
-  # #16 修復：JSON 解析失敗時 log WARN，保守放行
-  echo "[WARN] protect-main.sh: JSON 解析失敗，放行（保守策略）" >&2
-  exit 0
+  # AC-17 修復（DISPUTE）：malformed JSON 無法判斷指令是否為 git push main
+  # 保守策略應為「拒絕」而非「放行」，以防止誤推 main
+  echo "[WARN] protect-main.sh: JSON 解析失敗，保守拒絕操作（無法確認指令安全性）" >&2
+  exit 1
 fi
 
 if [[ -z "$CMD" ]]; then
