@@ -28,3 +28,7 @@
 [19:26:10] [Sprint 102 Review] §2.6 Issue 狀態回寫 — #308/#309 已關閉，#310 關閉，#314 新建（追蹤 test-us13/test-us37 刪除）
 [19:26:30] [Sprint 102 Review] bump v0.73.0 → v0.73.1（po-prompt.md 框架行為變更 patch）
 [19:26:45] [Sprint 102 Review] COMPLETE — Velocity 3pts，完成率 100%，DISPUTE 0%
+[22:32:34] [US-314] baseline 確認完成，開始刪除測試檔案
+[22:33:12] [US-314] 完成：兩檔案已刪除，測試無 regression，commit caf7d2d
+[22:35:00] [US-311] Phase 1 開始：撰寫 ADR-022 檔案級鎖定技術選型
+[22:37:05] [US-311] Phase 1 完成：ADR-022 已撰寫，決策選項 C（擴展 #312 claim 機制）
