@@ -1,9 +1,45 @@
 #!/usr/bin/env bash
+# session-start — US-317 Phase 2：出勤簽到（checkin）+ scrum-master skill 注入
+# AC1：寫入 checkin 紀錄到 docs/attendance/YYYY-MM-DD.jsonl
+# AC3：紀錄含 session_id, role, event, timestamp, repo
+# AC4：flock 保護多 session 併發寫入
 set -euo pipefail
 
 # ---------- Determine plugin root from script location ----------
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# ---------- US-317 Phase 2：出勤簽到（checkin）─────────────────────────────
+# 允許 ATTENDANCE_DIR 環境變數覆寫（測試友好設計）
+ATTENDANCE_DIR="${ATTENDANCE_DIR:-${PLUGIN_ROOT}/docs/attendance}"
+mkdir -p "$ATTENDANCE_DIR"
+
+SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+ROLE="scrum-master"
+EVENT="checkin"
+TIMESTAMP="$(date '+%Y-%m-%dT%H:%M:%S%z')"
+TODAY="$(date '+%Y-%m-%d')"
+JSONL_FILE="${ATTENDANCE_DIR}/${TODAY}.jsonl"
+
+# 取得 repo 名稱（從 git remote 或目錄名稱）
+REPO_ROOT_PATH=$(git rev-parse --show-toplevel 2>/dev/null || echo "$PLUGIN_ROOT")
+REPO_NAME=$(git remote get-url origin 2>/dev/null \
+  | sed 's|.*[/:]||' | sed 's/\.git$//' \
+  || basename "$REPO_ROOT_PATH")
+
+# repo fingerprint 用於 lock 檔案（隔離不同 repo）
+REPO_FP=$(echo "$REPO_ROOT_PATH" | sha256sum 2>/dev/null | cut -c1-8 \
+         || echo "$REPO_ROOT_PATH" | md5sum 2>/dev/null | cut -c1-8 \
+         || echo "fallback0")
+ATTENDANCE_LOCK="/tmp/shikigami-attendance-${REPO_FP}.lock"
+
+# flock 保護 JSONL append（AC4：多 session 併發安全）
+(
+  flock -x -w 5 200 || true
+  printf '{"session_id":"%s","role":"%s","event":"%s","timestamp":"%s","repo":"%s"}\n' \
+    "$SESSION_ID" "$ROLE" "$EVENT" "$TIMESTAMP" "$REPO_NAME" \
+    >> "$JSONL_FILE" 2>/dev/null || true
+) 200>"$ATTENDANCE_LOCK" || true
 
 # ---------- Read scrum-master skill content ----------
 SKILL_FILE="${PLUGIN_ROOT}/skills/scrum-master/SKILL.md"

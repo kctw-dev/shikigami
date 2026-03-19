@@ -3,6 +3,7 @@
 # US-312/US-311 — SessionEnd hook：自動 release 本 session 的所有 claim 與 file lock
 # US-316 — 修復：#5 async hook 清理失敗 WARN、#12 REPO_FP 兩步法、#14 WARN 移出迴圈
 # US-316 DISPUTE — AC-5 修復 || true 吞 exit code、AC-19 修復 local 在非函數
+# US-317 Phase 2 — 出勤簽退（checkout）寫入 docs/attendance/YYYY-MM-DD.jsonl
 #
 # 功能：
 #   - 列出 refs/claims/*，篩選本 session 的 claim（透過 gh label）
@@ -11,11 +12,13 @@
 #   - 列出 refs/file-locks/*，刪除本 session 持有的所有檔案鎖（US-311 AC-5）
 #   - 失敗不阻塞（AC-6：set +e / || true）
 #   - 清除本地 lock file 與 metadata
+#   - 出勤簽退：append checkout 到 docs/attendance/YYYY-MM-DD.jsonl（US-317 P2）
 #
 # 輸出標記：
 #   [CLAIM-RELEASE] refs/claims/<id>
 #   [CLAIM-RELEASE-SKIP] 無本 session 的 claim
 #   [FILE-LOCK-RELEASE] refs/file-locks/<hash>
+#   [ATTENDANCE] checkin/checkout 紀錄
 #   [WARN] <原因>
 
 # AC-6：失敗不阻塞，所有操作使用 || true
@@ -163,5 +166,38 @@ if [[ -d "$META_DIR" ]]; then
     rmdir "$META_DIR" 2>/dev/null || true
   fi
 fi
+
+# ── US-317 Phase 2：出勤簽退（checkout）──────────────────────────────────
+# AC2：寫入 checkout 紀錄到 docs/attendance/YYYY-MM-DD.jsonl
+# AC3：紀錄含 session_id, role, event, timestamp, repo
+# AC4：flock 保護多 session 併發寫入
+ATTENDANCE_CHECKOUT_DIR="${ATTENDANCE_DIR:-${SCRIPT_DIR}/../docs/attendance}"
+ATTENDANCE_CHECKOUT_DIR="$(cd "${ATTENDANCE_CHECKOUT_DIR}" 2>/dev/null && pwd || echo "${SCRIPT_DIR}/../docs/attendance")"
+mkdir -p "$ATTENDANCE_CHECKOUT_DIR" 2>/dev/null || true
+
+ATTEND_SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+ATTEND_ROLE="scrum-master"
+ATTEND_EVENT="checkout"
+ATTEND_TIMESTAMP="$(date '+%Y-%m-%dT%H:%M:%S%z' 2>/dev/null || echo 'unknown')"
+ATTEND_TODAY="$(date '+%Y-%m-%d' 2>/dev/null || echo 'unknown')"
+ATTEND_JSONL="${ATTENDANCE_CHECKOUT_DIR}/${ATTEND_TODAY}.jsonl"
+
+# 取得 repo 名稱
+ATTEND_REPO_NAME=$(git remote get-url origin 2>/dev/null \
+  | sed 's|.*[/:]||' | sed 's/\.git$//' \
+  || basename "$REPO_ROOT" 2>/dev/null \
+  || echo "unknown")
+
+ATTENDANCE_LOCK="/tmp/shikigami-attendance-${REPO_FP}.lock"
+
+# flock 保護 JSONL append（AC4：多 session 併發安全）
+(
+  flock -x -w 5 200 || true
+  printf '{"session_id":"%s","role":"%s","event":"%s","timestamp":"%s","repo":"%s"}\n' \
+    "$ATTEND_SESSION_ID" "$ATTEND_ROLE" "$ATTEND_EVENT" "$ATTEND_TIMESTAMP" "$ATTEND_REPO_NAME" \
+    >> "$ATTEND_JSONL" 2>/dev/null || true
+) 200>"$ATTENDANCE_LOCK" || true
+
+echo "[ATTENDANCE] checkout 紀錄已寫入：$ATTEND_JSONL"
 
 exit 0
