@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-19（Sprint 100 完成 — 框架執行可靠性 + Anti-Hallucination + CI 最佳實踐）
+> 最後更新：2026-03-19（Sprint 101 完成 — 多 Session 並行協調機制落地 + v0.73.0）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.72.1**（Sprint 100）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.73.0**（Sprint 101）。
 
 | 版號 | 含義 |
 |------|------|

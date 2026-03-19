@@ -3,7 +3,7 @@
 **Sprint Goal**：落地多 Session 並行協調機制，防止跨 session 重複領取 Issue/Story
 **日期**：2026-03-19
 **容量**：2 points
-**狀態**：進行中
+**狀態**：完成
 
 ## Sprint Backlog
 
@@ -64,3 +64,22 @@
 | Phase | 分群 | Stories | 理由 |
 |-------|------|---------|------|
 | Phase 1 | Group A | #312 | 單一 Story，無需分群 |
+
+## Sprint Review 最終驗收
+
+**日期**：2026-03-19
+**外部審查結果**：DISPUTE（第一輪，4 缺陷）→ 修復後 CONFIRM（第二輪）
+**測試**：26/26 PASS
+**驗證腳本**：全部通過
+**Stakeholder 驗收**：接受
+
+### QA 邊界測試（Sprint Review §2.2）
+
+| 測試項目 | 結果 |
+|---------|------|
+| claim-issue.sh 無參數時正確 exit 1 + WARN | PASS |
+| release-issue.sh 對不存在 ref 容錯，exit 0 | PASS |
+| session-end-release.sh CLAUDE_SESSION_ID=unknown 時略過 release | PASS |
+| hooks.json SessionEnd 配置正確（async: true） | PASS |
+
+**最終狀態**：完成（PASS）— bump v0.73.0

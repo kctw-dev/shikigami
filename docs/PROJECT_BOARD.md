@@ -1,21 +1,28 @@
 # Project Board
 
-**最後更新**：2026-03-19（Sprint 101 Planning 完成）
-**當前 Sprint**：Sprint 101（進行中）
+**最後更新**：2026-03-19（Sprint 101 Review 完成 — bump v0.73.0）
+**當前 Sprint**：Sprint 102（尚未開始）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 101](sprints/sprint_101.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 101（進行中）
+## Sprint 101（完成）
 
 > Sprint Goal：落地多 Session 並行協調機制，防止跨 session 重複領取 Issue/Story
+> **結果**：Goal 達成（1/1 Stories PASS）。Velocity 2 points，完成率 100%。三層協調機制（git remote ref 互斥鎖 + flock 本地原子鎖 + GitHub Issue 展示層）落地；獨立腳本 claim-issue.sh / release-issue.sh 可重用；SessionEnd hook 自動 release；外部審查 DISPUTE（4 缺陷）→ 修復後 CONFIRM。bump v0.73.0。
+> **Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | INFRA：多 Session 並行開發 — Issue/Story 級別協調機制 | #312 | M | 2 | 完成 |
 
 **Sprint 容量**：2 points
+
+## Sprint 101 統計
+- Velocity：2 points
+- 完成率：100%（完成 1 / 計畫 1）
+- 日期：2026-03-19
 
 ---
 
