@@ -115,8 +115,11 @@ else
   STAGED=$(git diff --cached --name-only 2>/dev/null || echo "")
   # 嘗試取得最近 commit 的檔案（已 commit 但未 push 的）
   UNPUSHED=$(git diff @{u}...HEAD --name-only 2>/dev/null || git diff origin/main...HEAD --name-only 2>/dev/null || echo "")
-  FILE_LIST=$(printf '%s\n%s' "$STAGED" "$UNPUSHED" | sort -u | tr '\n' ' ')
+  FILE_LIST=$(printf '%s\n%s' "$STAGED" "$UNPUSHED" | sort -u | grep -v '^$' | tr '\n' ' ' || true)
 fi
+
+# trim whitespace
+FILE_LIST=$(echo "$FILE_LIST" | xargs 2>/dev/null || echo "")
 
 if [[ -n "$FILE_LIST" ]]; then
   ALL_EXEMPT=true
