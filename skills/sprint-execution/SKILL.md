@@ -386,12 +386,15 @@ check_claim() {
 ## 2.12 Sprint 進度 Checkpoint（US-313）
 
 <!-- US-313 Sprint 進度 Checkpoint 機制 — Sprint 102 -->
+<!-- US-315 AC-6：Checkpoint 歸入狀態文件豁免清單，可直推 main -->
+
+> **[狀態文件豁免]** `docs/sprints/sprint-checkpoint.json` 屬於豁免清單（ADR-023 決策 3 + 決策 4，US-315 AC-5/AC-6），允許**直推 main**，不受 `protect-main.sh` PreToolUse hook 攔截。PR-based git flow 導入後本節流程**不受影響**，維持現行直推機制。
 
 每個 Story 完成（看板更新 + git commit + push）後，主 session 自動將當前 Sprint 進度寫入 `docs/sprints/sprint-checkpoint.json`，實現持久化 checkpoint，供 context 恢復或進度查詢使用。
 
 ### Checkpoint 寫入時機
 
-**每個 Story 完成後**（§3 步驟 7 git commit + push 完成之後）立即執行。
+**每個 Story 完成後**（§3 步驟 7 PR merge + 狀態文件 git push 完成之後）立即執行。
 
 ### Checkpoint 格式
 
@@ -492,6 +495,7 @@ Claim Story（§2.11，多 Session 並行協調）
   │                                                             │
   │  subagent 內部閉環：                                         │
   │  ├─ 讀取 sprint_N.md（AC + 需求）                           │
+  │  ├─ git checkout -b sprint-<N>/<story-id>（ADR-023，AC-3）  │
   │  ├─ TDD 開發（Red → Green → Refactor）                      │
   │  ├─ Spec Compliance self-review                             │
   │  │    |-- FAIL --> 修復循環（最多 3 次，內部閉環）            │
@@ -499,9 +503,13 @@ Claim Story（§2.11，多 Session 並行協調）
   │  ├─ Code Quality self-review                                │
   │  │    |-- FAIL --> 修復循環（最多 3 次，內部閉環）            │
   │  │    +-- PASS                                              │
-  │  └─ Security self-review（條件觸發）                         │
-  │       |-- FAIL / ESCALATE --> 升級主 session                │
-  │       +-- PASS / SKIP                                       │
+  │  ├─ Security self-review（條件觸發）                         │
+  │  │    |-- FAIL / ESCALATE --> 升級主 session                │
+  │  │    +-- PASS / SKIP                                       │
+  │  ├─ git commit + git push -u origin sprint-<N>/<story-id>  │
+  │  ├─ gh pr create → 回傳 PR_URL 至主 session                │
+  │  │    |-- gh 不可用 → [PR-FLOW-DEGRADED] 降級直推            │
+  │  └─ 回傳：PASS/FAIL/ESCALATE + PR_URL                      │
   └─────────────────────────────────────────────────────────────┘
   |
   v
@@ -512,7 +520,23 @@ Claim Story（§2.11，多 Session 並行協調）
   |           +-- 檔案不存在 → 輸出 [CACHE-RECOVERY-FAIL]，視同 ESCALATE: CONTEXT_OVERFLOW
   |-- ESCALATE --> 依升級類型處置（見下方升級表）
   |-- FAIL     --> 記錄失敗原因，更新看板，繼續下一 Story
-  +-- PASS
+  +-- PASS（含 PR_URL）
+        |
+        v
+  ┌─────────────────────────────────────────────────────────────┐
+  │  Code Review Loop（主 session，ADR-023 決策 5，AC-3）        │
+  │                                                             │
+  │  pr-review-toolkit 三 agent 審查 PR diff：                  │
+  │  ├─ code-reviewer                                           │
+  │  ├─ silent-failure-hunter                                   │
+  │  └─ comment-analyzer                                        │
+  │  |-- Plugin 未安裝 → [PR-REVIEW-DEGRADED] 內部 QA 審查      │
+  │  |-- LGTM（無 CRITICAL/HIGH）→ gh pr merge --squash         │
+  │  +-- CRITICAL/HIGH → 修復 → commit → push → 重新審查        │
+  │        |-- 3 輪後仍 CRITICAL/HIGH → [PR-REVIEW-ESCALATE]   │
+  │        +-- 通過 → gh pr merge --squash --delete-branch      │
+  │  merge 後：git checkout main && git pull                    │
+  └─────────────────────────────────────────────────────────────┘
         |
         v
   ┌─────────────────────────────────────────────────────────────┐
@@ -554,13 +578,18 @@ Claim Story（§2.11，多 Session 並行協調）
                 +-- DISPUTE --> 執行 DISPUTE 處理流程（見 §4 外部抽樣審查結果處理）
   |
   v（不觸發抽樣 / CONFIRM 完成後匯合）
+更新狀態文件（直推 main — 豁免清單，ADR-023 決策 3，AC-5）
+  git commit PROJECT_BOARD.md + sprint_N.md（豁免直推，不走 PR）
+  → [EXEMPT-PUSH] 直推 main
+  |
+  v
 Release Story（§2.11，多 Session 並行協調）
   bash hooks/release-issue.sh <story_id>  → [CLAIM-RELEASE] refs/claims/<story_id>
   失敗不阻塞（|| true）
   |
   v
 寫入 Sprint Checkpoint（§2.12）
-  更新 docs/sprints/sprint-checkpoint.json（sprint 編號、所有 Story 狀態、時間戳）
+  更新 docs/sprints/sprint-checkpoint.json（豁免直推 main，AC-6）
   |-- 寫入失敗 --> [CHECKPOINT-WRITE-WARN] 靜默略過，不阻塞
   +-- 寫入成功 --> 繼續
   |
@@ -689,7 +718,30 @@ Sprint Backlog 還有 Story？
    - `FAIL`：記錄失敗原因，更新看板標記為失敗，繼續下一 Story
    - `ESCALATE`：依升級類型表決定是否暫停 Sprint（見上方流程圖）
 6. **安全審查（條件觸發，主 session 層級）**：若 Story-Lifecycle subagent 回傳 `ESCALATE: SECURITY_CRITICAL`，主 session 暫停 Sprint 執行，觸發 `security-review` Skill 進行獨立深度安全審查。一般安全審查由 subagent 在 `story-lifecycle-prompt.md` §7 Security self-review 內部處理。
-7. **更新看板與同步 Sprint 文件**：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。
+7. **PR 合併與看板更新**（ADR-023 決策 1，US-315 AC-3）：
+
+   **[Story-Lifecycle subagent 職責]**（在 subagent 內部完成）：
+   - 7.1 `git checkout -b sprint-<N>/<story-id>`（從最新 main 建立 feature branch，命名格式：`sprint-<Sprint號>/<Story-ID>`，例：`sprint-102/US-315`）
+   - 7.2 TDD 開發（現行流程不變：Red → Green → Refactor）
+   - 7.3 審查閉環（現行流程不變：Spec Compliance + Code Quality）
+   - 7.4 `git commit -m "feat: <story-id> <標題>"`
+   - 7.5 `git push -u origin sprint-<N>/<story-id>`
+   - 7.6 `gh pr create --title "feat: <story-id> <標題>" --body "<AC 清單 + 審查摘要>"`
+         |-- `gh` 不可用 → `[PR-FLOW-DEGRADED]` 降級：直推 main + 內部審查
+   - 7.7 回傳 PR URL 至主 session（格式：`PR_URL: https://github.com/.../pull/N`）
+
+   **[主 session 職責]**（接收 PR URL 後）：
+   - 7.8 執行 Code Review Loop（ADR-023 決策 5，pr-review-toolkit 三 agent：code-reviewer / silent-failure-hunter / comment-analyzer）
+         |-- Plugin 未安裝 → `[PR-REVIEW-DEGRADED]` 回退內部 QA subagent 審查
+         |-- LGTM（無 CRITICAL/HIGH）→ 繼續
+         +-- CRITICAL/HIGH → 修復 → commit → push → 重新審查（最多 3 輪）
+               |-- 第 3 輪仍 CRITICAL/HIGH → `[PR-REVIEW-ESCALATE]` 升級 Architect
+   - 7.9 `gh pr merge --squash --delete-branch`
+         |-- merge conflict → `[PR-MERGE-CONFLICT]` 主 session rebase 解決
+   - 7.10 `git checkout main && git pull`
+
+   **[狀態文件更新]**（主 session，直推 main — 豁免清單，ADR-023 決策 3）：
+   更新看板與同步 Sprint 文件：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。
 
    <HARD-GATE>
    **Developer 更新範圍限制（越權禁止）**
@@ -719,8 +771,10 @@ Sprint Backlog 還有 Story？
    Developer subagent 更新 sprint_N.md Story 狀態前，**必須執行 read-then-compare 檢查**：讀取當前狀態值 → 比對是否符合預期 → 不符合時輸出 `[CONFLICT] 狀態衝突，跳過覆蓋：{story_id} 當前值={actual}，預期值={expected}` 並放棄寫入（不得靜默覆蓋）。符合預期時正常更新。
 
    **更新完成後，立即 git commit + push**（僅 commit `PROJECT_BOARD.md` 與 `sprint_N.md`；`Metrics_Log.md` 與 `Retrospective_Log.md` 由 sprint-review 負責。commit message 格式：`docs: Sprint N — [Story ID] 狀態更新為已完成`）。
+   > **豁免直推**：`PROJECT_BOARD.md` 與 `sprint_N.md` 屬於狀態文件豁免清單（ADR-023 決策 3，US-315 AC-5），允許直推 main，**不需要**建立 PR。
 
    git push 完成後，**寫入 Sprint Checkpoint**（§2.12）：更新 `docs/sprints/sprint-checkpoint.json`，記錄 Sprint 編號、所有 Story 狀態（completed/in-progress/pending）、completed_at 時間戳（僅本 Story），以及 `updated_at`。寫入失敗時靜默略過（`[CHECKPOINT-WRITE-WARN]`），不阻塞主流程。
+   > **Checkpoint 豁免**：`docs/sprints/sprint-checkpoint.json` 屬於狀態文件豁免清單，允許直推 main（ADR-023 決策 4，US-315 AC-6）。
 
    接著進行 Release Story（§2.11）後，檢查終止條件：Sprint Backlog 中仍有待辦 Story → 取出下一個 Story 繼續執行；Sprint Backlog 已清空（所有 Story 完成）→ **立即 invoke shikigami:sprint-review**，不詢問使用者、不跳回「下一個 Story」流程。
 

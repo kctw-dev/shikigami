@@ -279,7 +279,24 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
   +-- 無 CI/CD 變更 → SKIP
         |
         v
-[步驟 6] git commit（以 shoot: 前綴）+ git push
+[步驟 6] Branch + PR 流程（ADR-023 決策 1，US-315 AC-4）
+  6.1 git checkout -b shoot/<issue-or-desc>
+        branch 命名：
+          有 Issue number → shoot/<issue-number>  （例：shoot/320）
+          無 Issue number → shoot/<短描述>         （例：shoot/fix-css-layout）
+  6.2 git commit -m "shoot: <任務標題>"（以 shoot: 前綴）
+  6.3 git push -u origin shoot/<issue-or-desc>
+  6.4 gh pr create --title "shoot: <任務標題>" --body "<AC 摘要 + 審查結果>"
+        |-- gh 不可用 → [PR-FLOW-DEGRADED] 降級：直推 main（使用 STAGED_FILES 豁免）+ 內部審查
+  6.5 Code Review Loop（pr-review-toolkit，見 §8.6 + ADR-023 決策 5）
+        派遣 code-reviewer / silent-failure-hunter / comment-analyzer
+        |-- Plugin 未安裝 → [PR-REVIEW-DEGRADED] 回退內部 QA 審查
+        |-- LGTM（無 CRITICAL/HIGH）→ 繼續
+        +-- CRITICAL/HIGH → 修復 → commit → push → 重新審查
+              |-- 第 3 輪仍 CRITICAL/HIGH → [PR-REVIEW-ESCALATE] 升級 Architect，終止
+  6.6 gh pr merge --squash --delete-branch
+        |-- merge conflict → [PR-MERGE-CONFLICT] 主 session 解決（rebase onto latest main）
+  6.7 git checkout main && git pull
         |
         v
 [步驟 6.5] CI Gate — 等待 CI 狀態（見 §8.2）
@@ -292,6 +309,10 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
         |
         v
 [步驟 7] 更新 docs/km/Shoot_Log.md（寫入 PASS）與 docs/PROJECT_BOARD.md
+  > **狀態文件豁免（AC-5）**：
+  > - docs/PROJECT_BOARD.md 屬於豁免清單（ADR-023 決策 3），允許直推 main（不走 PR）
+  > - docs/km/Shoot_Log.md 不在豁免清單，應在步驟 6 的 PR 中一併 commit，
+  >   或步驟 6.6 merge 後另起 feature branch 處理（protect-main.sh 會攔截直推）
         |
         v
 [步驟 7.5] Release Issue（US-312，有 GitHub Issue number 時）

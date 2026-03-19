@@ -31,6 +31,10 @@
           {
             "type": "command",
             "command": "bash -c 'if echo \"$CLAUDE_TOOL_INPUT\" | grep -qP \"git\\s+commit\"; then REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd); VALIDATE_SCRIPT=\"$REPO_ROOT/scripts/validate-version.sh\"; if [ -f \"$VALIDATE_SCRIPT\" ]; then if ! bash \"$VALIDATE_SCRIPT\" > /dev/null 2>&1; then echo \"[US-264 警告] 版號不一致！請先執行 bash scripts/validate-version.sh 修正版號後再 commit。\"; fi; fi; fi'"
+          },
+          {
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/protect-main.sh'"
           }
         ]
       }
