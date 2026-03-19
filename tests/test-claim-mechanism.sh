@@ -53,6 +53,46 @@ LOCK_FILE="/tmp/shikigami-claims-${REPO_FP}.lock"
 pass "repo fingerprint 生成成功：${REPO_FP}"
 pass "lock file 路徑：${LOCK_FILE}"
 
+# 測試 flock 原子性：兩個 subshell 同時競搶同一 lock，驗證只有一個成功
+if command -v flock &>/dev/null; then
+  FLOCK_TEST_LOCK="/tmp/shikigami-flock-atomicity-test-$$.lock"
+  FLOCK_RESULT_A="/tmp/shikigami-flock-result-A-$$.txt"
+  FLOCK_RESULT_B="/tmp/shikigami-flock-result-B-$$.txt"
+
+  # subshell A：嘗試取得 lock，寫入結果
+  (flock -n "$FLOCK_TEST_LOCK" -c 'sleep 0.3; echo "A_GOT_LOCK"' > "$FLOCK_RESULT_A" 2>&1 \
+    || echo "A_BLOCKED" > "$FLOCK_RESULT_A") &
+  PID_A=$!
+
+  # subshell B：幾乎同時嘗試取得同一 lock，寫入結果
+  (flock -n "$FLOCK_TEST_LOCK" -c 'sleep 0.3; echo "B_GOT_LOCK"' > "$FLOCK_RESULT_B" 2>&1 \
+    || echo "B_BLOCKED" > "$FLOCK_RESULT_B") &
+  PID_B=$!
+
+  wait $PID_A $PID_B
+
+  RESULT_A=$(cat "$FLOCK_RESULT_A" 2>/dev/null || echo "")
+  RESULT_B=$(cat "$FLOCK_RESULT_B" 2>/dev/null || echo "")
+
+  rm -f "$FLOCK_TEST_LOCK" "$FLOCK_RESULT_A" "$FLOCK_RESULT_B"
+
+  # 驗證：恰好一個成功（GOT_LOCK），另一個被阻塞（BLOCKED）
+  GOT_LOCK_COUNT=0
+  BLOCKED_COUNT=0
+  [[ "$RESULT_A" == "A_GOT_LOCK" ]] && GOT_LOCK_COUNT=$((GOT_LOCK_COUNT+1))
+  [[ "$RESULT_B" == "B_GOT_LOCK" ]] && GOT_LOCK_COUNT=$((GOT_LOCK_COUNT+1))
+  [[ "$RESULT_A" == "A_BLOCKED" ]] && BLOCKED_COUNT=$((BLOCKED_COUNT+1))
+  [[ "$RESULT_B" == "B_BLOCKED" ]] && BLOCKED_COUNT=$((BLOCKED_COUNT+1))
+
+  if [[ $GOT_LOCK_COUNT -eq 1 && $BLOCKED_COUNT -eq 1 ]]; then
+    pass "flock 原子性驗證：兩 subshell 競搶，恰好一個取得 lock，另一個被阻塞"
+  else
+    fail "flock 原子性異常：GOT_LOCK=${GOT_LOCK_COUNT} BLOCKED=${BLOCKED_COUNT}（A=${RESULT_A} B=${RESULT_B}）"
+  fi
+else
+  skip "flock 不可用，跳過原子性測試"
+fi
+
 # ── AC-7 可觀測標記輸出格式測試 ─────────────────────────────────
 
 section "AC-7 可觀測標記格式驗證"
