@@ -1,16 +1,32 @@
 # Project Board
 
-**最後更新**：2026-03-19（Sprint 102 Planning 完成）
-**當前 Sprint**：Sprint 102（進行中）
+**最後更新**：2026-03-19（Sprint 103 Planning 完成）
+**當前 Sprint**：Sprint 103（計畫中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 102](sprints/sprint_102.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 103](sprints/sprint_103.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 102（進行中）
+## Sprint 103（計畫中）
+
+> Sprint Goal：強化多 Session 並行可靠性 — 清理過期測試技術債、定義檔案鎖定架構、建立中斷恢復機制
+> **狀態**：計畫中
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| INFRA：刪除過期測試 test-us13 / test-us37 | #314 | S | 1 | 待辦 |
+| FEATURE：多 Session 並行開發的檔案鎖定機制 | #311 | L | 3 | 待辦 |
+| FEATURE：Sprint 中斷恢復機制（Spot VM / Session Crash） | #313 | L | 3 | 待辦 |
+
+**Sprint 容量**：7 points
+
+---
+
+## Sprint 102（完成）
 
 > Sprint Goal：清除 Sprint 100 Retro 遺留測試技術債
-> **狀態**：進行中
+> **結果**：Goal 達成（3/3 Stories PASS）。Velocity 3 points，完成率 100%。test-sprint-planning-skill.sh 修復（12/12 PASS）+ US-275 邊界補齊（空目錄 fallback + git pull 容錯）+ 測試技術債評估報告（test-us13/test-us37 建議刪除）。bump v0.73.1。
+> **Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
@@ -19,6 +35,11 @@
 | RESEARCH：評估既有測試技術債清理 | #310 | S | 1 | 完成 |
 
 **Sprint 容量**：3 points
+
+## Sprint 102 統計
+- Velocity：3 points
+- 完成率：100%（完成 3 / 計畫 3）
+- 日期：2026-03-19
 
 ---
 
