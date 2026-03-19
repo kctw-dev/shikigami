@@ -3,7 +3,7 @@
 **Sprint Goal**：建立版號智慧策略與首階段績效可視化（會議紀錄）
 **日期**：2026-03-20
 **容量**：3 points
-**狀態**：進行中
+**狀態**：已完成
 
 ## Sprint Backlog
 
@@ -74,3 +74,69 @@
 - `docs/meetings/` 目錄尚不存在，實作時需建立
 - **DoR**：PASS
 - **防漂移基準**：2 Stories, 3 pts
+
+---
+
+## §2 Sprint Review（2026-03-20）
+
+### §2.1 PO Demo
+
+| Story | Issue | 結果 | 測試 |
+|-------|-------|------|------|
+| INFRA：版號策略 — 當日 minor 降級 patch | #305 | PASS | 10/10 |
+| FEATURE：Sprint 儀式會議紀錄自動產生（P1） | #317 | PASS | 10/10 |
+
+### §2.2 QA 邊界（輕量）
+
+- #305：3 項規則型 AC 全數通過；`git tag --sort=-creatordate` 查詢正常；無 tag 時降級邏輯正確
+- #317：4 項 AC 皆通過；frontmatter 欄位完整（type/sprint/date/start_time/end_time/participants）；三種會議紀錄格式一致
+
+### §2.3 Stakeholder 確認
+
+- #317 外部審查：CONFIRM（50% 抽樣，1/2）
+- 整體 DISPUTE 率：0%
+
+### §2.4 Architect 亮點
+
+- #305 實作位置修正：sprint-review → deployment-readiness（Architect 主動識別並修正）
+- #317 Phase 1 覆蓋 sprint-planning + sprint-review + retro 三種會議紀錄
+
+### §2.5 未完成範圍
+
+- #317 Phase 2（其他儀式會議紀錄）、Phase 3（整合/自動化）尚未實作
+
+### §2.6 Issue 狀態回寫
+
+- #305：關閉（INFRA 完成，規則已嵌入 deployment-readiness/SKILL.md）
+- #317：保持 open（Phase 2/3 待後續 Sprint）
+
+---
+
+## §3 Retrospective（2026-03-20）
+
+### Good
+
+- 正式討論流程充分：PO → Architect → QA → PO R2，各角色職責清晰
+- Architect 主動修正 #305 實作位置（sprint-review → deployment-readiness），避免概念混淆
+- 兩個 Story 完全平行執行，效率高
+
+### Problem
+
+- 無顯著問題
+
+### Action Items
+
+- 無
+
+---
+
+## Metrics
+
+| 指標 | 數值 |
+|------|------|
+| Velocity | 3 points |
+| 完成率 | 100%（2/2） |
+| 外部抽樣 CONFIRM | 50%（1/2） |
+| DISPUTE 率 | 0% |
+
+**版本 bump**：v0.75.1 → v0.76.0（minor，新功能：Sprint 儀式會議紀錄 #317）

@@ -86,3 +86,7 @@
 [02:04:38] [US-317] TDD 紅燈確認 — 開始修改 sprint-planning/SKILL.md
 [02:06:26] [US-317] 驗證全通過 — 開始 git commit
 [02:06:50] [US-317] Phase 1 完成 — 寫入 subagent-results/US-317.md
+[02:10:49] [Sprint 106 Review] 開始執行 Sprint Review + Retrospective
+[02:10:58] [Sprint 106 Review] §2.6 Issue 狀態回寫 — #305 已關閉，#317 保持 open（Phase 2/3 未做）
+[02:10:59] [Sprint 106 Review] bump v0.75.1 → v0.76.0（minor，新功能：Sprint 儀式會議紀錄 #317）
+[02:11:00] [Sprint 106 Review] COMPLETE — Velocity 3pts，完成率 100%，DISPUTE 0%，外部抽樣 50%（1/2 CONFIRM）
