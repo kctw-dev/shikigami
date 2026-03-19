@@ -9,8 +9,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| INFRA：編號統一 — US-#N + ADR claim 鎖 | #318 | M | 2 | 待開發 |
-| FEATURE：出勤時數 — 角色簽到/簽退（#317 P2） | #317 | M | 2 | 待開發 |
+| INFRA：編號統一 — US-#N + ADR claim 鎖 | #318 | M | 2 | 完成 |
+| FEATURE：出勤時數 — 角色簽到/簽退（#317 P2） | #317 | M | 2 | 完成 |
 
 ## Acceptance Criteria
 
