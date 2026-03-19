@@ -1,9 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-19（Sprint 101 Review 完成 — bump v0.73.0）
-**當前 Sprint**：Sprint 102（尚未開始）
+**最後更新**：2026-03-19（Sprint 102 Planning 完成）
+**當前 Sprint**：Sprint 102（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 101](sprints/sprint_101.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 102](sprints/sprint_102.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 102（進行中）
+
+> Sprint Goal：清除 Sprint 100 Retro 遺留測試技術債
+> **狀態**：進行中
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| INFRA：修復 test-sprint-planning-skill.sh | #308 | S | 1 | 待辦 |
+| INFRA：US-275 邊界補齊 | #309 | S | 1 | 待辦 |
+| RESEARCH：評估既有測試技術債清理 | #310 | S | 1 | 待辦 |
+
+**Sprint 容量**：3 points
 
 ---
 
