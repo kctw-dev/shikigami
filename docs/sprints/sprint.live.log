@@ -36,3 +36,8 @@
 [22:38:28] [US-313] 讀取 sprint-execution/SKILL.md §3 — 確認現有流程
 [22:40:16] [US-313] AC-1 sprint-execution checkpoint 機制寫入完成
 [22:40:47] [US-313] AC-4 驗證 — sprint-execution §3 步驟 7 已有 git push；shoot §7 步驟 6 已有 git push
+[22:42:03] [US-313] Phase 1 完成 — PASS
+[22:44:04] [US-311] Phase 2 開始 — AC-2~AC-5 實作
+[22:47:08] [US-311] Phase 2 開始 — AC-2~AC-5 實作
+[22:48:58] [US-311] Red phase 確認 — 6 項測試失敗，開始 Green phase 實作
+[22:52:16] [US-311] Green phase 完成 — 32/32 tests PASS

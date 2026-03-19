@@ -44,6 +44,9 @@ description: "Use when facing 2+ independent tasks that can be worked on without
 ## 3. 派遣流程
 
 ```
+Step 0.5: 檔案衝突預檢（US-311）
+  |
+  v
 Step 1: 識別獨立領域
   |
   v
@@ -54,6 +57,50 @@ Step 3: 使用 Task tool 平行派遣
   |
   v
 Step 4: 收集結果
+```
+
+### Step 0.5：檔案衝突預檢（US-311 AC-4）
+
+**在識別獨立領域前，先進行檔案衝突預檢，避免多個 subagent 同時編輯同一檔案。**
+
+列出各 subagent 預計觸碰的檔案清單，檢查是否有重疊：
+
+```
+各任務預計觸碰檔案？
+  ├── 有重疊 → 標記為「有共享狀態」→ 不適用平行派遣（改為順序處理）
+  └── 無重疊 → 各 subagent 在開始時 acquire 所需檔案鎖
+```
+
+若無重疊，在派遣前對各 subagent 預計觸碰的關鍵檔案取得 file lock：
+
+```bash
+# acquire file lock（US-311）
+FILE_LOCKS_ACQUIRED=()
+for FILE_PATH in "${TARGET_FILES[@]}"; do
+  RESULT=$(bash hooks/acquire-file-lock.sh "$FILE_PATH")
+  if echo "$RESULT" | grep -q "\[FILE-LOCK-OK\]\|\[FILE-LOCK-STALE\]"; then
+    FILE_LOCKS_ACQUIRED+=("$FILE_PATH")
+  elif echo "$RESULT" | grep -q "\[FILE-LOCK-BLOCKED\]"; then
+    echo "[WARN] 檔案 $FILE_PATH 已被鎖定：$RESULT"
+    echo "[PARALLEL-DISPATCH-ABORT] 檔案衝突，中止本次派遣"
+    # rollback 已 acquire 的 file lock
+    for PREV_FILE in "${FILE_LOCKS_ACQUIRED[@]}"; do
+      bash hooks/release-file-lock.sh "$PREV_FILE"
+    done
+    exit 1
+  fi
+done
+```
+
+任一 file lock acquire 失敗 → 全部放棄已 acquire 的 lock，回報衝突後中止派遣。
+
+subagent 完成或失敗後，統一在 Step 4 釋放 file lock：
+
+```bash
+# release file lock（US-311）
+for FILE_PATH in "${FILE_LOCKS_ACQUIRED[@]}"; do
+  bash hooks/release-file-lock.sh "$FILE_PATH" || true
+done
 ```
 
 ### Step 1：識別獨立領域
