@@ -47,3 +47,8 @@
 [22:58:00] [US-313] TDD Green — 實作 AC-3 claim-cleanup.sh
 [23:00:04] [US-313] TDD Green — 所有測試通過，開始 commit
 [23:02:51] [US-313] Phase 2 完成 — AC-2 斷點續跑 + AC-3 孤兒 Claim 清理 PASS
+[23:08:41] [Sprint 103 Review] 開始執行 Sprint Review + Retrospective
+[23:09:10] [Sprint 103 Review] §2.6 Issue 狀態回寫 — #311/#313/#314 已關閉
+[23:09:30] [Sprint 103 Review] Retro Action：補更 ADR-022 命名表格（file-lock.sh → acquire-file-lock.sh）
+[23:09:45] [Sprint 103 Review] bump v0.73.1 → v0.74.0（minor，新功能：file-lock + checkpoint）
+[23:10:00] [Sprint 103 Review] COMPLETE — Velocity 7pts，完成率 100%，DISPUTE 0%，外部抽樣 67%

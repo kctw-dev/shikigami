@@ -3,7 +3,7 @@
 **Sprint Goal**：強化多 Session 並行可靠性 — 清理過期測試技術債、定義檔案鎖定架構、建立中斷恢復機制
 **日期**：2026-03-19
 **容量**：7 points
-**狀態**：進行中
+**狀態**：完成
 
 ## Sprint Backlog
 
@@ -105,3 +105,68 @@
   - AC-3：設定短 TTL 後執行 claim-cleanup.sh 驗證清理
   - AC-4：檢查 git log 確認每個 Story 完成後有 push
 - **防漂移基準**：3 Stories, 7 pts
+
+---
+
+## Sprint Review（2026-03-19）
+
+### §1.5 一致性審查
+
+- PROJECT_BOARD.md：Sprint 103 所有 Story 狀態均為「完成」✓
+- sprint_103.md：3 Stories, 7 pts，全數 PASS ✓
+- 一致性確認：通過
+
+### §2 Sprint Review
+
+**PO Demo**
+
+| Story | Demo 重點 | 結果 |
+|-------|----------|------|
+| #314 | test-us13 / test-us37 已刪除，全測試套件 PASS | PASS |
+| #311 | acquire-file-lock.sh 取得/衝突/TTL 釋放行為，parallel-dispatch 整合，SessionEnd 自動清除 | PASS（32/32，外部審查 CONFIRM）|
+| #313 | checkpoint JSON 記錄進度，resume 從斷點繼續，claim-cleanup.sh 孤兒清理，每 Story 後 git push | PASS（15/15，外部審查 CONFIRM）|
+
+**QA 邊界測試（輕量）**
+
+- #311 邊界：兩個 session 同時 acquire 同一檔案 → 第二個收到 `[FILE-LOCK-BLOCKED]`（✓）
+- #311 邊界：TTL 過期後 stale lock 自動清除並重新鎖定（✓）
+- #313 邊界：checkpoint 存在但已全部完成 → resume 正確識別為「無需恢復」（✓）
+- #314 邊界：刪除後 `test-*.sh` glob 不再包含已刪除檔案（✓）
+
+**Stakeholder 驗收**：接受（全數 PASS，0% DISPUTE）
+
+**§2.6 Issue 狀態回寫**
+
+- #311：已關閉（PASS，CONFIRM）
+- #313：已關閉（PASS，CONFIRM）
+- #314：已關閉（PASS，Retro Action 兌現）
+
+### §3 Retrospective
+
+**Good**
+
+- 7 points 全數達成，Sprint Goal 完全兌現
+- ADR-022 技術選型（選項 C）成功複用 #312 架構，避免重複造輪子
+- 兩個 L-size Story（#311、#313）平行執行順利，無互相阻塞
+
+**Problem**
+
+- ADR-022 腳本命名與設計文件不符：ADR 寫的是 `file-lock.sh` / `file-unlock.sh`，實際實作為 `acquire-file-lock.sh` / `release-file-lock.sh`，文件回寫遺漏
+
+**Action**
+
+- [已完成] 補更 ADR-022 核心腳本命名表格，對齊實際實作（`acquire-file-lock.sh` / `release-file-lock.sh`）
+
+**上期 Retro Action 追蹤**
+
+- #314（Sprint 102 Retro Action：刪除過期測試）：本 Sprint 已完成並關閉 ✓
+
+### Sprint 103 Metrics
+
+| 指標 | 數值 |
+|------|------|
+| Velocity | 7 points |
+| 完成率 | 100%（3/3） |
+| 外部抽樣 | 67%（2/3，#311 CONFIRM + #313 CONFIRM） |
+| DISPUTE 率 | 0% |
+| 版本 bump | v0.73.1 → v0.74.0（minor，新功能） |

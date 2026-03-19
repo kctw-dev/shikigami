@@ -1,16 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-19（Sprint 103 Planning 完成）
-**當前 Sprint**：Sprint 103（進行中）
+**最後更新**：2026-03-19（Sprint 103 Review 完成）
+**當前 Sprint**：Sprint 103（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 103](sprints/sprint_103.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 103（進行中）
+## Sprint 103（完成）
 
 > Sprint Goal：強化多 Session 並行可靠性 — 清理過期測試技術債、定義檔案鎖定架構、建立中斷恢復機制
-> **狀態**：進行中
+> **結果**：Goal 達成（3/3 Stories PASS）。Velocity 7 points，完成率 100%。過期測試清理（#314）+ 檔案鎖定機制（acquire-file-lock.sh / release-file-lock.sh，ADR-022 選項 C 複用 #312 架構，32/32 PASS，CONFIRM）+ Sprint 中斷恢復機制（checkpoint JSON + claim-cleanup.sh，15/15 PASS，CONFIRM）。bump v0.74.0。
+> **Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
@@ -19,6 +20,11 @@
 | FEATURE：Sprint 中斷恢復機制（Spot VM / Session Crash） | #313 | L | 3 | 完成 |
 
 **Sprint 容量**：7 points
+
+## Sprint 103 統計
+- Velocity：7 points
+- 完成率：100%（完成 3 / 計畫 3）
+- 日期：2026-03-19
 
 ---
 

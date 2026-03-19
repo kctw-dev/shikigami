@@ -134,8 +134,8 @@ issue=<issue_id>
 
 | 檔案 | 功能 |
 |------|------|
-| `hooks/file-lock.sh <path> [issue_id]` | 取得檔案鎖（lock） |
-| `hooks/file-unlock.sh <path>` | 釋放檔案鎖（unlock） |
+| `hooks/acquire-file-lock.sh <path> [issue_id]` | 取得檔案鎖（lock） |
+| `hooks/release-file-lock.sh <path>` | 釋放檔案鎖（unlock） |
 | `hooks/file-lock-check.sh <path>` | 查詢檔案鎖狀態（non-blocking） |
 
 ### Ref 命名規則
@@ -220,8 +220,8 @@ git ls-remote origin "refs/file-locks/*" ...
 
 | 檔案 | 修改內容 |
 |------|---------|
-| `hooks/file-lock.sh`（新增） | 檔案鎖 acquire 腳本 |
-| `hooks/file-unlock.sh`（新增） | 檔案鎖 release 腳本 |
+| `hooks/acquire-file-lock.sh`（新增） | 檔案鎖 acquire 腳本 |
+| `hooks/release-file-lock.sh`（新增） | 檔案鎖 release 腳本 |
 | `hooks/file-lock-check.sh`（新增） | 檔案鎖狀態查詢腳本 |
 | `hooks/session-end-release.sh` | 擴展為同時清除 `refs/file-locks/*` |
 | `hooks/hooks.json` | 註冊新 hook 腳本 |
