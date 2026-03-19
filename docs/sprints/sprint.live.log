@@ -78,3 +78,6 @@
 [01:28:55] [Sprint 105 Review] Retro Action：記錄 feedback — Planning 不可壓縮，充分討論才是價值；DISPUTE 有效攔截 7 個殘留 bug
 [01:29:10] [Sprint 105 Review] bump v0.75.0 → v0.75.1（patch，分散式鎖 18 項 bug fix）
 [01:29:25] [Sprint 105 Review] COMPLETE — Velocity 3pts，完成率 100%，DISPUTE 100%（1/1 第一輪 DISPUTE → 修復 → CONFIRM）
+[02:01:18] [US-305] 開始實作：讀取 deployment-readiness/SKILL.md，準備新增當日重複 Minor 降級子節
+[02:01:40] [US-305] SKILL.md 新增當日重複 Minor 降級子節完成，準備撰寫測試
+[02:02:40] [US-305] 測試全部通過（PASS=10, FAIL=0），準備 commit

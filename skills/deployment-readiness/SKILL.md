@@ -131,6 +131,43 @@ Tag 名稱必須與 `plugin.json` 的 version 欄位一致（加 `v` 前綴）�
 - 安全掃描已通過（Security subagent 確認）
 - sprint-review SKILL.md §7 執行檢查清單全部打勾
 
+#### 當日重複 Minor 降級為 Patch
+
+當 Minor Bump 觸發條件全部滿足，但**當日已存在一個 minor bump tag** 時，本次 bump 自動降級為 **Patch bump**，以避免同一天內打出多個 minor tag。
+
+**判斷邏輯（SRE subagent 執行）**：
+
+```bash
+LATEST_TAG=$(git tag --sort=-creatordate | head -1)
+TAG_DATE=$(git log -1 --format='%cd' --date=short "$LATEST_TAG" 2>/dev/null)
+TODAY=$(date '+%Y-%m-%d')
+if [[ "$TAG_DATE" == "$TODAY" ]]; then
+  # 當日已有 tag → 降級為 patch bump
+  BUMP_TYPE="patch"
+else
+  # 跨日或無 tag → 正常 minor bump
+  BUMP_TYPE="minor"
+fi
+```
+
+**決策規則**：
+
+| 情況 | 最新 Tag 日期 | bump 類型 |
+|------|--------------|-----------|
+| 當日已有 minor bump | 今天 | **patch** |
+| 跨日第一次 bump | 昨天或更早 | **minor**（正常） |
+| 無任何 tag | N/A | **minor**（不報錯） |
+
+**範例**：
+
+- 今天 `2026-03-20` 已存在 `v0.74.0`（minor bump）→ 本次 bump 為 `v0.74.1`（patch）
+- 最新 tag `v0.74.1` 日期為 `2026-03-19` → 本次 bump 為 `v0.75.0`（minor）
+
+<HARD-GATE>
+當日重複 Minor 降級邏輯必須在打 tag 前執行。
+無 tag 時不得報錯，應視為跨日情況，執行正常 minor bump。
+</HARD-GATE>
+
 #### Major Bump 觸發條件（vX+1.0.0）
 
 以下**全部**條件成立時，**且已符合 Minor Bump 條件**，升級為 Major bump：
