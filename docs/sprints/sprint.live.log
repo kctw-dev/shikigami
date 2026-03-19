@@ -42,3 +42,7 @@
 [22:48:58] [US-311] Red phase 確認 — 6 項測試失敗，開始 Green phase 實作
 [22:52:16] [US-311] Green phase 完成 — 32/32 tests PASS
 [22:53:32] [US-311] Phase 2 DONE — commit 8adeacd，AC-2~AC-5 全部完成
+[22:54:32] [US-313] Phase 2 開始 — AC-2 斷點續跑 + AC-3 孤兒 Claim 清理
+[22:54:42] [US-313] TDD Red — 寫測試 test-checkpoint-resume.sh
+[22:58:00] [US-313] TDD Green — 實作 AC-3 claim-cleanup.sh
+[23:00:04] [US-313] TDD Green — 所有測試通過，開始 commit
