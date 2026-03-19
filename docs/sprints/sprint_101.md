@@ -9,7 +9,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| INFRA：多 Session 並行開發 — Issue/Story 級別協調機制 | #312 | M | 2 | 進行中 |
+| INFRA：多 Session 並行開發 — Issue/Story 級別協調機制 | #312 | M | 2 | 完成 |
 
 ## Acceptance Criteria
 
