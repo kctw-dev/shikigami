@@ -2,6 +2,7 @@
 # session-end-release.sh
 # US-312/US-311 — SessionEnd hook：自動 release 本 session 的所有 claim 與 file lock
 # US-316 — 修復：#5 async hook 清理失敗 WARN、#12 REPO_FP 兩步法、#14 WARN 移出迴圈
+# US-316 DISPUTE — AC-5 修復 || true 吞 exit code、AC-19 修復 local 在非函數
 #
 # 功能：
 #   - 列出 refs/claims/*，篩選本 session 的 claim（透過 gh label）
@@ -54,23 +55,32 @@ else
 
     if [[ "$SESSION_ID" == "unknown" ]]; then
       # SESSION_ID 未知：寬鬆策略（WARN 已在迴圈外輸出）
-      bash "$RELEASE_SCRIPT" "$ID" || true
-      # #5 修復：release 失敗時輸出 WARN
-      if [[ $? -ne 0 ]]; then
-        echo "[WARN] $REF release 失敗（exit=$?），孤兒 ref 可能殘留"
+      # #5 修復（DISPUTE）：RELEASE_EXIT 捕獲 exit code，|| true 吞掉導致 WARN 永不觸發
+      RELEASE_EXIT=0
+      bash "$RELEASE_SCRIPT" "$ID" || RELEASE_EXIT=$?
+      if [[ $RELEASE_EXIT -ne 0 ]]; then
+        echo "[WARN] $REF release 失敗（exit=$RELEASE_EXIT），孤兒 ref 可能殘留"
       fi
       RELEASED=$((RELEASED + 1))
     elif command -v gh &>/dev/null; then
       # SESSION_ID 已知：依 label 篩選，僅 release 本 session 的 claim
       LABELS=$(gh issue view "$ID" --json labels -q '.labels[].name' 2>/dev/null || echo "")
       if echo "$LABELS" | grep -qF "$LABEL"; then
-        bash "$RELEASE_SCRIPT" "$ID" || true
+        RELEASE_EXIT=0
+        bash "$RELEASE_SCRIPT" "$ID" || RELEASE_EXIT=$?
+        if [[ $RELEASE_EXIT -ne 0 ]]; then
+          echo "[WARN] $REF release 失敗（exit=$RELEASE_EXIT），孤兒 ref 可能殘留"
+        fi
         RELEASED=$((RELEASED + 1))
       fi
     else
       # gh 不可用但 SESSION_ID 已知：同樣採寬鬆策略
       echo "[WARN] gh CLI 不可用，release $REF（寬鬆策略）"
-      bash "$RELEASE_SCRIPT" "$ID" || true
+      RELEASE_EXIT=0
+      bash "$RELEASE_SCRIPT" "$ID" || RELEASE_EXIT=$?
+      if [[ $RELEASE_EXIT -ne 0 ]]; then
+        echo "[WARN] $REF release 失敗（exit=$RELEASE_EXIT），孤兒 ref 可能殘留"
+      fi
       RELEASED=$((RELEASED + 1))
     fi
   done <<< "$ALL_REFS"
@@ -126,8 +136,9 @@ if [[ -n "$FILE_LOCK_REFS" ]]; then
 
     if [[ "$SHOULD_RELEASE" == "true" ]]; then
       # #5 修復：push --delete 失敗時輸出 WARN
+      # AC-19 修復（DISPUTE）：`local` 不能在非函數（while 迴圈）使用，改為普通變數
       git push origin --delete "$FILE_REF" 2>/dev/null
-      local PUSH_EXIT=$?
+      PUSH_EXIT=$?
       if [[ $PUSH_EXIT -ne 0 ]]; then
         echo "[WARN] $FILE_REF 遠端刪除失敗（exit=$PUSH_EXIT），孤兒 ref 可能殘留"
       else
