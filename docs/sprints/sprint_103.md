@@ -3,15 +3,15 @@
 **Sprint Goal**：強化多 Session 並行可靠性 — 清理過期測試技術債、定義檔案鎖定架構、建立中斷恢復機制
 **日期**：2026-03-19
 **容量**：7 points
-**狀態**：計畫中
+**狀態**：進行中
 
 ## Sprint Backlog
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| INFRA：刪除過期測試 test-us13 / test-us37 | #314 | S | 1 | 待辦 |
-| FEATURE：多 Session 並行開發的檔案鎖定機制 | #311 | L | 3 | 待辦 |
-| FEATURE：Sprint 中斷恢復機制（Spot VM / Session Crash） | #313 | L | 3 | 待辦 |
+| INFRA：刪除過期測試 test-us13 / test-us37 | #314 | S | 1 | 完成 |
+| FEATURE：多 Session 並行開發的檔案鎖定機制 | #311 | L | 3 | 完成 |
+| FEATURE：Sprint 中斷恢復機制（Spot VM / Session Crash） | #313 | L | 3 | 完成 |
 
 ## Acceptance Criteria
 
