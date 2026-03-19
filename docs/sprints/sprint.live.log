@@ -52,3 +52,5 @@
 [23:09:30] [Sprint 103 Review] Retro Action：補更 ADR-022 命名表格（file-lock.sh → acquire-file-lock.sh）
 [23:09:45] [Sprint 103 Review] bump v0.73.1 → v0.74.0（minor，新功能：file-lock + checkpoint）
 [23:10:00] [Sprint 103 Review] COMPLETE — Velocity 7pts，完成率 100%，DISPUTE 0%，外部抽樣 67%
+[00:05:24] [US-315] Phase 1 開始：讀取現有 ADR 格式、Skill 定義、Hook 結構
+[00:08:12] [US-315] ADR-023 撰寫完成，開始寫入 subagent-results
