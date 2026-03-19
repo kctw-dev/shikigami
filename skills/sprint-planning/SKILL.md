@@ -40,6 +40,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 - [ ] 執行框架健康檢查（<!-- Claude Code -->invoke shikigami:health-check<!-- OpenCode -->使用 health-check skill<!-- /OpenCode -->）*(慢想)*
 - [ ] 角色權重調整檢查（詳見 §7）*(慢想)*
 - [ ] **PO** 掃描 GitHub open issues，對未分類 issues 執行 Triage（<!-- Claude Code -->invoke shikigami:issue-management Triage<!-- OpenCode -->使用 issue-management skill<!-- /OpenCode -->）
+- [ ] 記錄 Sprint Planning 開始時間：`START_TIME=$(date '+%Y-%m-%dT%H:%M+08:00')`
 - [ ] **PO** 執行 Backlog 排序與 Story 選取（詳見 [po-prompt.md](./po-prompt.md) Round 1）
 - [ ] 檢查選入 Story 是否標注「需要 ADR」— 若需要，ADR 必須已 Accepted
 - [ ] **Architect** 技術評估（詳見 [architect-prompt.md](./architect-prompt.md)）
@@ -47,6 +48,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 - [ ] 上個 Sprint 的 Retro Action Items 自動列入 Backlog（若有未完成項目）
 - [ ] **PO** 建立 `docs/sprints/sprint_N.md`、更新 `docs/PROJECT_BOARD.md`、GitHub label/milestone 操作（詳見 [po-prompt.md](./po-prompt.md) Round 2）
 - [ ] 記錄 Token 消耗至 `docs/km/Metrics_Log.md` *(慢想)*<!-- OpenCode -->（OpenCode 暫填 N/A）<!-- /OpenCode -->
+- [ ] 寫入 Sprint Planning 會議紀錄至 `docs/meetings/YYYY-MM-DD-sprint-planning.md`（詳見 §5.1 會議紀錄格式）
 - [ ] 完成 Sprint 狀態文件修改後，立即 git commit + git push（範圍見 §5）
 
 ---
@@ -93,6 +95,39 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 | `docs/sprints/sprint_N.md` | 新建。Sprint Goal、Stories 清單、T-shirt size、驗收標準摘要 |
 | `docs/PROJECT_BOARD.md` | 更新。將選入 Stories 移至「Sprint Backlog」欄位 |
 | GitHub Issues labels/milestone | `status: in-sprint` label + Sprint Milestone |
+| `docs/meetings/YYYY-MM-DD-sprint-planning.md` | 新建。Sprint Planning 會議紀錄（frontmatter + 結論） |
+
+### 5.1 Sprint Planning 會議紀錄格式
+
+`docs/meetings/` 目錄若不存在，執行 `mkdir -p docs/meetings` 建立。
+
+檔名規則：`docs/meetings/$(date '+%Y-%m-%d')-sprint-planning.md`
+
+時間取得方式：開始時間在流程第一步（記錄 `START_TIME`）取得，結束時間在寫入紀錄時取得。
+
+```yaml
+---
+type: sprint-planning
+sprint: <N>
+date: "<YYYY-MM-DD>"
+start_time: "<START_TIME>"
+end_time: "<date '+%Y-%m-%dT%H:%M+08:00'>"
+participants:
+  - role: PO
+    rounds: [1, 2]
+  - role: Architect
+  - role: QA
+---
+
+# Sprint <N> Planning 會議紀錄
+
+## 結論
+- Sprint Goal: <goal>
+- 選入 Stories: <story list>
+
+## 決議事項
+1. <decisions>
+```
 
 ### 並行衝突防護
 
@@ -120,12 +155,12 @@ claim/release 失敗不阻塞 Sprint Planning（gh CLI 不可用時同樣降級�
 ### Commit + Push 規範
 
 ```bash
-git add docs/PROJECT_BOARD.md docs/sprints/sprint_N.md
+git add docs/PROJECT_BOARD.md docs/sprints/sprint_N.md docs/meetings/
 git commit -m "docs: Sprint N Planning — 更新看板與 Sprint 文件"
 git push
 ```
 
-> **範圍限制**：僅適用 Sprint 狀態文件（`PROJECT_BOARD.md`、`sprint_N.md`、`Metrics_Log.md`、`Retrospective_Log.md`）。
+> **範圍限制**：僅適用 Sprint 狀態文件（`PROJECT_BOARD.md`、`sprint_N.md`、`Metrics_Log.md`、`Retrospective_Log.md`、`docs/meetings/*.md`）。
 
 ---
 

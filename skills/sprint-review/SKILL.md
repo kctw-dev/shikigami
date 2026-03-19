@@ -50,6 +50,8 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 
 確認生產環境已部署最新 commit。未部署 → 觸發 `deployment-readiness`，完成後才進入步驟 1。
 
+記錄 Sprint Review 開始時間：`REVIEW_START_TIME=$(date '+%Y-%m-%dT%H:%M+08:00')`
+
 ### 步驟
 
 1. **PO Subagent 展示 Demo 結果** — 角色 prompt：`skills/sprint-review/po-review-prompt.md`
@@ -61,6 +63,7 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 4. **更新 `docs/PROJECT_BOARD.md`（已完成欄位）** — 通過驗收 Story 移至 Done，記錄完成日期與 Sprint 編號，更新 Sprint 統計數據
 5. **未達 DoD 的 Story 處理** — 詳見 `po-review-prompt.md`
 6. **回寫 `docs/sprints/sprint_N.md` Story 最終狀態** — 詳見 `po-review-prompt.md`
+7. **寫入 Sprint Review 會議紀錄** — 寫入 `docs/meetings/YYYY-MM-DD-sprint-review.md`（詳見 §5.2 會議紀錄格式）
 
 ## 2.5 Sprint 外完成項目掃描
 
@@ -99,6 +102,8 @@ Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，�
 
 ## 3. Sprint Retrospective 流程
 
+記錄 Retro 開始時間：`RETRO_START_TIME=$(date '+%Y-%m-%dT%H:%M+08:00')`
+
 ### 步驟
 
 0. **Retrospective Analytics** — 角色 prompt：`skills/sprint-review/analytics-prompt.md`。報告展示完畢前不得開始收集 Good / Problem / Action。
@@ -109,6 +114,7 @@ Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，�
 5. **每個 Action 建立為 GitHub Issue** — 透過 `issue-management` Skill，標題 `retro:` 前綴，`retro-action` label
 6. **同步記錄至 `docs/km/Retrospective_Log.md`**
 7. **代理人校準儀式** — 角色 prompt：`skills/sprint-review/stakeholder-prompt.md`
+8. **寫入 Retro 會議紀錄** — 寫入 `docs/meetings/YYYY-MM-DD-retro.md`（詳見 §5.2 會議紀錄格式）
 
 ## 4. Action Items 驗收機制
 
@@ -129,6 +135,69 @@ Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，�
 | `docs/km/Metrics_Log.md` | 追加 Velocity、完成率、趨勢分析 |
 | `docs/sprints/sprint_N.md` | 回寫各 Story 最終驗收狀態 |
 | `docs/prd/ROADMAP.md` | 更新版本里程碑狀態 |
+| `docs/meetings/YYYY-MM-DD-sprint-review.md` | 新建。Sprint Review 會議紀錄（frontmatter + 結論） |
+| `docs/meetings/YYYY-MM-DD-retro.md` | 新建。Retro 會議紀錄（frontmatter + Good/Problem/Action） |
+
+### 5.2 Sprint Review & Retro 會議紀錄格式
+
+`docs/meetings/` 目錄若不存在，執行 `mkdir -p docs/meetings` 建立。
+
+**Sprint Review 紀錄**（§2 步驟 7）：
+
+檔名規則：`docs/meetings/$(date '+%Y-%m-%d')-sprint-review.md`
+
+```yaml
+---
+type: sprint-review
+sprint: <N>
+date: "<YYYY-MM-DD>"
+start_time: "<REVIEW_START_TIME>"
+end_time: "<date '+%Y-%m-%dT%H:%M+08:00'>"
+participants:
+  - role: PO
+  - role: QA
+  - role: Stakeholder
+---
+
+# Sprint <N> Review 會議紀錄
+
+## 結論
+- 通過驗收 Stories: <list>
+- 未通過 Stories: <list>
+
+## 決議事項
+1. <decisions>
+```
+
+**Retro 紀錄**（§3 步驟 8）：
+
+檔名規則：`docs/meetings/$(date '+%Y-%m-%d')-retro.md`
+
+```yaml
+---
+type: retro
+sprint: <N>
+date: "<YYYY-MM-DD>"
+start_time: "<RETRO_START_TIME>"
+end_time: "<date '+%Y-%m-%dT%H:%M+08:00'>"
+participants:
+  - role: PO
+  - role: Architect
+  - role: QA
+  - role: Stakeholder
+---
+
+# Sprint <N> Retrospective 會議紀錄
+
+## Good
+- <items>
+
+## Problem
+- <items>
+
+## Action
+- <items>
+```
 
 ### 5.1 ROADMAP 里程碑對齊檢查
 
@@ -144,7 +213,7 @@ Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，�
 
 ## 6. 歸檔觸發檢查
 
-Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 git commit + push。範圍：`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`、`sprint_N.md`。其他 KM 文件不適用，避免觸發 ADR-003 Hard Gate。
+Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 git commit + push。範圍：`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`、`sprint_N.md`、`docs/meetings/*.md`。其他 KM 文件不適用，避免觸發 ADR-003 Hard Gate。
 
 ---
 
