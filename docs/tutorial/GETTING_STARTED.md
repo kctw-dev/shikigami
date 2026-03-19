@@ -404,7 +404,7 @@ cat docs/km/Metrics_Log.md
 |------|---------|
 | 新增需求 | 「我想加一個...功能」、「我們需要...」 |
 | Sprint Planning | 「開始 Sprint」、「開始 Sprint Planning」 |
-| 實作 Story | 「實作 US-XX」、「開始做 XX 功能」 |
+| 實作 Story | 「實作 US-#N」、「開始做 XX 功能」 |
 | Sprint Review | 「執行 Sprint Review」、「Sprint 結束了」 |
 | 查看狀態 | 「standup」、「我們現在進度如何？」 |
 | 架構決策 | 「要用 A 還是 B？」、「需要做技術選型」 |

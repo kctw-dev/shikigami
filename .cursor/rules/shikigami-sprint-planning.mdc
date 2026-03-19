@@ -230,10 +230,10 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
    ```markdown
    | Story ID | 標題 | 估點 | AC 確認結果 | 獨立性評估 |
    |----------|------|------|------------|-----------|
-   | US-XX    | ...  | M    | PASS / 待確認 | 獨立 / 與 US-YY 衝突（同修改 path/to/file） |
+   | US-#N    | ...  | M    | PASS / 待確認 | 獨立 / 與 US-YY 衝突（同修改 path/to/file） |
    ```
 
-   此階段 PO 需明確定義本次 Sprint 要達成的目標，並評估各 Story 間的檔案修改獨立性：逐一列出每個 Story 預計修改的主要檔案，判斷哪些 Story 修改不同檔案（可平行執行），哪些 Story 修改相同檔案（有衝突，需順序執行）。「獨立性評估」欄位填入「獨立」或「與 US-XX 衝突（同修改 path/to/file）」，供 Architect 後續規劃平行派工分群使用。
+   此階段 PO 需明確定義本次 Sprint 要達成的目標，並評估各 Story 間的檔案修改獨立性：逐一列出每個 Story 預計修改的主要檔案，判斷哪些 Story 修改不同檔案（可平行執行），哪些 Story 修改相同檔案（有衝突，需順序執行）。「獨立性評估」欄位填入「獨立」或「與 US-#N 衝突（同修改 path/to/file）」，供 Architect 後續規劃平行派工分群使用。
 2. **Architect**：對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若發現 Hard Gate 問題，該 Story 退回 Backlog。詳細決策標準（估點策略、ADR 需求判斷、平行分群策略）請參閱 [Architect 角色決策指引](../architect/SKILL.md)。
 
    **平行分群建議**（正式輸出項目）：Architect 須根據 PO 回傳表格中的「獨立性評估」欄位，輸出平行派工分群建議，供主 session 後續調度使用。
@@ -246,7 +246,7 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
    ### Phase 1（可平行執行）
    | Story ID | 標題 | T-shirt | 說明 |
    |----------|------|---------|------|
-   | US-XX    | ...  | S       | 修改獨立檔案，無衝突 |
+   | US-#N    | ...  | S       | 修改獨立檔案，無衝突 |
 
    ### Phase 2（需序列執行）
    | Story ID | 標題 | T-shirt | 衝突原因 |
@@ -273,7 +273,7 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
 
    | Story ID | BDD 建議 | DDD 建議 | 說明 |
    |----------|---------|---------|------|
-   | US-XX | 建議（B1, B2） | 不適用 | AC2 含多執行路徑 + CLI 輸出變更，建議補充行為範例 |
+   | US-#N | 建議（B1, B2） | 不適用 | AC2 含多執行路徑 + CLI 輸出變更，建議補充行為範例 |
    | US-YY | 不適用 | 不適用 | doc-only，所有 AC 為 [靜態] |
    | US-ZZ | 不適用 | 建議（D1） | 引入新的 Domain Entity，建議先建領域模型 |
    ```
@@ -315,7 +315,7 @@ Sprint Planning 的 Subagent 調度遵循以下固定順序：
    [DRIFT-ALERT] PO Round 2 輸出偏離 Round 1，要求 PO 重新派遣。
 
    偏離項目：
-   - US-XX：標題被改寫（Round 1：「原始標題」→ Round 2：「改寫後標題」）
+   - US-#N：標題被改寫（Round 1：「原始標題」→ Round 2：「改寫後標題」）
    - US-YY：AC 被刪除（Round 1 有 3 條 AC，Round 2 僅有 2 條）
    - US-ZZ：Story ID 不符（Round 2 出現 Round 1 未選取的 ID）
 

@@ -73,7 +73,7 @@ Scenario: 排程模式下選入非S-size Story時Sprint Planning中止
   Given 環境變數 SHIKIGAMI_SCHEDULED 設為 "true"
     And PO subagent 已從 Backlog 篩選出候選 Stories
 
-  When  PO subagent 嘗試將 M-size Story（US-XXX）選入 Sprint Backlog
+  When  PO subagent 嘗試將 M-size Story（US-#NX）選入 Sprint Backlog
 
   Then  Sprint Planning 流程中止
     And 輸出告警訊息包含 "[SCHEDULED-MODE-GATE]"

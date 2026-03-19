@@ -148,7 +148,7 @@ export SHIKIGAMI_ROLE_PROVIDER_MAP="developer:gemini,qa:gemini,po:claude,archite
 ```bash
 # 批次更新範例（多個平行 Story 完成後）
 git add docs/PROJECT_BOARD.md docs/sprints/sprint_N.md
-git commit -m "docs: Sprint N — US-XX, US-YY, US-ZZ 狀態批次更新為完成"
+git commit -m "docs: Sprint N — US-#N, US-YY, US-ZZ 狀態批次更新為完成"
 git push
 ```
 
@@ -309,7 +309,7 @@ Sprint Backlog 還有 Story？
    story_id: ${story_id}
    sprint_file: ${sprint_file}" | gemini
    ```
-   - `story_id`：Story 識別碼（如 `US-XX`）
+   - `story_id`：Story 識別碼（如 `US-#N`）
    - `sprint_file`：`docs/sprints/sprint_N.md`（Story AC 與完整需求）
    - `project_board`：`docs/PROJECT_BOARD.md`
    - `related_adrs`：相關 ADR 路徑清單（如 `docs/adr/ADR-XXX.md`）

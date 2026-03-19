@@ -40,7 +40,7 @@ model: sonnet
 ```markdown
 | Story ID | 標題 | 估點 | AC 確認結果 | 獨立性評估 |
 |----------|------|------|------------|-----------|
-| US-XX    | ...  | S    | PASS       | 獨立 |
+| US-#N    | ...  | S    | PASS       | 獨立 |
 | US-YY    | ...  | M    | PASS       | 與 US-ZZ 衝突（同修改 path/to/file）|
 ```
 

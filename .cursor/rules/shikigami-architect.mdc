@@ -140,9 +140,9 @@ Architect 在 Sprint Planning Round 2 必須輸出 ADR 觸發清單：
 
 | Story | ADR 編號 | 說明 |
 |-------|----------|------|
-| US-XX | 新建 ADR-YYY | {觸發原因} |
-| US-XX | 修改 ADR-YYY | {修改原因} |
-| US-XX | 無需 ADR | {依據條件} |
+| US-#N | 新建 ADR-YYY | {觸發原因} |
+| US-#N | 修改 ADR-YYY | {修改原因} |
+| US-#N | 無需 ADR | {依據條件} |
 
 ---
 
@@ -159,7 +159,7 @@ Architect 在 Sprint Planning Round 2 必須輸出 ADR 觸發清單：
 Architect 在 Sprint Planning 時，根據每個 Story 的 AC 描述，列出各 Story 預計修改的檔案路徑：
 
 ```
-US-XX → 預計修改：
+US-#N → 預計修改：
   - skills/sprint-execution/SKILL.md
   - docs/sprints/sprint_N.md（固定：每個 Story 都會更新）
 
@@ -230,15 +230,15 @@ Sprint Planning 中 Architect 的正式輸出（供主 session 調度使用）�
 ### Phase 1（可平行執行）
 | Story ID | 標題 | T-shirt | 說明 |
 |----------|------|---------|------|
-| US-XX    | ...  | S       | 修改獨立檔案，無衝突 |
+| US-#N    | ...  | S       | 修改獨立檔案，無衝突 |
 
-### Phase 2（需序列執行，US-XX 完成後）
+### Phase 2（需序列執行，US-#N 完成後）
 | Story ID | 標題 | T-shirt | 衝突原因 |
 |----------|------|---------|---------|
-| US-YY    | ...  | M       | AC3 依賴 US-XX 的 SKILL.md 狀態 |
+| US-YY    | ...  | M       | AC3 依賴 US-#N 的 SKILL.md 狀態 |
 
 ### 執行順序
-US-XX → US-YY（嚴格序列，不可平行）
+US-#N → US-YY（嚴格序列，不可平行）
 ```
 
 ---
@@ -321,7 +321,7 @@ Architect Round 2 回傳新增以下區塊：
 
 | Story ID | BDD 建議 | DDD 建議 | 說明 |
 |----------|---------|---------|------|
-| US-XX | 建議（B1, B2） | 不適用 | AC2 含多執行路徑 + CLI 輸出變更，建議補充行為範例 |
+| US-#N | 建議（B1, B2） | 不適用 | AC2 含多執行路徑 + CLI 輸出變更，建議補充行為範例 |
 | US-YY | 不適用 | 不適用 | doc-only，所有 AC 為 [靜態] |
 | US-ZZ | 不適用 | 建議（D1） | 引入新的 Domain Entity，建議先建領域模型 |
 ```

@@ -224,7 +224,7 @@ model: sonnet
 - TD-XXX：{描述摘要}（嚴重度：H/M/L）
 
 #### 本次解決條目
-- TD-XXX：{描述摘要}（由 US-XX 解決）
+- TD-XXX：{描述摘要}（由 US-#N 解決）
 
 #### 逾期未解決警示（Active 超過 3 個 Sprint 未排入解決 Story）
 - TD-XXX：已 Active {N} 個 Sprint，建議本 Sprint Planning 強制排入

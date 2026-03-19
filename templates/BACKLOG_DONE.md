@@ -13,6 +13,6 @@
 
 | Story ID | 標題 | Size | Points | 完成 Sprint |
 |----------|------|------|--------|-------------|
-| US-XX    | [Story 標題] | S | 1 | Sprint N |
+| US-#N    | [Story 標題] | S | 1 | Sprint N |
 
 ---

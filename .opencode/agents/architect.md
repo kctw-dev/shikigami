@@ -78,8 +78,8 @@ model: sonnet
 ```markdown
 | Story | ADR 編號 | 說明 |
 |-------|----------|------|
-| US-XX | 新建 ADR-YYY | {觸發原因} |
-| US-XX | 無需 ADR | {依據條件} |
+| US-#N | 新建 ADR-YYY | {觸發原因} |
+| US-#N | 無需 ADR | {依據條件} |
 ```
 
 ---
@@ -106,7 +106,7 @@ model: sonnet
 ### Phase 1（可平行執行）
 | Story ID | 標題 | T-shirt | 說明 |
 |----------|------|---------|------|
-| US-XX    | ...  | S       | 修改獨立檔案，無衝突 |
+| US-#N    | ...  | S       | 修改獨立檔案，無衝突 |
 
 ### Phase 2（需序列執行）
 | Story ID | 標題 | T-shirt | 衝突原因 |
@@ -114,7 +114,7 @@ model: sonnet
 | US-YY    | ...  | M       | 與 US-ZZ 同修改 path/to/file |
 
 ### 執行順序
-US-XX → US-YY（嚴格序列，不可平行）
+US-#N → US-YY（嚴格序列，不可平行）
 ```
 
 ---

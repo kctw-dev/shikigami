@@ -73,7 +73,7 @@ Shikigami 框架會在派遣 subagent 時**自動指定適當模型**，使用�
 
 1. 等候 30 秒確認 subagent 確實停滯（非正常思考延遲）
 2. 對 Claude 說：「subagent 停滯了，請從上次中斷的地方繼續」
-3. 若仍無回應，開啟新 Session 後說：「請繼續執行 US-XX，從 [停滯的 AC 編號] 開始」
+3. 若仍無回應，開啟新 Session 後說：「請繼續執行 US-#N，從 [停滯的 AC 編號] 開始」
 4. 若問題持續發生，將大型 Story（M/L size）拆分為多個 S size Story 後重新 Planning
 5. 定期執行 Sprint Review 清理 context，避免累積過多歷史資訊
 
@@ -89,8 +89,8 @@ Shikigami 框架會在派遣 subagent 時**自動指定適當模型**，使用�
 
 1. 確認 Sprint 文件存在：`ls docs/sprints/`
 2. 開啟目前 Sprint 文件，確認完成的 Story 狀態標記為 `done` 或 `完成`（而非其他格式）
-3. 若狀態格式不一致，對 Claude 說：「請更新 sprint_N.md 中 US-XX 的狀態為完成」
-4. 確認 Sprint 文件的 Story 列表包含正確的 Story ID（US-XX 格式）
+3. 若狀態格式不一致，對 Claude 說：「請更新 sprint_N.md 中 US-#N 的狀態為完成」
+4. 確認 Sprint 文件的 Story 列表包含正確的 Story ID（US-#N 格式）
 5. 重新執行 Sprint Review：說「執行 Sprint Review」
 
 > 若問題涉及 Sprint 文件結構損壞，可參閱 [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)。
@@ -106,7 +106,7 @@ Shikigami 框架會在派遣 subagent 時**自動指定適當模型**，使用�
 **排除步驟**
 
 1. 查看 Sprint 文件確認該 Story 的 AC 數量和複雜度
-2. 若 AC 超過 5 個或有複雜的外部依賴，對 Claude 說：「請協助拆分 US-XX 為更小的 Stories」
+2. 若 AC 超過 5 個或有複雜的外部依賴，對 Claude 說：「請協助拆分 US-#N 為更小的 Stories」
 3. Architect subagent 會建議合理的拆分方式（每個子 Story 建議 3-5 個 AC）
 4. 拆分後重新執行 Sprint Planning，讓 QA Hard Gate 審查新的 AC
 5. 從拆分後的第一個子 Story 開始執行 Sprint Execution

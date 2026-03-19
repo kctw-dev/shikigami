@@ -84,7 +84,7 @@ model: sonnet
 ```
 ## 外部抽樣審查結論
 
-**Story ID**：US-XX
+**Story ID**：US-#N
 **結論**：DISPUTE
 **自審結論**：PASS（Story-Lifecycle subagent 回傳）
 **外部審查結論**：DISPUTE

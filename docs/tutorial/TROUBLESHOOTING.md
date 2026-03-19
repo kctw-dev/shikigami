@@ -339,7 +339,7 @@ cat docs/km/Retrospective_Log.md
 - Sprint Planning 輸出：`QA Hard Gate：FAIL`
 - QA subagent 列出一或多個 AC 的問題，如：
   ```
-  🔴 FAIL：US-XX AC2 不可測試
+  🔴 FAIL：US-#N AC2 不可測試
      問題：AC2「系統應該更好」缺乏明確的可測試標準
      建議：改為「系統回應時間 < 200ms（以 p95 為準）」
   ```
@@ -367,12 +367,12 @@ QA Hard Gate 的設計目的是確保每個進入 Sprint 的 Story，其 Accepta
 **步驟 2**：請 PO subagent 修正問題的 AC
 
 ```
-> 請修正 US-XX 的 AC2，讓它符合可測試標準
+> 請修正 US-#N 的 AC2，讓它符合可測試標準
 ```
 
 或者直接描述你的期望行為，讓 PO 重新撰寫 AC：
 ```
-> US-XX AC2 的目標是「使用者登入失敗時看到錯誤提示」，請重寫成可測試的 AC
+> US-#N AC2 的目標是「使用者登入失敗時看到錯誤提示」，請重寫成可測試的 AC
 ```
 
 **步驟 3**：確認 PRODUCT_BACKLOG.md 已更新

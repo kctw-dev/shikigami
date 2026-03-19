@@ -201,7 +201,7 @@ Cloud Run 部署狀態：已部署 / 未部署 / 不適用（無 Cloud Run）
    ```markdown
    | Story ID | 標題 | Sprint | 完成日期 | Points |
    |----------|------|--------|----------|--------|
-   | US-XX    | 功能標題 | Sprint N | YYYY-MM-DD | X |
+   | US-#N    | 功能標題 | Sprint N | YYYY-MM-DD | X |
    ```
 
    **Sprint 統計欄位**（PROJECT_BOARD.md 頂部或底部統計區塊）更新格式：
@@ -234,7 +234,7 @@ Cloud Run 部署狀態：已部署 / 未部署 / 不適用（無 Cloud Run）
    ```markdown
    | Story ID | 標題 | Size | Points | 狀態 |
    |----------|------|------|--------|------|
-   | US-XX    | 功能標題 | S | 1 | 完成 |
+   | US-#N    | 功能標題 | S | 1 | 完成 |
    | US-YY    | 另一功能 | M | 2 | 未完成（測試未通過） |
    ```
 
@@ -594,7 +594,7 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 
 | Story ID | 標題 | 狀態 | 完成 Sprint |
 |----------|------|------|-------------|
-| US-XX    | 功能標題 | 已完成 | Sprint N |
+| US-#N    | 功能標題 | 已完成 | Sprint N |
 | US-YY    | 另一功能 | 進行中 | — |
 ```
 
@@ -651,7 +651,7 @@ Sprint Review & Retrospective 完成後，必須更新以下文件：
 活躍里程碑：MX — <里程碑標題>
 
 本 Sprint 交付 Stories：
-- US-XX（已完成）— 屬於 MX
+- US-#N（已完成）— 屬於 MX
 - US-YY（已完成）— 屬於 MX
 
 MX 完成狀態：
