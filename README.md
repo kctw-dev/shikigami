@@ -2,7 +2,7 @@
 
 ![Version](https://img.shields.io/badge/version-v0.73.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-![Sprints](https://img.shields.io/badge/sprints-94%2B-orange?style=flat-square)
+![Sprints](https://img.shields.io/badge/sprints-101%2B-orange?style=flat-square)
 ![Skills](https://img.shields.io/badge/skills-26-purple?style=flat-square)
 
 **為你的 AI 開發工具注入 8 個專業角色，涵蓋 Discovery → Definition → Delivery 全產品生命週期。**
@@ -70,6 +70,7 @@ Shikigami 注入 8 個角色，覆蓋產品從**探索到上線**的完整流程
 - **Definition**：Backlog 管理、Sprint Planning、架構決策（ADR）
 - **Delivery**：TDD 開發、QA 雙階段審查、Security 掃描、SRE 部署
 - **Design**：UI/UX Designer 透過 Figma MCP 執行設計，Vision Critic 自審視覺品質
+- **多 Session 協調**：三層鎖機制（flock 本地鎖 + git refs 遠端鎖 + GitHub Issue 展示層），防止跨 session 重複領取 Issue
 
 角色之間**互相制衡**，不是 8 個獨立助手。**不需要記指令**，用自然語言說你要做什麼，Scrum Master 自動調度。
 
