@@ -95,7 +95,7 @@
 
 | 豁免情境 | 判定條件 | 理由 |
 |----------|---------|------|
-| Sprint Checkpoint 寫入 | commit message 包含 `[checkpoint]` | §2.12 checkpoint 需即時持久化（見決策 4） |
+| 狀態文件直推 | 變更檔案僅限 `docs/sprints/**` 或 `docs/PROJECT_BOARD.md` | 決策 3：狀態文件豁免，允許直推 main |
 | Claim/Release ref push | `git push origin refs/claims/` | #312 機制使用 refs，非 main branch |
 | git tag push | `git push origin --tags` 或 `git push origin v*` | 版本標籤不走 PR |
 
@@ -243,7 +243,7 @@ PR 建立後執行 code review loop：
 | 檔案 | 修改內容 |
 |------|---------|
 | `hooks/hooks.json` | PreToolUse 新增 main branch 保護 hook |
-| `hooks/main-protect.sh` | 新增：main 直推攔截腳本（含豁免判定） |
+| `hooks/protect-main.sh` | 新增：main 直推攔截腳本（含豁免判定） |
 | `skills/shoot/SKILL.md` §7 步驟 6 | `git commit + push` 改為 `branch + commit + push + PR + review + merge` |
 | `skills/shoot/SKILL.md` §8.6 | pr-review-toolkit 審查改為在 PR 上執行，結果寫入 PR comment |
 | `skills/sprint-execution/SKILL.md` §3 | Story-Lifecycle subagent 改為建立 branch + PR，主 session 負責 review + merge |

@@ -61,3 +61,8 @@
 [00:11:37] [US-315] TDD Green — 實作 protect-main.sh + 更新 hooks.json + SKILL.md
 [00:17:23] [US-315] TDD Green 完成 — 13/13 tests PASS
 [00:18:24] [US-315] Phase 2 完成 — commit 2fcbe87，subagent-results/US-315.md 更新
+[00:25:00] [Sprint 104 Review] 開始執行 Sprint Review + Retrospective
+[00:25:30] [Sprint 104 Review] §2.6 Issue 狀態回寫 — #315 已關閉
+[00:25:45] [Sprint 104 Review] Retro Action：修正 ADR-023 兩處筆誤（hook 檔名 + [checkpoint] 豁免條目）
+[00:26:00] [Sprint 104 Review] bump v0.74.0 → v0.75.0（minor，新功能：PR-based flow）
+[00:26:15] [Sprint 104 Review] COMPLETE — Velocity 3pts，完成率 100%，DISPUTE 0%，外部抽樣 100%

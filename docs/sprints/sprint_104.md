@@ -3,7 +3,7 @@
 **Sprint Goal**：Sprint Git Flow 改為 PR-based — 禁止直推 main，引入 code review 環節提升程式碼品質
 **日期**：2026-03-19
 **容量**：3 points
-**狀態**：進行中
+**狀態**：完成
 
 ## Sprint Backlog
 
@@ -89,3 +89,57 @@
   - AC-5：依 ADR 決策驗證（豁免：直推不被攔截；走 PR：PR 流程正常）
   - AC-6：驗證 checkpoint JSON 含 branch name；模擬 resume 時 checkout 到正確 branch
 - **防漂移基準**：1 Story, 3 pts
+
+## Sprint Review（2026-03-20）
+
+### §2.1 PO Demo
+
+| 交付物 | 狀態 |
+|--------|------|
+| ADR-023：PR-based Git Flow 技術選型（六項決策） | DONE |
+| `hooks/protect-main.sh`：PreToolUse hook 攔截直推 main | DONE |
+| `hooks/hooks.json`：新增 protect-main.sh 攔截規則 | DONE |
+| `skills/sprint-execution/SKILL.md`：§3 PR flow 改造 | DONE |
+| `skills/shoot/SKILL.md`：步驟 6 PR flow 改造 | DONE |
+| `tests/test-pr-flow.sh`：13/13 PASS | DONE |
+
+### §2.2 QA 邊界
+
+輕量 QA — 已有 13 項自動化測試覆蓋 AC-2 至 AC-6 主要路徑，無需額外驗收測試。
+
+### §2.3 Stakeholder 確認
+
+外部抽樣 1/1 CONFIRM（#315）。
+
+### §2.6 Issue 回寫
+
+- **#315**：CLOSED（PR-based Git Flow 完整落地，6 AC 全數 PASS）
+
+### §2.7 Metrics
+
+| 指標 | 數值 |
+|------|------|
+| Velocity | 3 points |
+| 完成率 | 100%（1/1 Story） |
+| 外部抽樣 | 100%（1/1 CONFIRM） |
+| DISPUTE 率 | 0% |
+
+---
+
+## Sprint Retrospective（2026-03-20）
+
+### Good
+
+- PR-based flow 完整落地：ADR-023 六項決策清晰，hook + SKILL 實作一致
+- 13/13 測試全數通過，無 DISPUTE
+- squash merge + branch 命名規範統一，main 歷史線性
+
+### Problem
+
+- ADR-023 存在 2 處文字筆誤：
+  1. 「需修改的檔案」表格誤寫 `hooks/main-protect.sh`（正確：`hooks/protect-main.sh`）
+  2. 「豁免清單」殘留 `[checkpoint]` commit message 豁免條目（與決策 3/4 狀態文件豁免衝突）
+
+### Action
+
+- [x] 修正 ADR-023 兩處筆誤（本 Review 完成）
