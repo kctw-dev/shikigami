@@ -133,15 +133,41 @@ ADR（Architecture Decision Record）的目的是記錄**有架構影響的技�
 
 **判斷觸發詞：** 若 Story 描述為「實作 ADR-XXX」、「補充說明」、「修正文件」、「新增知識文件」，通常不需要新 ADR。
 
+### ADR 建立前置步驟（AC3 — US-#318）
+
+<!-- US-#318 ADR claim 前置步驟 — Sprint 107 -->
+
+**新建 ADR 前，Architect 必須先執行 claim**，確保多 session 不會同時建立同一 ADR 導致編號衝突：
+
+```bash
+bash hooks/claim-issue.sh "adr-NNN"
+```
+
+| 回傳值 | 處置 |
+|--------|------|
+| `[CLAIM-OK]` | 繼續建立 ADR 文件 |
+| `[CLAIM-BLOCKED]` | 輸出 `[WARN] 已有其他 session 正在建立此 ADR`，繼續執行（不阻塞） |
+| claim 失敗（git push 失敗）| 輸出 `[WARN]`，繼續執行（保守策略） |
+
+ADR 文件建立完成並 commit 後，執行 release：
+
+```bash
+bash hooks/release-issue.sh "adr-NNN"
+```
+
+> **`NNN`** 為新 ADR 的三位數編號，例如：`bash hooks/claim-issue.sh "adr-024"`
+
+---
+
 ### ADR 觸發清單（Sprint Planning 輸出項目）
 
 Architect 在 Sprint Planning Round 2 必須輸出 ADR 觸發清單：
 
 | Story | ADR 編號 | 說明 |
 |-------|----------|------|
-| US-XX | 新建 ADR-YYY | {觸發原因} |
-| US-XX | 修改 ADR-YYY | {修改原因} |
-| US-XX | 無需 ADR | {依據條件} |
+| US-#N | 新建 ADR-YYY | {觸發原因} |
+| US-#N | 修改 ADR-YYY | {修改原因} |
+| US-#N | 無需 ADR | {依據條件} |
 
 ---
 
@@ -158,11 +184,11 @@ Architect 在 Sprint Planning Round 2 必須輸出 ADR 觸發清單：
 Architect 在 Sprint Planning 時，根據每個 Story 的 AC 描述，列出各 Story 預計修改的檔案路徑：
 
 ```
-US-XX → 預計修改：
+US-#N → 預計修改：
   - skills/sprint-execution/SKILL.md
   - docs/sprints/sprint_N.md（固定：每個 Story 都會更新）
 
-US-YY → 預計修改：
+US-#M → 預計修改：
   - skills/sprint-execution/story-lifecycle-prompt.md
   - docs/sprints/sprint_N.md（固定）
 ```
@@ -229,15 +255,15 @@ Sprint Planning 中 Architect 的正式輸出（供主 session 調度使用）�
 ### Phase 1（可平行執行）
 | Story ID | 標題 | T-shirt | 說明 |
 |----------|------|---------|------|
-| US-XX    | ...  | S       | 修改獨立檔案，無衝突 |
+| US-#N    | ...  | S       | 修改獨立檔案，無衝突 |
 
-### Phase 2（需序列執行，US-XX 完成後）
+### Phase 2（需序列執行，US-#N 完成後）
 | Story ID | 標題 | T-shirt | 衝突原因 |
 |----------|------|---------|---------|
-| US-YY    | ...  | M       | AC3 依賴 US-XX 的 SKILL.md 狀態 |
+| US-#M    | ...  | M       | AC3 依賴 US-#N 的 SKILL.md 狀態 |
 
 ### 執行順序
-US-XX → US-YY（嚴格序列，不可平行）
+US-#N → US-#M（嚴格序列，不可平行）
 ```
 
 ---
@@ -320,9 +346,9 @@ Architect Round 2 回傳新增以下區塊：
 
 | Story ID | BDD 建議 | DDD 建議 | 說明 |
 |----------|---------|---------|------|
-| US-XX | 建議（B1, B2） | 不適用 | AC2 含多執行路徑 + CLI 輸出變更，建議補充行為範例 |
-| US-YY | 不適用 | 不適用 | doc-only，所有 AC 為 [靜態] |
-| US-ZZ | 不適用 | 建議（D1） | 引入新的 Domain Entity，建議先建領域模型 |
+| US-#N | 建議（B1, B2） | 不適用 | AC2 含多執行路徑 + CLI 輸出變更，建議補充行為範例 |
+| US-#M | 不適用 | 不適用 | doc-only，所有 AC 為 [靜態] |
+| US-#K | 不適用 | 建議（D1） | 引入新的 Domain Entity，建議先建領域模型 |
 ```
 
 ### 當 BDD 被建議時的後續流程
@@ -460,9 +486,9 @@ Sprint Planning Architect Round 2 輸出的技術評估結果，必須包含「A
 
 | Story | T-shirt | ADR 需求 | API 契約 | 說明 |
 |-------|---------|---------|---------|------|
-| US-XX | M | 無需 ADR | **有**（見下方契約定義） | {說明} |
-| US-YY | S | 無需 ADR | **無**（需補充，阻擋開發） | {說明} |
-| US-ZZ | S | 無需 ADR | **不適用** | doc-only，無 API 互動 |
+| US-#N | M | 無需 ADR | **有**（見下方契約定義） | {說明} |
+| US-#M | S | 無需 ADR | **無**（需補充，阻擋開發） | {說明} |
+| US-#K | S | 無需 ADR | **不適用** | doc-only，無 API 互動 |
 
 **欄位說明：**
 
@@ -486,7 +512,7 @@ Sprint Planning Architect Round 2 輸出的技術評估結果，必須包含「A
 
 | 判斷條件 | 處置 |
 |---------|------|
-| Story AC 描述中含「依賴 US-XXX 完成」、「需要 XXX 先就緒」等字眼 | 確認前置 Story 是否在同 Sprint 可完成，若不可則標記 NOT_READY |
+| Story AC 描述中含「依賴 US-#N 完成」、「需要 XXX 先就緒」等字眼 | 確認前置 Story 是否在同 Sprint 可完成，若不可則標記 NOT_READY |
 | Story 需要外部系統可用性（第三方 API、SaaS 服務） | 確認外部系統狀態，若不確定則在 Sprint 前發出確認請求 |
 | Story 需要 ADR 已通過才能實作 | 確認對應 ADR 狀態為 Accepted，否則退回 Backlog |
 | Story 無前置依賴 | 記錄「無前置依賴」，繼續下一項 |

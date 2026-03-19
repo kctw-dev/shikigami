@@ -15,9 +15,9 @@
 
 | Story | T-shirt | ADR 需求 | API 契約 | Related SDDs | 說明 |
 |-------|---------|---------|---------|-------------|------|
-| US-XX | M | 無需 ADR | **有**（見下方契約定義） | SDD-000 §3, SDD-001 §2 | {說明} |
-| US-YY | S | 無需 ADR | **無**（需補充，阻擋開發） | SDD-000 §5 | {說明} |
-| US-ZZ | S | 無需 ADR | **不適用** | — | doc-only，無架構涉及 |
+| US-#N | M | 無需 ADR | **有**（見下方契約定義） | SDD-000 §3, SDD-001 §2 | {說明} |
+| US-#M | S | 無需 ADR | **無**（需補充，阻擋開發） | SDD-000 §5 | {說明} |
+| US-#K | S | 無需 ADR | **不適用** | — | doc-only，無架構涉及 |
 ```
 
 **API 契約欄位說明**：
@@ -77,21 +77,21 @@ Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義�
 ### Phase 1（可平行執行）
 | Story ID | 標題 | T-shirt | 說明 |
 |----------|------|---------|------|
-| US-XX    | ...  | S       | 修改獨立檔案，無衝突 |
+| US-#N    | ...  | S       | 修改獨立檔案，無衝突 |
 
 > 若 SHIKIGAMI_MAX_PARALLEL 觸發拆批，在此區塊標注子批次：
-> **Batch 1**（同時執行）：US-XX, US-YY
-> **Batch 2**（等 Batch 1 完成後執行）：US-ZZ
+> **Batch 1**（同時執行）：US-#N, US-#M
+> **Batch 2**（等 Batch 1 完成後執行）：US-#K
 
 ### Phase 2（需序列執行）
 | Story ID | 標題 | T-shirt | 衝突原因 |
 |----------|------|---------|---------|
-| US-YY    | ...  | M       | 與 US-ZZ 同修改 path/to/file，需等 US-ZZ 完成後執行 |
+| US-#M    | ...  | M       | 與 US-#K 同修改 path/to/file，需等 US-#K 完成後執行 |
 
 ### 檔案衝突分析
 | 衝突檔案 | 涉及 Story | 建議執行順序 |
 |---------|-----------|------------|
-| path/to/file | US-YY, US-ZZ | US-ZZ → US-YY |
+| path/to/file | US-#M, US-#K | US-#K → US-#M |
 ```
 
 ### 分群規則
@@ -114,9 +114,9 @@ Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義�
 
 | Story ID | BDD 建議 | DDD 建議 | 說明 |
 |----------|---------|---------|------|
-| US-XX | 建議（B1, B2） | 不適用 | AC2 含多執行路徑 + CLI 輸出變更，建議補充行為範例 |
-| US-YY | 不適用 | 不適用 | doc-only，所有 AC 為 [靜態] |
-| US-ZZ | 不適用 | 建議（D1） | 引入新的 Domain Entity，建議先建領域模型 |
+| US-#N | 建議（B1, B2） | 不適用 | AC2 含多執行路徑 + CLI 輸出變更，建議補充行為範例 |
+| US-#M | 不適用 | 不適用 | doc-only，所有 AC 為 [靜態] |
+| US-#K | 不適用 | 建議（D1） | 引入新的 Domain Entity，建議先建領域模型 |
 ```
 
 ---

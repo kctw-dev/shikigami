@@ -107,7 +107,7 @@ Gemini CLI 執行後，檢查回傳結果：
 
 ```yaml
 # Story-Lifecycle Subagent 輸入契約（ADR-007 §AC2 Phase 1）
-story_id: "US-XX"                          # 必填：Story 識別碼（如 US-40）
+story_id: "US-#N"                          # 必填：Story 識別碼（如 US-#312）
 sprint_file: "docs/sprints/sprint_N.md"    # 必填：包含 AC 的 Sprint 文件路徑
 project_board: "docs/PROJECT_BOARD.md"     # 必填：看板路徑（供狀態更新）
 related_adrs:                              # 可選：相關 ADR 路徑清單
@@ -1630,7 +1630,7 @@ uncertainty_check:      # 必填：不確定性三問檢查結果（US-214，開
 ```
 ## Story-Lifecycle 完成摘要
 
-**Story ID**：US-XX
+**Story ID**：US-#N
 **結論**：PASS
 **一句話摘要**：{≤50 字的結果說明，如「所有 5 項 AC 通過，Spec/Quality/Security self-review 均 PASS，無安全疑慮」}
 
@@ -1659,7 +1659,7 @@ uncertainty_check:      # 必填：不確定性三問檢查結果（US-214，開
 ```
 ## Story-Lifecycle 升級通知
 
-**Story ID**：US-XX
+**Story ID**：US-#N
 **結論**：ESCALATE
 **升級原因**：{升級類型}
 **升級詳情**：{具體說明}

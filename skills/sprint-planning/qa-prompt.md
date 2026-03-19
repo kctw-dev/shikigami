@@ -47,7 +47,7 @@ QA 在 Sprint Planning Round 3 驗收 AC 時，**必須**針對每個 Story 主�
 QA 在 Sprint Planning 中發現隱性需求缺口時，輸出如下格式，供 PO 更新 Story AC：
 
 ```
-[隱性需求] Story US-XXX
+[隱性需求] Story US-#N
 發現的隱性期待：{使用者期待什麼？}
 建議補充至 AC：{具體可測試的 AC 描述}
 非功能屬性類別：{freshness / completeness / performance / accessibility / reliability / security}
@@ -93,7 +93,7 @@ QA 在 Sprint Planning Round 3 驗收 AC 時，**必須**針對每個 Story 檢�
 ### 輸出格式
 
 ```
-[SDD 引用檢查] Story US-XXX
+[SDD 引用檢查] Story US-#N
   Related SDDs：SDD-000 §3, SDD-001 §2
   AC 中 SDD 一致性條件：{有 / 缺失}
   結果：PASS / NEEDS_REVISION

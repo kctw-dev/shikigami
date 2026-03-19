@@ -31,7 +31,8 @@ requiredTools:
 /shoot                    # 自動抓取模式（依優先順序自動選取任務）
 /shoot "任務描述"          # 直接描述模式（以文字作為任務標題）
 /shoot #N                 # GitHub Issue 模式（執行指定 Issue）
-/shoot US-XX              # Backlog Story 模式（執行指定 Story）
+/shoot US-#N              # Backlog Story 模式（執行指定 Story，如 US-#312）
+/shoot US-XX              # Backlog Story 模式（向後相容舊格式）
 ```
 
 ### 參數說明
@@ -41,7 +42,8 @@ requiredTools:
 | `/shoot`（無參數） | 自動抓取模式：依三層優先順序選取任務 |
 | `/shoot "描述"` | 直接描述模式：以引號內文字為任務標題直接執行 |
 | `/shoot #N` | GitHub Issue 模式：透過 `gh issue view #N` 取得 Issue 內容執行 |
-| `/shoot US-XX` | Backlog Story 模式：優先從 GitHub Issues 查詢對應 Story，若無結果則 fallback 至 `docs/prd/PRODUCT_BACKLOG.md` |
+| `/shoot US-#N` | Backlog Story 模式：優先從 GitHub Issues 查詢對應 Story，若無結果則 fallback 至 `docs/prd/PRODUCT_BACKLOG.md` |
+| `/shoot US-XX` | Backlog Story 模式（舊格式，向後相容，同上） |
 
 ---
 
@@ -87,7 +89,7 @@ fi
   - bug label 無 open Issue
   - retro-action label 無 open Issue
   - PRODUCT_BACKLOG.md 無 Size=S Story
-請改用 /shoot "描述"、/shoot #N 或 /shoot US-XX 指定任務。
+請改用 /shoot "描述"、/shoot #N 或 /shoot US-#N 指定任務。
 ```
 
 ---
@@ -136,19 +138,19 @@ gh issue view N --json number,title,body
 
 ## 6. Backlog Story 模式（AC4）
 
-`/shoot US-XX` 優先從 GitHub Issues 查詢對應 Story，若無結果則 fallback 至 `docs/prd/PRODUCT_BACKLOG.md`。
+`/shoot US-#N`（或舊格式 `/shoot US-XX`）優先從 GitHub Issues 查詢對應 Story，若無結果則 fallback 至 `docs/prd/PRODUCT_BACKLOG.md`。
 
 ### 查詢優先序
 
-1. **優先**：使用 `gh issue list` 搜尋 title 包含 US-XX 的 Issue
+1. **優先**：使用 `gh issue list` 搜尋 title 包含 US-#N 的 Issue
 2. **Fallback**：若 GitHub Issues 無結果，讀取 `docs/prd/PRODUCT_BACKLOG.md`（輸出警告）
 3. **兩者皆查無結果**：輸出錯誤並終止
 
 ### Story ID 比對邏輯
 
 ```bash
-# Step 1：優先查詢 GitHub Issues（搜尋 title 包含 US-XX 的 backlog-item Issue）
-STORY_ID="US-XX"  # 替換為實際 Story ID，如 US-78
+# Step 1：優先查詢 GitHub Issues（搜尋 title 包含 US-#N 的 backlog-item Issue）
+STORY_ID="US-#312"  # 替換為實際 Story ID，如 US-#312（舊格式 US-78 也支援）
 ISSUES=$(gh issue list --label "type: backlog-item" --state open \
   --json number,title,body --limit 200 2>/dev/null)
 
@@ -178,15 +180,15 @@ else
 fi
 ```
 
-Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
+Story ID 需**精確比對**（`US-#N` 格式優先，也支援舊格式 `US-XX`，大小寫不敏感）。
 
 ### 錯誤處理
 
 | 情境 | 處理方式 |
 |------|----------|
 | GitHub Issues 無結果，fallback 至 PRODUCT_BACKLOG.md | 輸出 `[WARN] 從歷史快照讀取：docs/prd/PRODUCT_BACKLOG.md` 並繼續執行 |
-| GitHub Issues 無結果且 PRODUCT_BACKLOG.md 也找不到 | 輸出 `[ERROR] 找不到 Story US-XX` 並終止，exit code 非 0 |
-| PRODUCT_BACKLOG.md 不存在（fallback 時） | 輸出 `[ERROR] 找不到 Story US-XX` 並終止，exit code 非 0 |
+| GitHub Issues 無結果且 PRODUCT_BACKLOG.md 也找不到 | 輸出 `[ERROR] 找不到 Story US-#N` 並終止，exit code 非 0 |
+| PRODUCT_BACKLOG.md 不存在（fallback 時） | 輸出 `[ERROR] 找不到 Story US-#N` 並終止，exit code 非 0 |
 | gh CLI 未認證 | 輸出 `[ERROR] gh CLI 未認證，請執行 gh auth login` 並終止，exit code 非 0 |
 
 ---
@@ -203,7 +205,7 @@ Story ID 需**精確比對**（`US-XX` 格式，大小寫不敏感）。
         |
         v
 [步驟 1.1] Claim Issue（US-312，有 GitHub Issue number 時）
-  若任務來源為 #N 或 US-XX（可對應 Issue），執行：
+  若任務來源為 #N 或 US-#N（可對應 Issue），執行：
   bash hooks/claim-issue.sh <issue_number>
   |-- [CLAIM-OK]      --> 繼續執行（已取得 issue 鎖）
   |-- [CLAIM-BLOCKED] --> 輸出 [WARN]，繼續執行（不阻塞 shoot）
@@ -843,7 +845,7 @@ CRITICAL/HIGH 阻擋時：
 
 | 日期 | 來源 | 標題 | 結果 | commit hash |
 |------|------|------|------|-------------|
-| YYYY-MM-DD | auto/direct/#N/US-XX | 任務標題 | PASS | abc1234 |
+| YYYY-MM-DD | auto/direct/#N/US-#N | 任務標題 | PASS | abc1234 |
 ```
 
 **欄位說明**：
@@ -851,7 +853,7 @@ CRITICAL/HIGH 阻擋時：
 | 欄位 | 格式 | 說明 |
 |------|------|------|
 | 日期 | `YYYY-MM-DD` | 任務完成日期 |
-| 來源 | `auto` / `direct` / `#N` / `US-XX` | 任務來源類型 |
+| 來源 | `auto` / `direct` / `#N` / `US-#N` | 任務來源類型 |
 | 標題 | 原始任務文字 | 完整保留，不截斷 |
 | 結果 | `PASS` / `FAIL` | 執行結果（FAIL 時不寫入） |
 | commit hash | 7 碼 short hash | `shoot:` commit 的 hash |
@@ -867,7 +869,7 @@ CRITICAL/HIGH 阻擋時：
 
 | 日期 | 標題 | Issue/Story | commit hash |
 |------|------|-------------|-------------|
-| YYYY-MM-DD | 任務標題 | #N 或 US-XX 或 — | abc1234 |
+| YYYY-MM-DD | 任務標題 | #N 或 US-#N 或 — | abc1234 |
 ```
 
 若「短衝記錄」區塊不存在，在 `PROJECT_BOARD.md` 末尾新增此區塊。

@@ -45,7 +45,7 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 ```markdown
 | Story ID | 標題 | 估點 | AC 確認結果 | 獨立性評估 |
 |----------|------|------|------------|-----------|
-| US-XX    | ...  | M    | PASS / 待確認 | 獨立 / 與 US-YY 衝突（同修改 path/to/file） |
+| US-#N    | ...  | M    | PASS / 待確認 | 獨立 / 與 US-#M 衝突（同修改 path/to/file） |
 ```
 
 ---
@@ -131,9 +131,9 @@ PO Round 2 回傳的 Story 清單，其 Story ID 與標題欄位必須與 Round 
 [DRIFT-ALERT] PO Round 2 輸出偏離 Round 1，要求 PO 重新派遣。
 
 偏離項目：
-- US-XX：標題被改寫（Round 1：「原始標題」→ Round 2：「改寫後標題」）
-- US-YY：AC 被刪除（Round 1 有 3 條 AC，Round 2 僅有 2 條）
-- US-ZZ：Story ID 不符（Round 2 出現 Round 1 未選取的 ID）
+- US-#N：標題被改寫（Round 1：「原始標題」→ Round 2：「改寫後標題」）
+- US-#M：AC 被刪除（Round 1 有 3 條 AC，Round 2 僅有 2 條）
+- US-#K：Story ID 不符（Round 2 出現 Round 1 未選取的 ID）
 
 請 PO 重新派遣，確保 Round 2 Story 清單與 Round 1 完全一致後再繼續。
 ```

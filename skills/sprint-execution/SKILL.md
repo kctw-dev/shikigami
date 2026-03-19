@@ -701,7 +701,7 @@ Sprint Backlog 還有 Story？
 
    - **provider = gemini**：使用 Bash 直接呼叫 Gemini CLI，以 stdin pipe 傳入 `story-lifecycle-prompt.md` 內容與 Story 參數。Gemini CLI 為原生 agent，具備完整工具能力，適用所有 Story 類型。
 
-   - `story_id`：Story 識別碼（如 `US-XX`）
+   - `story_id`：Story 識別碼（如 `US-#312`）
    - `sprint_file`：`docs/sprints/sprint_N.md`（Story AC 與完整需求）
    - `project_board`：`docs/PROJECT_BOARD.md`
    - `related_adrs`：相關 ADR 路徑清單（如 `docs/adr/ADR-XXX.md`）
