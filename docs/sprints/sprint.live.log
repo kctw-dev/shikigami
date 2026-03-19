@@ -99,3 +99,7 @@
 [02:45:54] [US-#317] ADR-024 建立完成，開始修改 session-start hook
 [02:48:03] [US-#317] Phase 2 實作完成，全部測試 PASS，開始 commit
 [02:48:58] [US-#317] Phase 2 完成：所有 AC PASS，結果寫入 subagent-results/US-317.md
+[02:52:13] [Sprint 107 Review] 開始執行 Sprint Review + Retrospective
+[02:52:30] [Sprint 107 Review] §2.6 Issue 狀態回寫 — #318 已關閉，#317 保持 open（Phase 3 未做）
+[02:52:45] [Sprint 107 Review] bump v0.76.0 → v0.76.1（patch，AI 團隊識別碼統一 + 出勤時數可視化）
+[02:53:00] [Sprint 107 Review] COMPLETE — Velocity 4pts，完成率 100%，DISPUTE 0%，外部抽樣 50%（1/2 CONFIRM）
