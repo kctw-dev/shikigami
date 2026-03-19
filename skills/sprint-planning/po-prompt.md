@@ -72,6 +72,7 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 
 ```
 1. 執行 git pull（同步最新狀態，取得其他 session 已 commit 的 sprint 文件）
+   失敗時：輸出 `[WARN] git pull 失敗，繼續使用本地狀態`，繼續後續流程（不阻塞）
 1.5 執行 Sprint Planning Claim（US-312）：
    bash hooks/claim-issue.sh "sprint-${next_N}-planning"
    [CLAIM-OK]      → 繼續（已取得 planning 鎖）
@@ -79,6 +80,7 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
    claim 失敗（git push 失敗）→ 輸出 [WARN]，繼續執行（保守策略）
 2. 掃描 docs/sprints/ 取得所有 sprint_N.md 的最大編號 max_N
    指令：ls docs/sprints/sprint_*.md 2>/dev/null | grep -oP 'sprint_\K\d+' | sort -n | tail -1
+   空目錄 fallback：若上述指令無輸出（目錄為空），則 `max_N=${max_N:-0}`（fallback 為 0，不報錯）
 3. 計算下一個 Sprint 編號：next_N = max_N + 1
 4. 檢查 docs/sprints/sprint_{next_N}.md 是否已存在：
    - 若不存在 → 使用此編號，繼續建立文件
