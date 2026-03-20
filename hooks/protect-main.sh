@@ -14,6 +14,7 @@
 #        docs/sprints/**（含 sprint-checkpoint.json、sprint.live.log、subagent-results/）
 #        docs/PROJECT_BOARD.md
 #        docs/attendance/**（出勤紀錄，ADR-024 決策）
+#        docs/exploration/**（探索紀錄，ADR-025 決策）
 #
 # 使用方式：由 hooks.json PreToolUse hook 呼叫
 #   CLAUDE_TOOL_INPUT（JSON）提供 command 欄位
@@ -107,6 +108,7 @@ EXEMPT_PATTERNS=(
   "^docs/sprints/"
   "^docs/PROJECT_BOARD\.md$"
   "^docs/attendance/"
+  "^docs/exploration/"
 )
 
 # 取得 staged/committed 檔案清單
@@ -156,6 +158,7 @@ echo "  豁免清單（可直推 main）："
 echo "    - docs/sprints/**（含 sprint-checkpoint.json、sprint.live.log、subagent-results/）"
 echo "    - docs/PROJECT_BOARD.md"
 echo "    - docs/attendance/**（出勤紀錄，ADR-024）"
+echo "    - docs/exploration/**（探索紀錄，ADR-025）"
 echo "    - refs/claims/ push（#312 機制）"
 echo "    - tag push（--tags 或 v* 格式）"
 exit 1

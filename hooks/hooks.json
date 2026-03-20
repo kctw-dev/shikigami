@@ -26,6 +26,16 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "WebSearch|WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/exploration-record.sh'",
+            "async": true
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
