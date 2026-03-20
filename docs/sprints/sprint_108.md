@@ -3,7 +3,7 @@
 **Sprint Goal**：修復出勤紀錄跨機器 conflict + 落地探索紀錄收集
 **日期**：2026-03-20
 **容量**：4 points
-**狀態**：進行中
+**狀態**：已完成
 
 ## Sprint Backlog
 
