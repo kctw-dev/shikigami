@@ -9,8 +9,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| INFRA：出勤紀錄 per-session + 結算 | #319 | M | 2 | 待開始 |
-| FEATURE：探索紀錄收集（#317 P3） | #317 | M | 2 | 待開始 |
+| INFRA：出勤紀錄 per-session + 結算 | #319 | M | 2 | 完成 |
+| FEATURE：探索紀錄收集（#317 P3） | #317 | M | 2 | 完成 |
 
 ## Acceptance Criteria
 
