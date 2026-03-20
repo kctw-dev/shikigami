@@ -70,7 +70,8 @@ Shikigami 注入 8 個角色，覆蓋產品從**探索到上線**的完整流程
 - **Definition**：Backlog 管理、Sprint Planning、架構決策（ADR）
 - **Delivery**：TDD 開發、QA 雙階段審查、Security 掃描、SRE 部署
 - **Design**：UI/UX Designer 透過 Figma MCP 執行設計，Vision Critic 自審視覺品質
-- **多 Session 協調**：三層鎖機制（flock 本地鎖 + git refs 遠端鎖 + GitHub Issue 展示層），防止跨 session 重複領取 Issue
+- **多 Session 協調**：跨機器多團隊並行開發 — Issue 級 claim + 檔案級鎖定 + Session crash 斷點續跑 + PR-based code review
+- **績效可視化**：會議紀錄、出勤時數、探索紀錄自動收集，`/performance-dashboard` 一指令查看當日工作成果
 
 角色之間**互相制衡**，不是 8 個獨立助手。**不需要記指令**，用自然語言說你要做什麼，Scrum Master 自動調度。
 
