@@ -103,3 +103,8 @@
 [02:52:30] [Sprint 107 Review] §2.6 Issue 狀態回寫 — #318 已關閉，#317 保持 open（Phase 3 未做）
 [02:52:45] [Sprint 107 Review] bump v0.76.0 → v0.76.1（patch，AI 團隊識別碼統一 + 出勤時數可視化）
 [02:53:00] [Sprint 107 Review] COMPLETE — Velocity 4pts，完成率 100%，DISPUTE 0%，外部抽樣 50%（1/2 CONFIRM）
+[09:47:22] [US-#319] Step 1: Writing test first (TDD)
+[09:48:11] [US-#319] Step 2: Creating attendance-settle.sh
+[09:49:29] [US-#319] Step 3: Updating ADR-024 with Amendment
+[09:50:08] [US-#319] Step 4: Running validation scripts
+[09:50:39] [US-#319] Step 5: Committing

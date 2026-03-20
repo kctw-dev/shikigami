@@ -1,11 +1,11 @@
 # ADR-024：出勤時數機制 — SessionStart/End Hook JSONL 紀錄
 
-**狀態**：Accepted
+**狀態**：Accepted（含 Amendment：US-#319 per-session 演化）
 **日期**：2026-03-20
 **決策者**：Architect（技術選型）+ QA Decision Challenger
 **關聯 ADR**：ADR-007（Story Lifecycle Subagent）、ADR-022（檔案級鎖定）、ADR-023（PR-based Git Flow）
-**關聯 Issue**：#317（出勤時數 Phase 2）
-**觸發來源**：Sprint 107 — 出勤時數可視化需求
+**關聯 Issue**：#317（出勤時數 Phase 2）、#319（出勤紀錄跨機器修復）
+**觸發來源**：Sprint 107 — 出勤時數可視化需求；Sprint 108 — 跨機器 conflict 修復
 
 ---
 
@@ -116,3 +116,45 @@ Lock 檔案位置：`/tmp/shikigami-attendance-${REPO_FP}.lock`
 - **不使用 git commit 記錄**：出勤紀錄是高頻操作，每次 session 產生 2 個 commit，會污染 history
 - **不使用 MCP server**：對於簡單的 append 操作，MCP server 過度設計
 - **不加入 .gitignore**：出勤紀錄需要版控（Sprint 結束批量 commit），不應 ignore
+
+---
+
+## Amendment：US-#319 — Per-Session 演化（Sprint 108）
+
+**日期**：2026-03-20
+**觸發**：多機器 Git merge conflict（多個機器同時 append 同一個 `YYYY-MM-DD.jsonl`）
+
+### 問題
+
+原始設計使用每日共用檔案（`YYYY-MM-DD.jsonl`），當不同機器的 session 同時進行時，Git merge 產生 conflict，需要手動解決。
+
+### 演化決策
+
+**從 per-day 改為 per-session 檔案**：
+
+| 項目 | 原始設計（US-317）| 演化設計（US-319）|
+|------|------|------|
+| 出勤檔名 | `YYYY-MM-DD.jsonl`（共用） | `YYYY-MM-DD-session-<session_id>.jsonl`（獨立）|
+| 併發寫入 | flock 防止衝突 | 天然隔離，無需 flock |
+| 跨機器 | 同名檔案 → merge conflict | 不同 session_id → 不同檔案 |
+| 結算 | 直接讀取單一檔案 | `attendance-settle.sh` 合併為 summary |
+| session_id=unknown | 覆寫同一檔案 | `unknown-$(date +%s)` 避免覆寫 |
+
+### 新增元件
+
+- **`hooks/attendance-settle.sh`**：結算腳本，掃描 `YYYY-MM-DD-session-*.jsonl` 並合併為 `YYYY-MM-DD.summary.jsonl`（依 timestamp 排序，保留原始 per-session 檔案）
+- **`tests/test-attendance-settle.sh`**：TDD 測試腳本
+
+### 目錄結構（演化後）
+
+```
+docs/attendance/
+├── 2026-03-20-session-abc123.jsonl   # session abc123 的原始紀錄
+├── 2026-03-20-session-def456.jsonl   # session def456 的原始紀錄（另一台機器）
+├── 2026-03-20.summary.jsonl          # 結算後的合併摘要（by timestamp）
+└── ...
+```
+
+### protect-main.sh
+
+`^docs/attendance/` 已涵蓋新檔名格式，無需修改。

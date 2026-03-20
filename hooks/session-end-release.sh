@@ -167,20 +167,25 @@ if [[ -d "$META_DIR" ]]; then
   fi
 fi
 
-# ── US-317 Phase 2：出勤簽退（checkout）──────────────────────────────────
-# AC2：寫入 checkout 紀錄到 docs/attendance/YYYY-MM-DD.jsonl
+# ── US-317 Phase 2 / US-319：出勤簽退（checkout）──────────────────────────
+# US-319: 改用 per-session 檔案（YYYY-MM-DD-session-<session_id>.jsonl）
+# AC2：寫入 checkout 紀錄到 docs/attendance/YYYY-MM-DD-session-<session_id>.jsonl
 # AC3：紀錄含 session_id, role, event, timestamp, repo
-# AC4：flock 保護多 session 併發寫入
 ATTENDANCE_CHECKOUT_DIR="${ATTENDANCE_DIR:-${SCRIPT_DIR}/../docs/attendance}"
 ATTENDANCE_CHECKOUT_DIR="$(cd "${ATTENDANCE_CHECKOUT_DIR}" 2>/dev/null && pwd || echo "${SCRIPT_DIR}/../docs/attendance")"
 mkdir -p "$ATTENDANCE_CHECKOUT_DIR" 2>/dev/null || true
 
 ATTEND_SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+# US-319: session_id=unknown 時用 unknown-$(date +%s) 避免覆寫
+if [[ "$ATTEND_SESSION_ID" == "unknown" ]]; then
+  ATTEND_SESSION_ID="unknown-$(date +%s)"
+fi
 ATTEND_ROLE="scrum-master"
 ATTEND_EVENT="checkout"
 ATTEND_TIMESTAMP="$(date '+%Y-%m-%dT%H:%M:%S%z' 2>/dev/null || echo 'unknown')"
 ATTEND_TODAY="$(date '+%Y-%m-%d' 2>/dev/null || echo 'unknown')"
-ATTEND_JSONL="${ATTENDANCE_CHECKOUT_DIR}/${ATTEND_TODAY}.jsonl"
+# US-319: per-session 檔案（YYYY-MM-DD-session-<session_id>.jsonl）
+ATTEND_JSONL="${ATTENDANCE_CHECKOUT_DIR}/${ATTEND_TODAY}-session-${ATTEND_SESSION_ID}.jsonl"
 
 # 取得 repo 名稱
 ATTEND_REPO_NAME=$(git remote get-url origin 2>/dev/null \
@@ -188,15 +193,10 @@ ATTEND_REPO_NAME=$(git remote get-url origin 2>/dev/null \
   || basename "$REPO_ROOT" 2>/dev/null \
   || echo "unknown")
 
-ATTENDANCE_LOCK="/tmp/shikigami-attendance-${REPO_FP}.lock"
-
-# flock 保護 JSONL append（AC4：多 session 併發安全）
-(
-  flock -x -w 5 200 || true
-  printf '{"session_id":"%s","role":"%s","event":"%s","timestamp":"%s","repo":"%s"}\n' \
-    "$ATTEND_SESSION_ID" "$ATTEND_ROLE" "$ATTEND_EVENT" "$ATTEND_TIMESTAMP" "$ATTEND_REPO_NAME" \
-    >> "$ATTEND_JSONL" 2>/dev/null || true
-) 200>"$ATTENDANCE_LOCK" || true
+# US-319: per-session 檔案天然隔離，無需 flock（每個 session 寫自己的檔案）
+printf '{"session_id":"%s","role":"%s","event":"%s","timestamp":"%s","repo":"%s"}\n' \
+  "$ATTEND_SESSION_ID" "$ATTEND_ROLE" "$ATTEND_EVENT" "$ATTEND_TIMESTAMP" "$ATTEND_REPO_NAME" \
+  >> "$ATTEND_JSONL" 2>/dev/null || true
 
 echo "[ATTENDANCE] checkout 紀錄已寫入：$ATTEND_JSONL"
 
