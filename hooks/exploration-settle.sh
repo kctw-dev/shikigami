@@ -66,7 +66,7 @@ done
 
 # 依 timestamp 欄位排序（ISO 8601 字典序 = 時間序）
 SUMMARY_FILE="${EXPLORATION_DIR}/${TARGET_DATE}.summary.jsonl"
-sort -t'"' -k8 "$COMBINED_TMP" > "$SUMMARY_FILE" 2>/dev/null || \
+sort -t'"' -k16 "$COMBINED_TMP" > "$SUMMARY_FILE" 2>/dev/null || \
   cp "$COMBINED_TMP" "$SUMMARY_FILE"
 
 SUMMARY_LINES=$(wc -l < "$SUMMARY_FILE" | tr -d ' ')

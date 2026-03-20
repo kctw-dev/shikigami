@@ -69,7 +69,7 @@ done
 SUMMARY_FILE="${ATTENDANCE_DIR}/${TARGET_DATE}.summary.jsonl"
 
 # 使用 sort 對 timestamp 欄位排序（JSON 中 timestamp 格式 ISO 8601 字典序 = 時間序）
-sort -t'"' -k8 "$COMBINED_TMP" > "$SUMMARY_FILE" 2>/dev/null || \
+sort -t'"' -k16 "$COMBINED_TMP" > "$SUMMARY_FILE" 2>/dev/null || \
   cp "$COMBINED_TMP" "$SUMMARY_FILE"
 
 SUMMARY_LINES=$(wc -l < "$SUMMARY_FILE" | tr -d ' ')

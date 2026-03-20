@@ -108,3 +108,10 @@
 [09:49:29] [US-#319] Step 3: Updating ADR-024 with Amendment
 [09:50:08] [US-#319] Step 4: Running validation scripts
 [09:50:39] [US-#319] Step 5: Committing
+[09:52:11] [US-#317] Phase 3 Start — 探索紀錄收集實作開始
+[09:53:26] [US-#317] Phase 3 — TDD 紅燈 commit 完成，開始實作
+[09:55:48] [US-#317] Phase 3 — 實作完成，開始寫 subagent 結果
+[09:56:38] [US-#317] Phase 3 完成 — AC1~AC5 全部 PASS，22 個測試，3 個 commits
+[10:13:19] [retro-sort-fix] TDD Step 1 PASS: k8 排序錯誤已確認，k16 為正確 sort key
+[10:13:34] [retro-sort-fix] TDD Step 2: 套用 k16 修改至兩個 settle 腳本
+[10:13:57] [retro-sort-fix] TDD Step 3 ALL PASS: attendance-settle.sh 和 exploration-settle.sh 排序均正確
