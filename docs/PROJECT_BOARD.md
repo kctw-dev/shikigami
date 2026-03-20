@@ -1,13 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-20（Sprint 107 Planning 完成）
-**當前 Sprint**：Sprint 107（進行中）
+**最後更新**：2026-03-20（Sprint 108 Planning 完成）
+**當前 Sprint**：Sprint 108（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 107](sprints/sprint_107.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 108](sprints/sprint_108.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 107（進行中）
+## Sprint 108（進行中）
+
+> Sprint Goal：修復出勤紀錄跨機器 conflict + 落地探索紀錄收集
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| INFRA：出勤紀錄 per-session + 結算 | #319 | M | 2 | 待開始 |
+| FEATURE：探索紀錄收集（#317 P3） | #317 | M | 2 | 待開始 |
+
+**Sprint 容量**：4 points
+
+---
+
+## Sprint 107（完成）
 
 > Sprint Goal：落地 AI 團隊識別碼統一規範與出勤時數可視化
 
@@ -17,6 +30,11 @@
 | FEATURE：出勤時數 — 角色簽到/簽退（#317 P2） | #317 | M | 2 | 完成 |
 
 **Sprint 容量**：4 points
+
+## Sprint 107 統計
+- Velocity：4 points
+- 完成率：100%（完成 2 / 計畫 2）
+- 日期：2026-03-20
 
 ---
 
