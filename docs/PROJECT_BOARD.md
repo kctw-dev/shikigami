@@ -1,13 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-20（Sprint 108 Planning 完成）
-**當前 Sprint**：Sprint 108（進行中）
+**最後更新**：2026-03-20（Sprint 109 Planning 完成）
+**當前 Sprint**：Sprint 109（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 108](sprints/sprint_108.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 109](sprints/sprint_109.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 108（進行中）
+## Sprint 109（進行中）
+
+> Sprint Goal：完成 AI 團隊績效儀表板，一指令查看當日工作成果
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| FEATURE：績效儀表板 Skill | #317 | M | 3 | 進行中 |
+| INFRA：settle sort key 修正 | retro | S | 1 | 進行中 |
+
+**Sprint 容量**：4 points
+
+---
+
+## Sprint 108（完成）
 
 > Sprint Goal：修復出勤紀錄跨機器 conflict + 落地探索紀錄收集
 
