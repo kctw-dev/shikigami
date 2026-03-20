@@ -9,8 +9,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| FEATURE：績效儀表板 Skill | #317 | M | 3 | 進行中 |
-| INFRA：settle sort key 修正 | retro | S | 1 | 進行中 |
+| FEATURE：績效儀表板 Skill | #317 | M | 3 | 完成 |
+| INFRA：settle sort key 修正 | retro | S | 1 | 完成 |
 
 ## Acceptance Criteria
 
