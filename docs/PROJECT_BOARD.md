@@ -1,13 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-20（Sprint 109 Planning 完成）
-**當前 Sprint**：Sprint 109（進行中）
+**最後更新**：2026-03-21（Sprint 110 Planning 完成）
+**當前 Sprint**：Sprint 110（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 109](sprints/sprint_109.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 110](sprints/sprint_110.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 109（進行中）
+## Sprint 110（進行中）
+
+> Sprint Goal：統一框架共用檔案的跨機器安全模式 — 所有 append-only log 改為 per-session + 結算
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| INFRA：框架共用檔案跨機器 conflict 修復 | #322 | L | 5 | 待開始 |
+
+**Sprint 容量**：5 points
+
+---
+
+## Sprint 109（完成）
 
 > Sprint Goal：完成 AI 團隊績效儀表板，一指令查看當日工作成果
 
