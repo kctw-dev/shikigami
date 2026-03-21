@@ -6,7 +6,7 @@
 #   - 攔截 git push origin HEAD:main
 #   - 攔截當前在 main branch 時執行的裸 git push
 #
-# 豁免清單（ADR-023 決策 2 + 決策 3，US-315 AC-2/AC-5/AC-6；US-317 P2 AC-5；US-322 B2）：
+# 豁免清單（ADR-023 決策 2 + 決策 3，US-315 AC-2/AC-5/AC-6；US-317 P2 AC-5；US-322 B2；US-321 AC-5）：
 #   1. push 目標為 refs/claims/（#312 機制）
 #   2. push --tags 或 push origin v*（版本標籤）
 #   3. 所有 staged/committed 檔案均屬豁免路徑（狀態文件，ADR-023 決策 3）
@@ -20,6 +20,7 @@
 #        docs/km/retro-log/**（Retro Log per-session，US-322 AC-4）
 #        docs/km/quality-decisions/**（Quality Decisions per-session，US-322 AC-5）
 #        docs/km/tech-debt/**（Tech Debt per-session，US-322 AC-6）
+#        docs/cruise-logs/**（Cruise Mode per-session log，US-321 AC-5）
 #
 # 使用方式：由 hooks.json PreToolUse hook 呼叫
 #   CLAUDE_TOOL_INPUT（JSON）提供 command 欄位
@@ -120,6 +121,7 @@ EXEMPT_PATTERNS=(
   "^docs/km/retro-log/"
   "^docs/km/quality-decisions/"
   "^docs/km/tech-debt/"
+  "^docs/cruise-logs/"
 )
 
 # 取得 staged/committed 檔案清單
@@ -176,6 +178,7 @@ echo "    - docs/km/metrics-log/**（Metrics Log per-session，US-322 AC-3）"
 echo "    - docs/km/retro-log/**（Retro Log per-session，US-322 AC-4）"
 echo "    - docs/km/quality-decisions/**（Quality Decisions per-session，US-322 AC-5）"
 echo "    - docs/km/tech-debt/**（Tech Debt per-session，US-322 AC-6）"
+echo "    - docs/cruise-logs/**（Cruise Mode per-session log，US-321 AC-5）"
 echo "    - refs/claims/ push（#312 機制）"
 echo "    - tag push（--tags 或 v* 格式）"
 exit 1
