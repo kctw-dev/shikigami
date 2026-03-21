@@ -13,7 +13,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| FEATURE：Cruise Mode Phase 1 — PO 巡邏 + SRE 巡檢自動巡航 | #321 | L | 5 | 進行中 |
+| FEATURE：Cruise Mode Phase 1 — PO 巡邏 + SRE 巡檢 | #321 | L | 5 | 完成 |
 
 **Sprint 容量**：5 points
 
