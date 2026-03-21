@@ -1,13 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-21（Sprint 110 Planning 完成）
-**當前 Sprint**：Sprint 110（進行中）
+**最後更新**：2026-03-21（Sprint 111 Planning 完成）
+**當前 Sprint**：Sprint 111（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 110](sprints/sprint_110.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 111](sprints/sprint_111.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 110（進行中）
+## Sprint 111（進行中）
+
+> Sprint Goal：落地 Cruise Mode Phase 1 — PO 巡邏 + SRE 巡檢自動巡航
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| FEATURE：Cruise Mode Phase 1 — PO 巡邏 + SRE 巡檢自動巡航 | #321 | L | 5 | 進行中 |
+
+**Sprint 容量**：5 points
+
+---
+
+## Sprint 110（完成）
 
 > Sprint Goal：統一框架共用檔案的跨機器安全模式 — 所有 append-only log 改為 per-session + 結算
 
