@@ -773,6 +773,18 @@ Sprint Backlog 還有 Story？
    **更新完成後，立即 git commit + push**（僅 commit `PROJECT_BOARD.md` 與 `sprint_N.md`；`Metrics_Log.md` 與 `Retrospective_Log.md` 由 sprint-review 負責。commit message 格式：`docs: Sprint N — [Story ID] 狀態更新為已完成`）。
    > **豁免直推**：`PROJECT_BOARD.md` 與 `sprint_N.md` 屬於狀態文件豁免清單（ADR-023 決策 3，US-315 AC-5），允許直推 main，**不需要**建立 PR。
 
+   **Push Retry 機制（US-322 AC-7，多台機器並行保護）**：
+   `git push` 失敗時（exit code 非 0），執行 `git pull --rebase` 後重試，最多 3 次。
+   ```bash
+   # Push with retry（最多 3 次）
+   for _retry in 1 2 3; do
+     git push && break
+     echo "[PUSH-RETRY] push 失敗（第 ${_retry} 次），執行 git pull --rebase..."
+     git pull --rebase || { echo "[PUSH-RETRY] rebase 失敗，中止"; break; }
+   done
+   ```
+   3 次均失敗時輸出 `[PUSH-RETRY-FAIL]` 並中止（不阻塞主流程，但記錄 WARN）。
+
    git push 完成後，**寫入 Sprint Checkpoint**（§2.12）：更新 `docs/sprints/sprint-checkpoint.json`，記錄 Sprint 編號、所有 Story 狀態（completed/in-progress/pending）、completed_at 時間戳（僅本 Story），以及 `updated_at`。寫入失敗時靜默略過（`[CHECKPOINT-WRITE-WARN]`），不阻塞主流程。
    > **Checkpoint 豁免**：`docs/sprints/sprint-checkpoint.json` 屬於狀態文件豁免清單，允許直推 main（ADR-023 決策 4，US-315 AC-6）。
 
@@ -1201,18 +1213,24 @@ Sprint Execution 支援 **Live Log Streaming** 功能，讓使用者在另一個
 在另一個 terminal 視窗執行：
 
 ```bash
-tail -f docs/sprints/sprint.live.log
+# 監看當前 session 的 live log（路徑含 session ID）
+tail -f docs/sprints/live-log/$(date '+%Y-%m-%d')-session-${SESSION_ID:-unknown-*}.log
+
+# 或使用萬用字元觀看當日所有 session
+tail -f docs/sprints/live-log/$(date '+%Y-%m-%d')-session-*.log
 ```
 
 > **跨平台說明**：`tail -f` 在 Linux、macOS、WSL 均原生支援。Windows 原生環境需使用 Git Bash 或 WSL。
 
-### 日誌檔案路徑
+### 日誌檔案路徑（US-322 AC-2，per-session）
 
 ```
-docs/sprints/sprint.live.log
+docs/sprints/live-log/YYYY-MM-DD-session-<SESSION_ID>.log
 ```
 
-每次 Sprint 可覆蓋或輪替此檔案（執行前可手動清除舊日誌）。
+每個 session 寫入自己的 `.log` 檔案（天然隔離，多台機器無 conflict）。結算腳本 `hooks/live-log-settle.sh` 合併同日日誌為 `YYYY-MM-DD.summary.log`。
+
+每次 Sprint 可清除舊 session 檔案（保留 summary.log 歸檔）。
 
 ### 日誌格式範例
 

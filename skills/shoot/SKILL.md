@@ -836,15 +836,29 @@ CRITICAL/HIGH 阻擋時：
 
 每次 `/shoot` 成功完成後，同時更新以下兩份文件：
 
-### 9.1 docs/km/Shoot_Log.md
+### 9.1 docs/km/shoot-log/（per-session，US-322 AC-1）
 
-**格式**（Markdown 表格）：
+<!-- US-322 AC-1 — Shoot Log 改為 per-session + 結算 — Sprint 110 -->
+
+**路徑格式**：`docs/km/shoot-log/YYYY-MM-DD-session-<SESSION_ID>.md`
+
+每個 session 寫入自己的檔案（天然隔離，零 conflict）。`SESSION_ID` 來源：
+- 優先使用環境變數 `SESSION_ID`（Claude Code 注入）
+- 無環境變數時使用 `unknown-$(date +%s)` 作為備援
+
+**寫入指令**：
+```bash
+SESSION_ID="${SESSION_ID:-unknown-$(date +%s)}"
+TODAY="$(date '+%Y-%m-%d')"
+LOG_DIR="docs/km/shoot-log"
+mkdir -p "$LOG_DIR"
+LOG_FILE="${LOG_DIR}/${TODAY}-session-${SESSION_ID}.md"
+echo "| ${TODAY} | <來源> | <標題> | PASS | <hash> |" >> "$LOG_FILE"
+```
+
+**格式**（Markdown 表格列）：
 
 ```markdown
-## Shoot Log
-
-| 日期 | 來源 | 標題 | 結果 | commit hash |
-|------|------|------|------|-------------|
 | YYYY-MM-DD | auto/direct/#N/US-#N | 任務標題 | PASS | abc1234 |
 ```
 
@@ -858,7 +872,9 @@ CRITICAL/HIGH 阻擋時：
 | 結果 | `PASS` / `FAIL` | 執行結果（FAIL 時不寫入） |
 | commit hash | 7 碼 short hash | `shoot:` commit 的 hash |
 
-**Shoot_Log.md 不存在時**：自動建立，包含表格標題行。
+**結算腳本**：`hooks/shoot-log-settle.sh`（合併同日 per-session 檔案為 summary.md）
+
+**protect-main.sh 豁免**：`^docs/km/shoot-log/` 已加入豁免清單，允許直推 main。
 
 ### 9.2 docs/PROJECT_BOARD.md 短衝記錄
 
@@ -934,14 +950,15 @@ fi
 
 | 檔案路徑 | 建立時機 | 說明 |
 |---------|---------|------|
-| `docs/km/Shoot_Log.md` | 首次 `/shoot` 成功完成時 | 短衝記錄主日誌 |
+| `docs/km/shoot-log/YYYY-MM-DD-session-<ID>.md` | 每次 `/shoot` 成功完成時 | per-session 短衝記錄（US-322 AC-1） |
+| `docs/km/shoot-log/YYYY-MM-DD.summary.md` | 執行 `hooks/shoot-log-settle.sh` 時 | 當日結算彙整 |
 | `docs/km/archive/SHOOT_LOG_ARCHIVE.md` | 首次觸發歸檔時 | 超過 20 筆時的歸檔目標 |
 
 ---
 
 ## 12. Sprint Review 連動（AC7）
 
-`/sprint-review` 執行時，會掃描 `docs/km/Shoot_Log.md`，將 Sprint 期間的短衝記錄列入「Sprint 外完成項目」區塊。
+`/sprint-review` 執行時，會掃描 `docs/km/shoot-log/` 目錄下的 per-session 檔案與 summary.md，將 Sprint 期間的短衝記錄列入「Sprint 外完成項目」區塊。
 
 詳見 `skills/sprint-review/SKILL.md` 的相關段落。
 

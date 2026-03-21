@@ -11,10 +11,11 @@
 #   2. push --tags 或 push origin v*（版本標籤）
 #   3. 所有 staged/committed 檔案均屬豁免路徑（狀態文件，ADR-023 決策 3）
 #      豁免路徑：
-#        docs/sprints/**（含 sprint-checkpoint.json、sprint.live.log、subagent-results/）
+#        docs/sprints/**（含 sprint-checkpoint.json、live-log/、subagent-results/）
 #        docs/PROJECT_BOARD.md
 #        docs/attendance/**（出勤紀錄，ADR-024 決策）
 #        docs/exploration/**（探索紀錄，ADR-025 決策）
+#        docs/km/shoot-log/**（Shoot Log per-session，US-322 AC-1）
 #
 # 使用方式：由 hooks.json PreToolUse hook 呼叫
 #   CLAUDE_TOOL_INPUT（JSON）提供 command 欄位
@@ -109,6 +110,8 @@ EXEMPT_PATTERNS=(
   "^docs/PROJECT_BOARD\.md$"
   "^docs/attendance/"
   "^docs/exploration/"
+  "^docs/km/shoot-log/"
+  "^docs/sprints/live-log/"
 )
 
 # 取得 staged/committed 檔案清單
@@ -155,10 +158,12 @@ echo "    Sprint Story:  sprint-<N>/<story-id>   （例：sprint-102/US-315）"
 echo "    Shoot 任務:    shoot/<issue-or-desc>    （例：shoot/320）"
 echo "  流程：git checkout -b <branch> → commit → git push -u origin <branch> → gh pr create"
 echo "  豁免清單（可直推 main）："
-echo "    - docs/sprints/**（含 sprint-checkpoint.json、sprint.live.log、subagent-results/）"
+echo "    - docs/sprints/**（含 sprint-checkpoint.json、subagent-results/）"
+echo "    - docs/sprints/live-log/**（Live Log per-session，US-322 AC-2）"
 echo "    - docs/PROJECT_BOARD.md"
 echo "    - docs/attendance/**（出勤紀錄，ADR-024）"
 echo "    - docs/exploration/**（探索紀錄，ADR-025）"
+echo "    - docs/km/shoot-log/**（Shoot Log per-session，US-322 AC-1）"
 echo "    - refs/claims/ push（#312 機制）"
 echo "    - tag push（--tags 或 v* 格式）"
 exit 1

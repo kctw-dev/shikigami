@@ -417,14 +417,21 @@ commit + 取得 commit SHA
 
 ---
 
-### 步驟 8：Live Log — Story 開始執行（US-269）
+### 步驟 8：Live Log — Story 開始執行（US-269，US-322 AC-2）
 
 <!-- US-269 演示模式 Live Log Streaming — Sprint 99 -->
+<!-- US-322 AC-2 — Live Log 改為 per-session + 結算 — Sprint 110 -->
 
-在進入 doc_only/TDD 路徑判斷前，寫入 Story 開始執行日誌（可選，失敗時靜默忽略）：
+在進入 doc_only/TDD 路徑判斷前，先確定本 session 的 live log 路徑，再寫入 Story 開始執行日誌（可選，失敗時靜默忽略）：
 
 ```bash
-echo "[$(date +%H:%M:%S)] [${story_id}] 開始執行" >> docs/sprints/sprint.live.log 2>/dev/null || true
+# 建立 per-session live log 路徑（每個 session 使用獨立檔案，天然隔離）
+_SESSION_ID="${SESSION_ID:-unknown-$(date +%s)}"
+_LIVE_LOG_DIR="docs/sprints/live-log"
+mkdir -p "$_LIVE_LOG_DIR" 2>/dev/null || true
+LIVE_LOG_FILE="${_LIVE_LOG_DIR}/$(date '+%Y-%m-%d')-session-${_SESSION_ID}.log"
+
+echo "[$(date +%H:%M:%S)] [${story_id}] 開始執行" >> "$LIVE_LOG_FILE" 2>/dev/null || true
 ```
 
 ---
@@ -442,7 +449,7 @@ echo "[$(date +%H:%M:%S)] [${story_id}] 開始執行" >> docs/sprints/sprint.liv
 <!-- US-269 Live Log — TDD Red -->
 在進入 Red 階段時寫入日誌（可選，失敗時靜默忽略）：
 ```bash
-echo "[$(date +%H:%M:%S)] [${story_id}] TDD Red — 開始" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] TDD Red — 開始" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 ```
 
 <!-- US-240 TDD 測試可寫性檢查 — Sprint 88 -->
@@ -520,7 +527,7 @@ echo "[$(date +%H:%M:%S)] [${story_id}] TDD Red — 開始" >> docs/sprints/spri
 <!-- US-269 Live Log — TDD Green -->
 在進入 Green 階段時寫入日誌（可選，失敗時靜默忽略）：
 ```bash
-echo "[$(date +%H:%M:%S)] [${story_id}] TDD Green — 開始" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] TDD Green — 開始" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 ```
 
 <!-- US-195 API 契約 Hard Gate — Sprint 74 -->
@@ -551,7 +558,7 @@ echo "[$(date +%H:%M:%S)] [${story_id}] TDD Green — 開始" >> docs/sprints/sp
 <!-- US-269 Live Log — TDD Refactor -->
 在進入 Refactor 階段時寫入日誌（可選，失敗時靜默忽略）：
 ```bash
-echo "[$(date +%H:%M:%S)] [${story_id}] TDD Refactor — 開始" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] TDD Refactor — 開始" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 ```
 
 （Green / Refactor 步驟、Commit 規範、設計原則詳見 `developer-prompt.md`）
@@ -827,7 +834,7 @@ QA 視覺回歸確認：
 <!-- US-269 Live Log — Spec Compliance Review 開始 -->
 在進入 Spec Compliance Self-Review 前寫入日誌（可選，失敗時靜默忽略）：
 ```bash
-echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — 開始" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — 開始" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 ```
 
 <HARD-GATE>
@@ -844,9 +851,9 @@ echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — 開始" >> do
 審查完成後寫入結果日誌（可選，失敗時靜默忽略），依審查結論輸出對應訊息：
 ```bash
 # PASS 時：
-echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — PASS" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — PASS" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 # FAIL 時：
-echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — FAIL（修復循環）" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — FAIL（修復循環）" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 ```
 
 ### 修復閉環規則
@@ -862,7 +869,7 @@ echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — FAIL（修復
 <!-- US-269 Live Log — Code Quality Review 開始 -->
 在進入 Code Quality Self-Review 前寫入日誌（可選，失敗時靜默忽略）：
 ```bash
-echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — 開始" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — 開始" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 ```
 
 <HARD-GATE>
@@ -879,9 +886,9 @@ echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — 開始" >> docs/
 審查完成後寫入結果日誌（可選，失敗時靜默忽略），依審查結論輸出對應訊息：
 ```bash
 # PASS 時：
-echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — PASS" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — PASS" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 # FAIL 時：
-echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — FAIL（修復循環）" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — FAIL（修復循環）" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 ```
 
 ### 修復閉環規則
@@ -1563,11 +1570,11 @@ TC-4 觸發（當前 Story 連續 2 次 self-review FAIL）
 在執行暫存寫入前，先寫入最終結果日誌（可選，失敗時靜默忽略）：
 ```bash
 # PASS 時：
-echo "[$(date +%H:%M:%S)] [${story_id}] 結果：PASS" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] 結果：PASS" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 # FAIL 時：
-echo "[$(date +%H:%M:%S)] [${story_id}] 結果：FAIL" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] 結果：FAIL" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 # ESCALATE 時：
-echo "[$(date +%H:%M:%S)] [${story_id}] 結果：ESCALATE（${escalation_type}）" >> docs/sprints/sprint.live.log 2>/dev/null || true
+echo "[$(date +%H:%M:%S)] [${story_id}] 結果：ESCALATE（${escalation_type}）" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 ```
 
 ### §9.1 暫存寫入（回傳前必執行）
