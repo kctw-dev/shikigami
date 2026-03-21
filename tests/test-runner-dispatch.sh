@@ -166,6 +166,51 @@ assert_contains "$PROTECT_MAIN" "docs/sprints/" "AC-10: docs/sprints/ 路徑豁�
 
 # ---------------------------------------------------------------------------
 echo ""
+echo "=== TC-11：US-#324 AC-1 permission_level input 存在 ==="
+# ---------------------------------------------------------------------------
+
+assert_contains "$WORKFLOW" "permission_level" "US-324 AC-1: permission_level input 存在"
+assert_contains "$WORKFLOW" "low.*medium.*high|choices.*low|options.*low" "US-324 AC-1: permission_level choices (low/medium/high)"
+assert_contains "$WORKFLOW" "default.*medium|medium.*default" "US-324 AC-1: permission_level default medium"
+
+# ---------------------------------------------------------------------------
+echo ""
+echo "=== TC-12：US-#324 AC-2 case/switch 動態組裝 ALLOWED_TOOLS ==="
+# ---------------------------------------------------------------------------
+
+assert_contains "$WORKFLOW" "Resolve permission level|resolve.*permission|permission.*level" "US-324 AC-2: Resolve permission level step 存在"
+assert_contains "$WORKFLOW" "ALLOWED_TOOLS" "US-324 AC-2: ALLOWED_TOOLS 環境變數設定"
+assert_contains "$WORKFLOW" "case.*permission|esac" "US-324 AC-2: case/switch 邏輯存在"
+assert_contains "$WORKFLOW" "Read,Grep,Glob" "US-324 AC-2: low 等級唯讀工具集"
+# Sprint Execution step 改用 $ALLOWED_TOOLS（而非硬編碼）
+assert_contains "$WORKFLOW" '\$ALLOWED_TOOLS|\${ALLOWED_TOOLS}' "US-324 AC-2: Sprint Execution 使用 \$ALLOWED_TOOLS"
+
+# ---------------------------------------------------------------------------
+echo ""
+echo "=== TC-13：US-#324 AC-3 high 等級 approval gate step ==="
+# ---------------------------------------------------------------------------
+
+assert_contains "$WORKFLOW" "Stakeholder [Aa]pproval|approval.*gate|approval.*high|high.*approval" "US-324 AC-3: approval gate step 存在"
+assert_contains "$WORKFLOW" "SHIKIGAMI_APPROVERS" "US-324 AC-3: SHIKIGAMI_APPROVERS 允許清單"
+assert_contains "$WORKFLOW" "sleep 30" "US-324 AC-3: polling 間隔 30 秒"
+assert_contains "$WORKFLOW" "30.*\* 60|1800|30min|timeout.*30" "US-324 AC-3: 30 分鐘 timeout"
+assert_contains "$WORKFLOW" "approved" "US-324 AC-3: approved 判斷"
+assert_contains "$WORKFLOW" "rejected" "US-324 AC-3: rejected 判斷"
+assert_contains "$WORKFLOW" "exit 1" "US-324 AC-3: rejected/timeout 中止 Sprint"
+
+# ---------------------------------------------------------------------------
+echo ""
+echo "=== TC-14：US-#324 AC-4 ADR-027 Amendment 段落 ==="
+# ---------------------------------------------------------------------------
+
+ADR027="$REPO_ROOT/docs/adr/ADR-027-ci-permissions.md"
+assert_contains "$ADR027" "Amendment.*1|Amendment 1" "US-324 AC-4: ADR-027 Amendment 1 段落存在"
+assert_contains "$ADR027" "權限分層|permission.*level|#324" "US-324 AC-4: Amendment 含 #324 引用或分層說明"
+assert_contains "$ADR027" "low" "US-324 AC-4: Amendment 含 low 分層"
+assert_contains "$ADR027" "high" "US-324 AC-4: Amendment 含 high 分層"
+
+# ---------------------------------------------------------------------------
+echo ""
 echo "=== 測試結果摘要 ==="
 # ---------------------------------------------------------------------------
 
@@ -174,10 +219,10 @@ echo "Total: $TOTAL | PASS: $PASS_COUNT | FAIL: $FAIL_COUNT"
 
 if [[ "$FAIL_COUNT" -eq 0 ]]; then
   echo ""
-  echo "[US-#323] test-runner-dispatch.sh — ALL PASS"
+  echo "[US-#323][US-#324] test-runner-dispatch.sh — ALL PASS"
   exit 0
 else
   echo ""
-  echo "[US-#323] test-runner-dispatch.sh — FAIL ($FAIL_COUNT failures)"
+  echo "[US-#323][US-#324] test-runner-dispatch.sh — FAIL ($FAIL_COUNT failures)"
   exit 1
 fi

@@ -5,3 +5,11 @@
 [14:52:00] [US-#321] DISPUTE 修復完成 — AC1 PO 巡邏留言掃描 + AC5 副檔名修正，測試 PASS 30/30
 [16:28:20] [US-#323] 開始 Phase 4 TDD — 先寫測試
 [16:35:27] [US-#323] story_end status=PASS — 全部 4 Phase 完成
+[16:57:09] [US-#324] 開始實作 — TDD 流程啟動
+[16:57:45] [US-#324] Step 2 — 實作 sprint-dispatch.yml
+[16:58:39] [US-#324] Step 3 — 更新 ADR-027 Amendment 1
+[17:02:09] [US-#324] START — 開始實作 CI 權限分層
+[17:03:28] [US-#324] test-runner-dispatch.sh 修正 \| → | ERE 模式 (TC-11~13)
+[17:03:28] [US-#324] ADR-027 Amendment 1 新增（權限分層）
+[17:03:28] [US-#324] 所有 56 tests PASS
+[17:03:28] [US-#324] 全部驗證腳本 PASS

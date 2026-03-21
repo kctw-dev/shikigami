@@ -126,3 +126,51 @@ claude \
 | 互動式確認 + CI 偵測 | 保留框架 | 實作複雜 | 否決 |
 | --allowedTools 白名單 | 安全可控，最小權限 | 需維護白名單 | **採用** |
 | GitHub App Fine-grained Token | Token 最小權限 | 運維複雜度高 | 輔助（GH_TOKEN secret） |
+
+---
+
+## Amendment 1：權限分層（#324）
+
+**日期**：2026-03-21
+**相關 Issue**：#324
+**狀態**：Accepted
+
+### 背景
+
+原決策（選項 C）採用固定工具白名單 `Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch`，適用於一般 Sprint 執行。但不同場景對權限的需求不同：
+
+- **唯讀審查**（如 code review、report generation）不需要 Bash/Write/Edit
+- **高風險操作**（如生產環境部署、資料庫遷移）應要求 Stakeholder 核准
+
+### 決策：permission_level 可選分層
+
+`sprint-dispatch.yml` 新增 `permission_level` input，依場景動態組裝 `--allowedTools`：
+
+| 等級 | allowedTools | 適用場景 | 備注 |
+|------|-------------|---------|------|
+| low | `Read,Grep,Glob` | 唯讀審查、報告產生 | 最小權限 |
+| medium（預設）| `Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch` | 一般 Sprint 執行 | 原 ADR-027 決策，不推翻 |
+| high | `Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch` | 高風險操作 | 同 medium 工具集，但需 Stakeholder Issue 核准 |
+
+### high 等級 Approval Gate
+
+高風險 `high` 等級觸發 Stakeholder Approval Gate：
+
+1. 檢查 `github.actor` 是否在 `SHIKIGAMI_APPROVERS` repo variable（逗號分隔 GitHub username）
+2. 若在允許清單 → 略過 polling（trusted operator）
+3. 否則在 `notify_issue` 留言請求核准（含 run ID 避免 race condition）
+4. Polling 間隔 30 秒，timeout 30 分鐘
+5. `approved` → 繼續；`rejected` 或 timeout → exit 1（中止 Sprint）
+
+### 邊界案例
+
+- `SHIKIGAMI_APPROVERS` 為空 → fail fast
+- `notify_issue` 未指定 + `high` 等級 → fail fast
+- 非 `approved`/`rejected` 回覆 → 忽略，繼續等待
+- 多 dispatch 同時 polling → 用 run ID 區分留言，避免 race condition
+
+### 原決策相容性
+
+- `medium` 為預設值，現有 workflow 呼叫不受影響
+- 原工具白名單不變，仍為 `Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch`
+- 本 Amendment 為擴充，不推翻原決策

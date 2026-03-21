@@ -9,7 +9,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| FIX：ADR-027 CI 權限模型改為可選分層 | #324 | M | 5 | 待開始 |
+| FIX：ADR-027 CI 權限模型改為可選分層 | #324 | M | 5 | 完成 |
 
 ## Acceptance Criteria
 

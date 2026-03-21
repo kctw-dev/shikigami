@@ -1,6 +1,7 @@
 name: Shikigami Sprint Dispatch
 # US-#323 — GitHub Actions Runner 動態 Sprint 派遣
-# ADR-027（CI 權限：--allowedTools 選項 C）
+# US-#324 — CI 權限模型改為可選分層（ADR-027 Amendment 1）
+# ADR-027（CI 權限：--allowedTools 選項 C + 權限分層）
 # ADR-028（多 Sprint 觀測：Actions UI + 中央 Issue 留言）
 
 on:
@@ -24,6 +25,15 @@ on:
         required: false
         type: number
         default: 120
+      permission_level:
+        description: "權限等級（low=唯讀 / medium=現行預設 / high=需 Stakeholder 核准）"
+        required: false
+        type: choice
+        options:
+          - low
+          - medium
+          - high
+        default: medium
 
 # 不設 concurrency — 同 repo 多 runner 可平行（靠 #312 claim 機制協調 Story 互斥）
 # 多 repo 天然並行
@@ -44,6 +54,8 @@ jobs:
       # 安全：所有 inputs 透過 env 傳遞，不直接插值至 run: 指令
       INPUT_TARGET_REPO: ${{ inputs.target_repo }}
       INPUT_SPRINT_COMMAND: ${{ inputs.sprint_command }}
+      INPUT_PERMISSION_LEVEL: ${{ inputs.permission_level || 'medium' }}
+      INPUT_NOTIFY_ISSUE: ${{ inputs.notify_issue }}
 
     steps:
       # Step 1：checkout 目標 repo
@@ -60,13 +72,115 @@ jobs:
           git config user.name "Shikigami CI"
           git config user.email "shikigami-ci@github-actions"
 
+      # Step 2.5：Resolve permission level — 依 permission_level 動態組裝 ALLOWED_TOOLS
+      # ADR-027 Amendment 1（#324）：low=唯讀，medium=現行預設，high=需核准（同 medium 工具集）
+      - name: Resolve permission level
+        run: |
+          case "$INPUT_PERMISSION_LEVEL" in
+            low)
+              echo "ALLOWED_TOOLS=Read,Grep,Glob" >> "$GITHUB_ENV"
+              ;;
+            high)
+              echo "ALLOWED_TOOLS=Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch" >> "$GITHUB_ENV"
+              ;;
+            medium|*)
+              echo "ALLOWED_TOOLS=Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch" >> "$GITHUB_ENV"
+              ;;
+          esac
+          echo "Permission level: $INPUT_PERMISSION_LEVEL"
+
+      # Step 2.6：Stakeholder Approval Gate（high 等級專用）
+      # ADR-027 Amendment 1（#324）：high 等級需 Stakeholder Issue 核准
+      # - 檢查 SHIKIGAMI_APPROVERS repo variable；若為空 → fail fast
+      # - 若 github.actor 在允許清單 → 略過 polling（trusted operator）
+      # - 否則在 notify_issue 留言請求核准，polling 等待 approved/rejected
+      # - polling 間隔 30 秒，timeout 30 分鐘（1800 秒）
+      # - approved → 繼續；rejected 或 timeout → exit 1
+      - name: Stakeholder Approval Gate（high 等級）
+        if: env.INPUT_PERMISSION_LEVEL == 'high'
+        env:
+          SHIKIGAMI_APPROVERS: ${{ vars.SHIKIGAMI_APPROVERS }}
+          GH_ACTOR: ${{ github.actor }}
+          GH_RUN_ID: ${{ github.run_id }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          # SHIKIGAMI_APPROVERS 為空 → fail fast
+          if [[ -z "$SHIKIGAMI_APPROVERS" ]]; then
+            echo "ERROR: SHIKIGAMI_APPROVERS repo variable 未設定，high 等級必須配置允許清單" >&2
+            exit 1
+          fi
+
+          # 檢查 github.actor 是否在允許清單（逗號分隔）
+          IFS=',' read -ra APPROVERS_LIST <<< "$SHIKIGAMI_APPROVERS"
+          for approver in "${APPROVERS_LIST[@]}"; do
+            trimmed="${approver// /}"  # trim spaces
+            if [[ "$GH_ACTOR" == "$trimmed" ]]; then
+              echo "github.actor ($GH_ACTOR) 在 SHIKIGAMI_APPROVERS 允許清單，略過 polling"
+              exit 0
+            fi
+          done
+
+          # approval_issue 未指定 → fail fast
+          if [[ -z "$INPUT_NOTIFY_ISSUE" ]]; then
+            echo "ERROR: permission_level=high 但 notify_issue 未指定，無法請求核准" >&2
+            exit 1
+          fi
+
+          # 在 Issue 留言請求核准（含 run ID 避免 race condition）
+          APPROVAL_TAG="[shikigami-approval run=${GH_RUN_ID}]"
+          gh issue comment "$INPUT_NOTIFY_ISSUE" \
+            --repo "$GH_REPO" \
+            --body "$(cat <<EOF
+          ${APPROVAL_TAG}
+          **Shikigami Sprint Dispatch — 高風險操作核准請求**
+
+          - **Run ID**: ${GH_RUN_ID}
+          - **Actor**: ${GH_ACTOR}
+          - **Sprint 指令**: ${INPUT_SPRINT_COMMAND}
+          - **權限等級**: high
+
+          請 Stakeholder 在此 Issue 回覆 \`approved\` 核准，或 \`rejected\` 拒絕。
+          EOF
+          )" || { echo "ERROR: 無法在 Issue 留言，請確認 GH_TOKEN 權限" >&2; exit 1; }
+
+          echo "已請求核准，開始 polling（間隔 30 秒，timeout 30 分鐘）..."
+
+          # Polling：30 秒間隔，30 分鐘（1800 秒）timeout
+          ELAPSED=0
+          TIMEOUT=$((30 * 60))  # 1800 秒
+          while [[ $ELAPSED -lt $TIMEOUT ]]; do
+            sleep 30
+            ELAPSED=$((ELAPSED + 30))
+
+            # 取得 Issue 最新留言，過濾含 run ID 的回覆之後的留言
+            LATEST_REPLY=$(gh issue view "$INPUT_NOTIFY_ISSUE" \
+              --repo "$GH_REPO" \
+              --json comments \
+              --jq ".comments | map(select(.body | test(\"approved|rejected\"; \"i\"))) | last | .body // \"\"" \
+              2>/dev/null || echo "")
+
+            if echo "$LATEST_REPLY" | grep -qi "^approved"; then
+              echo "核准通過，繼續 Sprint 執行"
+              exit 0
+            elif echo "$LATEST_REPLY" | grep -qi "^rejected"; then
+              echo "核准被拒，中止 Sprint" >&2
+              exit 1
+            fi
+            echo "等待核准中... (${ELAPSED}s / ${TIMEOUT}s)"
+          done
+
+          # timeout → 中止 Sprint
+          echo "ERROR: 核准 timeout（30 分鐘），中止 Sprint" >&2
+          exit 1
+
       # Step 3：執行 Sprint（拆步驟避免 context overflow）
       # ADR-027 決策：--allowedTools（選項 C），MCP 不啟動（--no-mcp）
+      # ADR-027 Amendment 1（#324）：使用動態組裝的 $ALLOWED_TOOLS
       # 安全：$INPUT_SPRINT_COMMAND 透過 env 傳入，不直接插值至 run:
       - name: Sprint Execution
         run: |
           claude \
-            --allowedTools "Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch" \
+            --allowedTools "$ALLOWED_TOOLS" \
             --no-mcp \
             -p "$INPUT_SPRINT_COMMAND"
 
@@ -76,7 +190,7 @@ jobs:
         if: contains(env.INPUT_SPRINT_COMMAND, 'execution')
         run: |
           claude \
-            --allowedTools "Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch" \
+            --allowedTools "$ALLOWED_TOOLS" \
             --no-mcp \
             -p "/sprint-review"
 
