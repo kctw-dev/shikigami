@@ -1,0 +1,89 @@
+name: Shikigami Sprint Dispatch
+# US-#323 — GitHub Actions Runner 動態 Sprint 派遣
+# ADR-027（CI 權限：--allowedTools 選項 C）
+# ADR-028（多 Sprint 觀測：Actions UI + 中央 Issue 留言）
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_repo:
+        description: "目標 Repo（例：org/repo-name）"
+        required: true
+        type: string
+      sprint_command:
+        description: "Sprint 指令（例：/sprint-execution sprint_112）"
+        required: true
+        type: string
+      notify_issue:
+        description: "Layer 3 留言目標 Issue 號碼（可選，空白則不留言）"
+        required: false
+        type: string
+        default: ""
+      timeout_minutes:
+        description: "Sprint 執行逾時（分鐘）"
+        required: false
+        type: number
+        default: 120
+
+# AC-1：concurrency 按 target_repo 分組（同 repo 不並行）
+concurrency:
+  group: shikigami-sprint-${{ inputs.target_repo }}
+  cancel-in-progress: false
+
+jobs:
+  sprint-run:
+    name: "Sprint Run"
+    runs-on: [self-hosted, shikigami-sprint]
+    timeout-minutes: ${{ fromJSON(inputs.timeout_minutes || '120') }}
+
+    env:
+      # AC-3：Session ID 綁定 GitHub Run ID
+      CLAUDE_SESSION_ID: ${{ github.run_id }}
+      # Layer 3 opt-in（AC-6）— 安全：使用 env 而非直接插值至 run:
+      SHIKIGAMI_LIVE_NOTIFY: ${{ inputs.notify_issue != '' && 'true' || 'false' }}
+      SHIKIGAMI_LIVE_NOTIFY_ISSUE: ${{ inputs.notify_issue }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      # 安全：所有 inputs 透過 env 傳遞，不直接插值至 run: 指令
+      INPUT_TARGET_REPO: ${{ inputs.target_repo }}
+      INPUT_SPRINT_COMMAND: ${{ inputs.sprint_command }}
+
+    steps:
+      # Step 1：checkout 目標 repo
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.target_repo }}
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
+
+      # Step 2：設定 git 身份（供 per-session log push）
+      - name: Configure git identity
+        run: |
+          git config user.name "Shikigami CI"
+          git config user.email "shikigami-ci@github-actions"
+
+      # Step 3：執行 Sprint（AC-2：headless mode，AC-3：Session ID）
+      # ADR-027 決策：--allowedTools（選項 C），MCP 不啟動（--no-mcp）
+      # 安全：$INPUT_SPRINT_COMMAND 透過 env 傳入，不直接插值至 run:
+      - name: Run Sprint
+        run: |
+          claude \
+            --allowedTools "Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch" \
+            --no-mcp \
+            -p "$INPUT_SPRINT_COMMAND"
+
+      # Step 4：AC-5 Layer 2 — per-session log push（if: always()）
+      - name: Push session logs
+        if: always()
+        run: |
+          SESSION_LOG_DIR="docs/sprints/live-log"
+          RUN_ID="$CLAUDE_SESSION_ID"
+
+          # 若有 session log，commit + push 回 repo
+          git add "${SESSION_LOG_DIR}/" 2>/dev/null || true
+          git add "docs/km/" 2>/dev/null || true
+
+          if ! git diff --cached --quiet 2>/dev/null; then
+            git commit -m "ci: push session logs [run=${RUN_ID}] [skip ci]" || true
+            git push origin HEAD 2>/dev/null || true
+          fi
