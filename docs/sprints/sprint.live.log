@@ -130,3 +130,13 @@
 [14:54:54] [Sprint 111 Review] §3 Retro Action：無（誤判原因已記錄，無需新 Action Item）
 [14:54:54] [Sprint 111 Review] bump v0.78.0 → v0.78.1（patch，Cruise Mode 第 28 個 Skill — Sprint 111）
 [14:54:54] [Sprint 111 Review] COMPLETE — Velocity 5pts，完成率 100%，外部抽樣 100%（1/1，DISPUTE 2 項→修復→CONFIRM），DISPUTE 率 100%（AC5 為 QA 誤判）
+[16:40:25] [Sprint 112 Review] 開始執行 Sprint Review + Retrospective
+[16:40:25] [Sprint 112 Review] 外部 QA 審查 US-#323：37/37 PASS — workflow YAML、ADR-027/028、story-lifecycle-prompt Layer 1/2/3、測試全通過
+[16:40:25] [Sprint 112 Review] §1 PO Demo：sprint-dispatch.yml 完整落地；--allowedTools 白名單 + --no-mcp；三層觀測機制（stdout / per-session push / Issue 留言 opt-in）
+[16:40:25] [Sprint 112 Review] §2 QA 邊界：無 concurrency block（靠 claim 協調）；Execution + Review 拆步驟；Layer 3 failure isolation || true 全部到位
+[16:40:25] [Sprint 112 Review] §2.6 Issue 狀態回寫 — #323 已關閉（CLOSED）
+[16:40:25] [Sprint 112 Review] §3 Retro Good：workflow YAML 完整落地；ADR-027/028 決策清晰；三層觀測 failure isolation 設計嚴謹
+[16:40:25] [Sprint 112 Review] §3 Retro Problem：初版 concurrency 設計需修正（已修正為無 concurrency + claim 協調）
+[16:40:25] [Sprint 112 Review] §3 Retro Action：無
+[16:40:25] [Sprint 112 Review] 版本確認：v0.78.1 → v0.78.2（patch，workflow YAML 不算 Skill，Skills badge 維持 28）
+[16:40:25] [Sprint 112 Review] COMPLETE — Velocity 10pts，完成率 100%，外部抽樣 100%（37/37 PASS），DISPUTE 率 0%

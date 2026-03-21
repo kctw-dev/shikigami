@@ -2,3 +2,6 @@
 [14:32:38] [US-#322-B2] Batch 2 完成 — 21 TC PASS, AC-3/4/5/6/8/9/10 PASS, subagent-results/US-322.md 已更新
 [14:42:56] [US-#321] Phase 1 開始
 [14:48:28] [US-#321] Phase 1 完成 — ADR-026, cruise Skill, hooks, 測試 30 TC PASS
+[14:52:00] [US-#321] DISPUTE 修復完成 — AC1 PO 巡邏留言掃描 + AC5 副檔名修正，測試 PASS 30/30
+[16:28:20] [US-#323] 開始 Phase 4 TDD — 先寫測試
+[16:35:27] [US-#323] story_end status=PASS — 全部 4 Phase 完成

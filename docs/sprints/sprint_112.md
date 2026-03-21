@@ -3,13 +3,13 @@
 **Sprint Goal**：讓 Shikigami Sprint 可從 GitHub Actions 動態觸發，對任意 repo 執行 headless Sprint
 **日期**：2026-03-21
 **容量**：10 points
-**狀態**：進行中
+**狀態**：完成
 
 ## Sprint Backlog
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| FEATURE：GitHub Actions Runner 動態 Sprint 派遣 | #323 | L | 10 | 待開始 |
+| FEATURE：GitHub Actions Runner 動態 Sprint 派遣 | #323 | L | 10 | 完成 |
 
 ## Acceptance Criteria
 
@@ -24,7 +24,7 @@
 **AC-1：Workflow YAML**
 - `.github/workflows/sprint-dispatch.yml` 存在
 - `workflow_dispatch` inputs：`target_repo`（required）、`sprint_command`（required）、`timeout_minutes`（optional, default 120）
-- concurrency group：`shikigami-sprint-${{ inputs.target_repo }}`（同 repo 不並行）
+- concurrency group：不設 concurrency（靠 #312 claim 機制協調 Story 互斥，同 repo 多 runner 可平行）
 
 **AC-2：Headless 執行**
 - `--allowedTools` 或等效 headless 權限配置，確保 Claude Code 無需人工確認
@@ -75,7 +75,7 @@
 
 - **ADR-027**：`--allowedTools`（選項 C），MCP 不啟動（CI 環境無 MCP 依賴）
 - **ADR-028**：Actions UI + 中央 Issue 留言（A+D 組合）
-- **concurrency**：按 `target_repo` 分組，同 repo 不並行
+- **concurrency**：不設 concurrency（同 repo 多 runner 可平行，靠 #312 claim 機制協調 Story 互斥）
 - **timeout**：可配（預設 120 min）
 - **4 Phase 串行**：workflow → 觀測 → ADR → 測試
 
