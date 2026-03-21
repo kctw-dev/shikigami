@@ -40,7 +40,7 @@
 - stop：刪除 flag file + SessionEnd hook 清理
 
 **AC-5：跨機器安全**
-- per-session cruise log（`docs/cruise-logs/YYYY-MM-DD-session-<SESSION_ID>.md`）
+- per-session cruise log（`docs/cruise-logs/YYYY-MM-DD-session-<SESSION_ID>.jsonl`）
 - Issue 重複防護（`gh issue list --search` 檢查已存在 Issue）
 - protect-main.sh 加入 `^docs/cruise-logs/` 白名單
 
