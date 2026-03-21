@@ -85,14 +85,47 @@ echo "[CRUISE] 巡航模式已停止"
 ### 掃描 Open Issues
 
 ```bash
-# 列出所有 open issues
-gh issue list --state open --limit 50 --json number,title,labels,assignees,updatedAt
+# 列出所有 open issues（含 comments 欄位）
+gh issue list --state open --limit 50 --json number,title,labels,assignees,updatedAt,comments
 ```
 
 掃描重點：
 - 逾期 Issue（`updatedAt` 超過 7 天未更新且無 assignee）
-- 無回應 Issue（已開超過 3 天但無留言且無 assignee）
+- 無回應 Issue（已開超過 3 天**且無任何留言**且無 assignee）
 - 標記為 `blocked` 或 `needs-triage` 的 Issue
+
+### 留言掃描步驟
+
+對 `comments > 0` 的 Issue，讀取實際留言內容：
+
+```bash
+# 讀取有留言的 Issue 完整留言
+gh issue view <issue_number> --json comments
+```
+
+**「無回應」判斷標準**（#320 教訓）：
+
+Issue 同時滿足以下條件才視為「無回應」：
+1. 無 assignee（`assignees` 為空陣列）
+2. 最近 3 天內無任何留言（不論留言者是誰）
+
+```bash
+# 判斷邏輯（偽碼）
+for each issue in issues:
+  has_assignee = issue.assignees.length > 0
+  comment_data = gh issue view issue.number --json comments
+  latest_comment_at = comment_data.comments[-1].createdAt  # 若有留言
+  days_since_comment = (now - latest_comment_at) in days
+
+  if not has_assignee and (no comments OR days_since_comment > 3):
+    mark as "無回應"
+
+  # Stakeholder 留言優先標記
+  for comment in comment_data.comments:
+    if "[PRIORITY]" in comment.body:
+      mark issue as "PRIORITY"
+      alert PO immediately
+```
 
 ### 留言追蹤
 
