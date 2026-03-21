@@ -1,9 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-21（Sprint 111 Planning 完成）
-**當前 Sprint**：Sprint 111（進行中）
+**最後更新**：2026-03-21（Sprint 112 Planning 完成）
+**當前 Sprint**：Sprint 112（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 111](sprints/sprint_111.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 112](sprints/sprint_112.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 112（進行中）
+
+> Sprint Goal：讓 Shikigami Sprint 可從 GitHub Actions 動態觸發，對任意 repo 執行 headless Sprint
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| FEATURE：GitHub Actions Runner 動態 Sprint 派遣 | #323 | L | 10 | 待開始 |
+
+**Sprint 容量**：10 points
 
 ---
 
