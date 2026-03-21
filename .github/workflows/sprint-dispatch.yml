@@ -25,10 +25,8 @@ on:
         type: number
         default: 120
 
-# AC-1：concurrency 按 target_repo 分組（同 repo 不並行）
-concurrency:
-  group: shikigami-sprint-${{ inputs.target_repo }}
-  cancel-in-progress: false
+# 不設 concurrency — 同 repo 多 runner 可平行（靠 #312 claim 機制協調 Story 互斥）
+# 多 repo 天然並行
 
 jobs:
   sprint-run:
@@ -62,15 +60,25 @@ jobs:
           git config user.name "Shikigami CI"
           git config user.email "shikigami-ci@github-actions"
 
-      # Step 3：執行 Sprint（AC-2：headless mode，AC-3：Session ID）
+      # Step 3：執行 Sprint（拆步驟避免 context overflow）
       # ADR-027 決策：--allowedTools（選項 C），MCP 不啟動（--no-mcp）
       # 安全：$INPUT_SPRINT_COMMAND 透過 env 傳入，不直接插值至 run:
-      - name: Run Sprint
+      - name: Sprint Execution
         run: |
           claude \
             --allowedTools "Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch" \
             --no-mcp \
             -p "$INPUT_SPRINT_COMMAND"
+
+      # Step 3.5：Sprint Review（獨立 session，避免 context overflow）
+      # 僅在 sprint_command 包含 execution 時自動接 review
+      - name: Sprint Review
+        if: contains(env.INPUT_SPRINT_COMMAND, 'execution')
+        run: |
+          claude \
+            --allowedTools "Bash,Read,Write,Edit,Grep,Glob,WebSearch,WebFetch" \
+            --no-mcp \
+            -p "/sprint-review"
 
       # Step 4：AC-5 Layer 2 — per-session log push（if: always()）
       - name: Push session logs
