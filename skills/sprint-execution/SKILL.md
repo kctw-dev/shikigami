@@ -788,7 +788,13 @@ Sprint Backlog 還有 Story？
    git push 完成後，**寫入 Sprint Checkpoint**（§2.12）：更新 `docs/sprints/sprint-checkpoint.json`，記錄 Sprint 編號、所有 Story 狀態（completed/in-progress/pending）、completed_at 時間戳（僅本 Story），以及 `updated_at`。寫入失敗時靜默略過（`[CHECKPOINT-WRITE-WARN]`），不阻塞主流程。
    > **Checkpoint 豁免**：`docs/sprints/sprint-checkpoint.json` 屬於狀態文件豁免清單，允許直推 main（ADR-023 決策 4，US-315 AC-6）。
 
-   接著進行 Release Story（§2.11）後，檢查終止條件：Sprint Backlog 中仍有待辦 Story → 取出下一個 Story 繼續執行；Sprint Backlog 已清空（所有 Story 完成）→ **立即 invoke shikigami:sprint-review**，不詢問使用者、不跳回「下一個 Story」流程。
+   接著進行 Release Story（§2.11）後，檢查終止條件：Sprint Backlog 中仍有待辦 Story → 取出下一個 Story 繼續執行；Sprint Backlog 已清空（所有 Story 完成）→ 輸出 sprint_end 標記（US-323 AC-4），再 **立即 invoke shikigami:sprint-review**，不詢問使用者、不跳回「下一個 Story」流程。
+
+   ```bash
+   # AC-4：Layer 1 stdout 標記 — Sprint 結束（US-323）
+   # AC-7：|| true 確保標記失敗不阻塞後續 sprint-review 觸發
+   echo "[SHIKIGAMI] event=sprint_end" || true
+   ```
 
 ---
 

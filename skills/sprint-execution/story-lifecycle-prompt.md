@@ -417,21 +417,32 @@ commit + 取得 commit SHA
 
 ---
 
-### 步驟 8：Live Log — Story 開始執行（US-269，US-322 AC-2）
+### 步驟 8：Live Log — Story 開始執行（US-269，US-322 AC-2，US-323 AC-4/6）
 
 <!-- US-269 演示模式 Live Log Streaming — Sprint 99 -->
 <!-- US-322 AC-2 — Live Log 改為 per-session + 結算 — Sprint 110 -->
+<!-- US-323 AC-4 — Layer 1 stdout 標記；AC-6 — Layer 3 Issue 留言 — Sprint 112 -->
 
 在進入 doc_only/TDD 路徑判斷前，先確定本 session 的 live log 路徑，再寫入 Story 開始執行日誌（可選，失敗時靜默忽略）：
 
 ```bash
 # 建立 per-session live log 路徑（每個 session 使用獨立檔案，天然隔離）
-_SESSION_ID="${SESSION_ID:-unknown-$(date +%s)}"
+_SESSION_ID="${CLAUDE_SESSION_ID:-${SESSION_ID:-unknown-$(date +%s)}}"
 _LIVE_LOG_DIR="docs/sprints/live-log"
 mkdir -p "$_LIVE_LOG_DIR" 2>/dev/null || true
 LIVE_LOG_FILE="${_LIVE_LOG_DIR}/$(date '+%Y-%m-%d')-session-${_SESSION_ID}.log"
 
 echo "[$(date +%H:%M:%S)] [${story_id}] 開始執行" >> "$LIVE_LOG_FILE" 2>/dev/null || true
+
+# AC-4：Layer 1 stdout 標記（GitHub Actions Log 天然收集）
+echo "[SHIKIGAMI] event=story_start story=${story_id}" || true
+
+# AC-6：Layer 3 — Issue 留言（opt-in，失敗不影響主流程）
+if [[ "${SHIKIGAMI_LIVE_NOTIFY:-false}" == "true" && -n "${SHIKIGAMI_LIVE_NOTIFY_ISSUE:-}" ]]; then
+  gh issue comment "${SHIKIGAMI_LIVE_NOTIFY_ISSUE}" \
+    --body "▶ **[SHIKIGAMI]** \`event=story_start\` story=\`${story_id}\` session=\`${_SESSION_ID}\`" \
+    2>/dev/null || true
+fi
 ```
 
 ---
@@ -1564,9 +1575,10 @@ TC-4 觸發（當前 Story 連續 2 次 self-review FAIL）
 
 <!-- US-249 Subagent 結果暫存 — context compaction 後結果復原機制 — Sprint 92 -->
 
-### §9.0 Live Log — 回傳結果（US-269）
+### §9.0 Live Log — 回傳結果（US-269，US-323 AC-4/6/7）
 
 <!-- US-269 Live Log — 回傳結果 -->
+<!-- US-323 AC-4 Layer 1 stdout 標記；AC-6 Layer 3 Issue 留言；AC-7 failure isolation -->
 在執行暫存寫入前，先寫入最終結果日誌（可選，失敗時靜默忽略）：
 ```bash
 # PASS 時：
@@ -1575,6 +1587,22 @@ echo "[$(date +%H:%M:%S)] [${story_id}] 結果：PASS" >> "${LIVE_LOG_FILE:-docs
 echo "[$(date +%H:%M:%S)] [${story_id}] 結果：FAIL" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 # ESCALATE 時：
 echo "[$(date +%H:%M:%S)] [${story_id}] 結果：ESCALATE（${escalation_type}）" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
+
+# AC-4：Layer 1 stdout 標記（GitHub Actions Log 天然收集）
+# AC-7：failure isolation — 每個 stdout 標記獨立，加 || true，互不阻塞
+# PASS 時：
+echo "[SHIKIGAMI] event=story_end story=${story_id} status=PASS" || true
+# FAIL 時（請依實際 status 選擇對應行）：
+# echo "[SHIKIGAMI] event=story_end story=${story_id} status=FAIL" || true
+
+# AC-6：Layer 3 — Issue 留言（opt-in，SHIKIGAMI_LIVE_NOTIFY=true 時發送，失敗不影響主流程）
+# AC-7：|| true 確保 gh issue comment 失敗不阻塞 Sprint 主流程
+_STORY_STATUS="${story_status:-PASS}"  # PASS | FAIL | ESCALATE
+if [[ "${SHIKIGAMI_LIVE_NOTIFY:-false}" == "true" && -n "${SHIKIGAMI_LIVE_NOTIFY_ISSUE:-}" ]]; then
+  gh issue comment "${SHIKIGAMI_LIVE_NOTIFY_ISSUE}" \
+    --body "$([ "$_STORY_STATUS" = "PASS" ] && echo "✅" || echo "❌") **[SHIKIGAMI]** \`event=story_end\` story=\`${story_id}\` status=\`${_STORY_STATUS}\`" \
+    2>/dev/null || true
+fi
 ```
 
 ### §9.1 暫存寫入（回傳前必執行）
