@@ -140,3 +140,15 @@
 [16:40:25] [Sprint 112 Review] §3 Retro Action：無
 [16:40:25] [Sprint 112 Review] 版本確認：v0.78.1 → v0.78.2（patch，workflow YAML 不算 Skill，Skills badge 維持 28）
 [16:40:25] [Sprint 112 Review] COMPLETE — Velocity 10pts，完成率 100%，外部抽樣 100%（37/37 PASS），DISPUTE 率 0%
+[17:05:50] [Sprint 113 Review] 外部 QA 審查 US-#324 — AC1~AC5 全數驗證 PASS（56/56 測試通過）
+[17:05:50] [Sprint 113 Review] AC1: permission_level input（low/medium/high，default medium）— PASS
+[17:05:50] [Sprint 113 Review] AC2: ALLOWED_TOOLS 動態組裝（case/switch，low=唯讀，medium/high=全工具）— PASS
+[17:05:50] [Sprint 113 Review] AC3: high 等級 Stakeholder Approval Gate（SHIKIGAMI_APPROVERS + polling 30s/30min）— PASS
+[17:05:50] [Sprint 113 Review] AC4: ADR-027 Amendment 1 段落存在，含分層表格與邊界案例 — PASS
+[17:05:50] [Sprint 113 Review] AC5: 測試覆蓋 56/56 PASS（TC-11~TC-14 覆蓋 #324 全部 AC）
+[17:05:50] [Sprint 113 Review] §3 Retro Good：權限分層設計完整（low/medium/high）；Stakeholder approval polling 機制嚴謹
+[17:05:50] [Sprint 113 Review] §3 Retro Problem：初版測試 ERE pattern 用錯（\| vs |），subagent 自行修復
+[17:05:50] [Sprint 113 Review] §3 Retro Action：無
+[17:05:50] [Sprint 113 Review] Velocity：5pts，完成率 100%，外部抽樣 100%（56/56 PASS），DISPUTE 率 0%
+[17:05:50] [Sprint 113 Review] bump v0.78.2 → v0.78.3（patch）— 5 個檔案已更新
+[17:05:50] [Sprint 113 Review] COMPLETE — v0.78.3
