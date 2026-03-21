@@ -174,14 +174,14 @@
 [TECH-DEBT] TD-004: UserRepository 與 AuthService 職責混亂，需抽離 token 驗證邏輯 | 嚴重度: L | 引入: US-09
 ```
 
-**ID 指派規則**：新增技術債時，先查閱 `docs/km/Tech_Debt_Registry.md` 取得最新 ID 流水號，依序累加。
+**ID 指派規則**：新增技術債時，先查閱 `docs/km/tech-debt/` 目錄下最新 summary.md 取得最新 ID 流水號，依序累加。
 
-### Registry 更新指引
+### Registry 更新指引（US-322 AC-6，per-session）
 
 每當產生 `[TECH-DEBT]` 標記，必須在**當次 Sprint 結束前**完成以下步驟：
 
-1. 開啟 `docs/km/Tech_Debt_Registry.md`
-2. 在 Registry 表格中新增一行，填入所有欄位：
+1. 開啟 `docs/km/tech-debt/$(date '+%Y-%m-%d')-session-${CLAUDE_SESSION_ID:-unknown}.md`（per-session 檔案，自動建立不存在時）
+2. 在 per-session 表格中新增一行，填入所有欄位：
    - **ID**：依流水號指派
    - **描述**：技術債詳細說明（比標記更完整）
    - **引入 Story**：當前 Story ID
@@ -190,7 +190,7 @@
    - **建議解法**：具體的解決方向或行動方案
    - **RICE**：填 `TBD`（由 Scrum Master 在 Grooming 時評估）
    - **狀態**：`Active`
-3. Commit 更新，格式：`docs: 新增技術債 TD-XXX 至 Registry`
+3. Commit 更新，格式：`docs: 新增技術債 TD-XXX 至 tech-debt per-session 檔案`
 
 當某 Story 解決了對應技術債，需將狀態更新為 `Resolved`，並填入「解決 Story」欄位。
 
@@ -200,7 +200,7 @@
 
 **執行步驟：**
 
-1. 掃描 `docs/km/Tech_Debt_Registry.md` 中所有 `Active` 條目
+1. 掃描 `docs/km/tech-debt/` 目錄下各 per-session 檔案（或 summary.md）中所有 `Active` 條目
 2. 標記逾期未解決項目（Active 超過 3 個 Sprint 且「解決 Story」仍為 `TBD`）
 3. 評估逾期項目是否需要強制納入本 Sprint Backlog
 4. 產出 Grooming 報告（格式見下方）
@@ -225,7 +225,7 @@
 - TD-XXX：已 Active {N} 個 Sprint，建議本 Sprint Planning 強制排入
 ```
 
-趨勢判定規則詳見 `docs/km/Tech_Debt_Registry.md` 的「趨勢判定規則」章節。
+趨勢判定規則詳見 `docs/km/Tech_Debt_Registry.md` 的「趨勢判定規則」章節（舊版參照，新 per-session 資料以 `docs/km/tech-debt/` summary.md 為準）。
 
 ---
 

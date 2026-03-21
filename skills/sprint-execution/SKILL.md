@@ -770,7 +770,7 @@ Sprint Backlog 還有 Story？
 
    Developer subagent 更新 sprint_N.md Story 狀態前，**必須執行 read-then-compare 檢查**：讀取當前狀態值 → 比對是否符合預期 → 不符合時輸出 `[CONFLICT] 狀態衝突，跳過覆蓋：{story_id} 當前值={actual}，預期值={expected}` 並放棄寫入（不得靜默覆蓋）。符合預期時正常更新。
 
-   **更新完成後，立即 git commit + push**（僅 commit `PROJECT_BOARD.md` 與 `sprint_N.md`；`Metrics_Log.md` 與 `Retrospective_Log.md` 由 sprint-review 負責。commit message 格式：`docs: Sprint N — [Story ID] 狀態更新為已完成`）。
+   **更新完成後，立即 git commit + push**（僅 commit `PROJECT_BOARD.md` 與 `sprint_N.md`；Metrics Log 與 Retrospective Log 由 sprint-review 負責，寫至 per-session 路徑。commit message 格式：`docs: Sprint N — [Story ID] 狀態更新為已完成`）。
    > **豁免直推**：`PROJECT_BOARD.md` 與 `sprint_N.md` 屬於狀態文件豁免清單（ADR-023 決策 3，US-315 AC-5），允許直推 main，**不需要**建立 PR。
 
    **Push Retry 機制（US-322 AC-7，多台機器並行保護）**：
@@ -813,7 +813,7 @@ Story-Lifecycle subagent 在回傳摘要前，會將結果寫入 `docs/sprints/s
 
 暫存文件在以下時機**可安全清除**：
 
-1. Sprint Review 完成，`docs/km/Retrospective_Log.md` 與 `docs/km/Metrics_Log.md` 已 git commit
+1. Sprint Review 完成，`docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` 與 `docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md` 已 git commit（US-322 AC-3/AC-4）
 2. 確認主 session 已讀取所有需要的 subagent 結果（PROJECT_BOARD.md 狀態已更新）
 
 清除指令（Sprint Review 完成後，由主 session 或 sprint-review Skill 執行）：

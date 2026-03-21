@@ -107,12 +107,12 @@ Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，�
 ### 步驟
 
 0. **Retrospective Analytics** — 角色 prompt：`skills/sprint-review/analytics-prompt.md`。報告展示完畢前不得開始收集 Good / Problem / Action。
-1. **在 `docs/km/Retrospective_Log.md` 新增記錄**
+1. **在 `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` 新增記錄**（per-session 檔案，US-322 AC-4）
 2. **使用 Good / Problem / Action 格式收集回饋**
 3. **SPACE 五維度量測** — 詳見 `analytics-prompt.md`
 4. **Quality Observer 診斷報告** — 詳見 `analytics-prompt.md`
 5. **每個 Action 建立為 GitHub Issue** — 透過 `issue-management` Skill，標題 `retro:` 前綴，`retro-action` label
-6. **同步記錄至 `docs/km/Retrospective_Log.md`**
+6. **同步記錄至 `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md`**（per-session 檔案，US-322 AC-4）
 7. **代理人校準儀式** — 角色 prompt：`skills/sprint-review/stakeholder-prompt.md`
 8. **寫入 Retro 會議紀錄** — 寫入 `docs/meetings/YYYY-MM-DD-retro.md`（詳見 §5.2 會議紀錄格式）
 
@@ -131,8 +131,8 @@ Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，�
 | 文件 | 更新內容 |
 |------|----------|
 | `docs/PROJECT_BOARD.md` | 已完成 Story 移至 Done；更新 Sprint 統計 |
-| `docs/km/Retrospective_Log.md` | 新增 Good / Problem / Action 記錄 |
-| `docs/km/Metrics_Log.md` | 追加 Velocity、完成率、趨勢分析 |
+| `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` | 新增 Good / Problem / Action 記錄（per-session，US-322 AC-4） |
+| `docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md` | 追加 Velocity、完成率、趨勢分析（per-session，US-322 AC-3） |
 | `docs/sprints/sprint_N.md` | 回寫各 Story 最終驗收狀態 |
 | `docs/prd/ROADMAP.md` | 更新版本里程碑狀態 |
 | `docs/meetings/YYYY-MM-DD-sprint-review.md` | 新建。Sprint Review 會議紀錄（frontmatter + 結論） |
@@ -213,7 +213,9 @@ participants:
 
 ## 6. 歸檔觸發檢查
 
-Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 git commit + push。範圍：`PROJECT_BOARD.md`、`Retrospective_Log.md`、`Metrics_Log.md`、`sprint_N.md`、`docs/meetings/*.md`。其他 KM 文件不適用，避免觸發 ADR-003 Hard Gate。
+Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 git commit + push。範圍：`PROJECT_BOARD.md`、`docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md`、`docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md`、`sprint_N.md`、`docs/meetings/*.md`。其他 KM 文件不適用，避免觸發 ADR-003 Hard Gate。
+
+> **per-session 路徑規則**：SESSION_ID 取自 `${CLAUDE_SESSION_ID:-unknown}`；路徑 = `docs/km/retro-log/$(date '+%Y-%m-%d')-session-${SESSION_ID}.md`（retro），`docs/km/metrics-log/$(date '+%Y-%m-%d')-session-${SESSION_ID}.md`（metrics）。結算腳本：`hooks/retro-settle.sh`、`hooks/metrics-settle.sh`（US-322 AC-3/AC-4）。
 
 ---
 
@@ -235,7 +237,7 @@ Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 g
   - [ ] 外部 Issue：done label + 移除 in-sprint + 階段 1 留言（保持 Open）
   - [ ] FAIL Story：已回復 backlog 狀態並留言
 - [ ] 未達 DoD Story 已移回 Backlog 並標注原因
-- [ ] `Retrospective_Log.md` 已新增記錄
+- [ ] `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` 已新增記錄
 - [ ] 每個 Action Item 已建立為 GitHub Issue
 - [ ] 上個 Sprint 的 `retro-action` Issues 已逐項檢查
 - [ ] 代理人校準儀式已完成
@@ -245,6 +247,6 @@ Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 g
 - [ ] `invoke shikigami:deployment-readiness`（附帶 §5.1 里程碑對齊結果）
 - [ ] **E2E 驗證結果已確認**
 - [ ] 外部 Issue 階段 2 留言（**僅在 deployment-readiness PASS 且 E2E PASS 後執行**；否則不補發）
-- [ ] Sprint Metrics 已計算並追加至 `Metrics_Log.md`（詳見 `po-review-prompt.md`）
+- [ ] Sprint Metrics 已計算並追加至 `docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md`（詳見 `po-review-prompt.md`；US-322 AC-3）
 - [ ] 角色制衡案例檢查（若有，更新 `ROLE_BALANCE_CASES.md`）
 - [ ] **產出文件 git commit + push**（HARD-GATE）

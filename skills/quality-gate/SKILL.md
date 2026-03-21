@@ -180,20 +180,22 @@ QA subagent 進行代碼審查時，必須逐項檢查以下清單：
 | 選項 | 條件 | 後續動作 |
 |------|------|---------|
 | **A. 修復** | 無條件可選（推薦） | Developer 修復 → 重新審查 |
-| **B. 降級** | 非 Security 類 CRITICAL 可選 | 強制記錄至 `docs/km/quality-gate-decisions.md`，附降級理由 |
-| **C. 接受風險** | 必須提供 GitHub Issue 編號 | 強制記錄至 `docs/km/quality-gate-decisions.md`，附 Issue 編號 |
+| **B. 降級** | 非 Security 類 CRITICAL 可選 | 強制記錄至 `docs/km/quality-decisions/YYYY-MM-DD-session-<SESSION_ID>.md`，附降級理由（US-322 AC-5） |
+| **C. 接受風險** | 必須提供 GitHub Issue 編號 | 強制記錄至 `docs/km/quality-decisions/YYYY-MM-DD-session-<SESSION_ID>.md`，附 Issue 編號（US-322 AC-5） |
 
 **Security 類 CRITICAL 限制**：涉及安全漏洞（SQL Injection、XSS、認證繞過等）的 CRITICAL 缺陷，**不允許選擇 B（降級）**，只能 A（修復）或 C（接受風險並建立 Security Issue）。
 
 **防濫用機制**：
 - 同一個 Story/PR 連續選擇 B 或 C **超過 2 次**，強制升級至 Architect 審查
-- 若 `docs/km/quality-gate-decisions.md` 中 C 選擇率 > 20%，觸發設計回顧
+- 若 `docs/km/quality-decisions/` 中 C 選擇率 > 20%（跨所有 session summary），觸發設計回顧
 
 **HARD-GATE 語意調整**：本互動決策點不取消 HARD-GATE，而是將「必須修復才能繼續」擴充為「必須做出有記錄的知情決策才能繼續」。未做選擇 = 門禁 FAIL，不得繼續。
 
 ### §7.2 決策記錄格式
 
-選擇 B 或 C 時，強制寫入 `docs/km/quality-gate-decisions.md`：
+選擇 B 或 C 時，強制寫入 `docs/km/quality-decisions/YYYY-MM-DD-session-<SESSION_ID>.md`（per-session 檔案，US-322 AC-5）：
+
+> **路徑規則**：SESSION_ID 取自 `${CLAUDE_SESSION_ID:-unknown}`；路徑 = `docs/km/quality-decisions/$(date '+%Y-%m-%d')-session-${SESSION_ID}.md`。結算腳本：`hooks/quality-decisions-settle.sh`。
 
 ```markdown
 ## {日期} — {Story/PR 標識}
@@ -207,7 +209,7 @@ QA subagent 進行代碼審查時，必須逐項檢查以下清單：
 | 審查者 | QA Engineer |
 ```
 
-此文件為追溯用途，供 Sprint Review 時檢視品質決策歷史。
+此 per-session 文件為追溯用途，供 Sprint Review 時檢視品質決策歷史。結算後可參照 `docs/km/quality-decisions/<date>.summary.md`。
 
 ---
 

@@ -1713,6 +1713,11 @@ uncertainty_check:      # 必填：不確定性三問檢查結果（US-214，開
 [TECH-DEBT] TD-XXX: {具體描述} | 嚴重度: H/M/L | 引入: {story_id}
 ```
 
+**Registry 寫入路徑（US-322 AC-6，per-session）**：
+寫入 `docs/km/tech-debt/YYYY-MM-DD-session-<SESSION_ID>.md`（per-session 檔案）。
+路徑規則：SESSION_ID 取自 `${CLAUDE_SESSION_ID:-unknown}`；路徑 = `docs/km/tech-debt/$(date '+%Y-%m-%d')-session-${SESSION_ID}.md`。
+結算腳本：`hooks/tech-debt-settle.sh`。
+
 詳細規則參照 `skills/sprint-execution/developer-prompt.md` §Tech Debt 管理章節。
 
 ---
