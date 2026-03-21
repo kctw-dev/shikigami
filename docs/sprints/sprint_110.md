@@ -9,7 +9,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| INFRA：框架共用檔案跨機器 conflict 修復 | #322 | L | 5 | 待開始 |
+| INFRA：框架共用檔案跨機器 conflict 修復 | #322 | L | 5 | 完成 |
 
 ## Acceptance Criteria
 
