@@ -121,3 +121,12 @@
 [14:18:15] [US-#322] Batch1 開始 — AC-1 AC-2 AC-7
 [14:19:28] [US-#322] TDD Red 確認 — 開始 Green 實作
 [14:22:59] [US-#322] TDD Green 全 PASS — 開始 commit
+[14:54:54] [Sprint 111 Review] 開始執行 Sprint Review + Retrospective
+[14:54:54] [Sprint 111 Review] §2 Demo：/cruise Skill 完整落地（ADR-026 + SKILL.md + hooks + tests/test-cruise-skill.sh）
+[14:54:54] [Sprint 111 Review] §2 QA 邊界：AC-5 DISPUTE 為 QA 誤判（以為改檔名，實際是改內容）；修復後 30/30 PASS
+[14:54:54] [Sprint 111 Review] §2.6 Issue 狀態回寫 — #321 已關閉（Sprint 中已關閉），#320（案例回報）已關閉（#321 已落地其教訓）
+[14:54:54] [Sprint 111 Review] §3 Retro Good：ADR-026 Session 內 loop 設計簡潔；per-session cruise log 跨機器安全；達成 28 個 Skill 里程碑
+[14:54:54] [Sprint 111 Review] §3 Retro Problem：QA 第二輪誤判 AC5（以為改檔名而非改內容）
+[14:54:54] [Sprint 111 Review] §3 Retro Action：無（誤判原因已記錄，無需新 Action Item）
+[14:54:54] [Sprint 111 Review] bump v0.78.0 → v0.78.1（patch，Cruise Mode 第 28 個 Skill — Sprint 111）
+[14:54:54] [Sprint 111 Review] COMPLETE — Velocity 5pts，完成率 100%，外部抽樣 100%（1/1，DISPUTE 2 項→修復→CONFIRM），DISPUTE 率 100%（AC5 為 QA 誤判）
