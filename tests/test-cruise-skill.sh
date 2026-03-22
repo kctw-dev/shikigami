@@ -208,6 +208,43 @@ if [[ -f "$SKILL_FILE" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# TC-11：--strict flag 觸發語法（AC-1）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-11：--strict 觸發語法驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '\-\-strict' "TC-11a: SKILL.md 觸發語法含 --strict"
+  assert_contains "$SKILL_FILE" '/cruise --strict|cruise.*--strict' "TC-11b: SKILL.md 含 /cruise --strict 範例"
+  assert_contains "$SKILL_FILE" '10m.*--strict|--strict.*10m' "TC-11c: SKILL.md 含自訂間隔+strict 組合範例"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-12：THRESHOLD_DAYS 參數化（AC-3）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-12：THRESHOLD_DAYS 參數化驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'THRESHOLD_DAYS' "TC-12a: SKILL.md 含 THRESHOLD_DAYS 變數"
+  assert_contains "$SKILL_FILE" 'THRESHOLD_DAYS=3' "TC-12b: SKILL.md 預設 THRESHOLD_DAYS=3"
+  assert_contains "$SKILL_FILE" 'THRESHOLD_DAYS=0' "TC-12c: SKILL.md strict 模式 THRESHOLD_DAYS=0"
+  assert_contains "$SKILL_FILE" 'THRESHOLD_DAYS.*days_since_comment|days_since_comment.*THRESHOLD_DAYS' "TC-12d: 無回應判斷使用 THRESHOLD_DAYS"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-13：--strict flag 解析 + strict log 格式（AC-2 + AC-4）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-13：--strict flag 解析與 log 格式驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'STRICT_MODE' "TC-13a: SKILL.md 含 STRICT_MODE 變數"
+  assert_contains "$SKILL_FILE" 'STRICT_MODE=false|STRICT_MODE=true' "TC-13b: SKILL.md 含 STRICT_MODE 初始化"
+  assert_contains "$SKILL_FILE" '"strict".*true|strict.*true' "TC-13c: strict 模式 log 格式含 strict 欄位"
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""

@@ -13,9 +13,12 @@ requiredTools:
 ## 觸發語法
 
 ```
-/cruise           — 啟動巡航（預設間隔 30 分鐘）
-/cruise 10m       — 啟動巡航，指定間隔（例：10m, 15m, 60m）
-/cruise stop      — 停止巡航
+/cruise              — 啟動巡航（預設間隔 30 分鐘）
+/cruise 10m          — 啟動巡航，指定間隔（例：10m, 15m, 60m）
+/cruise --strict     — 嚴格模式（0 天閾值，無回應立即標記）
+/cruise 10m --strict — 自訂間隔 + 嚴格模式
+/cruise --strict 10m — 同上（flag 位置無關）
+/cruise stop         — 停止巡航
 ```
 
 ## 概覽
@@ -33,9 +36,25 @@ Cruise Mode 在當前 Session 內持續執行 PO 巡邏與 SRE 巡檢，每隔�
 ### 1. 解析參數
 
 ```bash
-# 解析間隔（預設 30m）
-INTERVAL="${1:-30m}"
-# 轉換為秒數
+# 解析 --strict flag 與間隔（位置無關）
+STRICT_MODE=false
+INTERVAL="30m"
+for ARG in "$@"; do
+  if [[ "$ARG" == "--strict" ]]; then
+    STRICT_MODE=true
+  elif [[ "$ARG" =~ ^[0-9]+m$ ]]; then
+    INTERVAL="$ARG"
+  fi
+done
+
+# 設定閾值（THRESHOLD_DAYS）
+if [[ "$STRICT_MODE" == "true" ]]; then
+  THRESHOLD_DAYS=0
+else
+  THRESHOLD_DAYS=3
+fi
+
+# 轉換間隔為秒數
 INTERVAL_SECONDS=$(echo "$INTERVAL" | sed 's/m$//' | awk '{print $1 * 60}')
 ```
 
@@ -111,13 +130,14 @@ Issue 同時滿足以下條件才視為「無回應」：
 
 ```bash
 # 判斷邏輯（偽碼）
+# THRESHOLD_DAYS：預設 3，--strict 模式為 0
 for each issue in issues:
   has_assignee = issue.assignees.length > 0
   comment_data = gh issue view issue.number --json comments
   latest_comment_at = comment_data.comments[-1].createdAt  # 若有留言
   days_since_comment = (now - latest_comment_at) in days
 
-  if not has_assignee and (no comments OR days_since_comment > 3):
+  if not has_assignee and (no comments OR days_since_comment > THRESHOLD_DAYS):
     mark as "無回應"
 
   # Stakeholder 留言優先標記
@@ -160,10 +180,14 @@ SPRINT_FILE=$(ls docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
   "cycle": <N>,
   "timestamp": "<ISO8601>",
   "type": "po-patrol",
+  "strict": true,
+  "threshold_days": <THRESHOLD_DAYS>,
   "summary": "掃描 <X> 個 open issues，發現 <Y> 個逾期，<Z> 個無回應",
   "actions": ["留言 #<N1>", "留言 #<N2>"]
 }
 ```
+
+> **嚴格模式備注**：`--strict` 時 `"strict": true`，`threshold_days: 0`；預設模式 `"strict": false`，`threshold_days: 3`。
 
 ---
 
@@ -335,7 +359,7 @@ fi
 ## Log 格式完整範例
 
 ```jsonl
-{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","summary":"掃描 15 個 open issues，發現 2 個逾期，1 個無回應","actions":["留言 #301","留言 #305"]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期，1 個無回應","actions":["留言 #301","留言 #305"]}
 {"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:05+0800","type":"sre-inspection","summary":"檢查 10 筆 CI run，發現 1 個 failure，建立 1 個 Issue","actions":["建立 Issue #321"]}
-{"session_id":"abc123","cycle":2,"timestamp":"2026-03-21T11:00:00+0800","type":"po-patrol","summary":"掃描 15 個 open issues，無異常","actions":[]}
+{"session_id":"abc123","cycle":2,"timestamp":"2026-03-21T11:00:00+0800","type":"po-patrol","strict":true,"threshold_days":0,"summary":"掃描 15 個 open issues，無異常","actions":[]}
 ```
