@@ -1,8 +1,8 @@
 # ADR-026：Cruise Mode — 巡航模式定期執行機制
 
-**日期**：2026-03-21
+**日期**：2026-03-21（附錄更新：2026-03-23）
 **狀態**：Accepted
-**相關 Issue**：#321
+**相關 Issue**：#321, #333
 **提案者**：Architect Agent
 
 ---
@@ -84,6 +84,7 @@ TaskCreate PO-patrol → TaskCreate SRE-inspection → 等待兩者完成 → �
   "actions": ["<action1>", "<action2>"]
 }
 ```
+> 備注：此 schema 於 #333 附錄延伸 4 新增 `"repo"` 欄位，完整 schema 請見附錄。
 
 ### 決策 5：Issue 重複防護 — gh issue list --search
 
@@ -91,10 +92,10 @@ TaskCreate PO-patrol → TaskCreate SRE-inspection → 等待兩者完成 → �
 
 **實作**：
 ```bash
-# SRE 建 Issue 前搜尋
-EXISTING=$(gh issue list --search "<標題>" --state all --json number,title 2>/dev/null)
+# SRE 建 Issue 前搜尋（多 repo 時帶 -R）
+EXISTING=$(gh issue list -R ${OWNER_REPO} --search "<標題>" --state all --json number,title 2>/dev/null)
 if [[ -z "$EXISTING" || "$EXISTING" == "[]" ]]; then
-  gh issue create --title "<標題>" --body "<內容>"
+  gh issue create -R ${OWNER_REPO} --title "<標題>" --body "<內容>"
 fi
 ```
 
@@ -123,3 +124,62 @@ fi
 3. **修改**：`hooks/session-end-release.sh` — 追加 cruise flag cleanup
 4. **修改**：`hooks/protect-main.sh` — 豁免 `^docs/cruise-logs/`
 5. **新增**：`tests/test-cruise-skill.sh`
+
+---
+
+## 附錄：Multi-Repo 延伸（#333）
+
+**日期**：2026-03-23
+
+### 背景
+
+筆電資源有限，無法每個 repo 開一個 session 各跑 cruise。需要在一個 session 內巡邏多個 repo。
+
+### 延伸決策
+
+以下決策為 ADR-026 原有決策的延伸，不改變原有架構方向。
+
+#### 延伸 1：Group 目錄自動偵測策略
+
+- 若當前目錄含 `.git` → 單一 repo 模式（原行為，向後相容）
+- 若當前目錄不含 `.git` → 掃描第一層子目錄（`maxdepth 1`），含 `.git` 的視為巡邏對象
+- 不遞迴深層目錄，避免誤偵測（如 `node_modules/.git`）
+
+#### 延伸 2：Log 路徑策略
+
+- **單一 repo 模式**：`LOG_DIR` 維持 `docs/cruise-logs/`（原行為，受 `protect-main.sh` 豁免規則 `^docs/cruise-logs/` 保護）
+- **多 repo 模式**：`LOG_DIR` 改為 `<group-dir>/cruise-logs/`（group 目錄非 git repo，`protect-main.sh` 不適用，無需額外豁免規則）
+- `LOG_DIR` 僅在啟動流程步驟 5 定義一次（SSOT），後續段落引用不重新賦值
+
+#### 延伸 3：Subagent Repo Context 傳遞
+
+- 主 loop 推導各 repo 的 `OWNER_REPO`（`owner/repo` 字串，從 `git -C <path> remote get-url origin` 解析）
+- 支援 SSH URL（`git@github.com:owner/repo.git`）與 HTTPS URL（`https://github.com/owner/repo.git`）
+- Subagent prompt 帶入 `REPO_PATH`（絕對路徑）與 `OWNER_REPO`
+- 所有 `gh` 指令加 `-R ${OWNER_REPO}`
+- 交付追蹤用 `${REPO_PATH}/docs/sprints/` 絕對路徑
+
+#### 延伸 4：Log Schema 擴充
+
+原有 log schema 新增 `"repo"` 欄位：
+
+```json
+{
+  "session_id": "<SESSION_ID>",
+  "cycle": <N>,
+  "timestamp": "<ISO8601>",
+  "type": "po-patrol|sre-inspection",
+  "repo": "<OWNER_REPO>",
+  "summary": "<摘要>",
+  "actions": ["<action1>"]
+}
+```
+
+- 單一 repo 模式：`"repo"` 欄位仍存在（向後相容，值為該 repo 的 owner/repo）
+- 多 repo 模式：每個 repo 各自產生獨立的 log entry
+
+#### 延伸 5：DM-4 Log 寫入入口
+
+- Subagent（PO/SRE agent）回傳巡邏/巡檢結果，不自行寫入 log
+- 主 loop 統一彙整各 repo 結果後寫入 JSONL（單一寫入入口）
+- 避免多 subagent 並發寫入造成順序不確定

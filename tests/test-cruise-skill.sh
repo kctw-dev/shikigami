@@ -386,6 +386,97 @@ if [[ -f "$SKILL_FILE" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# TC-25：Multi-Repo 自動偵測 — .git 子目錄偵測邏輯（#333 AC-1）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-25：Multi-Repo 自動偵測邏輯 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '\.git' "TC-25a: SKILL.md 包含 .git 偵測邏輯"
+  assert_contains "$SKILL_FILE" 'REPOS' "TC-25b: SKILL.md 定義 REPOS 陣列"
+  assert_contains "$SKILL_FILE" 'MULTI_REPO' "TC-25c: SKILL.md 定義 MULTI_REPO 旗標"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-26：向後相容 — 單一 repo 模式（#333 AC-2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-26：單一 repo 向後相容 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '當前目錄含.*\.git.*單一.*repo|單一.*repo.*向後相容' "TC-26a: SKILL.md 描述單一 repo 向後相容"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-27：Multi-Repo Loop — 每個 repo 分別執行（#333 AC-3）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-27：Multi-Repo Loop 結構 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'for REPO_PATH in.*REPOS' "TC-27a: Loop 對每個 repo 迭代"
+  assert_contains "$SKILL_FILE" 'REPOS\[@\]' "TC-27a2: Bash 陣列展開語法正確"
+  assert_contains "$SKILL_FILE" 'OWNER_REPO.*REPO_REMOTES|REPO_REMOTES.*OWNER_REPO' "TC-27b: 從 REPO_REMOTES 取得 owner/repo"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-28：gh -R 推導 — owner/repo 格式（#333 AC-4）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-28：gh -R 推導邏輯 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'gh.*-R.*OWNER_REPO' "TC-28a: gh 指令含 -R OWNER_REPO"
+  assert_contains "$SKILL_FILE" 'git -C.*remote get-url origin' "TC-28b: 使用 git -C 推導 remote URL"
+  assert_contains "$SKILL_FILE" 'SSH.*HTTPS|ssh.*https' "TC-28c: 支援 SSH 與 HTTPS URL 格式"
+  assert_contains "$SKILL_FILE" 'local:.*跳過|WARNING.*無.*GitHub.*remote' "TC-28d: 無效 remote 驗證（local: fallback 跳過）"
+  assert_contains "$SKILL_FILE" 'owner/repo.*格式|OWNER_REPO.*格式' "TC-28e: 驗證 OWNER_REPO 格式"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-28f：Subagent 失敗處理（#333 Loop 防禦）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-28f：Subagent 失敗處理 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'subagent.*failed|subagent.*失敗' "TC-28f: Loop 含 subagent 失敗處理邏輯"
+  assert_contains "$SKILL_FILE" '"type":"error"' "TC-28f2: 失敗時寫入 error 類型 log entry"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-29：交付追蹤絕對路徑（#333 AC-5）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-29：交付追蹤絕對路徑 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '\$\{REPO_PATH\}/docs/sprints/' "TC-29a: SPRINT_FILE 使用 REPO_PATH 絕對路徑"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-30：Log repo 欄位（#333 AC-6）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-30：Log repo 欄位 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '"repo":.*OWNER_REPO' "TC-30a: PO log 含 repo 欄位"
+  assert_contains "$SKILL_FILE" '"repo":.*"KCTW/' "TC-30b: Log 範例含實際 repo 名稱"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-31：啟動清單輸出（#333 AC-7）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-31：啟動清單輸出 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '偵測到.*repo' "TC-31a: 啟動時輸出偵測到的 repo 數量"
+  assert_contains "$SKILL_FILE" '多 repo 模式' "TC-31b: 啟動訊息標示多 repo 模式"
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""

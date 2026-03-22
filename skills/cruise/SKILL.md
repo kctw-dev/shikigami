@@ -27,7 +27,25 @@ Cruise Mode 在當前 Session 內持續執行 PO 巡邏與 SRE 巡檢，每隔�
 
 **參與 Agent**：PO Agent（巡邏）、SRE Agent（巡檢）
 **執行模式**：Session 內 loop（sleep + flag file），參見 ADR-026
-**Log**：per-session JSONL（`docs/cruise-logs/YYYY-MM-DD-session-<SESSION_ID>.jsonl`）
+**Log**：per-session JSONL（`<LOG_BASE>/cruise-logs/YYYY-MM-DD-session-<SESSION_ID>.jsonl`）
+
+### Multi-Repo 支援（#333）
+
+Cruise 支援兩種模式，啟動時自動偵測：
+
+| 模式 | 偵測條件 | 行為 |
+|------|---------|------|
+| **單一 repo** | 當前目錄含 `.git` | 與原行為完全相同（向後相容） |
+| **多 repo** | 當前目錄不含 `.git`，但第一層子目錄有含 `.git` 的 | 對每個子 repo 分別執行 PO 巡邏 + SRE 巡檢 |
+
+多 repo 模式的典型目錄結構：
+
+```
+~/workspace/group-a/      ← cd 到這層，執行 /cruise
+├── shikigami/            ← 自動偵測（有 .git）
+├── project-x/            ← 自動偵測（有 .git）
+└── project-y/            ← 自動偵測（有 .git）
+```
 
 ---
 
@@ -58,7 +76,84 @@ fi
 INTERVAL_SECONDS=$(echo "$INTERVAL" | sed 's/m$//' | awk '{print $1 * 60}')
 ```
 
-### 2. 建立 Flag File
+### 2. 偵測 Repo 列表（AC-1 / AC-2）
+
+```bash
+REPOS=()
+MULTI_REPO=false
+
+if [[ -d ".git" ]]; then
+  # 當前目錄本身是 repo → 單一 repo 模式（向後相容）
+  REPOS+=("$(pwd)")
+else
+  # 掃描第一層子目錄（maxdepth 1）
+  for dir in */; do
+    if [[ -d "${dir}.git" ]]; then
+      REPOS+=("$(realpath "$dir")")
+    fi
+  done
+  if [[ ${#REPOS[@]} -gt 0 ]]; then
+    MULTI_REPO=true
+  fi
+fi
+
+# 無 repo 可巡 → 終止
+if [[ ${#REPOS[@]} -eq 0 ]]; then
+  echo "[CRUISE] 錯誤：當前目錄無 .git，子目錄也無 repo，無法啟動巡航"
+  exit 1
+fi
+
+# 推導各 repo 的 owner/repo 字串（AC-4）
+declare -A REPO_REMOTES
+for REPO_PATH in "${REPOS[@]}"; do
+  REMOTE_URL=$(git -C "$REPO_PATH" remote get-url origin 2>/dev/null || echo "")
+  if [[ -n "$REMOTE_URL" ]]; then
+    # 支援 SSH (git@github.com:owner/repo.git) 與 HTTPS (https://github.com/owner/repo.git)
+    OWNER_REPO=$(echo "$REMOTE_URL" | sed -E 's#^(https?://[^/]+/|git@[^:]+:)##; s#\.git$##')
+    REPO_REMOTES["$REPO_PATH"]="$OWNER_REPO"
+  else
+    REPO_REMOTES["$REPO_PATH"]="local:$(basename "$REPO_PATH")"
+  fi
+done
+```
+
+### 2.5 驗證 Repo Remote（排除無效 repo）
+
+```bash
+# 驗證 OWNER_REPO 格式為 owner/repo，排除無效 repo
+VALID_REPOS=()
+for REPO_PATH in "${REPOS[@]}"; do
+  OWNER_REPO="${REPO_REMOTES[$REPO_PATH]}"
+  if [[ "$OWNER_REPO" == local:* ]]; then
+    echo "[CRUISE] WARNING: ${REPO_PATH} 無 GitHub remote，跳過（gh 指令需要 owner/repo 格式）"
+  elif [[ ! "$OWNER_REPO" =~ ^[^/]+/[^/]+$ ]]; then
+    echo "[CRUISE] WARNING: ${REPO_PATH} remote URL 解析失敗（${OWNER_REPO}），跳過"
+  else
+    VALID_REPOS+=("$REPO_PATH")
+  fi
+done
+REPOS=("${VALID_REPOS[@]}")
+
+# 驗證後無有效 repo → 終止
+if [[ ${#REPOS[@]} -eq 0 ]]; then
+  echo "[CRUISE] 錯誤：所有偵測到的 repo 均無有效 GitHub remote，無法啟動巡航"
+  exit 1
+fi
+```
+
+### 3. 列出偵測結果（AC-7）
+
+```bash
+echo "[CRUISE] 偵測到 ${#REPOS[@]} 個有效 repo："
+for REPO_PATH in "${REPOS[@]}"; do
+  echo "  - ${REPO_REMOTES[$REPO_PATH]} (${REPO_PATH})"
+done
+if [[ "$MULTI_REPO" == "true" ]]; then
+  echo "[CRUISE] 多 repo 模式：Log 統一寫入 $(pwd)/cruise-logs/"
+fi
+```
+
+### 4. 建立 Flag File
 
 ```bash
 SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
@@ -69,43 +164,69 @@ echo "[CRUISE] Flag file: $CRUISE_FLAG"
 echo "[CRUISE] 停止指令：/cruise stop"
 ```
 
-### 3. 準備 Log 目錄
+### 5. 準備 Log 目錄
 
 ```bash
-LOG_DIR="docs/cruise-logs"
+# LOG_BASE：單一 repo 模式用 repo 內路徑；多 repo 模式用 group 目錄（SSOT，僅此處定義一次）
+if [[ "$MULTI_REPO" == "true" ]]; then
+  LOG_BASE="$(pwd)"
+else
+  LOG_BASE="${REPOS[0]}"
+fi
+LOG_DIR="${LOG_BASE}/cruise-logs"
 mkdir -p "$LOG_DIR"
 LOG_TODAY=$(date '+%Y-%m-%d')
 CRUISE_LOG="${LOG_DIR}/${LOG_TODAY}-session-${SESSION_ID}.jsonl"
 CYCLE=0
 ```
 
-### 4. 進入 Loop
+### 6. 進入 Loop
 
-每個 cycle 執行：PO 巡邏 + SRE 巡檢（平行派遣），完成後寫 log，然後 sleep。
+每個 cycle 對**每個 repo** 分別執行 PO 巡邏 + SRE 巡檢（平行派遣），完成後由主 loop 彙整寫 log，然後 sleep。
 
 ```
 while 檢查 flag file 存在:
   CYCLE += 1
-  平行派遣 PO-patrol 與 SRE-inspection（Task tool）
-  等待兩個 task 完成
-  彙整結果寫入 CRUISE_LOG（JSONL append）
-  echo "[CRUISE] Cycle ${CYCLE} 完成，下次執行：${INTERVAL} 後"
+  for REPO_PATH in REPOS:
+    OWNER_REPO = REPO_REMOTES[REPO_PATH]
+    平行派遣：
+      - PO-patrol（帶入 REPO_PATH, OWNER_REPO, STRICT_MODE, THRESHOLD_DAYS）
+      - SRE-inspection（帶入 REPO_PATH, OWNER_REPO）
+  等待所有 task 完成
+  for each subagent result:
+    if subagent 成功:
+      寫入正常 log entry（JSONL append，含 "repo" 欄位）
+    else:
+      寫入錯誤 log entry：
+        {"type":"error","repo":"<OWNER_REPO>","cycle":<N>,"timestamp":"<ISO8601>","summary":"subagent failed: <reason>"}
+      echo "[CRUISE] WARNING: ${OWNER_REPO} 巡邏/巡檢失敗，見 log"
+  echo "[CRUISE] Cycle ${CYCLE} 完成（${#REPOS[@]} repos），下次執行：${INTERVAL} 後"
   sleep ${INTERVAL_SECONDS}
   if flag file 不存在: break
 echo "[CRUISE] 巡航模式已停止"
 ```
+
+**subagent 派遣約定**（AC-3 / AC-4）：
+
+- 每個 subagent prompt 帶入 `REPO_PATH`（絕對路徑）與 `OWNER_REPO`（`owner/repo` 字串）
+- PO 巡邏的 `gh` 指令加 `-R ${OWNER_REPO}`（如 `gh issue list -R ${OWNER_REPO}`）
+- SRE 巡檢的 `gh` 指令同理（如 `gh run list -R ${OWNER_REPO}`）
+- 交付追蹤用 `${REPO_PATH}/docs/sprints/` 絕對路徑讀取 Sprint file（AC-5）
+- subagent 回傳結果，**不自行寫入 log**（DM-4：log 由主 loop 統一寫入）
 
 ---
 
 ## PO 巡邏指引（AC-1）
 
 **觸發**：每個 cruise cycle 由 Task tool 派遣 PO Agent 執行
+**Repo context**：subagent 接收 `REPO_PATH` 與 `OWNER_REPO` 參數，所有 `gh` 指令加 `-R ${OWNER_REPO}`
 
 ### 掃描 Open Issues
 
 ```bash
 # 列出所有 open issues（含 comments 欄位）
-gh issue list --state open --limit 50 --json number,title,labels,assignees,updatedAt,comments
+# 單一 repo 與多 repo 模式均使用 -R ${OWNER_REPO}，統一行為
+gh issue list -R ${OWNER_REPO} --state open --limit 50 --json number,title,labels,assignees,updatedAt,comments
 ```
 
 掃描重點：
@@ -120,7 +241,7 @@ gh issue list --state open --limit 50 --json number,title,labels,assignees,updat
 
 ```bash
 # 讀取有留言的 Issue 完整留言
-gh issue view <issue_number> --json comments
+gh issue view <issue_number> -R ${OWNER_REPO} --json comments
 ```
 
 **「無回應」判斷標準**（#320 教訓）：
@@ -134,7 +255,7 @@ Issue 同時滿足以下條件才視為「無回應」：
 # THRESHOLD_DAYS：預設 3，strict 模式為 0
 for each issue in issues:
   has_assignee = issue.assignees.length > 0
-  comment_data = gh issue view issue.number --json comments
+  comment_data = gh issue view issue.number -R ${OWNER_REPO} --json comments
   latest_comment_at = comment_data.comments[-1].createdAt  # 若有留言
   days_since_comment = (now - latest_comment_at) in days
 
@@ -181,7 +302,7 @@ for each issue in issues:
 # 偽碼：awaiting-reply 超時 → 催促（冪等，24h 上限）
 for each issue in issues:
   if "awaiting-reply" in issue.labels:
-    comment_data = gh issue view issue.number --json comments
+    comment_data = gh issue view issue.number -R ${OWNER_REPO} --json comments
     last_comment = comment_data.comments[-1]   # 最後一則留言
     hours_since_last = (now - last_comment.createdAt) in hours
 
@@ -191,7 +312,7 @@ for each issue in issues:
 
     # 頻率上限：每 Issue 每天最多催 1 次（最多 1 次，每 24h 重置）
     if hours_since_last >= 24:
-      gh issue comment <issue.number> --body "## [自動催促]
+      gh issue comment <issue.number> -R ${OWNER_REPO} --body "## [自動催促]
 
 此 Issue 標記為 awaiting-reply，超過 24h 未收到回覆，請確認狀態。
 
@@ -206,7 +327,7 @@ for each issue in issues:
 
 ```bash
 # 對逾期 Issue 留言
-gh issue comment <issue_number> --body "## 巡邏留言（自動）
+gh issue comment <issue_number> -R ${OWNER_REPO} --body "## 巡邏留言（自動）
 
 此 Issue 已逾期未更新，請相關負責人確認狀態。
 
@@ -222,11 +343,11 @@ PR merge 後若交付鏈卡住，自動推進下一步：
 
 ```bash
 # 偽碼：PR merge → 自動推進交付鏈
-SPRINT_FILE=$(ls docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
+SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
 # 讀取 Sprint Backlog，找出狀態為「PR merged / 待部署」的 Story
 
 for each story in backlog:
-  pr_status = gh pr view <pr_number> --json merged,mergedAt,state
+  pr_status = gh pr view <pr_number> -R ${OWNER_REPO} --json merged,mergedAt,state
   if pr_status.merged == true:
     # 前置條件檢查（推進前檢查，避免跳步）
     # 1. staging：確認 PR merge 已完成 + CI 狀態為 passing
@@ -249,7 +370,7 @@ for each story in backlog:
 
 ```bash
 # 搜尋當前 Sprint 的 Story
-SPRINT_FILE=$(ls docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
+SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
 # 讀取 Sprint Backlog，確認各 Story 狀態
 # 對「進行中」超過預期天數的 Story 留言確認
 ```
@@ -262,6 +383,7 @@ SPRINT_FILE=$(ls docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
   "cycle": <N>,
   "timestamp": "<ISO8601>",
   "type": "po-patrol",
+  "repo": "<OWNER_REPO>",
   "strict": true,
   "threshold_days": <THRESHOLD_DAYS>,
   "summary": "掃描 <X> 個 open issues，發現 <Y> 個逾期，<Z> 個無回應",
@@ -303,14 +425,15 @@ SPRINT_FILE=$(ls docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
 ## SRE 巡檢指引（AC-2）
 
 **觸發**：每個 cruise cycle 由 Task tool 派遣 SRE Agent 執行
+**Repo context**：subagent 接收 `REPO_PATH` 與 `OWNER_REPO` 參數，所有 `gh` 指令加 `-R ${OWNER_REPO}`
 
 ### CI/CD 狀態檢查
 
 ```bash
 # 列出最近 10 筆 GitHub Actions run
-gh run list --limit 10 --json status,conclusion,name,databaseId,createdAt
+gh run list -R ${OWNER_REPO} --limit 10 --json status,conclusion,name,databaseId,createdAt
 # 篩選 failure / cancelled
-FAILED_RUNS=$(gh run list --limit 10 --json status,conclusion,name,databaseId \
+FAILED_RUNS=$(gh run list -R ${OWNER_REPO} --limit 10 --json status,conclusion,name,databaseId \
   | jq '[.[] | select(.conclusion == "failure" or .conclusion == "cancelled")]')
 ```
 
@@ -320,7 +443,9 @@ FAILED_RUNS=$(gh run list --limit 10 --json status,conclusion,name,databaseId \
 
 ```bash
 # Step 1：偵測 owner 類型（org vs user）
-OWNER=$(gh repo view --json owner --jq '.owner.login')
+# OWNER_REPO 由主 loop 帶入（如 "KCTW/shikigami"）
+OWNER=$(echo "${OWNER_REPO}" | cut -d'/' -f1)
+REPO=$(echo "${OWNER_REPO}" | cut -d'/' -f2)
 OWNER_TYPE=$(gh api /orgs/${OWNER} --jq '.type' 2>/dev/null || echo "User")
 
 if [[ "$OWNER_TYPE" == "User" ]]; then
@@ -346,7 +471,7 @@ fi
 
 ```bash
 # 掃描最近 commit 的 CI logs 是否有 WARNING
-gh run view <run_id> --log 2>/dev/null | grep -i 'warning\|WARN\|deprecated' | head -20
+gh run view <run_id> -R ${OWNER_REPO} --log 2>/dev/null | grep -i 'warning\|WARN\|deprecated' | head -20
 ```
 
 ### 自動行動決策表（SRE）
@@ -364,7 +489,7 @@ gh run view <run_id> --log 2>/dev/null | grep -i 'warning\|WARN\|deprecated' | h
 ```bash
 # Issue 重複防護：建 Issue 前先搜尋（跨機器冪等）
 ISSUE_TITLE="[SRE] CI failure: ${RUN_NAME}"
-EXISTING=$(gh issue list \
+EXISTING=$(gh issue list -R ${OWNER_REPO} \
   --search "\"${ISSUE_TITLE}\"" \
   --state all \
   --json number,title \
@@ -374,12 +499,13 @@ if echo "$EXISTING" | jq -e '. | length > 0' &>/dev/null; then
   echo "[SRE] 跳過重複 Issue：$ISSUE_TITLE"
   log action: "跳過重複 Issue: ${ISSUE_TITLE}"
 else
-  gh issue create \
+  gh issue create -R ${OWNER_REPO} \
     --title "$ISSUE_TITLE" \
     --body "## SRE 巡檢發現 CI failure
 
 **發現時間**：$(date '+%Y-%m-%dT%H:%M:%S')
 **Session**：${SESSION_ID}
+**Repo**：${OWNER_REPO}
 **問題描述**：CI pipeline 執行失敗
 
 ### 詳情
@@ -400,16 +526,16 @@ fi
 
 ```bash
 # deploy failure：偵測 job name 含 deploy 且 conclusion=failure
-DEPLOY_FAILED_RUNS=$(gh run list --limit 10 --json status,conclusion,name,databaseId \
+DEPLOY_FAILED_RUNS=$(gh run list -R ${OWNER_REPO} --limit 10 --json status,conclusion,name,databaseId \
   | jq '[.[] | select(.conclusion == "failure") | select(.name | test("deploy"; "i"))]')
 
 for run in $(echo "$DEPLOY_FAILED_RUNS" | jq -r '.[].databaseId'); do
-  RUN_INFO=$(gh run view "$run" --json name,databaseId,createdAt)
+  RUN_INFO=$(gh run view "$run" -R ${OWNER_REPO} --json name,databaseId,createdAt)
   RUN_NAME=$(echo "$RUN_INFO" | jq -r '.name')
   ISSUE_TITLE="[SRE] Deploy failure: ${RUN_NAME}"
 
   # Issue 重複防護：建立前搜尋（EXISTING deploy）
-  EXISTING=$(gh issue list \
+  EXISTING=$(gh issue list -R ${OWNER_REPO} \
     --search "\"${ISSUE_TITLE}\"" \
     --state all \
     --json number,title \
@@ -421,12 +547,13 @@ for run in $(echo "$DEPLOY_FAILED_RUNS" | jq -r '.[].databaseId'); do
   else
     # PO_MENTION：從 CODEOWNERS 或 team 設定讀取，預設 @po
     PO_MENTION="${PO_GITHUB_LOGIN:-@po}"
-    gh issue create \
+    gh issue create -R ${OWNER_REPO} \
       --title "$ISSUE_TITLE" \
       --body "## SRE 巡檢發現 Deploy failure
 
 **發現時間**：$(date '+%Y-%m-%dT%H:%M:%S')
 **Session**：${SESSION_ID}
+**Repo**：${OWNER_REPO}
 **問題描述**：Deploy pipeline 執行失敗，需 PO 確認
 
 ### 詳情
@@ -454,7 +581,7 @@ for runner_name in $(echo "$OFFLINE_RUNNERS" | jq -r '.[].name'); do
   ISSUE_TITLE="[SRE] Runner offline: ${runner_name}"
 
   # Issue 重複防護：建立前搜尋（EXISTING runner）
-  EXISTING=$(gh issue list \
+  EXISTING=$(gh issue list -R ${OWNER_REPO} \
     --search "\"${ISSUE_TITLE}\"" \
     --state all \
     --json number,title \
@@ -464,12 +591,13 @@ for runner_name in $(echo "$OFFLINE_RUNNERS" | jq -r '.[].name'); do
     echo "[SRE] 跳過重複 Issue：$ISSUE_TITLE"
     log action: "跳過重複 Issue: ${ISSUE_TITLE}"
   else
-    gh issue create \
+    gh issue create -R ${OWNER_REPO} \
       --title "$ISSUE_TITLE" \
       --body "## SRE 巡檢發現 Runner offline
 
 **發現時間**：$(date '+%Y-%m-%dT%H:%M:%S')
 **Session**：${SESSION_ID}
+**Repo**：${OWNER_REPO}
 **Runner 名稱**：${runner_name}
 
 ### 建議處理
@@ -484,7 +612,7 @@ done
 
 ### 跨機器冪等性（所有 Issue 類型）
 
-多台機器同時執行 cruise 時，可能同時發現同一 failure。每種 Issue 類型在建立前均執行 `gh issue list --search` 搜尋，確保同一問題只建一個 Issue：
+多台機器同時執行 cruise 時，可能同時發現同一 failure。每種 Issue 類型在建立前均執行 `gh issue list -R ${OWNER_REPO} --search` 搜尋，確保同一問題只建一個 Issue：
 
 - CI failure：`EXISTING` 搜尋防護 → 已存在則跳過
 - Deploy failure：`EXISTING` 搜尋防護 → 已存在則跳過
@@ -500,6 +628,7 @@ done
   "cycle": <N>,
   "timestamp": "<ISO8601>",
   "type": "sre-inspection",
+  "repo": "<OWNER_REPO>",
   "summary": "檢查 <X> 筆 CI run，發現 <Y> 個 failure，建立 <Z> 個 Issue",
   "actions": ["create-issue-with-debug #<N1>", "create-issue-deploy #<N2>", "create-issue-runner #<N3>", "跳過重複 Issue: <title>"]
 }
@@ -549,20 +678,28 @@ echo "[CRUISE] SessionEnd cleanup: cruise flag file 已清除"
 
 每個 Session 寫入自己的 JSONL 檔案，避免多 session 同時 append 造成 git conflict：
 
+**單一 repo 模式**：
 ```
-docs/cruise-logs/
+<repo>/docs/cruise-logs/
 ├── 2026-03-21-session-abc123.jsonl   ← Session A 的 log
+└── 2026-03-22-session-def456.jsonl   ← 另一天的 log
+```
+
+**多 repo 模式**（log 統一在 group 目錄，不寫入各 repo）：
+```
+<group-dir>/cruise-logs/
+├── 2026-03-21-session-abc123.jsonl   ← Session A（巡邏 3 個 repo）
 ├── 2026-03-21-session-def456.jsonl   ← Session B 的 log（同一天）
 └── 2026-03-22-session-ghi789.jsonl   ← 另一天的 log
 ```
 
 ### Issue 重複防護
 
-SRE 建立 Issue 前必須執行 `gh issue list --search` 搜尋：
+SRE 建立 Issue 前必須執行 `gh issue list -R ${OWNER_REPO} --search` 搜尋：
 
 ```bash
 # 搜尋包含 issue_title 的所有 Issue（含已關閉）
-EXISTING=$(gh issue list \
+EXISTING=$(gh issue list -R ${OWNER_REPO} \
   --search "\"${ISSUE_TITLE}\"" \
   --state all \
   --json number,title \
@@ -571,7 +708,7 @@ EXISTING=$(gh issue list \
 if echo "$EXISTING" | jq -e '. | length > 0' &>/dev/null; then
   echo "[SRE] 跳過重複 Issue：$ISSUE_TITLE"
 else
-  gh issue create ...
+  gh issue create -R ${OWNER_REPO} ...
 fi
 ```
 
@@ -582,15 +719,26 @@ fi
 - Log 以 SESSION_ID 命名（per-session JSONL）
 - Issue 重複防護確保同一問題不會被多個 Session 重複建立（覆蓋所有新 Issue 類型：CI failure / deploy failure / runner offline）
 - 多 runner 同時發現同一 failure → 只建一個 Issue（search 防護，冪等性覆蓋所有新 Issue 類型）
+- **多 repo 場景**：同一 session 巡邏多個 repo，Issue 重複防護已含 `-R` 指定 repo，跨 repo 不會誤判重複
 
 ---
 
 ## Log 格式完整範例
 
+**單一 repo 模式**（`"repo"` 欄位仍存在，值為該 repo 的 owner/repo）：
+
 ```jsonl
-{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期，1 個無回應，3 個有新回覆，1 個無 label，2 個 awaiting-reply","actions":["reply #301","reply #305","triage #310","nudge #312","push-delivery #315 → staging","skipped #320: stakeholder-issue"]}
-{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:05+0800","type":"sre-inspection","summary":"檢查 10 筆 CI run，發現 1 個 CI failure，1 個 deploy failure，建立 2 個 Issue","actions":["create-issue-with-debug #321","create-issue-deploy #322","create-issue-runner #323","跳過重複 Issue: [SRE] CI failure: test"]}
-{"session_id":"abc123","cycle":2,"timestamp":"2026-03-21T11:00:00+0800","type":"po-patrol","strict":true,"threshold_days":0,"summary":"掃描 15 個 open issues，無異常","actions":[]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","repo":"KCTW/shikigami","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期，1 個無回應","actions":["reply #301","triage #310","nudge #312"]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:05+0800","type":"sre-inspection","repo":"KCTW/shikigami","summary":"檢查 10 筆 CI run，發現 1 個 CI failure，建立 1 個 Issue","actions":["create-issue-with-debug #321"]}
+```
+
+**多 repo 模式**（每個 repo 各一筆 log entry）：
+
+```jsonl
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","repo":"KCTW/shikigami","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期","actions":["reply #301","triage #310"]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:02+0800","type":"sre-inspection","repo":"KCTW/shikigami","summary":"檢查 10 筆 CI run，無異常","actions":[]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:04+0800","type":"po-patrol","repo":"KCTW/project-x","strict":false,"threshold_days":3,"summary":"掃描 8 個 open issues，無異常","actions":[]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:06+0800","type":"sre-inspection","repo":"KCTW/project-x","summary":"檢查 5 筆 CI run，發現 1 個 failure","actions":["create-issue-with-debug #45"]}
 ```
 
 **PO 巡邏 actions 行動類型說明**：
