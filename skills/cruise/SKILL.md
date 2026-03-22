@@ -112,6 +112,7 @@ gh issue list --state open --limit 50 --json number,title,labels,assignees,updat
 - 逾期 Issue（`updatedAt` 超過 7 天未更新且無 assignee）
 - 無回應 Issue（已開超過 3 天**且無任何留言**且無 assignee）
 - 標記為 `blocked` 或 `needs-triage` 的 Issue
+- 有新回覆的 Issue（`comments` 較上次 cycle 增加）
 
 ### 留言掃描步驟
 
@@ -147,6 +148,58 @@ for each issue in issues:
       alert PO immediately
 ```
 
+### 自動行動決策表
+
+**發現即處理**：PO 巡邏不再只回報，針對 4 種情境直接採取行動。
+
+**安全前置檢查**（每個 Issue 行動前必先執行）：
+- 若 Issue 帶有 `stakeholder` label → 跳過所有行動，記錄 `"skipped": "stakeholder-issue"` 至 cruise log
+- 詳見下方「安全邊界」段落
+
+| 情境 | 判斷條件 | 自動行動 | log action 類型 |
+|------|----------|----------|-----------------|
+| **新回覆 — 需排入 Backlog** | Issue 有新回覆 + 內容涉及新需求 / 問題回報 | invoke `backlog-management`，將需求排入 Backlog | `"reply"` |
+| **新回覆 — 內部 Issue 直接回覆** | Issue 有新回覆 + 屬於內部 Issue（無外部 stakeholder 參與）+ 可直接回應 | `gh issue comment` 直接回覆 | `"reply"` |
+| **無 label — 自動 Triage** | Issue 無任何 label（`labels` 為空陣列）| invoke `issue-management` triage；已有 label 的 Issue 不重複 triage（triage 冪等）| `"triage"` |
+| **awaiting-reply 超時 — 催促** | Issue 帶有 `awaiting-reply` label + 最後一則留言超過 24h | 自動留言催促；每 Issue 每天最多 1 次（催促冪等）| `"nudge"` |
+
+**情境 3 詳細邏輯（無 label 自動 Triage）**：
+
+```bash
+# 偽碼：無 label Issue → 觸發 issue-management triage（冪等）
+for each issue in issues:
+  if issue.labels is empty:           # 無 label → 需要 triage
+    # triage 冪等：避免重複觸發
+    invoke issue-management skill with action=triage, issue_number=issue.number
+    log action: "triage #<issue.number>"
+  # else: 已有 label，labels exist → skip triage，label.*exist.*skip.*triage 防護
+```
+
+**情境 4 詳細邏輯（awaiting-reply 超時催促）**：
+
+```bash
+# 偽碼：awaiting-reply 超時 → 催促（冪等，24h 上限）
+for each issue in issues:
+  if "awaiting-reply" in issue.labels:
+    comment_data = gh issue view issue.number --json comments
+    last_comment = comment_data.comments[-1]   # 最後一則留言
+    hours_since_last = (now - last_comment.createdAt) in hours
+
+    # 冪等：最後一則留言若已是自動催促留言 → 重複催促跳過
+    if "[自動催促]" in last_comment.body:
+      skip  # 已是自動催促，不重複
+
+    # 頻率上限：每 Issue 每天最多催 1 次（最多 1 次，每 24h 重置）
+    if hours_since_last >= 24:
+      gh issue comment <issue.number> --body "## [自動催促]
+
+此 Issue 標記為 awaiting-reply，超過 24h 未收到回覆，請確認狀態。
+
+- 催促時間：$(date '+%Y-%m-%dT%H:%M:%S')
+- Session: ${SESSION_ID}"
+      log action: "nudge #<issue.number>"
+```
+
 ### 留言追蹤
 
 對逾期或無回應的 Issue 留言提醒：
@@ -159,6 +212,35 @@ gh issue comment <issue_number> --body "## 巡邏留言（自動）
 
 - 巡邏時間：$(date '+%Y-%m-%dT%H:%M:%S')
 - Session: ${SESSION_ID}"
+```
+
+### 交付推進自動化
+
+**交付鏈**：`staging → E2E → tag → production → close`
+
+PR merge 後若交付鏈卡住，自動推進下一步：
+
+```bash
+# 偽碼：PR merge → 自動推進交付鏈
+SPRINT_FILE=$(ls docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
+# 讀取 Sprint Backlog，找出狀態為「PR merged / 待部署」的 Story
+
+for each story in backlog:
+  pr_status = gh pr view <pr_number> --json merged,mergedAt,state
+  if pr_status.merged == true:
+    # 前置條件檢查（推進前檢查，避免跳步）
+    # 1. staging：確認 PR merge 已完成 + CI 狀態為 passing
+    # 2. E2E：確認 staging 部署成功
+    # 3. tag：確認 E2E 通過
+    # 4. production：確認 tag 建立
+    # 5. close：確認 production 部署完成
+
+    next_step = determine_next_delivery_step(story)
+    if next_step and precondition_met(next_step):
+      execute_delivery_step(next_step)
+      log action: "push-delivery #<story.issue> → <next_step>"
+    else:
+      log: "skip push-delivery #<story.issue>：precondition not met for <next_step>"
 ```
 
 ### 交付追蹤
@@ -183,11 +265,38 @@ SPRINT_FILE=$(ls docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
   "strict": true,
   "threshold_days": <THRESHOLD_DAYS>,
   "summary": "掃描 <X> 個 open issues，發現 <Y> 個逾期，<Z> 個無回應",
-  "actions": ["留言 #<N1>", "留言 #<N2>"]
+  "actions": ["reply #<N1>", "triage #<N2>", "nudge #<N3>", "push-delivery #<N4> → staging", "skipped #<N5>: stakeholder-issue"]
 }
 ```
 
 > **嚴格模式備注**：`strict` 時 `"strict": true`，`threshold_days: 0`；預設模式 `"strict": false`，`threshold_days: 3`。
+
+---
+
+## 安全邊界
+
+### Stakeholder Issue — 不自動行動
+
+**判斷標準**：Issue 帶有 `stakeholder` label → 視為 Stakeholder Issue。
+
+**行為規則**：
+
+| 條件 | 行動 |
+|------|------|
+| Issue 有 `stakeholder` label | **只記錄**至 cruise log，不執行任何自動行動 |
+| Issue 無 `stakeholder` label | 正常執行自動行動決策表 |
+
+**Log 格式**：
+
+```json
+{
+  "actions": ["skipped #<N>: stakeholder-issue"]
+}
+```
+
+即 `"skipped"` 欄位標注 `"stakeholder-issue"`，標示 Stakeholder Issue 已被掃描但跳過自動行動。
+
+**設計理由**：Stakeholder Issue 涉及外部關係，由 PO 人工判斷後介入，避免自動行動造成不當回覆或影響關係管理。
 
 ---
 
@@ -359,7 +468,17 @@ fi
 ## Log 格式完整範例
 
 ```jsonl
-{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期，1 個無回應","actions":["留言 #301","留言 #305"]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期，1 個無回應，3 個有新回覆，1 個無 label，2 個 awaiting-reply","actions":["reply #301","reply #305","triage #310","nudge #312","push-delivery #315 → staging","skipped #320: stakeholder-issue"]}
 {"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:05+0800","type":"sre-inspection","summary":"檢查 10 筆 CI run，發現 1 個 failure，建立 1 個 Issue","actions":["建立 Issue #321"]}
 {"session_id":"abc123","cycle":2,"timestamp":"2026-03-21T11:00:00+0800","type":"po-patrol","strict":true,"threshold_days":0,"summary":"掃描 15 個 open issues，無異常","actions":[]}
 ```
+
+**PO 巡邏 actions 行動類型說明**：
+
+| 類型 | 說明 |
+|------|------|
+| `"reply"` | 新回覆判斷後執行（排入 Backlog 或直接回覆） |
+| `"triage"` | 無 label Issue 觸發 issue-management triage |
+| `"nudge"` | awaiting-reply 超時自動催促 |
+| `"push-delivery"` | PR merge 後推進交付鏈下一步 |
+| `"skipped"` | Stakeholder Issue 跳過自動行動（含 reason） |

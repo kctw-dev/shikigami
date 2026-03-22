@@ -245,6 +245,85 @@ if [[ -f "$SKILL_FILE" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# TC-14：自動行動決策表（AC-1）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-14：PO 巡邏自動行動決策表驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '自動行動決策表' "TC-14a: SKILL.md 含「自動行動決策表」子段標題"
+  assert_contains "$SKILL_FILE" 'backlog-management|invoke.*backlog|排入.*Backlog|Backlog.*排入' "TC-14b: 決策表含「排入 Backlog」行動（invoke backlog-management）"
+  assert_contains "$SKILL_FILE" '直接回覆|reply.*internal|internal.*reply|內部.*Issue.*回覆' "TC-14c: 決策表含「直接回覆」行動（內部 Issue only）"
+  assert_contains "$SKILL_FILE" '4.*情境|情境.*4|four.*scenario|scenario.*four' "TC-14d: 決策表列出 4 種情境"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-15：交付推進自動化（AC-2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-15：交付推進自動化驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'staging.*E2E|E2E.*staging|交付鏈|delivery.*chain' "TC-15a: SKILL.md 含交付鏈（staging → E2E → tag → production）"
+  assert_contains "$SKILL_FILE" 'PR.*merge|merge.*PR|PR.*merged|merged.*PR' "TC-15b: 交付推進判斷 PR merge 狀態"
+  assert_contains "$SKILL_FILE" '前置條件|precondition|pre.*condition|CI.*狀態.*推進|推進.*前.*檢查' "TC-15c: 推進前檢查前置條件（避免跳步）"
+  assert_contains "$SKILL_FILE" 'push-delivery|交付推進|推進交付' "TC-15d: log actions 含 push-delivery 類型"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-16：awaiting-reply 超時催促（AC-3）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-16：awaiting-reply 超時催促驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'awaiting-reply' "TC-16a: SKILL.md 含 awaiting-reply 標籤判斷"
+  assert_contains "$SKILL_FILE" '24h|每.*24|24.*小時|最多.*1.*次|最多.*催.*次' "TC-16b: 催促頻率上限（每 24h 最多 1 次）"
+  assert_contains "$SKILL_FILE" '最後一則留言|last.*comment.*time|已是自動催促|重複催促.*跳過|冪等.*催促' "TC-16c: 冪等性保護（最後留言為自動催促則跳過）"
+  assert_contains "$SKILL_FILE" 'nudge|催促' "TC-16d: log actions 含 nudge 類型"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-17：無 label Issue 自動 Triage（AC-4）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-17：無 label 自動 Triage 驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '無.*label.*triage|triage.*無.*label|no.*label.*triage|labels.*empty.*triage' "TC-17a: SKILL.md 含無 label → 觸發 triage 邏輯"
+  assert_contains "$SKILL_FILE" 'issue-management.*triage|triage.*issue-management' "TC-17b: 自動觸發 issue-management triage"
+  assert_contains "$SKILL_FILE" '已有.*label.*不.*triage|label.*exist.*skip.*triage|triage.*冪等' "TC-17c: 已有 label 不重複 triage（冪等性）"
+  assert_contains "$SKILL_FILE" '"triage"' "TC-17d: log actions 含 triage 類型"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-18：安全邊界 — Stakeholder Issue 不自動行動（AC-5）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-18：安全邊界驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '§安全邊界|##.*安全邊界|安全邊界' "TC-18a: SKILL.md 新增安全邊界段落"
+  assert_contains "$SKILL_FILE" 'stakeholder.*label|label.*stakeholder' "TC-18b: 安全邊界判斷標準為 stakeholder label"
+  assert_contains "$SKILL_FILE" 'stakeholder.*只記錄|只記錄.*stakeholder|skipped.*stakeholder|stakeholder.*不.*行動' "TC-18c: Stakeholder Issue 只記錄不自動行動"
+  assert_contains "$SKILL_FILE" '"skipped".*"stakeholder-issue"|skipped.*stakeholder-issue' "TC-18d: log 標注 skipped: stakeholder-issue"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-19：Cruise log 擴充行動類型（AC-6）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-19：Cruise log 行動類型擴充驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '"reply"' "TC-19a: log actions 含 reply 類型"
+  assert_contains "$SKILL_FILE" '"triage"' "TC-19b: log actions 含 triage 類型"
+  assert_contains "$SKILL_FILE" '"push-delivery"' "TC-19c: log actions 含 push-delivery 類型"
+  assert_contains "$SKILL_FILE" '"nudge"' "TC-19d: log actions 含 nudge 類型"
+  assert_contains "$SKILL_FILE" '"skipped"' "TC-19e: log actions 含 skipped 類型"
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""
