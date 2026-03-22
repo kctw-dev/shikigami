@@ -183,9 +183,30 @@ FAILED_RUNS=$(gh run list --limit 10 --json status,conclusion,name,databaseId \
 
 ### Runner 健康檢查
 
+> **前置條件**：查詢 org-level runner 需要 `admin:org` scope（`gh auth refresh -s admin:org`）。若缺少此 scope 將自動 fallback 至 repo-level。
+
 ```bash
-# 列出 self-hosted runner 狀態（若有）
-gh api /repos/{owner}/{repo}/actions/runners --jq '.runners[] | {name, status, busy}'
+# Step 1：偵測 owner 類型（org vs user）
+OWNER=$(gh repo view --json owner --jq '.owner.login')
+OWNER_TYPE=$(gh api /orgs/${OWNER} --jq '.type' 2>/dev/null || echo "User")
+
+if [[ "$OWNER_TYPE" == "User" ]]; then
+  # 個人帳號 repo — 直接走 repo-level，不嘗試 org API
+  echo "[SRE] owner 為 User，使用 repo-level runner API"
+  gh api /repos/${OWNER}/${REPO}/actions/runners --jq '.runners[] | {name, status, busy}' 2>/dev/null || true
+else
+  # Step 2：org-level API 優先（需 admin:org scope）
+  RUNNERS=$(gh api /orgs/${OWNER}/actions/runners --jq '.runners[] | {name, status, busy}' 2>/dev/null)
+  ORG_EXIT=$?
+
+  if [[ $ORG_EXIT -ne 0 ]]; then
+    # Step 3：fallback 至 repo-level（403 或 404）
+    echo "[SRE] org-level API 不可用，fallback 至 repo-level（可能缺少 admin:org scope）"
+    gh api /repos/${OWNER}/${REPO}/actions/runners --jq '.runners[] | {name, status, busy}' 2>/dev/null || true
+  else
+    echo "$RUNNERS"
+  fi
+fi
 ```
 
 ### Warnings 掃描
