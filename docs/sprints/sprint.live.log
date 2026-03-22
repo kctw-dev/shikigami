@@ -158,3 +158,8 @@
 [09:28:33] [Sprint 114 Review] Retro Problem：無 / Action：無
 [09:28:33] [Sprint 114 Review] bump v0.78.3 → v0.78.4（patch，Cruise --strict + org-level runner）
 [09:28:33] [Sprint 114 Review] COMPLETE — Velocity 3pts，完成率 100%，外部抽樣 100%（49/49 PASS），DISPUTE 率 0%
+[10:02:42] [Sprint 115 Planning] #327 Cruise 巡查閉環 — PO 自動行動 + SRE 觸發 debugging
+[10:02:42] [Sprint 115 Planning] Size: L (8pt) — Phase 1 PO 自動行動 (M, 5pt) + Phase 2 SRE 自動行動 (S, 3pt)
+[10:02:42] [Sprint 115 Planning] Architect: SKILL.md 單檔修改，label-based 安全邊界，SRE→debugging 松耦合，不需 ADR
+[10:02:42] [Sprint 115 Planning] QA: DoR PASS — 所有 AC 可驗證，邊界案例已覆蓋（Stakeholder/重複觸發/交付跳步/催促spam）
+[10:02:42] [Sprint 115 Planning] Milestone #57 建立，#327 標記 status:in-sprint + size:L
