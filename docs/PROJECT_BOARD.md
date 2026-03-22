@@ -1,9 +1,34 @@
 # Project Board
 
-**最後更新**：2026-03-21（Sprint 112 Planning 完成）
-**當前 Sprint**：Sprint 112（進行中）
+**最後更新**：2026-03-22（Sprint 114 Planning 完成）
+**當前 Sprint**：Sprint 114（準備中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 112](sprints/sprint_112.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 114](sprints/sprint_114.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 114（準備中）
+
+> Sprint Goal：Cruise Mode 穩定性與可用性改善 — SRE org-level runner + 嚴格模式
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| FIX：SRE 巡檢 org-level runner API 預設 | #325 | S | 1 | 待開始 |
+| FEATURE：Cruise --strict 嚴格模式 | #326 | S | 2 | 待開始 |
+
+**Sprint 容量**：3 points
+
+---
+
+## Sprint 113（完成）
+
+> Sprint Goal：CI 權限分層落地 — 讓 Runner 依場景選擇權限等級，高風險操作需 Stakeholder Issue 核准
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| FIX：ADR-027 CI 權限模型改為可選分層 | #324 | M | 5 | 完成 |
+
+**Sprint 容量**：5 points
 
 ---
 
