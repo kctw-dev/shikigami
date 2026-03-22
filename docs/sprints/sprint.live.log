@@ -169,3 +169,9 @@
 [10:09:45] [US-327 Phase 2] TDD Green — 82/82 PASS，全部 validate-*.sh 通過
 [10:09:48] [US-327 Phase 2] commit 49a9fc1 完成，subagent-results/US-327.md Phase 2 段落已 append
 [10:09:52] [US-327 Phase 2] 狀態：DONE — AC1-AC5 全數通過，82 PASS / 0 FAIL
+[10:12:00] [Sprint 115 Review] 外部 QA 抽樣 #327 Phase 1（65/65 PASS）+ Phase 2（82/82 PASS）— 決策表完整、冪等性雙重防護、安全邊界落地、SRE 松耦合設計 PASS
+[10:12:00] [Sprint 115 Review] §2.6 Issue 狀態回寫 — #327 已關閉（Phase 1 + Phase 2 全部完成）
+[10:12:00] [Sprint 115 Review] Retro Good：Cruise 從「回報」進化為「行動」；安全邊界 + 冪等性設計完整
+[10:12:00] [Sprint 115 Review] Retro Problem：無 / Action：無
+[10:12:00] [Sprint 115 Review] bump v0.78.4 → v0.78.5（patch，Cruise 行動閉環 — PO 自動行動 + SRE 自動 Issue）
+[10:12:00] [Sprint 115 Review] COMPLETE — Velocity 8pts，完成率 100%，外部抽樣 100%（Phase 1 65/65 + Phase 2 82/82），DISPUTE 率 0%

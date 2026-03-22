@@ -3,14 +3,14 @@
 **Sprint Goal**：Cruise 巡查閉環 — PO 自動行動 + SRE 觸發 debugging，從「只回報」進化為「發現即處理」
 **日期**：2026-03-22
 **容量**：8 points
-**狀態**：準備中
+**狀態**：已完成
 
 ## Sprint Backlog
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| PO 巡邏自動行動（新回覆判斷 + 交付推進 + 催促 + Triage） | #327 Phase 1 | M | 5 | 待開始 |
-| SRE 巡檢自動行動（CI fail → 建 Issue + debugging 指引） | #327 Phase 2 | S | 3 | 待開始 |
+| PO 巡邏自動行動（新回覆判斷 + 交付推進 + 催促 + Triage） | #327 Phase 1 | M | 5 | 完成 ✓ |
+| SRE 巡檢自動行動（CI fail → 建 Issue + debugging 指引） | #327 Phase 2 | S | 3 | 完成 ✓ |
 
 ## Acceptance Criteria
 
@@ -130,3 +130,44 @@
 
 - 兩個 Phase 都做（AI 團隊無工作量限制，同概念打包）
 - Sprint 115 容量：8 pts
+
+---
+
+## Sprint 115 Review
+
+**日期**：2026-03-22
+**版本**：v0.78.4 → v0.78.5
+
+### §1 Demo
+
+- #327 Phase 1（PO 巡邏自動行動）：65/65 PASS
+  - 自動行動決策表 4 種情境（reply / triage / nudge / push-delivery）落地
+  - 交付鏈推進前置條件檢查完整（防跳步）
+  - 催促冪等雙重防護（[自動催促] 標記 + 24h 頻率上限）
+  - Stakeholder 安全邊界段落獨立存在，label-based 判斷
+- #327 Phase 2（SRE 巡檢自動行動）：82/82 PASS
+  - CI failure → Issue + `/systematic-debugging` 指引（松耦合）
+  - Deploy failure → Issue + @mention PO
+  - Runner offline → Issue
+  - 跨機器冪等性（gh issue list --search 防護覆蓋所有三種 Issue 類型）
+
+### §2.6 Issue 狀態
+
+- #327 → CLOSED（Phase 1 + Phase 2 全部完成）
+
+### §3 Retrospective
+
+**Good**：
+- Cruise 從「回報」進化為「行動」，閉環設計完整
+- 安全邊界（stakeholder label）+ 冪等性（催促 / triage / 推進）設計嚴謹
+
+**Problem**：無
+
+**Action**：無
+
+### Metrics
+
+- Velocity：8 pts
+- 完成率：100%
+- DISPUTE 率：0%
+- 外部抽樣：Phase 1 65/65 PASS，Phase 2 82/82 PASS
