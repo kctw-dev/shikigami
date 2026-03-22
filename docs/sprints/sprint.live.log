@@ -163,3 +163,9 @@
 [10:02:42] [Sprint 115 Planning] Architect: SKILL.md 單檔修改，label-based 安全邊界，SRE→debugging 松耦合，不需 ADR
 [10:02:42] [Sprint 115 Planning] QA: DoR PASS — 所有 AC 可驗證，邊界案例已覆蓋（Stakeholder/重複觸發/交付跳步/催促spam）
 [10:02:42] [Sprint 115 Planning] Milestone #57 建立，#327 標記 status:in-sprint + size:L
+[10:09:20] [US-327 Phase 2] 開始執行 — 讀取 sprint_115.md AC + SKILL.md 現況
+[10:09:25] [US-327 Phase 2] TDD Red — TC-20~TC-24 (17 tests) 新增至 test-cruise-skill.sh，確認失敗
+[10:09:35] [US-327 Phase 2] TDD Green — 修改 SKILL.md SRE 段落：CI failure+debugging指引、Deploy failure+PO通知、Runner offline
+[10:09:45] [US-327 Phase 2] TDD Green — 82/82 PASS，全部 validate-*.sh 通過
+[10:09:48] [US-327 Phase 2] commit 49a9fc1 完成，subagent-results/US-327.md Phase 2 段落已 append
+[10:09:52] [US-327 Phase 2] 狀態：DONE — AC1-AC5 全數通過，82 PASS / 0 FAIL
