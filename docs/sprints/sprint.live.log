@@ -152,3 +152,9 @@
 [17:05:50] [Sprint 113 Review] Velocity：5pts，完成率 100%，外部抽樣 100%（56/56 PASS），DISPUTE 率 0%
 [17:05:50] [Sprint 113 Review] bump v0.78.2 → v0.78.3（patch）— 5 個檔案已更新
 [17:05:50] [Sprint 113 Review] COMPLETE — v0.78.3
+[09:28:33] [Sprint 114 Review] 外部 QA 抽樣 #326（主要）+ #325（確認）— #325 9/9 PASS，#326 40/40 PASS，DISPUTE 0
+[09:28:33] [Sprint 114 Review] §2.6 Issue 狀態回寫 — #325 已關閉，#326 已關閉
+[09:28:33] [Sprint 114 Review] Retro Good：Cruise Mode 兩改善快速落地；THRESHOLD_DAYS 參數化設計清晰；flag 位置無關解析優雅
+[09:28:33] [Sprint 114 Review] Retro Problem：無 / Action：無
+[09:28:33] [Sprint 114 Review] bump v0.78.3 → v0.78.4（patch，Cruise --strict + org-level runner）
+[09:28:33] [Sprint 114 Review] COMPLETE — Velocity 3pts，完成率 100%，外部抽樣 100%（49/49 PASS），DISPUTE 率 0%

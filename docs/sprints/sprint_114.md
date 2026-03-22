@@ -3,14 +3,14 @@
 **Sprint Goal**：Cruise Mode 穩定性與可用性改善 — SRE org-level runner + 嚴格模式
 **日期**：2026-03-22
 **容量**：3 points
-**狀態**：準備中
+**狀態**：已完成
 
 ## Sprint Backlog
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| FIX：SRE 巡檢 org-level runner API 預設 | #325 | S | 1 | 待開始 |
-| FEATURE：Cruise --strict 嚴格模式 | #326 | S | 2 | 待開始 |
+| FIX：SRE 巡檢 org-level runner API 預設 | #325 | S | 1 | 完成 |
+| FEATURE：Cruise --strict 嚴格模式 | #326 | S | 2 | 完成 |
 
 ## Acceptance Criteria
 
@@ -90,3 +90,46 @@
 - #326 AC-5：測試執行型
 - **DoR**：PASS
 - **防漂移基準**：2 Stories, 3 pts
+
+---
+
+## Sprint Review（2026-03-22）
+
+### §1 Demo
+
+- **#325 SRE org-level runner API**：`skills/cruise/SKILL.md` Runner 健康檢查改為 org-level 優先（`gh api /orgs/{org}/actions/runners`），自動偵測 owner 類型（org vs user），fallback 至 repo-level 並提示 `admin:org` scope 需求
+- **#326 Cruise --strict 嚴格模式**：觸發語法擴充（`/cruise --strict`、`/cruise 10m --strict`、`/cruise --strict 10m`），flag 解析位置無關，`THRESHOLD_DAYS` 參數化（預設 3 / strict 0），PO 巡邏使用 `THRESHOLD_DAYS` 替代硬編碼
+
+### §2 QA 結果
+
+| Story | 外部抽樣 | 結果 |
+|-------|---------|------|
+| #325 | 9/9 AC | PASS |
+| #326 | 40/40 AC | PASS |
+
+- **外部抽樣比例**：100%（#326 較大修改為主要抽樣對象）
+- **DISPUTE**：0 項
+
+### §2.6 Issue 狀態
+
+- #325 → CLOSED
+- #326 → CLOSED
+
+### §3 Retrospective
+
+**Good**：
+- Cruise Mode 兩個改善快速落地（org-level runner + strict 模式），SKILL.md 單檔修改零衝突
+- `THRESHOLD_DAYS` 參數化設計清晰，flag 位置無關解析優雅
+
+**Problem**：無
+
+**Action Item**：無
+
+---
+
+## Sprint Metrics
+
+- **Velocity**：3 pts
+- **完成率**：100%（2/2 Stories）
+- **DISPUTE 率**：0%
+- **版本**：v0.78.3 → v0.78.4（patch）
