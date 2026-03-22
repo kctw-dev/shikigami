@@ -324,6 +324,68 @@ if [[ -f "$SKILL_FILE" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# TC-20：CI failure → Issue body 含 /systematic-debugging 指引（AC-1 Phase 2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-20：SRE CI failure 建 Issue + debugging 指引驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '/systematic-debugging' "TC-20a: SRE CI failure Issue body 含 /systematic-debugging 指引"
+  assert_contains "$SKILL_FILE" 'sre-auto-debug' "TC-20b: SRE CI failure Issue 加上 sre-auto-debug label"
+  assert_contains "$SKILL_FILE" '不在.*cruise.*loop.*同步|cruise.*loop.*外|cruise.*輕量|松耦合' "TC-20c: 備注：不在 cruise loop 內同步執行 debugging"
+  assert_contains "$SKILL_FILE" 'create-issue-with-debug' "TC-20d: log actions 含 create-issue-with-debug 類型"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-21：Deploy failure → 建 Issue + 通知 PO（AC-2 Phase 2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-21：SRE Deploy failure 建 Issue + 通知 PO 驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'Deploy fail|deploy.*fail|deploy.*failure|部署.*失敗' "TC-21a: SKILL.md 含 Deploy failure 情境"
+  assert_contains "$SKILL_FILE" '@.*PO|mention.*PO|PO.*mention|@mention.*PO' "TC-21b: Deploy failure Issue body 含 @mention PO"
+  assert_contains "$SKILL_FILE" 'deploy-failure' "TC-21c: Deploy failure Issue 加上 deploy-failure label"
+  assert_contains "$SKILL_FILE" 'create-issue-deploy' "TC-21d: log actions 含 create-issue-deploy 類型"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-22：Runner offline → 建 Issue（AC-3 Phase 2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-22：SRE Runner offline 建 Issue 驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'Runner.*offline|runner.*offline|offline.*runner' "TC-22a: SKILL.md 含 Runner offline 情境"
+  assert_contains "$SKILL_FILE" 'runner-offline' "TC-22b: Runner offline Issue 加上 runner-offline label"
+  assert_contains "$SKILL_FILE" 'create-issue-runner' "TC-22c: log actions 含 create-issue-runner 類型"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-23：Cruise log SRE 行動類型擴充（AC-4 Phase 2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-23：SRE Cruise log 行動類型擴充驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '"create-issue-with-debug"' "TC-23a: SRE log actions 含 create-issue-with-debug 類型"
+  assert_contains "$SKILL_FILE" '"create-issue-deploy"' "TC-23b: SRE log actions 含 create-issue-deploy 類型"
+  assert_contains "$SKILL_FILE" '"create-issue-runner"' "TC-23c: SRE log actions 含 create-issue-runner 類型"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-24：跨機器冪等性 — 所有新 Issue 類型均有重複防護（AC-5 Phase 2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-24：SRE 跨機器冪等性驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'deploy.*failure.*search|search.*deploy.*failure|Deploy.*ISSUE_TITLE.*search|EXISTING.*deploy' "TC-24a: Deploy failure Issue 建立前執行 search 重複防護"
+  assert_contains "$SKILL_FILE" 'runner.*offline.*search|search.*runner.*offline|Runner.*ISSUE_TITLE.*search|EXISTING.*runner' "TC-24b: Runner offline Issue 建立前執行 search 重複防護"
+  assert_contains "$SKILL_FILE" '多.*runner.*同時|同時.*發現.*同一|multi.*runner.*idempotent|冪等.*所有.*Issue.*類型' "TC-24c: 文件說明多 runner 冪等性保障"
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""

@@ -349,37 +349,148 @@ fi
 gh run view <run_id> --log 2>/dev/null | grep -i 'warning\|WARN\|deprecated' | head -20
 ```
 
-### 建立 Issue（不修）
+### 自動行動決策表（SRE）
 
-SRE 發現問題時只建 Issue，不自行修復：
+**發現即處理**：SRE 巡檢發現問題時自動建立 Issue + 附加指引，不在 cruise loop 內同步執行修復（保持 cruise 輕量、松耦合）。
+
+| 情境 | 判斷條件 | 自動行動 | label | log action 類型 |
+|------|----------|----------|-------|-----------------|
+| **CI failure** | CI run 結果為 failure / cancelled | 建 Issue + body 含 `/systematic-debugging` 指引 | `sre,sre-auto-debug,needs-triage` | `"create-issue-with-debug"` |
+| **Deploy failure** | deploy job 失敗（conclusion=failure，job name 含 deploy） | 建 Issue + body 含 @mention PO | `sre,deploy-failure,needs-triage` | `"create-issue-deploy"` |
+| **Runner offline** | runner status=offline（repo-level fallback） | 建 Issue | `sre,runner-offline,needs-triage` | `"create-issue-runner"` |
+
+### CI failure → Issue + /systematic-debugging 指引
 
 ```bash
-# Issue 重複防護：建 Issue 前先搜尋
-ISSUE_TITLE="[SRE] CI/CD failure: ${RUN_NAME}"
-EXISTING=$(gh issue list --search "$ISSUE_TITLE" --state all --json number,title 2>/dev/null)
-if [[ -z "$EXISTING" || "$EXISTING" == "[]" ]]; then
+# Issue 重複防護：建 Issue 前先搜尋（跨機器冪等）
+ISSUE_TITLE="[SRE] CI failure: ${RUN_NAME}"
+EXISTING=$(gh issue list \
+  --search "\"${ISSUE_TITLE}\"" \
+  --state all \
+  --json number,title \
+  2>/dev/null || echo "[]")
+
+if echo "$EXISTING" | jq -e '. | length > 0' &>/dev/null; then
+  echo "[SRE] 跳過重複 Issue：$ISSUE_TITLE"
+  log action: "跳過重複 Issue: ${ISSUE_TITLE}"
+else
   gh issue create \
     --title "$ISSUE_TITLE" \
-    --body "## SRE 巡檢發現問題
+    --body "## SRE 巡檢發現 CI failure
 
 **發現時間**：$(date '+%Y-%m-%dT%H:%M:%S')
 **Session**：${SESSION_ID}
-**問題描述**：CI/CD pipeline 執行失敗
+**問題描述**：CI pipeline 執行失敗
 
 ### 詳情
 - Run ID: ${RUN_ID}
 - Run Name: ${RUN_NAME}
 - 狀態: failure
 
-### 建議處理
-請相關工程師確認並修復。
+### 建議排查
+執行 \`/systematic-debugging\` 進行系統性排查。
 
-> 此 Issue 由 SRE Cruise Agent 自動建立，請勿重複建立。" \
-    --label "sre,needs-triage"
-else
-  echo "[SRE] Issue 已存在，跳過建立：$ISSUE_TITLE"
+> 此 Issue 由 SRE Cruise Agent 自動建立（松耦合 — 不在 cruise loop 內同步執行 debugging）。請勿重複建立。" \
+    --label "sre,sre-auto-debug,needs-triage"
+  log action: "create-issue-with-debug #<new_issue_number>"
 fi
 ```
+
+### Deploy failure → Issue + 通知 PO
+
+```bash
+# deploy failure：偵測 job name 含 deploy 且 conclusion=failure
+DEPLOY_FAILED_RUNS=$(gh run list --limit 10 --json status,conclusion,name,databaseId \
+  | jq '[.[] | select(.conclusion == "failure") | select(.name | test("deploy"; "i"))]')
+
+for run in $(echo "$DEPLOY_FAILED_RUNS" | jq -r '.[].databaseId'); do
+  RUN_INFO=$(gh run view "$run" --json name,databaseId,createdAt)
+  RUN_NAME=$(echo "$RUN_INFO" | jq -r '.name')
+  ISSUE_TITLE="[SRE] Deploy failure: ${RUN_NAME}"
+
+  # Issue 重複防護：建立前搜尋（EXISTING deploy）
+  EXISTING=$(gh issue list \
+    --search "\"${ISSUE_TITLE}\"" \
+    --state all \
+    --json number,title \
+    2>/dev/null || echo "[]")
+
+  if echo "$EXISTING" | jq -e '. | length > 0' &>/dev/null; then
+    echo "[SRE] 跳過重複 Issue：$ISSUE_TITLE"
+    log action: "跳過重複 Issue: ${ISSUE_TITLE}"
+  else
+    # PO_MENTION：從 CODEOWNERS 或 team 設定讀取，預設 @po
+    PO_MENTION="${PO_GITHUB_LOGIN:-@po}"
+    gh issue create \
+      --title "$ISSUE_TITLE" \
+      --body "## SRE 巡檢發現 Deploy failure
+
+**發現時間**：$(date '+%Y-%m-%dT%H:%M:%S')
+**Session**：${SESSION_ID}
+**問題描述**：Deploy pipeline 執行失敗，需 PO 確認
+
+### 詳情
+- Run ID: ${RUN_ID}
+- Run Name: ${RUN_NAME}
+- 狀態: failure
+
+### 通知
+${PO_MENTION} 請確認此次部署失敗情況並決定後續行動。
+
+> 此 Issue 由 SRE Cruise Agent 自動建立。請勿重複建立。" \
+      --label "sre,deploy-failure,needs-triage"
+    log action: "create-issue-deploy #<new_issue_number>"
+  fi
+done
+```
+
+### Runner offline → Issue
+
+```bash
+# runner offline：偵測 runner status=offline
+OFFLINE_RUNNERS=$(echo "$RUNNERS" | jq '[.[] | select(.status == "offline")] // []')
+
+for runner_name in $(echo "$OFFLINE_RUNNERS" | jq -r '.[].name'); do
+  ISSUE_TITLE="[SRE] Runner offline: ${runner_name}"
+
+  # Issue 重複防護：建立前搜尋（EXISTING runner）
+  EXISTING=$(gh issue list \
+    --search "\"${ISSUE_TITLE}\"" \
+    --state all \
+    --json number,title \
+    2>/dev/null || echo "[]")
+
+  if echo "$EXISTING" | jq -e '. | length > 0' &>/dev/null; then
+    echo "[SRE] 跳過重複 Issue：$ISSUE_TITLE"
+    log action: "跳過重複 Issue: ${ISSUE_TITLE}"
+  else
+    gh issue create \
+      --title "$ISSUE_TITLE" \
+      --body "## SRE 巡檢發現 Runner offline
+
+**發現時間**：$(date '+%Y-%m-%dT%H:%M:%S')
+**Session**：${SESSION_ID}
+**Runner 名稱**：${runner_name}
+
+### 建議處理
+請確認 runner 狀態並重新啟動（已有權限防護：repo-level fallback）。
+
+> 此 Issue 由 SRE Cruise Agent 自動建立。請勿重複建立。" \
+      --label "sre,runner-offline,needs-triage"
+    log action: "create-issue-runner #<new_issue_number>"
+  fi
+done
+```
+
+### 跨機器冪等性（所有 Issue 類型）
+
+多台機器同時執行 cruise 時，可能同時發現同一 failure。每種 Issue 類型在建立前均執行 `gh issue list --search` 搜尋，確保同一問題只建一個 Issue：
+
+- CI failure：`EXISTING` 搜尋防護 → 已存在則跳過
+- Deploy failure：`EXISTING` 搜尋防護 → 已存在則跳過
+- Runner offline：`EXISTING` 搜尋防護 → 已存在則跳過
+
+**設計理由**：多 runner 同時發現同一 failure，因 GitHub Issue search 存在毫秒級競態，實務上極罕見建立重複；search 防護為主要冪等機制，已覆蓋所有新 Issue 類型。
 
 ### SRE 巡檢結果格式
 
@@ -390,9 +501,17 @@ fi
   "timestamp": "<ISO8601>",
   "type": "sre-inspection",
   "summary": "檢查 <X> 筆 CI run，發現 <Y> 個 failure，建立 <Z> 個 Issue",
-  "actions": ["建立 Issue #<N1>", "跳過重複 Issue: <title>"]
+  "actions": ["create-issue-with-debug #<N1>", "create-issue-deploy #<N2>", "create-issue-runner #<N3>", "跳過重複 Issue: <title>"]
 }
 ```
+
+**SRE 巡檢 actions 行動類型說明**：
+
+| 類型 | 說明 |
+|------|------|
+| `"create-issue-with-debug"` | CI failure 建 Issue + `/systematic-debugging` 指引（松耦合，不同步 debug） |
+| `"create-issue-deploy"` | Deploy failure 建 Issue + @mention PO |
+| `"create-issue-runner"` | Runner offline 建 Issue |
 
 ---
 
@@ -461,7 +580,8 @@ fi
 - 每個 Session 各自獨立執行 loop，互不干擾
 - Flag file 以 SESSION_ID 命名（`/tmp/shikigami-cruise-<SESSION_ID>.active`）
 - Log 以 SESSION_ID 命名（per-session JSONL）
-- Issue 重複防護確保同一問題不會被多個 Session 重複建立
+- Issue 重複防護確保同一問題不會被多個 Session 重複建立（覆蓋所有新 Issue 類型：CI failure / deploy failure / runner offline）
+- 多 runner 同時發現同一 failure → 只建一個 Issue（search 防護，冪等性覆蓋所有新 Issue 類型）
 
 ---
 
@@ -469,7 +589,7 @@ fi
 
 ```jsonl
 {"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期，1 個無回應，3 個有新回覆，1 個無 label，2 個 awaiting-reply","actions":["reply #301","reply #305","triage #310","nudge #312","push-delivery #315 → staging","skipped #320: stakeholder-issue"]}
-{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:05+0800","type":"sre-inspection","summary":"檢查 10 筆 CI run，發現 1 個 failure，建立 1 個 Issue","actions":["建立 Issue #321"]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:05+0800","type":"sre-inspection","summary":"檢查 10 筆 CI run，發現 1 個 CI failure，1 個 deploy failure，建立 2 個 Issue","actions":["create-issue-with-debug #321","create-issue-deploy #322","create-issue-runner #323","跳過重複 Issue: [SRE] CI failure: test"]}
 {"session_id":"abc123","cycle":2,"timestamp":"2026-03-21T11:00:00+0800","type":"po-patrol","strict":true,"threshold_days":0,"summary":"掃描 15 個 open issues，無異常","actions":[]}
 ```
 
