@@ -15,9 +15,9 @@ requiredTools:
 ```
 /cruise              — 啟動巡航（預設間隔 30 分鐘）
 /cruise 10m          — 啟動巡航，指定間隔（例：10m, 15m, 60m）
-/cruise --strict     — 嚴格模式（0 天閾值，無回應立即標記）
-/cruise 10m --strict — 自訂間隔 + 嚴格模式
-/cruise --strict 10m — 同上（flag 位置無關）
+/cruise strict     — 嚴格模式（0 天閾值，無回應立即標記）
+/cruise 10m strict — 自訂間隔 + 嚴格模式
+/cruise strict 10m — 同上（flag 位置無關）
 /cruise stop         — 停止巡航
 ```
 
@@ -36,11 +36,11 @@ Cruise Mode 在當前 Session 內持續執行 PO 巡邏與 SRE 巡檢，每隔�
 ### 1. 解析參數
 
 ```bash
-# 解析 --strict flag 與間隔（位置無關）
+# 解析 strict flag 與間隔（位置無關）
 STRICT_MODE=false
 INTERVAL="30m"
 for ARG in "$@"; do
-  if [[ "$ARG" == "--strict" ]]; then
+  if [[ "$ARG" == "strict" ]]; then
     STRICT_MODE=true
   elif [[ "$ARG" =~ ^[0-9]+m$ ]]; then
     INTERVAL="$ARG"
@@ -130,7 +130,7 @@ Issue 同時滿足以下條件才視為「無回應」：
 
 ```bash
 # 判斷邏輯（偽碼）
-# THRESHOLD_DAYS：預設 3，--strict 模式為 0
+# THRESHOLD_DAYS：預設 3，strict 模式為 0
 for each issue in issues:
   has_assignee = issue.assignees.length > 0
   comment_data = gh issue view issue.number --json comments
@@ -187,7 +187,7 @@ SPRINT_FILE=$(ls docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
 }
 ```
 
-> **嚴格模式備注**：`--strict` 時 `"strict": true`，`threshold_days: 0`；預設模式 `"strict": false`，`threshold_days: 3`。
+> **嚴格模式備注**：`strict` 時 `"strict": true`，`threshold_days: 0`；預設模式 `"strict": false`，`threshold_days: 3`。
 
 ---
 
