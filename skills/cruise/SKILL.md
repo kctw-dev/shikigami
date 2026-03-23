@@ -467,7 +467,8 @@ else:
 | **帶 `cruise-feedback` label** | **Feedback Routing** | 讀取 `feedback_routing` 設定，依 `project_level` 決定自動轉送（low）或留言確認（medium/high）（#339） | `"cruise-feedback-routed"` / `"cruise-feedback-pending-confirm"` / `"cruise-feedback-skip"` |
 | **Size=S，改動明確** | **auto-shoot** | 標記為 actionable，回傳給主 loop 派 `/shoot` | `"auto-shoot"` |
 | **Size=M+，需設計或跨模組** | **排入 Sprint** | `gh issue edit --add-label sprint-candidate` | `"sprint-candidate"` |
-| **缺資訊，無法判斷** | **等待回覆** | `gh issue edit --add-label awaiting-reply` + 留言問誰要補什麼 | `"awaiting-reply"` |
+| **交付物為規劃/設計文件** | **直接開始** | 識別為「規劃類」Issue（見交付物類型識別），標記為 actionable 或 sprint-candidate（依 Size），**不標記 awaiting-reply** | `"deliverable-planning"` |
+| **缺資訊，無法判斷**（交付物類型識別後仍不明確） | **等待回覆** | `gh issue edit --add-label awaiting-reply` + 留言問誰要補什麼 | `"awaiting-reply"` |
 | **明確暫停** | **暫停** | `gh issue edit --add-label pending` + 留言說明暫停原因 | `"pending"` |
 | **已修復但未關** | **結案** | `require_creator_approval: false`（預設）→ `gh issue close`；`true` → 留言建議關閉 + `awaiting-reply`（PO 自建 Issue 豁免，直接 close） | `"close"` / `"close-pending-approval"` |
 | **stakeholder Issue** | **跳過** | 只記錄至 cruise log | `"skipped"` |
@@ -475,6 +476,27 @@ else:
 **Size 判斷標準**：
 - **Size=S**：單一檔案或少數檔案修改、修復方向明確、無需跨模組協調
 - **Size=M+**：需要 ADR、跨多個模組、涉及架構變更、需要多人討論
+
+### 交付物類型識別（#412）
+
+<!-- #412 PO 巡邏未正確解讀 Issue 交付物 — 交付物識別邏輯 -->
+
+PO 在判斷 Issue 處置前，**必須**先解析 Issue body 判斷交付物類型。此步驟在 Size 判斷之前執行。
+
+| 交付物類型 | 關鍵字 | 正確處置 |
+|-----------|--------|---------|
+| **實作類**（需要程式碼） | `實作`、`開發`、`新增功能`、`修復`、`fix`、`feat` | 依 Size 判斷 auto-shoot 或 sprint-candidate |
+| **規劃類**（需要文件） | `規劃`、`設計`、`先規劃`、`審查後再實作`、`先不實作`、`plan` | **不標記 awaiting-reply**。交付物已明確（規劃文件），直接開始撰寫規劃 |
+| **調查類**（需要分析報告） | `調查`、`分析`、`評估`、`research`、`POC` | **不標記 awaiting-reply**。交付物已明確（調查報告），直接開始調查 |
+
+**`awaiting-reply` 使用限制**（#412 根因修正）：
+
+`awaiting-reply` **僅適用於**以下情境：
+- Issue 描述本身存在歧義，無法確定範圍
+- 缺少必要的技術前提資訊
+- 需要 stakeholder 確認優先順序衝突
+
+**不應**用於交付物已明確定義的情況。當 Issue body 包含「先規劃再實作」、「先規劃給我審查」等明確指示時，交付物為**規劃文件**，無需澄清，應直接開始作業。
 
 **PO 自主加分類 label（AC-6）**：除了流程性 label（`stakeholder`）需人工決定，其餘分類 label（`research`、`enhancement`、`bug`、`feature-request` 等）PO 直接 `gh issue edit --add-label` 加上，不需「建議」等人操作。
 
@@ -606,6 +628,16 @@ project_level=${PROJECT_LEVEL}，請確認是否轉送。
           --comment "## [巡邏狀態：已修復] 關聯 PR 已合併，結案。"
         log action: "close #<issue.number>"
         continue
+
+  # ── Step 3.5：交付物類型識別（#412）──
+  # 在 Size 判斷前，先解析 Issue body 判斷交付物類型
+  DELIVERABLE_TYPE = identify_deliverable_type(issue.body)
+  # 關鍵字匹配：「先規劃」「審查後再實作」「先不實作」→ planning
+  #              「調查」「評估」「research」「POC」→ research
+  #              其他 → implementation（預設）
+  if DELIVERABLE_TYPE == "planning" OR DELIVERABLE_TYPE == "research":
+    # 交付物已明確，不標記 awaiting-reply，依 Size 直接分流
+    log action: "deliverable-${DELIVERABLE_TYPE} #<issue.number>"
 
   # ── Step 4：判斷 Size 決定 auto-shoot 或 sprint-candidate ──
   if Size=S（單檔修改、修復方向明確、無需跨模組）:
