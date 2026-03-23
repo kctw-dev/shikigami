@@ -16,10 +16,10 @@
 |-------|-------|------|--------|------|
 | [SRE] CI unzip 缺失問題復發 | #472 | S | 1 | 已完成 |
 | [SRE] Runner offline: github-runner-mig-blpf | #471 | S | 1 | 已完成 |
-| 框架複雜度預算機制 | #462 | M | 3 | 進行中 |
+| 框架複雜度預算機制 | #462 | M | 3 | 已完成 |
 | Cruise/Sprint Task List 防跳步 | #469 | S | 1 | 已完成 |
 | PR 顆粒度規範 | #470 | S | 1 | 已完成 |
-| Structured Trace Log | #392 | L | 3 | 進行中 |
+| Structured Trace Log | #392 | L | 3 | 已完成 |
 | ADR-033 Trace Log 架構決策 | #473 | S | 1 | 已完成 |
 
 **Sprint 容量**：11 points
