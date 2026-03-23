@@ -8,11 +8,11 @@
 
 | # | Story | Size | Points | MoSCoW | 狀態 |
 |---|-------|------|--------|--------|------|
-| #434 | retro: Sprint 被外部依賴阻塞時應自動 bypass 並推進 backlog | M | 3 | Must | 待開始 |
-| #436 | retro: Self-hosted runner 環境標準化 — 確保必要工具預裝 | S | 2 | Must | 待開始 |
-| #435 | retro: Shoot 模式邏輯依賴驗證 — code-review checklist 加入依賴檢查 | S | 1 | Must | 待開始 |
-| #420 | feat: Sprint Review 拆成 Review + Retro 兩個平行 subagent | M | 3 | Should | 待開始 |
-| #401 | feat: Scrum Master 調度狀態圖文件（Mermaid） | S | 1 | Should | 待開始 |
+| #434 | retro: Sprint 被外部依賴阻塞時應自動 bypass 並推進 backlog | M | 3 | Must | 完成（PR #439） |
+| #436 | retro: Self-hosted runner 環境標準化 — 確保必要工具預裝 | S | 2 | Must | 完成（PR #438） |
+| #435 | retro: Shoot 模式邏輯依賴驗證 — code-review checklist 加入依賴檢查 | S | 1 | Must | 完成（PR #437） |
+| #420 | feat: Sprint Review 拆成 Review + Retro 兩個平行 subagent | M | 3 | Should | 完成（PR #440） |
+| #401 | feat: Scrum Master 調度狀態圖文件（Mermaid） | S | 1 | Should | 完成（PR #441） |
 
 ## 技術決策
 

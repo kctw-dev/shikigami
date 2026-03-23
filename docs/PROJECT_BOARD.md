@@ -13,11 +13,11 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: Sprint 阻塞 bypass | #434 | M | 3 | 待開始 |
-| retro: Runner 環境標準化 | #436 | S | 2 | 待開始 |
-| retro: 邏輯依賴驗證 | #435 | S | 1 | 待開始 |
-| feat: Sprint Review 平行化 | #420 | M | 3 | 待開始 |
-| feat: SM 狀態圖 | #401 | S | 1 | 待開始 |
+| retro: Sprint 阻塞 bypass | #434 | M | 3 | 完成 |
+| retro: Runner 環境標準化 | #436 | S | 2 | 完成 |
+| retro: 邏輯依賴驗證 | #435 | S | 1 | 完成 |
+| feat: Sprint Review 平行化 | #420 | M | 3 | 完成 |
+| feat: SM 狀態圖 | #401 | S | 1 | 完成 |
 
 **Sprint 容量**：10 points
 
