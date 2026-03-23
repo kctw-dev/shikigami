@@ -3,7 +3,7 @@ type: sprint-planning
 sprint: 121
 date: "2026-03-23"
 start_time: "2026-03-23T20:23+08:00"
-end_time: "2026-03-23T20:32+08:00"
+end_time: "2026-03-23T20:35+08:00"
 participants:
   - role: PO
     rounds: [1, 2]
