@@ -450,9 +450,79 @@ TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 ---
 
+## 2.13 Sprint Task List — compact 後進度恢復（#469）
+
+<!-- #469 Cruise/Sprint 執行時建立 Task List — 防止 compact 後跳步 -->
+
+Sprint Execution 啟動時建立 Task List，記錄 Sprint 的三個主要 phase。compact 後可透過 TaskList 查詢恢復進度，跳過已完成的 phase，防止跳步或停下來詢問使用者。
+
+### Task List 建立時機
+
+Sprint Execution **啟動時**（§3 流程最開始，Sprint Checkpoint 偵測之前）立即建立：
+
+```
+# 建立 Sprint Task List（多 session 隔離：以 SESSION_ID 命名）
+SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+TASK_LIST_ID="sprint-${SESSION_ID}"
+
+TaskCreate 以下 tasks（依執行順序）：
+  1. "sprint-planning-${SESSION_ID}"   — Sprint Planning（backlog refinement 至排程確定）
+  2. "sprint-execution-${SESSION_ID}"  — Sprint Execution（Story 逐一開發交付）
+  3. "sprint-review-${SESSION_ID}"     — Sprint Review（驗收、Velocity 計算、Retro）
+
+# ── compact 後恢復進度（#469 AC4）──
+# 重啟時先查詢 TaskList，判斷從哪個 phase 繼續
+EXISTING_TASKS=$(TaskList --filter "sprint-${SESSION_ID}")
+if [[ -n "$EXISTING_TASKS" ]]; then
+  echo "[SPRINT] 偵測到既有 Task List，恢復進度（compact 後重啟）"
+  # 讀取各 phase 狀態：
+  #   completed → 跳過（已完成）
+  #   failed    → 從該 phase 重試（#469 AC6）
+  #   in-progress / pending → 正常繼續
+fi
+```
+
+### Task 狀態轉換規則（#469 AC2 / AC6）
+
+| 事件 | TaskUpdate 動作 |
+|------|----------------|
+| Execution 開始 | `TaskUpdate id="sprint-execution-${SESSION_ID}" status=in-progress` |
+| 每個 Story 完成時更新進度 | `TaskUpdate id="sprint-execution-${SESSION_ID}" content="completed: #N1,#N2..."` |
+| Execution 完成 | `TaskUpdate id="sprint-execution-${SESSION_ID}" status=completed` |
+| Review 開始 | `TaskUpdate id="sprint-review-${SESSION_ID}" status=in-progress` |
+| Review 完成 | `TaskUpdate id="sprint-review-${SESSION_ID}" status=completed` |
+| 任一 phase 失敗 | `TaskUpdate id="sprint-<phase>-${SESSION_ID}" status=failed` |
+
+### 多 session 隔離（#469 AC5）
+
+- Task List 名稱含 SESSION_ID，每個 session 獨立，互不干擾
+- 不同 session 的 Task List 不會互相覆蓋（`sprint-${SESSION_ID}` 命名空間）
+
+### 容錯設計
+
+- TaskCreate / TaskUpdate 失敗時**靜默略過**，不阻塞主流程
+- Task List 為輔助進度追蹤機制，sprint-checkpoint.json（§2.12）為主要斷點恢復依據，兩者互補
+
+---
+
 ## 3. 執行流程
 
 ```
+Task List 初始化（§2.13，#469 AC1/AC3）
+  # Sprint 啟動時建立 Task List，記錄三個主要 phase
+  SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+  TaskCreate tasks：
+    - "sprint-planning-${SESSION_ID}"   status=pending
+    - "sprint-execution-${SESSION_ID}"  status=pending
+    - "sprint-review-${SESSION_ID}"     status=pending
+  # compact 後恢復進度：查詢 TaskList，從第一個非 completed 的 task 繼續（#469 AC4）
+  EXISTING_TASKS=$(TaskList --filter "sprint-${SESSION_ID}")
+  |
+  v
+# ── Task List 狀態更新：sprint-execution 開始（#469 AC2）──
+TaskUpdate id="sprint-execution-${SESSION_ID}" status=in-progress
+  |
+  v
 Sprint Checkpoint 偵測（AC-2 斷點續跑，§2.12）
   |-- docs/sprints/sprint-checkpoint.json 不存在
   |     → [CHECKPOINT-NEW] 正常開始（無先前 checkpoint）

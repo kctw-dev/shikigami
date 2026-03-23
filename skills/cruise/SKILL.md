@@ -198,6 +198,50 @@ echo "[CRUISE] Flag file: $CRUISE_FLAG"
 echo "[CRUISE] 停止指令：/cruise stop"
 ```
 
+### 4.2 建立 Task List（#469）
+
+<!-- #469 Cruise/Sprint 執行時建立 Task List — 防止 compact 後跳步 -->
+
+Cruise 啟動後立即建立 Task List，記錄本次巡航的所有 phase。compact 後可透過 TaskList 查詢恢復進度，跳過已完成的 phase，防止跳步或重複執行。
+
+```
+# 建立 Cruise Task List（多 session 隔離：以 SESSION_ID 命名）
+TASK_LIST_ID="cruise-${SESSION_ID}"
+
+TaskCreate 以下 tasks（依執行順序）：
+  1. "cruise-init-${SESSION_ID}"        — 初始化（參數解析、repo 偵測、flag file）
+  2. "po-patrol-${SESSION_ID}"          — PO 巡邏（每個 cycle 更新）
+  3. "sre-inspection-${SESSION_ID}"     — SRE 巡檢（每個 cycle 更新）
+  4. "auto-shoot-${SESSION_ID}"         — Auto-shoot 派遣（有 actionable issue 時）
+  5. "cruise-cleanup-${SESSION_ID}"     — 清理（flag 清除、退出）
+
+# 恢復進度：compact 後重啟時先查詢 TaskList（#469 AC4）
+# 若 task 狀態為 completed → 跳過
+# 若 task 狀態為 failed    → 從該 task 重試
+# 若 task 狀態為 pending   → 正常執行
+EXISTING_TASKS=$(TaskList --filter "cruise-${SESSION_ID}")
+if [[ -n "$EXISTING_TASKS" ]]; then
+  echo "[CRUISE] 偵測到既有 Task List，恢復進度（compact 後重啟）"
+  # 讀取各 phase 狀態，跳過已完成的 phase
+fi
+```
+
+**Task 狀態轉換規則**（#469 AC2 / AC6）：
+
+| 事件 | TaskUpdate 動作 |
+|------|----------------|
+| phase 開始執行 | `TaskUpdate id="<task_id>" status=in-progress` |
+| phase 成功完成 | `TaskUpdate id="<task_id>" status=completed` |
+| phase 執行失敗 | `TaskUpdate id="<task_id>" status=failed` |
+| compact 後重啟 | 查詢 TaskList，從第一個非 completed 的 task 繼續 |
+
+**多 session 隔離**（#469 AC5）：
+
+- Task List 名稱含 SESSION_ID（`cruise-${SESSION_ID}`），每個 session 獨立，互不干擾
+- 不同 session 的 Task List 不會互相覆蓋或干擾
+
+---
+
 ### 4.5 讀取 project_level（#348）
 
 ```bash
@@ -329,6 +373,12 @@ Once Mode 執行單輪 PO 巡邏 + SRE 巡檢，寫入 log 後自動退出，不
 # [AUTO-CONTINUE] 以下各步驟在 project_level=low 時自動執行，不停下來詢問
 CYCLE=1
 
+# ── Task List 狀態更新：cruise-init 完成（#469 AC2）──
+TaskUpdate id="cruise-init-${SESSION_ID}" status=completed
+# ── Task List 狀態更新：po-patrol / sre-inspection 開始（#469 AC2）──
+TaskUpdate id="po-patrol-${SESSION_ID}" status=in-progress
+TaskUpdate id="sre-inspection-${SESSION_ID}" status=in-progress
+
 for REPO_PATH in REPOS:
   OWNER_REPO = REPO_REMOTES[REPO_PATH]
   平行派遣：
@@ -340,15 +390,23 @@ for each subagent result:
   if subagent 成功:
     寫入正常 log entry（JSONL append，含 "repo" 欄位）
     # log entry 格式與 Loop Mode 一致（AC4：格式統一）
+    # ── Task List 狀態更新：phase 完成（#469 AC2）──
+    TaskUpdate id="po-patrol-${SESSION_ID}" status=completed
+    TaskUpdate id="sre-inspection-${SESSION_ID}" status=completed
   else:
     寫入錯誤 log entry：
       {"type":"error","repo":"<OWNER_REPO>","cycle":1,"timestamp":"<ISO8601>","summary":"subagent failed: <reason>","mode":"once"}
     echo "[CRUISE] WARNING: ${OWNER_REPO} 巡邏/巡檢失敗，見 log"
+    # ── Task List 狀態更新：phase 失敗（#469 AC6）──
+    TaskUpdate id="po-patrol-${SESSION_ID}" status=failed
+    TaskUpdate id="sre-inspection-${SESSION_ID}" status=failed
 
 # ── Auto-shoot（與 Loop Mode 相同，依 project_level 控制）──
 # [AUTO-CONTINUE] project_level=low → 自動派 auto-shoot，不停
 ACTIONABLE_ISSUES = PO 巡邏結果.actionable_issues
 if PROJECT_LEVEL != "high":
+  # ── Task List 狀態更新：auto-shoot 開始（#469 AC2）──
+  TaskUpdate id="auto-shoot-${SESSION_ID}" status=in-progress
   while ACTIONABLE_ISSUES is not empty:
     ISSUE = ACTIONABLE_ISSUES.shift()
     echo "$ISSUE" > SHOOT_FLAG
@@ -359,10 +417,15 @@ if PROJECT_LEVEL != "high":
     else:
       rm -f SHOOT_FLAG
       寫入 log：{"type":"auto-shoot-completed","issue":ISSUE,"result":"failed","mode":"once",...}
+  # ── Task List 狀態更新：auto-shoot 完成（#469 AC2）──
+  TaskUpdate id="auto-shoot-${SESSION_ID}" status=completed
 
 # ── Once Mode 完成 log entry ──
 寫入 log：{"type":"once-mode-complete","timestamp":"<ISO8601>","session_id":"<SESSION_ID>","repos":[<OWNER_REPO>,...]}
 echo "[CRUISE] Once Mode 執行完成，寫入 log：${CRUISE_LOG}"
+
+# ── Task List 狀態更新：cruise-cleanup 完成（#469 AC2）──
+TaskUpdate id="cruise-cleanup-${SESSION_ID}" status=completed
 
 # ── 清除 flag 並退出（AC1：不進入 sleep loop）──
 rm -f "$CRUISE_FLAG"
@@ -397,11 +460,19 @@ Once Mode 各 phase 轉換點均加入 `[AUTO-CONTINUE]` 備注，指示 `projec
 
 ```
 # [AUTO-CONTINUE] project_level=low 時 cycle 間自動推進，不停
+# ── Task List 狀態更新：cruise-init 完成（#469 AC2）──
+TaskUpdate id="cruise-init-${SESSION_ID}" status=completed
+
 while 檢查 flag file 存在:
   CYCLE += 1
   # #449 AC1：每個 cycle 開始時 touch flag file，重置 mtime，避免 systemd-tmpfiles-clean 清除
   touch "$CRUISE_FLAG"
   if [[ -f "$SHOOT_FLAG" ]]; then touch "$SHOOT_FLAG"; fi
+
+  # ── Task List 狀態更新：po-patrol / sre-inspection 開始（#469 AC2）──
+  TaskUpdate id="po-patrol-${SESSION_ID}" status=in-progress
+  TaskUpdate id="sre-inspection-${SESSION_ID}" status=in-progress
+
   for REPO_PATH in REPOS:
     OWNER_REPO = REPO_REMOTES[REPO_PATH]
     平行派遣：
@@ -411,10 +482,16 @@ while 檢查 flag file 存在:
   for each subagent result:
     if subagent 成功:
       寫入正常 log entry（JSONL append，含 "repo" 欄位）
+      # ── Task List 狀態更新：phase 完成（#469 AC2）──
+      TaskUpdate id="po-patrol-${SESSION_ID}" status=completed
+      TaskUpdate id="sre-inspection-${SESSION_ID}" status=completed
     else:
       寫入錯誤 log entry：
         {"type":"error","repo":"<OWNER_REPO>","cycle":<N>,"timestamp":"<ISO8601>","summary":"subagent failed: <reason>"}
       echo "[CRUISE] WARNING: ${OWNER_REPO} 巡邏/巡檢失敗，見 log"
+      # ── Task List 狀態更新：phase 失敗（#469 AC6）──
+      TaskUpdate id="po-patrol-${SESSION_ID}" status=failed
+      TaskUpdate id="sre-inspection-${SESSION_ID}" status=failed
 
   # ── SHOOT_FLAG 殘留防護 ──────────────────────
   if SHOOT_FLAG 存在:
