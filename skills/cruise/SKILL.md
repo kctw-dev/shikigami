@@ -413,7 +413,7 @@ for each issue in issues:
 | 判斷 | 處置 | 行動 | log action 類型 |
 |------|------|------|-----------------|
 | **無 label** | **Triage** | `gh issue edit --add-label <label>` 自主加分類 label（AC-6），然後重新判斷此 Issue | `"triage"` |
-| **帶 `cruise-feedback` label** | **Feedback Routing** | 讀取 `feedback_routing` 設定，依 `project_level` 決定自動轉送（low）或留言確認（medium/high）（#339） | `"cruise-feedback-routed"` / `"cruise-feedback-pending-confirm"` |
+| **帶 `cruise-feedback` label** | **Feedback Routing** | 讀取 `feedback_routing` 設定，依 `project_level` 決定自動轉送（low）或留言確認（medium/high）（#339） | `"cruise-feedback-routed"` / `"cruise-feedback-pending-confirm"` / `"cruise-feedback-skip"` |
 | **Size=S，改動明確** | **auto-shoot** | 標記為 actionable，回傳給主 loop 派 `/shoot` | `"auto-shoot"` |
 | **Size=M+，需設計或跨模組** | **排入 Sprint** | `gh issue edit --add-label sprint-candidate` | `"sprint-candidate"` |
 | **缺資訊，無法判斷** | **等待回覆** | `gh issue edit --add-label awaiting-reply` + 留言問誰要補什麼 | `"awaiting-reply"` |
@@ -479,9 +479,11 @@ ${issue.body}
 > 來源：${OWNER_REPO}#${issue.number}，Session: ${SESSION_ID}" \
           --label "cruise-feedback,feature-request"
         log action: "cruise-feedback-routed #<issue.number> → ${FEEDBACK_TARGET}"
+        # 轉送成功後移除 label，避免下一 cycle 重複處理
+        gh issue edit issue.number -R ${OWNER_REPO} --remove-label cruise-feedback
       fi
-    else:
-      # medium / high：PO 留言確認，不自動建 Issue
+    else
+      # medium / high：PO 留言確認，不自動建 Issue（冪等：已有 [巡邏狀態：Feedback Routing] 留言則跳過）
       gh issue comment issue.number -R ${OWNER_REPO} --body "## [巡邏狀態：Feedback Routing]
 
 此 Issue 標有 \`cruise-feedback\` label，判斷屬於框架層級改善建議。

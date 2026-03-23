@@ -12,9 +12,7 @@ shikigami:
       # 範例：kctw-dev/seiryu: none  # 純原型 repo，跳過交付追蹤
   feedback_routing:
     default: kctw-dev/shikigami       # 預設回報目標
-    patterns:
-      cruise-skill: kctw-dev/shikigami  # Cruise Skill 改善
-      ci-cd: self                       # CI/CD 問題回報到本 repo
+    # Future: pattern-based routing（尚未實作，目前僅使用 default）
 ---
 
 # Shikigami 專案配置
