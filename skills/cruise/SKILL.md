@@ -230,7 +230,9 @@ get_delivery_chain() {
   local OWNER_REPO="$1"
   local REPO_OVERRIDE
   if [[ -f "$CONFIG_FILE" ]]; then
-    REPO_OVERRIDE=$(grep -A50 'per_repo:' "$CONFIG_FILE" | grep "^    ${OWNER_REPO}:" | awk '{print $2}' | head -1)
+    # 限定搜尋 delivery_chain: 區段（避免 match 到 close_policy.per_repo）
+    REPO_OVERRIDE=$(awk '/delivery_chain:/,/^[^ ]/' "$CONFIG_FILE" \
+      | grep "^    ${OWNER_REPO}:" | awk '{print $2}' | head -1)
   fi
   echo "${REPO_OVERRIDE:-$DELIVERY_CHAIN_DEFAULT}"
 }
