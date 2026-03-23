@@ -162,13 +162,28 @@
 
 ---
 
-## 問題嚴重度分級
+## 問題嚴重度分級與分層
+
+<!-- US-384 Review 建議清單分層（MUST FIX vs SUGGESTION）— Sprint 119 -->
+
+審查問題分為兩層：
+
+### MUST FIX 層（阻塞，Critical + Important HIGH）
 
 | 等級 | 定義 | 要求 |
 |------|------|------|
-| **Critical** | 會導致 Bug、安全漏洞或資料遺失 | 進入 `skills/quality-gate/SKILL.md` §7.1 CRITICAL 互動決策點（A 修復 / B 降級 / C 接受風險） |
-| **Important** | 違反設計原則、影響可維護性 | 強烈建議修復，累計 3 個以上不過 |
-| **Suggestion** | 改善建議、風格偏好 | 可選擇性採納，不影響通過與否 |
+| **Critical** | 會導致 Bug、安全漏洞或資料遺失 | 阻塞合併，進入 `skills/quality-gate/SKILL.md` §7.1 CRITICAL 互動決策點（A 修復 / B 降級 / C 接受風險） |
+| **Important** | 違反設計原則、影響可維護性 | 阻塞合併（累計 3 個以上），強烈建議修復 |
+
+**處理規則**：MUST FIX 問題未處置完畢前，品質門禁不通過，不得繼續流程。
+
+### SUGGESTION 層（非阻塞，Developer 自行決定）
+
+| 等級 | 定義 | 要求 |
+|------|------|------|
+| **Suggestion** | 改善建議、風格偏好、可選優化 | 非阻塞，Developer 自行決定是否採納；**選擇不採納時必須記錄決策理由** |
+
+**處理規則**：SUGGESTION 問題不影響門禁判定。Developer 選擇跳過時，應在 commit message 或審查回覆中附上決策理由（例：「風格一致性暫緩，留待下次 refactor Sprint 統一處理」）。
 
 ---
 
@@ -183,21 +198,27 @@
 
 ### Issues（發現的問題）
 
-#### Critical
+#### MUST FIX（阻塞 — 必須修復）
+> Critical 與累計 3 個以上 Important 均屬此層，門禁不通過前不得繼續。
+
+##### Critical
 1. **[{檔案路徑}:{行號}] {問題標題}**
    - 問題：{具體描述}
    - 影響：{為什麼這是問題}
    - 建議：{具體修復方向}
 
-#### Important
+##### Important
 1. **[{檔案路徑}:{行號}] {問題標題}**
    - 問題：{具體描述}
    - 原則：{違反的設計原則}
    - 建議：{具體修復方向}
 
-#### Suggestion
+#### SUGGESTION（非阻塞 — Developer 自行決定）
+> Suggestion 等級問題不影響門禁。選擇不採納時請記錄決策理由。
+
 1. **[{檔案路徑}:{行號}] {問題標題}**
    - 建議：{改善方向}
+   - 決策理由（若不採納）：{填入或留空待 Developer 填寫}
 
 ### Assessment
 
@@ -214,6 +235,8 @@
 | 外部資源 Smoke Test（CQ-SMOKE） | {PASS / FAIL / N/A} |
 | 靜態資料覆蓋率 | {PASS / Hard Gate FAIL / N/A（不涉及靜態資料檔）} |
 
+**MUST FIX 摘要**：Critical {N} 個，Important {N} 個（阻塞門禁：{是 / 否}）
+**SUGGESTION 摘要**：{N} 個（不影響門禁）
 **總評**：{一句話總結代碼品質與是否通過}
 ```
 
