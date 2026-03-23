@@ -1,26 +1,47 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 126 Planning 完成）
-**當前 Sprint**：Sprint 126（進行中）
+**最後更新**：2026-03-24（Sprint 126 Review 完成）
+**當前 Sprint**：Sprint 127（待規劃）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 126（進行中）
+## Done（Sprint 126 完成）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| Trace Log 端到端驗證 | #483 | M | 2 | 已完成 |
+| CI unzip 永久修復機制 | #481 | M | 2 | 已完成 |
+| Runner offline 主動監控 | #484 | S | 1 | 已完成（AC4 部分實作，see Note） |
+
+---
+
+## Sprint Backlog（Carry-over from Sprint 126）
+
+| Story | Issue | Size | Points | 說明 |
+|-------|-------|------|--------|------|
+| Sprint Execution Skill 結構重構 | #485 | M | 3 | Sprint 126 未啟動實作，carry-over |
+| INFRA 測試框架 — 自動化回歸測試 | #452 | M | 3 | Sprint 126 未啟動實作，carry-over |
+
+---
+
+## Sprint 126（完成）
 
 > Sprint Goal：Sprint Execution 結構重構 + Observability 端到端驗證 + CI 防回歸永久修復
+> **結果**：部分達成（3/5 Stories PASS，#483 #481 #484）。Velocity 5 pts，完成率 60%。
+> **Stakeholder 驗收**：接受（Observability 基礎建設目標達成，CI 防回歸目標達成）
 > **容量**：11 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| Sprint Execution Skill 結構重構 | #485 | M | 3 | 進行中 |
-| Trace Log 端到端驗證 | #483 | M | 2 | 進行中 |
-| INFRA 測試框架 — 自動化回歸測試 | #452 | M | 3 | 待開始 |
-| CI unzip 永久修復機制 | #481 | M | 2 | 待開始 |
-| Runner offline 主動監控 | #484 | S | 1 | 待開始 |
+| Sprint Execution Skill 結構重構 | #485 | M | 3 | 未完成（carry-over） |
+| Trace Log 端到端驗證 | #483 | M | 2 | 已完成 |
+| INFRA 測試框架 — 自動化回歸測試 | #452 | M | 3 | 未完成（carry-over） |
+| CI unzip 永久修復機制 | #481 | M | 2 | 已完成 |
+| Runner offline 主動監控 | #484 | S | 1 | 已完成 |
 
-**Sprint 容量**：11 points
+**Sprint 容量**：11 points / **完成 Points**：5 pts
 **執行順序**：Phase 1（#485 | #483 平行） → Phase 2（#484 → #481 序列） → Phase 3（#452）
 
 ---
