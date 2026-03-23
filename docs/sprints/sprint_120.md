@@ -8,7 +8,7 @@
 
 | # | Story | Size | Points | MoSCoW | 狀態 |
 |---|-------|------|--------|--------|------|
-| #381 | retro: 修復 new-issue-intake CI workflow — claude-code-action 持續 failure | S | 2 | Must | 阻塞（需安裝 Claude Code GitHub App） |
+| #381 | retro: 修復 new-issue-intake CI workflow — claude-code-action 持續 failure | S | 2 | Must | 完成（根因修復：OIDC permission + GitHub App + OAuth token；剩餘 unzip 拆至 #433） |
 | #412 | [Cruise Feedback] PO 巡邏未正確解讀 Issue 交付物，誤將「規劃」類 Issue 標為 awaiting-reply | M | 3 | Must | 完成 |
 | #422 | [Cruise Feedback] 新增 Stakeholder 回覆處置表 — 明確指示應立即觸發執行 | S | 2 | Must | 完成 |
 | #415 | [Cruise Feedback] Sprint 不應等待 stakeholder — 人機協作流程改善 | S | 2 | Should | 完成 |

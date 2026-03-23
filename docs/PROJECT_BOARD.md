@@ -1,19 +1,21 @@
 # Project Board
 
-**最後更新**：2026-03-23（Sprint 120 Planning 完成）
-**當前 Sprint**：Sprint 120（進行中）
+**最後更新**：2026-03-23（Sprint 120 Review 完成）
+**當前 Sprint**：無（Sprint 120 完成，等待 Sprint 121 Planning）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 120](sprints/sprint_120.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 120（進行中）
+## Sprint 120（完成）
 
 > Sprint Goal：PO 巡邏行為修正 + CI 基礎設施修復 + code-review 強化
+> **結果**：Goal 達成（5/5 Stories PASS）。Velocity 10 pts，完成率 100%。
+> **Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: 修復 new-issue-intake CI workflow | #381 | S | 2 | 阻塞 |
+| retro: 修復 new-issue-intake CI workflow | #381 | S | 2 | 完成 |
 | [Cruise Feedback] PO 巡邏交付物識別缺陷 | #412 | M | 3 | 完成 |
 | [Cruise Feedback] Stakeholder 回覆處置表 | #422 | S | 2 | 完成 |
 | [Cruise Feedback] Sprint 不等 stakeholder | #415 | S | 2 | 完成 |
