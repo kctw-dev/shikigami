@@ -48,14 +48,15 @@ printf '{"session_id":"%s","role":"%s","event":"%s","timestamp":"%s","repo":"%s"
 RECOVERY_HINTS=""
 
 # 檢查 cruise flag
-CRUISE_FLAG="/tmp/shikigami-cruise-${CLAUDE_SESSION_ID:-unknown}.active"
+# 使用已 sanitized 的 SESSION_ID（與 cruise skill 一致）
+CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
 if [[ -f "$CRUISE_FLAG" ]]; then
   RECOVERY_HINTS="${RECOVERY_HINTS}[CRUISE-RECOVER] 偵測到巡航 flag，請恢復 /cruise 巡航。\n"
 fi
 
 # 檢查 sprint checkpoint
-REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo ".")
-CHECKPOINT_FILE="${REPO_ROOT}/docs/sprints/sprint-checkpoint.json"
+# 複用已有的 REPO_ROOT_PATH（不重複 git rev-parse）
+CHECKPOINT_FILE="${REPO_ROOT_PATH}/docs/sprints/sprint-checkpoint.json"
 if [[ -f "$CHECKPOINT_FILE" ]]; then
   SPRINT_NUM=$(grep -o '"sprint": *[0-9]*' "$CHECKPOINT_FILE" 2>/dev/null | grep -o '[0-9]*' || echo "?")
   PENDING=$(grep -c '"pending"' "$CHECKPOINT_FILE" 2>/dev/null || echo "0")
