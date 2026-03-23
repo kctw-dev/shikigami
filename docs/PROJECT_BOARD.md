@@ -1,27 +1,46 @@
 # Project Board
 
-**最後更新**：2026-03-23（Sprint 123 Planning 完成）
-**當前 Sprint**：Sprint 123（進行中）
+**最後更新**：2026-03-23（Sprint 124 Planning 完成）
+**當前 Sprint**：Sprint 124（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 123（進行中）
+## Sprint 124（進行中）
 
-> Sprint Goal：消除 Cruise Mode 隨機阻斷 + 交付 Cruise 雙模式 + 強化 CI 主動偵測
-> **容量**：9 pts（恢復正常節奏，Sprint 122 Retro Actions 納入）
+> Sprint Goal：Team Debate 核心機制 + CI Regression 修復 + Retro Actions 落地
+> **容量**：11 pts（stretch from 10 pts target）
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| [Bug] prompt hooks 隨機擋 Bash | #446 | S | 1 | 待辦 |
-| cruise: /tmp flag 被清理 | #449 | S | 1 | 待辦 |
-| Cruise 雙模式（Phase 1） | #430 | M | 3 | 待辦 |
-| CI 健康檢查腳本 | #450 | M | 2 | 待辦 |
-| 並行安全規則矩陣 | #451 | M | 2 | 待辦 |
+| [SRE] #442 Regression fix (sudo) | #464 | S | 1 | 待辦 |
+| Team Debate — 雙 Agent 交替批判 | #383 | M | 3 | 待辦 |
+| ADR 自動納入 Sprint | #456 | S | 1 | 待辦 |
+| PR Quality Gate | #461 | S | 1 | 待辦 |
+| Cruise SKILL.md 模組拆分 | #460 | M | 3 | 待辦 |
+| ci-health-check 整合 SRE | #463 | S | 2 | 待辦 |
+
+**Sprint 容量**：11 points
+**執行順序**：Phase 1（#464） -> Phase 2（#383 | #460->#463 | #456+#461 平行） -> Phase 3 Buffer（#463）
+
+---
+
+## Sprint 123（完成）
+
+> Sprint Goal：消除 Cruise Mode 隨機阻斷 + 交付 Cruise 雙模式 + 強化 CI 主動偵測
+> **結果**：Goal 達成（5/5 Stories PASS）。Velocity 9 pts，完成率 100%。v0.83.0 發布。
+> **Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| [Bug] prompt hooks 隨機擋 Bash | #446 | S | 1 | 完成 |
+| cruise: /tmp flag 被清理 | #449 | S | 1 | 完成 |
+| Cruise 雙模式（Phase 1） | #430 | M | 3 | 完成 |
+| CI 健康檢查腳本 | #450 | M | 2 | 完成 |
+| 並行安全規則矩陣 | #451 | M | 2 | 完成 |
 
 **Sprint 容量**：9 points
-**執行順序**：Phase 1（#446, #449 平行） -> Phase 2（#430, #450, #451 平行）
 
 ---
 
