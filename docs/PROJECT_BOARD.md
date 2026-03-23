@@ -1,28 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 126 Review 完成）
-**當前 Sprint**：Sprint 127（待規劃）
+**最後更新**：2026-03-24（Sprint 127 Planning 完成）
+**當前 Sprint**：Sprint 127
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Done（Sprint 126 完成）
+## Sprint Backlog（Sprint 127）
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| Trace Log 端到端驗證 | #483 | M | 2 | 已完成 |
-| CI unzip 永久修復機制 | #481 | M | 2 | 已完成 |
-| Runner offline 主動監控 | #484 | S | 1 | 已完成（AC4 部分實作，see Note） |
+| Sprint Execution Skill 結構重構 — story-lifecycle-prompt 模組化拆分 | #485 | M | 3 | 待開始 |
+| shoot/SKILL.md 模組化拆分 — 1108 行降至 <=400 行 | #486 | S | 2 | 待開始 |
+| RESEARCH: #452 拆分評估與最小可交付增量 | #490 | S | 1 | 待開始 |
+| Plugin 維護 — LICENSE 檔案 + git tag 同步 | #488 | S | 1 | 待開始 |
 
----
-
-## Sprint Backlog（Carry-over from Sprint 126）
-
-| Story | Issue | Size | Points | 說明 |
-|-------|-------|------|--------|------|
-| Sprint Execution Skill 結構重構 | #485 | M | 3 | Sprint 126 未啟動實作，carry-over |
-| INFRA 測試框架 — 自動化回歸測試 | #452 | M | 3 | Sprint 126 未啟動實作，carry-over |
+**Sprint 容量**：7 points
+**Phase 1**：全部可平行（#485 | #486 | #490 | #488）
 
 ---
 
