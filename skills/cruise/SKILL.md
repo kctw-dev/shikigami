@@ -401,6 +401,57 @@ for each issue in issues:
       alert PO immediately
 ```
 
+### 關聯 PR comments 掃描步驟（#389）
+
+對 Issue 掃描完留言後，**若存在關聯 PR**，額外讀取 PR comments，以確保不遺漏 stakeholder 在 PR 上留下的工作指示。
+
+```bash
+# 透過 issue timeline 取得關聯 PR（ConnectedEvent / CrossReferencedEvent）
+PR_LIST=$(gh issue view ${ISSUE_NUMBER} -R ${OWNER_REPO} \
+  --json timelineItems \
+  --jq '[.timelineItems.nodes[] | select(.__typename=="ConnectedEvent" or .__typename=="CrossReferencedEvent") | .source | select(.number != null) | {number:.number,state:.state}]' \
+  2>/dev/null || echo "[]")
+
+# 對每個關聯 PR，讀取其 comments（含 review comments）
+for pr_number in $(echo "$PR_LIST" | jq -r '.[].number // empty'); do
+  PR_COMMENT_DATA=$(gh pr view "${pr_number}" -R ${OWNER_REPO} \
+    --json comments,reviews,reviewRequests \
+    2>/dev/null || echo "{}")
+  # 篩選 LAST_PATROL_TIME 之後的新留言，避免重複處理
+  NEW_PR_COMMENTS=$(echo "$PR_COMMENT_DATA" | jq --arg since "${LAST_PATROL_TIME}" \
+    '[.comments[] | select(.createdAt > $since)]')
+done
+```
+
+**PR comments 解析規則**：
+
+| 解析項目 | 說明 |
+|---------|------|
+| 識別 stakeholder / PO 指示 | 留言者為 PO 帳號（如 `KCTW`），或留言內容包含工作指令語義（「按 Issue 切開」、「拆分」、「不要混」等） |
+| 時間戳篩選 | 僅處理 `createdAt > LAST_PATROL_TIME` 的新留言，避免重複處理舊指示 |
+| 指示方向萃取 | 若留言包含明確動作指令，提取並記錄為 `pr_instruction` |
+
+**PR comments 與 Issue comments 衝突時的優先級規則**（#389 核心修復）：
+
+> **以 PR comments 為準**。PR 是工作實作的直接脈絡，stakeholder 在 PR 上留下的指示通常是對 Issue 描述的細化或修正，時間上更接近實際工作狀態。
+
+```bash
+# 優先級偽碼
+if pr_instruction 與 issue_instruction 方向矛盾:
+  EFFECTIVE_INSTRUCTION = pr_instruction  # PR comments 優先
+  log action: "pr-instruction-overrides-issue #${ISSUE_NUMBER} PR#${PR_NUMBER}"
+  # 在巡邏留言中說明以 PR 指示為準，避免重複矛盾指令
+else:
+  EFFECTIVE_INSTRUCTION = merge(issue_instruction, pr_instruction)  # 無矛盾則合併
+```
+
+**回歸測試場景（#389 case）**：
+
+- Issue #25 / #28 關聯 PR #29（LinGeorge2/AIO-System）
+- PR #29 comment（PO KCTW 留言）：「不要混在一起 按 Issue 把工作切開, 再一一送 PR 來」
+- 預期 PO Agent 行為：掃描 PR #29 comments → 識別「拆分」指示 → 留言要求拆分 PR，不催促合併
+- 修復前錯誤行為：只看 Issue comments，持續催促合併
+
 ### PO Issue 處置決策表（#343，取代 #340 actionable 判斷）
 
 **全覆蓋強制處置**：每個 open Issue **必須**落入以下其中一格。PO **禁止自行加排除條件**。不允許「掃描完跳過」或「已留言所以跳過」。
@@ -439,6 +490,12 @@ for each issue in issues:
   if "stakeholder" in issue.labels:
     log action: "skipped #<issue.number>: stakeholder-issue"
     continue
+
+  # ── Step 0.5：讀取關聯 PR comments（#389），取得 EFFECTIVE_INSTRUCTION ──
+  # 執行「關聯 PR comments 掃描步驟」段落的邏輯
+  # PR comments 與 Issue comments 有矛盾時，以 PR comments 為準
+  EFFECTIVE_INSTRUCTION = merge_with_pr_priority(issue_comments, pr_comments)
+  # log 若有覆蓋：log action: "pr-instruction-overrides-issue #<issue.number> PR#<pr.number>"
 
   # ── Step 1：無 label → 先 Triage（PO 自主加 label）──
   if issue.labels is empty:
@@ -770,15 +827,38 @@ PO 巡邏每 cycle 判斷 Issue 當前所處狀態，選擇對應語意模板留
 
 **冪等規則**：同一狀態下，若上一則留言已是該狀態的自動留言，不重複留言。狀態轉換時（如「排隊中」→「處理中」），留一則新狀態留言。
 
+**留言操作選擇規則（#409）**：每次巡邏前，先判斷 Issue 最後一則留言的作者是否為當前巡邏 bot。若是，則**編輯既有留言**追加本次巡邏資訊，而非發新留言（避免通知噪音）。只有在其他人於上次巡邏後回應過，才發新留言。
+
+| 情境 | 操作 | 指令 |
+|------|------|------|
+| 最後留言作者 = 巡邏 bot 且狀態未變 | 編輯既有留言（PATCH） | `gh api -X PATCH repos/{owner}/{repo}/issues/comments/{comment_id} -f body="..."` |
+| 最後留言作者 = 巡邏 bot 且狀態改變 | 編輯既有留言，更新狀態標題 | `gh api -X PATCH repos/{owner}/{repo}/issues/comments/{comment_id} -f body="..."` |
+| 最後留言作者 ≠ 巡邏 bot（他人已回應） | 發新留言（POST） | `gh issue comment <issue_number> -R ${OWNER_REPO} --body "..."` |
+| Issue 尚無任何留言 | 發新留言（POST） | `gh issue comment <issue_number> -R ${OWNER_REPO} --body "..."` |
+
 ```bash
-# 留言模板（統一格式）
-gh issue comment <issue_number> -R ${OWNER_REPO} --body "## [巡邏狀態：<狀態名稱>]
+# 留言操作邏輯（#409：編輯優先）
+COMMENTS=$(gh issue view <issue_number> -R ${OWNER_REPO} --json comments -q '.comments')
+LAST_COMMENT_AUTHOR=$(echo "$COMMENTS" | jq -r '.[-1].author.login // empty')
+LAST_COMMENT_ID=$(echo "$COMMENTS" | jq -r '.[-1].databaseId // empty')
+BOT_ACTOR="${GITHUB_ACTOR:-github-actions[bot]}"  # 巡邏 bot 的 login
+
+PATROL_BODY="## [巡邏狀態：<狀態名稱>]
 
 <對應語意的留言內容>
 
 - 巡邏時間：$(date '+%Y-%m-%dT%H:%M:%S')
 - Session: ${SESSION_ID}
 - Cycle: ${CYCLE}"
+
+if [[ -n "$LAST_COMMENT_ID" && "$LAST_COMMENT_AUTHOR" == "$BOT_ACTOR" ]]; then
+  # 最後留言是自己的巡邏留言 → 編輯（不發新通知）
+  gh api -X PATCH "repos/${OWNER_REPO}/issues/comments/${LAST_COMMENT_ID}" \
+    -f body="${PATROL_BODY}"
+else
+  # 尚無留言，或他人已回應 → 發新留言
+  gh issue comment <issue_number> -R ${OWNER_REPO} --body "${PATROL_BODY}"
+fi
 ```
 
 ### 交付推進自動化（#338：per-repo delivery_chain）
