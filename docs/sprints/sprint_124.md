@@ -65,6 +65,24 @@
 - AC4: Debate 紀錄寫入 PR description 或 comment
 - AC5: 不增加超過 30% 的 Story 執行時間
 
+## Sprint Review — 2026-03-23
+
+**結果**：6/6 PASS，11/11 pts，100% 達成率
+
+| # | Story | Pts | PR | AC 驗證 | 判定 |
+|---|-------|-----|-----|---------|------|
+| #464 | sudo regression fix | 1 | #465 | AC1-3 PASS | PASS |
+| #383 | Team Debate 雙 Agent 交替批判 | 3 | #466 | AC1-5 PASS | PASS |
+| #456 | ADR 自動納入 Sprint | 1 | #467 | AC1-4 PASS | PASS |
+| #461 | PR Quality Gate | 1 | #467 | AC1-3 PASS | PASS |
+| #460 | Cruise SKILL.md 模組拆分 | 3 | #468 | AC1-4 PASS | PASS |
+| #463 | ci-health-check 整合 SRE | 2 | #467 | AC1-3 PASS | PASS |
+
+**版號**：v0.83.0 → v0.83.3
+**Issue 狀態**：#383、#456、#461、#463 標記 done 並關閉（#464、#460 已先行關閉）
+
+---
+
 ## 執行順序（平行分群）
 
 ### Phase 1（Bug 修復，立即開始）
