@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 125 Planning 完成）
-**當前 Sprint**：Sprint 125（進行中）
+**最後更新**：2026-03-24（Sprint 125 Review 完成）
+**當前 Sprint**：Sprint 126（待規劃）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 125（進行中）
+## Sprint 125（完成）
 
 > Sprint Goal：CI Regression 永久修復 + 框架治理強化 + Multi-Agent Observability 基礎建設
+> **結果**：Goal 達成（7/7 Stories PASS）。Velocity 11 pts，完成率 100%。
+> **Stakeholder 驗收**：接受
 > **容量**：11 pts
 
 | Story | Issue | Size | Points | 狀態 |
