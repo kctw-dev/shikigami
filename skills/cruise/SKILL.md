@@ -165,6 +165,32 @@ echo "[CRUISE] Flag file: $CRUISE_FLAG"
 echo "[CRUISE] 停止指令：/cruise stop"
 ```
 
+### 4.5 讀取 project_level（#348）
+
+```bash
+# 讀取 .claude/shikigami.local.md 的 YAML frontmatter
+CONFIG_FILE=".claude/shikigami.local.md"
+if [[ -f "$CONFIG_FILE" ]]; then
+  # 從 YAML frontmatter 提取 project_level（支援 shikigami.project_level 或頂層 project_level）
+  PROJECT_LEVEL=$(grep -A5 'shikigami:' "$CONFIG_FILE" | grep 'project_level:' | awk '{print $2}' | head -1)
+  if [[ -z "$PROJECT_LEVEL" ]]; then
+    PROJECT_LEVEL="medium"  # AC-4：YAML 存在但無 project_level → fallback medium
+  fi
+else
+  PROJECT_LEVEL="medium"  # AC-4：無設定檔 → fallback medium
+fi
+echo "[CRUISE] project_level: ${PROJECT_LEVEL}"
+```
+
+**project_level 行為矩陣**（#348 AC-2 / AC-3）：
+
+| 行為 | low | medium（預設） | high |
+|------|-----|---------------|------|
+| auto-shoot | 自動派遣 invoke shikigami:shoot，事後通知 | 自動派遣 | 只標記 actionable，PO 留言等人確認 |
+| Sprint Planning | sprint-candidate 達標 → 自動 invoke shikigami:sprint-planning | 達標 → PO 留言通知，等使用者確認再觸發 | 只標記 sprint-candidate，不觸發 |
+| Issue close | 自動 close | 自動 close | PO 留言建議 close，等人確認 |
+| CI/CD 變更 | 自動走 shoot 流程 | 自動走 shoot 流程 | PO 留言通知，必須人工確認 |
+
 ### 5. 準備 Log 目錄
 
 ```bash
@@ -211,15 +237,22 @@ while 檢查 flag file 存在:
       寫入 log entry：
         {"type":"auto-shoot-stale-cleared","repo":"<OWNER_REPO>","cycle":<N>,"timestamp":"<ISO8601>"}
 
-  # ── Auto-shoot 連續派遣（#343 AC-2：完成即派下一個，不等 cycle）──
-  # PO 回傳 actionable_issues，主 loop 連續處理直到清空
+  # ── Auto-shoot 連續派遣（#343 AC-2，#348 project_level 控制）──
+  # PO 回傳 actionable_issues，主 loop 依 project_level 決定行為
   ACTIONABLE_ISSUES = PO 巡邏結果.actionable_issues
-  while ACTIONABLE_ISSUES is not empty AND CRUISE_FLAG 存在:
-    if SHOOT_FLAG 不存在:
-      ISSUE = ACTIONABLE_ISSUES.shift()
-      echo "$ISSUE" > SHOOT_FLAG
-      echo "[CRUISE] Auto-shoot 派遣：#${ISSUE}"
-      派遣 shoot agent（/shoot #${ISSUE}），等待完成
+  if PROJECT_LEVEL == "high":
+    # high：只標記，PO 留言等人確認，不自動派 shoot
+    for ISSUE in ACTIONABLE_ISSUES:
+      echo "[CRUISE] project_level=high，#${ISSUE} 標記為 actionable 但不自動派工，等人確認"
+      寫入 log：{"type":"auto-shoot-pending-approval","issue":ISSUE,"project_level":"high",...}
+  else:
+    # low / medium：自動派遣 invoke shikigami:shoot
+    while ACTIONABLE_ISSUES is not empty AND CRUISE_FLAG 存在:
+      if SHOOT_FLAG 不存在:
+        ISSUE = ACTIONABLE_ISSUES.shift()
+        echo "$ISSUE" > SHOOT_FLAG
+        echo "[CRUISE] Auto-shoot 派遣：#${ISSUE}（project_level=${PROJECT_LEVEL}）"
+        invoke shikigami:shoot with args=#${ISSUE}  # 完整 shoot 流程（#346）
       if shoot 成功:
         rm -f SHOOT_FLAG
         SHOOT_FAIL_COUNT[ISSUE] = 0
@@ -235,17 +268,26 @@ while 檢查 flag file 存在:
           寫入 log：{"type":"auto-shoot-completed","issue":ISSUE,"result":"failed",...}
       # 立即繼續下一個（不 sleep）
 
-  # ── Sprint Planning 觸發（#343 AC-3）──
+  # ── Sprint Planning 觸發（#343 AC-3，#348 project_level 控制）──
   SPRINT_CANDIDATE_COUNT = gh issue list -R ${OWNER_REPO} --label sprint-candidate --state open | count
   OLDEST_CANDIDATE_AGE = 最早 sprint-candidate 的 updatedAt 距今分鐘數
-  if SPRINT_CANDIDATE_COUNT >= 3:
-    echo "[CRUISE] sprint-candidate 累積 ${SPRINT_CANDIDATE_COUNT} 個，觸發 Sprint Planning"
-    invoke shikigami:sprint-planning
-    寫入 log：{"type":"trigger-sprint-planning","reason":"count=${SPRINT_CANDIDATE_COUNT}",...}
-  elif SPRINT_CANDIDATE_COUNT >= 1 AND OLDEST_CANDIDATE_AGE >= 30:
-    echo "[CRUISE] sprint-candidate 超過 30 分鐘，觸發 Sprint Planning"
-    invoke shikigami:sprint-planning
-    寫入 log：{"type":"trigger-sprint-planning","reason":"timeout=30min",...}
+  SHOULD_TRIGGER = (SPRINT_CANDIDATE_COUNT >= 3) OR (SPRINT_CANDIDATE_COUNT >= 1 AND OLDEST_CANDIDATE_AGE >= 30)
+
+  if SHOULD_TRIGGER:
+    if PROJECT_LEVEL == "low":
+      # low：自動觸發，不等人
+      echo "[CRUISE] sprint-candidate 達標，project_level=low，自動觸發 Sprint Planning"
+      invoke shikigami:sprint-planning
+      寫入 log：{"type":"trigger-sprint-planning","project_level":"low","reason":"auto",...}
+    elif PROJECT_LEVEL == "medium":
+      # medium：PO 留言通知，等使用者確認
+      echo "[CRUISE] sprint-candidate 達標，project_level=medium，通知等確認"
+      PO 留言至 repo discussions 或最新 sprint-candidate Issue：
+        "Sprint Planning 觸發條件已達標（${SPRINT_CANDIDATE_COUNT} 個 sprint-candidate）。請確認是否啟動。"
+      寫入 log：{"type":"sprint-planning-notify","project_level":"medium","count":SPRINT_CANDIDATE_COUNT,...}
+    else:  # high
+      # high：只標記，不觸發不通知
+      寫入 log：{"type":"sprint-planning-marked","project_level":"high","count":SPRINT_CANDIDATE_COUNT,...}
 
   echo "[CRUISE] Cycle ${CYCLE} 完成（${#REPOS[@]} repos），下次執行：${INTERVAL} 後"
   sleep ${INTERVAL_SECONDS}
@@ -552,6 +594,7 @@ SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | t
   "repo": "<OWNER_REPO>",
   "strict": true,
   "threshold_days": <THRESHOLD_DAYS>,
+  "project_level": "<PROJECT_LEVEL>",
   "summary": "掃描 <X> 個 open issues，發現 <Y> 個逾期，<Z> 個無回應",
   "actions": ["triage #<N1>", "auto-shoot #<N2>", "sprint-candidate #<N3>", "awaiting-reply #<N4>", "pending #<N5>", "close #<N6>", "auto-close #<N7>", "waiting #<N8>: Xh elapsed", "skipped #<N9>: stakeholder-issue"],
   "actionable_issues": [<issue_numbers>],
