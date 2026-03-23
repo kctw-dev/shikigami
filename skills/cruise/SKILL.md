@@ -452,6 +452,28 @@ else:
 - 預期 PO Agent 行為：掃描 PR #29 comments → 識別「拆分」指示 → 留言要求拆分 PR，不催促合併
 - 修復前錯誤行為：只看 Issue comments，持續催促合併
 
+### Stakeholder 回覆處置表（#422）
+
+<!-- #422 新增 Stakeholder 回覆處置表 — 明確指示應立即觸發執行 -->
+
+**執行時機**：在 Issue 處置決策表之前執行。對有 comments 的 Issue，先掃描最新 comments 判斷是否有 Stakeholder 回覆。
+
+**Stakeholder 識別**：Issue author 或帶有 MEMBER/OWNER association 的留言者。
+
+| Stakeholder 回覆類型 | 識別關鍵字 | PO 處置 | log action |
+|---------------------|-----------|---------|-----------|
+| **明確指示** | `先做X`、`改成Y`、`加上Z`、`先規劃`、`先不實作`、直接描述待辦事項 | **立即執行**：依指示內容分流（auto-shoot 或 sprint-candidate），不標 awaiting-reply | `"stakeholder-instruction"` |
+| **確認/同意** | `OK`、`好`、`同意`、`approve`、`LGTM`、`merge`、`可以` | **推進**：移至下一階段（merge PR、close Issue、繼續開發） | `"stakeholder-confirm"` |
+| **提問/澄清** | `?`、`為什麼`、`能不能`、`怎麼做`、問句格式 | **回答**：PO 嘗試回答；無法回答則標記需人工處理 | `"stakeholder-question"` |
+| **拒絕/修改** | `不要`、`不行`、`改成`、`重做`、`不是這樣` | **調整**：依拒絕內容修改方向，重新分流 | `"stakeholder-reject"` |
+| **無回覆** | 無新 comments | 走 Issue 處置決策表正常流程 | — |
+
+**冪等規則**：同一 Stakeholder 回覆不重複處理。以 comment ID 判斷是否已處理過。
+
+**優先順序**：Stakeholder 回覆處置表 > Issue 處置決策表。若 Stakeholder 有明確指示，直接依指示執行，不再進入 Issue 處置決策表的判斷。
+
+---
+
 ### PO Issue 處置決策表（#343，取代 #340 actionable 判斷）
 
 **全覆蓋強制處置**：每個 open Issue **必須**落入以下其中一格。PO **禁止自行加排除條件**。不允許「掃描完跳過」或「已留言所以跳過」。
@@ -518,6 +540,27 @@ for each issue in issues:
   # PR comments 與 Issue comments 有矛盾時，以 PR comments 為準
   EFFECTIVE_INSTRUCTION = merge_with_pr_priority(issue_comments, pr_comments)
   # log 若有覆蓋：log action: "pr-instruction-overrides-issue #<issue.number> PR#<pr.number>"
+
+  # ── Step 0.7：Stakeholder 回覆處置（#422，在 Issue 處置決策表之前執行）──
+  if issue.comments > 0:
+    latest_stakeholder_comment = get_latest_stakeholder_comment(issue)
+    if latest_stakeholder_comment is not None AND not already_processed(latest_stakeholder_comment.id):
+      reply_type = classify_stakeholder_reply(latest_stakeholder_comment)
+      if reply_type == "instruction":
+        # 明確指示 → 立即執行，不進入 Issue 處置決策表
+        log action: "stakeholder-instruction #<issue.number>"
+        # 依指示內容分流（auto-shoot 或 sprint-candidate）
+        continue
+      elif reply_type == "confirm":
+        log action: "stakeholder-confirm #<issue.number>"
+        # 推進至下一階段
+        continue
+      elif reply_type == "question":
+        log action: "stakeholder-question #<issue.number>"
+        # PO 嘗試回答
+      elif reply_type == "reject":
+        log action: "stakeholder-reject #<issue.number>"
+        # 調整方向後重新分流
 
   # ── Step 1：無 label → 先 Triage（PO 自主加 label）──
   if issue.labels is empty:
