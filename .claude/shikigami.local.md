@@ -1,6 +1,15 @@
 ---
 shikigami:
   project_level: low
+  close_policy:
+    require_creator_approval: false   # false（預設）= 直接 close；true = 等發 Issue 人確認
+    default_timeout: 2h               # 等待確認的 timeout（預設 2h）
+    per_repo:
+      # 範例：KCTW/kinun: 4h         # 個別 repo 可覆蓋 timeout
+  delivery_chain:
+    default: production               # production = 完整鏈；pr = PR merge 即完成；none = 跳過
+    per_repo:
+      # 範例：kctw-dev/seiryu: none  # 純原型 repo，跳過交付追蹤
 ---
 
 # Shikigami 專案配置
