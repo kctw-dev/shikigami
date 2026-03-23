@@ -1,15 +1,17 @@
 # Project Board
 
-**最後更新**：2026-03-23（Sprint 121 Planning 完成）
-**當前 Sprint**：Sprint 121（2026-03-23 ~ 2026-03-30）
+**最後更新**：2026-03-23（Sprint 121 Review 完成）
+**當前 Sprint**：無（Sprint 121 完成，等待 Sprint 122 Planning）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 121（進行中）
+## Sprint 121（完成）
 
-> Sprint Goal：強化 Sprint 運作韌性：解決外部依賴阻塞問題、修復 CI 環境缺陷、提升 Sprint Review 效率，確保流程不再因單點故障而停滯。
+> Sprint Goal：強化 Sprint 運作韌性
+> **結果**：Goal 達成（5/5 Stories PASS）。Velocity 10 pts，完成率 100%。全 5 Story 平行執行（worktree 隔離）。
+> **Stakeholder 驗收**：接受
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
