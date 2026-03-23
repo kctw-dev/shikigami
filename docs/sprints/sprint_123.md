@@ -8,9 +8,9 @@
 
 | # | Story | Size | Points | MoSCoW | 狀態 | 執行順序 |
 |---|-------|------|--------|--------|------|----------|
-| #446 | [Bug] PreToolUse prompt hooks 隨機擋住所有 Bash 指令 | S | 1 | Must | 待辦 | 1 |
-| #449 | cruise: Flag file in /tmp cleared by systemd-tmpfiles-clean | S | 1 | Must | 待辦 | 1 |
-| #430 | feat: Cruise 雙模式 — Loop Mode + Once Mode（Phase 1：Loop + Once only） | M | 3 | Must | 待辦 | 2 |
+| #446 | [Bug] PreToolUse prompt hooks 隨機擋住所有 Bash 指令 | S | 1 | Must | 完成（PR #455） | 1 |
+| #449 | cruise: Flag file in /tmp cleared by systemd-tmpfiles-clean | S | 1 | Must | 完成（PR #454） | 1 |
+| #430 | feat: Cruise 雙模式 — Loop Mode + Once Mode（Phase 1：Loop + Once only） | M | 3 | Must | 進行中 | 2 |
 | #450 | feat: CI 健康檢查腳本 — 主動偵測 CI 故障點 | M | 2 | Should | 待辦 | 2 |
 | #451 | docs: 並行安全規則矩陣 — 明文化多 Agent 同時操作邊界 | M | 2 | Should | 待辦 | 2 |
 
