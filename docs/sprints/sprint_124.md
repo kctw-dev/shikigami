@@ -8,12 +8,12 @@
 
 | # | Story | Size | Points | MoSCoW | 狀態 | 執行順序 |
 |---|-------|------|--------|--------|------|----------|
-| #464 | [SRE] #442 Regression: sudo 密碼問題導致 unzip 修復無效 | S | 1 | Must | 待辦 | 1 |
-| #383 | feat: 同職能 Team Debate — 雙 Agent 交替批判機制（方案 C） | M | 3 | Must | 待辦 | 2 |
-| #456 | feat: ADR 自動納入 Sprint — Architect Refinement 自動補建 ADR Story | S | 1 | Should | 待辦 | 2 |
-| #461 | fix: PR Description Quality Gate 強制 Summary + AC Checklist | S | 1 | Should | 待辦 | 2 |
-| #460 | feat: Cruise SKILL.md 模組拆分 — 降低序列瓶頸提升並行效率 | M | 3 | Should | 待辦 | 2 |
-| #463 | ci-health-check.sh 整合至 Cruise SRE 啟動流程 | S | 2 | Could | 待辦 | 3 |
+| #464 | [SRE] #442 Regression: sudo 密碼問題導致 unzip 修復無效 | S | 1 | Must | 完成（PR #465） | 1 |
+| #383 | feat: 同職能 Team Debate — 雙 Agent 交替批判機制（方案 C） | M | 3 | Must | 完成（PR #466） | 2 |
+| #456 | feat: ADR 自動納入 Sprint — Architect Refinement 自動補建 ADR Story | S | 1 | Should | 完成（PR #467） | 2 |
+| #461 | fix: PR Description Quality Gate 強制 Summary + AC Checklist | S | 1 | Should | 完成（PR #467） | 2 |
+| #460 | feat: Cruise SKILL.md 模組拆分 — 降低序列瓶頸提升並行效率 | M | 3 | Should | 完成（PR #468） | 2 |
+| #463 | ci-health-check.sh 整合至 Cruise SRE 啟動流程 | S | 2 | Could | 完成（PR #467） | 3 |
 
 ## PO 決策紀錄
 
