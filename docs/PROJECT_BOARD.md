@@ -1,28 +1,48 @@
 # Project Board
 
-**最後更新**：2026-03-23（Sprint 124 Planning 完成）
-**當前 Sprint**：Sprint 124（進行中）
+**最後更新**：2026-03-24（Sprint 125 Planning 完成）
+**當前 Sprint**：Sprint 125（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 124（進行中）
+## Sprint 125（進行中）
 
-> Sprint Goal：Team Debate 核心機制 + CI Regression 修復 + Retro Actions 落地
-> **容量**：11 pts（stretch from 10 pts target）
+> Sprint Goal：CI Regression 永久修復 + 框架治理強化 + Multi-Agent Observability 基礎建設
+> **容量**：11 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| [SRE] #442 Regression fix (sudo) | #464 | S | 1 | 待辦 |
-| Team Debate — 雙 Agent 交替批判 | #383 | M | 3 | 待辦 |
-| ADR 自動納入 Sprint | #456 | S | 1 | 待辦 |
-| PR Quality Gate | #461 | S | 1 | 待辦 |
-| Cruise SKILL.md 模組拆分 | #460 | M | 3 | 待辦 |
-| ci-health-check 整合 SRE | #463 | S | 2 | 待辦 |
+| [SRE] CI unzip 缺失問題復發 | #472 | S | 1 | 待辦 |
+| [SRE] Runner offline: github-runner-mig-blpf | #471 | S | 1 | 待辦 |
+| 框架複雜度預算機制 | #462 | M | 3 | 待辦 |
+| Cruise/Sprint Task List 防跳步 | #469 | S | 1 | 待辦 |
+| PR 顆粒度規範 | #470 | S | 1 | 待辦 |
+| Structured Trace Log | #392 | L | 3 | 待辦 |
+| ADR-033 Trace Log 架構決策 | #473 | S | 1 | 待辦 |
 
 **Sprint 容量**：11 points
-**執行順序**：Phase 1（#464） -> Phase 2（#383 | #460->#463 | #456+#461 平行） -> Phase 3 Buffer（#463）
+**執行順序**：Phase 1（#472 | #471 | #469 | #470 | #473 平行） → Phase 2（#462 | #392 依賴 #473）
+
+---
+
+## Sprint 124（完成）
+
+> Sprint Goal：Team Debate 核心機制 + CI Regression 修復 + Retro Actions 落地
+> **結果**：Goal 達成（6/6 Stories PASS）。Velocity 11 pts，完成率 100%。
+> **Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| [SRE] #442 Regression fix (sudo) | #464 | S | 1 | 完成 |
+| Team Debate — 雙 Agent 交替批判 | #383 | M | 3 | 完成 |
+| ADR 自動納入 Sprint | #456 | S | 1 | 完成 |
+| PR Quality Gate | #461 | S | 1 | 完成 |
+| Cruise SKILL.md 模組拆分 | #460 | M | 3 | 完成 |
+| ci-health-check 整合 SRE | #463 | S | 2 | 完成 |
+
+**Sprint 容量**：11 points
 
 ---
 
