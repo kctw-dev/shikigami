@@ -76,3 +76,39 @@
 | #446 hooks 改為 command 後行為差異 | 中 | 測試覆蓋三個 gate 場景 |
 | #430 Phase 1 scope creep（加入 /schedule） | 中 | AC 明確限縮 Loop + Once only |
 | #449 + #430 cruise SKILL.md 衝突 | 低 | 序列執行，#449 先合併 |
+
+---
+
+## Sprint Review — 2026-03-23
+
+**Review 日期**：2026-03-23
+**結論**：Sprint Goal PASS — 5/5 Stories 完成，9/9 pts 達成
+
+### Story 交付驗收
+
+| # | Story | PR | AC 驗證 | 判定 |
+|---|-------|-----|---------|------|
+| #446 | prompt hooks bug fix | #455 | AC1-5 全 PASS（26/26 測試通過）；3 個 gate hooks 改為確定性 command；zero false positive 驗證 | PASS |
+| #449 | cruise /tmp flag fix | #454 | AC1-3 全 PASS；flag 改為每 cycle touch；stop/hook 行為維持；版號 v0.82.2 bump | PASS |
+| #430 | Cruise 雙模式 Loop+Once | #459 | Closes #430；Loop Mode + Once Mode 實作；cruise SKILL.md +124 行；測試 +86 TC；版號 bump | PASS |
+| #450 | CI 健康檢查腳本 | #457 | AC1-5 全 PASS（15 TC）；ci-health-check.sh 新增 369 行；--json flag；4 大偵測項 | PASS |
+| #451 | 並行安全規則矩陣 | #458 | AC1-4 全 PASS；parallel-safety-matrix.md 214 行；6 種 Story Type 覆蓋；architect-prompt 引用；版號 v0.82.3 bump | PASS |
+
+### Sprint Goal 達成判斷
+
+- **目標**：消除 Cruise Mode 隨機阻斷 + 交付 Cruise 雙模式（Loop + Once） + 強化 CI 主動偵測能力
+- **#446 PASS**：prompt hooks 改為確定性 command → Cruise 隨機阻斷根因消除
+- **#449 PASS**：/tmp flag 路徑修正 → systemd-tmpfiles-clean 不再干擾 Cruise
+- **#430 PASS**：Loop + Once 雙模式實作完成 → Cruise 功能擴展目標達成
+- **#450 PASS**：ci-health-check.sh 上線 → CI 主動偵測能力達成
+- **#451 PASS**：並行安全矩陣文件化 → Sprint 122 Retro Action Item 收尾
+- **判定**：Sprint Goal **完全達成** — 5/5 PASS，9 pts
+
+### Sprint 外完成項目
+
+- ADR-031 Team Debate（shoot 模式，為 #383 解除阻塞）
+- #456 Issue 建立（ADR 自動納入 Sprint 機制規劃）
+
+### Issue 狀態回寫
+
+- #446, #449, #430, #450, #451 — 全部標記 `done` label，移除 `status: in-sprint`（issues 已 closed）
