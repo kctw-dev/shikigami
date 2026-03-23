@@ -14,7 +14,7 @@
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | retro: 修復 new-issue-intake CI workflow | #381 | S | 2 | 待開始 |
-| [Cruise Feedback] PO 巡邏交付物識別缺陷 | #412 | M | 3 | 待開始 |
+| [Cruise Feedback] PO 巡邏交付物識別缺陷 | #412 | M | 3 | 完成 |
 | [Cruise Feedback] Stakeholder 回覆處置表 | #422 | S | 2 | 待開始 |
 | [Cruise Feedback] Sprint 不等 stakeholder | #415 | S | 2 | 完成 |
 | retro: code-review checklist PR/Issue title 一致性 | #421 | S | 1 | 完成 |
