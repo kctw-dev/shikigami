@@ -62,3 +62,56 @@
 | #423 需要 repo admin 權限安裝 GitHub App | 阻塞 | Stakeholder 已知，可即時操作 |
 | #424 Actions 升級可能破壞 CI | 高 | 先在 branch 測試，人工審核後才合併 |
 | validate-ci-versions.sh 不存在 | 低 | 納入 #424 一併建立 |
+
+---
+
+## Sprint 122 Review 結果
+
+**驗收日期**：2026-03-23
+**Velocity**：5 pts（目標 5，達成率 100%）
+**完成率**：100%（完成 3 / 計畫 3）
+**Sprint Goal 達成**：是 — CI 基礎設施三大故障點全數交付
+
+### AC 驗收摘要
+
+| Story | PR | AC | 結果 |
+|-------|----|----|------|
+| #423 Claude Code GitHub App 安裝指引 | #445 | 安裝步驟完整、驗證方法文件化 | PASS |
+| #442 unzip 修復 | merged | busybox.net 移除、apt-get 冪等安裝 | PASS |
+| #424 Node.js 24 遷移評估 | #448 | 5 action 識別、validate-ci-versions.sh 建立 | PASS |
+
+### Issue 狀態回寫
+- #423 / #442 / #424：done label + 留言記錄
+
+### Retrospective Analytics Summary
+
+**Velocity 趨勢**（最近 5 Sprint）：
+- Sprint 118: 10 pts (100%)
+- Sprint 119: 10 pts (100%)
+- Sprint 120: 10 pts (100%)
+- Sprint 121: 10 pts (100%)
+- Sprint 122: 5 pts (100%) — 降速聚焦 CI 修復
+
+**SPACE 五維度**：
+- **Satisfaction**: Sprint Goal 100% 達成，計畫紀律優先
+- **Productivity**: 3 stories 首次通過 Review，無返工
+- **Automation**: validate-ci-versions.sh 上線，INFRA 測試覆蓋仍缺
+- **Communication**: 零異步等待，QA 建議執行順序被採納
+- **Environment**: CI 故障點全數處理，v0.82.1 穩定
+
+**Good（亮點）**：
+1. 計畫紀律：降速聚焦品質 > 充數未就緒 stories
+2. CI 三大故障點全數交付 + validate-ci-versions.sh 補齊缺口
+3. Cruise → Planning → Execution 自動流程順暢
+
+**Problem（風險缺口）**：
+1. INFRA stories 缺自動化回歸測試
+2. CI 健康檢查被動式（無主動偵測）
+3. 框架複雜度增長無預算
+4. 並行安全規則未明文化
+
+**Action Items**（下一 Sprint）：
+1. CI 健康檢查腳本（主動偵測）
+2. 並行安全規則矩陣
+3. INFRA 測試框架
+4. 框架複雜度指標與預算
