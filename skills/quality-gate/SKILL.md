@@ -157,13 +157,27 @@ QA subagent 進行代碼審查時，必須逐項檢查以下清單：
 
 ### 判定規則
 
-- 存在任何 **Critical** 缺陷 → 進入 **CRITICAL 互動決策點**（見 §7.1）
+- 存在任何 **Critical** 缺陷 → 依 `project_level` 進入 §7.1 CRITICAL 互動決策點（low=自動修復；medium/high=AskUserQuestion 逐一確認）
 - 僅有 **Important** 缺陷 → 門禁 **條件通過**，強烈建議修復
 - 僅有 **Suggestion** → 門禁 **PASS**，建議改進但不阻擋
 
 ### §7.1 CRITICAL 互動決策點
 
-當 QA 發現 CRITICAL 缺陷時，**不直接 FAIL**，而是向使用者提出結構化選項：
+**project_level 分層控制**（讀取 `.claude/shikigami.local.md` 的 `shikigami.project_level`，無設定時 fallback 為 `medium`）：
+
+| project_level | CRITICAL 處理方式 |
+|---------------|-----------------|
+| **low** | 自動修復（現有行為不變），不彈出 AskUserQuestion，直接進入修復循環 |
+| **medium** | 用 AskUserQuestion 逐一確認每個 CRITICAL 缺陷，使用者選擇 A/B/C |
+| **high** | 用 AskUserQuestion 逐一確認每個 CRITICAL 缺陷，使用者選擇 A/B/C |
+
+**low 模式**（自動修復）：
+
+當 `project_level = low` 時，QA 發現 CRITICAL 缺陷後直接輸出問題清單，派遣 Developer subagent 修復，修復完成後重新執行品質門禁。不顯示互動確認選項。
+
+**medium/high 模式**（AskUserQuestion 逐一確認）：
+
+當 `project_level = medium` 或 `high` 時，QA 發現 CRITICAL 缺陷時，**不直接 FAIL**，而是用 `AskUserQuestion` 向使用者提出結構化選項（每個 CRITICAL 缺陷逐一確認）：
 
 ```
 [CRITICAL] 發現 N 個關鍵缺陷：
