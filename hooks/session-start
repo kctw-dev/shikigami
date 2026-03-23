@@ -72,6 +72,13 @@ if [[ -f "$CONFIG_FILE" ]]; then
   RECOVERY_HINTS="${RECOVERY_HINTS}[CONFIG] project_level=${PL:-medium}\n"
 fi
 
+# ---------- ADR-033：Trace Log Retention 清理 ----------
+# #392：session 啟動時清理超過 retention 天數的 trace log 檔案（靜默不阻塞）
+TRACE_RETENTION_SCRIPT="${PLUGIN_ROOT}/hooks/trace-log-retention.sh"
+if [[ -f "$TRACE_RETENTION_SCRIPT" ]]; then
+  bash "$TRACE_RETENTION_SCRIPT" 2>/dev/null || true
+fi
+
 # ---------- ADR-030：OAuth Token Watchdog ----------
 # 偵測 Claude OAuth token 是否即將過期，輸出告警（靜默跳過不阻塞）
 WATCHDOG_SCRIPT="${PLUGIN_ROOT}/hooks/oauth-token-watchdog.sh"

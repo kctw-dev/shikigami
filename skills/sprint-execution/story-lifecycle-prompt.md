@@ -894,6 +894,16 @@ echo "[$(date +%H:%M:%S)] [${story_id}] Spec Compliance Review — FAIL（修復
 echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — 開始" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 ```
 
+<!-- #392 ADR-033：Code Quality Review started trace span -->
+```bash
+# Trace span：code-quality-review started（#392 ADR-033）
+_CQ_SPAN_ID="cq-review-$(date '+%s')"
+_CQ_START_EPOCH="$(date '+%s')"
+printf '{"traceId":"%s","spanId":"%s","parentSpanId":"%s","agentRole":"developer","action":"code-quality-review","storyId":"%s","timestamp":"%s","duration":null,"status":"started","sessionId":"%s"}\n' \
+  "${TRACE_ID:-unknown}" "${_CQ_SPAN_ID}" "${_ROOT_SPAN_ID:-null}" "${story_id}" "$(date '+%Y-%m-%dT%H:%M:%S%z')" "${_SESSION_ID:-unknown}" \
+  >> "${TRACE_LOG_FILE:-docs/trace-logs/fallback-session-unknown.jsonl}" 2>/dev/null || true
+```
+
 <HARD-GATE>
 **Quality Reviewer Prompt 載入 Hard Gate**：進入 Code Quality Self-Review 前，必須使用 Read 工具完整讀取 `skills/sprint-execution/quality-reviewer-prompt.md`，載入 Code Quality Reviewer 角色的完整評估維度、CQ-NEW、CQ-SMOKE、CQ-DATA 檢查與判定標準。此 Gate 不受 bypass=true 豁免。
 </HARD-GATE>
@@ -911,6 +921,16 @@ echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — 開始" >> "${LI
 echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — PASS" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
 # FAIL 時：
 echo "[$(date +%H:%M:%S)] [${story_id}] Code Quality Review — FAIL（修復循環）" >> "${LIVE_LOG_FILE:-docs/sprints/live-log/fallback.log}" 2>/dev/null || true
+```
+
+<!-- #392 ADR-033：Code Quality Review 結果 trace span -->
+```bash
+# Trace span：code-quality-review completed/failed（依審查結論選擇 status）
+_CQ_STATUS="completed"  # 或 "failed"（FAIL 時改為 failed）
+_CQ_DUR=$(( $(date '+%s') - ${_CQ_START_EPOCH:-$(date '+%s')} ))
+printf '{"traceId":"%s","spanId":"%s","parentSpanId":"%s","agentRole":"developer","action":"code-quality-review","storyId":"%s","timestamp":"%s","duration":%s,"status":"%s","sessionId":"%s"}\n' \
+  "${TRACE_ID:-unknown}" "cq-review-$(date '+%s')" "${_ROOT_SPAN_ID:-null}" "${story_id}" "$(date '+%Y-%m-%dT%H:%M:%S%z')" "${_CQ_DUR}" "${_CQ_STATUS}" "${_SESSION_ID:-unknown}" \
+  >> "${TRACE_LOG_FILE:-docs/trace-logs/fallback-session-unknown.jsonl}" 2>/dev/null || true
 ```
 
 ### 修復閉環規則
@@ -1802,6 +1822,17 @@ if [[ "${SHIKIGAMI_LIVE_NOTIFY:-false}" == "true" && -n "${SHIKIGAMI_LIVE_NOTIFY
 fi
 ```
 
+<!-- #392 ADR-033：tdd-implement 根 span 完成（Story 執行結束） -->
+```bash
+# Trace span：tdd-implement completed/failed（根 span，#392 ADR-033）
+# status 依 Story 執行結果：PASS → "completed"，FAIL/ESCALATE → "failed"
+_STORY_TRACE_STATUS="completed"  # PASS 時；FAIL/ESCALATE 時改為 "failed"
+_TRACE_DUR=$(( $(date '+%s') - ${_TRACE_START_EPOCH:-$(date '+%s')} ))
+printf '{"traceId":"%s","spanId":"%s","parentSpanId":null,"agentRole":"developer","action":"tdd-implement","storyId":"%s","timestamp":"%s","duration":%s,"status":"%s","sessionId":"%s"}\n' \
+  "${TRACE_ID:-unknown}" "${_ROOT_SPAN_ID:-tdd-implement-0}" "${story_id}" "$(date '+%Y-%m-%dT%H:%M:%S%z')" "${_TRACE_DUR}" "${_STORY_TRACE_STATUS}" "${_SESSION_ID:-unknown}" \
+  >> "${TRACE_LOG_FILE:-docs/trace-logs/fallback-session-unknown.jsonl}" 2>/dev/null || true
+```
+
 ### §9.1 暫存寫入（回傳前必執行）
 
 **在回傳標準化摘要給主 session 之前**，必須先將結果寫入暫存文件，供主 session 在 context compaction 後復原使用。
@@ -1960,6 +1991,9 @@ team_debate:            # Team Debate 結果（§7.8，ADR-031，豁免時填 nu
 
 - **ADR-007**：`docs/adr/ADR-007-story-lifecycle-subagent.md`（架構決策、介面契約完整定義）
 - **ADR-031**：`docs/adr/ADR-031-team-debate.md`（Team Debate 機制決策）
+- **ADR-033**：`docs/adr/ADR-033-structured-trace-log.md`（Structured Trace Log 架構決策；#392 trace log 實作依據）
 - **team-debate/SKILL.md**：`skills/team-debate/SKILL.md`（Team Debate 完整 Skill 定義）
 - **developer-prompt.md**：`skills/sprint-execution/developer-prompt.md`（TDD 細節、同檔案衝突偵測、Tech Debt 規則）
 - **SKILL.md**：`skills/sprint-execution/SKILL.md`（Sprint 執行流程、Hard Gates、doc-only 識別規則）
+
+> **Trace Log 隱私保護**（#392 ADR-033）：trace log 不記錄使用者輸入內容，僅記錄 action metadata（agentRole、action 名稱、timestamp、duration、storyId）。禁止將 `$CLAUDE_TOOL_INPUT`、使用者提供的文字或任何 PII 寫入 trace log。
