@@ -42,7 +42,8 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 - [ ] **PO** 掃描 GitHub open issues，對未分類 issues 執行 Triage（<!-- Claude Code -->invoke shikigami:issue-management Triage<!-- OpenCode -->使用 issue-management skill<!-- /OpenCode -->）
 - [ ] 記錄 Sprint Planning 開始時間：`START_TIME=$(date '+%Y-%m-%dT%H:%M+08:00')`
 - [ ] **PO** 執行 Backlog 排序與 Story 選取（詳見 [po-prompt.md](./po-prompt.md) Round 1）
-- [ ] 檢查選入 Story 是否標注「需要 ADR」— 若需要，ADR 必須已 Accepted
+- [ ] **PO Round 1 ADR 自動納入**（#456）：PO 選取 Story 後，掃描 Architect 技術評估的 ADR 欄位；若有標注「已補建 #N（RESEARCH）」的 ADR Story，自動將該 ADR RESEARCH Story 一併選入同一 Sprint（AC2）
+- [ ] 檢查選入 Story 是否標注「需要 ADR」— 若需要，ADR 必須已 Accepted 或已在本 Sprint 納入 ADR RESEARCH Story
 - [ ] **Architect** 技術評估（詳見 [architect-prompt.md](./architect-prompt.md)）
 - [ ] **QA** 驗收標準確認（詳見 [qa-prompt.md](./qa-prompt.md)）
 - [ ] 上個 Sprint 的 Retro Action Items 自動列入 Backlog（若有未完成項目）

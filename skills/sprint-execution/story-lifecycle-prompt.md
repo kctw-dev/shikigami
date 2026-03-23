@@ -119,6 +119,8 @@ size: "M"                                  # 必填：Story Size（S/M/L），�
 bypass: false                              # 必填：是否為 [BYPASS] Story（影響 Review 豁免）
 story_type: "FEATURE"                      # 必填：Story 類型（FEATURE/DESIGN/INFRA/SECURITY/INTEGRATION/RESEARCH）
                                            # 缺失時 fallback 至 FEATURE（見「story_type Fallback 規則」）
+team_debate: true                          # 可選：是否啟用 Team Debate（ADR-031，預設 true）
+                                           # 設為 false 時，跳過 §7.8 Team Debate，回退至標準單一 agent 自審
 ```
 
 <!-- US-204 Story Template 更新 — Sprint 76 -->
@@ -293,13 +295,22 @@ TDD 開發循環（§3）：Red → Green → Refactor（每小步一個 commit�
 ║  ├─ Security self-review（§7，條件觸發）             ║
 ║  │       |-- FAIL --> 修復或升級                       ║
 ║  │       +-- PASS / SKIP                               ║
-║  └─ pr-review-toolkit 補充審查（§7.5，條件觸發）      ║
-║         |-- Plugin 未安裝 → [WARN] 跳過，繼續          ║
-║         |-- Doc-only → 僅執行 comment-analyzer          ║
-║         |-- 全部 PASS → 繼續                            ║
-║         +-- CRITICAL/HIGH → 修復 → 二審                 ║
-║               |-- PASS → 繼續                           ║
-║               +-- 仍 CRITICAL/HIGH → 升級 Architect     ║
+║  ├─ pr-review-toolkit 補充審查（§7.5，條件觸發）      ║
+║  │      |-- Plugin 未安裝 → [WARN] 跳過，繼續          ║
+║  │      |-- Doc-only → 僅執行 comment-analyzer          ║
+║  │      |-- 全部 PASS → 繼續                            ║
+║  │      +-- CRITICAL/HIGH → 修復 → 二審                 ║
+║  │            |-- PASS → 繼續                           ║
+║  │            +-- 仍 CRITICAL/HIGH → 升級 Architect     ║
+║  └─ Team Debate（§7.8，ADR-031 Phase 1，條件觸發）    ║
+║         |-- [DEBATE-SKIP] doc_only/RESEARCH/DESIGN → 略過║
+║         |-- [DEBATE-SKIP] team_debate=false → 略過      ║
+║         |-- Round 1：Critic 批判                        ║
+║         │      |-- Verdict: PASS → [DEBATE-PASS-R1] 收斂║
+║         │      +-- Verdict: FAIL → Round 2              ║
+║         |-- Round 2：Worker 修復 → Critic 二次批判      ║
+║               |-- Verdict: PASS → [DEBATE-PASS-R2] 收斂║
+║               +-- Verdict: FAIL → [DEBATE-UNRESOLVED]  ║
 ╚══════════════════════════════════════════════════════╝
   |
   v
@@ -1282,6 +1293,152 @@ WARN 清單（若有）：
 
 ---
 
+## §7.8 Team Debate — 同職能雙 Agent 交替批判（ADR-031，Phase 1）
+
+<!-- ADR-031 Team Debate 機制 — Sprint 124 / #383 -->
+
+### 觸發條件
+
+Team Debate 在以下條件下啟用：
+
+```
+啟用條件（以下所有條件均需滿足）：
+  1. story_type ∈ {FEATURE, INFRA, SECURITY, INTEGRATION}
+  2. doc_only = false
+  3. team_debate ≠ false（未被明確關閉）
+  4. Story 角色為 Developer（Phase 1 限定）
+
+豁免條件（任一即豁免）：
+  - doc_only = true → 跳過（文件類 Story，成本不值得）
+  - story_type ∈ {RESEARCH, DESIGN} → 跳過
+  - team_debate = false（明確關閉）→ 跳過，回退至標準單一 agent 自審
+  - size = S 且 Scrum Master 未明確啟用 → 跳過（S 規模預設豁免）
+```
+
+若豁免：輸出 `[DEBATE-SKIP] {原因}`，繼續進入 §8 DoD 自檢。
+
+### 執行流程
+
+```
+Step 1：確認觸發
+  → 輸出：[DEBATE-START] 啟用 Team Debate（ADR-031 Phase 1）
+
+Step 2：當前 subagent 身份確認
+  本 subagent 即 Worker（Agent A）。至此已完成：
+    - TDD 開發（§3）
+    - Spec Compliance self-review（§5）
+    - Code Quality self-review（§6）
+    - Runtime Verification（§6.5）
+    - Security self-review（§7，條件觸發）
+    - pr-review-toolkit 審查（§7.5，條件觸發）
+  回傳主 session：WORKER_COMPLETE + branch + worktree path
+
+  注意：若本 subagent 為 Critic（Agent B），執行 §7.8.2 Critic 批判流程，
+        寫入 .claude/debate/critique-round-{N}.md 後回傳主 session。
+
+Step 3：（由主 session 協調）派遣 Critic（Agent B）
+  → 讀取 Worker 產出（git diff 或修改檔案清單）
+  → 執行獨立批判（正確性、設計、測試覆蓋、安全性）
+  → 寫入 .claude/debate/critique-round-1.md
+
+Step 4：主 session 讀取 critique-round-1.md
+  ├─ Verdict: PASS → [DEBATE-PASS-R1] 收斂，繼續 §8
+  └─ Verdict: FAIL → 主 session 傳入批判結果，Worker 執行 Round 2 修復
+
+Step 5（Round 2，若 Round 1 FAIL）：
+  Worker 讀取 critique-round-1.md → 逐項回應（accept/reject）→ 修復 → commit
+  → 主 session 派遣 Critic 二次批判 → critique-round-2.md
+
+Step 6（Round 2 收斂）：
+  ├─ Verdict: PASS → [DEBATE-PASS-R2] 收斂，繼續 §8
+  └─ Verdict: FAIL → [DEBATE-UNRESOLVED] 強制收斂（禁止 Round 3）
+     → 標記升級候選，記錄至 PR description
+     → 繼續 §8（不阻塞）
+```
+
+### §7.8.1 Worker 修復規則（Round 2）
+
+Worker 接收 critique-round-1.md 後：
+
+```
+1. 逐項閱讀 Issues Found
+2. 對每項 Issue 決定 accept / reject：
+   - accept：說明修復方式，執行修復，commit
+   - reject：說明拒絕理由（需有合理理由，如「此為已知設計取捨」）
+3. Commit message 格式：
+   fix: Team Debate Round 2 修復 — {story_id}
+4. 所有 HIGH severity Issue 必須 accept（不可 reject）
+```
+
+### §7.8.2 Critic 批判流程
+
+當本 subagent 以 Critic 身份被派遣時：
+
+```
+1. 讀取 Worker 的所有修改檔案（git diff origin/main...HEAD 或修改檔案清單）
+2. 讀取 Story AC（從 sprint_file 取得）
+3. 執行 4 維度批判：
+   - 正確性：每項 AC 是否有對應實作？邊界條件？
+   - 設計：SOLID 原則？耦合度？命名清晰度？
+   - 測試覆蓋：是否真正 TDD？測試是否僅測 happy path？
+   - 安全性：外部輸入是否過濾？有無硬編碼 secrets？
+4. 確認目錄存在：mkdir -p .claude/debate/
+5. 寫入 .claude/debate/critique-round-{N}.md（格式見下方）
+6. 回傳主 session：CRITIC_COMPLETE + Verdict + 批判摘要
+```
+
+**批判結果格式**：
+
+```markdown
+# Critique Round {N}
+
+## Verdict: PASS | FAIL
+
+## Issues Found
+- [SEVERITY: HIGH|MED|LOW] {問題描述}
+  - 位置：{file}:{line}
+  - 建議：{改善方向}
+
+## Summary
+{總結評語，說明主要發現與整體評估}
+```
+
+**Verdict 判定規則**：
+- 有 HIGH severity Issue → Verdict: FAIL
+- 有 MED severity Issue 且超過 2 項 → Verdict: FAIL
+- 只有 LOW severity Issue → Verdict: PASS（附 Issues Found，但不阻塞）
+- Issues Found 為空 → Verdict: PASS
+
+**重要原則**：
+- 不能修改任何代碼，只能批判
+- 批判必須具體，指出檔案和行號
+- 不為了批判而批判：若真的找不到問題，Verdict = PASS
+
+### §7.8.3 [DEBATE-UNRESOLVED] 處置
+
+| project_level | 處置行為 |
+|---------------|---------|
+| `low` | 標記 [DEBATE-UNRESOLVED] 後直接進入 §8，PR description 附上未解決清單 |
+| `medium` / `high` | 輸出升級通知，等待主 session / 使用者決策 |
+
+若未解決問題包含 HIGH severity 設計問題，可升級至 ESCALATE: DESIGN_ISSUE。
+
+### §7.8.4 PR Description 附加資訊
+
+Team Debate 收斂後，PR description 需附加：
+
+```
+## Team Debate 摘要
+
+- 批判輪數：{1 / 2}
+- 最終 Verdict：{PASS / [DEBATE-UNRESOLVED]}
+- Critic 發現：{主要問題摘要，若無則填「無重大問題」}
+- Worker 修復：{修復摘要，若 Round 1 PASS 則填「N/A（Round 1 直接通過）」}
+- 批判紀錄：`.claude/debate/critique-round-{N}.md`
+```
+
+---
+
 ## §8 DoD 自檢
 
 完成所有 self-review 後，逐項確認：
@@ -1335,6 +1492,46 @@ chore: #307 US-272 Story-Lifecycle 強制 git commit Hard Gate
   ```
 - 並回傳 `ESCALATE: DESIGN_ISSUE`（附上 `[COMMIT-FAIL]` 錯誤詳情），由主 session 決定後續處置
 - 不得靜默忽略 commit 失敗繼續執行後續步驟
+
+此 Gate 不受 `bypass=true` 豁免。
+</HARD-GATE>
+
+---
+
+## §8.06 PR Description Quality Gate（#461）
+
+<!-- #461 PR Description Quality Gate 強制 Summary + AC Checklist — Sprint 124 -->
+
+<HARD-GATE>
+**PR body 品質門禁**：執行 `gh pr create` 時，PR body **必須**包含以下兩個段落，缺一不可：
+
+### 必要段落
+
+**1. Summary 段落**（AC1）
+
+```markdown
+## Summary
+
+{簡述本次 PR 的變更內容、目的與影響範圍。1–3 句話。}
+```
+
+**2. AC Checklist 段落**（AC2）
+
+```markdown
+## AC Checklist
+
+- [x] AC1: {AC 描述}
+- [x] AC2: {AC 描述}
+...（逐一列出 Story 的所有 AC，完成打勾）
+```
+
+### 違規處理
+
+| 缺失項目 | 處理方式 |
+|---------|---------|
+| 缺少 Summary 段落 | PR body 補充後重新執行 `gh pr create` |
+| 缺少 AC Checklist 段落 | PR body 補充後重新執行 `gh pr create` |
+| AC Checklist 未打勾（`- [ ]`） | 視為尚未完成，Story-Lifecycle 不得繼續流程 |
 
 此 Gate 不受 `bypass=true` 豁免。
 </HARD-GATE>
@@ -1648,12 +1845,17 @@ status: "PASS"          # 必填：PASS | FAIL | ESCALATE
 summary: ""             # 必填：≤50 字的結果說明
 modified_files: []      # 必填：所有被修改的檔案清單（含變更描述）
 commit_sha: ""          # PASS 時必填；FAIL 時若有部分 commit 填最後 SHA，否則 N/A
-escalation: null        # 升級時必填：DESIGN_ISSUE | CONTEXT_OVERFLOW | REQUIREMENT_AMBIGUITY | DEPENDENCY_MISSING | SECURITY_CRITICAL
+escalation: null        # 升級時必填：DESIGN_ISSUE | CONTEXT_OVERFLOW | REQUIREMENT_AMBIGUITY | DEPENDENCY_MISSING | SECURITY_CRITICAL | DEBATE_DESIGN_ISSUE
 uncertainty_check:      # 必填：不確定性三問檢查結果（US-214，開始前準備步驟 7）
   assumptions: []       # 第 (1) 項：假設清單（若無則為空陣列）
   uncertain_items: []   # 第 (2) 項：[UNCERTAIN] 標記項目清單（含驗證方式與驗證結果）
   queries_needed: []    # 第 (3) 項：需查閱的項目清單（若無則為空陣列）
   assumption_violation: false  # 若 Spec Compliance FAIL 且三問(2)(3)均為「無」→ true，輸出 [ASSUMPTION-VIOLATION]
+team_debate:            # Team Debate 結果（§7.8，ADR-031，豁免時填 null）
+  status: null          # PASS | UNRESOLVED | SKIPPED | null
+  rounds: 0             # 執行批判輪數（0 = 豁免）
+  final_verdict: null   # Critic 最終 Verdict（PASS / FAIL / null）
+  critique_files: []    # 批判紀錄檔案路徑清單（如 .claude/debate/critique-round-1.md）
 # --- Phase 2 欄位（AC3 抽樣邏輯已實作，schema 啟用待後續版本）---
 # sampling_triggered: false   # Phase 2 AC3：是否觸發外部抽樣審查（邏輯已實作於 §AC3 章節）
 # batch_index: null           # Phase 2 AC4：M/L size 分批執行批次索引
@@ -1681,6 +1883,7 @@ uncertainty_check:      # 必填：不確定性三問檢查結果（US-214，開
 - Spec Compliance：PASS（{一句話說明}）
 - Code Quality：PASS（{一句話說明}）
 - Security：PASS / SKIP（{一句話說明或「未觸發安全審查條件」}）
+- Team Debate：{PASS-R1 / PASS-R2 / UNRESOLVED / SKIPPED}（{一句話說明或豁免原因}）
 
 **不確定性三問摘要**（uncertainty_check）：
 - 假設：{假設清單，若無則填「無」}
@@ -1705,6 +1908,7 @@ uncertainty_check:      # 必填：不確定性三問檢查結果（US-214，開
   - REQUIREMENT_AMBIGUITY：AC 描述模糊或存在矛盾，無法判斷完成標準
   - DEPENDENCY_MISSING：依賴的文件、資源或前置條件不存在
   - SECURITY_CRITICAL：發現 Critical 安全問題，需 Security Engineer 人工介入
+  - DEBATE_DESIGN_ISSUE：Team Debate 2 輪仍 FAIL 且含 HIGH severity 設計問題，需 Architect 介入
 ```
 
 **升級決策規則（主 session 職責）：**
@@ -1716,6 +1920,7 @@ uncertainty_check:      # 必填：不確定性三問檢查結果（US-214，開
 | REQUIREMENT_AMBIGUITY | 暫停 Sprint 執行，升級至 PO 釐清 AC |
 | DEPENDENCY_MISSING | 暫停 Sprint 執行，解決依賴後重試 |
 | SECURITY_CRITICAL | 暫停 Sprint 執行，觸發 security-review Skill |
+| DEBATE_DESIGN_ISSUE | 暫停 Sprint 執行，升級至 Architect 評估（Team Debate 未解決設計問題） |
 
 ---
 
@@ -1730,6 +1935,7 @@ uncertainty_check:      # 必填：不確定性三問檢查結果（US-214，開
 | 依賴的 ADR、SDD、前置 Story 不存在或未完成 | DEPENDENCY_MISSING | 需解決依賴後重試 |
 | 發現未受防護的外部輸入、硬編碼 API 金鑰等 Critical 安全問題 | SECURITY_CRITICAL | 需 Security Engineer 人工介入 |
 | subagent context 接近上限（Phase 2 實作） | CONTEXT_OVERFLOW | Phase 2 §AC4 fallback 策略處理 |
+| Team Debate 2 輪仍 FAIL 且含 HIGH severity 設計問題 | DEBATE_DESIGN_ISSUE | 需 Architect 介入評估設計問題 |
 
 ---
 
@@ -1753,5 +1959,7 @@ uncertainty_check:      # 必填：不確定性三問檢查結果（US-214，開
 ## 參照文件
 
 - **ADR-007**：`docs/adr/ADR-007-story-lifecycle-subagent.md`（架構決策、介面契約完整定義）
+- **ADR-031**：`docs/adr/ADR-031-team-debate.md`（Team Debate 機制決策）
+- **team-debate/SKILL.md**：`skills/team-debate/SKILL.md`（Team Debate 完整 Skill 定義）
 - **developer-prompt.md**：`skills/sprint-execution/developer-prompt.md`（TDD 細節、同檔案衝突偵測、Tech Debt 規則）
 - **SKILL.md**：`skills/sprint-execution/SKILL.md`（Sprint 執行流程、Hard Gates、doc-only 識別規則）
