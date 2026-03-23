@@ -21,15 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install unzip (no sudo)
+      - name: Install unzip
         run: |
           if ! command -v unzip &>/dev/null; then
-            # 無 sudo 權限時，下載 busybox unzip 作為 fallback
-            curl -sSL -o /tmp/busybox https://busybox.net/downloads/binaries/1.35.0-x86_64-linux-musl/busybox || true
-            chmod +x /tmp/busybox 2>/dev/null || true
-            ln -sf /tmp/busybox /tmp/unzip 2>/dev/null || true
-            export PATH="/tmp:$PATH"
-            echo "/tmp" >> "$GITHUB_PATH"
+            sudo apt-get install -y unzip
           fi
 
       - name: New Issue Intake
