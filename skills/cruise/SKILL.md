@@ -13,17 +13,31 @@ requiredTools:
 ## 觸發語法
 
 ```
-/cruise              — 啟動巡航（預設間隔 30 分鐘）
+/cruise              — 啟動巡航（Loop Mode，預設間隔 30 分鐘）
 /cruise 10m          — 啟動巡航，指定間隔（例：10m, 15m, 60m）
 /cruise strict     — 嚴格模式（0 天閾值，無回應立即標記）
 /cruise 10m strict — 自訂間隔 + 嚴格模式
 /cruise strict 10m — 同上（flag 位置無關）
-/cruise stop         — 停止巡航
+/cruise --once       — Once Mode：跑一輪 PO+SRE 後自動退出（不進入 sleep loop）
+/cruise --once strict — Once Mode + 嚴格模式
+/cruise stop         — 停止巡航（Loop Mode 用）
 ```
+
+### 模式說明
+
+| 模式 | 觸發語法 | 行為 |
+|------|---------|------|
+| **Loop Mode**（預設） | `/cruise`、`/cruise 10m` | 長駐 loop，每隔指定間隔執行，直到 `/cruise stop` 或 Session 結束 |
+| **Once Mode** | `/cruise --once` | 執行一輪 PO 巡邏 + SRE 巡檢，寫入 log，清除 flag，自動退出（不進入 sleep loop） |
+
+**向後相容**：不帶 `--once` 的語法行為不變（Loop Mode）。
 
 ## 概覽
 
-Cruise Mode 在當前 Session 內持續執行 PO 巡邏與 SRE 巡檢，每隔指定間隔自動觸發一次，直到收到 `/cruise stop` 或 Session 結束為止。
+Cruise Mode 支援兩種執行模式：
+
+- **Loop Mode**（`/cruise`）：在當前 Session 內持續執行 PO 巡邏與 SRE 巡檢，每隔指定間隔自動觸發一次，直到收到 `/cruise stop` 或 Session 結束為止。
+- **Once Mode**（`/cruise --once`）：執行一輪 PO 巡邏與 SRE 巡檢後自動退出，不進入 sleep loop，適合搭配外部排程工具（如 cron）使用。
 
 **參與 Agent**：PO Agent（巡邏）、SRE Agent（巡檢）
 **執行模式**：Session 內 loop（sleep + flag file），參見 ADR-026
@@ -54,11 +68,14 @@ Cruise 支援兩種模式，啟動時自動偵測：
 ### 1. 解析參數
 
 ```bash
-# 解析 strict flag 與間隔（位置無關）
+# 解析 --once flag、strict flag 與間隔（位置無關）
 STRICT_MODE=false
+ONCE_MODE=false
 INTERVAL="30m"
 for ARG in "$@"; do
-  if [[ "$ARG" == "strict" ]]; then
+  if [[ "$ARG" == "--once" ]]; then
+    ONCE_MODE=true
+  elif [[ "$ARG" == "strict" ]]; then
     STRICT_MODE=true
   elif [[ "$ARG" =~ ^[0-9]+m$ ]]; then
     INTERVAL="$ARG"
@@ -72,8 +89,15 @@ else
   THRESHOLD_DAYS=3
 fi
 
-# 轉換間隔為秒數
+# 轉換間隔為秒數（Loop Mode 用）
 INTERVAL_SECONDS=$(echo "$INTERVAL" | sed 's/m$//' | awk '{print $1 * 60}')
+
+# 輸出模式提示
+if [[ "$ONCE_MODE" == "true" ]]; then
+  echo "[CRUISE] Once Mode 啟動（--once）：執行一輪後退出"
+else
+  echo "[CRUISE] Loop Mode 啟動：間隔 ${INTERVAL}"
+fi
 ```
 
 ### 2. 偵測 Repo 列表（AC-1 / AC-2）
@@ -267,11 +291,104 @@ CRUISE_LOG="${LOG_DIR}/${LOG_TODAY}-session-${SESSION_ID}.jsonl"
 CYCLE=0
 ```
 
-### 6. 進入 Loop
+### 6. 選擇執行模式
+
+根據 `ONCE_MODE` flag 決定進入 Loop Mode 或 Once Mode：
+
+```bash
+if [[ "$ONCE_MODE" == "true" ]]; then
+  # ── Once Mode：執行一輪後退出（AC1：不進入 sleep loop）──
+  # [AUTO-CONTINUE] project_level=low 時，phase 自動推進，不停下來等確認
+  _cruise_run_once  # 執行單輪邏輯（見下方 Once Mode 段落）
+  # ── Once Mode 清除 flag 並退出（AC1）──
+  rm -f "$CRUISE_FLAG"
+  rm -f "$SHOOT_FLAG" 2>/dev/null || true
+  echo "[CRUISE] Once Mode 完成，flag 已清除，退出"
+  exit 0
+fi
+# Loop Mode：繼續進入下方 while loop
+```
+
+### 6a. Once Mode 執行流程（`/cruise --once`）
+
+Once Mode 執行單輪 PO 巡邏 + SRE 巡檢，寫入 log 後自動退出，不進入 sleep loop。
+
+**觸發條件**：`--once` flag 存在。
+
+**執行步驟**：
+
+```
+# [AUTO-CONTINUE] 以下各步驟在 project_level=low 時自動執行，不停下來詢問
+CYCLE=1
+
+for REPO_PATH in REPOS:
+  OWNER_REPO = REPO_REMOTES[REPO_PATH]
+  平行派遣：
+    - PO-patrol（帶入 REPO_PATH, OWNER_REPO, STRICT_MODE, THRESHOLD_DAYS）
+    - SRE-inspection（帶入 REPO_PATH, OWNER_REPO）
+等待所有 task 完成
+
+for each subagent result:
+  if subagent 成功:
+    寫入正常 log entry（JSONL append，含 "repo" 欄位）
+    # log entry 格式與 Loop Mode 一致（AC4：格式統一）
+  else:
+    寫入錯誤 log entry：
+      {"type":"error","repo":"<OWNER_REPO>","cycle":1,"timestamp":"<ISO8601>","summary":"subagent failed: <reason>","mode":"once"}
+    echo "[CRUISE] WARNING: ${OWNER_REPO} 巡邏/巡檢失敗，見 log"
+
+# ── Auto-shoot（與 Loop Mode 相同，依 project_level 控制）──
+# [AUTO-CONTINUE] project_level=low → 自動派 auto-shoot，不停
+ACTIONABLE_ISSUES = PO 巡邏結果.actionable_issues
+if PROJECT_LEVEL != "high":
+  while ACTIONABLE_ISSUES is not empty:
+    ISSUE = ACTIONABLE_ISSUES.shift()
+    echo "$ISSUE" > SHOOT_FLAG
+    invoke shikigami:shoot with args=#${ISSUE}
+    if shoot 成功:
+      rm -f SHOOT_FLAG
+      寫入 log：{"type":"auto-shoot-completed","issue":ISSUE,"result":"success","mode":"once",...}
+    else:
+      rm -f SHOOT_FLAG
+      寫入 log：{"type":"auto-shoot-completed","issue":ISSUE,"result":"failed","mode":"once",...}
+
+# ── Once Mode 完成 log entry ──
+寫入 log：{"type":"once-mode-complete","timestamp":"<ISO8601>","session_id":"<SESSION_ID>","repos":[<OWNER_REPO>,...]}
+echo "[CRUISE] Once Mode 執行完成，寫入 log：${CRUISE_LOG}"
+
+# ── 清除 flag 並退出（AC1：不進入 sleep loop）──
+rm -f "$CRUISE_FLAG"
+rm -f "$SHOOT_FLAG" 2>/dev/null || true
+echo "[CRUISE] Once Mode 完成，flag 已清除，自動退出"
+exit 0
+```
+
+**Once Mode Log 格式**（AC4：與 Loop Mode 格式一致）：
+
+```jsonl
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-23T10:30:00+0800","type":"po-patrol","repo":"KCTW/shikigami","strict":false,"threshold_days":3,"mode":"once","summary":"掃描 15 個 open issues，處置完畢","actions":[...],"actionable_issues":[...],"sprint_candidates":[...]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-23T10:30:05+0800","type":"sre-inspection","repo":"KCTW/shikigami","mode":"once","summary":"檢查 10 筆 CI run，無異常","actions":[]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-23T10:30:10+0800","type":"once-mode-complete","session_id":"abc123","repos":["KCTW/shikigami"]}
+```
+
+**`[AUTO-CONTINUE]` 提醒機制**（AC5）：
+
+Once Mode 各 phase 轉換點均加入 `[AUTO-CONTINUE]` 備注，指示 `project_level=low` 時自動推進，不停下來等確認：
+
+| Phase 轉換點 | `[AUTO-CONTINUE]` 說明 |
+|------------|----------------------|
+| 啟動 → 執行巡邏 | `project_level=low` 時自動執行，不詢問 |
+| 巡邏完成 → auto-shoot | `project_level=low` 時自動派工，不停 |
+| auto-shoot → 退出 | 所有 actionable 處理完後自動退出 |
+
+---
+
+### 6b. 進入 Loop（Loop Mode）
 
 每個 cycle 對**每個 repo** 分別執行 PO 巡邏 + SRE 巡檢（平行派遣），完成後由主 loop 彙整寫 log，然後 sleep。
 
 ```
+# [AUTO-CONTINUE] project_level=low 時 cycle 間自動推進，不停
 while 檢查 flag file 存在:
   CYCLE += 1
   # #449 AC1：每個 cycle 開始時 touch flag file，重置 mtime，避免 systemd-tmpfiles-clean 清除
