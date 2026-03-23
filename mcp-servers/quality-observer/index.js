@@ -21,7 +21,7 @@ import {
   ErrorCode,
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync, readdirSync } from "fs";
 import { join, resolve } from "path";
 
 // ─── 環境設定 ────────────────────────────────────────────────────────────────
@@ -33,6 +33,7 @@ const SHIKIGAMI_ROOT = process.env.SHIKIGAMI_ROOT
 const METRICS_LOG_PATH = join(SHIKIGAMI_ROOT, "docs/km/Metrics_Log.md");
 const QUALITY_OBSERVER_PATH = join(SHIKIGAMI_ROOT, "docs/km/Quality_Observer.md");
 const RETROSPECTIVE_LOG_PATH = join(SHIKIGAMI_ROOT, "docs/km/Retrospective_Log.md");
+const TRACE_LOGS_DIR = join(SHIKIGAMI_ROOT, "docs/trace-logs");
 
 // ─── Markdown 解析工具 ────────────────────────────────────────────────────────
 
@@ -124,6 +125,115 @@ function analyzeVelocityTrend(metricsData, lastN = 10) {
   };
 }
 
+// ─── Trace Log 解析工具 ───────────────────────────────────────────────────────
+
+/**
+ * 列出 docs/trace-logs/ 下所有 .jsonl 檔案（不含 .gitkeep），依名稱降序排列
+ */
+function listTraceLogFiles() {
+  if (!existsSync(TRACE_LOGS_DIR)) {
+    return [];
+  }
+  return readdirSync(TRACE_LOGS_DIR)
+    .filter((f) => f.endsWith(".jsonl") && f !== ".gitkeep")
+    .sort()
+    .reverse(); // 最新在前（依日期命名 YYYY-MM-DD-...）
+}
+
+/**
+ * 解析單一 .jsonl trace log 檔案，回傳 span 陣列（跳過非法行）
+ * @param {string} filepath 完整路徑
+ * @returns {Array<Object>} span 物件陣列
+ */
+function parseTraceLogFile(filepath) {
+  if (!existsSync(filepath)) return [];
+  const lines = readFileSync(filepath, "utf-8").split("\n");
+  const spans = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    try {
+      const obj = JSON.parse(trimmed);
+      if (typeof obj === "object" && obj !== null && !Array.isArray(obj)) {
+        spans.push(obj);
+      }
+    } catch {
+      // 非法 JSON 行跳過
+    }
+  }
+  return spans;
+}
+
+/**
+ * 從檔案名稱提取 sessionId（basename 去除副檔名後，移除日期前綴 YYYY-MM-DD-）
+ * 例：2026-03-24-session-abc123.jsonl -> session-abc123
+ */
+function extractSessionIdFromFilename(filename) {
+  const base = filename.replace(/\.jsonl$/, "");
+  const match = base.match(/^\d{4}-\d{2}-\d{2}-(.+)$/);
+  return match ? match[1] : base;
+}
+
+/**
+ * 計算 trace 完整性統計
+ * @param {Array<Object>} spans
+ * @returns {Object} 統計資料
+ */
+const REQUIRED_TRACE_FIELDS = [
+  "traceId", "spanId", "parentSpanId", "agentRole",
+  "action", "timestamp", "status", "sessionId",
+];
+
+function calcTraceCompleteness(spans) {
+  if (spans.length === 0) {
+    return { total: 0, complete: 0, completenessRate: null };
+  }
+  const complete = spans.filter((s) =>
+    REQUIRED_TRACE_FIELDS.every((f) => Object.prototype.hasOwnProperty.call(s, f))
+  ).length;
+  return {
+    total: spans.length,
+    complete,
+    completenessRate: Math.round((complete / spans.length) * 1000) / 10,
+  };
+}
+
+/**
+ * 生成 human-readable trace summary
+ */
+function buildTraceSummary(spans, filename) {
+  const stats = calcTraceCompleteness(spans);
+  const byAgent = {};
+  const byStatus = {};
+  const byAction = {};
+
+  for (const span of spans) {
+    const role = span.agentRole || "unknown";
+    const status = span.status || "unknown";
+    const action = span.action || "unknown";
+    byAgent[role] = (byAgent[role] || 0) + 1;
+    byStatus[status] = (byStatus[status] || 0) + 1;
+    byAction[action] = (byAction[action] || 0) + 1;
+  }
+
+  const lines = [
+    `=== Trace Log Summary: ${filename} ===`,
+    `總 span 數：${stats.total}`,
+    `完整 span 數：${stats.complete}（含全部 8 個必要欄位）`,
+    `必要欄位覆蓋率：${stats.completenessRate !== null ? stats.completenessRate + "%" : "N/A"}`,
+    "",
+    "Agent 角色分佈：",
+    ...Object.entries(byAgent).map(([k, v]) => `  ${k}: ${v} span`),
+    "",
+    "Status 分佈：",
+    ...Object.entries(byStatus).map(([k, v]) => `  ${k}: ${v}`),
+    "",
+    "Action 分佈：",
+    ...Object.entries(byAction).map(([k, v]) => `  ${k}: ${v}`),
+  ];
+  return lines.join("\n");
+}
+
 // ─── MCP Server 設定 ──────────────────────────────────────────────────────────
 
 const server = new Server(
@@ -190,6 +300,50 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         inputSchema: {
           type: "object",
           properties: {},
+        },
+      },
+      {
+        name: "get_trace_recent",
+        description:
+          "查詢最近 N 條 trace span（依檔案日期排序，最新優先）。回傳 span 物件陣列，含 traceId、spanId、agentRole、action、timestamp、status 等欄位。",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: {
+              type: "number",
+              description: "最多回傳幾條 span（預設 20，最大 200）",
+              default: 20,
+            },
+          },
+        },
+      },
+      {
+        name: "get_trace_by_session",
+        description:
+          "按 session ID 篩選 trace span。回傳指定 session 的所有 span，依 timestamp 升序排列。",
+        inputSchema: {
+          type: "object",
+          properties: {
+            session_id: {
+              type: "string",
+              description: "要篩選的 session ID（如 session-abc123）",
+            },
+          },
+          required: ["session_id"],
+        },
+      },
+      {
+        name: "get_trace_summary",
+        description:
+          "取得 human-readable trace 摘要。包含必要欄位覆蓋率、Agent 角色分佈、Status 分佈、Action 分佈等統計資訊。可指定 session 或取全域摘要。",
+        inputSchema: {
+          type: "object",
+          properties: {
+            session_id: {
+              type: "string",
+              description: "僅摘要指定 session（選填；省略時摘要全部 session）",
+            },
+          },
         },
       },
     ],
@@ -342,6 +496,172 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           {
             type: "text",
             text: content,
+          },
+        ],
+      };
+    }
+
+    case "get_trace_recent": {
+      const limit = Math.min(Math.max(1, args?.limit || 20), 200);
+      const files = listTraceLogFiles();
+
+      if (files.length === 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({
+                spans: [],
+                total: 0,
+                message: `docs/trace-logs/ 目錄下無 trace log 檔案（路徑：${TRACE_LOGS_DIR}）`,
+              }, null, 2),
+            },
+          ],
+        };
+      }
+
+      const collected = [];
+      for (const filename of files) {
+        if (collected.length >= limit) break;
+        const filepath = join(TRACE_LOGS_DIR, filename);
+        const spans = parseTraceLogFile(filepath);
+        // 從最新的 span 開始（reverse 後取）
+        const reversed = spans.slice().reverse();
+        for (const span of reversed) {
+          if (collected.length >= limit) break;
+          collected.push({ _file: filename, ...span });
+        }
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              spans: collected,
+              total: collected.length,
+              files_scanned: files.length,
+            }, null, 2),
+          },
+        ],
+      };
+    }
+
+    case "get_trace_by_session": {
+      const sessionId = args?.session_id;
+      if (!sessionId) {
+        throw new McpError(ErrorCode.InvalidParams, "session_id 為必要參數");
+      }
+
+      const files = listTraceLogFiles();
+      const matchedSpans = [];
+
+      for (const filename of files) {
+        // 先用檔名快速篩選（性能優化）
+        const fileSessionId = extractSessionIdFromFilename(filename);
+        const filepath = join(TRACE_LOGS_DIR, filename);
+        const spans = parseTraceLogFile(filepath);
+
+        for (const span of spans) {
+          // 支援兩種匹配：span 內的 sessionId 欄位，或檔名推斷的 sessionId
+          if (span.sessionId === sessionId || fileSessionId === sessionId) {
+            matchedSpans.push({ _file: filename, ...span });
+          }
+        }
+      }
+
+      // 依 timestamp 升序排列
+      matchedSpans.sort((a, b) => {
+        const ta = a.timestamp || "";
+        const tb = b.timestamp || "";
+        return ta.localeCompare(tb);
+      });
+
+      if (matchedSpans.length === 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({
+                spans: [],
+                total: 0,
+                session_id: sessionId,
+                message: `找不到 session「${sessionId}」的 trace span`,
+                available_sessions: files.map(extractSessionIdFromFilename),
+              }, null, 2),
+            },
+          ],
+        };
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify({
+              spans: matchedSpans,
+              total: matchedSpans.length,
+              session_id: sessionId,
+            }, null, 2),
+          },
+        ],
+      };
+    }
+
+    case "get_trace_summary": {
+      const filterSessionId = args?.session_id || null;
+      const files = listTraceLogFiles();
+
+      if (files.length === 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `docs/trace-logs/ 目錄下無 trace log 檔案（路徑：${TRACE_LOGS_DIR}）`,
+            },
+          ],
+        };
+      }
+
+      const summaries = [];
+
+      for (const filename of files) {
+        const fileSessionId = extractSessionIdFromFilename(filename);
+
+        // 若指定 session，只處理匹配的檔案
+        if (filterSessionId && fileSessionId !== filterSessionId) {
+          // 也嘗試從 span 的 sessionId 欄位匹配（需讀取檔案）
+          const filepath = join(TRACE_LOGS_DIR, filename);
+          const spans = parseTraceLogFile(filepath);
+          const matchedSpans = spans.filter((s) => s.sessionId === filterSessionId);
+          if (matchedSpans.length === 0) continue;
+          summaries.push(buildTraceSummary(matchedSpans, filename));
+          continue;
+        }
+
+        const filepath = join(TRACE_LOGS_DIR, filename);
+        const spans = parseTraceLogFile(filepath);
+        summaries.push(buildTraceSummary(spans, filename));
+      }
+
+      if (summaries.length === 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: filterSessionId
+                ? `找不到 session「${filterSessionId}」的 trace span`
+                : "無 trace 資料可摘要",
+            },
+          ],
+        };
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: summaries.join("\n\n" + "=".repeat(60) + "\n\n"),
           },
         ],
       };
