@@ -47,16 +47,16 @@
             "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/protect-main.sh'"
           },
           {
-            "type": "prompt",
-            "prompt": "如果本次 Bash 工具的 command 欄位包含 'gh pr merge' 或 'pr merge'，請回覆以下提醒（否則不回覆任何內容）：\n\n[PR-MERGE-GATE] 合併前請確認以下審查已完成：\n1. pr-review-toolkit 三 agent 審查已執行且通過？（code-reviewer / silent-failure-hunter 無 CRITICAL/HIGH；comment-analyzer 無 Critical Issues）\n2. 外部獨立審查已 CONFIRM（或 doc-only 跳過）？\n3. CI/CD 雙審查 Gate（若有 .github/workflows 變更）已 PASS？\n\n若未完成，請先執行審查再合併。若確認已完成，可繼續合併。"
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/pr-merge-gate.sh'"
           },
           {
-            "type": "prompt",
-            "prompt": "如果本次 Bash 工具的 command 欄位符合 'git checkout -b' 或 'git switch -c'，請回覆以下提醒（否則不回覆任何內容）：\n\n[BRANCH-GATE] 建立新分支前，請確認：\n1. 已在 Sprint Backlog 中 claim 本 Story（避免多 session 搶單）？\n2. 分支命名遵循慣例 sprint-{N}/{story-id}？\n\n若尚未 claim，請先更新 Sprint 文件再建立分支。"
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/branch-gate.sh'"
           },
           {
-            "type": "prompt",
-            "prompt": "如果本次 Bash 工具的 command 欄位包含 'git push' 且同時包含 'main' 或 'origin main'，請回覆以下提醒（否則不回覆任何內容）：\n\n[PUSH-MAIN-GATE] 直接 push 到 main 分支前，請確認：\n1. 本次變更是否在豁免清單中（doc-only / hotfix / version-bump）？\n2. 若非豁免，請改用 PR 流程：git push origin {branch} 後執行 gh pr create。\n\n直接 push main 僅適用於豁免清單場景，一般功能實作必須走 PR 流程。"
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/push-main-gate.sh'"
           }
         ]
       }
