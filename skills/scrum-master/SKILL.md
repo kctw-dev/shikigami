@@ -40,6 +40,7 @@ description: "Use when starting any conversation - 自動調度 Shikigami Agent 
 | `health-check` | 框架狀態檢查、自我診斷、結構完整性驗證 |
 | `onboarding` | 新用戶安裝後初始化、專案目錄 scaffold、CLAUDE.md 生成 |
 | `dispel` | Legacy 系統考古、不熟悉 codebase 分析、解咒模式 |
+| `team-debate` | Developer Story 實作後觸發同職能雙 Agent 交替批判（ADR-031 Phase 1） |
 
 ---
 
