@@ -588,6 +588,105 @@ project_level=medium，請確認是否啟動 Sprint Planning。"
   else:  # high
     # high：只標記，不觸發不通知
     log action: "sprint-planning-marked (project_level=high, count=${SPRINT_CANDIDATE_COUNT})"
+
+# ── Step 6：閒置偵測（#331-子2）──
+# 條件：無進行中 Sprint + 無進行中 Shoot + Backlog 有 open issues → 觸發 Sprint Planning
+IN_SPRINT_COUNT = gh issue list -R ${OWNER_REPO} --label "status: in-sprint" --state open --json number | jq length
+BACKLOG_COUNT   = gh issue list -R ${OWNER_REPO} --state open --json number | jq length
+
+if [[ "$IN_SPRINT_COUNT" -eq 0 && ! -f "$SHOOT_FLAG" && "$BACKLOG_COUNT" -gt 0 ]]; then
+  # 閒置狀態：無 Sprint、無 Shoot、backlog 有東西
+  if [[ "$PROJECT_LEVEL" == "low" ]]; then
+    # low：直接觸發 Sprint Planning
+    invoke shikigami:sprint-planning
+    log action: "idle-trigger-sprint-planning (project_level=low, backlog=${BACKLOG_COUNT})"
+  elif [[ "$PROJECT_LEVEL" == "medium" ]]; then
+    # medium：留言通知，等使用者確認
+    FIRST_BACKLOG_ISSUE=$(gh issue list -R ${OWNER_REPO} --state open --json number --jq '.[0].number')
+    gh issue comment ${FIRST_BACKLOG_ISSUE} -R ${OWNER_REPO} --body "## [巡邏狀態：閒置偵測]
+
+目前無進行中 Sprint 且無進行中 Shoot，但 Backlog 有 ${BACKLOG_COUNT} 個 open issues。
+
+project_level=medium，請確認是否啟動 Sprint Planning。
+
+- 巡邏時間：$(date '+%Y-%m-%dT%H:%M:%S')
+- Session: ${SESSION_ID}
+- Cycle: ${CYCLE}"
+    log action: "idle-detected-notify (project_level=medium, backlog=${BACKLOG_COUNT})"
+  else:  # high
+    # high：只記錄，不觸發
+    log action: "idle-detected-marked (project_level=high, backlog=${BACKLOG_COUNT})"
+fi
+```
+
+### 背景 Agent 進度追蹤（#331-子3）
+
+PO 巡邏在每個 cycle 偵測 subagent 是否有新產出，避免背景工作完成但無人推進。
+
+```bash
+# ── 背景 Agent 進度偵測 ──
+# 上次巡邏時間：從 JSONL log 讀取，取最近一筆 timestamp；首次 cycle 用 30 分鐘前
+LAST_PATROL_TIME=$(jq -r 'select(.type=="po-patrol") | .timestamp' "${CRUISE_LOG}" 2>/dev/null \
+  | sort | tail -1)
+if [[ -z "$LAST_PATROL_TIME" ]]; then
+  LAST_PATROL_TIME=$(date -d "30 minutes ago" '+%Y-%m-%dT%H:%M:%S' 2>/dev/null \
+    || date -v-30M '+%Y-%m-%dT%H:%M:%S' 2>/dev/null \
+    || date '+%Y-%m-%dT%H:%M:%S')
+fi
+
+# 1. 偵測 git log 新 commit（自上次巡邏以來）
+NEW_COMMITS=$(git -C "${REPO_PATH}" log --since="${LAST_PATROL_TIME}" --oneline 2>/dev/null)
+
+# 2. 偵測 docs/sprints/subagent-results/ 新增檔案（自上次巡邏以來）
+SUBAGENT_RESULTS_DIR="${REPO_PATH}/docs/sprints/subagent-results"
+NEW_RESULT_FILES=""
+if [[ -d "$SUBAGENT_RESULTS_DIR" ]]; then
+  NEW_RESULT_FILES=$(find "$SUBAGENT_RESULTS_DIR" -newer "${CRUISE_LOG}" -name "*.md" 2>/dev/null \
+    | sort | tr '\n' ' ')
+fi
+
+# 3. 有新進度 → 對相關 Issue 留言更新狀態
+if [[ -n "$NEW_COMMITS" || -n "$NEW_RESULT_FILES" ]]; then
+  # 從新 commit message 或 result 檔名推導 issue number（格式 US-NNN.md 或 #NNN）
+  PROGRESS_ISSUES=()
+  if [[ -n "$NEW_RESULT_FILES" ]]; then
+    for FILE in $NEW_RESULT_FILES; do
+      ISSUE_NUM=$(basename "$FILE" | grep -oE '[0-9]+' | head -1)
+      if [[ -n "$ISSUE_NUM" ]]; then
+        PROGRESS_ISSUES+=("$ISSUE_NUM")
+      fi
+    done
+  fi
+  if [[ -n "$NEW_COMMITS" ]]; then
+    while IFS= read -r COMMIT_LINE; do
+      ISSUE_NUM=$(echo "$COMMIT_LINE" | grep -oE '#([0-9]+)' | tr -d '#' | head -1)
+      if [[ -n "$ISSUE_NUM" ]]; then
+        PROGRESS_ISSUES+=("$ISSUE_NUM")
+      fi
+    done <<< "$NEW_COMMITS"
+  fi
+
+  # 對每個有新進度的 Issue 留言（冪等：若已有「進度回報」留言且進度未變，不重複）
+  for ISSUE_NUM in $(echo "${PROGRESS_ISSUES[@]}" | tr ' ' '\n' | sort -u); do
+    ISSUE_EXISTS=$(gh issue view "${ISSUE_NUM}" -R ${OWNER_REPO} --json state \
+      --jq '.state' 2>/dev/null || echo "")
+    if [[ "$ISSUE_EXISTS" == "OPEN" ]]; then
+      gh issue comment "${ISSUE_NUM}" -R ${OWNER_REPO} --body "## [巡邏狀態：進度回報]
+
+背景 subagent 偵測到新產出：
+
+$(if [[ -n "$NEW_COMMITS" ]]; then echo "**新 commit**："; echo '```'; echo "$NEW_COMMITS"; echo '```'; fi)
+$(if [[ -n "$NEW_RESULT_FILES" ]]; then echo "**新結果檔案**：\`${NEW_RESULT_FILES}\`"; fi)
+
+- 巡邏時間：$(date '+%Y-%m-%dT%H:%M:%S')
+- Session: ${SESSION_ID}
+- Cycle: ${CYCLE}"
+      log action: "progress-report #${ISSUE_NUM}"
+    fi
+  done
+
+  log action: "background-progress-detected (commits=${NEW_COMMITS:-none}, files=${NEW_RESULT_FILES:-none})"
+fi
 ```
 
 ### Auto-shoot 連續派遣（AC-2，修正 #340）
