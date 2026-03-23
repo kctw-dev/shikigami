@@ -10,7 +10,7 @@
 |---|-------|------|--------|--------|------|----------|
 | #423 | [SRE] CI failure: Claude Code GitHub App 未安裝 | S | 1 | Must | 完成（PR #445） | 1 |
 | #442 | [SRE] CI failure: unzip 缺失導致 Bun setup 失敗 | S | 1 | Must | 完成（PR merged） | 2 |
-| #424 | [SRE] Node.js 20 actions deprecated 遷移 | M | 3 | Must | 待辦 | 3 |
+| #424 | [SRE] Node.js 20 actions deprecated 遷移 | M | 3 | Must | 完成（PR #448） | 3 |
 
 ## PO 決策紀錄
 
