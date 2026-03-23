@@ -158,6 +158,7 @@ fi
 ```bash
 SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
 CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
+SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"  # Auto-shoot 併發控制（SSOT，僅此處定義）
 touch "$CRUISE_FLAG"
 echo "[CRUISE] 巡航模式已啟動（Session: ${SESSION_ID}，間隔: ${INTERVAL}）"
 echo "[CRUISE] Flag file: $CRUISE_FLAG"
@@ -200,6 +201,48 @@ while 檢查 flag file 存在:
       寫入錯誤 log entry：
         {"type":"error","repo":"<OWNER_REPO>","cycle":<N>,"timestamp":"<ISO8601>","summary":"subagent failed: <reason>"}
       echo "[CRUISE] WARNING: ${OWNER_REPO} 巡邏/巡檢失敗，見 log"
+
+  # ── Auto-shoot 派工（#340）──────────────────────
+  # PO 巡邏結果回傳後，檢查是否有 actionable Issue 可自動修復
+  # 條件：(1) PO 回傳 actionable Issues (2) SHOOT_FLAG 不存在（無 shoot 進行中）(3) 非 stakeholder
+  # ── SHOOT_FLAG 殘留防護 ──────────────────────
+  if SHOOT_FLAG 存在:
+    SHOOT_FLAG_AGE = (now - SHOOT_FLAG mtime) in minutes
+    if SHOOT_FLAG_AGE > 30:
+      echo "[CRUISE] SHOOT_FLAG 殘留超過 30 分鐘，強制清除"
+      rm -f SHOOT_FLAG
+      寫入 log entry：
+        {"type":"auto-shoot-stale-cleared","repo":"<OWNER_REPO>","cycle":<N>,"timestamp":"<ISO8601>"}
+
+  if PO 巡邏結果含 actionable Issues:
+    if SHOOT_FLAG 不存在:
+      FIRST_ACTIONABLE = 取第一個 actionable Issue（優先序：sre-auto-debug > bug）
+      echo "$FIRST_ACTIONABLE" > SHOOT_FLAG  # 建立互斥鎖，內容為 issue number（供「處理中」狀態判斷）
+      平行派遣 background Agent：
+        - shoot-agent（run_in_background: true，帶入 FIRST_ACTIONABLE issue number）
+        - 指令：執行 /shoot #<issue_number>
+      寫入 log entry：
+        {"type":"auto-shoot-dispatched","repo":"<OWNER_REPO>","cycle":<N>,"issue":<issue_number>,"timestamp":"<ISO8601>"}
+      echo "[CRUISE] Auto-shoot 已派遣：#<issue_number>"
+    else:
+      echo "[CRUISE] Shoot 進行中，跳過自動派工"
+      寫入 log entry：
+        {"type":"auto-shoot-skipped","repo":"<OWNER_REPO>","cycle":<N>,"reason":"shoot-in-progress","timestamp":"<ISO8601>"}
+  # ── Auto-shoot 完成檢查 ──────────────────────────
+  # 若上一 cycle 派遣了 shoot，檢查 background agent 是否已完成
+  if 上一 cycle 派遣了 shoot 且 background agent 已完成:
+    讀取 shoot agent 結果
+    if shoot 成功:
+      rm -f SHOOT_FLAG  # 清除互斥鎖
+      寫入 log entry：
+        {"type":"auto-shoot-completed","repo":"<OWNER_REPO>","cycle":<N>,"issue":<issue_number>,"result":"success","timestamp":"<ISO8601>"}
+      echo "[CRUISE] Auto-shoot 完成：#<issue_number> 修復成功"
+    else:
+      rm -f SHOOT_FLAG
+      寫入 log entry：
+        {"type":"auto-shoot-completed","repo":"<OWNER_REPO>","cycle":<N>,"issue":<issue_number>,"result":"failed","reason":"<reason>","timestamp":"<ISO8601>"}
+      echo "[CRUISE] Auto-shoot 失敗：#<issue_number>，見 log"
+
   echo "[CRUISE] Cycle ${CYCLE} 完成（${#REPOS[@]} repos），下次執行：${INTERVAL} 後"
   sleep ${INTERVAL_SECONDS}
   if flag file 不存在: break
@@ -283,6 +326,7 @@ for each issue in issues:
 | **新回覆 — 內部 Issue 直接回覆** | Issue 有新回覆 + 屬於內部 Issue（無外部 stakeholder 參與）+ 可直接回應 | `gh issue comment` 直接回覆 | `"reply"` |
 | **無 label — 自動 Triage** | Issue 無任何 label（`labels` 為空陣列）| invoke `issue-management` triage；已有 label 的 Issue 不重複 triage（triage 冪等）| `"triage"` |
 | **awaiting-reply 超時 — 催促** | Issue 帶有 `awaiting-reply` label + 最後一則留言超過 24h | 自動留言催促；每 Issue 每天最多 1 次（催促冪等）| `"nudge"` |
+| **可修復 Issue — 自動派工**（#340） | Issue 有明確修復方向（`bug` 或 `sre-auto-debug` label）+ 非 stakeholder + 非 `awaiting-reply` | 標記為 actionable，回傳給主 loop（主 loop 負責 `SHOOT_FLAG` 併發控制）| `"auto-shoot"` |
 
 **情境 3 詳細邏輯（無 label 自動 Triage）**：
 
@@ -321,18 +365,63 @@ for each issue in issues:
       log action: "nudge #<issue.number>"
 ```
 
-### 留言追蹤
-
-對逾期或無回應的 Issue 留言提醒：
+**情境 5 詳細邏輯（可修復 Issue 自動派工，#340）**：
 
 ```bash
-# 對逾期 Issue 留言
-gh issue comment <issue_number> -R ${OWNER_REPO} --body "## 巡邏留言（自動）
+# 偽碼：PO 巡邏判斷 actionable Issue → 回傳給主 loop
+ACTIONABLE_ISSUES=()
+for each issue in issues:
+  # 安全前置：stakeholder label → 跳過自動修復
+  if "stakeholder" in issue.labels:
+    skip
 
-此 Issue 已逾期未更新，請相關負責人確認狀態。
+  # actionable 判斷標準（label-based，v1 簡潔設計）：
+  # 1. 有明確修復方向的 label（bug 或 sre-auto-debug）
+  # 2. 非 awaiting-reply（不等人回覆的才派工）
+  if ("bug" in issue.labels OR "sre-auto-debug" in issue.labels) \
+     AND "awaiting-reply" NOT in issue.labels:
+    ACTIONABLE_ISSUES += issue.number
+
+# 回傳結果中加入 actionable_issues 欄位
+# 主 loop 收到後依 auto-shoot 邏輯決定是否派工
+```
+
+**actionable 優先序**（主 loop 從中選取第一個）：
+1. `sre-auto-debug` label（SRE 建立的 CI failure Issue，有 /systematic-debugging 指引）
+2. `bug` label（一般 bug）
+
+### 留言語意狀態表（#340）
+
+PO 巡邏每 cycle 判斷 Issue 當前所處狀態，選擇對應語意模板留言。此表**取代**原有的固定催促留言模板（SSOT）。
+
+| 狀態 | 判斷依據 | 留言語意 | 留言範例 |
+|------|---------|---------|---------|
+| **未處理** | 無 assignee + 無留言或留言超過 threshold | 催促/提醒 | 「此 Issue 已逾期未更新，請相關負責人確認狀態」 |
+| **等待回覆** | `awaiting-reply` label | 告知等待對象 | 「等待 @someone 補充環境資訊」 |
+| **排隊中** | Issue 為 actionable + `SHOOT_FLAG` 存在（另一 shoot 進行中） | 告知排序 | 「已排入修復佇列，前方有 1 個修復進行中」 |
+| **處理中** | Issue 為當前 auto-shoot 目標（`SHOOT_FLAG` 內容 = 此 issue number） | 進度回報 | 「已派工修復，shoot 執行中…」 |
+| **PR 已開** | 關聯 PR 存在且 state=open | 交付追蹤 | 「PR #N 已開，待 review」 |
+| **已修復** | 關聯 PR merged + CI passing | 結案確認 | 「修復已合併，CI 恢復正常」 |
+
+**狀態判斷順序**（優先高→低）：
+1. 已修復（PR merged + CI pass）→ 留言結案
+2. PR 已開 → 留言追蹤 PR
+3. 處理中（SHOOT_FLAG 內容 = issue number）→ 留言進度
+4. 排隊中（actionable + SHOOT_FLAG 存在）→ 留言排序
+5. 等待回覆（`awaiting-reply` label）→ 留言等待對象
+6. 未處理（default）→ 催促/提醒
+
+**冪等規則**：同一狀態下，若上一則留言已是該狀態的自動留言，不重複留言。狀態轉換時（如「排隊中」→「處理中」），留一則新狀態留言。
+
+```bash
+# 留言模板（統一格式）
+gh issue comment <issue_number> -R ${OWNER_REPO} --body "## [巡邏狀態：<狀態名稱>]
+
+<對應語意的留言內容>
 
 - 巡邏時間：$(date '+%Y-%m-%dT%H:%M:%S')
-- Session: ${SESSION_ID}"
+- Session: ${SESSION_ID}
+- Cycle: ${CYCLE}"
 ```
 
 ### 交付推進自動化
@@ -387,7 +476,8 @@ SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | t
   "strict": true,
   "threshold_days": <THRESHOLD_DAYS>,
   "summary": "掃描 <X> 個 open issues，發現 <Y> 個逾期，<Z> 個無回應",
-  "actions": ["reply #<N1>", "triage #<N2>", "nudge #<N3>", "push-delivery #<N4> → staging", "skipped #<N5>: stakeholder-issue"]
+  "actions": ["reply #<N1>", "triage #<N2>", "nudge #<N3>", "push-delivery #<N4> → staging", "skipped #<N5>: stakeholder-issue", "auto-shoot #<N6>"],
+  "actionable_issues": [<issue_numbers>]
 }
 ```
 
@@ -651,9 +741,11 @@ done
 ```bash
 SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
 CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
+SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"
 
 if [[ -f "$CRUISE_FLAG" ]]; then
   rm -f "$CRUISE_FLAG"
+  rm -f "$SHOOT_FLAG" 2>/dev/null || true  # 同步清除 auto-shoot flag
   echo "[CRUISE] 巡航模式停止指令已送出，loop 將在當前 cycle 完成後退出"
 else
   echo "[CRUISE] 巡航模式未啟動（flag file 不存在）"
@@ -662,12 +754,14 @@ fi
 
 ### SessionEnd Hook 自動清理
 
-`hooks/session-end-release.sh` 在 Session 結束時自動清除 cruise flag file，確保無殘留：
+`hooks/session-end-release.sh` 在 Session 結束時自動清除 cruise flag file 與 shoot flag file，確保無殘留：
 
 ```bash
 CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
+SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"
 rm -f "$CRUISE_FLAG" 2>/dev/null || true
-echo "[CRUISE] SessionEnd cleanup: cruise flag file 已清除"
+rm -f "$SHOOT_FLAG" 2>/dev/null || true  # 清除 auto-shoot flag（殘留防護）
+echo "[CRUISE] SessionEnd cleanup: cruise + shoot flag files 已清除"
 ```
 
 ---
@@ -716,6 +810,7 @@ fi
 
 - 每個 Session 各自獨立執行 loop，互不干擾
 - Flag file 以 SESSION_ID 命名（`/tmp/shikigami-cruise-<SESSION_ID>.active`）
+- Shoot flag 以 SESSION_ID 命名（`/tmp/shikigami-cruise-shoot-<SESSION_ID>.active`），per-session 互斥，不影響其他 session 的 auto-shoot
 - Log 以 SESSION_ID 命名（per-session JSONL）
 - Issue 重複防護確保同一問題不會被多個 Session 重複建立（覆蓋所有新 Issue 類型：CI failure / deploy failure / runner offline）
 - 多 runner 同時發現同一 failure → 只建一個 Issue（search 防護，冪等性覆蓋所有新 Issue 類型）
@@ -728,8 +823,10 @@ fi
 **單一 repo 模式**（`"repo"` 欄位仍存在，值為該 repo 的 owner/repo）：
 
 ```jsonl
-{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","repo":"KCTW/shikigami","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期，1 個無回應","actions":["reply #301","triage #310","nudge #312"]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","repo":"KCTW/shikigami","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期，1 個無回應","actions":["reply #301","triage #310","nudge #312","auto-shoot #321"],"actionable_issues":[321]}
 {"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:05+0800","type":"sre-inspection","repo":"KCTW/shikigami","summary":"檢查 10 筆 CI run，發現 1 個 CI failure，建立 1 個 Issue","actions":["create-issue-with-debug #321"]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:06+0800","type":"auto-shoot-dispatched","repo":"KCTW/shikigami","issue":321}
+{"session_id":"abc123","cycle":2,"timestamp":"2026-03-21T11:00:08+0800","type":"auto-shoot-completed","repo":"KCTW/shikigami","issue":321,"result":"success"}
 ```
 
 **多 repo 模式**（每個 repo 各一筆 log entry）：
@@ -749,4 +846,14 @@ fi
 | `"triage"` | 無 label Issue 觸發 issue-management triage |
 | `"nudge"` | awaiting-reply 超時自動催促 |
 | `"push-delivery"` | PR merge 後推進交付鏈下一步 |
+| `"auto-shoot"` | 可修復 Issue 標記為 actionable，觸發主 loop 自動派工（#340） |
 | `"skipped"` | Stakeholder Issue 跳過自動行動（含 reason） |
+
+**Auto-shoot log entry 類型說明**（#340，由主 loop 寫入）：
+
+| 類型 | 說明 |
+|------|------|
+| `"auto-shoot-dispatched"` | 主 loop 已派遣 background shoot agent |
+| `"auto-shoot-skipped"` | 有 actionable Issue 但 shoot 正在進行中，跳過 |
+| `"auto-shoot-completed"` | shoot agent 完成，含 result（success/failed） |
+| `"auto-shoot-stale-cleared"` | SHOOT_FLAG 殘留超過 30 分鐘，強制清除（防死鎖） |
