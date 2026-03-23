@@ -262,6 +262,31 @@
 
 ---
 
+## PR Metadata 品質檢查（#421）
+
+<!-- retro: Sprint 119 Action A3 — PR title / Issue title 語義一致性 -->
+
+Code Review 時，除代碼品質外，必須檢查 PR 的 metadata 品質：
+
+### PR Title / Issue Title 語義對齊
+
+| 檢查項目 | 說明 |
+|---------|------|
+| **PR title 應與對應 Issue title 語義對齊** | PR title 的核心描述應反映 Issue title 的主要意圖。例如 Issue title 為「AskUserQuestion pattern」，PR title 不應偏移為「project_level 分層控制」而完全遺漏原始意圖 |
+| **差異需在 PR body 說明** | 若 PR title 因實作範圍調整而與 Issue title 有語義差異，必須在 PR body 中明確說明差異原因（例：「Issue 聚焦 pattern 定義，PR 同時包含 project_level 分層作為實作載體」） |
+
+**判定規則**：
+
+| 情境 | 結果 |
+|------|------|
+| PR title 與 Issue title 語義一致 | PASS（不列入 Issues） |
+| PR title 與 Issue title 有差異，但 PR body 已說明 | PASS（記為 Observation） |
+| PR title 與 Issue title 有差異，PR body 未說明 | SUGGESTION（非阻塞，建議補充說明） |
+
+> **來源**：Sprint 119 Retro — PR #416 title 強調「project_level 分層控制」vs Issue #387 title 強調「AskUserQuestion pattern」，造成 Sprint Review 對應困難。
+
+---
+
 ## 注意事項
 
 - 審查要**具體**：指出確切的檔案、行號、代碼片段。不要泛泛而談。
