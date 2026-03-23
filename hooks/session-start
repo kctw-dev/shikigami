@@ -43,6 +43,28 @@ printf '{"session_id":"%s","role":"%s","event":"%s","timestamp":"%s","repo":"%s"
   "$SESSION_ID" "$ROLE" "$EVENT" "$TIMESTAMP" "$REPO_NAME" \
   >> "$JSONL_FILE" 2>/dev/null || true
 
+# ---------- #359：Compact 後自動恢復巡航與 Sprint 進度 ----------
+# SESSION_EVENT 由 Claude Code 注入（startup/resume/clear/compact）
+RECOVERY_HINTS=""
+
+# 檢查 cruise flag
+# 使用已 sanitized 的 SESSION_ID（與 cruise skill 一致）
+CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
+if [[ -f "$CRUISE_FLAG" ]]; then
+  RECOVERY_HINTS="${RECOVERY_HINTS}[CRUISE-RECOVER] 偵測到巡航 flag，請恢復 /cruise 巡航。\n"
+fi
+
+# 檢查 sprint checkpoint
+# 複用已有的 REPO_ROOT_PATH（不重複 git rev-parse）
+CHECKPOINT_FILE="${REPO_ROOT_PATH}/docs/sprints/sprint-checkpoint.json"
+if [[ -f "$CHECKPOINT_FILE" ]]; then
+  SPRINT_NUM=$(grep -o '"sprint": *[0-9]*' "$CHECKPOINT_FILE" 2>/dev/null | grep -o '[0-9]*' || echo "?")
+  PENDING=$(grep -c '"pending"' "$CHECKPOINT_FILE" 2>/dev/null || echo "0")
+  if [[ "$PENDING" -gt 0 ]]; then
+    RECOVERY_HINTS="${RECOVERY_HINTS}[SPRINT-RECOVER] Sprint ${SPRINT_NUM} 進行中，${PENDING} 個 Story 待完成。讀取 ${CHECKPOINT_FILE} 恢復進度。\n"
+  fi
+fi
+
 # ---------- Read scrum-master skill content ----------
 SKILL_FILE="${PLUGIN_ROOT}/skills/scrum-master/SKILL.md"
 
@@ -67,7 +89,14 @@ escape_for_json() {
 ESCAPED="$(escape_for_json "$SKILL_CONTENT")"
 
 # ---------- Build the context message ----------
-PREFIX="You have shikigami superpowers.\\n\\n**Below is the full content of your 'shikigami:scrum-master' skill - your AI Agent Scrum Team controller. For all other skills, use the 'Skill' tool:**"
+# #359：注入恢復提示（若有）
+RECOVERY_PREFIX=""
+if [[ -n "$RECOVERY_HINTS" ]]; then
+  ESCAPED_HINTS="$(escape_for_json "$(echo -e "$RECOVERY_HINTS")")"
+  RECOVERY_PREFIX="\\n\\n## 恢復提示\\n${ESCAPED_HINTS}"
+fi
+
+PREFIX="You have shikigami superpowers.${RECOVERY_PREFIX}\\n\\n**Below is the full content of your 'shikigami:scrum-master' skill - your AI Agent Scrum Team controller. For all other skills, use the 'Skill' tool:**"
 CONTEXT="<EXTREMELY_IMPORTANT>\\n${PREFIX}\\n\\n${ESCAPED}\\n</EXTREMELY_IMPORTANT>"
 
 # ---------- Output JSON (dual fields for compatibility) ----------
