@@ -1,0 +1,12 @@
+{
+  "sprint": 116,
+  "stories": [
+    {"id": "#329", "status": "completed", "completed_at": "2026-03-23T04:17:41Z", "pr": 356},
+    {"id": "#338", "status": "pending", "completed_at": null},
+    {"id": "#339", "status": "pending", "completed_at": null}
+  ],
+  "current_step": "story-329-completed",
+  "version": "v0.78.13",
+  "updated_at": "2026-03-23T04:17:41Z",
+  "notes": "Sprint 116 執行中。#329 PR#356 merged。#338 需 ADR（per-repo 設定 schema）。#339 在 #338 之後。Sprint 完成後需討論 SKILL.md 流程拆解。"
+}
