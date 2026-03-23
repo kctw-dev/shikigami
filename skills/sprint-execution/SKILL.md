@@ -739,7 +739,7 @@ Claim Story（§2.11，多 Session 並行協調）
    - 7.3 審查閉環（現行流程不變：Spec Compliance + Code Quality）
    - 7.4 `git commit -m "feat: <story-id> <標題>"`
    - 7.5 `git push -u origin sprint-<N>/<story-id>`
-   - 7.6 `gh pr create --title "feat: <story-id> <標題>" --body "<AC 清單 + 審查摘要>"`
+   - 7.6 `gh pr create --title "feat: <story-id> <標題>" --body "<PR body（必須包含 Summary + AC Checklist，見 PR Description Quality Gate）>"`
          |-- `gh` 不可用 → `[PR-FLOW-DEGRADED]` 降級：直推 main + 內部審查
    - 7.7 Code Review Loop（ADR-023 決策 5，pr-review-toolkit 三 agent，#368 方向2 責任下放）
          pr-review-toolkit 三 agent：code-reviewer / silent-failure-hunter / comment-analyzer

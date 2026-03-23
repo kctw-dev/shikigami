@@ -105,6 +105,30 @@ Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義�
 - 若所有 Story 皆獨立，Phase 2 區塊可省略，填「無」
 - **SHIKIGAMI_MAX_PARALLEL=1 時**：Phase 1 與 Phase 2 合併為單一循序佇列，不出現平行分組（輸出「強制循序，無平行分群」）
 
+### ADR 依賴分群規則（#456 AC3）
+
+<!-- #456 ADR 自動納入 Sprint — Sprint 124 -->
+
+當 Sprint 中含有由 Architect 自動補建的 ADR RESEARCH Story 時，**強制應用以下分群**：
+
+| 分群 | 包含 Story | 說明 |
+|------|-----------|------|
+| **ADR Phase 1（必須先執行）** | ADR RESEARCH Story（`已補建 #N`） | ADR 必須先完成以確立技術決策，才能進入依賴 Story 的開發 |
+| **ADR Phase 2（等 ADR 完成後執行）** | 依賴該 ADR 的 Story | ADR Accepted 後方可執行 |
+
+**輸出格式**（加入技術評估表格下方）：
+
+```markdown
+### ADR 依賴分群（#456）
+
+> ADR Phase 1 必須在 ADR Phase 2 前完成。
+
+**ADR Phase 1（先執行）**：#{ADR_Issue_number} — {ADR 決策主題}
+**ADR Phase 2（ADR Accepted 後執行）**：#{story_id} — {Story 標題}
+```
+
+**豁免條件**：Sprint 中無 ADR RESEARCH Story 時，此分群規則不適用，輸出「無 ADR 依賴分群」。
+
 ---
 
 ## 方法論適用性評估
@@ -175,6 +199,57 @@ Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義�
 | RESEARCH | N/A | 無 Contract（產出 Spike Report） | RESEARCH 恆為 N/A |
 
 > **衝突排除說明**：FEATURE 與 INTEGRATION 雖共享 Architect 作為 Contract Owner，但在同一 Sprint 中不會對同一介面同時產生 FEATURE 和 INTEGRATION Story，因此不存在 Contract 衝突。若罕見情況下出現同一介面的 FEATURE + INTEGRATION 並行，由 Architect 統一協調，以 INTEGRATION Contract 為主文件，FEATURE Contract 作為補充。
+
+---
+
+## ADR 補建自動行為（#456）
+
+<!-- #456 ADR 自動納入 Sprint — Sprint 124 -->
+
+在技術評估（Refinement 輸出）階段，Architect 若判斷某 Story **需要 ADR 但尚無對應 Accepted ADR**，必須自動執行以下步驟：
+
+### ADR 補建觸發條件
+
+| 條件 | 觸發 |
+|------|------|
+| Story 涉及新技術選型、架構邊界變更或跨模組設計決策 | 是 → 觸發 ADR 補建 |
+| 已有 Accepted ADR 對應 | 否 → 不觸發 |
+| RESEARCH type Story | 否 → RESEARCH 本身為調查性質，不強制 ADR |
+
+### ADR 補建流程（AC1）
+
+當觸發條件成立時，Architect **自動建立 ADR Issue**：
+
+```bash
+gh issue create \
+  -R ${OWNER_REPO} \
+  --title "RESEARCH: ADR — {決策主題}" \
+  --body "## ADR 補建需求
+
+**觸發 Story**：#{story_number} {story_title}
+**決策主題**：{具體需要 ADR 的技術決策描述}
+**影響範圍**：{受影響的模組、介面或系統}
+
+## 驗收標準
+- [ ] ADR 文件建立於 docs/adr/ 目錄
+- [ ] ADR 狀態標記為 Accepted
+- [ ] 相關 Story 更新 ADR 參照欄位
+
+> 此 Issue 由 Architect Refinement 自動建立。" \
+  --label "RESEARCH,size:S,story-points:1"
+```
+
+輸出 ADR Issue 建立確認：`[ADR-AUTO-CREATED] Issue #<N> — {決策主題}`
+
+### 技術評估表格 ADR 欄位更新
+
+ADR 補建觸發後，技術評估表格 `ADR 需求` 欄位格式：
+
+| ADR 需求欄位值 | 意義 |
+|--------------|------|
+| 無需 ADR | Story 不涉及架構決策，無需 ADR |
+| 已有 ADR-XXX（Accepted） | 已有對應 Accepted ADR，可進 Sprint |
+| **已補建 #N（RESEARCH）** | Architect 自動建立 ADR Issue #N，ADR Story 須先於本 Story 進 Sprint |
 
 ---
 

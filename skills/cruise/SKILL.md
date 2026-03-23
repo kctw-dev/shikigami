@@ -1206,6 +1206,42 @@ SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | t
 **觸發**：每個 cruise cycle 由 Task tool 派遣 SRE Agent 執行
 **Repo context**：subagent 接收 `REPO_PATH` 與 `OWNER_REPO` 參數，所有 `gh` 指令加 `-R ${OWNER_REPO}`
 
+### CI 健康檢查（#463 ci-health-check.sh 整合）
+
+<!-- #463 ci-health-check.sh 整合至 Cruise SRE 啟動流程 — Sprint 124 -->
+
+SRE 巡檢**開頭**必須執行 CI 健康檢查腳本（AC1）：
+
+```bash
+# Step 0: CI 健康檢查（ci-health-check.sh 整合）
+CI_HEALTH_SCRIPT="${REPO_PATH}/scripts/ci-health-check.sh"
+
+if [[ -f "$CI_HEALTH_SCRIPT" ]]; then
+  echo "[SRE] 執行 CI 健康檢查：$CI_HEALTH_SCRIPT"
+  CI_HEALTH_OUTPUT=$(bash "$CI_HEALTH_SCRIPT" 2>&1)
+  CI_HEALTH_EXIT=$?
+  if [[ $CI_HEALTH_EXIT -eq 0 ]]; then
+    echo "[SRE] CI 健康檢查 PASS"
+  else
+    echo "[SRE] CI 健康檢查 WARN（exit code: $CI_HEALTH_EXIT）"
+    echo "$CI_HEALTH_OUTPUT"
+  fi
+else
+  # Graceful fallback（AC3）：腳本不存在時靜默跳過，不阻塞巡檢
+  echo "[SRE] ci-health-check.sh 不存在（${CI_HEALTH_SCRIPT}），跳過健康檢查"
+  CI_HEALTH_OUTPUT="[SKIPPED] ci-health-check.sh 不存在"
+  CI_HEALTH_EXIT=0
+fi
+```
+
+健康檢查結果（`CI_HEALTH_OUTPUT`、`CI_HEALTH_EXIT`）**納入 SRE 巡檢報告**（AC2），格式見「SRE 巡檢結果格式」的 `ci_health_check` 欄位。
+
+| 情境 | 行為 |
+|------|------|
+| 腳本存在且 exit 0 | `[SRE] CI 健康檢查 PASS`，結果納入報告 |
+| 腳本存在但 exit ≠ 0 | `[SRE] CI 健康檢查 WARN`，輸出結果納入報告，不阻塞巡檢繼續執行 |
+| 腳本不存在 | `[SRE] ci-health-check.sh 不存在，跳過健康檢查`，報告填 `SKIPPED`（AC3） |
+
 ### cruise-feedback label 標註規則（#339）
 
 SRE 建立 Issue 時，若判斷問題**屬於框架層級**（非 repo 特定，而是 Cruise Skill 本身的限制或設計缺陷），在 `--label` 參數中加入 `cruise-feedback`。
@@ -1510,9 +1546,22 @@ done
     "current_vm_count": <N>,
     "recommended_size": <N>
   },
+  "ci_health_check": {
+    "status": "PASS | WARN | SKIPPED",
+    "exit_code": 0,
+    "output": "<ci-health-check.sh 輸出摘要，或 SKIPPED 原因>"
+  },
   "actions": ["create-issue-with-debug #<N1>", "create-issue-deploy #<N2>", "create-issue-runner #<N3>", "create-issue-vm-anomaly #<N4>", "跳過重複 Issue: <title>"]
 }
 ```
+
+**ci_health_check.status 說明**（#463）：
+
+| 值 | 說明 |
+|----|------|
+| `"PASS"` | ci-health-check.sh 存在且 exit 0 |
+| `"WARN"` | ci-health-check.sh 存在但 exit ≠ 0，輸出已記錄 |
+| `"SKIPPED"` | ci-health-check.sh 不存在，graceful fallback |
 
 **SRE 巡檢 actions 行動類型說明**：
 
