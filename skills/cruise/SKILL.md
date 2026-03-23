@@ -156,9 +156,10 @@ fi
 ### 4. 建立 Flag File
 
 ```bash
+# ── Flag 路徑常數（SSOT — 唯一定義處，#449 AC4）────────────────────
 SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
 CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
-SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"  # Auto-shoot 併發控制（SSOT，僅此處定義）
+SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"  # Auto-shoot 併發控制
 touch "$CRUISE_FLAG"
 echo "[CRUISE] 巡航模式已啟動（Session: ${SESSION_ID}，間隔: ${INTERVAL}）"
 echo "[CRUISE] Flag file: $CRUISE_FLAG"
@@ -273,6 +274,9 @@ CYCLE=0
 ```
 while 檢查 flag file 存在:
   CYCLE += 1
+  # #449 AC1：每個 cycle 開始時 touch flag file，重置 mtime，避免 systemd-tmpfiles-clean 清除
+  touch "$CRUISE_FLAG"
+  if [[ -f "$SHOOT_FLAG" ]]; then touch "$SHOOT_FLAG"; fi
   for REPO_PATH in REPOS:
     OWNER_REPO = REPO_REMOTES[REPO_PATH]
     平行派遣：
@@ -1418,9 +1422,9 @@ done
 ### /cruise stop 指令
 
 ```bash
-SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
-CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
-SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"
+# Flag 路徑沿用啟動階段 SSOT 定義（Section 4，#449 AC4）
+# CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
+# SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"
 
 if [[ -f "$CRUISE_FLAG" ]]; then
   rm -f "$CRUISE_FLAG"
@@ -1436,8 +1440,9 @@ fi
 `hooks/session-end-release.sh` 在 Session 結束時自動清除 cruise flag file 與 shoot flag file，確保無殘留：
 
 ```bash
-CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
-SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"
+# Flag 路徑與啟動階段 SSOT 一致（Section 4，#449 AC4）
+# CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
+# SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"
 rm -f "$CRUISE_FLAG" 2>/dev/null || true
 rm -f "$SHOOT_FLAG" 2>/dev/null || true  # 清除 auto-shoot flag（殘留防護）
 echo "[CRUISE] SessionEnd cleanup: cruise + shoot flag files 已清除"
