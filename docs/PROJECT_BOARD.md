@@ -1,9 +1,33 @@
 # Project Board
 
-**最後更新**：2026-03-23（Sprint 116 Review + Retro 完成）
-**當前 Sprint**：Sprint 116（完成）
+**最後更新**：2026-03-23（Sprint 118 Review + Retro 完成）
+**當前 Sprint**：Sprint 118（完成）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 116](sprints/sprint_116.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 118](sprints/sprint_118.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 118（完成）
+
+> Sprint Goal：Sprint Execution 流程重構（責任下放 + 流程拆解 + Epic 防護）
+> **結果**：Goal 達成（5/5 Stories PASS）。Velocity 10 pts，完成率 100%。Code Review Loop 責任下放至 Story-Lifecycle subagent（ADR-023）+ Story Completion Checklist 5 步拆解 + Sprint Review §2.6 epic 防護（title 含 epic: 不 close）+ Cruise fallback 視窗可配置化 + OAuth 告警閾值可配置化。bump v0.82.0。
+> **Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| #368-子2 責任下放：Code Review Loop 移至 Story-Lifecycle subagent | #368 | M | 3 | 完成 |
+| #368-子3 流程拆解：Story Completion Checklist（5 步明確清單） | #368 | M | 3 | 完成 |
+| fix: Sprint Review 不應自動 close epic Issue | #376 | S | 2 | 完成 |
+| feat: Cruise 進度偵測 fallback 視窗可配置化 | #374 | S | 1 | 完成 |
+| feat: OAuth Token Watchdog 過期通知閾值可配置化 | #375 | S | 1 | 完成 |
+
+**Sprint 容量**：10 points
+
+## Sprint 118 統計
+- Velocity：10 pts（目標 10，達成率 100%）
+- 完成率：100%（完成 5 / 計畫 5）
+- 日期：2026-03-23
+- Sprint 外 Shoots：1 項（#379 worktree 隔離）
 
 ---
 
