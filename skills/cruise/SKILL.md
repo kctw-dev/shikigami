@@ -399,8 +399,9 @@ for each issue in issues:
     SPRINT_CANDIDATES += issue.number
     log action: "sprint-candidate #<issue.number>"
 
-# 回傳結果
-# actionable_issues: 供主 loop auto-shoot 派遣
+# 回傳結果（#346：close 與 auto-shoot 分開回傳）
+# close_issues: PO 已直接 close 的 Issue（不走 shoot）
+# actionable_issues: 供主 loop invoke shikigami:shoot 派遣（必須走完整 shoot 流程）
 # sprint_candidates: 供主 loop Sprint Planning 觸發判斷
 ```
 
@@ -427,11 +428,24 @@ SHOOT_FLAG **只防併發，不防連續**。shoot 完成後立即檢查下一�
 
 ```bash
 # 偽碼：shoot 完成後立即 re-check（在主 loop 內）
+#
+# 重要（#346）：auto-shoot 與 close 的區分
+#   - auto-shoot（有程式碼修改）→ 必須 invoke shikigami:shoot（完整 QA gates）
+#   - close（已修復結案）→ 直接 gh issue close，不走 shoot
+#   - 禁止直接派 Developer Agent 跳過 shoot 流程
+
+# Step 1：先處理 close 處置（不走 shoot，直接關閉）
+for ISSUE in CLOSE_ISSUES:
+  gh issue close ${ISSUE} -R ${OWNER_REPO} --comment "<結案理由>"
+  log: "close #${ISSUE}"
+
+# Step 2：連續 auto-shoot（走完整 /shoot 流程）
 while ACTIONABLE_ISSUES is not empty:
   if SHOOT_FLAG 不存在:
     ISSUE = ACTIONABLE_ISSUES.shift()  # 取出第一個
     echo "$ISSUE" > SHOOT_FLAG
-    派遣 shoot agent（/shoot #${ISSUE}）
+    # !! 必須 invoke shikigami:shoot，不是派 Developer Agent !!
+    invoke shikigami:shoot with args=#${ISSUE}  # 完整 QA + Architect + PR + CI Gate
     等待 shoot 完成
     if shoot 成功:
       rm -f SHOOT_FLAG
