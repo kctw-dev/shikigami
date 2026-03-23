@@ -491,6 +491,12 @@ for each issue in issues:
     log action: "skipped #<issue.number>: stakeholder-issue"
     continue
 
+  # ── Step 0.5：讀取關聯 PR comments（#389），取得 EFFECTIVE_INSTRUCTION ──
+  # 執行「關聯 PR comments 掃描步驟」段落的邏輯
+  # PR comments 與 Issue comments 有矛盾時，以 PR comments 為準
+  EFFECTIVE_INSTRUCTION = merge_with_pr_priority(issue_comments, pr_comments)
+  # log 若有覆蓋：log action: "pr-instruction-overrides-issue #<issue.number> PR#<pr.number>"
+
   # ── Step 1：無 label → 先 Triage（PO 自主加 label）──
   if issue.labels is empty:
     # PO 判斷 Issue 類型，直接加 label（AC-6）
