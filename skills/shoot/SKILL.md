@@ -289,6 +289,8 @@ Story ID 需**精確比對**（`US-#N` 格式優先，也支援舊格式 `US-XX`
   6.2 git commit -m "shoot: <任務標題>"（以 shoot: 前綴）
   6.3 git push -u origin shoot/<issue-or-desc>
   6.4 gh pr create --title "shoot: <任務標題>" --body "<AC 摘要 + 審查結果>"
+        PR title 語義對齊檢查（#421）：PR title 應與對應 Issue title 語義對齊，
+        若有差異需在 PR body 說明。詳見 quality-reviewer-prompt.md §PR Metadata 品質檢查。
         |-- gh 不可用 → [PR-FLOW-DEGRADED] 降級：直推 main（使用 STAGED_FILES 豁免）+ 內部審查
   6.5 Code Review Loop（pr-review-toolkit，見 §8.6 + ADR-023 決策 5）
         派遣 code-reviewer / silent-failure-hunter / comment-analyzer
