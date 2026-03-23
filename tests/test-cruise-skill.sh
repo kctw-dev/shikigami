@@ -477,6 +477,44 @@ if [[ -f "$SKILL_FILE" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# TC-32：#449 — systemd-tmpfiles-clean 防護（每 cycle touch flag file）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-32：#449 systemd-tmpfiles-clean 防護 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  # AC1：每個 cycle 開始時 touch flag file
+  assert_contains "$SKILL_FILE" '#449 AC1' \
+    "TC-32a: Loop cycle 開始處有 #449 AC1 備註"
+  assert_contains "$SKILL_FILE" 'touch.*\$CRUISE_FLAG' \
+    "TC-32b: SKILL.md loop 中有 touch \$CRUISE_FLAG 指令"
+  assert_contains "$SKILL_FILE" 'touch.*\$SHOOT_FLAG' \
+    "TC-32c: SKILL.md loop 中有 touch \$SHOOT_FLAG 指令（SHOOT_FLAG 存在時）"
+
+  # AC4：Flag 路徑常數 SSOT — 唯一定義處在 Section 4
+  assert_contains "$SKILL_FILE" 'SSOT.*唯一定義處|唯一定義處.*SSOT' \
+    "TC-32d: Section 4 含 SSOT 備註（#449 AC4）"
+  assert_contains "$SKILL_FILE" 'Flag 路徑沿用啟動階段 SSOT 定義|Flag 路徑與啟動階段 SSOT 一致' \
+    "TC-32e: Stop 機制與 SessionEnd 章節改為 SSOT 引用（不重複定義）"
+
+  # 確認 /cruise stop 章節不再重複定義 CRUISE_FLAG（應為注解非賦值）
+  STOP_SECTION_ACTIVE_DEFS=$(grep -c '^CRUISE_FLAG=' "$SKILL_FILE" 2>/dev/null || echo "0")
+  if [[ "$STOP_SECTION_ACTIVE_DEFS" -eq 1 ]]; then
+    pass "TC-32f: CRUISE_FLAG 僅定義一次（SSOT），無重複賦值"
+  else
+    fail "TC-32f: CRUISE_FLAG 定義次數不為 1（actual=${STOP_SECTION_ACTIVE_DEFS}），SSOT 未達標"
+  fi
+
+  # AC2：/cruise stop 仍能清除 flag
+  assert_contains "$SKILL_FILE" 'rm -f.*CRUISE_FLAG' \
+    "TC-32g: /cruise stop 仍含 rm -f CRUISE_FLAG（AC2）"
+
+  # AC3：session-end hook 清除 flag
+  assert_contains "$HOOK_FILE" 'CRUISE_FLAG.*active|shikigami-cruise.*SESSION_ID' \
+    "TC-32h: session-end-release.sh 定義 CRUISE_FLAG 並清除（AC3）"
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""
