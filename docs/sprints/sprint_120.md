@@ -12,7 +12,7 @@
 | #412 | [Cruise Feedback] PO 巡邏未正確解讀 Issue 交付物，誤將「規劃」類 Issue 標為 awaiting-reply | M | 3 | Must | 待開始 |
 | #422 | [Cruise Feedback] 新增 Stakeholder 回覆處置表 — 明確指示應立即觸發執行 | S | 2 | Must | 待開始 |
 | #415 | [Cruise Feedback] Sprint 不應等待 stakeholder — 人機協作流程改善 | S | 2 | Should | 待開始 |
-| #421 | retro: code-review checklist 加入 PR title / Issue title 語義一致性檢查 | S | 1 | Should | 待開始 |
+| #421 | retro: code-review checklist 加入 PR title / Issue title 語義一致性檢查 | S | 1 | Should | 完成 |
 
 ## 技術決策
 
