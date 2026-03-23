@@ -142,6 +142,40 @@ QA subagent 進行代碼審查時，必須逐項檢查以下清單：
 | Cyclomatic complexity（圈複雜度） | 單一函式圈複雜度 < 10 | [ ] |
 | Duplication detection（重複偵測） | 是否存在重複代碼，是否應抽取共用模組 | [ ] |
 | SOLID compliance（SOLID 合規） | 是否遵循 SOLID 原則（SRP、OCP、LSP、ISP、DIP） | [ ] |
+| Dependency verification（邏輯依賴驗證） | 若當前 Story 依賴其他 Story，確認被依賴 Story 的狀態（Issue ID + 是否已 merge） | [ ] |
+
+### 邏輯依賴驗證（Dependency Verification）
+
+<!-- #435 Sprint 121 — Shoot 模式邏輯依賴驗證 -->
+
+**觸發條件**：Story 描述、PR body 或 commit message 中出現以下任一形式時觸發：
+- `depends on #N`、`依賴 #N`、`blocked by #N`、`requires #N`
+
+**檢查步驟**：
+
+1. 識別所有被依賴的 Story（Issue ID 列表）
+2. 查詢每個依賴 Story 的狀態：`gh issue view <N> -R <repo> --json state,title`
+3. 確認對應 PR 是否已 merge：`gh pr list -R <repo> --search "closes #N" --state merged`
+
+**Review Feedback 格式**：
+
+```
+[DEP-CHECK] 依賴驗證結果：
+  - #<Story ID>（<標題>）：<狀態>
+    - Issue 狀態：open / closed
+    - PR merge 狀態：merged / not merged / not found
+    - 結論：OK / WARN / BLOCK
+```
+
+**判定規則**：
+
+| 狀態 | 結論 | 處置 |
+|------|------|------|
+| Issue closed + PR merged | OK | 不阻擋 |
+| Issue closed，PR 狀態不明 | WARN | Important 缺陷，建議確認 |
+| Issue open 或 PR not merged | BLOCK | Critical 缺陷，進入 §7.1 互動決策點 |
+
+**未偵測到依賴時**：跳過此檢查，不輸出任何 `[DEP-CHECK]` 訊息。
 
 ---
 
