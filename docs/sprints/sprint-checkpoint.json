@@ -1,12 +1,13 @@
 {
-  "sprint": 116,
+  "sprint": 117,
   "stories": [
-    {"id": "#329", "status": "completed", "completed_at": "2026-03-23T03:45:00Z", "pr": 356},
-    {"id": "#338", "status": "completed", "completed_at": "2026-03-23T04:46:27Z", "pr": 361},
-    {"id": "#339", "status": "completed", "completed_at": "2026-03-23T04:46:27Z", "pr": 363}
+    {"id": "#368-子1", "status": "pending", "completed_at": null, "title": "Hook 攔截擴充"},
+    {"id": "#330", "status": "pending", "completed_at": null, "title": "OAuth Token Watchdog（需 ADR-030）"},
+    {"id": "#331-子2", "status": "pending", "completed_at": null, "title": "閒置排入機制"},
+    {"id": "#331-子3", "status": "pending", "completed_at": null, "title": "背景 agent 進度追蹤"}
   ],
-  "current_step": "all-stories-completed, pending-sprint-review",
+  "current_step": "sprint-execution-started",
   "version": "v0.79.0",
-  "updated_at": "2026-03-23T04:46:27Z",
-  "notes": "所有 Story 完成（10 pts）。待 sprint-review。Sprint 完成後需討論 SKILL.md 流程拆解（memory: project_skill_flow_discussion.md）。"
+  "updated_at": "2026-03-23T05:37:27Z",
+  "notes": "Sprint 117 剛開始。三軌平行：Track A #368-子1 Hook / Track B #330 ADR-030+Watchdog / Track C #331-子2+子3 Cruise。context 已近上限需 compact。"
 }
