@@ -13,6 +13,10 @@ shikigami:
   feedback_routing:
     default: kctw-dev/shikigami       # 預設回報目標
     # Future: pattern-based routing（尚未實作，目前僅使用 default）
+  cruise:
+    progress_fallback_window: 30m     # 背景 Agent 進度偵測 fallback 視窗（預設 30m，支援 Nm / Nh）
+  oauth:
+    warn_threshold_hours: 24          # OAuth Token 過期告警門檻（預設 24 小時）
 ---
 
 # Shikigami 專案配置

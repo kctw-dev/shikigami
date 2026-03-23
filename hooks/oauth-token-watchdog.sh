@@ -3,7 +3,7 @@
 #
 # 行為：
 #   - 讀取 ~/.claude/.credentials.json
-#   - 檢查 claudeAiOauth.expiresAt 是否距現在 < 24 小時
+#   - 檢查 claudeAiOauth.expiresAt 是否距現在 < warn_threshold_hours（預設 24 小時）
 #   - 即將過期 → 輸出 [OAUTH-WARN] 告警（提示執行 claude auth login）
 #   - 檔案不存在 / 欄位缺失 / 解析失敗 → 靜默跳過（不阻塞 session）
 #
@@ -12,7 +12,17 @@
 #   - 靜默跳過：任何讀取或解析錯誤均不影響 session 啟動
 
 CREDENTIALS_FILE="${HOME}/.claude/.credentials.json"
-WARN_THRESHOLD_SECONDS=$((24 * 3600))   # 告警門檻：24 小時
+
+# 告警門檻：從 .claude/shikigami.local.md 讀取 oauth.warn_threshold_hours（預設 24）
+_LOCAL_CONFIG="$(git rev-parse --show-toplevel 2>/dev/null)/.claude/shikigami.local.md"
+_THRESHOLD_HOURS=24
+if [[ -f "$_LOCAL_CONFIG" ]]; then
+  _RAW=$(grep 'warn_threshold_hours:' "$_LOCAL_CONFIG" 2>/dev/null | awk '{print $2}' | head -1)
+  if [[ "$_RAW" =~ ^[0-9]+$ ]]; then
+    _THRESHOLD_HOURS="$_RAW"
+  fi
+fi
+WARN_THRESHOLD_SECONDS=$(( _THRESHOLD_HOURS * 3600 ))
 
 # 檔案不存在 → 靜默跳過
 if [[ ! -f "$CREDENTIALS_FILE" ]]; then

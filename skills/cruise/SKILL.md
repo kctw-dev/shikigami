@@ -625,12 +625,25 @@ PO 巡邏在每個 cycle 偵測 subagent 是否有新產出，避免背景工作
 
 ```bash
 # ── 背景 Agent 進度偵測 ──
-# 上次巡邏時間：從 JSONL log 讀取，取最近一筆 timestamp；首次 cycle 用 30 分鐘前
+# fallback 視窗：從 .claude/shikigami.local.md 讀取 cruise.progress_fallback_window（預設 30m）
+LOCAL_CONFIG="${REPO_PATH}/.claude/shikigami.local.md"
+FALLBACK_WINDOW_RAW=$(grep 'progress_fallback_window:' "${LOCAL_CONFIG}" 2>/dev/null | awk '{print $2}' | head -1)
+FALLBACK_MINUTES=30
+if [[ -n "$FALLBACK_WINDOW_RAW" ]]; then
+  # 支援 30m / 60m / 1h 格式
+  if [[ "$FALLBACK_WINDOW_RAW" =~ ^([0-9]+)h$ ]]; then
+    FALLBACK_MINUTES=$(( ${BASH_REMATCH[1]} * 60 ))
+  elif [[ "$FALLBACK_WINDOW_RAW" =~ ^([0-9]+)m$ ]]; then
+    FALLBACK_MINUTES="${BASH_REMATCH[1]}"
+  fi
+fi
+
+# 上次巡邏時間：從 JSONL log 讀取，取最近一筆 timestamp；首次 cycle 用 fallback 視窗前
 LAST_PATROL_TIME=$(jq -r 'select(.type=="po-patrol") | .timestamp' "${CRUISE_LOG}" 2>/dev/null \
   | sort | tail -1)
 if [[ -z "$LAST_PATROL_TIME" ]]; then
-  LAST_PATROL_TIME=$(date -d "30 minutes ago" '+%Y-%m-%dT%H:%M:%S' 2>/dev/null \
-    || date -v-30M '+%Y-%m-%dT%H:%M:%S' 2>/dev/null \
+  LAST_PATROL_TIME=$(date -d "${FALLBACK_MINUTES} minutes ago" '+%Y-%m-%dT%H:%M:%S' 2>/dev/null \
+    || date -v-${FALLBACK_MINUTES}M '+%Y-%m-%dT%H:%M:%S' 2>/dev/null \
     || date '+%Y-%m-%dT%H:%M:%S')
 fi
 
