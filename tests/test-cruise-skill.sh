@@ -515,6 +515,92 @@ if [[ -f "$SKILL_FILE" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# TC-33：Once Mode 觸發語法（#430 AC1 / AC2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-33：Once Mode 觸發語法驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '/cruise --once' \
+    "TC-33a: SKILL.md 含 /cruise --once 觸發語法"
+  assert_contains "$SKILL_FILE" 'once strict|Once Mode.*strict|Once.*嚴格' \
+    "TC-33b: SKILL.md 含 --once strict 組合語法"
+  assert_contains "$SKILL_FILE" 'Once Mode|Once.*Mode' \
+    "TC-33c: SKILL.md 含 Once Mode 說明"
+  assert_contains "$SKILL_FILE" 'Loop Mode.*預設|Loop Mode.*向後相容|向後相容.*Loop Mode' \
+    "TC-33d: SKILL.md 標示 Loop Mode 向後相容"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-34：Once Mode 行為 — 執行一輪後退出（#430 AC1）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-34：Once Mode 行為驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'ONCE_MODE' \
+    "TC-34a: SKILL.md 含 ONCE_MODE 變數"
+  assert_contains "$SKILL_FILE" 'ONCE_MODE=false|ONCE_MODE=true' \
+    "TC-34b: SKILL.md 含 ONCE_MODE 初始化"
+  assert_contains "$SKILL_FILE" "不進入 sleep loop|不.*sleep loop|sleep loop.*退出" \
+    "TC-34c: Once Mode 說明不進入 sleep loop"
+  assert_contains "$SKILL_FILE" 'exit 0' \
+    "TC-34d: Once Mode 執行完後 exit 0（自動退出）"
+  assert_contains "$SKILL_FILE" 'rm -f.*CRUISE_FLAG' \
+    "TC-34e: Once Mode 完成後清除 CRUISE_FLAG"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-35：Loop Mode 向後相容（#430 AC2）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-35：Loop Mode 向後相容驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'ONCE_MODE.*==.*true|ONCE_MODE.*true' \
+    "TC-35a: 入口判斷 ONCE_MODE，Loop Mode 走 while loop"
+  assert_contains "$SKILL_FILE" 'sleep \${INTERVAL_SECONDS}' \
+    "TC-35b: Loop Mode 仍有 sleep（向後相容）"
+  assert_contains "$SKILL_FILE" 'while 檢查 flag file 存在' \
+    "TC-35c: Loop Mode while loop 未被移除"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-36：Once Mode Log 格式（#430 AC4）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-36：Once Mode Log 格式驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '"mode":"once"' \
+    "TC-36a: Once Mode log entry 含 mode:once 欄位"
+  assert_contains "$SKILL_FILE" '"type":"once-mode-complete"' \
+    "TC-36b: Once Mode 結束寫入 once-mode-complete log entry"
+  assert_contains "$SKILL_FILE" 'AC4.*格式統一|格式.*與.*Loop Mode.*一致|Loop Mode.*格式.*一致' \
+    "TC-36c: Once Mode log 格式與 Loop Mode 一致（AC4）"
+fi
+
+# ---------------------------------------------------------------------------
+# TC-37：[AUTO-CONTINUE] 提醒機制（#430 AC5）
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-37：[AUTO-CONTINUE] 提醒機制驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" '\[AUTO-CONTINUE\]' \
+    "TC-37a: SKILL.md 含 [AUTO-CONTINUE] 提醒"
+  # 確認 [AUTO-CONTINUE] 出現在 Once Mode 相關章節
+  AC_COUNT=$(grep -c '\[AUTO-CONTINUE\]' "$SKILL_FILE" 2>/dev/null || echo "0")
+  if [[ "$AC_COUNT" -ge 2 ]]; then
+    pass "TC-37b: [AUTO-CONTINUE] 出現 ${AC_COUNT} 次（覆蓋多個 phase 轉換點）"
+  else
+    fail "TC-37b: [AUTO-CONTINUE] 出現次數不足（actual=${AC_COUNT}，預期 ≥ 2）"
+  fi
+  assert_contains "$SKILL_FILE" 'project_level=low.*自動|自動.*project_level=low' \
+    "TC-37c: [AUTO-CONTINUE] 說明 project_level=low 時自動推進"
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""
