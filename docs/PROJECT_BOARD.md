@@ -1,9 +1,43 @@
 # Project Board
 
-**最後更新**：2026-03-23（Sprint 118 Review + Retro 完成）
-**當前 Sprint**：Sprint 118（完成）
+**最後更新**：2026-03-23（Sprint 120 Planning 完成）
+**當前 Sprint**：Sprint 120（進行中）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 118](sprints/sprint_118.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 120](sprints/sprint_120.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 120（進行中）
+
+> Sprint Goal：PO 巡邏行為修正 + CI 基礎設施修復 + code-review 強化
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: 修復 new-issue-intake CI workflow | #381 | S | 2 | 待開始 |
+| [Cruise Feedback] PO 巡邏交付物識別缺陷 | #412 | M | 3 | 待開始 |
+| [Cruise Feedback] Stakeholder 回覆處置表 | #422 | S | 2 | 待開始 |
+| [Cruise Feedback] Sprint 不等 stakeholder | #415 | S | 2 | 待開始 |
+| retro: code-review checklist PR/Issue title 一致性 | #421 | S | 1 | 待開始 |
+
+**Sprint 容量**：10 points
+
+---
+
+## Sprint 119（完成）
+
+> Sprint Goal：ADR-032 + CRITICAL 互動確認 + Review 分層 + Discovery Checklist + Worktree 驗證
+> **結果**：Goal 達成（5/5 Stories PASS）。Velocity 10 pts，完成率 100%。
+> **Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| adr: ADR-032 交付路徑分層 | #391 | M | 3 | 完成 |
+| feat: CRITICAL issue 互動式確認 | #387 | S | 2 | 完成 |
+| feat: Discovery Per-Item Checklist | #390 | S | 2 | 完成 |
+| feat: Review 建議清單分層 | #384 | S | 2 | 完成 |
+| retro: worktree 隔離驗證 | #382 | S | 1 | 完成 |
+
+**Sprint 容量**：10 points
 
 ---
 
@@ -542,6 +576,7 @@
 | 2026-03-15 | ADR-020 SDD 作為 AC 強制上游約束 — SDD → AC → TDD 追溯鏈 | — | ec9b05d |
 | 2026-03-15 | SDD 類別圖強制 Gateway 寫入入口 — 新增 DM-4 審查機制 | #268 | 0da8626 |
 | 2026-03-23 | 巡邏留言應編輯而非重複發新留言 | #409 | afd1d37 |
+| 2026-03-23 | #389 PO 巡邏加入 PR comments 掃描（補回歸測試） | #389 | 7370b84 |
 
 ---
 
