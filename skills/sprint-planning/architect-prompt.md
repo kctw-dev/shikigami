@@ -50,7 +50,11 @@ Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義�
 
 ## 平行分群建議
 
+<!-- #451 並行安全規則矩陣 — Sprint 123 -->
+
 根據 PO 回傳表格中的「獨立性評估」欄位，輸出平行派工分群建議，供主 session 後續調度使用。
+
+> **並行安全決策依據**：分群時必須參照 [`docs/km/parallel-safety-matrix.md`](../../docs/km/parallel-safety-matrix.md) 的故事類型 × 修改範圍決策表（§1），並確認修改目標不在共用文件清單（§2）中。衝突分析欄位的「矩陣依據」必須填入矩陣 §1 對應規則，確保決策可追溯。
 
 <!-- US-255 SHIKIGAMI_MAX_PARALLEL 平行數量上限控制 — Sprint 93 -->
 
@@ -89,9 +93,9 @@ Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義�
 | US-#M    | ...  | M       | 與 US-#K 同修改 path/to/file，需等 US-#K 完成後執行 |
 
 ### 檔案衝突分析
-| 衝突檔案 | 涉及 Story | 建議執行順序 |
-|---------|-----------|------------|
-| path/to/file | US-#M, US-#K | US-#K → US-#M |
+| 衝突檔案 | 涉及 Story | 建議執行順序 | 矩陣依據 |
+|---------|-----------|------------|---------|
+| path/to/file | US-#M, US-#K | US-#K → US-#M | parallel-safety-matrix.md §1：相同 skill 子目錄 = NO |
 ```
 
 ### 分群規則
