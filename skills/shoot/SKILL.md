@@ -23,6 +23,27 @@ requiredTools:
 
 **適用場景**：Bug 修復、Retro Action Item、小型功能增強（Size=S）。
 
+### 人機協作配置（#415）
+
+<!-- #415 Sprint 不應等待 stakeholder — 人機協作流程改善 -->
+
+以下配置控制 shoot 的人機協作行為，可在 `.claude/shikigami.local.md` 中設定：
+
+| 設定 | 預設值 | 說明 |
+|------|--------|------|
+| `shoot.skip_merge` | `false` | `true` 時跳過步驟 6.6（gh pr merge），PR 送出即視為 shoot 完成。Stakeholder 獨立決定 merge 時機 |
+| `shoot.self_review` | `true` | PR 送出後、通知 stakeholder 前，執行 self-review（gh pr diff 重新確認） |
+| `shoot.notify_stakeholder` | `true` | PR 送出後是否通知 stakeholder（Issue comment 或 assign） |
+
+**讀取方式**：
+```bash
+CONFIG_FILE=".claude/shikigami.local.md"
+SKIP_MERGE=$(grep -A10 'shoot:' "$CONFIG_FILE" 2>/dev/null | grep 'skip_merge:' | awk '{print $2}' | head -1)
+SKIP_MERGE="${SKIP_MERGE:-false}"
+SELF_REVIEW=$(grep -A10 'shoot:' "$CONFIG_FILE" 2>/dev/null | grep 'self_review:' | awk '{print $2}' | head -1)
+SELF_REVIEW="${SELF_REVIEW:-true}"
+```
+
 ---
 
 ## 2. 觸發語法
@@ -298,9 +319,20 @@ Story ID 需**精確比對**（`US-#N` 格式優先，也支援舊格式 `US-XX`
         |-- LGTM（無 CRITICAL/HIGH）→ 繼續
         +-- CRITICAL/HIGH → 修復 → commit → push → 重新審查
               |-- 第 3 輪仍 CRITICAL/HIGH → [PR-REVIEW-ESCALATE] 升級 Architect，終止
+  6.55 Self-Review（#415，shoot.self_review=true 時執行）
+        PR 送出後、merge/通知 stakeholder 前，執行自我複審：
+        a) gh pr diff — 重新看完整 diff
+        b) 確認 PR title/body 對 reviewer 友善（上下文完整、改動清晰、PR title 與 Issue title 語義對齊 #421）
+        c) 確認無夾帶不相關改動
+        d) 有問題 → 修復 → commit → push → 重新確認
+        e) 確認完畢 → 繼續下一步
+        |-- shoot.self_review=false → 跳過
   6.6 gh pr merge --squash --delete-branch
+        |-- shoot.skip_merge=true → 跳過 merge，PR 送出即 shoot 完成（#415）
+        |     輸出 [SHOOT-PR-SUBMITTED] PR #{N} 已送出，等待 stakeholder 審查 merge
+        |     → 跳至步驟 7（不執行 merge、不 checkout main）
         |-- merge conflict → [PR-MERGE-CONFLICT] 主 session 解決（rebase onto latest main）
-  6.7 git checkout main && git pull
+  6.7 git checkout main && git pull（skip_merge=true 時跳過）
         |
         v
 [步驟 6.5] CI Gate — 等待 CI 狀態（見 §8.2）
