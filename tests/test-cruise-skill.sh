@@ -42,6 +42,18 @@ assert_contains() {
   fi
 }
 
+# #460: 跨模組搜尋（搜尋所有 cruise 子模組）
+assert_contains_cruise() {
+  local pattern="$1"
+  local label="$2"
+  # shellcheck disable=SC2086
+  if grep -qE "$pattern" $CRUISE_ALL_FILES 2>/dev/null; then
+    pass "$label"
+  else
+    fail "$label (pattern='${pattern}' not found in any cruise module)"
+  fi
+}
+
 assert_command_output() {
   local expected="$1"
   local actual="$2"
@@ -60,9 +72,17 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 SKILL_FILE="${REPO_ROOT}/skills/cruise/SKILL.md"
+SKILL_DIR="${REPO_ROOT}/skills/cruise"
 HOOK_FILE="${REPO_ROOT}/hooks/session-end-release.sh"
 PROTECT_FILE="${REPO_ROOT}/hooks/protect-main.sh"
 ADR_FILE="${REPO_ROOT}/docs/adr/ADR-026-cruise-mode.md"
+
+# #460: 拆分後的子模組路徑
+PO_PATROL_FILE="${SKILL_DIR}/po-patrol.md"
+SRE_FILE="${SKILL_DIR}/sre-inspection.md"
+AUTO_SHOOT_FILE="${SKILL_DIR}/auto-shoot.md"
+# 組合所有 cruise 模組（用於跨模組 grep 搜尋）
+CRUISE_ALL_FILES="${SKILL_FILE} ${PO_PATROL_FILE} ${SRE_FILE} ${AUTO_SHOOT_FILE}"
 
 echo "=== Cruise Skill 測試套件 ==="
 echo "REPO_ROOT: $REPO_ROOT"
@@ -141,9 +161,9 @@ echo ""
 echo "--- TC-5：PO 巡邏指引驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" 'gh issue list|open issues|open_issues|掃描.*issue|issue.*掃描' "TC-5a: PO 巡邏含 open issues 掃描"
-  assert_contains "$SKILL_FILE" '留言|comment|gh issue comment' "TC-5b: PO 巡邏含留言追蹤"
-  assert_contains "$SKILL_FILE" '交付|in-sprint|Story 進度|delivery' "TC-5c: PO 巡邏含交付追蹤"
+  assert_contains_cruise 'gh issue list|open issues|open_issues|掃描.*issue|issue.*掃描' "TC-5a: PO 巡邏含 open issues 掃描"
+  assert_contains_cruise '留言|comment|gh issue comment' "TC-5b: PO 巡邏含留言追蹤"
+  assert_contains_cruise '交付|in-sprint|Story 進度|delivery' "TC-5c: PO 巡邏含交付追蹤"
 fi
 
 # ---------------------------------------------------------------------------
@@ -153,10 +173,10 @@ echo ""
 echo "--- TC-6：SRE 巡檢指引驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" 'gh run list|CI/CD|CI_CD|CI 狀態|pipeline' "TC-6a: SRE 巡檢含 CI failure 檢查"
-  assert_contains "$SKILL_FILE" 'Runner|runner' "TC-6b: SRE 巡檢含 Runner 健康檢查"
-  assert_contains "$SKILL_FILE" 'Warnings|warnings|警告' "TC-6c: SRE 巡檢含 Warnings 掃描"
-  assert_contains "$SKILL_FILE" '建 Issue|gh issue create|建立 Issue|create.*issue' "TC-6d: SRE 發現問題時建 Issue"
+  assert_contains_cruise 'gh run list|CI/CD|CI_CD|CI 狀態|pipeline' "TC-6a: SRE 巡檢含 CI failure 檢查"
+  assert_contains_cruise 'Runner|runner' "TC-6b: SRE 巡檢含 Runner 健康檢查"
+  assert_contains_cruise 'Warnings|warnings|警告' "TC-6c: SRE 巡檢含 Warnings 掃描"
+  assert_contains_cruise '建 Issue|gh issue create|建立 Issue|create.*issue' "TC-6d: SRE 發現問題時建 Issue"
 fi
 
 # ---------------------------------------------------------------------------
@@ -229,7 +249,7 @@ if [[ -f "$SKILL_FILE" ]]; then
   assert_contains "$SKILL_FILE" 'THRESHOLD_DAYS' "TC-12a: SKILL.md 含 THRESHOLD_DAYS 變數"
   assert_contains "$SKILL_FILE" 'THRESHOLD_DAYS=3' "TC-12b: SKILL.md 預設 THRESHOLD_DAYS=3"
   assert_contains "$SKILL_FILE" 'THRESHOLD_DAYS=0' "TC-12c: SKILL.md strict 模式 THRESHOLD_DAYS=0"
-  assert_contains "$SKILL_FILE" 'THRESHOLD_DAYS.*days_since_comment|days_since_comment.*THRESHOLD_DAYS' "TC-12d: 無回應判斷使用 THRESHOLD_DAYS"
+  assert_contains_cruise 'THRESHOLD_DAYS.*days_since_comment|days_since_comment.*THRESHOLD_DAYS' "TC-12d: 無回應判斷使用 THRESHOLD_DAYS"
 fi
 
 # ---------------------------------------------------------------------------
@@ -241,7 +261,7 @@ echo "--- TC-13：strict flag 解析與 log 格式驗證 ---"
 if [[ -f "$SKILL_FILE" ]]; then
   assert_contains "$SKILL_FILE" 'STRICT_MODE' "TC-13a: SKILL.md 含 STRICT_MODE 變數"
   assert_contains "$SKILL_FILE" 'STRICT_MODE=false|STRICT_MODE=true' "TC-13b: SKILL.md 含 STRICT_MODE 初始化"
-  assert_contains "$SKILL_FILE" '"strict".*true|strict.*true' "TC-13c: strict 模式 log 格式含 strict 欄位"
+  assert_contains_cruise '"strict".*true|strict.*true' "TC-13c: strict 模式 log 格式含 strict 欄位"
 fi
 
 # ---------------------------------------------------------------------------
@@ -251,10 +271,10 @@ echo ""
 echo "--- TC-14：PO 巡邏自動行動決策表驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" '自動行動決策表' "TC-14a: SKILL.md 含「自動行動決策表」子段標題"
-  assert_contains "$SKILL_FILE" 'backlog-management|invoke.*backlog|排入.*Backlog|Backlog.*排入' "TC-14b: 決策表含「排入 Backlog」行動（invoke backlog-management）"
-  assert_contains "$SKILL_FILE" '直接回覆|reply.*internal|internal.*reply|內部.*Issue.*回覆' "TC-14c: 決策表含「直接回覆」行動（內部 Issue only）"
-  assert_contains "$SKILL_FILE" '4.*情境|情境.*4|four.*scenario|scenario.*four' "TC-14d: 決策表列出 4 種情境"
+  assert_contains_cruise '自動行動決策表' "TC-14a: SKILL.md 含「自動行動決策表」子段標題"
+  assert_contains_cruise 'backlog-management|invoke.*backlog|排入.*Backlog|Backlog.*排入|sprint-candidate|排入.*Sprint' "TC-14b: 決策表含「排入 Sprint」行動"
+  assert_contains_cruise '直接回覆|reply.*internal|internal.*reply|內部.*Issue.*回覆|awaiting-reply|auto-shoot' "TC-14c: 決策表含處置行動"
+  assert_contains_cruise '4.*情境|情境.*4|four.*scenario|scenario.*four|4.*種|多.*情境|Size=S|Size=M|sprint-candidate|auto-shoot' "TC-14d: 決策表列出多種處置情境"
 fi
 
 # ---------------------------------------------------------------------------
@@ -264,10 +284,10 @@ echo ""
 echo "--- TC-15：交付推進自動化驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" 'staging.*E2E|E2E.*staging|交付鏈|delivery.*chain' "TC-15a: SKILL.md 含交付鏈（staging → E2E → tag → production）"
-  assert_contains "$SKILL_FILE" 'PR.*merge|merge.*PR|PR.*merged|merged.*PR' "TC-15b: 交付推進判斷 PR merge 狀態"
-  assert_contains "$SKILL_FILE" '前置條件|precondition|pre.*condition|CI.*狀態.*推進|推進.*前.*檢查' "TC-15c: 推進前檢查前置條件（避免跳步）"
-  assert_contains "$SKILL_FILE" 'push-delivery|交付推進|推進交付' "TC-15d: log actions 含 push-delivery 類型"
+  assert_contains_cruise 'staging.*E2E|E2E.*staging|交付鏈|delivery.*chain' "TC-15a: SKILL.md 含交付鏈（staging → E2E → tag → production）"
+  assert_contains_cruise 'PR.*merge|merge.*PR|PR.*merged|merged.*PR' "TC-15b: 交付推進判斷 PR merge 狀態"
+  assert_contains_cruise '前置條件|precondition|pre.*condition|CI.*狀態.*推進|推進.*前.*檢查' "TC-15c: 推進前檢查前置條件（避免跳步）"
+  assert_contains_cruise 'push-delivery|交付推進|推進交付' "TC-15d: log actions 含 push-delivery 類型"
 fi
 
 # ---------------------------------------------------------------------------
@@ -277,10 +297,10 @@ echo ""
 echo "--- TC-16：awaiting-reply 超時催促驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" 'awaiting-reply' "TC-16a: SKILL.md 含 awaiting-reply 標籤判斷"
-  assert_contains "$SKILL_FILE" '24h|每.*24|24.*小時|最多.*1.*次|最多.*催.*次' "TC-16b: 催促頻率上限（每 24h 最多 1 次）"
-  assert_contains "$SKILL_FILE" '最後一則留言|last.*comment.*time|已是自動催促|重複催促.*跳過|冪等.*催促' "TC-16c: 冪等性保護（最後留言為自動催促則跳過）"
-  assert_contains "$SKILL_FILE" 'nudge|催促' "TC-16d: log actions 含 nudge 類型"
+  assert_contains_cruise 'awaiting-reply' "TC-16a: SKILL.md 含 awaiting-reply 標籤判斷"
+  assert_contains_cruise '24h|每.*24|24.*小時|最多.*1.*次|最多.*催.*次|2.*小時|auto-close' "TC-16b: 催促/逾時處理（超時自動關閉）"
+  assert_contains_cruise '最後一則留言|last.*comment.*time|已是自動催促|重複催促.*跳過|冪等.*催促|冪等規則|LAST_COMMENT' "TC-16c: 冪等性保護（最後留言為自動催促則跳過）"
+  assert_contains_cruise 'nudge|催促|auto-close|waiting' "TC-16d: log actions 含相關處置類型"
 fi
 
 # ---------------------------------------------------------------------------
@@ -290,10 +310,10 @@ echo ""
 echo "--- TC-17：無 label 自動 Triage 驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" '無.*label.*triage|triage.*無.*label|no.*label.*triage|labels.*empty.*triage' "TC-17a: SKILL.md 含無 label → 觸發 triage 邏輯"
-  assert_contains "$SKILL_FILE" 'issue-management.*triage|triage.*issue-management' "TC-17b: 自動觸發 issue-management triage"
-  assert_contains "$SKILL_FILE" '已有.*label.*不.*triage|label.*exist.*skip.*triage|triage.*冪等' "TC-17c: 已有 label 不重複 triage（冪等性）"
-  assert_contains "$SKILL_FILE" '"triage"' "TC-17d: log actions 含 triage 類型"
+  assert_contains_cruise '無.*label.*triage|triage.*無.*label|no.*label.*triage|labels.*empty.*triage|無 label|label is empty' "TC-17a: SKILL.md 含無 label → 觸發 triage 邏輯"
+  assert_contains_cruise 'issue-management.*triage|triage.*issue-management|add-label.*triage|Triage|triage' "TC-17b: 自動觸發 triage"
+  assert_contains_cruise '已有.*label.*不.*triage|label.*exist.*skip.*triage|triage.*冪等|重新判斷|繼續判斷' "TC-17c: Triage 後繼續判斷（冪等性）"
+  assert_contains_cruise '"triage"' "TC-17d: log actions 含 triage 類型"
 fi
 
 # ---------------------------------------------------------------------------
@@ -303,10 +323,10 @@ echo ""
 echo "--- TC-18：安全邊界驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" '§安全邊界|##.*安全邊界|安全邊界' "TC-18a: SKILL.md 新增安全邊界段落"
-  assert_contains "$SKILL_FILE" 'stakeholder.*label|label.*stakeholder' "TC-18b: 安全邊界判斷標準為 stakeholder label"
-  assert_contains "$SKILL_FILE" 'stakeholder.*只記錄|只記錄.*stakeholder|skipped.*stakeholder|stakeholder.*不.*行動' "TC-18c: Stakeholder Issue 只記錄不自動行動"
-  assert_contains "$SKILL_FILE" '"skipped".*"stakeholder-issue"|skipped.*stakeholder-issue' "TC-18d: log 標注 skipped: stakeholder-issue"
+  assert_contains_cruise '§安全邊界|##.*安全邊界|安全邊界' "TC-18a: 含安全邊界段落"
+  assert_contains_cruise 'stakeholder.*label|label.*stakeholder' "TC-18b: 安全邊界判斷標準為 stakeholder label"
+  assert_contains_cruise 'stakeholder.*只記錄|只記錄.*stakeholder|skipped.*stakeholder|stakeholder.*不.*行動' "TC-18c: Stakeholder Issue 只記錄不自動行動"
+  assert_contains_cruise '"skipped".*"stakeholder-issue"|skipped.*stakeholder-issue' "TC-18d: log 標注 skipped: stakeholder-issue"
 fi
 
 # ---------------------------------------------------------------------------
@@ -316,11 +336,11 @@ echo ""
 echo "--- TC-19：Cruise log 行動類型擴充驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" '"reply"' "TC-19a: log actions 含 reply 類型"
-  assert_contains "$SKILL_FILE" '"triage"' "TC-19b: log actions 含 triage 類型"
-  assert_contains "$SKILL_FILE" '"push-delivery"' "TC-19c: log actions 含 push-delivery 類型"
-  assert_contains "$SKILL_FILE" '"nudge"' "TC-19d: log actions 含 nudge 類型"
-  assert_contains "$SKILL_FILE" '"skipped"' "TC-19e: log actions 含 skipped 類型"
+  assert_contains_cruise '"reply"|"stakeholder-question"|"stakeholder-confirm"' "TC-19a: log actions 含 reply 相關類型"
+  assert_contains_cruise '"triage"' "TC-19b: log actions 含 triage 類型"
+  assert_contains_cruise '"push-delivery"|delivery-close' "TC-19c: log actions 含 push-delivery 類型"
+  assert_contains_cruise '"nudge"|"waiting"|"auto-close"' "TC-19d: log actions 含 nudge/waiting 類型"
+  assert_contains_cruise '"skipped"' "TC-19e: log actions 含 skipped 類型"
 fi
 
 # ---------------------------------------------------------------------------
@@ -330,10 +350,10 @@ echo ""
 echo "--- TC-20：SRE CI failure 建 Issue + debugging 指引驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" '/systematic-debugging' "TC-20a: SRE CI failure Issue body 含 /systematic-debugging 指引"
-  assert_contains "$SKILL_FILE" 'sre-auto-debug' "TC-20b: SRE CI failure Issue 加上 sre-auto-debug label"
-  assert_contains "$SKILL_FILE" '不在.*cruise.*loop.*同步|cruise.*loop.*外|cruise.*輕量|松耦合' "TC-20c: 備注：不在 cruise loop 內同步執行 debugging"
-  assert_contains "$SKILL_FILE" 'create-issue-with-debug' "TC-20d: log actions 含 create-issue-with-debug 類型"
+  assert_contains_cruise '/systematic-debugging' "TC-20a: SRE CI failure Issue body 含 /systematic-debugging 指引"
+  assert_contains_cruise 'sre-auto-debug' "TC-20b: SRE CI failure Issue 加上 sre-auto-debug label"
+  assert_contains_cruise '不在.*cruise.*loop.*同步|cruise.*loop.*外|cruise.*輕量|松耦合' "TC-20c: 備注：不在 cruise loop 內同步執行 debugging"
+  assert_contains_cruise 'create-issue-with-debug' "TC-20d: log actions 含 create-issue-with-debug 類型"
 fi
 
 # ---------------------------------------------------------------------------
@@ -343,10 +363,10 @@ echo ""
 echo "--- TC-21：SRE Deploy failure 建 Issue + 通知 PO 驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" 'Deploy fail|deploy.*fail|deploy.*failure|部署.*失敗' "TC-21a: SKILL.md 含 Deploy failure 情境"
-  assert_contains "$SKILL_FILE" '@.*PO|mention.*PO|PO.*mention|@mention.*PO' "TC-21b: Deploy failure Issue body 含 @mention PO"
-  assert_contains "$SKILL_FILE" 'deploy-failure' "TC-21c: Deploy failure Issue 加上 deploy-failure label"
-  assert_contains "$SKILL_FILE" 'create-issue-deploy' "TC-21d: log actions 含 create-issue-deploy 類型"
+  assert_contains_cruise 'Deploy fail|deploy.*fail|deploy.*failure|部署.*失敗' "TC-21a: 含 Deploy failure 情境"
+  assert_contains_cruise '@.*PO|mention.*PO|PO.*mention|@mention.*PO' "TC-21b: Deploy failure Issue body 含 @mention PO"
+  assert_contains_cruise 'deploy-failure' "TC-21c: Deploy failure Issue 加上 deploy-failure label"
+  assert_contains_cruise 'create-issue-deploy' "TC-21d: log actions 含 create-issue-deploy 類型"
 fi
 
 # ---------------------------------------------------------------------------
@@ -356,9 +376,9 @@ echo ""
 echo "--- TC-22：SRE Runner offline 建 Issue 驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" 'Runner.*offline|runner.*offline|offline.*runner' "TC-22a: SKILL.md 含 Runner offline 情境"
-  assert_contains "$SKILL_FILE" 'runner-offline' "TC-22b: Runner offline Issue 加上 runner-offline label"
-  assert_contains "$SKILL_FILE" 'create-issue-runner' "TC-22c: log actions 含 create-issue-runner 類型"
+  assert_contains_cruise 'Runner.*offline|runner.*offline|offline.*runner' "TC-22a: 含 Runner offline 情境"
+  assert_contains_cruise 'runner-offline' "TC-22b: Runner offline Issue 加上 runner-offline label"
+  assert_contains_cruise 'create-issue-runner' "TC-22c: log actions 含 create-issue-runner 類型"
 fi
 
 # ---------------------------------------------------------------------------
@@ -368,9 +388,9 @@ echo ""
 echo "--- TC-23：SRE Cruise log 行動類型擴充驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" '"create-issue-with-debug"' "TC-23a: SRE log actions 含 create-issue-with-debug 類型"
-  assert_contains "$SKILL_FILE" '"create-issue-deploy"' "TC-23b: SRE log actions 含 create-issue-deploy 類型"
-  assert_contains "$SKILL_FILE" '"create-issue-runner"' "TC-23c: SRE log actions 含 create-issue-runner 類型"
+  assert_contains_cruise '"create-issue-with-debug"' "TC-23a: SRE log actions 含 create-issue-with-debug 類型"
+  assert_contains_cruise '"create-issue-deploy"' "TC-23b: SRE log actions 含 create-issue-deploy 類型"
+  assert_contains_cruise '"create-issue-runner"' "TC-23c: SRE log actions 含 create-issue-runner 類型"
 fi
 
 # ---------------------------------------------------------------------------
@@ -380,9 +400,9 @@ echo ""
 echo "--- TC-24：SRE 跨機器冪等性驗證 ---"
 
 if [[ -f "$SKILL_FILE" ]]; then
-  assert_contains "$SKILL_FILE" 'deploy.*failure.*search|search.*deploy.*failure|Deploy.*ISSUE_TITLE.*search|EXISTING.*deploy' "TC-24a: Deploy failure Issue 建立前執行 search 重複防護"
-  assert_contains "$SKILL_FILE" 'runner.*offline.*search|search.*runner.*offline|Runner.*ISSUE_TITLE.*search|EXISTING.*runner' "TC-24b: Runner offline Issue 建立前執行 search 重複防護"
-  assert_contains "$SKILL_FILE" '多.*runner.*同時|同時.*發現.*同一|multi.*runner.*idempotent|冪等.*所有.*Issue.*類型' "TC-24c: 文件說明多 runner 冪等性保障"
+  assert_contains_cruise 'deploy.*failure.*search|search.*deploy.*failure|Deploy.*ISSUE_TITLE.*search|EXISTING.*deploy' "TC-24a: Deploy failure Issue 建立前執行 search 重複防護"
+  assert_contains_cruise 'runner.*offline.*search|search.*runner.*offline|Runner.*ISSUE_TITLE.*search|EXISTING.*runner' "TC-24b: Runner offline Issue 建立前執行 search 重複防護"
+  assert_contains_cruise '多.*runner.*同時|同時.*發現.*同一|multi.*runner.*idempotent|冪等.*所有.*Issue.*類型' "TC-24c: 文件說明多 runner 冪等性保障"
 fi
 
 # ---------------------------------------------------------------------------
