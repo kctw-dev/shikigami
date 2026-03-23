@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
-# Test #464: unzip sudo regression fix — 驗證 new-issue-intake.yml 不使用需要密碼的 sudo
-# AC1: workflow 不再因 sudo 密碼而失敗（使用 sudo -n 非互動模式）
-# AC2: 已有 unzip 時靜默跳過（command -v 守衛）
-# AC3: 無 unzip + 無 sudo 權限時 graceful fallback（不卡住）
-
-set -euo pipefail
+# Test #464: unzip sudo — 歷史測試，#472 已覆寫 sudo -n 方案
+# 注意：#472 發現 sudo -n 在無 NOPASSWD runner 上靜默失敗，已回歸至 sudo apt-get
+# 本測試保留核心不變量驗證（冪等性、apt-get 存在、無 busybox）
+# sudo -n 相關斷言已廢棄（由 test-472-unzip-regression-fix.sh 替代）
 
 WORKFLOW=".github/workflows/new-issue-intake.yml"
 PASS=0
@@ -22,35 +20,24 @@ check() {
   fi
 }
 
-echo "=== Test #464: unzip sudo regression fix ==="
+echo "=== Test #464: unzip core invariants (sudo -n ACs superseded by #472) ==="
 
-# AC1: 不使用會卡住的 plain sudo（必須是 sudo -n 非互動模式）
-! grep -qP "^\s+sudo apt-get" "$WORKFLOW"
-check "AC1: no plain 'sudo apt-get' (would block on password prompt)" $?
+# 核心不變量：使用 apt-get install unzip（#472 已確保不帶 -n）
+grep -q "apt-get install -y unzip" "$WORKFLOW"
+check "CORE: apt-get install -y unzip present" $?
 
-# AC1: 使用 sudo -n（non-interactive，無密碼時立即失敗而非卡住）
-grep -q "sudo -n apt-get install -y unzip" "$WORKFLOW"
-check "AC1: uses sudo -n apt-get install -y unzip (non-interactive)" $?
-
-# AC2: 冪等性守衛仍存在（已有 unzip 時跳過）
+# 核心不變量：冪等性守衛（command -v unzip）
 grep -q "command -v unzip" "$WORKFLOW"
-check "AC2: idempotency guard (command -v unzip) present" $?
+check "CORE: idempotency guard (command -v unzip) present" $?
 
-# AC3: graceful fallback — sudo 失敗時有 fallback echo（不卡住）
-grep -q "proceeding anyway" "$WORKFLOW"
-check "AC3: graceful fallback message present (proceeding anyway)" $?
-
-# AC3: sudo -n 輸出導向 /dev/null，不會因 stderr 雜訊而影響 log
-grep -q "sudo -n apt-get install -y unzip 2>/dev/null" "$WORKFLOW"
-check "AC3: sudo -n stderr redirected to /dev/null" $?
+# 核心不變量：busybox.net 未重新引入
+result=0
+grep -q "busybox.net" "$WORKFLOW" && result=1 || true
+check "CORE: no busybox.net dependency" $result
 
 # Structural: YAML is valid
 python3 -c "import yaml; yaml.safe_load(open('$WORKFLOW'))" 2>/dev/null
 check "STRUCTURE: YAML syntax valid" $?
-
-# Structural: apt-get 仍在（確認未被誤刪）
-grep -q "apt-get install -y unzip" "$WORKFLOW"
-check "STRUCTURE: apt-get install unzip still present" $?
 
 echo ""
 echo "Results: PASS=$PASS FAIL=$FAIL"
