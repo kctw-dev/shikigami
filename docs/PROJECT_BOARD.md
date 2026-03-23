@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-23（Sprint 121 Review 完成）
-**當前 Sprint**：無（Sprint 121 完成，等待 Sprint 122 Planning）
+**最後更新**：2026-03-23（Sprint 122 Planning 完成）
+**當前 Sprint**：Sprint 122（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 122（進行中）
+
+> Sprint Goal：修復 CI 基礎設施三大故障點，恢復 Shikigami CI/CD 可靠度
+> **容量**：5 pts（降速 Sprint：聚焦 CI 修復，僅 3 stories READY）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| [SRE] GitHub App 安裝 | #423 | S | 1 | 待辦 |
+| [SRE] unzip 修復 | #442 | S | 1 | 待辦 |
+| [SRE] Node.js 20 遷移 | #424 | M | 3 | 待辦 |
+
+**Sprint 容量**：5 points
+**執行順序**：#423 -> #442 -> #424（依賴鏈）
 
 ---
 
