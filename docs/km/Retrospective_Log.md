@@ -4,6 +4,29 @@
 
 ---
 
+## Sprint 117 — 2026-03-23
+
+**Sprint Goal**：框架執行可靠性強化 + CI Token 自動化 + Cruise 智慧巡邏
+**結果**：Goal 達成（3/3 Stories PASS）
+
+### Good
+1. Sprint Goal 100% 達成：10/10 pts，3/3 Stories PASS，Velocity 持平 Sprint 116。
+2. Hook 攔截擴充（BRANCH-GATE + PUSH-MAIN-GATE）一次到位，覆蓋 git 高風險操作。
+3. OAuth Token Watchdog ADR-030 架構嚴謹，正確拒絕自動 refresh（非公開 API）。
+4. Cruise 智慧巡邏：閒置偵測（project_level 控制矩陣）+ 進度追蹤（git log + subagent 產出物）打包交付零衝突。
+
+### Problem
+1. #368 epic 子任務 2（責任下放）、子任務 3（流程拆解）仍未開始，前置條件尚未就緒。
+2. OAuth Token Watchdog 僅偵測不自動修復，token 過期仍需手動介入。
+3. Cruise 進度偵測首次 cycle fallback 固定 30 分鐘，長時間閒置後可能漏偵測早期 commit。
+
+### Action
+1. #368 epic 後續評估 Story-Lifecycle subagent 前置條件，納入 Backlog Grooming（追蹤中）。
+2. Cruise 進度偵測 fallback 視窗可配置化。（Issue #374）
+3. OAuth Token 過期通知閾值可配置化（目前 24h 硬編碼）。（Issue #375）
+
+---
+
 ## Sprint 101 — 2026-03-19
 
 **Sprint Goal**：落地多 Session 並行協調機制，防止跨 session 重複領取 Issue/Story

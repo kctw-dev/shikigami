@@ -168,6 +168,8 @@ Quality Observer 消費 SPACE 五維度記錄表作為觀察數據來源，同�
 | Sprint 99 | 2026-03-15 | 5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網）；A=100%；C=0（外部抽樣 1/2 CONFIRM，0 DISPUTE）；E=0（無 CHECKPOINT-FAIL，無人工介入）；SDD-000 補充 + Live Log Streaming TDD 完整交付，v0.71.0 |
 | Sprint 100 | 2026-03-19 | 4/5 | 0幻覺 | 100% | 0 | 0 | Stakeholder 評分 4（ACCEPT，2 個 QA WARN 為小缺口）；P=0 幻覺（本 Sprint 無幻覺攔截事件）；A=100%（5/5 Stories）；C=0（無跨 Agent 交叉確認問題）；E=0 斷鏈（無 CHECKPOINT-FAIL）；git commit Hard Gate + KM Anti-Hallucination 機制首次落地，v0.72.1 |
 | Sprint 101 | 2026-03-19 | 5/5 | 0/0 | 100% | 1 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0（無幻覺攔截/漏網事件）；A=100%（1/1 Stories）；C=1（外部抽樣 DISPUTE 4 缺陷，修復後第二輪 CONFIRM — 機制有效運作）；E=0（無 CHECKPOINT-FAIL，無人工介入）；三層協調機制首次落地，v0.73.0 |
+| Sprint 116 | 2026-03-23 | 5/5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0；A=100%（3/3 Stories）；C=0；E=0；Cruise 治理邊界（close_policy + delivery_chain + feedback routing）完整落地，v0.79.0 |
+| Sprint 117 | 2026-03-23 | 5/5 | 0/0 | 100% | 0 | 0 | Stakeholder 評分 5（ACCEPT）；P=0/0；A=100%（3/3 Stories）；C=0；E=0；Hook 攔截擴充（BRANCH-GATE + PUSH-MAIN-GATE）+ OAuth Token Watchdog（ADR-030）+ Cruise 閒置偵測+進度追蹤，v0.80.0 |
 
 ---
 
