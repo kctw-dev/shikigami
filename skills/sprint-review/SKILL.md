@@ -80,14 +80,28 @@ Story 驗收判定完成後，依判定結果回寫 GitHub Issue 狀態。在 §
 | Story PASS | 依 Issue 建立者判斷執行對應操作 | 內部 Issue 自動關閉；外部 Issue 保持 Open |
 | Story FAIL | Issue 保持 open | 回流 Backlog，等待下次 Sprint 選取 |
 
+### Epic Issue 判斷（優先檢查）
+
+**Epic Issue**：Issue title 含 `epic:` 前綴（大小寫不敏感）。
+
+Epic Issue **不得 close**，無論其為內部或外部 Issue，一律執行：
+
+1. `gh issue edit` 加 `done` label、移除 `in-sprint` label
+2. `gh issue comment` 留言記錄：「Sprint <N> Review PASS，此 Epic Issue 持續追蹤中，不自動關閉。」
+
+> **理由**：Epic 通常跨多個 Sprint，單一 Sprint 完成不代表 Epic 整體收斂，需手動判斷關閉時機。
+
 ### Issue 建立者判斷
 
 **內部 Issue**：建立者為 `github-actions[bot]` 或 body 含 `backlog-intake`。其餘為**外部 Issue**。
+
+> Epic Issue 已於上方獨立處理，以下規則僅適用於**非 Epic Issue**。
 
 ### Story PASS — 操作步驟
 
 | 情況 | 步驟 1（共通） | 步驟 2 |
 |------|--------------|--------|
+| **Epic Issue**（title 含 `epic:`） | `gh issue edit` 加 `done` label、移除 `in-sprint` label | `gh issue comment` 留言記錄，**不執行 close** |
 | **內部 Issue** | `gh issue edit` 加 `done` label、移除 `in-sprint` label | `gh issue close` 並留言 |
 | **外部 Issue（階段 1）** | 同上 | `gh issue comment` 留言通知，**不執行 close** |
 | **外部 Issue（階段 2）** | — | 觸發條件：**deployment-readiness PASS 且 E2E PASS**，方可執行 `gh issue comment` 補充留言 |
@@ -232,7 +246,9 @@ Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 g
 - [ ] 通過驗收 Story 已移至 `PROJECT_BOARD.md` Done 欄位
 - [ ] `sprint_N.md` Story 狀態欄已回寫最終驗收結果
 - [ ] **Story Issue 狀態回寫**（§2.6，HARD-GATE）：
-  - [ ] PASS Story：已查詢 Issue 建立者、判斷內部/外部、執行對應操作
+  - [ ] PASS Story：先判斷是否為 Epic Issue（title 含 `epic:`）
+  - [ ] Epic Issue：done label + 移除 in-sprint + 留言記錄（**不 close**）
+  - [ ] 非 Epic — 查詢 Issue 建立者、判斷內部/外部、執行對應操作
   - [ ] 內部 Issue：done label + 移除 in-sprint + 關閉
   - [ ] 外部 Issue：done label + 移除 in-sprint + 階段 1 留言（保持 Open）
   - [ ] FAIL Story：已回復 backlog 狀態並留言
