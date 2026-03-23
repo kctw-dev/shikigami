@@ -29,7 +29,11 @@
 6. **日期來源**：所有日期時間必須用 `date` 指令取得系統時間，不可靠 agent 推斷
 7. **.md 受眾**：`.md` 文件是給 agent 消費的，其他格式（PDF、HTML）才是給人看的
 8. **跨機器多團隊**：所有新功能必須考慮「多台機器各開一個 session 同時工作」的場景。共用檔案 append 會 git conflict — 改用 per-session 檔案 + 結算機制。取號用 GitHub Issue `#N` 或 claim 鎖，不可自行編號。
-9. **project_level=low 禁止停下來問**：SKILL.md 已明確寫「不詢問使用者」的步驟，禁止停下來問。包括但不限於：Sprint Planning 完成後自動 Sprint Execution、Sprint Execution 完成後自動 Sprint Review、auto-shoot 發現 actionable 自動派工。需要 compact 時直接 compact 再繼續，不問。
+9. **project_level 行為紀律**：各等級行為如下，嚴格遵守，不得混淆：
+   - `project_level=low`：**所有操作自動執行，禁止停下來問使用者**。包括但不限於：Sprint Planning 完成後自動 Sprint Execution、Sprint Execution 完成後自動 Sprint Review、auto-shoot 發現 actionable 自動派工、Feedback Routing 自動轉送、需要 compact 直接 compact 再繼續。
+   - `project_level=medium`：高風險操作（Sprint Planning 啟動、Sprint Execution 啟動）留言通知等使用者確認；日常低風險操作自動執行。
+   - `project_level=high`：每個重要步驟都必須等人確認，只標記不自動觸發。
+10. **CI Actions 版本釘定**：所有 GitHub Actions 統一使用 `@v4`，升級需先確認 self-hosted runner 相容性，並經人工審核後才能更新版本號。新增或修改 workflow 時執行 `bash scripts/validate-ci-versions.sh` 驗證。
 
 ## 目錄結構
 
