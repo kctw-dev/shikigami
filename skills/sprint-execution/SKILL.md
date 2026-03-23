@@ -145,6 +145,19 @@ Sprint Execution **派遣 subagent 前**，主 session 執行以下檢查：
 [MAX-PARALLEL-SKIP] SHIKIGAMI_MAX_PARALLEL 未設定，不限制平行數量
 ```
 
+### Git Worktree 隔離（#379）
+
+Sprint Execution 派遣 Story-Lifecycle subagent 時，使用 Claude Code Agent tool 的 `isolation: "worktree"` 參數，讓每個 subagent 在獨立 git worktree 操作：
+
+- 每個 subagent 自動獲得獨立的工作目錄副本
+- 互不影響：subagent A 修改 SKILL.md 不會影響 subagent B
+- worktree 自動清理：subagent 完成後，若有修改則回傳 worktree 路徑和 branch；無修改則自動清理
+- 主 session 工作目錄不受 subagent 影響
+
+> **worktree 隔離模式（#379）**：使用 `isolation: "worktree"` 時，
+> 每個 subagent 在獨立工作目錄操作，共用文件衝突風險大幅降低。
+> 但 PR merge 順序仍可能造成衝突，主 session 負責 merge conflict 解決。
+
 ### 主 session 批次更新機制
 
 所有平行 subagent 完成後，**主 session 統一批次更新**：收集所有 PASS/FAIL/ESCALATE 結果 → 一次性讀取 `PROJECT_BOARD.md` 與 `sprint_N.md` → 依序套用狀態更新 → 單次 commit 提交。
@@ -493,6 +506,11 @@ Claim Story（§2.11，多 Session 並行協調）
   ┌─────────────────────────────────────────────────────────────┐
   │  派遣 Story-Lifecycle subagent（story-lifecycle-prompt.md）  │
   │                                                             │
+  │  Agent tool 派遣參數：                                       │
+  │    subagent_type: "general-purpose"                         │
+  │    model: "sonnet"                                          │
+  │    isolation: "worktree"  ← 新增（#379）                    │
+  │                                                             │
   │  subagent 內部閉環：                                         │
   │  ├─ 讀取 sprint_N.md（AC + 需求）                           │
   │  ├─ git checkout -b sprint-<N>/<story-id>（ADR-023，AC-3）  │
@@ -692,7 +710,7 @@ Claim Story（§2.11，多 Session 並行協調）
 
    **雙軌派遣路徑：**
 
-   - **provider = claude（預設）**：使用 Agent tool 派遣，指定 `model: "sonnet"`，並**明確指定 `agent_type: "general-purpose"`**（預設使用通用 agent type，避免 shikigami:developer 等角色特定 agent 的 prompt injection 偵測導致 subagent 拒絕執行）。此路徑支援完整 tool calling（Read / Edit / Bash 等），適用所有 Story 類型。
+   - **provider = claude（預設）**：使用 Agent tool 派遣，指定 `model: "sonnet"`，並**明確指定 `agent_type: "general-purpose"`**（預設使用通用 agent type，避免 shikigami:developer 等角色特定 agent 的 prompt injection 偵測導致 subagent 拒絕執行），以及 `isolation: "worktree"`（#379，消除平行衝突）。此路徑支援完整 tool calling（Read / Edit / Bash 等），適用所有 Story 類型。
 
    - **provider = gemini**：使用 Bash 直接呼叫 Gemini CLI，以 stdin pipe 傳入 `story-lifecycle-prompt.md` 內容與 Story 參數。Gemini CLI 為原生 agent，具備完整工具能力，適用所有 Story 類型。
 
