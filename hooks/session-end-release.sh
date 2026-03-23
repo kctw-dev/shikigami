@@ -201,10 +201,11 @@ printf '{"session_id":"%s","role":"%s","event":"%s","timestamp":"%s","repo":"%s"
 echo "[ATTENDANCE] checkout 紀錄已寫入：$ATTEND_JSONL"
 
 # ── US-321：Cruise Mode flag file cleanup ────────────────────────────────
-# 清除本 session 的 cruise flag file（若存在）
+# 清除本 session 的 cruise flag file 與 shoot flag file（若存在）
 CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
-if rm -f "$CRUISE_FLAG" 2>/dev/null; then
-  echo "[CRUISE] SessionEnd cleanup: cruise flag file 已清除（$CRUISE_FLAG）"
-fi
+SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"
+rm -f "$CRUISE_FLAG" 2>/dev/null || true
+rm -f "$SHOOT_FLAG" 2>/dev/null || true
+echo "[CRUISE] SessionEnd cleanup: cruise + shoot flag files 已清除"
 
 exit 0
