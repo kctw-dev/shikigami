@@ -721,6 +721,41 @@ project_level=medium，請確認是否啟動 Sprint Planning。"
     # high：只標記，不觸發不通知
     log action: "sprint-planning-marked (project_level=high, count=${SPRINT_CANDIDATE_COUNT})"
 
+# ── Step 5.5：Sprint 實質完成偵測（#434）──
+# 條件：Sprint 中所有 Story 均帶 blocked label → 判定 Sprint 實質完成，允許推進
+# 目的：避免外部依賴阻塞時 Sprint 名義進行中卻無法推進 backlog 的問題
+BLOCKED_SPRINT_STORIES=$(gh issue list -R ${OWNER_REPO} --label "status: in-sprint" --label "blocked" --state open --json number | jq length)
+TOTAL_SPRINT_STORIES=$(gh issue list -R ${OWNER_REPO} --label "status: in-sprint" --state open --json number | jq length)
+EFFECTIVELY_COMPLETE=$(( TOTAL_SPRINT_STORIES > 0 && BLOCKED_SPRINT_STORIES == TOTAL_SPRINT_STORIES ))
+
+if [[ "$EFFECTIVELY_COMPLETE" -eq 1 ]]; then
+  # Sprint 實質完成：所有 in-sprint Story 均 blocked，允許 bypass
+  if [[ "$PROJECT_LEVEL" == "low" ]]; then
+    # low：自動觸發 Sprint Review，將 blocked Story 回流 backlog
+    invoke shikigami:sprint-review
+    log action: "sprint-effectively-complete-bypass (project_level=low, blocked=${BLOCKED_SPRINT_STORIES}, total=${TOTAL_SPRINT_STORIES})"
+  elif [[ "$PROJECT_LEVEL" == "medium" ]]; then
+    # medium：留言通知等使用者確認是否觸發 Sprint Review
+    FIRST_BLOCKED_ISSUE=$(gh issue list -R ${OWNER_REPO} --label "status: in-sprint" --label "blocked" --state open --json number --jq '.[0].number')
+    gh issue comment ${FIRST_BLOCKED_ISSUE} -R ${OWNER_REPO} --body "## [巡邏狀態：Sprint 實質完成]
+
+Sprint 中所有 ${TOTAL_SPRINT_STORIES} 個 Story 均被外部依賴阻塞（blocked）。
+
+Sprint 已實質完成，建議觸發 Sprint Review 將阻塞 Story 回流 backlog，推進下一個 Sprint。
+
+project_level=medium，請確認是否觸發 Sprint Review。
+
+- 阻塞 Story 數：${BLOCKED_SPRINT_STORIES} / ${TOTAL_SPRINT_STORIES}
+- 巡邏時間：$(date '+%Y-%m-%dT%H:%M:%S')
+- Session: ${SESSION_ID}
+- Cycle: ${CYCLE}"
+    log action: "sprint-effectively-complete-notify (project_level=medium, blocked=${BLOCKED_SPRINT_STORIES}, total=${TOTAL_SPRINT_STORIES})"
+  else:  # high
+    # high：只標記，不觸發不通知
+    log action: "sprint-effectively-complete-marked (project_level=high, blocked=${BLOCKED_SPRINT_STORIES}, total=${TOTAL_SPRINT_STORIES})"
+  fi
+fi
+
 # ── Step 6：閒置偵測（#331-子2）──
 # 條件：無進行中 Sprint + 無進行中 Shoot + Backlog 有 open issues → 觸發 Sprint Planning
 IN_SPRINT_COUNT = gh issue list -R ${OWNER_REPO} --label "status: in-sprint" --state open --json number | jq length
