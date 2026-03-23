@@ -162,6 +162,27 @@ git push
 
 > **範圍限制**：僅適用 Sprint 狀態文件（`PROJECT_BOARD.md`、`sprint_N.md`、`Metrics_Log.md`、`Retrospective_Log.md`、`docs/meetings/*.md`）。
 
+### 自動啟動 Sprint Execution（#354）
+
+Sprint Planning commit + push 完成後，依 `project_level` 決定是否自動啟動 Sprint Execution：
+
+```bash
+# 讀取 project_level（同 Cruise 步驟 4.5 讀取方式）
+CONFIG_FILE=".claude/shikigami.local.md"
+PROJECT_LEVEL=$(grep -A5 'shikigami:' "$CONFIG_FILE" 2>/dev/null | grep 'project_level:' | awk '{print $2}' | head -1)
+PROJECT_LEVEL="${PROJECT_LEVEL:-medium}"
+
+if PROJECT_LEVEL == "low":
+  # low：自動啟動，不問人
+  invoke shikigami:sprint-execution
+elif PROJECT_LEVEL == "medium":
+  # medium：通知等確認
+  echo "[SPRINT] Sprint Planning 完成。請確認是否啟動 Sprint Execution。"
+else:  # high
+  # high：只記錄
+  echo "[SPRINT] Sprint Planning 完成。Sprint Execution 需手動啟動。"
+```
+
 ---
 
 ## 6. Subagent 派遣順序
