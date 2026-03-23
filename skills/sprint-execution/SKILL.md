@@ -507,9 +507,22 @@ Claim Story（§2.11，多 Session 並行協調）
   │  │    |-- FAIL / ESCALATE --> 升級主 session                │
   │  │    +-- PASS / SKIP                                       │
   │  ├─ git commit + git push -u origin sprint-<N>/<story-id>  │
-  │  ├─ gh pr create → 回傳 PR_URL 至主 session                │
+  │  ├─ gh pr create                                           │
   │  │    |-- gh 不可用 → [PR-FLOW-DEGRADED] 降級直推            │
-  │  └─ 回傳：PASS/FAIL/ESCALATE + PR_URL                      │
+  │  ├─ Code Review Loop（subagent 內部，ADR-023 決策 5，AC-3）  │
+  │  │    pr-review-toolkit 三 agent 審查 PR diff：             │
+  │  │    ├─ code-reviewer                                      │
+  │  │    ├─ silent-failure-hunter                              │
+  │  │    └─ comment-analyzer                                   │
+  │  │    |-- Plugin 未安裝 → [PR-REVIEW-DEGRADED] 內部 QA 審查 │
+  │  │    |-- LGTM（無 CRITICAL/HIGH）→ gh pr merge --squash    │
+  │  │    +-- CRITICAL/HIGH → 修復 → commit → push → 重新審查   │
+  │  │          |-- 3 輪後仍 CRITICAL/HIGH → [PR-REVIEW-ESCALATE]│
+  │  │                                      → 升級主 session    │
+  │  │          +-- 通過 → gh pr merge --squash --delete-branch  │
+  │  └─ 回傳：PASS/FAIL/ESCALATE + MERGED_COMMIT               │
+  │     （MERGED_COMMIT = merge 後的 commit SHA，               │
+  │      主 session 憑此確認 merge 已完成）                      │
   └─────────────────────────────────────────────────────────────┘
   |
   v
@@ -520,23 +533,7 @@ Claim Story（§2.11，多 Session 並行協調）
   |           +-- 檔案不存在 → 輸出 [CACHE-RECOVERY-FAIL]，視同 ESCALATE: CONTEXT_OVERFLOW
   |-- ESCALATE --> 依升級類型處置（見下方升級表）
   |-- FAIL     --> 記錄失敗原因，更新看板，繼續下一 Story
-  +-- PASS（含 PR_URL）
-        |
-        v
-  ┌─────────────────────────────────────────────────────────────┐
-  │  Code Review Loop（主 session，ADR-023 決策 5，AC-3）        │
-  │                                                             │
-  │  pr-review-toolkit 三 agent 審查 PR diff：                  │
-  │  ├─ code-reviewer                                           │
-  │  ├─ silent-failure-hunter                                   │
-  │  └─ comment-analyzer                                        │
-  │  |-- Plugin 未安裝 → [PR-REVIEW-DEGRADED] 內部 QA 審查      │
-  │  |-- LGTM（無 CRITICAL/HIGH）→ gh pr merge --squash         │
-  │  +-- CRITICAL/HIGH → 修復 → commit → push → 重新審查        │
-  │        |-- 3 輪後仍 CRITICAL/HIGH → [PR-REVIEW-ESCALATE]   │
-  │        +-- 通過 → gh pr merge --squash --delete-branch      │
-  │  merge 後：git checkout main && git pull                    │
-  └─────────────────────────────────────────────────────────────┘
+  +-- PASS（含 MERGED_COMMIT）
         |
         v
   ┌─────────────────────────────────────────────────────────────┐
@@ -578,25 +575,23 @@ Claim Story（§2.11，多 Session 並行協調）
                 +-- DISPUTE --> 執行 DISPUTE 處理流程（見 §4 外部抽樣審查結果處理）
   |
   v（不觸發抽樣 / CONFIRM 完成後匯合）
-更新狀態文件（直推 main — 豁免清單，ADR-023 決策 3，AC-5）
-  git commit PROJECT_BOARD.md + sprint_N.md（豁免直推，不走 PR）
-  → [EXEMPT-PUSH] 直推 main
-  |
-  v
-Release Story（§2.11，多 Session 並行協調）
-  bash hooks/release-issue.sh <story_id>  → [CLAIM-RELEASE] refs/claims/<story_id>
-  失敗不阻塞（|| true）
-  |
-  v
-寫入 Sprint Checkpoint（§2.12）
-  更新 docs/sprints/sprint-checkpoint.json（豁免直推 main，AC-6）
-  |-- 寫入失敗 --> [CHECKPOINT-WRITE-WARN] 靜默略過，不阻塞
-  +-- 寫入成功 --> 繼續
-  |
-  v
-Sprint Backlog 還有 Story？
-  |-- YES --> 取出下一個 Story（回到頂端繼續）
-  +-- NO（所有 Story 完成）--> 立即 invoke shikigami:sprint-review（不詢問使用者）
+  ┌─────────────────────────────────────────────────────────────┐
+  │  Story Completion Checklist（#368 方向3，每個 Story 完成後  │
+  │  必做，主 session 按序逐項執行）                             │
+  │                                                             │
+  │  1. [ ] git checkout main && git pull                       │
+  │         （取得 subagent merge 後的最新 main）                │
+  │  2. [ ] 更新 PROJECT_BOARD.md + sprint_N.md 狀態           │
+  │         git commit + push（豁免直推 main，ADR-023 決策 3）  │
+  │  3. [ ] 寫入 sprint-checkpoint.json（§2.12，豁免直推 main）  │
+  │  4. [ ] release claim                                       │
+  │         bash hooks/release-issue.sh <story_id>             │
+  │  5. [ ] 檢查 Sprint Backlog 是否清空                        │
+  │         |-- 有剩餘 Story → 取出下一個 Story 繼續            │
+  │         +-- 全部完成 → 立即 invoke shikigami:sprint-review  │
+  │                                                             │
+  │  ※ 步驟 1-4 任一失敗不阻塞，輸出 WARN 後繼續步驟 5          │
+  └─────────────────────────────────────────────────────────────┘
 ```
 
 **升級類型處置表（主 session 職責）：**
@@ -712,9 +707,9 @@ Sprint Backlog 還有 Story？
 
    > **backward compatibility**：`developer-prompt.md`、`spec-reviewer-prompt.md`、`quality-reviewer-prompt.md` 保留，供獨立使用或 ADR-007 Phase 2 外部抽樣審查時引用。
 
-4. **Story-Lifecycle subagent 執行**：subagent 在內部閉環執行 TDD 開發（Red → Green → Refactor）、Spec Compliance self-review、Code Quality self-review、Security self-review（條件觸發）、修復循環，最終回傳 PASS/FAIL/ESCALATE 結論與標準化摘要。主 session **不累積 QA 對話 context**。
+4. **Story-Lifecycle subagent 執行**：subagent 在內部閉環執行 TDD 開發（Red → Green → Refactor）、Spec Compliance self-review、Code Quality self-review、Security self-review（條件觸發）、Code Review Loop、PR merge，最終回傳 PASS/FAIL/ESCALATE 結論與標準化摘要（含 `MERGED_COMMIT` SHA）。主 session **不累積 QA 對話 context**。
 5. **接收回傳並處置**：依 Story-Lifecycle subagent 回傳結論處置：
-   - `PASS`：繼續步驟 6（看板更新）
+   - `PASS`（含 `MERGED_COMMIT`）：繼續步驟 6（Story Completion Checklist）
    - `FAIL`：記錄失敗原因，更新看板標記為失敗，繼續下一 Story
    - `ESCALATE`：依升級類型表決定是否暫停 Sprint（見上方流程圖）
 6. **安全審查（條件觸發，主 session 層級）**：若 Story-Lifecycle subagent 回傳 `ESCALATE: SECURITY_CRITICAL`，主 session 暫停 Sprint 執行，觸發 `security-review` Skill 進行獨立深度安全審查。一般安全審查由 subagent 在 `story-lifecycle-prompt.md` §7 Security self-review 內部處理。
@@ -728,19 +723,20 @@ Sprint Backlog 還有 Story？
    - 7.5 `git push -u origin sprint-<N>/<story-id>`
    - 7.6 `gh pr create --title "feat: <story-id> <標題>" --body "<AC 清單 + 審查摘要>"`
          |-- `gh` 不可用 → `[PR-FLOW-DEGRADED]` 降級：直推 main + 內部審查
-   - 7.7 回傳 PR URL 至主 session（格式：`PR_URL: https://github.com/.../pull/N`）
-
-   **[主 session 職責]**（接收 PR URL 後）：
-   - 7.8 執行 Code Review Loop（ADR-023 決策 5，pr-review-toolkit 三 agent：code-reviewer / silent-failure-hunter / comment-analyzer）
+   - 7.7 Code Review Loop（ADR-023 決策 5，pr-review-toolkit 三 agent，#368 方向2 責任下放）
+         pr-review-toolkit 三 agent：code-reviewer / silent-failure-hunter / comment-analyzer
          |-- Plugin 未安裝 → `[PR-REVIEW-DEGRADED]` 回退內部 QA subagent 審查
-         |-- LGTM（無 CRITICAL/HIGH）→ 繼續
+         |-- LGTM（無 CRITICAL/HIGH）→ 繼續 7.8
          +-- CRITICAL/HIGH → 修復 → commit → push → 重新審查（最多 3 輪）
-               |-- 第 3 輪仍 CRITICAL/HIGH → `[PR-REVIEW-ESCALATE]` 升級 Architect
-   - 7.9 `gh pr merge --squash --delete-branch`
-         |-- merge conflict → `[PR-MERGE-CONFLICT]` 主 session rebase 解決
-   - 7.10 `git checkout main && git pull`
+               |-- 第 3 輪仍 CRITICAL/HIGH → `[PR-REVIEW-ESCALATE]` 升級主 session
+   - 7.8 `gh pr merge --squash --delete-branch`
+         |-- merge conflict → 嘗試 rebase 後重試；仍失敗 → `[PR-MERGE-CONFLICT]` 升級主 session
+   - 7.9 回傳 `MERGED_COMMIT: <commit-sha>`（merge 後的 commit SHA，主 session 憑此確認 merge 已完成）
 
-   **[狀態文件更新]**（主 session，直推 main — 豁免清單，ADR-023 決策 3）：
+   **[主 session 職責]**（接收 MERGED_COMMIT 後，按 Story Completion Checklist 執行）：
+   - 見流程圖「Story Completion Checklist」步驟 1-5（取得最新 main → 更新狀態文件 → 寫入 checkpoint → release claim → 檢查終止條件）
+
+   **[Checklist 步驟 2 — 狀態文件更新]**（主 session，步驟 1 git pull 完成後，直推 main — 豁免清單，ADR-023 決策 3）：
    更新看板與同步 Sprint 文件：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。
 
    <HARD-GATE>
