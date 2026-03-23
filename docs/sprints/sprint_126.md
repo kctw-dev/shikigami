@@ -16,6 +16,8 @@
 | #484 | Runner offline 主動監控 | S | 1 | INFRA | AC 精化完成（新增 AC4 恢復自動清除警示） |
 
 **Sprint 容量**：11 points
+**Sprint 結果**：3/5 PASS（#483 #481 #484），完成 5 pts，完成率 60%
+**未完成**：#485（未啟動）、#452（未啟動），carry-over 至下個 Sprint
 
 ---
 
