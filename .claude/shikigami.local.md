@@ -10,6 +10,9 @@ shikigami:
     default: production               # production = 完整鏈；pr = PR merge 即完成；none = 跳過
     per_repo:
       # 範例：kctw-dev/seiryu: none  # 純原型 repo，跳過交付追蹤
+  feedback_routing:
+    default: kctw-dev/shikigami       # 預設回報目標
+    # Future: pattern-based routing（尚未實作，目前僅使用 default）
 ---
 
 # Shikigami 專案配置

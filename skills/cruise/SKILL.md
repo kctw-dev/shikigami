@@ -413,6 +413,7 @@ for each issue in issues:
 | 判斷 | 處置 | 行動 | log action 類型 |
 |------|------|------|-----------------|
 | **無 label** | **Triage** | `gh issue edit --add-label <label>` 自主加分類 label（AC-6），然後重新判斷此 Issue | `"triage"` |
+| **帶 `cruise-feedback` label** | **Feedback Routing** | 讀取 `feedback_routing` 設定，依 `project_level` 決定自動轉送（low）或留言確認（medium/high）（#339） | `"cruise-feedback-routed"` / `"cruise-feedback-pending-confirm"` / `"cruise-feedback-skip"` |
 | **Size=S，改動明確** | **auto-shoot** | 標記為 actionable，回傳給主 loop 派 `/shoot` | `"auto-shoot"` |
 | **Size=M+，需設計或跨模組** | **排入 Sprint** | `gh issue edit --add-label sprint-candidate` | `"sprint-candidate"` |
 | **缺資訊，無法判斷** | **等待回覆** | `gh issue edit --add-label awaiting-reply` + 留言問誰要補什麼 | `"awaiting-reply"` |
@@ -445,6 +446,58 @@ for each issue in issues:
     gh issue edit issue.number -R ${OWNER_REPO} --add-label <判斷的 label>
     log action: "triage #<issue.number>"
     # 加完 label 後繼續判斷此 Issue（不跳過）
+
+  # ── Step 1.5：cruise-feedback label → Feedback Routing（#339）──
+  if "cruise-feedback" in issue.labels:
+    # 讀取 feedback_routing 設定（.claude/shikigami.local.md）
+    FEEDBACK_DEFAULT=$(grep -A10 'feedback_routing:' "$CONFIG_FILE" 2>/dev/null \
+      | grep 'default:' | awk '{print $2}' | head -1)
+    FEEDBACK_TARGET="${FEEDBACK_DEFAULT:-kctw-dev/shikigami}"
+
+    if [[ "$PROJECT_LEVEL" == "low" ]]; then
+      # low：自動建 Issue 到目標 repo，事後通知
+      FEEDBACK_TITLE="[Cruise Feedback] ${issue.title}"
+      EXISTING_FEEDBACK=$(gh issue list -R "${FEEDBACK_TARGET}" \
+        --search "\"${FEEDBACK_TITLE}\"" --state all --json number,title \
+        2>/dev/null || echo "[]")
+      if echo "$EXISTING_FEEDBACK" | jq -e '. | length > 0' &>/dev/null; then
+        log action: "cruise-feedback-skip #<issue.number>: duplicate in ${FEEDBACK_TARGET}"
+      else
+        gh issue create -R "${FEEDBACK_TARGET}" \
+          --title "${FEEDBACK_TITLE}" \
+          --body "## [Cruise Feedback] 自動轉送
+
+原始 Issue：${OWNER_REPO}#${issue.number}
+標題：${issue.title}
+
+---
+
+${issue.body}
+
+---
+> 此 Issue 由 Cruise Feedback Routing 自動建立。
+> 來源：${OWNER_REPO}#${issue.number}，Session: ${SESSION_ID}" \
+          --label "cruise-feedback,feature-request"
+        log action: "cruise-feedback-routed #<issue.number> → ${FEEDBACK_TARGET}"
+        # 轉送成功後移除 label，避免下一 cycle 重複處理
+        gh issue edit issue.number -R ${OWNER_REPO} --remove-label cruise-feedback
+      fi
+    else
+      # medium / high：PO 留言確認，不自動建 Issue（冪等：已有 [巡邏狀態：Feedback Routing] 留言則跳過）
+      gh issue comment issue.number -R ${OWNER_REPO} --body "## [巡邏狀態：Feedback Routing]
+
+此 Issue 標有 \`cruise-feedback\` label，判斷屬於框架層級改善建議。
+
+建議回報至：**${FEEDBACK_TARGET}**
+
+project_level=${PROJECT_LEVEL}，請確認是否轉送。
+
+- 巡邏時間：$(date '+%Y-%m-%dT%H:%M:%S')
+- Session: ${SESSION_ID}
+- Cycle: ${CYCLE}"
+      log action: "cruise-feedback-pending-confirm #<issue.number>: notify only (project_level=${PROJECT_LEVEL})"
+    fi
+    continue
 
   # ── Step 2：超時自動關閉（AC-4）──
   if "awaiting-reply" in issue.labels OR "pending" in issue.labels:
@@ -729,6 +782,21 @@ SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | t
 
 **觸發**：每個 cruise cycle 由 Task tool 派遣 SRE Agent 執行
 **Repo context**：subagent 接收 `REPO_PATH` 與 `OWNER_REPO` 參數，所有 `gh` 指令加 `-R ${OWNER_REPO}`
+
+### cruise-feedback label 標註規則（#339）
+
+SRE 建立 Issue 時，若判斷問題**屬於框架層級**（非 repo 特定，而是 Cruise Skill 本身的限制或設計缺陷），在 `--label` 參數中加入 `cruise-feedback`。
+
+判斷依據：
+
+| 情境 | 加 `cruise-feedback`？ | 說明 |
+|------|----------------------|------|
+| Cruise Skill 行為有缺陷（如 routing 邏輯錯誤） | 是 | 屬於框架層級，需回報 kctw-dev/shikigami |
+| 某 repo CI 設定問題 | 否 | Repo 特定問題，不屬框架層級 |
+| 某 runner offline | 否 | 基礎設施問題，非 Cruise Skill 問題 |
+| Cruise 對某類 Issue 誤判（如誤標 sprint-candidate） | 是 | 屬於框架層級判斷邏輯問題 |
+
+加上 `cruise-feedback` label 後，PO 巡邏在下一個 cycle 會透過 Feedback Routing 機制（Step 1.5）自動轉送或留言確認。
 
 ### CI/CD 狀態檢查
 
@@ -1152,6 +1220,9 @@ fi
 | 類型 | 說明 |
 |------|------|
 | `"triage"` | 無 label Issue，PO 自主加分類 label |
+| `"cruise-feedback-routed"` | 帶 `cruise-feedback` label 的 Issue，自動轉送建 Issue 至目標 repo（project_level=low）（#339） |
+| `"cruise-feedback-pending-confirm"` | 帶 `cruise-feedback` label 的 Issue，留言確認後等人轉送（project_level=medium/high）（#339） |
+| `"cruise-feedback-skip"` | 帶 `cruise-feedback` label 的 Issue，目標 repo 已有相同 Issue，跳過重複建立（#339） |
 | `"auto-shoot"` | Size=S Issue 標記為 actionable，供主 loop 連續派工 |
 | `"sprint-candidate"` | Size=M+ Issue，加 `sprint-candidate` label |
 | `"awaiting-reply"` | 缺資訊，加 `awaiting-reply` label + 留言 |
