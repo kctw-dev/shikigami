@@ -146,6 +146,18 @@ Discovery Phase 包含 6 個步驟，必須依序執行：
 
 ---
 
+## Discovery Item Checklist（每個候選需求必做）
+
+- [ ] Step 2：三問假設外顯化
+- [ ] Step 3：PB 草稿（docs/discovery/PB-*.md）
+- [ ] Gate 1：PO 草稿審查
+- [ ] Step 4：Architect 技術可行性
+- [ ] Gate 2：技術確認
+- [ ] Step 5：PO 簽核
+- [ ] Step 6：轉 Backlog（開 Issue）
+
+---
+
 ## 3. Product Brief 格式
 
 Product Brief 是 Discovery Phase 的核心產出物，使用 `docs/templates/product-brief-template.md` 模板建立。
