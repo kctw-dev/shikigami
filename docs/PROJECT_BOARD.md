@@ -1,9 +1,25 @@
 # Project Board
 
-**最後更新**：2026-03-23（Sprint 120 Review 完成）
-**當前 Sprint**：無（Sprint 120 完成，等待 Sprint 121 Planning）
+**最後更新**：2026-03-23（Sprint 121 Planning 完成）
+**當前 Sprint**：Sprint 121（2026-03-23 ~ 2026-03-30）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 121（進行中）
+
+> Sprint Goal：強化 Sprint 運作韌性：解決外部依賴阻塞問題、修復 CI 環境缺陷、提升 Sprint Review 效率，確保流程不再因單點故障而停滯。
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: Sprint 阻塞 bypass | #434 | M | 3 | 待開始 |
+| retro: Runner 環境標準化 | #436 | S | 2 | 待開始 |
+| retro: 邏輯依賴驗證 | #435 | S | 1 | 待開始 |
+| feat: Sprint Review 平行化 | #420 | M | 3 | 待開始 |
+| feat: SM 狀態圖 | #401 | S | 1 | 待開始 |
+
+**Sprint 容量**：10 points
 
 ---
 
