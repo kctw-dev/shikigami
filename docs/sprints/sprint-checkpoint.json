@@ -1,13 +1,1 @@
-{
-  "sprint": 117,
-  "stories": [
-    {"id": "#368-子1", "status": "pending", "completed_at": null, "title": "Hook 攔截擴充"},
-    {"id": "#330", "status": "pending", "completed_at": null, "title": "OAuth Token Watchdog（需 ADR-030）"},
-    {"id": "#331-子2", "status": "pending", "completed_at": null, "title": "閒置排入機制"},
-    {"id": "#331-子3", "status": "pending", "completed_at": null, "title": "背景 agent 進度追蹤"}
-  ],
-  "current_step": "sprint-execution-started",
-  "version": "v0.79.0",
-  "updated_at": "2026-03-23T05:37:27Z",
-  "notes": "Sprint 117 剛開始。三軌平行：Track A #368-子1 Hook / Track B #330 ADR-030+Watchdog / Track C #331-子2+子3 Cruise。context 已近上限需 compact。"
-}
+{"sprint":119,"stories":[{"id":"#391","status":"completed","completed_at":"2026-03-23T09:47:10Z"},{"id":"#387","status":"pending"},{"id":"#390","status":"pending"},{"id":"#384","status":"pending"},{"id":"#382","status":"pending"}],"current_step":"story-391-completed","updated_at":"2026-03-23T09:47:10Z"}
