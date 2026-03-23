@@ -7,18 +7,48 @@ description: "Use when sprint ends, conducting sprint review and retrospective, 
 
 ## 1. 概述
 
-Sprint Review（驗收成果）+ Retrospective（持續改進），依序進行。全程採用**精簡輸出**：每步驟輸出結論（PASS/FAIL + 一行摘要），Checklist 逐項打勾，不展開中間推理。
+Sprint Review（驗收成果）+ Retrospective（持續改進），採用**兩個平行 subagent** 執行，總時間約減半。全程採用**精簡輸出**：每步驟輸出結論（PASS/FAIL + 一行摘要），Checklist 逐項打勾，不展開中間推理。
+
+### 1.1 平行 Subagent 職責拆分
+
+| Subagent | 負責範圍 | 說明 |
+|----------|----------|------|
+| **Review subagent** | §1.5 + §2 全部步驟（含 §2.6 Issue 回寫） | 驗收成果、Issue 狀態更新 |
+| **Retro subagent** | §3 全部步驟 | Retrospective 分析與記錄 |
+
+### 1.2 平行執行與同步點
+
+```
+啟動時：
+  ├── Review subagent 開始執行 §1.5 + §2
+  └── Retro subagent 立即開始執行 §3 步驟 0（Analytics，只讀歷史數據，可與 Review 平行）
+
+同步點（Retro subagent 等待）：
+  Review subagent 完成 §2.6（Issue 狀態回寫）後，
+  寫入同步 signal：docs/sprints/.review-signal-<SESSION_ID>
+  內容：REVIEW_DONE=<timestamp>
+
+  Retro subagent 讀取到 signal 後，開始執行 §3 步驟 1（Good / Problem / Action 收集）
+
+最終：兩個 subagent 各自完成後，主流程驗收兩份產出是否完整。
+```
+
+### 1.3 錯誤處理
+
+- **Review subagent 失敗**：Retro subagent 的 §3 步驟 0 結果**仍然保留**（已寫入 per-session 檔案）；§3 步驟 1 以後因缺少同步 signal 而暫停，待 Review subagent 重試完成後繼續。
+- **Retro subagent 失敗**：Review subagent 的所有產出（Issue 回寫、PROJECT_BOARD、sprint_N.md）**仍然保留**；Retro 部分可獨立重試，不影響 Review 結果。
+- **兩者失敗**：各自已完成的步驟產出均保留，重試時從最後失敗步驟繼續。
 
 ## 模型選用建議
 
-| 角色 / 步驟 | 模型 | 說明 |
-|------------|------|------|
-| PO Subagent（Demo 展示、AC 驗收） | `sonnet` | 需要情境理解與商業判斷 |
-| Stakeholder Subagent（商業期待確認） | `sonnet` | 需要情境理解與商業判斷 |
-| Analytics Subagent（§3 步驟 0 趨勢分析） | `haiku` | 統計分析，規則明確可程式化 |
-| Metrics Subagent（Sprint Metrics） | `haiku` | 數值計算，規則明確可程式化 |
+| 角色 / 步驟 | Subagent | 模型 | 說明 |
+|------------|----------|------|------|
+| PO Subagent（Demo 展示、AC 驗收） | Review | `sonnet` | 需要情境理解與商業判斷 |
+| Stakeholder Subagent（商業期待確認） | Review | `sonnet` | 需要情境理解與商業判斷 |
+| Analytics Subagent（§3 步驟 0 趨勢分析） | Retro | `haiku` | 統計分析，規則明確可程式化；可與 Review 平行 |
+| Metrics Subagent（Sprint Metrics） | Review | `haiku` | 數值計算，規則明確可程式化 |
 
-## 1.3 合約載入
+## 1.4 合約載入
 
 Sprint Review 開始前載入共用交付合約作為驗收基準：
 
@@ -112,7 +142,22 @@ Epic Issue **不得 close**，無論其為內部或外部 Issue，一律執行�
 
 Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，留言記錄未完成原因。
 
+### §2.6 完成後：寫入同步 Signal
+
+Review subagent 完成 §2.6 全部 Issue 狀態回寫後，立即執行：
+
+```bash
+echo "REVIEW_DONE=$(date '+%Y-%m-%dT%H:%M+08:00')" > docs/sprints/.review-signal-${CLAUDE_SESSION_ID:-unknown}
+```
+
+Retro subagent 在執行完 §3 步驟 0 後，輪詢此 signal 檔案（每 5 秒一次，最多等 10 分鐘）；讀取到 `REVIEW_DONE=` 後，繼續執行 §3 步驟 1。
+
 ---
+
+<!-- ======================================================= -->
+<!-- 平行化邊界：Review subagent 結束，Retro subagent 開始 §3 步驟 1 -->
+<!-- Retro subagent §3 步驟 0 已在 Review 進行中平行啟動       -->
+<!-- ======================================================= -->
 
 ## 3. Sprint Retrospective 流程
 
@@ -120,7 +165,7 @@ Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，�
 
 ### 步驟
 
-0. **Retrospective Analytics** — 角色 prompt：`skills/sprint-review/analytics-prompt.md`。報告展示完畢前不得開始收集 Good / Problem / Action。
+0. **Retrospective Analytics**（**可與 Review 平行執行**）— 角色 prompt：`skills/sprint-review/analytics-prompt.md`。僅讀取歷史數據，不依賴 Review 結果。報告完成後等待同步 signal（`docs/sprints/.review-signal-<SESSION_ID>`），signal 到達且報告展示完畢後，才開始步驟 1。
 1. **在 `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` 新增記錄**（per-session 檔案，US-322 AC-4）
 2. **使用 Good / Problem / Action 格式收集回饋**
 3. **SPACE 五維度量測** — 詳見 `analytics-prompt.md`
@@ -229,16 +274,28 @@ participants:
 
 Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 git commit + push。範圍：`PROJECT_BOARD.md`、`docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md`、`docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md`、`sprint_N.md`、`docs/meetings/*.md`。其他 KM 文件不適用，避免觸發 ADR-003 Hard Gate。
 
+commit + push 完成後，清理同步 signal 檔案：
+
+```bash
+rm -f docs/sprints/.review-signal-${CLAUDE_SESSION_ID:-unknown}
+```
+
 > **per-session 路徑規則**：SESSION_ID 取自 `${CLAUDE_SESSION_ID:-unknown}`；路徑 = `docs/km/retro-log/$(date '+%Y-%m-%d')-session-${SESSION_ID}.md`（retro），`docs/km/metrics-log/$(date '+%Y-%m-%d')-session-${SESSION_ID}.md`（metrics）。結算腳本：`hooks/retro-settle.sh`、`hooks/metrics-settle.sh`（US-322 AC-3/AC-4）。
 
 ---
 
 ## 7. 執行檢查清單
 
+### 啟動階段（兩個 subagent 同時啟動）
+
 - [ ] **Systematic Debugging（HARD-GATE）**：Sprint Review 前執行 `invoke shikigami:systematic-debugging`，PASS 後方可繼續
+- [ ] **Review subagent 已啟動**（負責 §1.5 + §2）
+- [ ] **Retro subagent 已啟動**（負責 §3，步驟 0 立即開始）
+
+### Review subagent Checklist
+
 - [ ] **Pre-Demo 部署驗證**（PASS 或 FAIL）
 - [ ] **交付物文案一致性審查**（§1.5 全部 PASS）
-- [ ] **Retrospective Analytics 報告**（§3 步驟 0，四區塊完整）
 - [ ] PO Subagent 已展示所有已完成 Story 的 Demo
 - [ ] **QA 邊界案例測試**（§2 步驟 2）：QA 已執行邊界案例測試環節，並產出初步驗證結果
 - [ ] **QA 複驗修復有效性（HARD-GATE）**（§2 步驟 2b）：若步驟 2 發現缺陷，Developer 修復後 QA 已執行 targeted regression 複驗，確認缺陷已修復且無 regression。PASS 方可進入步驟 3
@@ -265,4 +322,20 @@ Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 g
 - [ ] 外部 Issue 階段 2 留言（**僅在 deployment-readiness PASS 且 E2E PASS 後執行**；否則不補發）
 - [ ] Sprint Metrics 已計算並追加至 `docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md`（詳見 `po-review-prompt.md`；US-322 AC-3）
 - [ ] 角色制衡案例檢查（若有，更新 `ROLE_BALANCE_CASES.md`）
+
+### Retro subagent Checklist
+
+- [ ] §3 步驟 0 Analytics 報告已完成（平行階段）
+- [ ] 已讀取同步 signal `docs/sprints/.review-signal-<SESSION_ID>`（等待 Review §2.6 完成）
+- [ ] Good / Problem / Action 已收集（步驟 1-2）
+- [ ] SPACE 五維度量測完成（步驟 3）
+- [ ] Quality Observer 診斷報告完成（步驟 4）
+- [ ] 每個 Action Item 已建立為 GitHub Issue（步驟 5）
+- [ ] `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` 已同步（步驟 6）
+- [ ] 代理人校準儀式已完成（步驟 7）
+- [ ] Retro 會議紀錄已寫入（步驟 8）
+
+### 最終收尾（兩個 subagent 均完成後）
+
 - [ ] **產出文件 git commit + push**（HARD-GATE）
+- [ ] 同步 signal 已清理（`docs/sprints/.review-signal-<SESSION_ID>`）
