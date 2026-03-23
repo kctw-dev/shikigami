@@ -1,25 +1,43 @@
 # Project Board
 
-**最後更新**：2026-03-23（Sprint 122 Planning 完成）
-**當前 Sprint**：Sprint 122（進行中）
+**最後更新**：2026-03-23（Sprint 123 Planning 完成）
+**當前 Sprint**：Sprint 123（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 122（進行中）
+## Sprint 123（進行中）
 
-> Sprint Goal：修復 CI 基礎設施三大故障點，恢復 Shikigami CI/CD 可靠度
-> **容量**：5 pts（降速 Sprint：聚焦 CI 修復，僅 3 stories READY）
+> Sprint Goal：消除 Cruise Mode 隨機阻斷 + 交付 Cruise 雙模式 + 強化 CI 主動偵測
+> **容量**：9 pts（恢復正常節奏，Sprint 122 Retro Actions 納入）
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| [SRE] GitHub App 安裝 | #423 | S | 1 | 待辦 |
-| [SRE] unzip 修復 | #442 | S | 1 | 待辦 |
-| [SRE] Node.js 20 遷移 | #424 | M | 3 | 待辦 |
+| [Bug] prompt hooks 隨機擋 Bash | #446 | S | 1 | 待辦 |
+| cruise: /tmp flag 被清理 | #449 | S | 1 | 待辦 |
+| Cruise 雙模式（Phase 1） | #430 | M | 3 | 待辦 |
+| CI 健康檢查腳本 | #450 | M | 2 | 待辦 |
+| 並行安全規則矩陣 | #451 | M | 2 | 待辦 |
+
+**Sprint 容量**：9 points
+**執行順序**：Phase 1（#446, #449 平行） -> Phase 2（#430, #450, #451 平行）
+
+---
+
+## Sprint 122（完成）
+
+> Sprint Goal：修復 CI 基礎設施三大故障點，恢復 Shikigami CI/CD 可靠度
+> **結果**：Goal 達成（3/3 Stories PASS）。Velocity 5 pts，完成率 100%。降速聚焦 CI 修復。
+> **Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| [SRE] GitHub App 安裝 | #423 | S | 1 | 完成 |
+| [SRE] unzip 修復 | #442 | S | 1 | 完成 |
+| [SRE] Node.js 20 遷移 | #424 | M | 3 | 完成 |
 
 **Sprint 容量**：5 points
-**執行順序**：#423 -> #442 -> #424（依賴鏈）
 
 ---
 
