@@ -145,15 +145,26 @@ QA subagent 進行代碼審查時，必須逐項檢查以下清單：
 
 ---
 
-## 7. 缺陷分類
+## 7. 缺陷分類與建議分層
 
-審查發現的問題依嚴重度分為三級：
+<!-- US-384 Review 建議清單分層（MUST FIX vs SUGGESTION）— Sprint 119 -->
+
+審查發現的問題依阻塞性分為兩層，再細分三級：
+
+### MUST FIX 層（阻塞）
 
 | 等級 | 名稱 | 定義 | 處理方式 |
 |------|------|------|----------|
-| Critical | 關鍵缺陷 | 影響系統正確性、安全性或穩定性的嚴重問題 | **必須修復**才能合併，門禁不通過 |
-| Important | 重要缺陷 | 影響可維護性、效能或可讀性的問題 | **應該修復**，強烈建議在合併前處理 |
-| Suggestion | 改進建議 | 風格優化、更佳實踐方式的建議 | **建議改進**，可於後續迭代處理 |
+| Critical | 關鍵缺陷 | 影響系統正確性、安全性或穩定性的嚴重問題 | **必須修復**才能合併，進入 §7.1 CRITICAL 互動決策點 |
+| Important | 重要缺陷 | 影響可維護性、效能或可讀性的問題 | **應該修復**，累計 3 個以上**阻塞**門禁 |
+
+### SUGGESTION 層（非阻塞）
+
+| 等級 | 名稱 | 定義 | 處理方式 |
+|------|------|------|----------|
+| Suggestion | 改進建議 | 風格優化、更佳實踐方式的建議 | **非阻塞**，Developer 自行決定；選擇不採納時須記錄決策理由 |
+
+**分層設計原意**（參照 `docs/discovery/PB-2026-03-23-review-suggestions.md`）：MUST FIX 不修不過 gate；SUGGESTION 由 Developer 保留決策權，降低強制修復循環次數。
 
 ### 判定規則
 
@@ -229,14 +240,24 @@ QA subagent 進行代碼審查時，必須逐項檢查以下清單：
 
 ## 8. 審查失敗處理
 
-當品質門禁發現問題時：
+<!-- US-384 Review 建議清單分層（MUST FIX vs SUGGESTION）— Sprint 119 -->
 
-1. QA subagent 產出具體問題清單，每個問題標注嚴重度（Critical / Important / Suggestion）
+當品質門禁發現問題時，依分層處理：
+
+**MUST FIX 層（阻塞）**：
+
+1. QA subagent 產出問題清單，每個 MUST FIX 問題標注嚴重度（Critical / Important）
 2. **Critical 問題**：進入 §7.1 CRITICAL 互動決策點，使用者選擇 A/B/C
 3. 選擇 A（修復）：Developer subagent 接收問題清單進行修復，修復完成後重新執行品質門禁審查
 4. 選擇 B/C：強制寫入決策記錄（§7.2），流程繼續
 5. 同一門禁連續失敗 3 次（選擇 A 後仍 FAIL），升級至 Architect 評估是否存在設計層面的問題
 6. 同一 Story/PR 連續選擇 B/C 超過 2 次，強制升級至 Architect 審查
+
+**SUGGESTION 層（非阻塞）**：
+
+7. QA subagent 產出 SUGGESTION 清單，每個問題標注改善方向
+8. Developer 自行決定是否採納：選擇不採納時，在 commit message 或審查回覆中記錄決策理由
+9. SUGGESTION 問題不觸發 FAIL，不影響門禁判定，不進入修復循環
 
 ---
 
