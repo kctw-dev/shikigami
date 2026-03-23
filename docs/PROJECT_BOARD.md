@@ -14,13 +14,13 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| [SRE] CI unzip 缺失問題復發 | #472 | S | 1 | 待辦 |
-| [SRE] Runner offline: github-runner-mig-blpf | #471 | S | 1 | 待辦 |
-| 框架複雜度預算機制 | #462 | M | 3 | 待辦 |
-| Cruise/Sprint Task List 防跳步 | #469 | S | 1 | 待辦 |
-| PR 顆粒度規範 | #470 | S | 1 | 待辦 |
-| Structured Trace Log | #392 | L | 3 | 待辦 |
-| ADR-033 Trace Log 架構決策 | #473 | S | 1 | 待辦 |
+| [SRE] CI unzip 缺失問題復發 | #472 | S | 1 | 已完成 |
+| [SRE] Runner offline: github-runner-mig-blpf | #471 | S | 1 | 已完成 |
+| 框架複雜度預算機制 | #462 | M | 3 | 進行中 |
+| Cruise/Sprint Task List 防跳步 | #469 | S | 1 | 已完成 |
+| PR 顆粒度規範 | #470 | S | 1 | 已完成 |
+| Structured Trace Log | #392 | L | 3 | 進行中 |
+| ADR-033 Trace Log 架構決策 | #473 | S | 1 | 已完成 |
 
 **Sprint 容量**：11 points
 **執行順序**：Phase 1（#472 | #471 | #469 | #470 | #473 平行） → Phase 2（#462 | #392 依賴 #473）
