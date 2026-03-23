@@ -9,9 +9,9 @@
 
 | # | Story | Size | Points | MoSCoW | 狀態 |
 |---|-------|------|--------|--------|------|
-| #338 | [Cruise] Issue 關閉需發 Issue 人同意 + 交付鏈深度 per-repo 可定義 | M | 5 | Must | 待開始 |
-| #339 | [Cruise] 回報對象應成為工作流的一部份 | S | 3 | Should | 待開始 |
-| #329 | SRE 巡檢：VM 消失原因不可推測，必須查證 | S | 2 | Should | 待開始 |
+| #338 | [Cruise] Issue 關閉需發 Issue 人同意 + 交付鏈深度 per-repo 可定義 | M | 5 | Must | 完成 |
+| #339 | [Cruise] 回報對象應成為工作流的一部份 | S | 3 | Should | 完成 |
+| #329 | SRE 巡檢：VM 消失原因不可推測，必須查證 | S | 2 | Should | 完成 |
 
 ## 技術決策（Architect）
 
@@ -29,3 +29,21 @@
 | #339 pattern 辨識條件 | 不做 AI 辨識，改為 label-based（`cruise-feedback` label 路由） |
 | #339 確認機制 | 走 project_level 控制（low=直接建 Issue，medium=留言確認） |
 | #329 gcloud 查詢失敗 fallback | 跳過 + 記錄 `[SRE] gcloud 不可用，跳過 MIG 查證` |
+
+## Sprint 116 Review 結果
+
+**Review 日期**：2026-03-23
+**版本**：v0.79.0
+**Sprint Goal 達成**：是
+
+| # | Story | PR | 驗收 | 備注 |
+|---|-------|----|------|------|
+| #329 | SRE 巡檢：VM 消失原因不可推測，必須查證 | #356 | PASS | VM 數量變化查證 SOP + gcloud MIG 查證 + autoscaler/SPOT 分類 + fallback 落地 |
+| #338 | [Cruise] Issue 關閉需發 Issue 人同意 + 交付鏈深度 per-repo 可定義 | #361 | PASS | close_policy + delivery_chain per-repo 配置、awaiting-reply 流程、ADR-029 落地 |
+| #339 | [Cruise] 回報對象應成為工作流的一部份 | #363 | PASS | cruise-feedback label routing、feedback_routing 設定、project_level 控制 |
+
+## Sprint 116 統計
+
+- Velocity：10 pts（目標 10，達成率 100%）
+- 完成率：100%（3/3 Stories PASS）
+- Sprint 外 Shoots（本 session）：#333, #340, #343, #346, #348, #350, #352, #354, #357, #359

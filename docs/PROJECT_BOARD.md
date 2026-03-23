@@ -1,9 +1,31 @@
 # Project Board
 
-**最後更新**：2026-03-22（Sprint 114 Planning 完成）
-**當前 Sprint**：Sprint 114（準備中）
+**最後更新**：2026-03-23（Sprint 116 Review + Retro 完成）
+**當前 Sprint**：Sprint 116（完成）
 
-工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 114](sprints/sprint_114.md) → 本看板 | [Tutorial](tutorial/README.md)
+工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → [Sprint 116](sprints/sprint_116.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 116（完成）
+
+> Sprint Goal：Cruise 治理邊界完善 + SRE 診斷 SOP
+> **結果**：Goal 達成（3/3 Stories PASS）。Velocity 10 pts，完成率 100%。Cruise close_policy + delivery_chain per-repo 配置（ADR-029）+ SRE VM 查證 SOP（gcloud MIG + 三分類）+ feedback routing label-based 自動化。bump v0.79.0。
+> **Stakeholder 驗收**：接受
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| SRE 巡檢：VM 消失原因不可推測，必須查證 | #329 | S | 2 | 完成 |
+| [Cruise] Issue 關閉需發 Issue 人同意 + 交付鏈深度 per-repo 可定義 | #338 | M | 5 | 完成 |
+| [Cruise] 回報對象應成為工作流的一部份 | #339 | S | 3 | 完成 |
+
+**Sprint 容量**：10 points
+
+## Sprint 116 統計
+- Velocity：10 pts（目標 10，達成率 100%）
+- 完成率：100%（完成 3 / 計畫 3）
+- 日期：2026-03-23
+- Sprint 外 Shoots：10 項（#333, #340, #343, #346, #348, #350, #352, #354, #357, #359）
 
 ---
 
