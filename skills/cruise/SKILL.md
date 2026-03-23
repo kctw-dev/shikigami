@@ -268,26 +268,10 @@ while 檢查 flag file 存在:
           寫入 log：{"type":"auto-shoot-completed","issue":ISSUE,"result":"failed",...}
       # 立即繼續下一個（不 sleep）
 
-  # ── Sprint Planning 觸發（#343 AC-3，#348 project_level 控制）──
-  SPRINT_CANDIDATE_COUNT = gh issue list -R ${OWNER_REPO} --label sprint-candidate --state open | count
-  OLDEST_CANDIDATE_AGE = 最早 sprint-candidate 的 updatedAt 距今分鐘數
-  SHOULD_TRIGGER = (SPRINT_CANDIDATE_COUNT >= 3) OR (SPRINT_CANDIDATE_COUNT >= 1 AND OLDEST_CANDIDATE_AGE >= 30)
-
-  if SHOULD_TRIGGER:
-    if PROJECT_LEVEL == "low":
-      # low：自動觸發，不等人
-      echo "[CRUISE] sprint-candidate 達標，project_level=low，自動觸發 Sprint Planning"
-      invoke shikigami:sprint-planning
-      寫入 log：{"type":"trigger-sprint-planning","project_level":"low","reason":"auto",...}
-    elif PROJECT_LEVEL == "medium":
-      # medium：PO 留言通知，等使用者確認
-      echo "[CRUISE] sprint-candidate 達標，project_level=medium，通知等確認"
-      PO 留言至 repo discussions 或最新 sprint-candidate Issue：
-        "Sprint Planning 觸發條件已達標（${SPRINT_CANDIDATE_COUNT} 個 sprint-candidate）。請確認是否啟動。"
-      寫入 log：{"type":"sprint-planning-notify","project_level":"medium","count":SPRINT_CANDIDATE_COUNT,...}
-    else:  # high
-      # high：只標記，不觸發不通知
-      寫入 log：{"type":"sprint-planning-marked","project_level":"high","count":SPRINT_CANDIDATE_COUNT,...}
+  # ── Sprint Planning 觸發已移至 PO 巡邏直接執行（#352）──
+  # PO Agent 在巡邏結束時自己檢查 sprint-candidate count + project_level，
+  # 直接 invoke shikigami:sprint-planning（low）或留言通知（medium）。
+  # 主 loop 不再負責 Sprint Planning 觸發，避免被跳過。
 
   echo "[CRUISE] Cycle ${CYCLE} 完成（${#REPOS[@]} repos），下次執行：${INTERVAL} 後"
   sleep ${INTERVAL_SECONDS}
@@ -444,24 +428,32 @@ for each issue in issues:
 # 回傳結果（#346：close 與 auto-shoot 分開回傳）
 # close_issues: PO 已直接 close 的 Issue（不走 shoot）
 # actionable_issues: 供主 loop invoke shikigami:shoot 派遣（必須走完整 shoot 流程）
-# sprint_candidates: 供主 loop Sprint Planning 觸發判斷
-```
 
-### Sprint Planning 觸發（AC-3）
+# ── Step 5：Sprint Planning 觸發（#352：PO 直接執行，不經主 loop）──
+# PO 巡邏完所有 Issue 後，自己檢查 sprint-candidate 觸發條件
+# 讀取 project_level 從 .claude/shikigami.local.md（步驟 4.5 已定義讀取方式）
+CONFIG_FILE=".claude/shikigami.local.md"
+PROJECT_LEVEL=$(grep -A5 'shikigami:' "$CONFIG_FILE" 2>/dev/null | grep 'project_level:' | awk '{print $2}' | head -1)
+PROJECT_LEVEL="${PROJECT_LEVEL:-medium}"
 
-```bash
-# 偽碼：主 loop 收到 PO 結果後檢查 sprint-candidate 觸發條件
 SPRINT_CANDIDATE_COUNT = gh issue list -R ${OWNER_REPO} --label sprint-candidate --state open --json number | jq length
 OLDEST_CANDIDATE_AGE = 最早的 sprint-candidate Issue 的 updatedAt 距今分鐘數
+SHOULD_TRIGGER = (SPRINT_CANDIDATE_COUNT >= 3) OR (SPRINT_CANDIDATE_COUNT >= 1 AND OLDEST_CANDIDATE_AGE >= 30)
 
-if SPRINT_CANDIDATE_COUNT >= 3:
-  echo "[CRUISE] sprint-candidate 已累積 ${SPRINT_CANDIDATE_COUNT} 個，觸發 Sprint Planning"
-  invoke shikigami:sprint-planning
-  log action: "trigger-sprint-planning (count=${SPRINT_CANDIDATE_COUNT})"
-elif SPRINT_CANDIDATE_COUNT >= 1 AND OLDEST_CANDIDATE_AGE >= 30:
-  echo "[CRUISE] sprint-candidate 超過 30 分鐘未新增，觸發 Sprint Planning"
-  invoke shikigami:sprint-planning
-  log action: "trigger-sprint-planning (timeout=30min)"
+if SHOULD_TRIGGER:
+  if PROJECT_LEVEL == "low":
+    # low：PO 直接觸發，不等人
+    invoke shikigami:sprint-planning
+    log action: "trigger-sprint-planning (project_level=low, count=${SPRINT_CANDIDATE_COUNT})"
+  elif PROJECT_LEVEL == "medium":
+    # medium：PO 留言通知，等使用者確認
+    gh issue comment <最新 sprint-candidate Issue> -R ${OWNER_REPO} --body "## [Sprint Planning 觸發通知]
+Sprint candidate 已累積 ${SPRINT_CANDIDATE_COUNT} 個，達到觸發條件。
+project_level=medium，請確認是否啟動 Sprint Planning。"
+    log action: "sprint-planning-notify (project_level=medium, count=${SPRINT_CANDIDATE_COUNT})"
+  else:  # high
+    # high：只標記，不觸發不通知
+    log action: "sprint-planning-marked (project_level=high, count=${SPRINT_CANDIDATE_COUNT})"
 ```
 
 ### Auto-shoot 連續派遣（AC-2，修正 #340）
