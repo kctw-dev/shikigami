@@ -191,6 +191,63 @@ echo "[CRUISE] project_level: ${PROJECT_LEVEL}"
 | Issue close | 自動 close | 自動 close | PO 留言建議 close，等人確認 |
 | CI/CD 變更 | 自動走 shoot 流程 | 自動走 shoot 流程 | PO 留言通知，必須人工確認 |
 
+### 4.6 讀取 close_policy 與 delivery_chain（#338）
+
+```bash
+# 讀取 close_policy（向下相容：無設定 → 預設行為）
+CONFIG_FILE=".claude/shikigami.local.md"
+REQUIRE_CREATOR_APPROVAL="false"        # 預設：直接 close（現有行為）
+CLOSE_DEFAULT_TIMEOUT="2h"             # 預設 timeout
+
+if [[ -f "$CONFIG_FILE" ]]; then
+  # 讀取 require_creator_approval
+  _VAL=$(grep 'require_creator_approval:' "$CONFIG_FILE" | awk '{print $2}' | head -1)
+  if [[ -n "$_VAL" ]]; then
+    REQUIRE_CREATOR_APPROVAL="$_VAL"
+  fi
+  # 讀取 default_timeout
+  _TIMEOUT=$(grep 'default_timeout:' "$CONFIG_FILE" | awk '{print $2}' | head -1)
+  if [[ -n "$_TIMEOUT" ]]; then
+    CLOSE_DEFAULT_TIMEOUT="$_TIMEOUT"
+  fi
+fi
+echo "[CRUISE] close_policy.require_creator_approval: ${REQUIRE_CREATOR_APPROVAL}（timeout: ${CLOSE_DEFAULT_TIMEOUT}）"
+
+# 讀取 delivery_chain（向下相容：無設定 → production 完整鏈）
+DELIVERY_CHAIN_DEFAULT="production"     # 預設：完整交付鏈
+
+if [[ -f "$CONFIG_FILE" ]]; then
+  _DC_DEFAULT=$(grep -A2 'delivery_chain:' "$CONFIG_FILE" | grep 'default:' | awk '{print $2}' | head -1)
+  if [[ -n "$_DC_DEFAULT" ]]; then
+    DELIVERY_CHAIN_DEFAULT="$_DC_DEFAULT"
+  fi
+fi
+echo "[CRUISE] delivery_chain.default: ${DELIVERY_CHAIN_DEFAULT}"
+
+# 讀取 per-repo delivery_chain 覆蓋（在每個 repo 的 loop 內使用）
+# 函式：取得指定 repo 的 delivery_chain 設定
+get_delivery_chain() {
+  local OWNER_REPO="$1"
+  local REPO_OVERRIDE
+  if [[ -f "$CONFIG_FILE" ]]; then
+    REPO_OVERRIDE=$(grep -A50 'per_repo:' "$CONFIG_FILE" | grep "^    ${OWNER_REPO}:" | awk '{print $2}' | head -1)
+  fi
+  echo "${REPO_OVERRIDE:-$DELIVERY_CHAIN_DEFAULT}"
+}
+
+# 讀取 per-repo close_policy timeout 覆蓋
+get_close_timeout() {
+  local OWNER_REPO="$1"
+  local REPO_TIMEOUT
+  if [[ -f "$CONFIG_FILE" ]]; then
+    # 讀取 close_policy.per_repo 區段
+    REPO_TIMEOUT=$(awk '/close_policy:/,/delivery_chain:|^[^ ]/' "$CONFIG_FILE" \
+      | grep "^    ${OWNER_REPO}:" | awk '{print $2}' | head -1)
+  fi
+  echo "${REPO_TIMEOUT:-$CLOSE_DEFAULT_TIMEOUT}"
+}
+```
+
 ### 5. 準備 Log 目錄
 
 ```bash
@@ -358,7 +415,7 @@ for each issue in issues:
 | **Size=M+，需設計或跨模組** | **排入 Sprint** | `gh issue edit --add-label sprint-candidate` | `"sprint-candidate"` |
 | **缺資訊，無法判斷** | **等待回覆** | `gh issue edit --add-label awaiting-reply` + 留言問誰要補什麼 | `"awaiting-reply"` |
 | **明確暫停** | **暫停** | `gh issue edit --add-label pending` + 留言說明暫停原因 | `"pending"` |
-| **已修復但未關** | **結案** | `gh issue close`（非 stakeholder、非 George 的 Issue） | `"close"` |
+| **已修復但未關** | **結案** | `require_creator_approval: false`（預設）→ `gh issue close`；`true` → 留言建議關閉 + `awaiting-reply`（PO 自建 Issue 豁免，直接 close） | `"close"` / `"close-pending-approval"` |
 | **stakeholder Issue** | **跳過** | 只記錄至 cruise log | `"skipped"` |
 
 **Size 判斷標準**：
@@ -407,14 +464,36 @@ for each issue in issues:
       log action: "waiting #<issue.number>: <hours_since>h elapsed"
       continue
 
-  # ── Step 3：已修復未關 → 結案 ──
+  # ── Step 3：已修復未關 → 結案（#338：close_policy 控制）──
   # 檢查是否有關聯 PR 已 merged
   if issue 有關聯 PR 且 PR 已 merged:
     if issue 非 George 的 Issue:
-      gh issue close issue.number -R ${OWNER_REPO} \
-        --comment "## [巡邏狀態：已修復] 關聯 PR 已合併，結案。"
-      log action: "close #<issue.number>"
-      continue
+      # 讀取此 repo 的 close_policy 設定
+      # 豁免條件：PO 自建（issue.author == 當前 PO / bot）→ 直接 close
+      IS_PO_ISSUE = (issue.author is PO agent or system bot)
+
+      if REQUIRE_CREATOR_APPROVAL == "true" AND NOT IS_PO_ISSUE:
+        # 需要發 Issue 人同意 → 留言建議關閉 + awaiting-reply
+        REPO_TIMEOUT=$(get_close_timeout "${OWNER_REPO}")
+        gh issue edit issue.number -R ${OWNER_REPO} --add-label awaiting-reply
+        gh issue comment issue.number -R ${OWNER_REPO} --body "## [巡邏狀態：已修復] 建議關閉
+
+關聯 PR 已合併，此 Issue 看起來已修復。
+
+如無異議，將在 ${REPO_TIMEOUT} 後自動關閉。如需保持開啟，請回覆說明。
+
+- 巡邏時間：$(date '+%Y-%m-%dT%H:%M:%S')
+- Session: ${SESSION_ID}
+- Cycle: ${CYCLE}"
+        log action: "close-pending-approval #<issue.number>"
+        # 留言後交由 Step 2 超時機制統一處理（awaiting-reply label）
+        continue
+      else:
+        # require_creator_approval == false，或 PO 自建 Issue → 直接 close
+        gh issue close issue.number -R ${OWNER_REPO} \
+          --comment "## [巡邏狀態：已修復] 關聯 PR 已合併，結案。"
+        log action: "close #<issue.number>"
+        continue
 
   # ── Step 4：判斷 Size 決定 auto-shoot 或 sprint-candidate ──
   if Size=S（單檔修改、修復方向明確、無需跨模組）:
@@ -535,33 +614,52 @@ gh issue comment <issue_number> -R ${OWNER_REPO} --body "## [巡邏狀態：<狀
 - Cycle: ${CYCLE}"
 ```
 
-### 交付推進自動化
+### 交付推進自動化（#338：per-repo delivery_chain）
 
-**交付鏈**：`staging → E2E → tag → production → close`
+**交付鏈深度**由 `delivery_chain` per-repo 設定控制（詳見 ADR-029）：
+
+| `delivery_chain` 值 | 交付終點 |
+|--------------------|---------|
+| `production`（預設） | `staging → E2E → tag → production → close`（完整鏈） |
+| `pr` | PR merge 即視為交付完成，直接 close Issue |
+| `none` | 跳過交付追蹤，不推進交付步驟 |
 
 PR merge 後若交付鏈卡住，自動推進下一步：
 
 ```bash
-# 偽碼：PR merge → 自動推進交付鏈
+# 偽碼：PR merge → 自動推進交付鏈（per-repo delivery_chain）
 SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | tail -1)
 # 讀取 Sprint Backlog，找出狀態為「PR merged / 待部署」的 Story
 
-for each story in backlog:
-  pr_status = gh pr view <pr_number> -R ${OWNER_REPO} --json merged,mergedAt,state
-  if pr_status.merged == true:
-    # 前置條件檢查（推進前檢查，避免跳步）
-    # 1. staging：確認 PR merge 已完成 + CI 狀態為 passing
-    # 2. E2E：確認 staging 部署成功
-    # 3. tag：確認 E2E 通過
-    # 4. production：確認 tag 建立
-    # 5. close：確認 production 部署完成
+# 取得此 repo 的 delivery_chain 設定（步驟 4.6 定義的 get_delivery_chain 函式）
+REPO_DELIVERY_CHAIN=$(get_delivery_chain "${OWNER_REPO}")
 
-    next_step = determine_next_delivery_step(story)
-    if next_step and precondition_met(next_step):
-      execute_delivery_step(next_step)
-      log action: "push-delivery #<story.issue> → <next_step>"
-    else:
-      log: "skip push-delivery #<story.issue>：precondition not met for <next_step>"
+if [[ "$REPO_DELIVERY_CHAIN" == "none" ]]; then
+  # none → 跳過交付追蹤
+  log: "skip delivery-chain for ${OWNER_REPO}：delivery_chain=none"
+else:
+  for each story in backlog:
+    pr_status = gh pr view <pr_number> -R ${OWNER_REPO} --json merged,mergedAt,state
+    if pr_status.merged == true:
+      if [[ "$REPO_DELIVERY_CHAIN" == "pr" ]]; then
+        # pr → PR merge 即完成，直接結案
+        gh issue close <story.issue> -R ${OWNER_REPO} \
+          --comment "## [交付完成] PR 已合併，delivery_chain=pr，結案。"
+        log action: "delivery-close #<story.issue>（delivery_chain=pr）"
+      else:  # production（預設）→ 完整交付鏈
+        # 前置條件檢查（推進前檢查，避免跳步）
+        # 1. staging：確認 PR merge 已完成 + CI 狀態為 passing
+        # 2. E2E：確認 staging 部署成功
+        # 3. tag：確認 E2E 通過
+        # 4. production：確認 tag 建立
+        # 5. close：確認 production 部署完成
+
+        next_step = determine_next_delivery_step(story)
+        if next_step and precondition_met(next_step):
+          execute_delivery_step(next_step)
+          log action: "push-delivery #<story.issue> → <next_step>"
+        else:
+          log: "skip push-delivery #<story.issue>：precondition not met for <next_step>"
 ```
 
 ### 交付追蹤
@@ -588,7 +686,7 @@ SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | t
   "threshold_days": <THRESHOLD_DAYS>,
   "project_level": "<PROJECT_LEVEL>",
   "summary": "掃描 <X> 個 open issues，發現 <Y> 個逾期，<Z> 個無回應",
-  "actions": ["triage #<N1>", "auto-shoot #<N2>", "sprint-candidate #<N3>", "awaiting-reply #<N4>", "pending #<N5>", "close #<N6>", "auto-close #<N7>", "waiting #<N8>: Xh elapsed", "skipped #<N9>: stakeholder-issue"],
+  "actions": ["triage #<N1>", "auto-shoot #<N2>", "sprint-candidate #<N3>", "awaiting-reply #<N4>", "pending #<N5>", "close #<N6>", "close-pending-approval #<N7>", "auto-close #<N8>", "waiting #<N9>: Xh elapsed", "skipped #<N10>: stakeholder-issue"],
   "actionable_issues": [<issue_numbers>],
   "sprint_candidates": [<issue_numbers>]
 }
