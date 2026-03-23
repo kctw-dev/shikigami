@@ -355,3 +355,9 @@ Story-Lifecycle subagent 新增職責：
 | pr-review-toolkit 未安裝 | 內部 QA subagent 審查 | `[PR-REVIEW-DEGRADED]` |
 | PR merge conflict | 主 session rebase 解決 | `[PR-MERGE-CONFLICT]` |
 | Review loop 超過 3 輪 | 升級 Architect | `[PR-REVIEW-ESCALATE]` |
+
+## Amendment（#368 方向2，Sprint 118）
+
+**決策 5 和 6 部分修正**：Code Review Loop 和 PR merge 責任從主 session 移至 Story-Lifecycle subagent 內部執行。主 session 不再負責 Code Review 和 merge，改為接收 subagent 的 `MERGED_COMMIT` 結果後執行 Story Completion Checklist。
+
+**理由**：主 session 反覆跳過 Code Review Loop（Sprint 116 #329 直接 merge 案例），將責任封裝至 subagent 消除人為漏步驟的風險。
