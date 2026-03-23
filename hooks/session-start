@@ -65,6 +65,13 @@ if [[ -f "$CHECKPOINT_FILE" ]]; then
   fi
 fi
 
+# ---------- #443：Compact 後注入 project_level ----------
+CONFIG_FILE="${REPO_ROOT_PATH}/.claude/shikigami.local.md"
+if [[ -f "$CONFIG_FILE" ]]; then
+  PL=$(grep -A5 'shikigami:' "$CONFIG_FILE" | grep 'project_level:' | awk '{print $2}' | head -1)
+  RECOVERY_HINTS="${RECOVERY_HINTS}[CONFIG] project_level=${PL:-medium}\n"
+fi
+
 # ---------- ADR-030：OAuth Token Watchdog ----------
 # 偵測 Claude OAuth token 是否即將過期，輸出告警（靜默跳過不阻塞）
 WATCHDOG_SCRIPT="${PLUGIN_ROOT}/hooks/oauth-token-watchdog.sh"
