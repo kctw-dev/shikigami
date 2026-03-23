@@ -1,9 +1,27 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 125 Review 完成）
-**當前 Sprint**：Sprint 126（待規劃）
+**最後更新**：2026-03-24（Sprint 126 Planning 完成）
+**當前 Sprint**：Sprint 126（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 126（進行中）
+
+> Sprint Goal：Sprint Execution 結構重構 + Observability 端到端驗證 + CI 防回歸永久修復
+> **容量**：11 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| Sprint Execution Skill 結構重構 | #485 | M | 3 | 進行中 |
+| Trace Log 端到端驗證 | #483 | M | 2 | 進行中 |
+| INFRA 測試框架 — 自動化回歸測試 | #452 | M | 3 | 待開始 |
+| CI unzip 永久修復機制 | #481 | M | 2 | 待開始 |
+| Runner offline 主動監控 | #484 | S | 1 | 待開始 |
+
+**Sprint 容量**：11 points
+**執行順序**：Phase 1（#485 | #483 平行） → Phase 2（#484 → #481 序列） → Phase 3（#452）
 
 ---
 
