@@ -202,9 +202,6 @@ while 檢查 flag file 存在:
         {"type":"error","repo":"<OWNER_REPO>","cycle":<N>,"timestamp":"<ISO8601>","summary":"subagent failed: <reason>"}
       echo "[CRUISE] WARNING: ${OWNER_REPO} 巡邏/巡檢失敗，見 log"
 
-  # ── Auto-shoot 派工（#340）──────────────────────
-  # PO 巡邏結果回傳後，檢查是否有 actionable Issue 可自動修復
-  # 條件：(1) PO 回傳 actionable Issues (2) SHOOT_FLAG 不存在（無 shoot 進行中）(3) 非 stakeholder
   # ── SHOOT_FLAG 殘留防護 ──────────────────────
   if SHOOT_FLAG 存在:
     SHOOT_FLAG_AGE = (now - SHOOT_FLAG mtime) in minutes
@@ -214,34 +211,41 @@ while 檢查 flag file 存在:
       寫入 log entry：
         {"type":"auto-shoot-stale-cleared","repo":"<OWNER_REPO>","cycle":<N>,"timestamp":"<ISO8601>"}
 
-  if PO 巡邏結果含 actionable Issues:
+  # ── Auto-shoot 連續派遣（#343 AC-2：完成即派下一個，不等 cycle）──
+  # PO 回傳 actionable_issues，主 loop 連續處理直到清空
+  ACTIONABLE_ISSUES = PO 巡邏結果.actionable_issues
+  while ACTIONABLE_ISSUES is not empty AND CRUISE_FLAG 存在:
     if SHOOT_FLAG 不存在:
-      FIRST_ACTIONABLE = 取第一個 actionable Issue（優先序：sre-auto-debug > bug）
-      echo "$FIRST_ACTIONABLE" > SHOOT_FLAG  # 建立互斥鎖，內容為 issue number（供「處理中」狀態判斷）
-      平行派遣 background Agent：
-        - shoot-agent（run_in_background: true，帶入 FIRST_ACTIONABLE issue number）
-        - 指令：執行 /shoot #<issue_number>
-      寫入 log entry：
-        {"type":"auto-shoot-dispatched","repo":"<OWNER_REPO>","cycle":<N>,"issue":<issue_number>,"timestamp":"<ISO8601>"}
-      echo "[CRUISE] Auto-shoot 已派遣：#<issue_number>"
-    else:
-      echo "[CRUISE] Shoot 進行中，跳過自動派工"
-      寫入 log entry：
-        {"type":"auto-shoot-skipped","repo":"<OWNER_REPO>","cycle":<N>,"reason":"shoot-in-progress","timestamp":"<ISO8601>"}
-  # ── Auto-shoot 完成檢查 ──────────────────────────
-  # 若上一 cycle 派遣了 shoot，檢查 background agent 是否已完成
-  if 上一 cycle 派遣了 shoot 且 background agent 已完成:
-    讀取 shoot agent 結果
-    if shoot 成功:
-      rm -f SHOOT_FLAG  # 清除互斥鎖
-      寫入 log entry：
-        {"type":"auto-shoot-completed","repo":"<OWNER_REPO>","cycle":<N>,"issue":<issue_number>,"result":"success","timestamp":"<ISO8601>"}
-      echo "[CRUISE] Auto-shoot 完成：#<issue_number> 修復成功"
-    else:
-      rm -f SHOOT_FLAG
-      寫入 log entry：
-        {"type":"auto-shoot-completed","repo":"<OWNER_REPO>","cycle":<N>,"issue":<issue_number>,"result":"failed","reason":"<reason>","timestamp":"<ISO8601>"}
-      echo "[CRUISE] Auto-shoot 失敗：#<issue_number>，見 log"
+      ISSUE = ACTIONABLE_ISSUES.shift()
+      echo "$ISSUE" > SHOOT_FLAG
+      echo "[CRUISE] Auto-shoot 派遣：#${ISSUE}"
+      派遣 shoot agent（/shoot #${ISSUE}），等待完成
+      if shoot 成功:
+        rm -f SHOOT_FLAG
+        SHOOT_FAIL_COUNT[ISSUE] = 0
+        寫入 log：{"type":"auto-shoot-completed","issue":ISSUE,"result":"success",...}
+      else:
+        rm -f SHOOT_FLAG
+        SHOOT_FAIL_COUNT[ISSUE] += 1
+        if SHOOT_FAIL_COUNT[ISSUE] >= 2:  # AC-5：連續 2 次 fail → 升級
+          gh issue edit ISSUE -R ${OWNER_REPO} --add-label sprint-candidate
+          寫入 log：{"type":"auto-shoot-escalated","issue":ISSUE,"reason":"2 consecutive failures",...}
+          echo "[CRUISE] #${ISSUE} 連續 2 次 shoot fail，升級為 sprint-candidate"
+        else:
+          寫入 log：{"type":"auto-shoot-completed","issue":ISSUE,"result":"failed",...}
+      # 立即繼續下一個（不 sleep）
+
+  # ── Sprint Planning 觸發（#343 AC-3）──
+  SPRINT_CANDIDATE_COUNT = gh issue list -R ${OWNER_REPO} --label sprint-candidate --state open | count
+  OLDEST_CANDIDATE_AGE = 最早 sprint-candidate 的 updatedAt 距今分鐘數
+  if SPRINT_CANDIDATE_COUNT >= 3:
+    echo "[CRUISE] sprint-candidate 累積 ${SPRINT_CANDIDATE_COUNT} 個，觸發 Sprint Planning"
+    invoke shikigami:sprint-planning
+    寫入 log：{"type":"trigger-sprint-planning","reason":"count=${SPRINT_CANDIDATE_COUNT}",...}
+  elif SPRINT_CANDIDATE_COUNT >= 1 AND OLDEST_CANDIDATE_AGE >= 30:
+    echo "[CRUISE] sprint-candidate 超過 30 分鐘，觸發 Sprint Planning"
+    invoke shikigami:sprint-planning
+    寫入 log：{"type":"trigger-sprint-planning","reason":"timeout=30min",...}
 
   echo "[CRUISE] Cycle ${CYCLE} 完成（${#REPOS[@]} repos），下次執行：${INTERVAL} 後"
   sleep ${INTERVAL_SECONDS}
@@ -312,83 +316,142 @@ for each issue in issues:
       alert PO immediately
 ```
 
-### 自動行動決策表
+### PO Issue 處置決策表（#343，取代 #340 actionable 判斷）
 
-**發現即處理**：PO 巡邏不再只回報，針對 4 種情境直接採取行動。
+**全覆蓋強制處置**：每個 open Issue **必須**落入以下其中一格。PO **禁止自行加排除條件**。不允許「掃描完跳過」或「已留言所以跳過」。
 
 **安全前置檢查**（每個 Issue 行動前必先執行）：
 - 若 Issue 帶有 `stakeholder` label → 跳過所有行動，記錄 `"skipped": "stakeholder-issue"` 至 cruise log
+- George 的 issues 不能代關
 - 詳見下方「安全邊界」段落
 
-| 情境 | 判斷條件 | 自動行動 | log action 類型 |
-|------|----------|----------|-----------------|
-| **新回覆 — 需排入 Backlog** | Issue 有新回覆 + 內容涉及新需求 / 問題回報 | invoke `backlog-management`，將需求排入 Backlog | `"reply"` |
-| **新回覆 — 內部 Issue 直接回覆** | Issue 有新回覆 + 屬於內部 Issue（無外部 stakeholder 參與）+ 可直接回應 | `gh issue comment` 直接回覆 | `"reply"` |
-| **無 label — 自動 Triage** | Issue 無任何 label（`labels` 為空陣列）| invoke `issue-management` triage；已有 label 的 Issue 不重複 triage（triage 冪等）| `"triage"` |
-| **awaiting-reply 超時 — 催促** | Issue 帶有 `awaiting-reply` label + 最後一則留言超過 24h | 自動留言催促；每 Issue 每天最多 1 次（催促冪等）| `"nudge"` |
-| **可修復 Issue — 自動派工**（#340） | Issue 有明確修復方向（`bug` 或 `sre-auto-debug` label）+ 非 stakeholder + 非 `awaiting-reply` | 標記為 actionable，回傳給主 loop（主 loop 負責 `SHOOT_FLAG` 併發控制）| `"auto-shoot"` |
+| 判斷 | 處置 | 行動 | log action 類型 |
+|------|------|------|-----------------|
+| **無 label** | **Triage** | `gh issue edit --add-label <label>` 自主加分類 label（AC-6），然後重新判斷此 Issue | `"triage"` |
+| **Size=S，改動明確** | **auto-shoot** | 標記為 actionable，回傳給主 loop 派 `/shoot` | `"auto-shoot"` |
+| **Size=M+，需設計或跨模組** | **排入 Sprint** | `gh issue edit --add-label sprint-candidate` | `"sprint-candidate"` |
+| **缺資訊，無法判斷** | **等待回覆** | `gh issue edit --add-label awaiting-reply` + 留言問誰要補什麼 | `"awaiting-reply"` |
+| **明確暫停** | **暫停** | `gh issue edit --add-label pending` + 留言說明暫停原因 | `"pending"` |
+| **已修復但未關** | **結案** | `gh issue close`（非 stakeholder、非 George 的 Issue） | `"close"` |
+| **stakeholder Issue** | **跳過** | 只記錄至 cruise log | `"skipped"` |
 
-**情境 3 詳細邏輯（無 label 自動 Triage）**：
+**Size 判斷標準**：
+- **Size=S**：單一檔案或少數檔案修改、修復方向明確、無需跨模組協調
+- **Size=M+**：需要 ADR、跨多個模組、涉及架構變更、需要多人討論
 
-```bash
-# 偽碼：無 label Issue → 觸發 issue-management triage（冪等）
-for each issue in issues:
-  if issue.labels is empty:           # 無 label → 需要 triage
-    # triage 冪等：避免重複觸發
-    invoke issue-management skill with action=triage, issue_number=issue.number
-    log action: "triage #<issue.number>"
-  # else: 已有 label，labels exist → skip triage，label.*exist.*skip.*triage 防護
-```
+**PO 自主加分類 label（AC-6）**：除了流程性 label（`stakeholder`）需人工決定，其餘分類 label（`research`、`enhancement`、`bug`、`feature-request` 等）PO 直接 `gh issue edit --add-label` 加上，不需「建議」等人操作。
 
-**情境 4 詳細邏輯（awaiting-reply 超時催促）**：
+### 處置決策偽碼（AC-1）
 
 ```bash
-# 偽碼：awaiting-reply 超時 → 催促（冪等，24h 上限）
-for each issue in issues:
-  if "awaiting-reply" in issue.labels:
-    comment_data = gh issue view issue.number -R ${OWNER_REPO} --json comments
-    last_comment = comment_data.comments[-1]   # 最後一則留言
-    hours_since_last = (now - last_comment.createdAt) in hours
-
-    # 冪等：最後一則留言若已是自動催促留言 → 重複催促跳過
-    if "[自動催促]" in last_comment.body:
-      skip  # 已是自動催促，不重複
-
-    # 頻率上限：每 Issue 每天最多催 1 次（最多 1 次，每 24h 重置）
-    if hours_since_last >= 24:
-      gh issue comment <issue.number> -R ${OWNER_REPO} --body "## [自動催促]
-
-此 Issue 標記為 awaiting-reply，超過 24h 未收到回覆，請確認狀態。
-
-- 催促時間：$(date '+%Y-%m-%dT%H:%M:%S')
-- Session: ${SESSION_ID}"
-      log action: "nudge #<issue.number>"
-```
-
-**情境 5 詳細邏輯（可修復 Issue 自動派工，#340）**：
-
-```bash
-# 偽碼：PO 巡邏判斷 actionable Issue → 回傳給主 loop
+# 偽碼：每個 open Issue 必須有處置結果，禁止跳過
 ACTIONABLE_ISSUES=()
+SPRINT_CANDIDATES=()
+
 for each issue in issues:
-  # 安全前置：stakeholder label → 跳過自動修復
+  # ── 安全前置 ──
   if "stakeholder" in issue.labels:
-    skip
+    log action: "skipped #<issue.number>: stakeholder-issue"
+    continue
 
-  # actionable 判斷標準（label-based，v1 簡潔設計）：
-  # 1. 有明確修復方向的 label（bug 或 sre-auto-debug）
-  # 2. 非 awaiting-reply（不等人回覆的才派工）
-  if ("bug" in issue.labels OR "sre-auto-debug" in issue.labels) \
-     AND "awaiting-reply" NOT in issue.labels:
+  # ── Step 1：無 label → 先 Triage（PO 自主加 label）──
+  if issue.labels is empty:
+    # PO 判斷 Issue 類型，直接加 label（AC-6）
+    gh issue edit issue.number -R ${OWNER_REPO} --add-label <判斷的 label>
+    log action: "triage #<issue.number>"
+    # 加完 label 後繼續判斷此 Issue（不跳過）
+
+  # ── Step 2：超時自動關閉（AC-4）──
+  if "awaiting-reply" in issue.labels OR "pending" in issue.labels:
+    label_added_at = issue.updatedAt  # 以最後更新時間近似
+    hours_since = (now - label_added_at) in hours
+    if hours_since >= 2:
+      gh issue close issue.number -R ${OWNER_REPO} \
+        --comment "## [自動關閉]
+
+此 Issue 標記為 $(label)，超過 2 小時未回應，自動關閉。
+如需重新開啟，請留言說明。
+
+- 關閉時間：$(date '+%Y-%m-%dT%H:%M:%S')
+- Session: ${SESSION_ID}"
+      log action: "auto-close #<issue.number>"
+      continue
+    else:
+      # 未超時，維持等待狀態（AC-1：仍須記錄處置結果，不靜默跳過）
+      log action: "waiting #<issue.number>: <hours_since>h elapsed"
+      continue
+
+  # ── Step 3：已修復未關 → 結案 ──
+  # 檢查是否有關聯 PR 已 merged
+  if issue 有關聯 PR 且 PR 已 merged:
+    if issue 非 George 的 Issue:
+      gh issue close issue.number -R ${OWNER_REPO} \
+        --comment "## [巡邏狀態：已修復] 關聯 PR 已合併，結案。"
+      log action: "close #<issue.number>"
+      continue
+
+  # ── Step 4：判斷 Size 決定 auto-shoot 或 sprint-candidate ──
+  if Size=S（單檔修改、修復方向明確、無需跨模組）:
     ACTIONABLE_ISSUES += issue.number
+    log action: "auto-shoot #<issue.number>"
+  else:  # Size=M+
+    gh issue edit issue.number -R ${OWNER_REPO} --add-label sprint-candidate
+    SPRINT_CANDIDATES += issue.number
+    log action: "sprint-candidate #<issue.number>"
 
-# 回傳結果中加入 actionable_issues 欄位
-# 主 loop 收到後依 auto-shoot 邏輯決定是否派工
+# 回傳結果
+# actionable_issues: 供主 loop auto-shoot 派遣
+# sprint_candidates: 供主 loop Sprint Planning 觸發判斷
 ```
 
-**actionable 優先序**（主 loop 從中選取第一個）：
-1. `sre-auto-debug` label（SRE 建立的 CI failure Issue，有 /systematic-debugging 指引）
-2. `bug` label（一般 bug）
+### Sprint Planning 觸發（AC-3）
+
+```bash
+# 偽碼：主 loop 收到 PO 結果後檢查 sprint-candidate 觸發條件
+SPRINT_CANDIDATE_COUNT = gh issue list -R ${OWNER_REPO} --label sprint-candidate --state open --json number | jq length
+OLDEST_CANDIDATE_AGE = 最早的 sprint-candidate Issue 的 updatedAt 距今分鐘數
+
+if SPRINT_CANDIDATE_COUNT >= 3:
+  echo "[CRUISE] sprint-candidate 已累積 ${SPRINT_CANDIDATE_COUNT} 個，觸發 Sprint Planning"
+  invoke shikigami:sprint-planning
+  log action: "trigger-sprint-planning (count=${SPRINT_CANDIDATE_COUNT})"
+elif SPRINT_CANDIDATE_COUNT >= 1 AND OLDEST_CANDIDATE_AGE >= 30:
+  echo "[CRUISE] sprint-candidate 超過 30 分鐘未新增，觸發 Sprint Planning"
+  invoke shikigami:sprint-planning
+  log action: "trigger-sprint-planning (timeout=30min)"
+```
+
+### Auto-shoot 連續派遣（AC-2，修正 #340）
+
+SHOOT_FLAG **只防併發，不防連續**。shoot 完成後立即檢查下一個 actionable，不等下一 cycle：
+
+```bash
+# 偽碼：shoot 完成後立即 re-check（在主 loop 內）
+while ACTIONABLE_ISSUES is not empty:
+  if SHOOT_FLAG 不存在:
+    ISSUE = ACTIONABLE_ISSUES.shift()  # 取出第一個
+    echo "$ISSUE" > SHOOT_FLAG
+    派遣 shoot agent（/shoot #${ISSUE}）
+    等待 shoot 完成
+    if shoot 成功:
+      rm -f SHOOT_FLAG
+      SHOOT_FAIL_COUNT[ISSUE] = 0
+      log: "auto-shoot-completed #${ISSUE} success"
+    else:
+      rm -f SHOOT_FLAG
+      SHOOT_FAIL_COUNT[ISSUE] += 1
+      if SHOOT_FAIL_COUNT[ISSUE] >= 2:  # AC-5：連續 2 次 fail → 升級
+        gh issue edit ${ISSUE} -R ${OWNER_REPO} --add-label sprint-candidate
+        log: "auto-shoot-escalated #${ISSUE} → sprint-candidate (2 consecutive failures)"
+      else:
+        log: "auto-shoot-completed #${ISSUE} failed (attempt ${SHOOT_FAIL_COUNT[ISSUE]})"
+  # 立即繼續下一個，不 sleep
+```
+
+**actionable 優先序**（從 ACTIONABLE_ISSUES 中排序）：
+1. `sre-auto-debug` label（CI failure，最緊急）
+2. `bug` label
+3. 其餘 Size=S Issue
 
 ### 留言語意狀態表（#340）
 
@@ -476,8 +539,9 @@ SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | t
   "strict": true,
   "threshold_days": <THRESHOLD_DAYS>,
   "summary": "掃描 <X> 個 open issues，發現 <Y> 個逾期，<Z> 個無回應",
-  "actions": ["reply #<N1>", "triage #<N2>", "nudge #<N3>", "push-delivery #<N4> → staging", "skipped #<N5>: stakeholder-issue", "auto-shoot #<N6>"],
-  "actionable_issues": [<issue_numbers>]
+  "actions": ["triage #<N1>", "auto-shoot #<N2>", "sprint-candidate #<N3>", "awaiting-reply #<N4>", "pending #<N5>", "close #<N6>", "auto-close #<N7>", "waiting #<N8>: Xh elapsed", "skipped #<N9>: stakeholder-issue"],
+  "actionable_issues": [<issue_numbers>],
+  "sprint_candidates": [<issue_numbers>]
 }
 ```
 
@@ -496,7 +560,7 @@ SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | t
 | 條件 | 行動 |
 |------|------|
 | Issue 有 `stakeholder` label | **只記錄**至 cruise log，不執行任何自動行動 |
-| Issue 無 `stakeholder` label | 正常執行自動行動決策表 |
+| Issue 無 `stakeholder` label | 正常執行 PO Issue 處置決策表 |
 
 **Log 格式**：
 
@@ -823,37 +887,40 @@ fi
 **單一 repo 模式**（`"repo"` 欄位仍存在，值為該 repo 的 owner/repo）：
 
 ```jsonl
-{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","repo":"KCTW/shikigami","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期，1 個無回應","actions":["reply #301","triage #310","nudge #312","auto-shoot #321"],"actionable_issues":[321]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","repo":"KCTW/shikigami","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，處置完畢","actions":["triage #301","auto-shoot #310","sprint-candidate #312","auto-close #315","waiting #320: 1h elapsed","skipped #321: stakeholder-issue"],"actionable_issues":[310],"sprint_candidates":[312]}
 {"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:05+0800","type":"sre-inspection","repo":"KCTW/shikigami","summary":"檢查 10 筆 CI run，發現 1 個 CI failure，建立 1 個 Issue","actions":["create-issue-with-debug #321"]}
-{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:06+0800","type":"auto-shoot-dispatched","repo":"KCTW/shikigami","issue":321}
-{"session_id":"abc123","cycle":2,"timestamp":"2026-03-21T11:00:08+0800","type":"auto-shoot-completed","repo":"KCTW/shikigami","issue":321,"result":"success"}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:10+0800","type":"auto-shoot-completed","repo":"KCTW/shikigami","cycle":1,"issue":310,"result":"success"}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:31:00+0800","type":"trigger-sprint-planning","repo":"KCTW/shikigami","reason":"count=3"}
 ```
 
 **多 repo 模式**（每個 repo 各一筆 log entry）：
 
 ```jsonl
-{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","repo":"KCTW/shikigami","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，發現 2 個逾期","actions":["reply #301","triage #310"]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:00+0800","type":"po-patrol","repo":"KCTW/shikigami","strict":false,"threshold_days":3,"summary":"掃描 15 個 open issues，處置完畢","actions":["triage #301","auto-shoot #310"],"actionable_issues":[310],"sprint_candidates":[]}
 {"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:02+0800","type":"sre-inspection","repo":"KCTW/shikigami","summary":"檢查 10 筆 CI run，無異常","actions":[]}
-{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:04+0800","type":"po-patrol","repo":"KCTW/project-x","strict":false,"threshold_days":3,"summary":"掃描 8 個 open issues，無異常","actions":[]}
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:04+0800","type":"po-patrol","repo":"KCTW/project-x","strict":false,"threshold_days":3,"summary":"掃描 8 個 open issues，處置完畢","actions":["sprint-candidate #50"],"actionable_issues":[],"sprint_candidates":[50]}
 {"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T10:30:06+0800","type":"sre-inspection","repo":"KCTW/project-x","summary":"檢查 5 筆 CI run，發現 1 個 failure","actions":["create-issue-with-debug #45"]}
 ```
 
-**PO 巡邏 actions 行動類型說明**：
+**PO 巡邏 actions 行動類型說明**（#343）：
 
 | 類型 | 說明 |
 |------|------|
-| `"reply"` | 新回覆判斷後執行（排入 Backlog 或直接回覆） |
-| `"triage"` | 無 label Issue 觸發 issue-management triage |
-| `"nudge"` | awaiting-reply 超時自動催促 |
-| `"push-delivery"` | PR merge 後推進交付鏈下一步 |
-| `"auto-shoot"` | 可修復 Issue 標記為 actionable，觸發主 loop 自動派工（#340） |
-| `"skipped"` | Stakeholder Issue 跳過自動行動（含 reason） |
+| `"triage"` | 無 label Issue，PO 自主加分類 label |
+| `"auto-shoot"` | Size=S Issue 標記為 actionable，供主 loop 連續派工 |
+| `"sprint-candidate"` | Size=M+ Issue，加 `sprint-candidate` label |
+| `"awaiting-reply"` | 缺資訊，加 `awaiting-reply` label + 留言 |
+| `"pending"` | 暫停，加 `pending` label + 留言 |
+| `"close"` | 已修復未關，結案 |
+| `"auto-close"` | `awaiting-reply`/`pending` 超過 2h 未回應，自動關閉（AC-4） |
+| `"waiting"` | `awaiting-reply`/`pending` 未超時，維持等待（AC-1 全覆蓋） |
+| `"skipped"` | Stakeholder Issue 跳過（含 reason） |
 
-**Auto-shoot log entry 類型說明**（#340，由主 loop 寫入）：
+**主 loop 寫入的 log entry 類型**（#343 修正 #340）：
 
 | 類型 | 說明 |
 |------|------|
-| `"auto-shoot-dispatched"` | 主 loop 已派遣 background shoot agent |
-| `"auto-shoot-skipped"` | 有 actionable Issue 但 shoot 正在進行中，跳過 |
-| `"auto-shoot-completed"` | shoot agent 完成，含 result（success/failed） |
-| `"auto-shoot-stale-cleared"` | SHOOT_FLAG 殘留超過 30 分鐘，強制清除（防死鎖） |
+| `"auto-shoot-completed"` | shoot 完成，含 result（success/failed） |
+| `"auto-shoot-escalated"` | 同一 Issue 連續 2 次 shoot fail，升級為 sprint-candidate（AC-5） |
+| `"auto-shoot-stale-cleared"` | SHOOT_FLAG 殘留超過 30 分鐘，強制清除 |
+| `"trigger-sprint-planning"` | sprint-candidate ≥ 3 或 1 個超過 30min，觸發 Sprint Planning（AC-3） |
