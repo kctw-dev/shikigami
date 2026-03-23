@@ -60,7 +60,7 @@ jobs:
     steps:
       # Step 1：checkout 目標 repo
       - name: Checkout target repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ inputs.target_repo }}
           token: ${{ secrets.GH_TOKEN }}
