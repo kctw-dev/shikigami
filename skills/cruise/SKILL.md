@@ -670,6 +670,84 @@ else
 fi
 ```
 
+### VM 數量變化查證
+
+> 發現 GCP VM 數量與上次巡檢不同時，必須查證原因，**禁止推測**。
+
+```bash
+# 前置判斷：確認 gcloud 可用
+if ! gcloud version 2>/dev/null; then
+  echo "[SRE] gcloud 不可用，跳過 MIG 查證"
+  # 不阻塞後續流程，直接跳過
+else
+  # 查詢 MIG autoscaler 狀態（MIG_NAME 由環境變數或 SRE config 帶入）
+  MIG_INFO=$(gcloud compute instance-groups managed describe "${MIG_NAME}" \
+    --format="yaml(autoscaler.recommendedSize,targetSize)" 2>/dev/null)
+
+  if [[ $? -ne 0 ]]; then
+    echo "[SRE] gcloud 不可用，跳過 MIG 查證"
+  else
+    RECOMMENDED_SIZE=$(echo "$MIG_INFO" | grep 'recommendedSize' | awk '{print $2}')
+    TARGET_SIZE=$(echo "$MIG_INFO" | grep 'targetSize' | awk '{print $2}')
+    PREVIOUS_VM_COUNT="${PREVIOUS_VM_COUNT:-$TARGET_SIZE}"  # fallback 至 targetSize
+
+    if [[ "$RECOMMENDED_SIZE" -lt "$PREVIOUS_VM_COUNT" ]]; then
+      # autoscaler 主動縮減 — 正常行為
+      echo "[SRE] VM 數量變化原因：autoscaler 縮減（正常）recommendedSize=${RECOMMENDED_SIZE} < 之前=${PREVIOUS_VM_COUNT}"
+      VM_HEALTH_STATUS="autoscaler-scale-in"
+      VM_HEALTH_NOTE="autoscaler 縮減（正常）：recommendedSize=${RECOMMENDED_SIZE}，之前 VM 數=${PREVIOUS_VM_COUNT}"
+    elif [[ "$RECOMMENDED_SIZE" -eq "$PREVIOUS_VM_COUNT" ]]; then
+      # recommendedSize 未變但 VM 少了 — SPOT 回收或故障（異常）
+      echo "[SRE] VM 數量變化原因：SPOT 回收或故障（異常）recommendedSize=${RECOMMENDED_SIZE} = 之前=${PREVIOUS_VM_COUNT}，但 VM 實際減少"
+      VM_HEALTH_STATUS="spot-preemption-or-failure"
+      VM_HEALTH_NOTE="SPOT 回收或故障（異常）：recommendedSize=${RECOMMENDED_SIZE}，之前 VM 數=${PREVIOUS_VM_COUNT}，實際 VM 數減少"
+      # 建立 Issue（異常情況）
+      ISSUE_TITLE="[SRE] VM 異常減少：${MIG_NAME}"
+      EXISTING=$(gh issue list -R ${OWNER_REPO} \
+        --search "\"${ISSUE_TITLE}\"" \
+        --state all \
+        --json number,title \
+        2>/dev/null || echo "[]")
+      if echo "$EXISTING" | jq -e '. | length > 0' &>/dev/null; then
+        echo "[SRE] 跳過重複 Issue：$ISSUE_TITLE"
+        log action: "跳過重複 Issue: ${ISSUE_TITLE}"
+      else
+        gh issue create -R ${OWNER_REPO} \
+          --title "$ISSUE_TITLE" \
+          --body "## SRE 巡檢發現 VM 異常減少
+
+**發現時間**：$(date '+%Y-%m-%dT%H:%M:%S')
+**Session**：${SESSION_ID}
+**MIG**：${MIG_NAME}
+**recommendedSize**：${RECOMMENDED_SIZE}
+**之前 VM 數**：${PREVIOUS_VM_COUNT}
+
+### 判斷依據
+- recommendedSize = 之前 VM 數 → autoscaler 未主動縮減
+- 但實際 VM 數減少 → 推測為 SPOT 回收或 VM 故障
+
+### 建議排查
+1. 確認 GCP Console MIG 事件記錄（preemption / health check fail）
+2. 確認 SPOT VM 回收通知
+3. 執行 \`/systematic-debugging\` 進行系統性排查
+
+> 此 Issue 由 SRE Cruise Agent 自動建立。請勿重複建立。" \
+          --label "sre,vm-anomaly,needs-triage"
+        log action: "create-issue-vm-anomaly #<new_issue_number>"
+      fi
+    fi
+  fi
+fi
+```
+
+**VM 查證結論分類**：
+
+| 情況 | 判斷條件 | 結論 | 行動 |
+|------|----------|------|------|
+| autoscaler 縮減 | `recommendedSize < 之前 VM 數` | 正常（autoscaler scale-in） | 記錄，不建 Issue |
+| SPOT 回收或故障 | `recommendedSize = 之前 VM 數` 但 VM 實際減少 | 異常 | 記錄 + 建 Issue |
+| gcloud 不可用 | `gcloud version` 失敗 | 跳過（不阻塞） | 記錄 `[SRE] gcloud 不可用，跳過 MIG 查證` |
+
 ### Warnings 掃描
 
 ```bash
@@ -686,6 +764,7 @@ gh run view <run_id> -R ${OWNER_REPO} --log 2>/dev/null | grep -i 'warning\|WARN
 | **CI failure** | CI run 結果為 failure / cancelled | 建 Issue + body 含 `/systematic-debugging` 指引 | `sre,sre-auto-debug,needs-triage` | `"create-issue-with-debug"` |
 | **Deploy failure** | deploy job 失敗（conclusion=failure，job name 含 deploy） | 建 Issue + body 含 @mention PO | `sre,deploy-failure,needs-triage` | `"create-issue-deploy"` |
 | **Runner offline** | runner status=offline（repo-level fallback） | 建 Issue | `sre,runner-offline,needs-triage` | `"create-issue-runner"` |
+| **VM 異常減少** | `recommendedSize = 之前 VM 數` 但 VM 實際減少 | 建 Issue + 記錄原因 + 證據 | `sre,vm-anomaly,needs-triage` | `"create-issue-vm-anomaly"` |
 
 ### CI failure → Issue + /systematic-debugging 指引
 
@@ -833,7 +912,14 @@ done
   "type": "sre-inspection",
   "repo": "<OWNER_REPO>",
   "summary": "檢查 <X> 筆 CI run，發現 <Y> 個 failure，建立 <Z> 個 Issue",
-  "actions": ["create-issue-with-debug #<N1>", "create-issue-deploy #<N2>", "create-issue-runner #<N3>", "跳過重複 Issue: <title>"]
+  "vm_health": {
+    "status": "autoscaler-scale-in | spot-preemption-or-failure | no-change | skipped",
+    "note": "<原因說明 + 證據>",
+    "previous_vm_count": <N>,
+    "current_vm_count": <N>,
+    "recommended_size": <N>
+  },
+  "actions": ["create-issue-with-debug #<N1>", "create-issue-deploy #<N2>", "create-issue-runner #<N3>", "create-issue-vm-anomaly #<N4>", "跳過重複 Issue: <title>"]
 }
 ```
 
@@ -844,6 +930,16 @@ done
 | `"create-issue-with-debug"` | CI failure 建 Issue + `/systematic-debugging` 指引（松耦合，不同步 debug） |
 | `"create-issue-deploy"` | Deploy failure 建 Issue + @mention PO |
 | `"create-issue-runner"` | Runner offline 建 Issue |
+| `"create-issue-vm-anomaly"` | VM 異常減少（SPOT 回收或故障）建 Issue + 原因 + 證據 |
+
+**vm_health.status 說明**：
+
+| 值 | 說明 |
+|---|------|
+| `"autoscaler-scale-in"` | autoscaler 主動縮減（正常），`recommendedSize < 之前 VM 數` |
+| `"spot-preemption-or-failure"` | SPOT 回收或 VM 故障（異常），`recommendedSize = 之前 VM 數` 但 VM 減少 |
+| `"no-change"` | VM 數量無變化，跳過查證 |
+| `"skipped"` | gcloud 不可用，跳過 MIG 查證（`[SRE] gcloud 不可用，跳過 MIG 查證`） |
 
 ---
 
