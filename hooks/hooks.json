@@ -48,7 +48,7 @@
           },
           {
             "type": "prompt",
-            "prompt": "如果 command 包含 'gh pr merge' 或 'pr merge'，請回覆以下提醒（否則回覆空字串）：\n\n[PR-MERGE-GATE] 合併前請確認以下審查已完成：\n1. pr-review-toolkit 三 agent 審查（code-reviewer / silent-failure-hunter / comment-analyzer）已執行且無 CRITICAL/HIGH？\n2. 外部獨立審查已 CONFIRM（或 doc-only 跳過）？\n3. CI/CD 雙審查 Gate（若有 .github/workflows 變更）已 PASS？\n\n若未完成，請先執行審查再合併。若確認已完成，可繼續合併。"
+            "prompt": "如果本次 Bash 工具的 command 欄位包含 'gh pr merge' 或 'pr merge'，請回覆以下提醒（否則不回覆任何內容）：\n\n[PR-MERGE-GATE] 合併前請確認以下審查已完成：\n1. pr-review-toolkit 三 agent 審查已執行且通過？（code-reviewer / silent-failure-hunter 無 CRITICAL/HIGH；comment-analyzer 無 Critical Issues）\n2. 外部獨立審查已 CONFIRM（或 doc-only 跳過）？\n3. CI/CD 雙審查 Gate（若有 .github/workflows 變更）已 PASS？\n\n若未完成，請先執行審查再合併。若確認已完成，可繼續合併。"
           }
         ]
       }
