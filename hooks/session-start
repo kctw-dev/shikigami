@@ -65,6 +65,13 @@ if [[ -f "$CHECKPOINT_FILE" ]]; then
   fi
 fi
 
+# ---------- ADR-030：OAuth Token Watchdog ----------
+# 偵測 Claude OAuth token 是否即將過期，輸出告警（靜默跳過不阻塞）
+WATCHDOG_SCRIPT="${PLUGIN_ROOT}/hooks/oauth-token-watchdog.sh"
+if [[ -f "$WATCHDOG_SCRIPT" ]]; then
+  bash "$WATCHDOG_SCRIPT" || true
+fi
+
 # ---------- Read scrum-master skill content ----------
 SKILL_FILE="${PLUGIN_ROOT}/skills/scrum-master/SKILL.md"
 
