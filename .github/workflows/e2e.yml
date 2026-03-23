@@ -43,11 +43,11 @@ jobs:
     steps:
       # ── 1. Checkout 原始碼 ──────────────────────────────────
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       # ── 2. 設定 Node.js 環境 ────────────────────────────────
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
@@ -73,7 +73,7 @@ jobs:
 
       # ── 6. 上傳測試結果 Artifact ───────────────────────────
       - name: Upload Playwright test report
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         # 無論測試成功或失敗，均上傳報告（方便排查問題）
         if: always()
         with:
@@ -83,7 +83,7 @@ jobs:
 
       # ── 7. 上傳 Playwright traces（失敗時）────────────────
       - name: Upload test traces on failure
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-traces-${{ github.ref_name }}
