@@ -23,9 +23,12 @@ jobs:
 
       - name: Install unzip
         run: |
-          if ! command -v unzip &>/dev/null; then
-            sudo apt-get install -y unzip
-          fi
+          # AC2: 已有 unzip 時靜默跳過
+          # AC1: 用 sudo -n 避免密碼互動卡住
+          # AC3: 無 unzip + 無 sudo 權限時 graceful fallback
+          command -v unzip > /dev/null 2>&1 || \
+            sudo -n apt-get install -y unzip 2>/dev/null || \
+            echo "unzip not available via sudo, proceeding anyway"
 
       - name: New Issue Intake
         uses: anthropics/claude-code-action@v1
