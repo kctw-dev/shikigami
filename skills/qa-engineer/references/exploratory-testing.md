@@ -9,7 +9,7 @@ QA Engineer 在 Sprint Review Demo 中主導「邊界案例測試」環節，補
 | 時機 | 職責 |
 |------|------|
 | **Sprint Review Demo 期間（Happy Path Demo 後）** | 主導執行邊界案例測試，使用本節清單選取測試輸入 |
-| **Demo 結束前** | 彙整並報告「邊界案例驗證結果」，格式參照 `skills/sprint-review/po-review-prompt.md §邊界案例驗證結果` |
+| **Demo 結束前** | 彙整並報告「邊界案例驗證結果」，格式參照 `skills/sprint-review/references/po-review-prompt.md §邊界案例驗證結果` |
 
 ### §5.2 常見邊界案例清單（Input Validation Matrix）
 
