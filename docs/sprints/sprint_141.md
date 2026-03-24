@@ -1,8 +1,8 @@
 ---
 sprint: 141
 start_date: 2026-03-25
-end_date: 2026-04-01
-status: in-progress
+end_date: 2026-03-25
+status: completed
 velocity_baseline: 5.3
 capacity: 5-6
 actual_capacity: 2
@@ -19,8 +19,8 @@ version_target: v0.95.0
 
 | Story | Issue | Type | Size | Points | 狀態 | Assignee |
 |-------|-------|------|------|--------|------|----------|
-| retro: watchdog-monitor.sh 閾值與 #408 AC 規格對齊（10 分鐘） | #646 | RETRO | S | 1 | TODO | Developer |
-| retro log 補完 — Retrospective_Log.md Sprint 98-140 條目聚合 | #647 | RETRO | S | 1 | TODO | Developer |
+| retro: watchdog-monitor.sh 閾值與 #408 AC 規格對齊（10 分鐘） | #646 | RETRO | S | 1 | DONE(#648) | Developer |
+| retro log 補完 — Retrospective_Log.md Sprint 98-140 條目聚合 | #647 | RETRO | S | 1 | DONE(#649) | Developer |
 
 **Sprint 容量**：2 pts（可用 Backlog 已完全選入；#643 人工阻塞排除在外）
 

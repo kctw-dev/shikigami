@@ -1,10 +1,22 @@
 {
-  "sprint": 140,
+  "sprint": 141,
+  "updated_at": "2026-03-24T23:19:20Z",
+  "session_id": "cron-20260325-065001",
   "stories": [
-    {"id": "#637", "status": "completed", "pr": "#640"},
-    {"id": "#405", "status": "completed", "pr": "#641"},
-    {"id": "#408", "status": "completed", "pr": "#642"}
+    {
+      "id": "646",
+      "title": "retro: watchdog-monitor.sh 閾值與 #408 AC 規格對齊（10 分鐘）",
+      "status": "completed",
+      "pr": 648,
+      "merged_at": "2026-03-24T23:19:20Z"
+    },
+    {
+      "id": "647",
+      "title": "retro log 補完 — Retrospective_Log.md Sprint 98-140 條目聚合",
+      "status": "completed",
+      "pr": 649,
+      "merged_at": "2026-03-24T23:19:20Z"
+    }
   ],
-  "current_step": "all-complete",
-  "updated_at": "2026-03-24T22:31+08:00"
+  "sprint_status": "completed"
 }

@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 141 啟動 — 2 Stories IN SPRINT）
-**當前 Sprint**：Sprint 141（進行中）
+**最後更新**：2026-03-25（Sprint 141 完成 — 2/2 Stories DONE）
+**當前 Sprint**：Sprint 141（已完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
@@ -15,15 +15,16 @@
 
 ---
 
-## Sprint 141（進行中）
+## Sprint 141（完成）
 
 > Sprint Goal：完成 Sprint 140 殘留改善項目 — watchdog 閾值精確對齊 AC 規格，並聚合 Sprint 98-140 Retrospective Log 確保知識庫完整性
-> **容量**：2 pts（可用 Backlog 完全選入）
+> **結果**：Goal 達成（2/2 Stories DONE）。Velocity 2 pts，完成率 100%。連續第 15 Sprint 100%（127-141）。
+> **容量**：2 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: watchdog-monitor.sh 閾值與 #408 AC 規格對齊（10 分鐘） | #646 | S | 1 | TODO |
-| retro log 補完 — Retrospective_Log.md Sprint 98-140 條目聚合 | #647 | S | 1 | TODO |
+| retro: watchdog-monitor.sh 閾值與 #408 AC 規格對齊（10 分鐘） | #646 | S | 1 | DONE(#648) |
+| retro log 補完 — Retrospective_Log.md Sprint 98-140 條目聚合 | #647 | S | 1 | DONE(#649) |
 
 ---
 
