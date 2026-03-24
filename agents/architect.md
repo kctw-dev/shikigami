@@ -95,3 +95,29 @@ color: blue
 - 與 SRE 合作部署架構
 - 與 PO 合作評估技術可行性
 - 與 Developer 確認設計實作細節
+
+## D3 辯論觸發條件（#403）
+
+<!-- #403 D3 Debate Framework — Sprint 133 -->
+
+在以下情境中，Architect 應主動觸發 D3 Debate 結構化辯論：
+
+| 情境 | 觸發條件 |
+|------|---------|
+| **技術方案有 2+ 候選** | 各方案有明確取捨（Effort、風險、維護成本不同），且無明顯最優解 |
+| **重大架構決策** | 涉及多個模組邊界調整，或長期影響系統演進路徑（ADR 形成前置） |
+| **M/L Story 技術分歧** | Story Size = M 或 L，且 Refinement 階段已識別技術分歧點 |
+| **Sprint Review 缺陷根因爭議** | 缺陷根因分析產生多方不一致論點 |
+
+觸發方式：
+
+```
+invoke shikigami:debate
+```
+
+或在技術評估報告（Architect Evaluation）中描述候選方案，框架自動識別並引用 D3 流程。
+
+**Jury 職責**：在 D3 Deliberate 階段，Architect 擔任 Jury，負責：
+- 對各方案進行成本評估（Story Points）
+- 分析技術風險等級（Low / Med / High）
+- 提供技術取捨矩陣，輔助 Judge（Scrum Master）做最終裁決
