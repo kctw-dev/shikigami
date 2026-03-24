@@ -5,8 +5,8 @@
     {"id": "#610", "status": "completed", "pr": "#612"},
     {"id": "#609", "status": "completed", "pr": "#613"},
     {"id": "#600", "status": "completed", "pr": "#614"},
-    {"id": "#406", "status": "pending"}
+    {"id": "#406", "status": "completed", "pr": "#615"}
   ],
-  "current_step": "batch2-start",
-  "updated_at": "2026-03-24T19:58+08:00"
+  "current_step": "all-complete",
+  "updated_at": "2026-03-24T20:03+08:00"
 }

@@ -18,7 +18,7 @@
 | retro: Workflow issue body 應使用 --body-file 模式避免 YAML 特殊字符衝突 | #610 | S | 1 | 已完成 (#612) |
 | retro: 新增 GitHub Actions workflow YAML lint CI 步驟 | #609 | S | 1 | 已完成 (#613) |
 | [SRE] CI 持續失敗：New Issue Intake 401 Invalid bearer token | #600 | S | 1 | 已完成 (#614) |
-| feat: Schema 先行 — API Contract 統一定義 | #406 | M | 2 | 待執行 |
+| feat: Schema 先行 — API Contract 統一定義 | #406 | M | 2 | 已完成 (#615) |
 
 **Sprint 容量**：6 points
 **執行順序**：ADR Phase（#601）→ Batch 1（#610 | #609 平行，完成後 #600）→ Batch 2（#406 序列）
