@@ -1,6 +1,6 @@
 ---
 name: health-check
-description: "Use when checking framework health, diagnosing configuration issues, or verifying structural integrity"
+description: "Use when checking Shikigami framework health — file integrity, CI status, ADR consistency, version sync, or retro action staleness diagnostics"
 ---
 
 # Health Check — 框架自我診斷

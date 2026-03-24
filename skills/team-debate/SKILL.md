@@ -1,6 +1,6 @@
 ---
 name: team-debate
-description: "Use when a Developer Story requires peer critique from an independent Critic Agent after implementation"
+description: "Use when a M/L size Story completes implementation and needs independent peer critique from a Critic Agent before PR merge"
 ---
 
 # Team Debate — 同職能雙 Agent 交替批判機制

@@ -1,6 +1,6 @@
 ---
 name: performance-dashboard
-description: "Use when generating team performance reports from attendance, exploration, and meeting summaries"
+description: "Use when generating AI team performance dashboards — attendance hours, exploration logs, meeting summaries, and Sprint velocity metrics"
 requiredTools:
   - Read
   - Glob

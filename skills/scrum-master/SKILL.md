@@ -1,6 +1,6 @@
 ---
 name: scrum-master
-description: "Use when routing user intent to the appropriate Shikigami workflow — central dispatcher that analyzes requests and delegates to specialized skills"
+description: "Use when Shikigami needs to route a request to the right workflow — dispatches to sprint, backlog, architecture, QA, or other specialized skills"
 ---
 
 # Scrum Master — 核心調度
