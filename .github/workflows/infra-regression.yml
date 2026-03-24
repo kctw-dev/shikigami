@@ -1,0 +1,79 @@
+name: INFRA Regression Tests
+
+# AC3：INFRA 回歸測試可在 CI pipeline 中自動執行
+# 關聯 Story：#495（INFRA 回歸測試案例實作）
+# 父 Story：#452（INFRA 自動化回歸測試框架）
+#
+# 觸發時機：
+#   - PR 合併至 main 時（自動回歸）
+#   - 手動觸發（workflow_dispatch）
+#   - push 至 main（保護主分支）
+#
+# 執行內容：
+#   - tests/test-infra-regression.sh（INFRA 回歸測試套件）
+#   - scripts/validate-ci-versions.sh（CI Actions 版本釘定驗證）
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/**"
+      - "scripts/ci-health-check.sh"
+      - "scripts/validate-ci-versions.sh"
+      - "tests/test-infra-regression.sh"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/**"
+      - "scripts/ci-health-check.sh"
+      - "scripts/validate-ci-versions.sh"
+      - "tests/test-infra-regression.sh"
+  workflow_dispatch:
+    inputs:
+      infra_test_level:
+        description: "測試層級（smoke / unit / integration / all）"
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - smoke
+          - unit
+          - integration
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  infra-regression:
+    name: "INFRA Regression Tests"
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    env:
+      # 安全：choice input 透過 env 傳遞，避免直接插值至 run: 指令
+      INPUT_TEST_LEVEL: ${{ inputs.infra_test_level || 'all' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install unzip（確保測試環境具備 unzip — #442 回歸驗證前置）
+        run: |
+          if ! command -v unzip > /dev/null 2>&1; then
+            sudo apt-get install -y unzip
+          fi
+
+      - name: Run INFRA regression tests
+        run: |
+          INFRA_TEST_LEVEL="${INPUT_TEST_LEVEL}" bash tests/test-infra-regression.sh
+        env:
+          CI: "true"
+
+      - name: Run CI Actions version validation（#424 釘定規範驗證）
+        run: bash scripts/validate-ci-versions.sh

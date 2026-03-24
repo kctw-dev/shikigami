@@ -181,7 +181,7 @@ assert_output_contains() {
 
 # ── 測試套件開始 ──────────────────────────────────────────────────────────────
 
-echo "=== INFRA Regression Test Suite（#494）==="
+echo "=== INFRA Regression Test Suite（#494/#495）==="
 echo "  REPO_ROOT: ${REPO_ROOT}"
 echo "  INFRA_TEST_LEVEL: ${INFRA_TEST_LEVEL}"
 echo ""
@@ -362,6 +362,224 @@ if should_run "integration"; then
   fi
 else
   skip "I-2: GitHub App 安裝驗證（level=integration）"
+fi
+
+echo ""
+
+# ============================================================================
+# [UNIT] U-3：#423 OIDC token exchange 配置驗證（AC2a）
+# 關聯 Story：#423（GitHub App 安裝驗證 / OIDC token exchange）
+# 側重：CI workflow 是否正確配置 id-token 權限（OIDC token exchange 前置條件）
+# ============================================================================
+
+echo "--- [UNIT] U-3：#423 OIDC token exchange 配置驗證 ---"
+
+if should_run "unit"; then
+  INTAKE_WORKFLOW="${REPO_ROOT}/.github/workflows/new-issue-intake.yml"
+
+  if [[ -f "${INTAKE_WORKFLOW}" ]]; then
+    # AC2a：OIDC token exchange 需要 id-token: write 權限
+    assert_contains "${INTAKE_WORKFLOW}" \
+      "id-token.*write|id-token:.*write" \
+      "U-3a: new-issue-intake.yml 含 id-token: write 權限（OIDC 前置條件）" \
+      "#423" \
+      "在 new-issue-intake.yml 的 permissions 區塊加入 id-token: write，以啟用 OIDC token exchange"
+
+    # AC2a：workflow 包含 claude-code-action（OIDC token 消費方）
+    assert_contains "${INTAKE_WORKFLOW}" \
+      "anthropics/claude-code-action|claude.*oauth.*token|CLAUDE_CODE_OAUTH_TOKEN" \
+      "U-3b: new-issue-intake.yml 包含 Claude OAuth token 使用步驟" \
+      "#423" \
+      "確認 new-issue-intake.yml 中 claude-code-action 步驟仍使用 CLAUDE_CODE_OAUTH_TOKEN"
+
+    # AC2a：permissions 區塊存在（防止意外移除整段 permissions）
+    assert_contains "${INTAKE_WORKFLOW}" \
+      "^[[:space:]]*permissions:" \
+      "U-3c: new-issue-intake.yml 含 permissions 區塊（最小權限原則）" \
+      "#423" \
+      "確認 new-issue-intake.yml 保有明確的 permissions 區塊，避免預設 permissions 過寬"
+  else
+    skip "U-3: new-issue-intake.yml 不存在，跳過 OIDC 配置驗證"
+  fi
+else
+  skip "U-3: OIDC token exchange 配置（level=unit）"
+fi
+
+echo ""
+
+# ============================================================================
+# [UNIT] U-4：#442 unzip 修復深度回歸驗證（AC2b）
+# 關聯 Story：#442（unzip 可用性修復）
+# 側重：回歸驗證 — 確認修復後的 idempotent 安裝邏輯未退化
+# 與 test-442-ci-unzip-fix.sh 區分：本測試著重「修復後的行為結構是否保持正確」
+# ============================================================================
+
+echo "--- [UNIT] U-4：#442 unzip 修復深度回歸驗證 ---"
+
+if should_run "unit"; then
+  INTAKE_WORKFLOW="${REPO_ROOT}/.github/workflows/new-issue-intake.yml"
+
+  if [[ -f "${INTAKE_WORKFLOW}" ]]; then
+    # AC2b：冪等安裝：先檢查 unzip 是否存在，再決定是否安裝
+    assert_contains "${INTAKE_WORKFLOW}" \
+      "command -v unzip|which unzip" \
+      "U-4a: CI workflow unzip 安裝步驟包含冪等檢查（command -v unzip）" \
+      "#442" \
+      "確認 new-issue-intake.yml 中 unzip 安裝前有 'if ! command -v unzip' 冪等判斷，防止每次都重新安裝"
+
+    # AC2b：使用 apt-get 安裝（不依賴外部下載站台）
+    assert_contains "${INTAKE_WORKFLOW}" \
+      "apt-get install.*-y.*unzip|apt-get install.*unzip.*-y" \
+      "U-4b: CI workflow 使用 apt-get install -y unzip（非外部依賴）" \
+      "#442" \
+      "確認 new-issue-intake.yml 使用 'apt-get install -y unzip'，不依賴 busybox.net 或其他外部站台"
+
+    # AC2b：確認沒有 sudo -n（#464 修復後的退化檢查）
+    # #464 曾引入 sudo -n 導致靜默失敗，本測試確保此退化不再出現
+    # 注意：僅檢查非註解行（排除 # 開頭的說明行）
+    if grep -vE "^[[:space:]]*#" "${INTAKE_WORKFLOW}" 2>/dev/null | grep -qE "sudo[[:space:]]+-n[[:space:]]"; then
+      fail "U-4c: CI workflow 不含 sudo -n（已知靜默失敗根因）" \
+        "發現 sudo -n 用法（非註解行），此為 #464 引入的已知靜默失敗根因，#442/#472 已修復" \
+        "#442" \
+        "移除 workflow 中的 sudo -n，改用 sudo apt-get install -y unzip（無 -n flag）"
+    else
+      pass "U-4c: CI workflow 不含 sudo -n（已知靜默失敗根因）"
+    fi
+  else
+    skip "U-4: new-issue-intake.yml 不存在，跳過 unzip 深度回歸驗證"
+  fi
+else
+  skip "U-4: unzip 修復深度回歸（level=unit）"
+fi
+
+echo ""
+
+# ============================================================================
+# [INTEGRATION] I-3：#424 validate-ci-versions.sh 實際執行驗證（AC2c）
+# 關聯 Story：#424（Node.js 20 遷移 / CI Actions 版本釘定）
+# 側重：結合現有 validate-ci-versions.sh，驗證 CI Actions 版本符合釘定規範
+# ============================================================================
+
+echo "--- [INTEGRATION] I-3：#424 CI Actions 版本釘定實際執行驗證 ---"
+
+if should_run "integration"; then
+  VALIDATE_CI="${REPO_ROOT}/scripts/validate-ci-versions.sh"
+
+  if [[ -f "${VALIDATE_CI}" ]]; then
+    # AC2c：實際執行 validate-ci-versions.sh，驗證目前 workflows 均符合版本規範
+    VALIDATE_OUTPUT=$(CI_VERSIONS_REPO_ROOT="${REPO_ROOT}" bash "${VALIDATE_CI}" 2>&1)
+    VALIDATE_EXIT=$?
+
+    if [[ $VALIDATE_EXIT -eq 0 ]]; then
+      pass "I-3a: validate-ci-versions.sh 執行通過（所有 Actions 版本符合規範）"
+    else
+      fail "I-3a: validate-ci-versions.sh 執行失敗（發現不符合規範的 Actions 版本）" \
+        "validate-ci-versions.sh 回傳非零 exit code（${VALIDATE_EXIT}）" \
+        "#424" \
+        "執行 bash scripts/validate-ci-versions.sh 查看詳細報告，並依 CLAUDE.md 第 10 條更新 Actions 版本至允許清單版本"
+    fi
+
+    # AC2c：輸出包含 PASS 字串（確認腳本輸出格式穩定）
+    assert_output_contains "${VALIDATE_OUTPUT}" \
+      "PASS|結果：PASS" \
+      "I-3b: validate-ci-versions.sh 輸出包含 PASS 結果字串" \
+      "#424" \
+      "確認 validate-ci-versions.sh 在版本合規時輸出 PASS 狀態，格式未被改動"
+
+    # AC2c：確認至少掃描到 3 個 workflow 檔案（防止 workflows 目錄被清空的回歸）
+    assert_output_contains "${VALIDATE_OUTPUT}" \
+      "e2e\.yml|new-issue-intake\.yml|sprint-dispatch\.yml" \
+      "I-3c: validate-ci-versions.sh 掃描到預期的 workflow 檔案" \
+      "#424" \
+      "確認 .github/workflows/ 中的三個核心 workflow 檔案均存在且被掃描"
+  else
+    skip "I-3: validate-ci-versions.sh 不存在，跳過版本釘定執行驗證"
+  fi
+else
+  skip "I-3: CI Actions 版本釘定實際執行（level=integration）"
+fi
+
+echo ""
+
+# ============================================================================
+# [INTEGRATION] I-4：#423 GitHub App 安裝 — OIDC token 端對端結構驗證（AC2a）
+# 關聯 Story：#423（GitHub App 安裝驗證 / OIDC token exchange）
+# 側重：ci-health-check.sh 中 GitHub App 偵測邏輯的完整端對端結構
+# ============================================================================
+
+echo "--- [INTEGRATION] I-4：#423 OIDC token 端對端結構驗證 ---"
+
+if should_run "integration"; then
+  HEALTH_SCRIPT="${REPO_ROOT}/scripts/ci-health-check.sh"
+
+  if [[ -f "${HEALTH_SCRIPT}" ]]; then
+    # AC2a：健康檢查腳本呼叫 GitHub API installation endpoint
+    assert_contains "${HEALTH_SCRIPT}" \
+      "repos/.*installation|/installation" \
+      "I-4a: ci-health-check.sh 使用 /repos/{owner}/{repo}/installation API endpoint" \
+      "#423" \
+      "確認 ci-health-check.sh 呼叫 GitHub API '/repos/\$repo_slug/installation' 偵測 App 安裝狀態"
+
+    # AC2a：健康檢查腳本能辨識 404（App 未安裝）vs 401/403（認證問題）
+    assert_contains "${HEALTH_SCRIPT}" \
+      "404|Not Found" \
+      "I-4b: ci-health-check.sh 能辨識 404（GitHub App 未安裝）" \
+      "#423" \
+      "確認 ci-health-check.sh 對 GitHub API 404 回應有明確處理（App 未安裝）"
+
+    assert_contains "${HEALTH_SCRIPT}" \
+      "401|403|Unauthorized|Forbidden" \
+      "I-4c: ci-health-check.sh 能辨識 401/403（認證不足）" \
+      "#423" \
+      "確認 ci-health-check.sh 對 GitHub API 401/403 回應有明確處理（認證問題與安裝問題區分）"
+  else
+    skip "I-4: ci-health-check.sh 不存在，跳過 OIDC 端對端結構驗證"
+  fi
+else
+  skip "I-4: OIDC token 端對端結構（level=integration）"
+fi
+
+echo ""
+
+# ============================================================================
+# [SMOKE] S-3：AC3 CI pipeline 整合驗證（#495 AC3）
+# 關聯 Story：#495（INFRA 回歸測試案例實作與 CI 整合）
+# 側重：確認 INFRA 回歸測試有對應的 GitHub Actions workflow，可被 CI 觸發
+# ============================================================================
+
+echo "--- [SMOKE] S-3：AC3 CI pipeline 整合驗證 ---"
+
+if should_run "smoke"; then
+  INFRA_CI_WORKFLOW="${REPO_ROOT}/.github/workflows/infra-regression.yml"
+
+  assert_file_exists "${INFRA_CI_WORKFLOW}" \
+    "S-3a: .github/workflows/infra-regression.yml 存在（AC3 CI 整合）" \
+    "#495"
+
+  if [[ -f "${INFRA_CI_WORKFLOW}" ]]; then
+    # 確認 CI workflow 觸發 INFRA regression 測試
+    assert_contains "${INFRA_CI_WORKFLOW}" \
+      "test-infra-regression\.sh" \
+      "S-3b: CI workflow 包含 test-infra-regression.sh 執行步驟" \
+      "#495" \
+      "確認 infra-regression.yml 中包含執行 tests/test-infra-regression.sh 的步驟"
+
+    # 確認 CI workflow 有 push/pull_request 觸發（自動回歸）
+    assert_contains "${INFRA_CI_WORKFLOW}" \
+      "pull_request|push" \
+      "S-3c: CI workflow 包含 push/pull_request 自動觸發條件" \
+      "#495" \
+      "確認 infra-regression.yml 在 push 或 pull_request 時自動觸發，實現持續回歸"
+
+    # 確認 CI workflow 使用 @v4 Actions（版本釘定）
+    assert_contains "${INFRA_CI_WORKFLOW}" \
+      "actions/checkout@v4" \
+      "S-3d: CI workflow Actions 版本符合釘定規範（actions/checkout@v4）" \
+      "#424" \
+      "確認 infra-regression.yml 使用 actions/checkout@v4（CLAUDE.md 第 10 條）"
+  fi
+else
+  skip "S-3: CI pipeline 整合驗證（level=smoke）"
 fi
 
 echo ""
