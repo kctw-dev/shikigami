@@ -48,6 +48,57 @@ Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義�
 
 ---
 
+## Schema Contract 定義（ADR-036，#406 Schema 先行）
+
+<!-- ADR-036 Schema-first API Contract — Sprint 136 #406 -->
+
+**觸發條件**：Story AC 涉及 Agent-to-Agent 資料交換、function calling 介面、或 HTTP REST API 文件時，Architect 必須在技術評估中產出對應的 Schema Contract。
+
+### Schema Contract 輸出規則
+
+| Story 涉及場景 | 格式 | 輸出路徑 |
+|--------------|------|---------|
+| Agent function calling / A2A 資料交換 | JSON Schema（Draft 2020-12，`.json`）| `docs/schema/sprint-<N>/<story-id>-<description>.json` |
+| HTTP REST API 文件 | OpenAPI 3.0（`.yaml`）| `docs/schema/sprint-<N>/<story-id>-<description>.yaml` |
+| 不確定場景 | JSON Schema（預設）| 同上 |
+| RESEARCH / DESIGN / doc-only Story | 豁免，不需產出 | — |
+
+**命名規範（kebab-case）**：
+- 目錄與檔名均使用 kebab-case（全小寫，連字號分隔）
+- 前綴為 Story ID（如 `406-gad-agent-contract.json`）
+- 詳見 `docs/schema/README.md`
+
+### Schema Contract 生命週期
+
+| 狀態 | 說明 | 時機 |
+|------|------|------|
+| `draft` | 起草中 | Architect 技術評估時建立 |
+| `review` | 審查中 | Sprint Planning 期間 |
+| `locked` | 凍結（不可修改）| Architect 完成技術評估後，移至 `docs/schema/locked/` |
+
+**鎖定動作**：Architect 完成技術評估後，將本 Sprint 涉及的 Contract 複製至 `docs/schema/locked/`，並在 `sprint_N.md` 新增「Schema Contracts」區塊記錄 locked 路徑。
+
+### Sprint_N.md 記錄格式
+
+```markdown
+## Schema Contracts（ADR-036 Schema 先行）
+
+| Contract | 路徑 | 狀態 | 使用 Story |
+|---------|------|------|-----------|
+| {描述} | docs/schema/locked/{filename} | locked | #{N} |
+```
+
+### 技術評估輸出表格（新增 Schema Contract 欄位）
+
+```markdown
+| Story | T-shirt | ADR 需求 | API 契約 | Schema Contract | Related SDDs | 說明 |
+|-------|---------|---------|---------|----------------|-------------|------|
+| US-#N | M | 無需 ADR | **有** | docs/schema/sprint-N/N-desc.json（draft）| — | {說明} |
+| US-#M | S | 無需 ADR | **不適用** | 豁免（RESEARCH）| — | doc-only |
+```
+
+---
+
 ## 平行分群建議
 
 <!-- #451 並行安全規則矩陣 — Sprint 123 -->
