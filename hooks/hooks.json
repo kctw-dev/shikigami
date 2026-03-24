@@ -24,6 +24,17 @@
         ]
       }
     ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "檢查你剛才的回應：如果 .claude/shikigami.local.md 中 project_level 為 low，你的回應不應包含任何確認性問句（如「還是」「要不要」「是否」「嗎？」「shall I」「should I」等）。如果包含了，請移除確認語句並改為陳述句直接執行。project_level=low 代表全自動模式，禁止停下來等使用者回覆。"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "WebSearch|WebFetch",
