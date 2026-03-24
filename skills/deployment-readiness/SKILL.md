@@ -117,7 +117,7 @@ Checklist 中任一項目未勾選，不得執行部署。
 
 ---
 
-## 9. Hard Gates
+## 6. Hard Gates
 
 <HARD-GATE>
 不可修改業務邏輯——業務邏輯變更屬於 Architect 權限範疇。
@@ -136,7 +136,7 @@ Toil（重複性手動操作）不得超過 50% 工時。
 
 ---
 
-## 10. 與其他 Skill 的關係
+## 7. 與其他 Skill 的關係
 
 | 情境 | 觸發 |
 |------|------|
@@ -148,7 +148,7 @@ Toil（重複性手動操作）不得超過 50% 工時。
 
 ---
 
-## 11. CI/CD 環境偵測
+## 8. CI/CD 環境偵測
 
 > **詳細步驟**：見 `references/cicd-detection.md`（self-hosted runner 警示、偵測步驟、決策規則）
 
@@ -156,20 +156,20 @@ SRE subagent 於部署就緒檢查期間掃描 `.github/workflows/` runner 配�
 
 ---
 
-## 15. Deploy Board — 部署狀態看板
+## 9. Deploy Board — 部署狀態看板
 
 **新增於**：Sprint 90（US-246，CI/CD Deploy 通知 Workflow）
 
 Deploy Board 是 GitHub Issue 形式的部署狀態看板，追蹤 Staging/Production × Backend/Frontend/E2E 共 6 格的即時狀態，由 `deploy-notify.yml` workflow 自動更新。
 
-### 15.1 Deploy Board 模板參照
+### 9.1 Deploy Board 模板參照
 
 | 模板 | 路徑 | 用途 |
 |------|------|------|
 | Deploy 通知 Workflow | `docs/templates/deploy-notify.yml` | CI workflow，監聽 deploy workflow 完成並自動更新 Board |
 | Deploy Board 初始化腳本 | `docs/templates/deploy-board-init.sh` | 一次性腳本，建立 6 格看板 Issue |
 
-### 15.2 部署前設定步驟
+### 9.2 部署前設定步驟
 
 1. 執行 `docs/templates/deploy-board-init.sh` 初始化 Deploy Board Issue
 2. 將輸出的 Issue 編號設定為 Repository Variable `DEPLOY_BOARD_ISSUE_NUMBER`
@@ -178,7 +178,7 @@ Deploy Board 是 GitHub Issue 形式的部署狀態看板，追蹤 Staging/Produ
 
 > **注意**：`workflow_run` 觸發的 context 不提供 `contents:read` 權限，因此 deploy-notify.yml **不可進行 checkout**。Board 更新操作直接透過 `gh` CLI 完成。
 
-### 15.3 已知陷阱（來自 CloneAI Sprint 73-74 實戰）
+### 9.3 已知陷阱（來自 CloneAI Sprint 73-74 實戰）
 
 | 陷阱 | 說明 | 解法 |
 |------|------|------|

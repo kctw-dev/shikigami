@@ -129,13 +129,13 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 
 ---
 
-## 13. 複雜度預算機制（#462）
+## 8. 複雜度預算機制（#462）
 
 詳見 [references/complexity-budget.md](./references/complexity-budget.md)。
 
 ---
 
-## 12. SBE 範例體系（Specification by Example）
+## 9. SBE 範例體系（Specification by Example）
 
 Sprint Planning 流程中的業務規則以 SBE 範例作為 ground truth，格式標準與相關文件：
 
