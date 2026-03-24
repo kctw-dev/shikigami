@@ -1,0 +1,32 @@
+name: YAML Lint
+
+# Sprint 136 #609 retro: 新增 GitHub Actions workflow YAML lint CI 步驟
+# 防止 workflow YAML parse error 進入 main branch（Sprint 135 歷史案例 #597）
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+jobs:
+  yamllint:
+    name: Lint GitHub Actions Workflows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Run yamllint on workflows
+        run: |
+          yamllint \
+            -d '{extends: default, rules: {line-length: {max: 200}, truthy: {allowed-values: ["true", "false", "on", "off"]}, comments: {min-spaces-from-content: 1}}}' \
+            .github/workflows/*.yml
+          echo "[YAMLLINT-PASS] All workflow YAML files passed lint"
