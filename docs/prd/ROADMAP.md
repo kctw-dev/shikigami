@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-23（Sprint 118 完成 — Sprint Execution 流程重構落地 + v0.82.0）
+> 最後更新：2026-03-24（Sprint 134 完成 — Retro Actions 落地 + Security Gate + Conflict Prediction + v0.89.7）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.82.0**（Sprint 118）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.89.7**（Sprint 134）。
 
 | 版號 | 含義 |
 |------|------|
