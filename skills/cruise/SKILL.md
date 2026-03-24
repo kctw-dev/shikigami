@@ -139,22 +139,41 @@ echo "[CRUISE] Loop Mode 啟動（Session: ${SESSION_ID}，間隔: ${INTERVAL}�
 echo "[CRUISE] 停止指令：/cruise stop"
 ```
 
-### 4.2 建立 Sprint Stories Task List（#513）
+### 4.2 建立 Sprint Stories Task List（#513 / #538）
 
-為當前 Sprint 中每個 Story 建立一個 Task，追蹤其在 Cruise 期間的進度。
+為當前 Cruise Cycle 建立一個 Task，追蹤進度並支援 compact 後恢復。同時為每個 in-sprint Story 建立追蹤 Task。
+
+**Task 命名格式（#538 AC1）**：`{repo}/cruise-cycle-{N}`
+
+其中 `{repo}` = `OWNER_REPO`（如 `kctw-dev/shikigami`），`{N}` = `CYCLE` 編號（從 1 開始）。
 
 ```
+# 清理上一 cycle 的殘留 Task（#538 AC5）
+# 查詢並刪除前一個 cycle 的 Task（若存在）
+PREV_CYCLE=$((CYCLE - 1))
+if [[ $PREV_CYCLE -gt 0 ]]; then
+  OLD_TASKS=$(TaskList | filter subject matches "${OWNER_REPO}/cruise-cycle-${PREV_CYCLE}")
+  for OLD_TASK in OLD_TASKS:
+    TaskUpdate id=OLD_TASK.id status="completed"
+    # 標記完成以保留記錄（不刪除，避免 TaskList API 無 delete 方法時出錯）
+fi
+
+# 建立本 cycle 的 Cruise Task
+TaskCreate subject="${OWNER_REPO}/cruise-cycle-${CYCLE}" status="in-progress"
+
 # 查詢當前 Sprint 的 Stories
 SPRINT_STORIES=$(gh issue list -R ${OWNER_REPO} --label "status: in-sprint" --json number,title)
 
 # 每個 Story 建立一個 Task（task 數量上限：取決於 Claude Task 工具上限，通常 50 個）
 for STORY in SPRINT_STORIES:
-  TaskCreate subject="Story #${STORY.number}: ${STORY.title}" status="pending"
+  TaskCreate subject="${OWNER_REPO}/cruise-cycle-${CYCLE}/#${STORY.number}" status="pending"
 
-# 若無 Story，建立一個 placeholder Task 避免 TaskList 為空
-if SPRINT_STORIES is empty:
-  TaskCreate subject="cruise-session-${SESSION_ID}" status="in-progress"
+# 若無 Story，Cruise Task 本身即為 placeholder
 ```
+
+**Task 命名範例**：
+- `kctw-dev/shikigami/cruise-cycle-3`（本次 cycle 主 Task）
+- `kctw-dev/shikigami/cruise-cycle-3/#538`（Story 追蹤 Task）
 
 **Task 狀態對應**：
 
@@ -165,11 +184,13 @@ if SPRINT_STORIES is empty:
 | shoot 成功完成 | `completed` |
 | shoot 失敗升級 | `failed` |
 
-**compact 後恢復**：查詢 TaskList，找出所有 `in-progress` 或 `pending` 的 Story Task，從中繼續執行。
+**compact 後恢復（#538 AC4）**：查詢 TaskList，以 `{repo}/cruise-cycle-` 為前綴找出 `in-progress` 的 Cycle Task，從中萃取 `CYCLE` 編號並繼續執行。
 
 ```
 # compact 恢復邏輯
-PENDING_STORIES=$(TaskList | filter status in ["pending", "in-progress"])
+ACTIVE_CYCLE_TASK=$(TaskList | filter subject starts_with "${OWNER_REPO}/cruise-cycle-" AND status="in-progress" | first)
+CYCLE=$(extract N from ACTIVE_CYCLE_TASK.subject)  # 從 "repo/cruise-cycle-N" 取出 N
+PENDING_STORIES=$(TaskList | filter subject starts_with "${OWNER_REPO}/cruise-cycle-${CYCLE}/#" AND status in ["pending", "in-progress"])
 ACTIONABLE_ISSUES = PENDING_STORIES.map(task => extract story_number from task.subject)
 ```
 

@@ -106,11 +106,27 @@ Sprint Execution 開始前，依 Story AC 載入相關共用交付合約：
 
 ---
 
-## 2.13 Sprint Task List — compact 後進度恢復（#469）
+## 2.13 Sprint Task List — compact 後進度恢復（#469 / #538）
+
+<HARD-GATE>
+**Task List 強制建立（#538 AC7）**：Sprint Execution 啟動時，必須為每個 in-sprint Story 建立對應 Task（格式：`{repo}/sprint-{N}-execution`）。若 TaskList 中缺失本 Sprint 的 Task，必須立即補建再繼續。任何跳過 Task 建立的行為均屬流程違規。hook 腳本 `hooks/task-gate.sh` 可協助驗證（Sprint Execution 啟動時自動呼叫）。
+</HARD-GATE>
+
+<!-- 以下為 §2.13 正文，接原標題 -->
 
 <!-- #469 Cruise/Sprint 執行時建立 Task List — 防止 compact 後跳步 -->
+<!-- #538 Task 命名改為 repo/sprint-N-phase 格式，取代 SESSION_ID 後綴 -->
 
-Sprint Execution 啟動時建立 Task List（`sprint-${SESSION_ID}`），記錄三個主要 phase。compact 後查詢 TaskList 恢復進度，跳過已完成 phase，防止跳步。多 session 以 SESSION_ID 隔離。
+Sprint Execution 啟動時建立 Task List，以 `{repo}/sprint-{N}-{phase}` 格式命名，記錄三個主要 phase。compact 後查詢 TaskList，以 `{repo}/sprint-{N}-` 為前綴匹配，恢復進度跳過已完成 phase，防止跳步。
+
+**Task 命名格式（#538 AC2）**：`{repo}/sprint-{N}-{phase}`
+
+其中 `{repo}` = 從 `git remote get-url origin` 解析的 `owner/repo`（如 `kctw-dev/shikigami`），`{N}` = Sprint 編號（從 sprint_N.md 讀取），`{phase}` = `planning` | `execution` | `review`。
+
+**命名範例**：
+- `kctw-dev/shikigami/sprint-129-planning`
+- `kctw-dev/shikigami/sprint-129-execution`
+- `kctw-dev/shikigami/sprint-129-review`
 
 > 詳見 `references/checkpoint.md`
 
@@ -119,18 +135,28 @@ Sprint Execution 啟動時建立 Task List（`sprint-${SESSION_ID}`），記錄�
 ## 3. 執行流程
 
 ```
-Task List 初始化（§2.13，#469 AC1/AC3）
+Task List 初始化（§2.13，#469 AC1/AC3，#538 AC2）
   # Sprint 啟動時建立 Task List，記錄三個主要 phase
-  SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+  # 從 git remote 解析 OWNER_REPO（如 kctw-dev/shikigami）
+  OWNER_REPO=$(git remote get-url origin | sed -E 's#^(https?://[^/]+/|git@[^:]+:)##; s#\.git$##')
+  # 從 sprint_N.md 讀取 SPRINT_NUM
+  SPRINT_NUM=<N>  # 從 sprint file 路徑解析
+
+  # 清理舊 Sprint 殘留 Task（#538 AC5）
+  # 若 TaskList 中存在前一 Sprint 的 Task（status 非 completed），標記為 completed
+  OLD_SPRINT_TASKS=$(TaskList | filter subject starts_with "${OWNER_REPO}/sprint-" AND subject NOT contains "/sprint-${SPRINT_NUM}-" AND status != "completed")
+  for OLD_TASK in OLD_SPRINT_TASKS:
+    TaskUpdate id=OLD_TASK.id status="completed"
+
   TaskCreate tasks：
-    - "sprint-planning-${SESSION_ID}"   status=pending
-    - "sprint-execution-${SESSION_ID}"  status=pending
-    - "sprint-review-${SESSION_ID}"     status=pending
-  # compact 後恢復進度：查詢 TaskList，從第一個非 completed 的 task 繼續（#469 AC4）
+    - "${OWNER_REPO}/sprint-${SPRINT_NUM}-planning"   status=pending
+    - "${OWNER_REPO}/sprint-${SPRINT_NUM}-execution"  status=pending
+    - "${OWNER_REPO}/sprint-${SPRINT_NUM}-review"     status=pending
+  # compact 後恢復進度（#538 AC4）：以 "{repo}/sprint-{N}-" 為前綴查詢 TaskList，從第一個非 completed 的 task 繼續
   |
   v
 # ── Task List 狀態更新：sprint-execution 開始（#469 AC2）──
-TaskUpdate id="sprint-execution-${SESSION_ID}" status=in-progress
+TaskUpdate id="${OWNER_REPO}/sprint-${SPRINT_NUM}-execution" status=in-progress
   |
   v
 Sprint Checkpoint 偵測（AC-2 斷點續跑，§2.12）

@@ -199,3 +199,22 @@ commit + push 完成後清理同步 signal：`rm -f docs/sprints/.review-signal-
 
 - [ ] **產出文件 git commit + push**（HARD-GATE）
 - [ ] 同步 signal 已清理（`docs/sprints/.review-signal-<SESSION_ID>`）
+- [ ] **Sprint Task cleanup（#538 AC5）**：Sprint Review 完成後，將本 Sprint 的三個 Task 標記為 completed
+  ```
+  OWNER_REPO=$(git remote get-url origin | sed -E 's#^(https?://[^/]+/|git@[^:]+:)##; s#\.git$##')
+  # 標記 planning / execution / review 三個 Task 為 completed
+  for PHASE in planning execution review; do
+    TASK=$(TaskList | filter subject="${OWNER_REPO}/sprint-${SPRINT_NUM}-${PHASE}")
+    if TASK exists: TaskUpdate id=TASK.id status="completed"
+  done
+  ```
+- [ ] **Sprint 後繼續提醒（#538 AC6）**：若有待執行工作（cruise actionable、下一 Sprint 已規劃），建立 continuation reminder Task
+  ```
+  # 檢查是否有下一 Sprint 或 cruise actionable
+  NEXT_SPRINT_ISSUES=$(gh issue list --label "sprint-candidate" --limit 5 --json number,title 2>/dev/null || echo "[]")
+  if NEXT_SPRINT_ISSUES is not empty OR cruise_actionable_detected:
+    TaskCreate subject="${OWNER_REPO}/sprint-${SPRINT_NUM}-done-next-action" status="in-progress"
+    # subject 清楚告知 compact 後該做什麼
+    # 範例：kctw-dev/shikigami/sprint-129-done-next-action
+    # agent compact 後看到此 Task 即知道要繼續 Sprint Planning 或 Cruise
+  ```
