@@ -4,7 +4,7 @@
 
 - **專案名稱**：Shikigami（式神）
 - **性質**：Claude Code Plugin — AI Agent Scrum Team 框架
-- **目前版本**：v0.87.0
+- **目前版本**：v0.88.0
 - **授權**：MIT
 - **Repository**：https://github.com/KCTW/shikigami
 
