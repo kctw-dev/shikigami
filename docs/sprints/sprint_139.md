@@ -15,8 +15,8 @@
 |-------|-------|------|------|--------|------|--------|
 | feat: TCB 斷點管理 — Agent Action 級 Checkpoint | #404 | FEATURE | M | 2 | DONE(#634) | 獨立（hooks/tcb-write.sh 新建，與其他 Story 無衝突） |
 | RESEARCH: ADR-041 — Crash Recovery 架構決策（unblocks #405） | #631 | RESEARCH | S | 1 | DONE(#633) | 獨立（docs/adr/ADR-041 新建） |
-| RESEARCH: ADR-042 — Session Watchdog 架構決策（unblocks #408） | #632 | RESEARCH | S | 1 | 待執行 | 依賴 #631（ADR-042 需先了解 ADR-041 恢復策略） |
-| research: A2A 協議相容性評估 | #399 | RESEARCH | S | 1 | 待執行 | 獨立（docs/research/a2a-protocol-evaluation.md） |
+| RESEARCH: ADR-042 — Session Watchdog 架構決策（unblocks #408） | #632 | RESEARCH | S | 1 | DONE(#635) | 依賴 #631（ADR-042 需先了解 ADR-041 恢復策略） |
+| research: A2A 協議相容性評估 | #399 | RESEARCH | S | 1 | DONE(#636) | 獨立（docs/research/a2a-protocol-evaluation.md） |
 
 **Sprint 容量**：5 points
 

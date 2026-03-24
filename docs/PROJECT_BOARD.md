@@ -16,8 +16,8 @@
 |-------|-------|------|--------|------|
 | feat: TCB 斷點管理 — Agent Action 級 Checkpoint | #404 | M | 2 | 待執行 |
 | RESEARCH: ADR-041 — Crash Recovery 架構決策（unblocks #405）| #631 | S | 1 | 待執行 |
-| RESEARCH: ADR-042 — Session Watchdog 架構決策（unblocks #408）| #632 | S | 1 | 待執行 |
-| research: A2A 協議相容性評估 | #399 | S | 1 | 待執行 |
+| RESEARCH: ADR-042 — Session Watchdog 架構決策（unblocks #408）| #632 | S | 1 | DONE |
+| research: A2A 協議相容性評估 | #399 | S | 1 | DONE |
 
 **Sprint 容量**：5 points
 **執行順序**：Phase 1 平行（#404 | #631 | #399）→ Phase 2 序列（#632，依賴 #631）
