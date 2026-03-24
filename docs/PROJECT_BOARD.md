@@ -1,9 +1,29 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 128 Execution 完成）
-**當前 Sprint**：Sprint 128（完成）
+**最後更新**：2026-03-24（Sprint 129 Planning 完成）
+**當前 Sprint**：Sprint 129（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 129（進行中）
+
+> Sprint Goal：落地 Sprint 128 Retro 四項行動改善（Issue 追蹤紀律、OOM 防護、重複派遣防護、Task name 格式），修復 CI OAuth token 失效並建立長期自動同步機制，同步完成 worktree 殘留清理功能。
+> **容量**：7 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: Retro-Action Issue 追蹤紀律 | #534 | S | 1 | 待開發 |
+| feat: Worktree 自動清理 | #500 | S | 1 | 待開發 |
+| retro: 平行 subagent OOM 防護 | #536 | S | 1 | 待開發 |
+| retro: 重複派遣防護 Gate | #537 | S | 1 | 待開發 |
+| retro: Task name 改用 repo/sprint-N 格式 | #538 | S | 1 | 待開發 |
+| [SRE] CI failure: OAuth token 過期 | #524 | S | 1 | 待開發 |
+| feat: GCE watchdog 自動同步 OAuth token | #539 | S | 1 | 待開發 |
+
+**Sprint 容量**：7 points
+**執行順序**：Phase 1a（#534 | #500 平行 worktree） → Phase 1b（#536 → #537 → #538 序列） → Phase 2（#524 → #539 人工部署）
 
 ---
 
