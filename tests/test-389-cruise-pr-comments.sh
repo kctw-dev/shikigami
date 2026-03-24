@@ -9,8 +9,8 @@
 set -euo pipefail
 
 SKILL_FILE="skills/cruise/SKILL.md"
-# #460: 拆分後 PR comments 邏輯在 po-patrol.md，允許在任意 cruise 模組中搜尋
-CRUISE_FILES="skills/cruise/SKILL.md skills/cruise/po-patrol.md skills/cruise/sre-inspection.md skills/cruise/auto-shoot.md"
+# #460: 拆分後 PR comments 邏輯在 references/po-patrol.md，允許在任意 cruise 模組中搜尋
+CRUISE_FILES="skills/cruise/SKILL.md skills/cruise/references/po-patrol.md skills/cruise/references/sre-inspection.md skills/cruise/references/auto-shoot.md"
 PASS=0
 FAIL=0
 
@@ -41,7 +41,7 @@ else
 fi
 
 # AC1-2：掃描步驟應位於「留言掃描步驟」之後（在 po-patrol.md 中）
-PATROL_FILE="skills/cruise/po-patrol.md"
+PATROL_FILE="skills/cruise/references/po-patrol.md"
 if [[ -f "$PATROL_FILE" ]]; then
   ISSUE_COMMENT_LINE=$(grep -n "### 留言掃描步驟\|## 留言掃描步驟" "$PATROL_FILE" | head -1 | cut -d: -f1)
   PR_COMMENT_LINE=$(grep -n "### 關聯 PR comments 掃描步驟\|## 關聯 PR comments 掃描步驟" "$PATROL_FILE" | head -1 | cut -d: -f1)
