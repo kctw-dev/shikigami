@@ -15,6 +15,7 @@
 | #488 | Plugin 維護 — LICENSE 檔案 + git tag 同步 | S | 1 | CHORE | QA 要求 AC1 補充 LICENSE 存在性驗證（validate-version.sh 不覆蓋，需獨立檢查） |
 
 **Sprint 容量**：7 points
+**Sprint 結果**：4/4 PASS，完成 7 pts，完成率 100%
 
 ---
 
