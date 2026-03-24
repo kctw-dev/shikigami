@@ -131,3 +131,33 @@ sprint-candidate Issue body 中的標準格式（po-prompt.md 的正則提取規
 - 新開 sprint-candidate Issue 時，在 Issue body 加入 `**RICE Score** | **N.N**` 格式
 - PO Cruise 巡邏時可在評估後補充 RICE Score 至 Issue comment
 - 本標準文件由 PO 維護，每 3 個月（~12 Sprint）review 一次評分維度
+
+---
+
+## Model Routing 決策規則（ADR-039 Token Cost Routing）
+
+<!-- #402 ADR-039 Token Cost Routing 實作 — Sprint 138 -->
+
+在 RICE Score 基礎上，Sprint 138 新增 **Model Routing** 決策：Story 進入 Sprint Execution 前，依 ADR-039 四維度風險評分選擇適當 model tier。
+
+### 風險評分 → Model Tier 對應
+
+| 風險分數 | Tier | Model | 適用場景 |
+|---------|------|-------|---------|
+| 4–6 | 1 | `haiku` | doc-only 文件修改、格式轉換、retro-action 文件類 |
+| 7–9 | 2 | `sonnet` | 一般功能實作、CI 修復、Backlog 分析（預設） |
+| 10–12 | 3 | `opus` | ADR 架構決策、安全審查、L-size Story |
+
+### RICE Score 與 Model Routing 的關係
+
+- RICE Score 決定 **Backlog 排序優先序**（選哪些 Story 進 Sprint）
+- Risk Score 決定 **執行時 model tier**（用哪個 model 執行）
+- 兩者獨立計算，高 RICE Score 的 Story 不必然使用高 tier model
+
+### 計算範例
+
+| Story | RICE Score | Risk Score（R+S+C+N） | Model Tier |
+|-------|-----------|----------------------|-----------|
+| doc-only retro 任務 | 8 | 4（1+1+1+1）| Tier 1 haiku |
+| CI workflow 修復 | 12 | 7（2+2+2+1）| Tier 2 sonnet |
+| L-size 架構 ADR | 6 | 11（3+3+3+2）| Tier 3 opus |

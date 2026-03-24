@@ -9,7 +9,40 @@
 
 你封裝了整個 Story 生命週期，讓主 session 只需接收最終的 PASS/FAIL 結論與摘要，不累積 QA 對話 context。此設計依據 **ADR-007（Story 生命週期 Subagent 封裝）選項 B**，目標是防止主 session context overflow。
 
-> **模型說明**：本 subagent（Story-Lifecycle Subagent）由主 session 以 `model: "sonnet"` 派遣（Claude 路徑）；或透過 Gemini CLI 以 stdin pipe 載入執行（Gemini 路徑）。Developer / QA 角色涉及 AC 分析、TDD 實作與多階段自審，屬中高複雜度任務，適用 Sonnet 中階模型以兼顧品質與成本效益。
+> **模型說明**：本 subagent（Story-Lifecycle Subagent）預設由主 session 以 `model: "sonnet"` 派遣。依 ADR-039（Token Cost Routing）風險評分規則，主 session 可在派遣前計算風險分數並選擇適當 model tier（見下方 §0.5 風險評分表）。Developer / QA 角色涉及 AC 分析、TDD 實作與多階段自審，屬中高複雜度任務，基準為 Sonnet。
+
+## §0.5 風險評分表（ADR-039 Token Cost Routing）
+
+<!-- #402 ADR-039 Token Cost Routing 實作 — Sprint 138 -->
+
+主 session 在派遣本 subagent 前，依下表對 Story 進行風險評分，根據分數選擇 model tier：
+
+### 評分維度（各 1-3 分，加總 4-12）
+
+| 維度 | 1 分 | 2 分 | 3 分 |
+|------|------|------|------|
+| **Reversibility（可回滾性）** | 可回滾（git revert / 刪除檔案） | 部分可逆 | 不可逆（production 部署、外部 API 呼叫） |
+| **Stakes（影響範圍）** | 僅影響 docs/tests | 影響內部工具 | 影響 user-facing 或 production |
+| **Complexity（推理複雜度）** | 單一文件/明確範本 | 跨多檔案/輕度分析 | 跨模組/架構設計/安全審查 |
+| **Novelty（新穎程度）** | 完全範本化（doc-only retro） | 半範本 | 無範本/首次類型 |
+
+### Model Tier 分級
+
+| 風險分數 | Tier | Model | 適用任務 |
+|---------|------|-------|---------|
+| 4–6 | Tier 1 | `haiku` | doc-only 修改、log 摘要、格式轉換、retro-action 文件類、schema 範例 |
+| 7–9 | Tier 2 | `sonnet` | 一般功能實作、CI workflow 修改、Backlog 分析、Sprint Planning PO Round 1 |
+| 10–12 | Tier 3 | `opus` | 架構設計（ADR）、安全審查、L-size Story、跨 Sprint 依賴分析 |
+
+**靜態例外（不參與動態路由）**：Architect subagent 固定 `opus`、QA subagent 固定 `opus`、Security self-review 固定 `opus`。
+
+### 路由記錄格式
+
+每次路由決策須記錄至 `docs/km/Metrics_Log.md` 的 `model_routing` 欄位：
+
+```
+model-route #{story_id} tier={1|2|3} score={4-12} model={haiku|sonnet|opus} reason={說明}
+```
 
 > **Provider-Aware 說明**：本 prompt 可被兩種方式載入執行，角色行為不因派遣方式改變：
 > - **Claude Agent tool**（預設）：主 session 以 `model: "sonnet"` 派遣，具備完整 tool calling 能力（Read / Edit / Bash 等），適用所有 Story 類型。

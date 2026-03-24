@@ -23,7 +23,7 @@
 
 1. **版號同步**：bump 版本時必須同時更新 `plugin.json`、`marketplace.json`、`gemini-extension.json`、`CLAUDE.md`、`README.md` badge
 2. **語言慣例**：Skill / Agent 內容使用中文，檔名使用英文 kebab-case
-3. **Agent model**：所有 agent 統一使用 `model: sonnet`
+3. **Agent model**：基準模型為 `model: sonnet`。Agent 定義中若未明確指定 model，預設使用 sonnet。Sprint Planning / Execution 中可依 ADR-039（Token Cost Routing）的風險評分規則路由至 haiku（分數 4-6）或 opus（分數 10-12）。路由決策必須記錄（log action：`model-route #N tier=X score=Y`）。靜態例外（不參與動態路由）：Architect subagent 固定 `opus`、QA subagent 固定 `opus`、Security self-review 固定 `opus`。
 4. **禁止幻覺**：非發散階段（Discovery 以外）禁止生成未定義內容，遇未定義情況應回退詢問
 5. **TDD 雙重驗證**：寫不出測試代表需求不清，必須回退釐清而非強行實作
 6. **日期來源**：所有日期時間必須用 `date` 指令取得系統時間，不可靠 agent 推斷
