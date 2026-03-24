@@ -199,6 +199,22 @@ API 文件版本驗證（§2.8，知識老化偵測事件觸發層）
 Sprint Backlog 中取出 Story
   |
   v
+Parallel Conflict Prediction 靜態衝突分析（#395，AC1）
+  # 取出所有 pending Story 後，執行靜態衝突預測，決定 dispatch 分組
+  # 詳見 references/conflict-prediction.md
+  1. 推測每個 Story 涉及的檔案路徑（從 AC + sprint_N.md 描述推斷）
+  2. 靜態比對 — 偵測 Story 間的檔案重疊或路徑衝突
+  3. 分組：
+     |-- 無衝突 → Group A（可平行，受 SHIKIGAMI_MAX_PARALLEL 上限控制）
+     +-- 有衝突 → Group B（序列，等 Group A 完成後動態重評估）
+  4. 輸出 dispatch plan 至 live-log：
+     [CONFLICT-PREDICTION] dispatch plan:
+       Group A（平行）: #<id1> | #<id2>
+       Group B（序列）: #<id3>
+  5. Group A Stories 依平行上限派遣
+  6. Group A 全數完成後，重評估 Group B — 若 Group B Stories 間無新衝突，可再次平行；否則依序執行
+  |
+  v
 前端 Story 設計資訊 Pre-check（§2.10，story_type=FEATURE 時）
   |-- [FE-PRECHECK-SKIP] 非前端 Story --> 繼續執行
   |-- [FE-PRECHECK-PASS] 設計資訊完整 --> 繼續執行
