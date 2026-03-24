@@ -29,6 +29,17 @@ ALLOWED_ACTIONS=(
 
 # ──────────────────────────────────────────────
 # Node.js 20 廢棄偵測：已知在 Node.js 20 上執行的 action 版本
+# 強制切換日期：2026-06-02（Node.js 24）
+# Node.js 20 移除日期：2026-09-16
+# 追蹤：#526 #424 #337
+#
+# 升級路徑（需人工審核，CLAUDE.md 第 10 條）：
+#   actions/checkout@v4     → @v5（Node.js 24）或 @v6（最新）
+#   actions/setup-node@v4   → @v4 最新（持續更新）+ node-version: "24"
+#   actions/upload-artifact@v4 → @v5（Node.js 24）
+#   actions/download-artifact@v4 → @v5（Node.js 24）
+#   actions/cache@v4        → 待評估
+#   anthropics/claude-code-action@v1 → 持續維護，觀察官方更新
 # ──────────────────────────────────────────────
 NODEJS20_AFFECTED_ACTIONS=(
   "actions/checkout@v4"
@@ -43,6 +54,7 @@ PASS=true
 WARNINGS=()
 ERRORS=()
 AFFECTED_NODES20=()
+NODE_VERSION_WARNINGS=()  # setup-node 使用 node-version: "20" 的偵測（#526）
 
 echo "======================================"
 echo "  CI Actions 版本驗證"
@@ -88,6 +100,14 @@ for wf in "${WORKFLOW_FILES[@]}"; do
       FOUND_ACTIONS["${action_ref}"]="${wf_name}"
     fi
   done < <(grep -E '^\s+(- )?uses:\s+' "${wf}" 2>/dev/null || true)
+
+  # 偵測 setup-node node-version: "20"（#526 Node.js 20 deprecation 追蹤）
+  while IFS= read -r line; do
+    ver=$(echo "${line}" | sed -E "s/.*node-version:\s*['\"]?([0-9]+)['\"]?.*/\1/" | xargs)
+    if [[ "${ver}" == "20" ]]; then
+      NODE_VERSION_WARNINGS+=("${wf_name}：node-version: \"20\" 應升級至 \"24\"（2026-06-02 前）")
+    fi
+  done < <(grep -E 'node-version:' "${wf}" 2>/dev/null || true)
 done
 
 echo "──────────────────────────────────────"
@@ -145,14 +165,35 @@ else
   echo "  以下 actions 可能受 Node.js 20 deprecation 影響："
   echo "  （參考：https://github.blog/changelog/2025-11-11-node-20-actions-deprecation/）"
   echo "  截止日期：2026-06-02（Node.js 24 強制），2026-09-16（Node.js 20 移除）"
+  echo "  追蹤 Issue：#526"
   echo ""
   for item in "${AFFECTED_NODES20[@]}"; do
     echo "  WARNING: ${item}"
   done
   echo ""
-  echo "  建議短期緩解方案："
-  echo "    在 workflow 中加入以下 env，提前測試 Node.js 24 相容性："
-  echo "    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true"
+  echo "  升級路徑（需人工審核，CLAUDE.md 第 10 條）："
+  echo "    actions/checkout@v4     → @v5 或 @v6（Node.js 24）"
+  echo "    actions/setup-node@v4   → @v4 最新 + node-version: \"24\""
+  echo "    actions/upload-artifact@v4 → @v5（Node.js 24）"
+  echo "    actions/download-artifact@v4 → @v5（Node.js 24）"
+  echo "    anthropics/claude-code-action@v1 → 持續維護，觀察官方更新"
+  echo ""
+  echo "  短期緩解（提前測試 Node.js 24 相容性）："
+  echo "    在 workflow jobs 層級加入：env: FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true"
+fi
+
+echo ""
+echo "──────────────────────────────────────"
+echo "  Node.js 版本參數偵測（#526）"
+echo "──────────────────────────────────────"
+if [[ ${#NODE_VERSION_WARNINGS[@]} -eq 0 ]]; then
+  echo "  無 node-version: \"20\" 使用"
+else
+  for nv in "${NODE_VERSION_WARNINGS[@]}"; do
+    echo "  WARN: node-version: \"20\" — ${nv}"
+  done
+  echo ""
+  echo "  建議：將 node-version: \"20\" 改為 node-version: \"24\""
 fi
 
 echo ""
