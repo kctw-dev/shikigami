@@ -17,6 +17,52 @@
 
 ---
 
+## Pre-TDD Dependency Analysis（TDAD，ADR-035，#394）
+
+<!-- feat: TDAD Dependency Map — Sprint 132，ADR-035 Accepted -->
+
+在進入 TDD 循環之前，若 Story 涉及修改已有測試覆蓋的程式碼模組，**必須**先執行依賴分析，識別受影響的測試集合。
+
+### 觸發條件
+
+| 情況 | 處置 |
+|------|------|
+| Story 修改已有測試覆蓋的程式碼模組 | 執行 Pre-TDD Dependency Analysis（強制） |
+| Story 為新增功能（無既有測試） | 跳過，直接進入 TDD Red |
+| Story 為 doc-only / RESEARCH | 跳過，TDD 豁免 |
+
+### 執行步驟（ADR-035 選項 B：Bash grep-based + LLM 輔助）
+
+```bash
+TARGET_FILE="<Story 主要修改的程式碼檔案>"
+
+# Python 依賴分析
+AFFECTED_TESTS=$(grep -rl "$(basename "$TARGET_FILE" .py)" tests/ --include="test_*.py" 2>/dev/null)
+
+# TypeScript 依賴分析
+# AFFECTED_TESTS=$(grep -rl "$(basename "$TARGET_FILE" .ts)" --include="*.test.ts" --include="*.spec.ts" 2>/dev/null)
+
+# Bash/Shell（Shikigami 框架自身）
+# AFFECTED_TESTS=$(grep -rl "$(basename "$TARGET_FILE")" tests/ --include="test-*.sh" 2>/dev/null)
+```
+
+### 輸出格式
+
+```
+[TDAD] Pre-TDD Dependency Analysis
+目標檔案：{TARGET_FILE}
+依賴分析方法：Bash grep-based（ADR-035 選項 B）
+受影響測試：
+  - {test_file_1}（共 N 個）
+LLM 輔助確認：{確認或補充說明，動態 import 漏報標注}
+```
+
+- **Red/Green phase**：只執行受影響測試
+- **最終 QA Gate**：全量測試一次（由 Spec Compliance Review 觸發）
+- 若 grep 結果為空但邏輯上應有受影響測試，在 summary 標注「靜態分析未發現，執行全量測試確認」
+
+---
+
 ## TDD 流程（強制）
 
 你必須嚴格遵循 TDD 三步循環：
