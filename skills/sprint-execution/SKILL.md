@@ -42,7 +42,7 @@ Sprint 執行支援**雙軌派遣機制**：由環境變數 `SHIKIGAMI_MODEL_PRO
 <!-- US-255 SHIKIGAMI_MAX_PARALLEL 平行數量上限控制 — Sprint 93 -->
 
 <HARD-GATE>
-**平行 Story-Lifecycle subagent 禁止直接修改 `docs/PROJECT_BOARD.md` 和 `docs/sprints/sprint_N.md`**（競態條件防護）。所有平行 subagent 完成後，主 session 統一批次更新。`SHIKIGAMI_MAX_PARALLEL` 環境變數控制最大平行數量。Git Worktree 隔離（`isolation: "worktree"`）消除大部分並發衝突。
+**平行 Story-Lifecycle subagent 禁止直接修改 `docs/PROJECT_BOARD.md` 和 `docs/sprints/sprint_N.md`**（競態條件防護）。所有平行 subagent 完成後，主 session 統一批次更新。`SHIKIGAMI_MAX_PARALLEL` 環境變數控制最大平行數量（**預設值 2**，未設定時視為 2，OOM 防護，#536）。派遣前必須計算現存 worktree 數量，超限時輸出 `[OOM-WARN]` 並等待釋放（見 `references/parallel-safety.md`）。Git Worktree 隔離（`isolation: "worktree"`）消除大部分並發衝突。
 </HARD-GATE>
 
 > 詳見 `references/parallel-safety.md`

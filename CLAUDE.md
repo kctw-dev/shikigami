@@ -35,6 +35,7 @@
    - `project_level=high`：每個重要步驟都必須等人確認，只標記不自動觸發。
 10. **CI Actions 版本釘定**：所有 GitHub Actions 統一使用 `@v4`，升級需先確認 self-hosted runner 相容性，並經人工審核後才能更新版本號。新增或修改 workflow 時執行 `bash scripts/validate-ci-versions.sh` 驗證。
 11. **GitHub URL 可讀取**：遇到 GitHub URL（含 attachment），帶 `gh auth token` 認證直接讀取，不要報「無法讀取」。
+12. **平行 Worktree OOM 防護**：平行 worktree subagent 過多會 OOM（Sprint 127 歷史案例：4 個 worktree 觸發 core dump）。`SHIKIGAMI_MAX_PARALLEL` 預設 2，**未設定時亦視為 2，不得無限平行**。派遣前必須執行 `git worktree list` 計算現存數量；重派前必須確認同任務 agent 是否還在跑，避免重複派遣。詳見 `skills/sprint-execution/references/parallel-safety.md`。
 
 ## 目錄結構
 

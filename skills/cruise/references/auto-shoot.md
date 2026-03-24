@@ -17,8 +17,19 @@ for ISSUE in CLOSE_ISSUES:
 
 # Step 2：連續 auto-shoot（走完整 /shoot 流程）
 while ACTIONABLE_ISSUES is not empty:
+  # OOM 防護：派工前確認現存 worktree 數量（#536 AC2）
+  MAX_PARALLEL=${SHIKIGAMI_MAX_PARALLEL:-2}
+  EXISTING_WT=$(git worktree list | grep -v "bare\|（main branch）" | tail -n +2 | wc -l)
+  if EXISTING_WT >= MAX_PARALLEL:
+    echo "[OOM-WARN] 現存 worktree 已達上限（${EXISTING_WT}/${MAX_PARALLEL}），暫緩本次 auto-shoot"
+    break  # 等待下一 cycle 再試
+
   if SHOOT_FLAG 不存在:
     ISSUE = ACTIONABLE_ISSUES.shift()  # 取出第一個
+    # 重派前確認同 Story 是否已有 worktree 在跑（#536 AC2）
+    if git worktree list | grep -q "sprint-.*${ISSUE}":
+      echo "[OOM-SKIP] Story #${ISSUE} 已有 worktree 執行中，跳過重派"
+      continue
     echo "$ISSUE" > SHOOT_FLAG
     # !! 必須 invoke shikigami:shoot，不是派 Developer Agent !!
     # 更新對應 Story Task 狀態為 in-progress（#513 AC3）
