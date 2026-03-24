@@ -45,6 +45,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 - [ ] **PO Round 1 ADR 自動納入**（#456）：PO 選取 Story 後，掃描 Architect 技術評估的 ADR 欄位；若有標注「已補建 #N（RESEARCH）」的 ADR Story，自動將該 ADR RESEARCH Story 一併選入同一 Sprint（AC2）
 - [ ] 檢查選入 Story 是否標注「需要 ADR」— 若需要，ADR 必須已 Accepted 或已在本 Sprint 納入 ADR RESEARCH Story
 - [ ] **複雜度影響評估**（#462）：對每個新增功能 Story，執行 `bash scripts/measure-complexity.sh` 評估複雜度影響；若預計新增 Skill/Agent，須同步評估是否刪減等量舊功能（見 §13 複雜度預算）
+- [ ] 確認 INFRA Story 涉及的 CI Actions 版本升級已完成人工審核確認（未完成者須退回 Backlog 或延至下一 Sprint）
 - [ ] **Architect** 技術評估（詳見 [architect-prompt.md](./references/architect-prompt.md)）
 - [ ] **QA** 驗收標準確認（詳見 [qa-prompt.md](./references/qa-prompt.md)）
 - [ ] 上個 Sprint 的 Retro Action Items 自動列入 Backlog（若有未完成項目）

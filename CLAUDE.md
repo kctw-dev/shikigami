@@ -33,7 +33,7 @@
    - `project_level=low`：**所有操作自動執行，禁止停下來問使用者**。包括但不限於：Sprint Planning 完成後自動 Sprint Execution、Sprint Execution 完成後自動 Sprint Review、auto-shoot 發現 actionable 自動派工、Feedback Routing 自動轉送、需要 compact 直接 compact 再繼續。
    - `project_level=medium`：高風險操作（Sprint Planning 啟動、Sprint Execution 啟動）留言通知等使用者確認；日常低風險操作自動執行。
    - `project_level=high`：每個重要步驟都必須等人確認，只標記不自動觸發。
-10. **CI Actions 版本釘定**：所有 GitHub Actions 統一使用 `@v4`，升級需先確認 self-hosted runner 相容性，並經人工審核後才能更新版本號。新增或修改 workflow 時執行 `bash scripts/validate-ci-versions.sh` 驗證。
+10. **CI Actions 版本釘定**：所有 GitHub Actions 統一使用 `@v4`，升級需先確認 self-hosted runner 相容性，並經人工審核後才能更新版本號。新增或修改 workflow 時執行 `bash scripts/validate-ci-versions.sh` 驗證。**升級確認時機**：INFRA Story 涉及 CI Actions 版本升級時，確認須在 Sprint Planning 前完成，避免 Sprint 中途因版本不相容而阻塞。
 11. **GitHub URL 可讀取**：遇到 GitHub URL（含 attachment），帶 `gh auth token` 認證直接讀取，不要報「無法讀取」。
 12. **平行 Worktree OOM 防護**：平行 worktree subagent 過多會 OOM（Sprint 127 歷史案例：4 個 worktree 觸發 core dump）。`SHIKIGAMI_MAX_PARALLEL` 預設 2，**未設定時亦視為 2，不得無限平行**。派遣前必須執行 `git worktree list` 計算現存數量；重派前必須確認同任務 agent 是否還在跑，避免重複派遣。詳見 `skills/sprint-execution/references/parallel-safety.md`。
 
