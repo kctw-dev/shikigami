@@ -20,6 +20,11 @@
             "type": "command",
             "command": "'${CLAUDE_PLUGIN_ROOT}/hooks/session-end-release.sh'",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'SESSION_ID=\"${SHIKIGAMI_SESSION_ID:-unknown}\"; if [ -f \"$(git rev-parse --show-toplevel 2>/dev/null || pwd)/.kill-switch/${SESSION_ID}.flag\" ]; then bash \"$(git rev-parse --show-toplevel 2>/dev/null || pwd)/hooks/kill-switch.sh\" clear \"${SESSION_ID}\" || true; fi'",
+            "async": true
           }
         ]
       }

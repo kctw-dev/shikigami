@@ -21,3 +21,6 @@ docs/vision-critic-reports/*.json
 
 # 系統記錄（live-log, schedule-cruise 等）不入版控
 logs/
+
+# Kill Switch runtime files（ADR-038）— flag と report は runtime のみ、git 対象外
+.kill-switch/
