@@ -76,12 +76,12 @@ test_tc03_retro_action_label_mentioned() {
     "TC-03：偵測規則基於 retro-action label"
 }
 
-# TC-04：偵測規則包含閾值定義（2 Sprint）
+# TC-04：偵測規則包含閾值定義（連續 2 Sprint）
 test_tc04_threshold_defined() {
   assert_file_contains \
-    "2" \
+    "連續 2 個" \
     "$RETRO_GROOMING_REF" \
-    "TC-04：偵測閾值定義（至少含「2」）"
+    "TC-04：偵測閾值明確定義為「連續 2 個」Sprint"
 }
 
 # TC-05：偵測規則包含觸發 Grooming 的動作說明

@@ -36,16 +36,33 @@ gh issue list \
 
 ### 1.3 偵測方式
 
-在 Sprint Review §4（Action Items 驗收機制）執行期間，對每個 open 的 `retro-action` Issue 執行以下判定：
+在 Sprint Review §4（Action Items 驗收機制）執行期間，對每個 open 的 `retro-action` Issue 執行以下判定。
 
-1. 讀取 Issue 的 milestone 歷史（透過 GitHub API）
-2. 取最近 3 個 Sprint 的 milestone 記錄
-3. 計算連續排入且未完成的 Sprint 數量
-4. 若連續數量 ≥ 2，觸發 `[RETRO-GROOMING-TRIGGER]`
+**主要判定方式（`deferred` label 法）**：
 
-**簡化判定（無法取得完整 milestone 歷史時的回退方案）**：
+```bash
+# 掃描同時帶有 retro-action 與 deferred label 的 open Issues
+gh issue list \
+  --label "retro-action" \
+  --label "deferred" \
+  --state open \
+  --json number,title,createdAt,labels \
+  --limit 100
+```
 
-若 Issue 具有 `deferred` label 且建立日期距今超過 2 個 Sprint 週期（約 14 天），視為「可能連續未完成」，輸出警示並建議人工確認。
+- Issue 同時具有 `retro-action` 和 `deferred` label → 判定為連續未完成，觸發 `[RETRO-GROOMING-TRIGGER]`
+- `deferred` label 在 Sprint Review §4 中由 Agent 設定（未完成 → `deferred` label），連續兩次設定即代表連續兩 Sprint 未完成
+
+**選用增強（GitHub Timeline API 法，需 GitHub Token 支援）**：
+
+若需取得精確的 milestone 歷史記錄，可透過以下 API 查詢：
+
+```bash
+gh api repos/{owner}/{repo}/issues/{issue_number}/timeline \
+  --jq '[.[] | select(.event == "milestoned")] | length'
+```
+
+此方式可計算 Issue 曾被加入幾次 milestone，作為「排入 Sprint 次數」的佐證。**但此法為選用增強，主要判定仍以 `deferred` label 法為準。**
 
 ---
 
