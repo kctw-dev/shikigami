@@ -18,8 +18,8 @@ version_target: v0.95.1
 
 | Story | Issue | Type | Size | Points | 狀態 | Assignee | 獨立性 |
 |-------|-------|------|------|--------|------|----------|--------|
-| retro: 調查並修正 New Issue Intake CI workflow 連續失敗 | #650 | BUG/INFRA | M | 2 | TODO | Developer | Group A（獨立）|
-| retro: Backlog 補充 — 掃描 open Issues 提升可執行 Story 存量 | #651 | RETRO | M | 3 | TODO | PO | Group A（獨立）|
+| retro: 調查並修正 New Issue Intake CI workflow 連續失敗 | #650 | BUG/INFRA | M | 2 | DONE(#652) | Developer | Group A（獨立）|
+| retro: Backlog 補充 — 掃描 open Issues 提升可執行 Story 存量 | #651 | RETRO | M | 3 | DONE(#659) | PO | Group A（獨立）|
 
 **Sprint 容量**：5 pts（Sprint 139=5, 140=5, 141=2, avg≈4, 建議 5pts）
 

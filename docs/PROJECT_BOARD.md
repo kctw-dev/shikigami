@@ -22,8 +22,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: 調查並修正 New Issue Intake CI workflow 連續失敗 | #650 | M | 2 | TODO |
-| retro: Backlog 補充 — 掃描 open Issues 提升可執行 Story 存量 | #651 | M | 3 | TODO |
+| retro: 調查並修正 New Issue Intake CI workflow 連續失敗 | #650 | M | 2 | DONE(#652) |
+| retro: Backlog 補充 — 掃描 open Issues 提升可執行 Story 存量 | #651 | M | 3 | DONE(#659) |
 
 **平行分群**：Group A — #650 與 #651 完全獨立，可平行執行
 

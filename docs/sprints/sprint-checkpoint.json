@@ -1,21 +1,21 @@
 {
-  "sprint": 141,
-  "updated_at": "2026-03-24T23:19:20Z",
-  "session_id": "cron-20260325-065001",
+  "sprint": 142,
+  "updated_at": "2026-03-24T23:55:00Z",
+  "session_id": "cron-20260325-073001",
   "stories": [
     {
-      "id": "646",
-      "title": "retro: watchdog-monitor.sh 閾值與 #408 AC 規格對齊（10 分鐘）",
+      "id": "650",
+      "title": "retro: 調查並修正 New Issue Intake CI workflow 連續失敗",
       "status": "completed",
-      "pr": 648,
-      "merged_at": "2026-03-24T23:19:20Z"
+      "pr": 652,
+      "merged_at": "2026-03-24T23:50:00Z"
     },
     {
-      "id": "647",
-      "title": "retro log 補完 — Retrospective_Log.md Sprint 98-140 條目聚合",
+      "id": "651",
+      "title": "retro: Backlog 補充 — 掃描 open Issues 提升可執行 Story 存量",
       "status": "completed",
-      "pr": 649,
-      "merged_at": "2026-03-24T23:19:20Z"
+      "pr": 659,
+      "merged_at": "2026-03-24T23:55:00Z"
     }
   ],
   "sprint_status": "completed"
