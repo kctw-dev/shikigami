@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 141 完成 — 2/2 Stories DONE）
-**當前 Sprint**：Sprint 141（已完成）
+**最後更新**：2026-03-25（Sprint 142 Planning 完成 — 2 Stories, 5 pts）
+**當前 Sprint**：Sprint 142（active）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
@@ -12,6 +12,20 @@
 | 日期 | 來源 | 標題 | 結果 | commit |
 |------|------|------|------|--------|
 | 2026-03-24 | #638 | retro: tcb-write.sh smoke test — stdout 污染回歸防護 | PASS | d4e353d |
+
+---
+
+## Sprint 142（active）
+
+> Sprint Goal：修復 New Issue Intake CI 持續失敗根因，並完成 Backlog 健康補充，確保後續 Sprint 容量充足。
+> **容量**：5 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: 調查並修正 New Issue Intake CI workflow 連續失敗 | #650 | M | 2 | TODO |
+| retro: Backlog 補充 — 掃描 open Issues 提升可執行 Story 存量 | #651 | M | 3 | TODO |
+
+**平行分群**：Group A — #650 與 #651 完全獨立，可平行執行
 
 ---
 
