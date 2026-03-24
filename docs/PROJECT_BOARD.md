@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 140 Planning 完成）
-**當前 Sprint**：Sprint 140（進行中）
+**最後更新**：2026-03-24（Sprint 140 完成 — 3/3 Stories DONE）
+**當前 Sprint**：Sprint 140（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
@@ -15,16 +15,17 @@
 
 ---
 
-## Sprint 140（進行中）
+## Sprint 140（完成）
 
 > Sprint Goal：落地 ADR-041/ADR-042 決策成果——實作 Crash Recovery 與 Session Watchdog 彈性架構，並根本解決持續發生的 CI Token 輪換問題。
+> **結果**：Goal 達成（3/3 Stories DONE）。Velocity 5 pts，完成率 100%。連續第 14 Sprint 100%（127-140）。
 > **容量**：5 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: CI Token 輪換自動化 — CLAUDE_CODE_OAUTH_TOKEN 持續過期根本解決 | #637 | S | 1 | TODO |
-| feat: Temporal-style Crash Recovery（ADR-041 Accepted） | #405 | M | 2 | TODO |
-| feat: Session Watchdog — 存活監控 + 自動重啟（ADR-042 Accepted） | #408 | M | 2 | TODO |
+| retro: CI Token 輪換自動化 — CLAUDE_CODE_OAUTH_TOKEN 持續過期根本解決 | #637 | S | 1 | DONE(#640) |
+| feat: Temporal-style Crash Recovery（ADR-041 Accepted） | #405 | M | 2 | DONE(#641) |
+| feat: Session Watchdog — 存活監控 + 自動重啟（ADR-042 Accepted） | #408 | M | 2 | DONE(#642) |
 
 ---
 
