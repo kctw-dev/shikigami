@@ -2,8 +2,8 @@
 
 ![Version](https://img.shields.io/badge/version-v0.83.5-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-![Sprints](https://img.shields.io/badge/sprints-112%2B-orange?style=flat-square)
-![Skills](https://img.shields.io/badge/skills-28-purple?style=flat-square)
+![Sprints](https://img.shields.io/badge/sprints-127%2B-orange?style=flat-square)
+![Skills](https://img.shields.io/badge/skills-29-purple?style=flat-square)
 
 **為你的 AI 開發工具注入 8 個專業角色，涵蓋 Discovery → Definition → Delivery 全產品生命週期。**
 
@@ -176,7 +176,7 @@ Architect：ADR-002 狀態 → Accepted
 **重點：它們互相制衡，不是 8 個獨立助手。**
 
 <details>
-<summary>完整 26 個 Skills 列表</summary>
+<summary>完整 29 個 Skills 列表</summary>
 
 **Discovery（產品探索）**
 
@@ -207,6 +207,7 @@ Architect：ADR-002 狀態 → Accepted
 | **dispel** | Legacy 系統考古、不熟悉 codebase 分析、解咒模式 |
 | **architect** | Architect 角色知識框架、架構評估決策指引 |
 | **qa-engineer** | QA 角色知識框架、審查策略與 Story-Lifecycle 整合指引 |
+| **team-debate** | 同職能 Critic Agent 對 M/L Stories 的獨立 peer critique |
 
 **Design（設計）**
 
@@ -226,6 +227,9 @@ Architect：ADR-002 狀態 → Accepted
 | **onboarding** | 新專案初始化、目錄結構建立、CLAUDE.md 生成引導 |
 | **schedule** | Sprint 自動排程執行、cron 腳本生成、序列排程保護 |
 | **shoot** | 短衝模式、單 Story 快速執行、不起 Sprint 的輕量交付 |
+| **browser-automation** | Web 應用瀏覽器自動化測試與驗證、E2E 測試、Synthetic Monitoring |
+| **cruise** | PO 定期巡邏 + SRE 基礎設施巡檢的背景自動化模式 |
+| **performance-dashboard** | 團隊績效報告生成（出勤、探索紀錄、會議摘要） |
 | **diagram** | 架構圖自動化生成（drawio-mcp-server stdio 整合、雙格式輸出、多雲圖標集） |
 
 </details>
