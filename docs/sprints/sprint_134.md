@@ -5,13 +5,13 @@
 
 ## Sprint Backlog
 
-| Story ID | 標題 | Type | Size | Priority | Assignee | Phase |
-|----------|------|------|------|----------|----------|-------|
-| #573 | retro: Sprint Planning AC 指定明確檔案路徑 | RETRO | S(1) | should | Developer | Batch 1 |
-| #581 | retro: Sprint 133 — 並行 worktree 版本衝突預防機制 | RETRO | S(1) | should | Developer | Batch 1 |
-| #574 | retro: Sprint Review 後補打 git tag | RETRO | S(1) | should | Developer | Batch 2 |
-| #393 | feat: Prompt Injection Defense — Security Gate 擴充 | FEATURE | M(2) | should | Developer | Batch 2 |
-| #395 | feat: Parallel Conflict Prediction — 平行任務衝突預測 | FEATURE | M(2) | should | Developer | Batch 3 |
+| Story ID | 標題 | Type | Size | Priority | Assignee | Phase | 狀態 |
+|----------|------|------|------|----------|----------|-------|------|
+| #573 | retro: Sprint Planning AC 指定明確檔案路徑 | RETRO | S(1) | should | Developer | Batch 1 | DONE(#592) |
+| #581 | retro: Sprint 133 — 並行 worktree 版本衝突預防機制 | RETRO | S(1) | should | Developer | Batch 1 | DONE(#593) |
+| #574 | retro: Sprint Review 後補打 git tag | RETRO | S(1) | should | Developer | Batch 2 | DONE(#594) |
+| #393 | feat: Prompt Injection Defense — Security Gate 擴充 | FEATURE | M(2) | should | Developer | Batch 2 | DONE(#595) |
+| #395 | feat: Parallel Conflict Prediction — 平行任務衝突預測 | FEATURE | M(2) | should | Developer | Batch 3 | DONE(#596) |
 
 ## Capacity
 - Total: 7 pts (3S + 2M)
