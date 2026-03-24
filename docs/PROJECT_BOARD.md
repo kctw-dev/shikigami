@@ -1,27 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 127 — 4/4 Stories 完成）
-**當前 Sprint**：Sprint 127（完成，待 Review）
+**最後更新**：2026-03-24（Sprint 127 Planning 完成）
+**當前 Sprint**：Sprint 127
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 127（完成）
-
-> Sprint Goal：鞏固 Sprint Execution 核心品質 — 完成結構重構 + 清除 Skill 技術債
-> **結果**：Goal 達成（4/4 Stories PASS）。Velocity 7 pts，完成率 100%。
-> **容量**：7 pts
+## Sprint Backlog（Sprint 127）
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| Sprint Execution Skill 結構重構 — story-lifecycle-prompt 模組化拆分 | #485 | M | 3 | 已完成 |
-| shoot/SKILL.md 模組化拆分 — 1108 行降至 <=400 行 | #486 | S | 2 | 已完成 |
-| RESEARCH: #452 拆分評估與最小可交付增量 | #490 | S | 1 | 已完成 |
-| Plugin 維護 — LICENSE 檔案 + git tag 同步 | #488 | S | 1 | 已完成 |
+| Sprint Execution Skill 結構重構 — story-lifecycle-prompt 模組化拆分 | #485 | M | 3 | 待開始 |
+| shoot/SKILL.md 模組化拆分 — 1108 行降至 <=400 行 | #486 | S | 2 | 待開始 |
+| RESEARCH: #452 拆分評估與最小可交付增量 | #490 | S | 1 | 待開始 |
+| Plugin 維護 — LICENSE 檔案 + git tag 同步 | #488 | S | 1 | 待開始 |
 
 **Sprint 容量**：7 points
-**Phase 1**：全部平行執行（#485 | #486 | #490 | #488）
+**Phase 1**：全部可平行（#485 | #486 | #490 | #488）
 
 ---
 
