@@ -89,7 +89,31 @@ if [[ -f "$WATCHDOG_SCRIPT" ]]; then
   bash "$WATCHDOG_SCRIPT" || true
 fi
 
-# ---------- Read scrum-master skill content ----------
+# ---------- ADR-037：JIT Context Loading — Read Context Manifest ----------
+# Phase 1（方向 C：Read-on-Demand Hook）
+# Inject: (a) always-load resources from manifest, (b) on-demand path list
+# Fallback: if manifest missing or unreadable → full preload (graceful degradation, AC5)
+MANIFEST_FILE="${PLUGIN_ROOT}/agents/context-manifest.yaml"
+JIT_ON_DEMAND_PATHS=""
+JIT_MODE=false
+
+if [[ -f "$MANIFEST_FILE" ]]; then
+  # Extract on_demand paths from scrum_master section (simple grep, no yaml parser needed)
+  JIT_ON_DEMAND_PATHS=$(grep -A200 "^scrum_master:" "$MANIFEST_FILE" 2>/dev/null \
+    | grep -A100 "on_demand:" \
+    | grep "path:" \
+    | sed 's/.*path: *"\([^"]*\)".*/\1/' \
+    | head -10 \
+    | tr '\n' ',' \
+    | sed 's/,$//' || echo "")
+  if [[ -n "$JIT_ON_DEMAND_PATHS" ]]; then
+    JIT_MODE=true
+  fi
+fi
+
+# ---------- Read scrum-master skill content (always-load, AC1) ----------
+# ADR-037 Phase 1: scrum-master SKILL.md 仍為 always-load（必讀）
+# On-demand paths are listed for the agent to self-load as needed
 SKILL_FILE="${PLUGIN_ROOT}/skills/scrum-master/SKILL.md"
 
 if [[ ! -f "$SKILL_FILE" ]]; then
@@ -120,7 +144,13 @@ if [[ -n "$RECOVERY_HINTS" ]]; then
   RECOVERY_PREFIX="\\n\\n## 恢復提示\\n${ESCAPED_HINTS}"
 fi
 
-PREFIX="You have shikigami superpowers.${RECOVERY_PREFIX}\\n\\n**Below is the full content of your 'shikigami:scrum-master' skill - your AI Agent Scrum Team controller. For all other skills, use the 'Skill' tool:**"
+# ADR-037：JIT on-demand paths hint（只在 manifest 可讀時注入）
+JIT_HINT=""
+if [[ "$JIT_MODE" == "true" && -n "$JIT_ON_DEMAND_PATHS" ]]; then
+  JIT_HINT="\\n\\n## JIT Context（ADR-037 Phase 1）\\n以下資源為 on-demand，請在需要時自行使用 Read 工具載入：\\n${JIT_ON_DEMAND_PATHS}"
+fi
+
+PREFIX="You have shikigami superpowers.${RECOVERY_PREFIX}${JIT_HINT}\\n\\n**Below is the full content of your 'shikigami:scrum-master' skill - your AI Agent Scrum Team controller. For all other skills, use the 'Skill' tool:**"
 CONTEXT="<EXTREMELY_IMPORTANT>\\n${PREFIX}\\n\\n${ESCAPED}\\n</EXTREMELY_IMPORTANT>"
 
 # ---------- Output JSON (dual fields for compatibility) ----------

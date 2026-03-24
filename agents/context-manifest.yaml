@@ -1,0 +1,53 @@
+# Context Manifest — JIT Context Loading
+# ADR-037: Read-on-Demand Hook (Phase 1, Direction C)
+# Agent context-manifest: defines always-load vs on-demand resources
+# Format: always = 每次 session 必讀, on_demand = 執行特定任務時才讀
+#
+# Fallback: if this file is missing or unreadable, session-start hook
+# falls back to full preload mode (graceful degradation, AC5)
+
+scrum_master:
+  always:
+    - path: "skills/scrum-master/SKILL.md"
+      description: "Scrum Master 角色行為定義，session 啟動必讀"
+    - path: ".claude/shikigami.local.md"
+      description: "專案配置（project_level 等），每次 session 必讀"
+  on_demand:
+    - path: "docs/sprints/sprint_N.md"
+      description: "當前 Sprint 詳情，執行 Sprint 任務時才需要"
+      trigger: "sprint execution, sprint planning, sprint review"
+    - path: "docs/prd/PRODUCT_BACKLOG.md"
+      description: "Product Backlog，Sprint Planning 時才需要"
+      trigger: "sprint planning"
+    - path: "docs/adr/*.md"
+      description: "架構決策記錄，架構討論時才需要"
+      trigger: "architecture decision, ADR creation"
+    - path: "docs/sprints/sprint-checkpoint.json"
+      description: "Sprint 進度 checkpoint，Sprint 執行恢復時才需要"
+      trigger: "sprint execution resume, compact recovery"
+
+developer:
+  always:
+    - path: "skills/developer/SKILL.md"
+      description: "Developer 角色 TDD 執行規則，每次 session 必讀"
+  on_demand:
+    - path: "docs/sprints/sprint_N.md"
+      description: "Sprint Story 詳情，開發任務時才需要"
+      trigger: "feature development"
+    - path: "docs/adr/*.md"
+      description: "ADR，架構決策查詢時才需要"
+      trigger: "architecture check"
+
+po:
+  always:
+    - path: "agents/product-owner.md"
+      description: "PO 角色定義，每次 session 必讀"
+  on_demand:
+    - path: "docs/prd/PRODUCT_BACKLOG.md"
+      description: "Backlog，排序和選取 Story 時才需要"
+      trigger: "sprint planning, backlog grooming"
+    - path: "docs/prd/ROADMAP.md"
+      description: "產品路線圖，策略決策時才需要"
+      trigger: "roadmap discussion"
+
+# 注意：此 manifest 為 Phase 1 初始版本，後續將依 ADR-037 Phase 2 擴充精化
