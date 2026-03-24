@@ -14,10 +14,10 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: 建立 Skill 行數自動偵測腳本 | #555 | S | 1 | 待開始 |
-| ADR RESEARCH: browser-automation 工具選型 ADR | #386 | M | 2 | 待開始 |
-| retro: CI 升級確認時機明確化 | #556 | S | 1 | 待開始 |
-| feat: /shoot 進化版 — test→review→PR 一鍵串接 | #388 | M | 2 | 待開始 |
+| retro: 建立 Skill 行數自動偵測腳本 | #555 | S | 1 | 已完成 (#559) |
+| ADR RESEARCH: browser-automation 工具選型 ADR | #386 | M | 2 | 已完成 (#560) |
+| retro: CI 升級確認時機明確化 | #556 | S | 1 | 已完成 (#561) |
+| feat: /shoot 進化版 — test→review→PR 一鍵串接 | #388 | M | 2 | 已完成 (#562) |
 
 **Sprint 容量**：6 points
 **執行順序**：Batch 1（#555 | #386 平行） → Batch 2（#556 | #388 平行）
