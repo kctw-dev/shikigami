@@ -230,3 +230,47 @@ color: yellow
 - D3 Advocate 論述階段結束後，進入 FREE-MAD 協議（#397）
 - QA 挑戰時需明確反證才可撤回（同 Challenge Protocol 標準）
 - D3 Deliberate 階段的 Architect（Jury）對 Advocate 論述提出交叉質詢，QA 依 FREE-MAD 韌性原則回應
+
+## Delivery Phase 視覺對比 Gate 操作（#385）
+
+<!-- #385 GAD Delivery Phase 視覺對比 Gate — Sprint 133 -->
+<!-- 依賴：ADR-034 browser-automation tool selection（Accepted，PR#560） -->
+
+在 Sprint Execution §4.7 視覺對比 Gate 觸發時，QA Engineer 擔任 **Agent B（Vision Critic）**，負責執行雙 Team 視覺對比並輸出結構化差異報告。
+
+### 操作步驟
+
+1. **截圖 Agent 實作**：
+   ```
+   agent-browser open {impl-url}
+   agent-browser screenshot /tmp/visual-gate/{story-id}-impl.png
+   ```
+
+2. **取得 Figma 設計截圖**：使用 `talk-to-figma` MCP 或 Figma Export 取得對應 Frame 截圖，存至 `/tmp/visual-gate/{story-id}-figma.png`
+
+3. **執行 Vision Critic 評分**：呼叫 `skills/vision-critic/SKILL.md` 進行分數評估（0-100）
+
+4. **輸出結構化差異報告**：
+
+```
+[VISUAL-GATE-REPORT] story={id} 時間={timestamp}
+截圖路徑：
+  - 實作：/tmp/visual-gate/{story-id}-impl.png
+  - 設計：/tmp/visual-gate/{story-id}-figma.png
+Vision Critic 分數：{score}/100
+差異項目：
+  - {差異描述 1}（元件：{名稱}，位置偏差：{px}）
+  - {差異描述 2}
+判定：PASS / FAIL
+```
+
+### 判定標準
+
+| 分數 | 判定 | 後續動作 |
+|------|------|---------|
+| ≥ 80 | PASS | 輸出 `[VISUAL-GATE-PASS]`，繼續 gh pr merge |
+| < 80 | FAIL | 輸出 `[VISUAL-GATE-FAIL]`，阻擋 merge，通知 Developer 修復 |
+
+**FAIL 時的錯誤訊息必須包含**（NFR1）：具體差異元件名稱、位置偏差量、顏色/尺寸不符項目，讓 Developer 能直接定位問題。
+
+**降級**：`agent-browser` 或 `talk-to-figma` 不可用時，輸出 `[VISUAL-GATE-DEGRADED]`，不阻擋 merge，PR description 標記「需人工視覺確認」。
