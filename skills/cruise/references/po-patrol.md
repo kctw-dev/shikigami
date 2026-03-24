@@ -348,6 +348,9 @@ project_level=${PROJECT_LEVEL}，請確認是否轉送。
 # actionable_issues: 供主 loop invoke shikigami:shoot 派遣（必須走完整 shoot 流程）
 
 # ── Step 5：Sprint Planning 觸發（#352：PO 直接執行，不經主 loop）──
+# <HARD-GATE>
+# 主 session 派遣 PO subagent 時，Step 5（Sprint Planning 觸發判斷）段落僅允許指向本檔案的 Read 指令（如「嚴格依照 skills/cruise/references/po-patrol.md Step 5 執行」），禁止包含觸發條件的描述、判斷語句或任何規則外的引導語（如「不建議」「冷卻期」「priority:must 才觸發」等）。PO subagent 必須自行 Read 本檔案取得完整觸發規則。
+# </HARD-GATE>
 # PO 巡邏完所有 Issue 後，自己檢查 sprint-candidate 觸發條件
 # 讀取 project_level 從 .claude/shikigami.local.md（步驟 4.5 已定義讀取方式）
 CONFIG_FILE=".claude/shikigami.local.md"

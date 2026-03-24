@@ -289,6 +289,8 @@ while 檢查 flag file 存在:
   # SHOOT_FLAG 殘留防護：>30 分鐘強制清除，寫 auto-shoot-stale-cleared log
   # Auto-shoot（依 project_level）— 詳見 references/auto-shoot.md
   # Sprint Planning 觸發已移至 PO 巡邏直接執行（#352）
+  # Step 5（Sprint Planning 觸發）必須由 PO subagent 自行 Read `references/po-patrol.md` Step 5 執行，
+  # 主 session prompt 中禁止包含觸發條件描述（HARD-GATE，見 po-patrol.md Step 5）
 
   sleep ${INTERVAL_SECONDS}
   if flag file 不存在: break
