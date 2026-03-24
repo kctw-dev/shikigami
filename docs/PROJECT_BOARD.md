@@ -14,10 +14,10 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: Story AC 完整性前置確認 | #563 | S | 1 | Sprint Backlog |
-| ADR RESEARCH: TDAD 依賴分析工具選型 | #567 | S | 1 | Sprint Backlog |
-| retro: Sprint Candidate RICE Score 補充 | #564 | M | 2 | Sprint Backlog |
-| feat: TDAD Dependency Map — 精準 TDD 執行 | #394 | M | 2 | Sprint Backlog |
+| retro: Story AC 完整性前置確認 | #563 | S | 1 | 已完成 (#568) |
+| ADR RESEARCH: TDAD 依賴分析工具選型 | #567 | S | 1 | 已完成 (#569) |
+| retro: Sprint Candidate RICE Score 補充 | #564 | M | 2 | 已完成 (#570) |
+| feat: TDAD Dependency Map — 精準 TDD 執行 | #394 | M | 2 | 已完成 (#571) |
 
 **Sprint 容量**：6 points
 **執行順序**：Batch 1（#563 | #567 平行） → Batch 2（#564 | #394 平行，#394 依賴 #567）

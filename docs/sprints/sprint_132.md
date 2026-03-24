@@ -7,10 +7,10 @@
 
 | Story ID | 標題 | Type | Size | Priority | Assignee | Phase |
 |----------|------|------|------|----------|----------|-------|
-| #563 | retro: Story AC 完整性前置確認 — PO Round 1 必須提供完整 AC | RETRO | S(1) | must | Developer | Batch 1 |
-| #567 | ADR RESEARCH: TDAD 依賴分析工具選型（Python AST vs TypeScript madge） | RESEARCH | S(1) | should | Developer | Batch 1 |
-| #564 | retro: Sprint Candidate RICE Score 補充 — 24 個待排 Story 缺乏優先級量化 | RETRO | M(2) | should | Developer | Batch 2 |
-| #394 | feat: TDAD Dependency Map — 精準 TDD 執行 | FEATURE | M(2) | should | Developer | Batch 2（依賴 #567） |
+| #563 | retro: Story AC 完整性前置確認 — PO Round 1 必須提供完整 AC | RETRO | S(1) | must | Developer | Batch 1 ✓ PR#568 |
+| #567 | ADR RESEARCH: TDAD 依賴分析工具選型（Python AST vs TypeScript madge） | RESEARCH | S(1) | should | Developer | Batch 1 ✓ PR#569 |
+| #564 | retro: Sprint Candidate RICE Score 補充 — 24 個待排 Story 缺乏優先級量化 | RETRO | M(2) | should | Developer | Batch 2 ✓ PR#570 |
+| #394 | feat: TDAD Dependency Map — 精準 TDD 執行 | FEATURE | M(2) | should | Developer | Batch 2 ✓ PR#571 |
 
 ## Capacity
 - Total: 6 pts (2M + 2S)
