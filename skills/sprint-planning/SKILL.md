@@ -48,6 +48,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 - [ ] **Architect** 技術評估（詳見 [architect-prompt.md](./references/architect-prompt.md)）
 - [ ] **QA** 驗收標準確認（詳見 [qa-prompt.md](./references/qa-prompt.md)）
 - [ ] 上個 Sprint 的 Retro Action Items 自動列入 Backlog（若有未完成項目）
+- [ ] **Retro-Action Grooming 偵測**（#493）：掃描 `retro-action` label 的 open Issues，對 Sprint Review 觸發的 `[RETRO-GROOMING-TRIGGER]` Issues 執行 Backlog Grooming 重評估（詳見 `skills/sprint-review/references/retro-grooming.md`）
 - [ ] **PO** 建立 `docs/sprints/sprint_N.md`、更新 `docs/PROJECT_BOARD.md`、GitHub label/milestone 操作（詳見 [po-prompt.md](./references/po-prompt.md) Round 2）
 - [ ] 記錄 Token 消耗至 `docs/km/Metrics_Log.md` *(慢想)*<!-- OpenCode -->（OpenCode 暫填 N/A）<!-- /OpenCode -->
 - [ ] 寫入 Sprint Planning 會議紀錄至 `docs/meetings/YYYY-MM-DD-sprint-planning.md`（詳見 §5.1 會議紀錄格式）
