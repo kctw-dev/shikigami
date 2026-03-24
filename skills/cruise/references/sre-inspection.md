@@ -21,12 +21,40 @@ SRE 建立 Issue 時，若判斷問題**屬於框架層級**（非 repo 特定�
 ## CI/CD 狀態檢查
 
 ```bash
-# 列出最近 10 筆 GitHub Actions run
+# 列出最近 10 筆 GitHub Actions run（所有 branch，含 feature branch）
 gh run list -R ${OWNER_REPO} --limit 10 --json status,conclusion,name,databaseId,createdAt
 # 篩選 failure / cancelled
 FAILED_RUNS=$(gh run list -R ${OWNER_REPO} --limit 10 --json status,conclusion,name,databaseId \
   | jq '[.[] | select(.conclusion == "failure" or .conclusion == "cancelled")]')
 ```
+
+### main branch CI 獨立檢查（必須執行）
+
+> **背景**：`gh run list` 預設列出所有 branch 的 run。當 feature branch 有大量 failure 時，SRE 容易忽略 main branch 本身的健康狀態。main branch failure 影響所有後續 merge 和 deploy，嚴重度高於 feature branch failure。
+
+```bash
+# 獨立檢查 main branch 最近 run
+MAIN_RUNS=$(gh run list -R ${OWNER_REPO} --branch main --limit 3 \
+  --json status,conclusion,name,databaseId,createdAt)
+MAIN_FAILURES=$(echo "$MAIN_RUNS" | jq '[.[] | select(.conclusion == "failure" or .conclusion == "cancelled")]')
+
+if [[ $(echo "$MAIN_FAILURES" | jq length) -gt 0 ]]; then
+  echo "[SRE] WARNING: main branch CI failure detected — 優先級 HIGH"
+  # main branch failure 優先於 feature branch failure 處理
+  MAIN_CI_HEALTH="FAIL"
+else
+  MAIN_CI_HEALTH="PASS"
+fi
+```
+
+**main branch vs feature branch CI failure 嚴重度判斷**：
+
+| CI failure 位置 | 嚴重度 | 影響範圍 | 行動 |
+|----------------|--------|---------|------|
+| **main branch** | **HIGH** | 影響所有後續 merge 和 deploy | 優先建 Issue，label 加 `main-branch-failure` |
+| feature branch | MEDIUM | 僅影響該 PR | 記錄，關聯既有 Issue |
+
+**重要**：即使所有可見 failure 都在 feature branch，仍必須執行 main branch 獨立檢查，不可因 feature branch 有既有 Issue 而跳過。
 
 ## Runner 健康檢查
 
@@ -149,10 +177,60 @@ gh run view <run_id> -R ${OWNER_REPO} --log 2>/dev/null | grep -i 'warning\|WARN
 
 | 情境 | 判斷條件 | 自動行動 | label | log action 類型 |
 |------|----------|----------|-------|-----------------|
-| **CI failure** | CI run 結果為 failure / cancelled | 建 Issue + body 含 `/systematic-debugging` 指引 | `sre,sre-auto-debug,needs-triage` | `"create-issue-with-debug"` |
+| **main branch CI failure** | main branch CI run 結果為 failure / cancelled（`--branch main` 獨立查詢） | 建 Issue + body 含 `/systematic-debugging` 指引 + 標記 HIGH 優先級 | `sre,sre-auto-debug,needs-triage,main-branch-failure` | `"create-issue-main-ci-failure"` |
+| **CI failure（feature branch）** | CI run 結果為 failure / cancelled（非 main branch） | 建 Issue + body 含 `/systematic-debugging` 指引 | `sre,sre-auto-debug,needs-triage` | `"create-issue-with-debug"` |
 | **Deploy failure** | deploy job 失敗（conclusion=failure，job name 含 deploy） | 建 Issue + body 含 @mention PO | `sre,deploy-failure,needs-triage` | `"create-issue-deploy"` |
 | **Runner offline** | runner status=offline（repo-level fallback） | 建 Issue | `sre,runner-offline,needs-triage` | `"create-issue-runner"` |
 | **VM 異常減少** | `recommendedSize = 之前 VM 數` 但 VM 實際減少 | 建 Issue + 記錄原因 + 證據 | `sre,vm-anomaly,needs-triage` | `"create-issue-vm-anomaly"` |
+
+## main branch CI failure → Issue（HIGH 優先級）
+
+```bash
+# main branch CI failure：從上方 MAIN_FAILURES 陣列逐筆建 Issue
+for run_id in $(echo "$MAIN_FAILURES" | jq -r '.[].databaseId'); do
+  RUN_INFO=$(gh run view "$run_id" -R ${OWNER_REPO} --json name,databaseId,createdAt)
+  RUN_NAME=$(echo "$RUN_INFO" | jq -r '.name')
+  ISSUE_TITLE="[SRE] main branch CI failure: ${RUN_NAME}"
+
+  # Issue 重複防護（跨機器冪等）
+  EXISTING=$(gh issue list -R ${OWNER_REPO} \
+    --search "\"${ISSUE_TITLE}\"" \
+    --state all \
+    --json number,title \
+    2>/dev/null || echo "[]")
+
+  if echo "$EXISTING" | jq -e '. | length > 0' &>/dev/null; then
+    echo "[SRE] 跳過重複 Issue：$ISSUE_TITLE"
+    log action: "跳過重複 Issue: ${ISSUE_TITLE}"
+  else
+    gh issue create -R ${OWNER_REPO} \
+      --title "$ISSUE_TITLE" \
+      --body "## SRE 巡檢發現 main branch CI failure（HIGH 優先級）
+
+**發現時間**：$(date '+%Y-%m-%dT%H:%M:%S')
+**Session**：${SESSION_ID}
+**Repo**：${OWNER_REPO}
+**嚴重度**：HIGH — 影響所有後續 merge 和 deploy
+**問題描述**：main branch CI pipeline 執行失敗
+
+### 詳情
+- Run ID: ${run_id}
+- Run Name: ${RUN_NAME}
+- Branch: main
+- 狀態: failure
+
+### 影響
+main branch 失敗會阻塞所有後續 PR merge 及 deploy 流程，需優先處理。
+
+### 建議排查
+執行 \`/systematic-debugging\` 進行系統性排查。
+
+> 此 Issue 由 SRE Cruise Agent 自動建立（main branch 獨立檢查）。請勿重複建立。" \
+      --label "sre,sre-auto-debug,needs-triage,main-branch-failure"
+    log action: "create-issue-main-ci-failure #<new_issue_number>"
+  fi
+done
+```
 
 ## CI failure → Issue + /systematic-debugging 指引
 
@@ -284,7 +362,8 @@ done
 
 多台機器同時執行 cruise 時，可能同時發現同一 failure。每種 Issue 類型在建立前均執行 `gh issue list -R ${OWNER_REPO} --search` 搜尋，確保同一問題只建一個 Issue：
 
-- CI failure：`EXISTING` 搜尋防護 → 已存在則跳過
+- main branch CI failure：`EXISTING` 搜尋防護 → 已存在則跳過
+- CI failure（feature branch）：`EXISTING` 搜尋防護 → 已存在則跳過
 - Deploy failure：`EXISTING` 搜尋防護 → 已存在則跳過
 - Runner offline：`EXISTING` 搜尋防護 → 已存在則跳過
 
@@ -299,7 +378,12 @@ done
   "timestamp": "<ISO8601>",
   "type": "sre-inspection",
   "repo": "<OWNER_REPO>",
-  "summary": "檢查 <X> 筆 CI run，發現 <Y> 個 failure，建立 <Z> 個 Issue",
+  "summary": "檢查 <X> 筆 CI run，main branch: <PASS|FAIL>，發現 <Y> 個 failure，建立 <Z> 個 Issue",
+  "main_ci_health": {
+    "status": "PASS | FAIL",
+    "failure_count": <N>,
+    "note": "main branch CI 獨立檢查結果（--branch main --limit 3）"
+  },
   "vm_health": {
     "status": "autoscaler-scale-in | spot-preemption-or-failure | no-change | skipped",
     "note": "<原因說明 + 證據>",
@@ -307,7 +391,7 @@ done
     "current_vm_count": <N>,
     "recommended_size": <N>
   },
-  "actions": ["create-issue-with-debug #<N1>", "create-issue-deploy #<N2>", "create-issue-runner #<N3>", "create-issue-vm-anomaly #<N4>", "跳過重複 Issue: <title>"]
+  "actions": ["create-issue-main-ci-failure #<N0>", "create-issue-with-debug #<N1>", "create-issue-deploy #<N2>", "create-issue-runner #<N3>", "create-issue-vm-anomaly #<N4>", "跳過重複 Issue: <title>"]
 }
 ```
 
@@ -315,7 +399,8 @@ done
 
 | 類型 | 說明 |
 |------|------|
-| `"create-issue-with-debug"` | CI failure 建 Issue + `/systematic-debugging` 指引（松耦合，不同步 debug） |
+| `"create-issue-main-ci-failure"` | main branch CI failure 建 Issue（HIGH 優先級，label 含 `main-branch-failure`） |
+| `"create-issue-with-debug"` | feature branch CI failure 建 Issue + `/systematic-debugging` 指引（松耦合，不同步 debug） |
 | `"create-issue-deploy"` | Deploy failure 建 Issue + @mention PO |
 | `"create-issue-runner"` | Runner offline 建 Issue |
 | `"create-issue-vm-anomaly"` | VM 異常減少（SPOT 回收或故障）建 Issue + 原因 + 證據 |
