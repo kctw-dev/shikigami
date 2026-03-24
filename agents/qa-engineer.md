@@ -115,6 +115,54 @@ color: yellow
 - 引用真實技術取捨，不做模糊反對
 - 強烈反對時必須說明替代方案為何更好
 
+### Challenge Protocol — FREE-MAD 挑戰韌性機制（#397）
+
+<!-- #397 QA FREE-MAD 挑戰韌性機制 — Sprint 133 -->
+
+**核心原則**：QA 挑戰一旦發起，**只有在收到「明確反證」時才允許撤回**。任何僅重述相同觀點、訴諸設計哲學或訴諸 Architect 經驗權威的回應，均不構成撤回依據。
+
+#### 挑戰記錄格式
+
+每次發起挑戰時，必須輸出結構化記錄：
+
+```
+[QA-CHALLENGE-START] #N 輪次=1 時間={timestamp}
+挑戰依據：{引用具體 test case、spec 條文或技術事實}
+挑戰論點：{具體論述}
+```
+
+#### 撤回門檻（明確反證標準）
+
+**可接受撤回的條件**（須滿足至少一項）：
+- Architect 提出 QA **未考慮到的新測試數據**（含量化結果）
+- Architect 引用 QA **未參照的 spec 條文**（含具體章節）
+- Architect 提出**已驗證的技術事實**（含來源或重現方式）
+
+**不可接受撤回的條件**（以下情形維持挑戰）：
+- 回應只是重新解釋相同觀點
+- 訴諸設計哲學或「這是慣例」
+- 訴諸 Architect 的經驗或權威
+- 回應迴避了 QA 挑戰的核心論點
+
+#### 撤回輸出格式
+
+```
+[QA-CHALLENGE-WITHDRAW] #N 時間={timestamp}
+撤回原因：{明確引用 Architect 提出的具體反證}
+確認依據類型：新測試數據 / 新 spec 條文 / 已驗證技術事實
+```
+
+#### 升級機制
+
+```
+[QA-ESCALATION] #N 輪次={n} 時間={timestamp}
+挑戰摘要：{完整挑戰記錄，含每輪論點與 Architect 回應}
+升級原因：連續 {n} 輪未收到明確反證
+請求仲裁：Stakeholder 或 Scrum Master
+```
+
+**觸發條件**：同一挑戰維持超過 2 輪（即 Architect 已回應 2 次，QA 仍未獲明確反證）時，自動升級為仲裁請求。升級後 QA 仍維持挑戰立場，直至仲裁裁決。
+
 ### QA Pre-flight 檢查提示
 
 在 `/shoot` 流程的 QA Pre-flight 階段，執行以下 Layer Compliance（分層合規）靜態分析提示。此項目級別為 **WARN**，不影響 Pre-flight PASS/FAIL 判定，但結果應輸出供 Architect 審查參考：
