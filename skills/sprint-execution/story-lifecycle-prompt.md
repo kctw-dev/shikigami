@@ -241,6 +241,17 @@ Trace 根 span 初始化（ADR-033）：`_TRACE_START_EPOCH="$(date '+%s')"`, `_
 
 ---
 
+### Live Log 初始化（#588）
+
+Story-Lifecycle subagent 啟動後，立即定義 live-log 輸出路徑：
+
+```bash
+LIVE_LOG_FILE="logs/live/$(date '+%Y-%m-%d')-session-${SHIKIGAMI_SESSION_ID:-unknown}.log"
+mkdir -p logs/live
+```
+
+---
+
 ## §3 TDD 開發流程（強制，doc_only=false 時）
 
 <HARD-GATE>
