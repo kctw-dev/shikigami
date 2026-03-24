@@ -12,9 +12,9 @@
 
 | Story | Issue | Type | Size | Points | ADR | 負責人 | 狀態 |
 |-------|-------|------|------|--------|-----|--------|------|
-| retro: CI Token 輪換自動化 — CLAUDE_CODE_OAUTH_TOKEN 持續過期根本解決 | #637 | INFRA | S | 1 | 無需 | Developer | TODO |
-| feat: Temporal-style Crash Recovery（依賴 ADR-041 Accepted） | #405 | FEATURE | M | 2 | ADR-041 ✓ | Developer | TODO |
-| feat: Session Watchdog — 存活監控 + 自動重啟（依賴 ADR-042 + #405） | #408 | FEATURE | M | 2 | ADR-042 ✓ | Developer | TODO |
+| retro: CI Token 輪換自動化 — CLAUDE_CODE_OAUTH_TOKEN 持續過期根本解決 | #637 | INFRA | S | 1 | 無需 | Developer | DONE(#640) |
+| feat: Temporal-style Crash Recovery（依賴 ADR-041 Accepted） | #405 | FEATURE | M | 2 | ADR-041 ✓ | Developer | DONE(#641) |
+| feat: Session Watchdog — 存活監控 + 自動重啟（依賴 ADR-042 + #405） | #408 | FEATURE | M | 2 | ADR-042 ✓ | Developer | DONE(#642) |
 
 **總計**：5 pts
 
