@@ -1,23 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 139 Planning 完成 — 4 Stories 選入，5 pts）
-**當前 Sprint**：Sprint 139（進行中）
+**最後更新**：2026-03-24（Sprint 139 Review 完成 — 4/4 Stories DONE，5 pts）
+**當前 Sprint**：Sprint 139（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 139（進行中）
+## Sprint 139（完成）
 
 > Sprint Goal：落地 TCB 斷點管理實作（ADR-040 決策成果），同步推進 Crash Recovery 與 Session Watchdog 的 ADR 先行工作，並完成 A2A 協議相容性研究評估。
+> **結果**：Goal 達成（4/4 Stories DONE）。Velocity 5 pts，完成率 100%。連續第 13 Sprint 100%（127-139）。
 > **容量**：5 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: TCB 斷點管理 — Agent Action 級 Checkpoint | #404 | M | 2 | 待執行 |
-| RESEARCH: ADR-041 — Crash Recovery 架構決策（unblocks #405）| #631 | S | 1 | 待執行 |
-| RESEARCH: ADR-042 — Session Watchdog 架構決策（unblocks #408）| #632 | S | 1 | DONE |
-| research: A2A 協議相容性評估 | #399 | S | 1 | DONE |
+| feat: TCB 斷點管理 — Agent Action 級 Checkpoint | #404 | M | 2 | DONE(#634) |
+| RESEARCH: ADR-041 — Crash Recovery 架構決策（unblocks #405）| #631 | S | 1 | DONE(#633) |
+| RESEARCH: ADR-042 — Session Watchdog 架構決策（unblocks #408）| #632 | S | 1 | DONE(#635) |
+| research: A2A 協議相容性評估 | #399 | S | 1 | DONE(#636) |
 
 **Sprint 容量**：5 points
 **執行順序**：Phase 1 平行（#404 | #631 | #399）→ Phase 2 序列（#632，依賴 #631）
