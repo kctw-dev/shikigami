@@ -216,6 +216,19 @@ PROJECT_LEVEL=$(grep -A5 'shikigami:' "$CONFIG_FILE" 2>/dev/null | grep 'project
 PROJECT_LEVEL="${PROJECT_LEVEL:-medium}"
 ```
 
+### 4.55 讀取 cruise.patrol（#590）
+
+```bash
+PATROL_MODE=$(grep -A10 'cruise:' "$CONFIG_FILE" 2>/dev/null | grep 'patrol:' | awk '{print $2}' | head -1)
+PATROL_MODE="${PATROL_MODE:-both}"
+```
+
+| 值 | 行為 |
+|----|------|
+| `po` | 只派 PO-patrol subagent，跳過 SRE-inspection |
+| `sre` | 只派 SRE-inspection subagent，跳過 PO-patrol |
+| `both`（預設） | 同時派 PO + SRE（向後相容，未設定時 fallback） |
+
 <HARD-GATE>
 project_level=low 的所有自動行為（auto-shoot、auto-close、auto-sprint-planning、auto-sprint-execution）為強制執行，Agent 禁止加入額外確認步驟。
 </HARD-GATE>
@@ -257,9 +270,13 @@ CYCLE=0
 CYCLE=1
 寫入 {"type":"cruise-init",...} log entry
 for REPO_PATH in REPOS:
-  平行派遣 PO-patrol + SRE-inspection（帶入 REPO_PATH, OWNER_REPO）
+  # 依 PATROL_MODE 決定派遣
+  if PATROL_MODE == "po" or PATROL_MODE == "both":
+    派遣 PO-patrol subagent（帶入 REPO_PATH, OWNER_REPO）
+  if PATROL_MODE == "sre" or PATROL_MODE == "both":
+    派遣 SRE-inspection subagent（帶入 REPO_PATH, OWNER_REPO）
 等待完成，寫入 JSONL log（格式見 references/log-format.md）
-寫入 {"type":"po-patrol-complete",...} / {"type":"sre-inspection-complete",...} log entry
+寫入 {"type":"po-patrol-complete",...} / {"type":"sre-inspection-complete",...} log entry（依實際派遣的 agent）
 
 # [AUTO-CONTINUE] project_level=low → 自動派 auto-shoot，不停
 if PROJECT_LEVEL != "high": auto-shoot ACTIONABLE_ISSUES（見 references/auto-shoot.md）
@@ -284,7 +301,11 @@ while 檢查 flag file 存在:
   CYCLE += 1; touch "$CRUISE_FLAG"
   寫入 {"type":"po-patrol-start",...} / {"type":"sre-inspection-start",...} log entry
   for REPO_PATH in REPOS:
-    平行派遣 PO-patrol（詳見 references/po-patrol.md）+ SRE-inspection（詳見 references/sre-inspection.md）
+    # 依 PATROL_MODE 決定派遣
+    if PATROL_MODE == "po" or PATROL_MODE == "both":
+      派遣 PO-patrol subagent（詳見 references/po-patrol.md）
+    if PATROL_MODE == "sre" or PATROL_MODE == "both":
+      派遣 SRE-inspection subagent（詳見 references/sre-inspection.md）
   等待完成，寫入 log
   寫入 {"type":"po-patrol-complete",...} / {"type":"sre-inspection-complete",...} log entry
 
