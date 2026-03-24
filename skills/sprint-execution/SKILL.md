@@ -481,7 +481,7 @@ Sprint Execution 中各角色的具體決策標準請參閱以下文件：
 
 <!-- US-269 演示模式 Live Log Streaming — Sprint 99 -->
 
-Sprint Execution 支援 Live Log Streaming，讓使用者在另一個 terminal 即時觀看 Story-Lifecycle subagent 工作進度。每個 session 寫入獨立 `.log` 檔案（`docs/sprints/live-log/YYYY-MM-DD-session-<SESSION_ID>.log`）。日誌寫入為可選機制，失敗時靜默忽略，不影響主流程。
+Sprint Execution 支援 Live Log Streaming，讓使用者在另一個 terminal 即時觀看 Story-Lifecycle subagent 工作進度。每個 session 寫入獨立 `.log` 檔案（`logs/live/YYYY-MM-DD-session-<SESSION_ID>.log`）。日誌寫入為可選機制，失敗時靜默忽略，不影響主流程。
 
 > 詳見 `references/live-log.md`
 

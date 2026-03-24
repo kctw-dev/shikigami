@@ -198,7 +198,7 @@ jobs:
       - name: Push session logs
         if: always()
         run: |
-          SESSION_LOG_DIR="docs/sprints/live-log"
+          SESSION_LOG_DIR="logs/live"
           RUN_ID="$CLAUDE_SESSION_ID"
 
           # 若有 session log，commit + push 回 repo

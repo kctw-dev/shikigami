@@ -18,3 +18,6 @@ claude-talk-to-figma-mcp/
 #       框架現階段（v0.50.x）無雲端基礎設施，外部儲存延後至有實際需求時再引入。
 #       目錄結構與 README 仍納入 git（! 規則保留），僅排除報告本體。
 docs/vision-critic-reports/*.json
+
+# 系統記錄（live-log, schedule-cruise 等）不入版控
+logs/

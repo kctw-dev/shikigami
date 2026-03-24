@@ -235,7 +235,7 @@ commit + 取得 commit SHA
 ### 步驟 8：Live Log — Story 開始執行（US-269，US-322 AC-2，US-323 AC-4/6）
 
 <!-- US-269 / US-322 / US-323 -->
-進入 doc_only/TDD 路徑前：建立 per-session log 路徑 `docs/sprints/live-log/$(date '+%Y-%m-%d')-session-${_SESSION_ID}.log`，寫入 `event=story_start`（可選，`|| true` 防阻塞）。Layer 1 stdout：`echo "[SHIKIGAMI] event=story_start story=${story_id}"`。Layer 3 Issue 留言：`SHIKIGAMI_LIVE_NOTIFY=true` 時 opt-in 發送。
+進入 doc_only/TDD 路徑前：建立 per-session log 路徑 `logs/live/$(date '+%Y-%m-%d')-session-${_SESSION_ID}.log`，寫入 `event=story_start`（可選，`|| true` 防阻塞）。Layer 1 stdout：`echo "[SHIKIGAMI] event=story_start story=${story_id}"`。Layer 3 Issue 留言：`SHIKIGAMI_LIVE_NOTIFY=true` 時 opt-in 發送。
 
 Trace 根 span 初始化（ADR-033）：`_TRACE_START_EPOCH="$(date '+%s')"`, `_ROOT_SPAN_ID="tdd-implement-$(date '+%s')"`, `TRACE_LOG_FILE="docs/trace-logs/$(date '+%Y-%m-%d')-session-${_SESSION_ID}.jsonl"`。
 

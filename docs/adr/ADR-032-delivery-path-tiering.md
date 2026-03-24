@@ -149,7 +149,7 @@ ADR-023 決策 2 定義了 PreToolUse hook 豁免清單，`/commit` 路徑需納
 
 **頻率追蹤**：
 
-- 每次 `/commit` 成功後，在 `docs/sprints/live-log/` 當日 session log 記錄一筆 `[COMMIT-PATH-USAGE]` 事件
+- 每次 `/commit` 成功後，在 `logs/live/` 當日 session log 記錄一筆 `[COMMIT-PATH-USAGE]` 事件
 - 記錄格式：`[COMMIT-PATH-USAGE] <timestamp> <commit-hash> <files-changed>`
 
 **告警門檻**：

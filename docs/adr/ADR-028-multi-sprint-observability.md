@@ -103,7 +103,7 @@ Workflow step 4（`if: always()`）：
 - name: Push session logs
   if: always()
   run: |
-    git add docs/sprints/live-log/
+    git add logs/live/
     git commit -m "ci: push session logs [run=...]" || true
     git push origin HEAD || true
 ```
@@ -139,7 +139,7 @@ Layer 3 失敗 → 不影響 Layer 1、Layer 2、Sprint 主流程
 1. **新增**：`.github/workflows/sprint-dispatch.yml` — Layer 2 push step（`if: always()`）
 2. **修改**：`skills/sprint-execution/story-lifecycle-prompt.md` — 步驟 8（Layer 1 + Layer 3）、§9.0（Layer 1 + Layer 3）
 3. **修改**：`skills/sprint-execution/SKILL.md` — sprint_end 標記（Layer 1）
-4. **docs/sprints/live-log/**：per-session 路徑已在 protect-main.sh 豁免清單，可直推 main
+4. **logs/live/**：per-session 路徑已在 protect-main.sh 豁免清單，可直推 main
 
 ---
 
