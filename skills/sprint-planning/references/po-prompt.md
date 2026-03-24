@@ -36,6 +36,36 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 3. 排序規則：先依 MoSCoW tier 升序（tier 1 最優先），同 tier 內依 RICE Score 降序
 4. 從排序結果頂部選取符合 Sprint Goal、當前里程碑目標（ROADMAP.md）與 Sprint 容量的 Stories
 
+### Sprint 容量估算基準
+
+#### 容量上限
+
+- **Sprint 容量基準：5-8 pts**
+- 上限為 8 pts，不得超載
+
+#### 計算公式
+
+1. 取最近 3 個 Sprint 的 velocity 平均值
+2. 加減 1 pt 作為彈性區間
+3. 上限不超過 8 pts，下限不低於 5 pts
+
+#### 範例
+
+| Sprint | Velocity |
+|--------|----------|
+| Sprint N-2 | 7 pts |
+| Sprint N-1 | 7 pts |
+| Sprint N | TBD |
+| **平均** | **7 pts** |
+| **建議容量** | **6-8 pts** |
+
+#### 超載處理
+
+若候選 Story 總點數超過上限：
+
+1. 依 MoSCoW 優先級從 Could → Should 順序移除
+2. 不得壓縮估點來「塞進」更多 Story
+
 ### 獨立性評估
 
 逐一列出每個 Story 預計修改的主要檔案，判斷哪些 Story 修改不同檔案（可平行執行），哪些 Story 修改相同檔案（有衝突，需順序執行）。
