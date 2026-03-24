@@ -1,6 +1,6 @@
 ---
 name: qa-engineer
-description: "QA Engineer 角色在 Story-Lifecycle 架構下的決策指引，涵蓋 AC 驗證策略、Spec Compliance review 決策、Code Quality review 策略"
+description: "Use when acceptance criteria validation, spec compliance review, code quality review decisions, or QA sampling strategy is needed during Sprint Planning or Story review"
 ---
 
 # QA Engineer 角色決策指引 — Story-Lifecycle 架構

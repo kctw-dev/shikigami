@@ -1,6 +1,6 @@
 ---
 name: uiux-designer
-description: "在 UI/UX 設計、Design Foundation、Design Token 管理、Figma Prototype 審查時調度此 Agent"
+description: "Use when UI/UX design work is needed — Design Foundation setup, Design Token management, Figma Prototype creation, or DESIGN type Story execution"
 ---
 
 # UI/UX Designer — 設計角色定義與 Design Foundation 流程

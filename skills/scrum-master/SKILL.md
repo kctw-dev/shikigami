@@ -1,6 +1,6 @@
 ---
 name: scrum-master
-description: "Use when starting any conversation - 自動調度 Shikigami Agent Scrum Team 的角色分工與 Sprint 流程"
+description: "Use when routing user intent to the appropriate Shikigami workflow — central dispatcher that analyzes requests and delegates to specialized skills"
 ---
 
 # Scrum Master — 核心調度

@@ -1,6 +1,6 @@
 ---
 name: schedule
-description: "Use when setting up automated scheduled execution of a skill via cron. Handles pre-flight checks, script generation, crontab registration, post-deploy verification, and rollback."
+description: "Use when scheduling a skill for automated periodic execution via cron — setup, verification, and rollback of crontab entries"
 requiredTools:
   - Read
   - Glob

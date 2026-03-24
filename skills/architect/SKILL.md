@@ -1,6 +1,6 @@
 ---
 name: architect
-description: "Architect 角色在 Story-Lifecycle 架構下的決策指引，涵蓋估點策略、ADR 需求判斷、平行分群策略"
+description: "Use when technical estimation, story sizing, ADR requirement assessment, or parallel dispatch grouping decisions are needed during Sprint Planning or Execution"
 ---
 
 # Architect 角色決策指引 — Story-Lifecycle 架構

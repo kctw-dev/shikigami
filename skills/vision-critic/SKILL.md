@@ -1,6 +1,6 @@
 ---
 name: vision-critic
-description: "Use when evaluating Figma Frame output against Design System specifications. Performs multi-dimensional visual consistency scoring (layout consistency, design token compliance, component spec compliance) using Figma MCP tools and produces structured PASS/FAIL reports with actionable MCP fix sequences."
+description: "Use when evaluating Figma Frame output against Design System specifications — visual consistency scoring, Design Token compliance check, and component spec validation"
 ---
 
 # Vision Critic Agent Skill — 視覺一致性審查員

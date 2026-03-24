@@ -1,6 +1,6 @@
 ---
 name: cruise
-description: "Use when enabling periodic PO patrol + SRE inspection in the current session"
+description: "Use when starting cruise mode, automated patrol, periodic issue scanning, or background monitoring — enables PO patrol + SRE inspection loops"
 requiredTools:
   - Read
   - Glob

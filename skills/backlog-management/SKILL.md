@@ -1,6 +1,6 @@
 ---
 name: backlog-management
-description: "Use when new feature requests arrive, requirements change, backlog grooming is needed, or product discovery begins"
+description: "Use when backlog grooming is needed, requirements change, new stories need RICE scoring, or backlog health maintenance is due"
 ---
 
 # Backlog Management — 需求管理與產品探索

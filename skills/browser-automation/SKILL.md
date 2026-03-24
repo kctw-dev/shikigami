@@ -1,6 +1,6 @@
 ---
 name: browser-automation
-description: "Web 應用的瀏覽器自動化測試與驗證。QA E2E 測試、UX Contract 實作驗證、SRE Synthetic Monitoring 共用的 browser 能力底層。"
+description: "Use when browser-based testing or verification is needed — E2E tests, visual regression, form validation, responsive checks, or deployment smoke tests via agent-browser"
 ---
 
 # Browser Automation — agent-browser 整合
