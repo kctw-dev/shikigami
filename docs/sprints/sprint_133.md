@@ -10,7 +10,7 @@
 | #397 | feat: QA FREE-MAD 挑戰韌性機制 | FEATURE | S(1) | should | Developer | Batch 1 |
 | #407 | feat: 專案範本 — Skills/Hooks/Script 綁定 | FEATURE | S(1) | should | Developer | Batch 1 |
 | #403 | feat: D3 Debate Framework（Debate-Deliberate-Decide） | FEATURE | M(2) | should | Developer | Batch 2 | DONE(#578) |
-| #385 | feat: GAD 接入 Delivery Phase — 雙 Team 視覺對比 | FEATURE | M(2) | should | Developer | Batch 2 |
+| #385 | feat: GAD 接入 Delivery Phase — 雙 Team 視覺對比 | FEATURE | M(2) | should | Developer | Batch 2 | DONE(#579) |
 
 ## Capacity
 - Total: 6 pts (2S + 2M)
