@@ -21,7 +21,11 @@ if [[ -z "$ID" ]]; then
 fi
 
 REF="refs/claims/${ID}"
-SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+# 解析 Session ID（#572 fallback chain）
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=hooks/lib/resolve-session-id.sh
+source "${SCRIPT_DIR}/lib/resolve-session-id.sh" 2>/dev/null || true
+SESSION_ID="${SHIKIGAMI_SESSION_ID:-${CLAUDE_SESSION_ID:-unknown}}"
 LABEL="bot:session-${SESSION_ID}"
 
 # ── 取得 gh 登入使用者（可選）──────────────────────────────────

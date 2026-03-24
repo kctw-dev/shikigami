@@ -42,7 +42,10 @@ fi
 
 # ── 檢查 Task 初始化標記 ──────────────────────────────────────────────────────
 # 使用 /tmp 標記檔案追蹤 Task 是否已建立（輕量實作，重啟後失效觸發補建）
-SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+# 解析 Session ID（#572 fallback chain）
+# shellcheck source=hooks/lib/resolve-session-id.sh
+source "${SCRIPT_DIR}/lib/resolve-session-id.sh" 2>/dev/null || true
+SESSION_ID="${SHIKIGAMI_SESSION_ID:-${CLAUDE_SESSION_ID:-unknown}}"
 TASK_INIT_FLAG="/tmp/shikigami-task-init-sprint${SPRINT_NUM}-${SESSION_ID}.flag"
 
 if [[ -f "$TASK_INIT_FLAG" ]]; then

@@ -14,7 +14,10 @@ PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 ATTENDANCE_DIR="${ATTENDANCE_DIR:-${PLUGIN_ROOT}/docs/attendance}"
 mkdir -p "$ATTENDANCE_DIR"
 
-SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+# 解析 Session ID（#572 fallback chain）
+# shellcheck source=hooks/lib/resolve-session-id.sh
+source "${SCRIPT_DIR}/lib/resolve-session-id.sh" 2>/dev/null || true
+SESSION_ID="${SHIKIGAMI_SESSION_ID:-${CLAUDE_SESSION_ID:-unknown}}"
 # US-319: session_id=unknown 時用 unknown-$(date +%s) 避免覆寫
 if [[ "$SESSION_ID" == "unknown" ]]; then
   SESSION_ID="unknown-$(date +%s)"

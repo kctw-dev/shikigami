@@ -131,7 +131,9 @@ done
 ### 4. 建立 Flag File（SSOT — #449 AC4）
 
 ```bash
-SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+# 解析 Session ID（#572 fallback chain）
+source hooks/lib/resolve-session-id.sh
+SESSION_ID="${SHIKIGAMI_SESSION_ID}"
 CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
 SHOOT_FLAG="/tmp/shikigami-cruise-shoot-${SESSION_ID}.active"
 touch "$CRUISE_FLAG"

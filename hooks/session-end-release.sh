@@ -24,11 +24,14 @@
 # AC-6：失敗不阻塞，所有操作使用 || true
 set +e
 
-SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
-LABEL="bot:session-${SESSION_ID}"
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RELEASE_SCRIPT="${SCRIPT_DIR}/release-issue.sh"
+
+# 解析 Session ID（#572 fallback chain）
+# shellcheck source=hooks/lib/resolve-session-id.sh
+source "${SCRIPT_DIR}/lib/resolve-session-id.sh" 2>/dev/null || true
+SESSION_ID="${SHIKIGAMI_SESSION_ID:-${CLAUDE_SESSION_ID:-unknown}}"
+LABEL="bot:session-${SESSION_ID}"
 
 # ── repo fingerprint 計算（兩步法，#12 修復）────────────────────
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
@@ -175,7 +178,8 @@ ATTENDANCE_CHECKOUT_DIR="${ATTENDANCE_DIR:-${SCRIPT_DIR}/../docs/attendance}"
 ATTENDANCE_CHECKOUT_DIR="$(cd "${ATTENDANCE_CHECKOUT_DIR}" 2>/dev/null && pwd || echo "${SCRIPT_DIR}/../docs/attendance")"
 mkdir -p "$ATTENDANCE_CHECKOUT_DIR" 2>/dev/null || true
 
-ATTEND_SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+# #572：改用 SHIKIGAMI_SESSION_ID（已由 resolve-session-id.sh 解析）
+ATTEND_SESSION_ID="${SHIKIGAMI_SESSION_ID:-${CLAUDE_SESSION_ID:-unknown}}"
 # US-319: session_id=unknown 時用 unknown-$(date +%s) 避免覆寫
 if [[ "$ATTEND_SESSION_ID" == "unknown" ]]; then
   ATTEND_SESSION_ID="unknown-$(date +%s)"

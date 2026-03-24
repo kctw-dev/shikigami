@@ -29,7 +29,11 @@ fi
 
 # ── 常數設定 ────────────────────────────────────────────────────────
 TTL_SECONDS=1800  # 30 分鐘
-SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+# 解析 Session ID（#572 fallback chain）
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=hooks/lib/resolve-session-id.sh
+source "${SCRIPT_DIR}/lib/resolve-session-id.sh" 2>/dev/null || true
+SESSION_ID="${SHIKIGAMI_SESSION_ID:-${CLAUDE_SESSION_ID:-unknown}}"
 
 # ── Path Hash 計算 ─────────────────────────────────────────────────
 # 使用相對路徑計算 sha256，取前 16 字元，確保跨機器一致性

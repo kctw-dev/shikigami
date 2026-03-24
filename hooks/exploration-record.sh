@@ -57,8 +57,10 @@ fi
 EXPLORATION_DIR="${EXPLORATION_DIR:-${PLUGIN_ROOT}/docs/exploration}"
 mkdir -p "$EXPLORATION_DIR"
 
-# ── Session ID（沿用 #319 模式）─────────────────────────────────────────────
-SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+# ── Session ID（#572 fallback chain）────────────────────────────────────────
+# shellcheck source=hooks/lib/resolve-session-id.sh
+source "${SCRIPT_DIR}/lib/resolve-session-id.sh" 2>/dev/null || true
+SESSION_ID="${SHIKIGAMI_SESSION_ID:-${CLAUDE_SESSION_ID:-unknown}}"
 if [[ "$SESSION_ID" == "unknown" ]]; then
   SESSION_ID="unknown-$(date +%s)"
 fi
