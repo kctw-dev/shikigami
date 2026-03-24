@@ -14,10 +14,10 @@
 
 | Story | Issue | Size | Points | Type | 負責人 | 狀態 |
 |-------|-------|------|--------|------|--------|------|
-| RESEARCH: ADR-037 — Context Engineering JIT 架構決策 | #602 | S | 1 | RESEARCH | Architect | 待開始 |
-| retro: 修復 CI New Issue Intake OAuth token 認證失效 | #597 | S | 1 | INFRA | SRE | 待開始 |
-| research: Agent Skills 開放標準對齊評估 | #396 | M | 2 | RESEARCH | Architect | 待開始 |
-| feat: Context Engineering — Just-in-Time Retrieval | #400 | M | 2 | FEATURE | Developer | 待開始（依賴 #602 ADR-037 Accepted） |
+| RESEARCH: ADR-037 — Context Engineering JIT 架構決策 | #602 | S | 1 | RESEARCH | Architect | 已完成 (#603) |
+| retro: 修復 CI New Issue Intake OAuth token 認證失效 | #597 | S | 1 | INFRA | SRE | 已完成 (#604) |
+| research: Agent Skills 開放標準對齊評估 | #396 | M | 2 | RESEARCH | Architect | 已完成 (#605) |
+| feat: Context Engineering — Just-in-Time Retrieval | #400 | M | 2 | FEATURE | Developer | 已完成 (#607) |
 
 **Sprint 容量**：6 points
 
@@ -126,9 +126,9 @@
 ## Definition of Done
 
 所有 Story 完成條件：
-- [ ] 所有 Acceptance Criteria 通過
-- [ ] 單元測試 / 整合測試全部通過（0 failed）（RESEARCH 豁免）
-- [ ] 無硬編碼金鑰，配置透過環境變數管理
+- [x] 所有 Acceptance Criteria 通過
+- [x] 單元測試 / 整合測試全部通過（0 failed）（RESEARCH 豁免）
+- [x] 無硬編碼金鑰，配置透過環境變數管理
 - [ ] Metrics_Log.md 本 Sprint 數據已更新
-- [ ] 既有測試全部仍然通過
-- [ ] PR merged，Issue closed
+- [x] 既有測試全部仍然通過
+- [x] PR merged，Issue closed
