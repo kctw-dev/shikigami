@@ -21,17 +21,23 @@ while ACTIONABLE_ISSUES is not empty:
     ISSUE = ACTIONABLE_ISSUES.shift()  # 取出第一個
     echo "$ISSUE" > SHOOT_FLAG
     # !! 必須 invoke shikigami:shoot，不是派 Developer Agent !!
+    # 更新對應 Story Task 狀態為 in-progress（#513 AC3）
+    TaskUpdate subject="Story #${ISSUE}:*" status=in-progress
     invoke shikigami:shoot with args=#${ISSUE}  # 完整 QA + Architect + PR + CI Gate
     等待 shoot 完成
     if shoot 成功:
       rm -f SHOOT_FLAG
       SHOOT_FAIL_COUNT[ISSUE] = 0
+      # 更新對應 Story Task 狀態為 completed（#513 AC3）
+      TaskUpdate subject="Story #${ISSUE}:*" status=completed
       log: "auto-shoot-completed #${ISSUE} success"
     else:
       rm -f SHOOT_FLAG
       SHOOT_FAIL_COUNT[ISSUE] += 1
       if SHOOT_FAIL_COUNT[ISSUE] >= 2:  # AC-5：連續 2 次 fail → 升級
         gh issue edit ${ISSUE} -R ${OWNER_REPO} --add-label sprint-candidate
+        # 更新對應 Story Task 狀態為 failed（#513 AC3）
+        TaskUpdate subject="Story #${ISSUE}:*" status=failed
         log: "auto-shoot-escalated #${ISSUE} → sprint-candidate (2 consecutive failures)"
       else:
         log: "auto-shoot-completed #${ISSUE} failed (attempt ${SHOOT_FAIL_COUNT[ISSUE]})"

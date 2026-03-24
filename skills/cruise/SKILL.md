@@ -139,24 +139,51 @@ echo "[CRUISE] Loop Mode 啟動（Session: ${SESSION_ID}，間隔: ${INTERVAL}�
 echo "[CRUISE] 停止指令：/cruise stop"
 ```
 
-### 4.2 建立 Task List（#469）
+### 4.2 建立 Sprint Stories Task List（#513）
+
+為當前 Sprint 中每個 Story 建立一個 Task，追蹤其在 Cruise 期間的進度。
 
 ```
-TaskCreate（依執行順序）：
-  1. "cruise-init-${SESSION_ID}"
-  2. "po-patrol-${SESSION_ID}"
-  3. "sre-inspection-${SESSION_ID}"
-  4. "auto-shoot-${SESSION_ID}"
-  5. "cruise-cleanup-${SESSION_ID}"
+# 查詢當前 Sprint 的 Stories
+SPRINT_STORIES=$(gh issue list -R ${OWNER_REPO} --label "status: in-sprint" --json number,title)
 
-# compact 後恢復：查 TaskList，從第一個非 completed task 繼續
+# 每個 Story 建立一個 Task（task 數量上限：取決於 Claude Task 工具上限，通常 50 個）
+for STORY in SPRINT_STORIES:
+  TaskCreate subject="Story #${STORY.number}: ${STORY.title}" status="pending"
+
+# 若無 Story，建立一個 placeholder Task 避免 TaskList 為空
+if SPRINT_STORIES is empty:
+  TaskCreate subject="cruise-session-${SESSION_ID}" status="in-progress"
 ```
 
-| 事件 | TaskUpdate 動作 |
-|------|----------------|
-| phase 開始 | `status=in-progress` |
-| phase 成功 | `status=completed` |
-| phase 失敗 | `status=failed` |
+**Task 狀態對應**：
+
+| Story 狀態 | Task status |
+|-----------|-------------|
+| 等待派工 | `pending` |
+| auto-shoot 進行中 | `in-progress` |
+| shoot 成功完成 | `completed` |
+| shoot 失敗升級 | `failed` |
+
+**compact 後恢復**：查詢 TaskList，找出所有 `in-progress` 或 `pending` 的 Story Task，從中繼續執行。
+
+```
+# compact 恢復邏輯
+PENDING_STORIES=$(TaskList | filter status in ["pending", "in-progress"])
+ACTIONABLE_ISSUES = PENDING_STORIES.map(task => extract story_number from task.subject)
+```
+
+**Cruise phase 追蹤改用 JSONL log entries**（不佔用 TaskCreate）：
+
+| 事件 | JSONL log entry type |
+|------|----------------------|
+| cruise 初始化 | `"cruise-init"` |
+| PO 巡邏開始 | `"po-patrol-start"` |
+| PO 巡邏完成 | `"po-patrol-complete"` |
+| SRE 巡檢開始 | `"sre-inspection-start"` |
+| SRE 巡檢完成 | `"sre-inspection-complete"` |
+| auto-shoot 開始 | `"auto-shoot-start"` |
+| cruise 清理完成 | `"cruise-cleanup"` |
 
 ### 4.5 讀取 project_level（#348）
 
@@ -205,17 +232,16 @@ CYCLE=0
 
 ```
 CYCLE=1
-TaskUpdate cruise-init status=completed
-TaskUpdate po-patrol / sre-inspection status=in-progress
+寫入 {"type":"cruise-init",...} log entry
 for REPO_PATH in REPOS:
   平行派遣 PO-patrol + SRE-inspection（帶入 REPO_PATH, OWNER_REPO）
 等待完成，寫入 JSONL log（格式見 references/log-format.md）
-TaskUpdate po-patrol / sre-inspection status=completed|failed
+寫入 {"type":"po-patrol-complete",...} / {"type":"sre-inspection-complete",...} log entry
 
 # [AUTO-CONTINUE] project_level=low → 自動派 auto-shoot，不停
 if PROJECT_LEVEL != "high": auto-shoot ACTIONABLE_ISSUES（見 references/auto-shoot.md）
 寫入 {"type":"once-mode-complete",...} log entry
-TaskUpdate cruise-cleanup status=completed
+寫入 {"type":"cruise-cleanup",...} log entry
 rm -f "$CRUISE_FLAG" "$SHOOT_FLAG"; exit 0
 ```
 
@@ -230,13 +256,14 @@ rm -f "$CRUISE_FLAG" "$SHOOT_FLAG"; exit 0
 ### 6b. Loop Mode
 
 ```
-TaskUpdate cruise-init status=completed
+寫入 {"type":"cruise-init",...} log entry
 while 檢查 flag file 存在:
   CYCLE += 1; touch "$CRUISE_FLAG"
-  TaskUpdate po-patrol / sre-inspection status=in-progress
+  寫入 {"type":"po-patrol-start",...} / {"type":"sre-inspection-start",...} log entry
   for REPO_PATH in REPOS:
     平行派遣 PO-patrol（詳見 references/po-patrol.md）+ SRE-inspection（詳見 references/sre-inspection.md）
-  等待完成，寫入 log，TaskUpdate status=completed|failed
+  等待完成，寫入 log
+  寫入 {"type":"po-patrol-complete",...} / {"type":"sre-inspection-complete",...} log entry
 
   # SHOOT_FLAG 殘留防護：>30 分鐘強制清除，寫 auto-shoot-stale-cleared log
   # Auto-shoot（依 project_level）— 詳見 references/auto-shoot.md
