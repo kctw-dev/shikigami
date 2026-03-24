@@ -2,11 +2,11 @@
   "sprint": 136,
   "stories": [
     {"id": "#601", "status": "completed", "pr": "#611"},
-    {"id": "#610", "status": "pending"},
-    {"id": "#609", "status": "pending"},
-    {"id": "#600", "status": "pending"},
+    {"id": "#610", "status": "completed", "pr": "#612"},
+    {"id": "#609", "status": "completed", "pr": "#613"},
+    {"id": "#600", "status": "completed", "pr": "#614"},
     {"id": "#406", "status": "pending"}
   ],
-  "current_step": "batch1-start",
-  "updated_at": "2026-03-24T19:50+08:00"
+  "current_step": "batch2-start",
+  "updated_at": "2026-03-24T19:58+08:00"
 }
