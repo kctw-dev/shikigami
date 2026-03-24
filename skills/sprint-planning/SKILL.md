@@ -103,6 +103,10 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 
 詳見 [references/commit-and-trigger.md](./references/commit-and-trigger.md)。
 
+<HARD-GATE>
+project_level=low 時，Sprint Planning commit + push 完成後，必須自動 invoke shikigami:sprint-execution，禁止詢問使用者確認。
+</HARD-GATE>
+
 ---
 
 ## 6. Subagent 派遣順序

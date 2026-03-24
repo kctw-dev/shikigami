@@ -69,6 +69,10 @@ git push
 
 Sprint Planning commit + push 完成後，依 `project_level` 決定是否自動啟動 Sprint Execution：
 
+<HARD-GATE>
+project_level=low 時，Sprint Planning commit + push 完成後，必須自動 invoke shikigami:sprint-execution，禁止詢問使用者確認。
+</HARD-GATE>
+
 ```bash
 # 讀取 project_level（同 Cruise 步驟 4.5 讀取方式）
 CONFIG_FILE=".claude/shikigami.local.md"
