@@ -80,6 +80,25 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 
 ---
 
+## AC 完整性 Gate（#563，Sprint 132）
+
+<!-- retro: Story AC 完整性前置確認 — Sprint 131 Problem 1 -->
+
+<HARD-RULE id="ac-completeness-gate">
+**PO Round 1 輸出 AC 完整性硬性規則：每個 Story 至少包含 1 條 AC 草稿。**
+
+| 情況 | 處置 |
+|------|------|
+| Story Issue body 包含至少 1 條明確 AC（非「AC 待補」或空白）| 允許進入 Sprint |
+| Story Issue body AC 為空、或僅含「AC 待補」、或 AC 欄位不存在 | PO Round 1 輸出標記「**AC 缺失**」，不得進入 Sprint；PO 必須先補充 AC 後重新評估 |
+
+**目的**：防止 PO Round 1 輸出空 AC，導致 QA 在 Round 3 全部打回 NEEDS_REVISION，增加多輪溝通摩擦（Sprint 131 Problem 1 歷史案例：#388/#386 PO Round 1 AC 全空，QA 打回 4/4 NEEDS_REVISION）。
+
+**成功指標**：下個 Sprint（Sprint 133）PO Round 1 的 AC 通過率 >= 75%（4 Story 中最多 1 個需補充）。
+</HARD-RULE>
+
+---
+
 ## PO Round 2：Sprint 文件產出與最終確認
 
 ### 職責
