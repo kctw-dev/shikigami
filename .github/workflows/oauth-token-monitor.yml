@@ -2,7 +2,10 @@ name: OAuth Token Expiry Monitor
 
 # ADR-030: Claude OAuth Token Watchdog -- CI monitor
 # Issue #597: retro CI New Issue Intake OAuth token fix
+# Issue #616: CI 認證問題快速升級機制 — 重複次數偵測 + escalate label
 # Daily check for CLAUDE_CODE_OAUTH_TOKEN expiry, creates alert issue on 401
+# Escalation: if the same auth failure has occurred >= 2 times, add needs-triage label
+# and suggest changing auth method instead of token refresh.
 
 on:
   schedule:
@@ -38,28 +41,45 @@ jobs:
             echo "[TOKEN-WARN] Cannot verify token (HTTP ${HTTP_CODE})"
           fi
 
-      - name: Check for existing alert (冪等防重複建立)
+      - name: Count auth failure occurrences (重複次數偵測, #616)
         if: steps.validate.outputs.status == 'expired'
         id: check-existing
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          EXISTING=$(gh issue list \
+          # Count all TOKEN-ALERT issues (open + closed) to detect repeat occurrences
+          OPEN_COUNT=$(gh issue list \
             --label "retro-action" \
             --state open \
             --search "[TOKEN-ALERT]" \
             --json number --jq length)
-          echo "existing=${EXISTING}" >> $GITHUB_OUTPUT
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLOSED_COUNT=$(gh issue list \
+            --label "retro-action" \
+            --state closed \
+            --search "[TOKEN-ALERT]" \
+            --json number --jq length)
+          TOTAL_OCCURRENCES=$(( OPEN_COUNT + CLOSED_COUNT ))
+          echo "open_count=${OPEN_COUNT}" >> $GITHUB_OUTPUT
+          echo "total_occurrences=${TOTAL_OCCURRENCES}" >> $GITHUB_OUTPUT
+          echo "[ESCALATION-CHECK] open=${OPEN_COUNT} closed=${CLOSED_COUNT} total=${TOTAL_OCCURRENCES}"
+          # Escalation threshold: >= 2 occurrences
+          if [[ "${TOTAL_OCCURRENCES}" -ge 2 ]]; then
+            echo "should_escalate=true" >> $GITHUB_OUTPUT
+            echo "[ESCALATION-TRIGGERED] repeat count ${TOTAL_OCCURRENCES} >= 2, escalating"
+          else
+            echo "should_escalate=false" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Create Alert Issue
+      - name: Create Alert Issue (first occurrence)
         if: >
           steps.validate.outputs.status == 'expired' &&
-          steps.check-existing.outputs.existing == '0'
+          steps.check-existing.outputs.open_count == '0' &&
+          steps.check-existing.outputs.should_escalate == 'false'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           DETECTED_TIME=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
-          # --body-file 模式：避免多行 body 含特殊字符導致 YAML parse error（CLAUDE.md 規範 13）
+          # --body-file mode: avoids YAML parse error from special chars (CLAUDE.md rule 13)
           BODY_FILE=$(mktemp /tmp/token-alert-body-XXXXXX.txt)
           printf '%s\n' \
             "OAuth Token Alert - Detected: ${DETECTED_TIME}" \
@@ -76,7 +96,61 @@ jobs:
             --label "retro-action" \
             --label "priority: must"
           rm -f "${BODY_FILE}"
-          echo "[TOKEN-ALERT] Alert issue created"
+          echo "[TOKEN-ALERT] Alert issue created (first occurrence)"
+
+      - name: Escalate on repeated auth failure (#616 escalation mechanism)
+        if: >
+          steps.validate.outputs.status == 'expired' &&
+          steps.check-existing.outputs.should_escalate == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOTAL_OCCURRENCES: ${{ steps.check-existing.outputs.total_occurrences }}
+        run: |
+          DETECTED_TIME=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+          # Step 1: Add needs-triage label to existing open TOKEN-ALERT issue
+          OPEN_ISSUE=$(gh issue list \
+            --label "retro-action" \
+            --state open \
+            --search "[TOKEN-ALERT]" \
+            --json number --jq '.[0].number // empty')
+          if [[ -n "${OPEN_ISSUE}" ]]; then
+            gh issue edit "${OPEN_ISSUE}" --add-label "needs-triage" 2>/dev/null || true
+            echo "[ESCALATE-LABEL] Added needs-triage to issue #${OPEN_ISSUE}"
+          fi
+          # Step 2: Create escalation issue if not already open (idempotent)
+          EXISTING_ESCALATE=$(gh issue list \
+            --state open \
+            --search "[TOKEN-ESCALATE]" \
+            --json number --jq length)
+          if [[ "${EXISTING_ESCALATE}" == "0" ]]; then
+            ESC_BODY=$(mktemp /tmp/token-escalate-body-XXXXXX.txt)
+            printf '%s\n' \
+              "[TOKEN-ESCALATE] CI auth failure escalation - ${DETECTED_TIME}" \
+              "" \
+              "This is occurrence #${TOTAL_OCCURRENCES} of CLAUDE_CODE_OAUTH_TOKEN auth failure (HTTP 401)." \
+              "" \
+              "Per CI escalation mechanism (Issue #616): repeat count >= 2 triggers escalation." \
+              "" \
+              "Recommended action: CHANGE AUTH METHOD, do not just refresh the token again." \
+              "" \
+              "Suggested fix:" \
+              "1. Migrate to ANTHROPIC_API_KEY (non-expiring, see #600 for reference)" \
+              "2. Or evaluate other non-expiring authentication mechanisms" \
+              "" \
+              "History: ${TOTAL_OCCURRENCES} occurrences total" \
+              "Ref: Issue #616 (escalation mechanism), Issue #600 (Sprint 136 fix)" \
+              > "${ESC_BODY}"
+            gh issue create \
+              --title "[TOKEN-ESCALATE] CI auth failure occurrence #${TOTAL_OCCURRENCES} - change auth method" \
+              --body-file "${ESC_BODY}" \
+              --label "sre" \
+              --label "priority: must" \
+              --label "needs-triage"
+            rm -f "${ESC_BODY}"
+            echo "[TOKEN-ESCALATE] Escalation issue created (occurrence #${TOTAL_OCCURRENCES})"
+          else
+            echo "[TOKEN-ESCALATE] Escalation issue already open, skipping duplicate"
+          fi
 
       - name: Summary
         run: |
