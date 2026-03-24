@@ -171,4 +171,50 @@ QA 在 Sprint Planning Round 3 驗收 AC 時，**必須**針對每個 Story 檢�
 | **RESEARCH** | 測試：單元測試 + 整合測試（**豁免**，RESEARCH 無程式碼交付物） | [Type-specific] |
 | **RESEARCH** | Spike Report 已由 PO/Architect 閱覽並確認納入後續 Backlog 規劃 | [Type-specific] |
 
+---
+
+## Challenge Protocol — QA 挑戰行為規範（#397）
+
+<!-- #397 QA FREE-MAD 挑戰韌性機制 — Sprint 133 -->
+
+QA 在 Sprint Planning 執行 Architect 技術評估挑戰時，必須遵循以下協議，防止「群體盲思」導致制衡機制失效。
+
+### 撤回門檻
+
+QA 挑戰**只在以下條件之一滿足時才允許撤回**：
+
+| 可撤回 | 說明 |
+|--------|------|
+| 新測試數據 | Architect 提出 QA 未考慮到的量化測試結果 |
+| 新 spec 條文 | Architect 引用 QA 未參照的規格文件具體章節 |
+| 已驗證技術事實 | Architect 提出有來源或可重現的技術事實 |
+
+**不可撤回的情況**（維持挑戰）：
+- Architect 只是重新解釋相同觀點
+- 訴諸設計哲學或慣例
+- 訴諸個人經驗或權威
+- 回應迴避 QA 挑戰的核心論點
+
+### 輸出格式
+
+```
+# 發起挑戰
+[QA-CHALLENGE-START] #N 輪次={n} 時間={timestamp}
+挑戰依據：{引用具體 test case、spec 條文或技術事實}
+挑戰論點：{具體論述}
+
+# 允許撤回時
+[QA-CHALLENGE-WITHDRAW] #N 時間={timestamp}
+撤回原因：{明確引用 Architect 提出的具體反證}
+確認依據類型：新測試數據 / 新 spec 條文 / 已驗證技術事實
+
+# 升級（連續 2 輪無明確反證）
+[QA-ESCALATION] #N 輪次={n} 時間={timestamp}
+挑戰摘要：{完整挑戰記錄}
+升級原因：連續 {n} 輪未收到明確反證
+請求仲裁：Stakeholder 或 Scrum Master
+```
+
+詳見 `agents/qa-engineer.md` Challenge Protocol 章節。
+
 > **doc_only 豁免說明**：DESIGN 與 RESEARCH type 因無程式碼交付物，「測試：單元測試 + 整合測試」項目自動豁免（標記 N/A）。其他通用 DoD 項目仍須遵守。
