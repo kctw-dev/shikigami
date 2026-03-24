@@ -85,187 +85,27 @@ description: "Use when Shikigami needs to route a request to the right workflow 
 
 ## 5. 流程觸發規則
 
-### 5.1 意圖驅動（使用者說了什麼）
+> 完整規則（意圖驅動決策樹、狀態驅動自動觸發、排程 PR 偵測）請見：
+> [`references/flow-trigger-rules.md`](references/flow-trigger-rules.md)
 
-根據使用者意圖，按以下決策樹觸發對應 Skill：
+**快速摘要**：
 
-```
-使用者意圖分析：
-├── 新功能/需求 → invoke shikigami:backlog-management
-├── 開始 Sprint → invoke shikigami:sprint-planning
-├── 實作 Story → invoke shikigami:sprint-execution
-├── 技術決策/架構 → invoke shikigami:architecture-decision
-├── 代碼審查/PR → invoke shikigami:quality-gate
-├── 安全相關 → invoke shikigami:security-review
-├── 部署/發布 → invoke shikigami:deployment-readiness
-├── 衝突/僵局 → invoke shikigami:escalation
-├── Sprint 結束 → invoke shikigami:sprint-review
-├── 解咒/考古/legacy 分析/不熟悉的 codebase → invoke shikigami:dispel
-├── Bug/錯誤/測試失敗 → invoke shikigami:systematic-debugging
-├── 分支隔離/worktree → invoke shikigami:git-workflow
-├── 開發完成/合併/PR → invoke shikigami:git-workflow
-├── 多個獨立任務 → invoke shikigami:parallel-dispatch
-├── Issue 管理/分類/回覆 → invoke shikigami:issue-management
-├── Issue 轉 User Story → invoke shikigami:issue-management
-├── 框架狀態/健康檢查/自我診斷 → invoke shikigami:health-check
-├── 初始化專案/第一次使用/scaffold/onboarding → invoke shikigami:onboarding
-└── 日常開發 → 主 Agent 直接執行（不需觸發角色）
-```
-
-**路由邊界：dispel vs systematic-debugging**
-- `dispel`：Legacy 或不活躍 codebase 的全面考古分析，使用者意圖是「理解這個系統」
-- `systematic-debugging`：活躍開發中的特定 bug、測試失敗、非預期行為，使用者意圖是「修復這個問題」
-- 兩者互斥，不得同時觸發
-
-### 5.2 狀態驅動（自動觸發）
-
-以下 Skill 不需要使用者明確要求，當條件滿足時 **Scrum Master 主動觸發**：
-
-| 條件 | 自動觸發 |
-|------|----------|
-| 新 session 開始（使用者首次互動） | 執行 `/standup` slash command（Daily Standup — 健康快篩 + Git 同步 + Sprint 進度）+ 排程 PR 偵測（見 §5.3） |
-| Sprint 中所有 Story 標記完成 | `invoke shikigami:sprint-review` |
-| sprint-review 驗收通過 | `invoke shikigami:deployment-readiness`（版本 Tag + 部署就緒） |
-| sprint-review 完成且 Backlog 有待選 Story | `invoke shikigami:sprint-planning`（下一個 Sprint） |
-| Story 實作完成 | `invoke shikigami:quality-gate` |
-| quality-gate 發現安全問題 | `invoke shikigami:security-review` |
-| 升級鏈走完仍無解 | `invoke shikigami:escalation` |
-| 偵測到 `SHIKIGAMI_SCHEDULED=1` 環境變數且 Skill 為 `sprint-execution` | worktree 隔離執行模式（見 schedule SKILL.md §5.7），不觸發互動式提醒 |
-| 偵測到 `scheduled/*` 分支且無對應 open PR | 自動建立 PR + quality-gate 檢查（見 schedule SKILL.md §5.8） |
-| **Sprint Review 流程開始前**（進入 §1.5 交付物一致性審查前） | `invoke shikigami:systematic-debugging`（**HARD-GATE**，確認系統健康後才繼續 Review；見 `sprint-review/SKILL.md` §7） |
-| **deployment-readiness 完成後**（服務部署至生產環境後） | `invoke shikigami:systematic-debugging`（建議，post-deploy health check；見 `sprint-execution/SKILL.md` §7.1） |
-| **Bug 修復完成後**（通過 Spec Compliance + Code Quality Review 後） | `invoke shikigami:systematic-debugging`（建議，確認無回歸；見 `sprint-execution/SKILL.md` §7.2） |
-| **CI FAIL 時**（CI 狀態快掃或 CI Gate 回傳 FAIL） | `invoke shikigami:systematic-debugging`（建議，CI FAIL 根因排查；見 `sprint-execution/SKILL.md` §7.0） |
-
-**原則**：Scrum Master 不只是被動路由器，也是**主動的流程守門員**。當偵測到流程轉折點時，自動推進到下一個環節，不等使用者提醒。
-
----
-
-### 5.3 互動 Session 啟動：排程 PR 偵測
-
-**觸發時機**：每次互動 Session 啟動（使用者首次互動），在 standup 完成後立即執行。
-
-**偵測指令**：
-
-```bash
-gh pr list --label "scheduled" --state open --json number,title,createdAt
-```
-
-**執行邏輯**：
-
-```
-Session 啟動
-  |
-  v
-執行 standup（健康快篩 + Git 同步 + Sprint 進度）
-  |
-  v
-偵測待審排程 PR（gh pr list --label "scheduled" --state open）
-  |-- 無待審 PR（空結果）→ 靜默通過，不顯示任何提醒
-  +-- 偵測到待審 PR
-        |
-        v
-      顯示標準提醒區塊（見下方格式）
-      等待使用者選擇操作選項
-```
-
-**無待審 PR 時**：靜默通過，不輸出任何訊息，不干擾正常流程。
-
-**偵測到待審 PR 時**，顯示以下標準提醒區塊：
-
-```
-[SCHEDULED-PR] 偵測到 N 個待審排程 PR
-
-| # | PR 編號 | 標題 | 建立時間 |
-|---|---------|------|----------|
-| 1 | #XX     | ...  | YYYY-MM-DD HH:MM |
-| 2 | #YY     | ...  | YYYY-MM-DD HH:MM |
-
-選項：
-1. 立即審核（逐一檢視並 merge/reject）
-2. 本次略過（下次 session 再提醒）
-3. 批次確認全部（全部 approve + merge）
-```
-
-**各選項行為說明**：
-
-| 選項 | 行為 |
-|------|------|
-| 1. 立即審核 | 逐一開啟各 PR，執行 `quality-gate` 檢視，由使用者決定 merge 或 reject |
-| 2. 本次略過 | 關閉提醒，繼續 session；下次 session 啟動時仍會偵測並再次提醒 |
-| 3. 批次確認全部 | 對所有列出的 PR 執行 `gh pr merge --merge`，完成後輸出批次結果摘要 |
-
-**規格來源**：US-54 AC1、AC2（Sprint 30）
+- **意圖驅動**：分析使用者說了什麼，按決策樹映射至對應 Skill（新功能→backlog-management、開始 Sprint→sprint-planning、Bug→systematic-debugging 等）
+- **狀態驅動**：Session 啟動→standup、所有 Story 完成→sprint-review、Story 完成→quality-gate 等自動推進
+- **Session 啟動**：standup 後偵測待審排程 PR，有則顯示提醒，無則靜默通過
 
 ---
 
 ## 6. 專案等級與自治策略
 
-專案等級決定整個框架的自治程度。可在專案的 `CLAUDE.md` 中設定：
+> 完整定義（等級說明、操作風險分類、不阻塞原則決策樹）請見：
+> [`references/autonomy-levels.md`](references/autonomy-levels.md)
 
-```
-shikigami.project_level: medium
-```
+**快速摘要**：
 
-未設定時預設為 `medium`。
-
-### 等級定義
-
-| 專案等級 | 適用場景 | 低風險操作 | 高風險操作 |
-|----------|----------|-----------|-----------|
-| **low** | 個人專案、實驗、內部工具 | 自動執行 | 自動執行，事後通知 |
-| **medium** | 一般開發專案 | 自動執行 | QA subagent 審核後自動執行 |
-| **high** | 重要產品、公開 repo、生產環境 | 自動執行 | 人工確認後執行 |
-
-### 操作風險分類
-
-| 風險等級 | 操作類型 | 判定原則 |
-|----------|----------|----------|
-| **低** | 讀取、查詢、label、assign、本地檔案編輯 | 可逆、不影響外部 |
-| **高** | 公開留言、關閉 issue、建立 issue、刪除、force push、部署 | 不可逆或影響外部可見狀態 |
-
-### 自治原則
-
-- **日常開發免啟動角色**：功能代碼撰寫、簡單 Bug 修復、文件小幅更新、測試執行——主 Agent 自行完成。
-- **需要專業判斷時**：按上方觸發規則啟動對應 Skill，派遣 Subagent 執行。
-- **團隊內部閉環**：大部分決策由團隊自行解決，不升級 Stakeholder。
-- **「沉默即同意」**：被知會（I）但未回應的決策，團隊可自行推進，不因等待回應而阻塞。
-- **不阻塞原則**：見下方獨立章節。
-
-### 6.1 不阻塞原則
-
-**核心原則**：流程中避免使用 AskUserQuestion 停下來等待。決策點依專案等級自動處理，僅在 `high` 等級的高風險操作才暫停等待人工確認。
-
-**決策樹**：遇到需要判斷的情境時，按以下順序評估：
-
-```
-需要做決策？
-├── 專案等級是 high 且操作是高風險？
-│   └── YES → 暫停，使用 AskUserQuestion 請使用者確認
-│   └── NO ↓
-├── 有明確的流程規則可依循？（RACI、DoD、Hard Gate）
-│   └── YES → 按規則自動執行，不詢問
-│   └── NO ↓
-├── 有歷史先例可參考？（ADR、Retro Action、過往 Sprint 決策）
-│   └── YES → 按先例執行，在 commit message 或文件中記錄引用依據
-│   └── NO ↓
-├── 影響範圍小且可逆？（文件修改、本地操作、label 變更）
-│   └── YES → 自動執行，事後在看板或 commit 中通知
-│   └── NO ↓
-└── 以上都不適用 → 選擇最保守的自動化選項執行，Sprint Review 時回報
-```
-
-**絕對不問的情境**：
-- 選擇哪個 Story 先做（按看板優先級）
-- 是否需要啟動 Subagent（按觸發規則）
-- 文件格式或命名慣例（按現有慣例）
-- 測試是否通過（跑測試即可知道）
-- Sprint Execution 完成後是否觸發 Sprint Review（Sprint Backlog 清空即自動觸發，不詢問）
-
-**必須暫停的情境**：
-- `high` 等級專案的高風險操作（公開留言、關閉 issue、部署）
-- 發現明確的安全漏洞需要人工決策
-- 升級鏈走完仍無法解決的僵局
+- `low`：全自動，事後通知；`medium`：高風險 QA 審核後自動；`high`：高風險人工確認
+- 未設定預設 `medium`（在專案 `CLAUDE.md` 設定 `shikigami.project_level`）
+- **不阻塞原則**：遇決策優先查規則→先例→影響範圍，只有 `high` 等級高風險才暫停詢問
 
 ---
 
@@ -307,205 +147,43 @@ shikigami.project_level: medium
 
 ## 9. Preflight Check 與 Hard Gate
 
-框架文件修改、Sprint 外變更、儀式完整性的品質稽核機制。依 ADR-003（分級介入模式）實作。
-
-> **ADR-003 場景覆蓋說明**：ADR-003 定義四個稽核場景，其中三個 Hard Gate 於本節實作（9.1–9.3）。第四個場景 Story Completion DoD Audit 為 Soft Gate，已委由 `quality-gate` Skill 處理，不在本節重複定義。
-
-### 9.1 Preflight Check：Framework Document Change Audit
+> 完整 checklist（9.1 Framework Document Change Audit、9.2 Out-of-Sprint Change Audit、9.3 Ceremony Integrity Audit）請見：
+> [`references/preflight-audit.md`](references/preflight-audit.md)
 
 <HARD-GATE>
-框架文件（`skills/`、`commands/`、`agents/` 下任一 `.md` 檔案）修改前，必須通過以下 4 項二元 checklist。全部 Pass 方可繼續，任一 Fail 則阻塞修改。
+框架文件（`skills/`、`commands/`、`agents/` 下任一 `.md` 檔案）修改前，必須通過 preflight-audit.md §9.1 的 4 項 checklist。全部 Pass 方可繼續，任一 Fail 則阻塞修改。
 </HARD-GATE>
-
-**觸發條件**：`skills/`、`commands/`、`agents/` 下任一 `.md` 檔案即將被修改
-
-**Checklist（二元判定）**：
-
-| # | 檢查項 | 判定 |
-|---|--------|------|
-| 1 | 修改目的對應 Sprint Backlog 中的某個 Story ID | [ ] |
-| 2 | 修改範圍在該 Story 的 AC 所涵蓋文件範圍內 | [ ] |
-| 3 | 修改前已讀取目標文件的當前版本 | [ ] |
-| 4 | 修改後執行 health-check 確認結構完整性 | [ ] |
-
-**結果判定**：
-- 全部 Pass → 繼續修改
-- 任一 Fail → 阻塞，修復後重新稽核
-
-**規格來源**：ADR-003「Framework Document Change Audit」
-
-> **Bootstrap 豁免**：本規則自 Sprint 6（US-FIX-02）引入。引入本身的框架文件修改不適用回溯稽核，但後續對本文件的修改須遵循上述 checklist。
-
-### 9.2 Out-of-Sprint Change Audit
 
 <HARD-GATE>
-Sprint 期間偵測到 Sprint Backlog 無對應項目的框架文件修改時，必須走以下路徑之一。不得在無對應 Story 的情況下逕行修改框架文件。
+Sprint 期間偵測到 Sprint Backlog 無對應項目的框架文件修改時，必須走 preflight-audit.md §9.2 的正常路徑或緊急例外路徑。不得在無對應 Story 的情況下逕行修改。
 </HARD-GATE>
-
-**觸發條件**：Sprint 期間發生非 Sprint Backlog 範圍的框架文件修改
-
-**正常路徑**：
-
-修改必須對應現有 Backlog Story。若無對應 Story，必須先由 PO 建立緊急 Story 並核准後方可繼續修改。
-
-**緊急例外路徑**（僅限安全漏洞或框架破損）：
-
-| # | 步驟 | 說明 |
-|---|------|------|
-| 1 | `[EMERGENCY]` 標注 | commit message 必須標注 `[EMERGENCY]` 並記錄緊急變更原因 |
-| 2 | 48 小時事後稽核 | 48 小時內完成事後稽核，確認變更合理性 |
-| 3 | Retrospective 追蹤 | 於下次 Sprint Review 將此事件列入 Retrospective Problem 追蹤 |
-
-**規格來源**：ADR-003「Out-of-Sprint Change Audit」
-
-### 9.3 Ceremony Integrity Audit
 
 <HARD-GATE>
-Sprint Planning 與 Sprint Review 儀式結束前，必須通過各自的完整性 checklist。任一項未完成則儀式不得宣告結束。
+Sprint Planning 與 Sprint Review 儀式結束前，必須通過 preflight-audit.md §9.3 各自的完整性 checklist。任一項未完成則儀式不得宣告結束。
 </HARD-GATE>
-
-**觸發條件**：Sprint Planning 或 Sprint Review 宣告結束前
-
-**Sprint Planning 必要條件（4 項）**：
-
-| # | 檢查項 | 判定 |
-|---|--------|------|
-| 1 | Sprint Goal 已定義 | [ ] |
-| 2 | Sprint Backlog 已選取並完成 Story 點數估算 | [ ] |
-| 3 | 所有 Story 有明確 Acceptance Criteria | [ ] |
-| 4 | GitHub open issues 已掃描 | [ ] |
-
-**Sprint Review 必要條件（5 項）**：
-
-| # | 檢查項 | 判定 |
-|---|--------|------|
-| 1 | PO Demo 已完成 | [ ] |
-| 2 | Stakeholder 已確認 | [ ] |
-| 3 | Retrospective_Log.md 已更新 | [ ] |
-| 4 | Action Items 已建立 | [ ] |
-| 5 | ROADMAP.md 已更新 | [ ] |
-
-**結果判定**：全部勾選 → 儀式可結束；任一未完成 → 阻塞，補齊後方可結束
-
-**規格來源**：ADR-003「Ceremony Integrity Audit」
 
 ---
 
 ## 10. Bypass 機制
 
-輕量流程通道，讓低風險、小範圍任務避開完整儀式開銷，同時保留必要的品質防線。
+> 完整規則（觸發條件、流程定義、保護清單、稽核追蹤）請見：
+> [`references/bypass-mechanism.md`](references/bypass-mechanism.md)
 
-### 10.1 觸發條件
+**快速摘要**：
 
-以下**任一條件**成立，可啟用 Bypass：
-
-| # | 條件 | 說明 |
-|---|------|------|
-| 1 | Size = S 且無 ADR 依賴 | Story 估點為 S（最小）且實作不涉及任何 ADR 所規範的架構決策 |
-| 2 | 使用者標注 `[QUICK]` | 使用者在 Story 標題或描述中明確加上 `[QUICK]` 標籤 |
-| 3 | Retro Action Item 類任務 | 來自 Sprint Retrospective 的行動項目（通常為流程改善、文件修正類） |
-
-### 10.2 流程定義
-
-Bypass 模式下，流程分為**跳過**與**保留**兩組：
-
-**跳過（豁免）：**
-- Architect T-shirt 估點
-- QA AC 審查（Spec Compliance Review）
-- 雙階段 QA Review（Spec Compliance + Code Quality）
-
-**保留（不可省略）：**
-- DoD 自檢（功能層 = AC 通過）
-- Commit（每個步驟仍須提交，保持可追溯性）
-- PROJECT_BOARD 更新（Story 狀態同步）
-
-### 10.3 保護清單
-
-以下 3 類情況**禁止使用 Bypass**，無論觸發條件為何（Size=S、`[QUICK]`、Retro Action Item），均強制走完整流程：
-
-| # | 禁止類型 | 規格依據 |
-|---|----------|----------|
-| 1 | Framework Document Change | ADR-003 §9.1 — 框架文件修改須通過 Preflight Check |
-| 2 | 外部 API | 涉及第三方 API 整合或外部服務呼叫 |
-| 3 | 安全相關 | 涉及認證、授權、外部輸入處理、加密、金鑰管理 |
-
-**拒絕輸出格式範例：**
-
-```
-❌ Bypass 拒絕：此任務涉及 [Framework Document Change / 外部 API / 安全相關]，
-無論觸發條件為何均須走完整流程。
-原因：[具體說明]
-```
+- **可啟用條件**：Size=S 且無 ADR 依賴、使用者標注 `[QUICK]`、Retro Action Item
+- **跳過**：Architect 估點、QA AC 審查；**保留**：DoD 自檢、Commit、PROJECT_BOARD 更新
+- **禁止 Bypass**：Framework Document Change、外部 API、安全相關（強制走完整流程）
+- **40% 上限**：每 Sprint `[BYPASS]` Story 數 ≤ floor(總 Story 數 × 0.4)
 
 ---
 
 ## 11. Scrum Master & SRE Engineer Refinement 職責
 
-<!-- US-203 角色 Refinement 職責定義 — Sprint 77 -->
+> 完整職責定義（SM 流程守護、SRE 觸發條件與輸出）請見：
+> [`references/refinement-roles.md`](references/refinement-roles.md)
 
-### 11.1 Scrum Master Refinement 職責
+**快速摘要**：
 
-Scrum Master 在 Refinement 中負責**流程管理與會議協調**，確保 Refinement 流程依 sprint-planning/SKILL.md §9 定義的結構執行，並追蹤 NOT_READY Story 的後續處置。
-
-| 面向 | 職責內容 |
-|------|---------|
-| **流程守護** | 確保 Refinement 依 §9 執行順序進行，Chair（Architect）逐一回答 Q1–Q5，不得跳過 |
-| **時間盒管理** | 監控每個 Story 的 Refinement 時間，避免單一 Story 討論時間過長影響整體節奏 |
-| **NOT_READY 追蹤** | 記錄 NOT_READY Story 的阻塞原因與待完成動作，追蹤解除阻塞後的重新 Refinement 排程 |
-| **出席者確認** | 在 Refinement 前確認所有必要角色（含 Contract Owner）已通知並可出席 |
-
-**Refinement 輸出（Scrum Master）：**
-
-| 輸出項目 | 說明 |
-|---------|------|
-| Refinement 出席記錄 | 記錄本次 Refinement 出席角色及 Story 清單 |
-| NOT_READY 追蹤清單 | 列出 NOT_READY Story、阻塞原因、負責解除阻塞的角色與目標時間 |
-| 下次 Refinement 排程 | 若有 NOT_READY Story，安排重新 Refinement 的時間點 |
-
-### 11.2 SRE Engineer Refinement 職責
-
-SRE Engineer 在 Refinement 中負責識別 Story 的**基礎設施需求與部署風險**，確保 INFRA 類工作在開發前已規劃就緒。SRE 為**諮詢（Consulted）**角色，僅在涉及 INFRA 相關依賴的 Story 中出席。
-
-**觸發出席條件（滿足任一即出席）：**
-
-| 觸發條件 | 說明 |
-|---------|------|
-| Story Type 為 INFRA | SRE 作為 Contract Owner，必須出席確認基礎設施變更範圍 |
-| FEATURE / INTEGRATION Story 包含 INFRA 前置依賴 | 需確認環境就緒時間與 Rollback 策略 |
-| Story 涉及 CI/CD 流程變更 | CI/CD 變更影響所有角色，需 SRE 提前評估影響範圍 |
-| Story 涉及多環境（dev/staging/prod）配置 | 環境配置變更需 SRE 確認執行時間窗口 |
-
-**SRE Refinement 職責說明：**
-
-| 面向 | 職責內容 |
-|------|---------|
-| **INFRA 工作量評估** | 判斷 FEATURE / INTEGRATION Story 中包含的 INFRA 工作量是否可忽略（設定調整）或需獨立拆分（SRE 設計建置）|
-| **環境依賴確認** | 確認 Story 所需的環境（dev/staging/prod 端點、外部服務）在 Sprint 期間可用 |
-| **Rollback 策略確認** | 對涉及部署變更的 Story，提前定義 Rollback 方案 |
-| **Infra Prerequisites Checklist 提供** | 若 INFRA 工作量極小，提供 Infra Prerequisites Checklist（SRE 簽核後附於 FEATURE Contract）|
-
-**SRE Refinement 輸出：**
-
-| 輸出項目 | 說明 |
-|---------|------|
-| INFRA 工作量評估意見 | 判定 INFRA 部分是否需拆分為獨立 Story 或附加 Infra Prerequisites Checklist |
-| 環境可用性確認 | 確認 Sprint 期間相關環境可用，若不確定則列為 NOT_READY 阻塞項目 |
-| Infra Prerequisites Checklist（若適用） | 列出 SRE 需簽核的基礎設施前置條件，格式為 checkbox 清單 |
-
-### 10.4 稽核追蹤
-
-**標注規則：** 使用 Bypass 的 Story，在 `sprint_N.md` 的 Story 列末尾加上 `[BYPASS]` 標注。
-
-**40% 上限：** 每個 Sprint 內 `[BYPASS]` Story 數量不得超過 Sprint 總 Story 數的 40%（向下取整）。
-
-**計算示例：**
-
-```
-Sprint N 共 5 個 Story，Bypass 上限 = floor(5 × 0.4) = 2 個。
-已有 2 個 [BYPASS] Story，後續 Story 不可再使用 Bypass。
-```
-
-**執行規則：**
-- 派遣 Developer subagent 前確認當前 Sprint 的 `[BYPASS]` 使用數量
-- 若已達上限，該 Story 即使符合觸發條件，仍須走完整流程
-- Sprint Review 時統計 `[BYPASS]` 比例，列入 Metrics_Log.md
+- **SM**：負責流程守護、時間盒管理、NOT_READY 追蹤、出席者確認
+- **SRE**：在 INFRA/CI-CD/多環境 Story 中出席，評估工作量、確認環境可用、定義 Rollback 策略
