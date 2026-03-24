@@ -19,13 +19,13 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 # ---------------------------------------------------------------------------
 # 定義需檢查的檔案
 SKILL_FILES=(
-  "skills/sprint-planning/po-prompt.md"
+  "skills/sprint-planning/references/po-prompt.md"
   "skills/sprint-execution/story-lifecycle-prompt.md"
   "skills/sprint-execution/SKILL.md"
   "skills/sprint-execution/developer-prompt.md"
   "skills/architect/SKILL.md"
-  "skills/sprint-planning/qa-prompt.md"
-  "skills/sprint-planning/architect-prompt.md"
+  "skills/sprint-planning/references/qa-prompt.md"
+  "skills/sprint-planning/references/architect-prompt.md"
   "skills/shoot/SKILL.md"
   "skills/qa-engineer/SKILL.md"
   "skills/sprint-review/po-review-prompt.md"

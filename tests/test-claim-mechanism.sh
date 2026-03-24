@@ -295,7 +295,7 @@ check_skill_claim() {
 
 check_skill_claim "$REPO_ROOT/skills/sprint-execution/SKILL.md" "sprint-execution/SKILL.md"
 check_skill_claim "$REPO_ROOT/skills/sprint-planning/SKILL.md" "sprint-planning/SKILL.md"
-check_skill_claim "$REPO_ROOT/skills/sprint-planning/po-prompt.md" "sprint-planning/po-prompt.md"
+check_skill_claim "$REPO_ROOT/skills/sprint-planning/references/po-prompt.md" "sprint-planning/references/po-prompt.md"
 check_skill_claim "$REPO_ROOT/skills/shoot/SKILL.md" "shoot/SKILL.md"
 check_skill_claim "$REPO_ROOT/skills/parallel-dispatch/SKILL.md" "parallel-dispatch/SKILL.md"
 
