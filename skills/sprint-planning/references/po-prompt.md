@@ -88,6 +88,25 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 
 ---
 
+## Developer SKILL 類 Story AC 路徑明確性規則（#573，Sprint 134）
+
+<!-- retro: Sprint Planning AC 指定明確檔案路徑 — Sprint 132 Problem 1 -->
+
+PO 在 Sprint Planning 中為 **Developer SKILL 類 Story**（涉及 Developer subagent 行為修改的 Story）撰寫 AC 時，**必須**明確指定實際修改的檔案路徑，不得使用泛稱（如「Developer SKILL 文件」）。
+
+**路徑選擇規則：**
+
+| 修改意圖 | 應指定的路徑 |
+|---------|------------|
+| Developer subagent 執行行為修改（TDD 流程、Commit 規範、自審策略） | `skills/sprint-execution/developer-prompt.md` |
+| Sprint Execution 整體流程修改（派遣邏輯、Hard Gate、平行分群） | `skills/sprint-execution/SKILL.md` |
+| Story-Lifecycle 執行步驟修改（三問、Live Log、branch 策略） | `skills/sprint-execution/story-lifecycle-prompt.md` |
+| 同時涉及以上多個檔案 | 在 AC 中逐一列出所有路徑 |
+
+**Architect 技術評估配合規則：** 技術評估表格的「修改檔案」欄位必須填寫完整路徑（非泛稱），與 PO AC 路徑對應一致。
+
+---
+
 ## AC 完整性 Gate（#563，Sprint 132）
 
 <!-- retro: Story AC 完整性前置確認 — Sprint 131 Problem 1 -->
