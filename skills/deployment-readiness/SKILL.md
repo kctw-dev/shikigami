@@ -12,8 +12,8 @@ SRE Engineer 主導的部署就緒檢查 Skill，確保每次部署安全、可�
 部署前由 **SRE subagent** 準備部署計畫與回滾方案，同時 **Security subagent** 並行執行部署前安全掃描。兩者皆通過後方可執行部署，任一不通過則修復後重新審查。
 
 > **Subagent Prompt 參照**：
-> - SRE subagent：`skills/deployment-readiness/sre-prompt.md`（Golden Signals 監控、SLO/SLI 驗證、可靠性架構、Incident Response、Post-mortem、效能基準管理）
-> - Security subagent：`skills/deployment-readiness/security-prompt.md`（部署前安全掃描、L2 API 整合驗證、L3 E2E 端對端驗證）
+> - SRE subagent：`skills/deployment-readiness/references/sre-prompt.md`（Golden Signals 監控、SLO/SLI 驗證、可靠性架構、Incident Response、Post-mortem、效能基準管理）
+> - Security subagent：`skills/deployment-readiness/references/security-prompt.md`（部署前安全掃描、L2 API 整合驗證、L3 E2E 端對端驗證）
 
 ---
 
@@ -23,8 +23,8 @@ SRE Engineer 主導的部署就緒檢查 Skill，確保每次部署安全、可�
 
 - **雙軌並行**：SRE 準備部署計畫的同時，Security 執行安全掃描，縮短前置時間
 - **回滾優先**：任何部署必須先有經過驗證的回滾方案，才能執行
-- **可觀測性**：Golden Signals 監控確保部署後即時發現異常（詳見 `sre-prompt.md §6`）
-- **Error Budget 驅動**：部署前確認 SLO Error Budget 充足，避免在預算不足時冒險部署（詳見 `sre-prompt.md §7`）
+- **可觀測性**：Golden Signals 監控確保部署後即時發現異常（詳見 `references/sre-prompt.md §6`）
+- **Error Budget 驅動**：部署前確認 SLO Error Budget 充足，避免在預算不足時冒險部署（詳見 `references/sre-prompt.md §7`）
 
 ---
 
@@ -38,8 +38,8 @@ SRE Engineer 主導的部署就緒檢查 Skill，確保每次部署安全、可�
   v                  v
 派遣 SRE subagent    派遣 Security subagent
 （部署計畫 +          （部署前安全掃描）
-  回滾方案）           → 詳見 security-prompt.md
-  → 詳見 sre-prompt.md
+  回滾方案）           → 詳見 references/security-prompt.md
+  → 詳見 references/sre-prompt.md
   |                  |
   v                  v
 SRE 審查結果      Security 審查結果
@@ -58,7 +58,7 @@ SRE 審查結果      Security 審查結果
 執行部署
   |
   v
-部署後 Golden Signals 監控驗證（sre-prompt.md §6）
+部署後 Golden Signals 監控驗證（references/sre-prompt.md §6）
   |
   v
 更新部署文件 + 通知相關角色
@@ -67,153 +67,29 @@ SRE 審查結果      Security 審查結果
 ### 步驟詳解
 
 1. **部署請求觸發**：從 Sprint 完成的 Stories 或版本發布需求觸發部署就緒檢查。
-2. **派遣 SRE subagent**：使用 `sre-prompt.md` 作為 prompt，準備完整部署計畫，包含部署步驟、環境配置變更、回滾方案與驗證程序。
-3. **派遣 Security subagent（並行）**：使用 `security-prompt.md` 作為 prompt，執行部署前安全掃描，涵蓋依賴套件漏洞、配置安全性、機密資訊洩漏檢查。
+2. **派遣 SRE subagent**：使用 `references/sre-prompt.md` 作為 prompt，準備完整部署計畫，包含部署步驟、環境配置變更、回滾方案與驗證程序。
+3. **派遣 Security subagent（並行）**：使用 `references/security-prompt.md` 作為 prompt，執行部署前安全掃描，涵蓋依賴套件漏洞、配置安全性、機密資訊洩漏檢查。
 4. **審查結果匯總**：兩個 subagent 的結果皆必須通過。任一不通過則產出問題清單，修復後重新審查。
 5. **執行部署**：通過所有檢查後，按部署計畫執行部署。
-6. **部署後驗證**：監控 Golden Signals，確認服務健康，驗證 SLO 達標（詳見 `sre-prompt.md §6`）。
+6. **部署後驗證**：監控 Golden Signals，確認服務健康，驗證 SLO 達標（詳見 `references/sre-prompt.md §6`）。
 
 ---
 
 ## 4. 版本 Tag 管理
 
+> **詳細規則**：見 `references/version-management.md`（版號策略、決策矩陣、Minor/Major/Patch 觸發條件、PO Override 機制）
+
 Sprint Review 驗收通過後，由 SRE subagent 負責打 tag 與更新版號。
 
-### 版號策略（Semantic Versioning）
-
-| 事件 | 版號變化 | 範例 |
-|------|----------|------|
-| Sprint Review 通過 | minor +1 | `v0.1.0` → `v0.2.0` |
-| Hotfix（Sprint 外緊急修復） | patch +1 | `v0.2.0` → `v0.2.1` |
-| 正式穩定版（外部使用者驗證） | major | `v0.x.y` → `v1.0.0` |
-
-### 執行步驟
-
-1. 更新 `.claude-plugin/plugin.json` 的 `version` 欄位
-2. 更新 `.claude-plugin/marketplace.json` 的 `version` 欄位
-3. Commit：`chore: bump version to vX.Y.Z`
-4. 打 tag：`git tag vX.Y.Z`
-5. Push：`git push && git push --tags`
-
-### 觸發時機
-
-```
-sprint-review 驗收通過
-  → 觸發 deployment-readiness
-    → SRE subagent 執行版本 Tag 流程
-    → 部署就緒檢查（若有部署需求）
-```
+**執行步驟**：
+1. 更新 `.claude-plugin/plugin.json` 與 `marketplace.json` 的 `version` 欄位
+2. Commit：`chore: bump version to vX.Y.Z`
+3. 打 tag：`git tag vX.Y.Z`，Push：`git push && git push --tags`
 
 <HARD-GATE>
 `plugin.json` 與 `marketplace.json` 的版號必須一致。
 Tag 名稱必須與 `plugin.json` 的 version 欄位一致（加 `v` 前綴）。
-</HARD-GATE>
-
-### 版本 Tag 決策規則
-
-在執行版本 Tag 流程前，SRE subagent 必須依下列規則判定版號 bump 類型。
-
-#### 決策矩陣
-
-| 條件 | 決策 | 版號變化 |
-|------|------|----------|
-| Sprint Review 通過 + 所有 Stories 完成 + 無安全掃描失敗 | **Minor bump** | `vX.Y.0` → `vX.(Y+1).0` |
-| ROADMAP 里程碑完成（所有里程碑 Stories 均已交付）+ PO 確認 + 無安全掃描失敗 | **Major bump** | `vX.Y.Z` → `v(X+1).0.0` |
-| Hotfix（Sprint 外緊急修復，標注 `[EMERGENCY]`） | **Patch bump** | `vX.Y.Z` → `vX.Y.(Z+1)` |
-| 以下任一禁止條件成立 | **禁止 bump** | 不更新版號 |
-
-#### Minor Bump 觸發條件（vX.Y+1.0）
-
-以下**全部**條件成立時，執行 Minor bump：
-
-- Sprint Review 驗收通過（PO Subagent 確認）
-- Sprint Backlog 中所有計畫 Stories 均已完成（無「未完成」狀態 Story）
-- 安全掃描已通過（Security subagent 確認）
-- sprint-review SKILL.md §7 執行檢查清單全部打勾
-
-#### 當日重複 Minor 降級為 Patch
-
-當 Minor Bump 觸發條件全部滿足，但**當日已存在一個 minor bump tag** 時，本次 bump 自動降級為 **Patch bump**，以避免同一天內打出多個 minor tag。
-
-**判斷邏輯（SRE subagent 執行）**：
-
-```bash
-LATEST_TAG=$(git tag --sort=-creatordate | head -1)
-TAG_DATE=$(git log -1 --format='%cd' --date=short "$LATEST_TAG" 2>/dev/null)
-TODAY=$(date '+%Y-%m-%d')
-if [[ "$TAG_DATE" == "$TODAY" ]]; then
-  # 當日已有 tag → 降級為 patch bump
-  BUMP_TYPE="patch"
-else
-  # 跨日或無 tag → 正常 minor bump
-  BUMP_TYPE="minor"
-fi
-```
-
-**決策規則**：
-
-| 情況 | 最新 Tag 日期 | bump 類型 |
-|------|--------------|-----------|
-| 當日已有 minor bump | 今天 | **patch** |
-| 跨日第一次 bump | 昨天或更早 | **minor**（正常） |
-| 無任何 tag | N/A | **minor**（不報錯） |
-
-**範例**：
-
-- 今天 `2026-03-20` 已存在 `v0.74.0`（minor bump）→ 本次 bump 為 `v0.74.1`（patch）
-- 最新 tag `v0.74.1` 日期為 `2026-03-19` → 本次 bump 為 `v0.75.0`（minor）
-
-<HARD-GATE>
-當日重複 Minor 降級邏輯必須在打 tag 前執行。
-無 tag 時不得報錯，應視為跨日情況，執行正常 minor bump。
-</HARD-GATE>
-
-#### Major Bump 觸發條件（vX+1.0.0）
-
-以下**全部**條件成立時，**且已符合 Minor Bump 條件**，升級為 Major bump：
-
-- `docs/prd/ROADMAP.md` 某個里程碑下的所有 Stories 均已標記完成
-- PO 明確確認該里程碑達成（口頭或 Sprint Review 記錄）
-- sprint-review SKILL.md 的 ROADMAP 里程碑對齊檢查確認里程碑完成
-- 安全掃描已通過
-
-#### 禁止 Bump 條件
-
-以下任一條件成立時，**不得執行任何版號 bump**：
-
-- Sprint Backlog 有任何 Story 狀態為「未完成」
-- 安全掃描未通過或尚未執行
-- 部署 Checklist 有未勾選項目
-- sprint-review SKILL.md §7 執行檢查清單有未完成項目
-
-#### PO Override 機制
-
-當自動決策規則判定「禁止 bump」，但 PO 認為基於商業原因應執行 bump 時，PO 可啟動覆蓋機制。
-
-**觸發條件**：自動規則建議禁止 bump，但 PO 明確指示應執行 bump。
-
-**執行步驟**：
-
-1. PO 提供覆蓋原因（必須是具體商業原因，例如：「僅有文件性 Story 未完成，不影響功能穩定性」）
-2. SRE subagent 在執行 bump 前在 commit message 中標注：
-   ```
-   chore: bump version to vX.Y.Z [PO-OVERRIDE]
-
-   覆蓋原因：<PO 提供的覆蓋原因>
-   覆蓋時間：YYYY-MM-DD
-   覆蓋決策者：PO
-   ```
-3. 同步將覆蓋記錄寫入 `docs/km/Metrics_Log.md` 的備注欄（格式：`[PO-OVERRIDE] vX.Y.Z — <原因摘要>`）
-4. Sprint Review Retrospective 的 Problem 區塊記錄此次覆蓋事件，確保下個 Sprint 追蹤根因
-
-**限制**：
-
-- PO Override 不得用於規避安全掃描未通過的限制——安全掃描失敗是絕對禁止條件，PO 無法覆蓋
-- 連續兩個 Sprint 使用 PO Override 時，自動升級至 Stakeholder 審查
-
-<HARD-GATE>
 安全掃描未通過時，禁止任何版號 bump，包括 PO Override 情況。
-PO Override 必須標注 [PO-OVERRIDE] 於 commit message，且同步記錄至 Metrics_Log.md。
 </HARD-GATE>
 
 ---
@@ -230,9 +106,9 @@ PO Override 必須標注 [PO-OVERRIDE] 於 commit message，且同步記錄至 M
 | 環境變數已設定 | [ ] |
 | 監控告警已配置 | [ ] |
 | 部署文件已更新 | [ ] |
-| 效能基準驗證通過（見 `sre-prompt.md §14`） | [ ] |
+| 效能基準驗證通過（見 `references/sre-prompt.md §14`） | [ ] |
 
-> **L2/L3 驗證**：API 整合驗證（L2）與 E2E 驗證（L3）由 Security subagent 執行，詳見 `security-prompt.md §5.1`、`§5.2`。
+> **L2/L3 驗證**：API 整合驗證（L2）與 E2E 驗證（L3）由 Security subagent 執行，詳見 `references/security-prompt.md §5.1`、`§5.2`。
 
 <HARD-GATE>
 Checklist 中任一項目未勾選，不得執行部署。
@@ -272,27 +148,11 @@ Toil（重複性手動操作）不得超過 50% 工時。
 
 ---
 
-## 11. CI/CD 環境偵測 — Self-hosted Runner 警示
+## 11. CI/CD 環境偵測
 
-**新增於**：Sprint 45（US-93，ADR-011 合規）
+> **詳細步驟**：見 `references/cicd-detection.md`（self-hosted runner 警示、偵測步驟、決策規則）
 
-部署就緒檢查期間，SRE subagent 必須執行以下 CI/CD 環境偵測步驟，識別潛在的 self-hosted runner OOM 風險。
-
-### 偵測步驟
-
-1. 掃描 `grep -rn "runs-on:" .github/workflows/`，列出所有 workflow 的 runner 配置
-2. 若所有 `runs-on:` 均為 `self-hosted`，輸出 `[CI/CD 拆分建議]` 警示：建議依 `docs/ci-cd-guide/README.md` 決策樹將 compute-heavy 任務移至 GitHub-hosted runner（OOM 風險），event-driven 任務保留 self-hosted
-3. 記錄偵測結果於部署 Checklist 備注欄
-
-### 決策規則
-
-| 偵測結果 | 動作 |
-|---------|------|
-| 所有 workflow 均跑在 self-hosted | 輸出 CI/CD 拆分建議警示，不阻擋部署 |
-| 部分 workflow 已使用 GitHub-hosted | 無需動作，視為已拆分 |
-| 無 `.github/workflows/` 目錄 | 無需動作，跳過此步驟 |
-
-> **注意**：此偵測為建議性提示，不構成部署 Hard Gate 阻擋條件。但若消費端專案持續出現 CI 測試失敗，應將拆分建議列入下一 Sprint 技術債處理。
+SRE subagent 於部署就緒檢查期間掃描 `.github/workflows/` runner 配置，識別潛在 OOM 風險並輸出建議（不阻擋部署）。
 
 ---
 
