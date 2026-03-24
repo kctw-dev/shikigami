@@ -113,14 +113,20 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 2. **使用 Good / Problem / Action 格式收集回饋**
 3. **SPACE 五維度量測** — 詳見 `references/analytics-prompt.md`
 4. **Quality Observer 診斷報告** — 詳見 `references/analytics-prompt.md`
-5. **每個 Action 建立為 GitHub Issue** — 透過 `issue-management` Skill，標題 `retro:` 前綴，`retro-action` label
+5. **每個 Action 建立為 GitHub Issue（Hard Gate）** — 透過 `issue-management` Skill，標題 `retro:` 前綴，`retro-action` label。**每個 Action 必須在步驟 5 執行期間完成 Issue 建立，取得實際 Issue 編號（#N），不允許標記「待建立」或留空。步驟 5 完成標準：Action Items 清單中每一項均有對應的 GitHub Issue 編號。** 回傳格式：
+   ```
+   Action Issues 建立清單：
+   - [Action 描述] → #N
+   - [Action 描述] → #N
+   ```
+   若任何 Action 無法取得 Issue 編號，步驟 5 **未完成**，必須重試直到所有 Action 均有 Issue 編號。
 6. **同步記錄至 `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md`**（per-session 檔案，US-322 AC-4）
 7. **代理人校準儀式** — 角色 prompt：`skills/sprint-review/references/stakeholder-prompt.md`
 8. **寫入 Retro 會議紀錄** — 寫入 `docs/meetings/YYYY-MM-DD-retro.md`（詳見 `references/meeting-format.md`）
 
 ## 4. Action Items 驗收機制
 
-GitHub Issues 追蹤（`retro-action` label）：每個 Action 透過 `issue-management` 建 Issue；每次 Sprint Review 前逐項確認：完成 → close；未完成 → `deferred` label；連續兩 Sprint open → 升級 Stakeholder。
+GitHub Issues 追蹤（`retro-action` label）：每個 Action 透過 `issue-management` 建 Issue，並取得實際 Issue 編號（#N）；**Retro 結束前，所有 Action 必須有對應 Issue 編號，不得有「待建立」項目**。每次 Sprint Review 前逐項確認：完成 → close；未完成 → `deferred` label；連續兩 Sprint open → 升級 Stakeholder。
 
 ---
 
@@ -172,7 +178,7 @@ commit + push 完成後清理同步 signal：`rm -f docs/sprints/.review-signal-
 - [ ] `sprint_N.md` Story 狀態欄已回寫最終驗收結果
 - [ ] **Story Issue 狀態回寫**（§2.6，HARD-GATE）：按 `references/issue-writeback.md` 操作規則執行；Epic/內部/外部 Issue 分流完成；FAIL Story 已回復 backlog
 - [ ] 未達 DoD Story 已移回 Backlog 並標注原因
-- [ ] retro-log per-session 檔案已新增記錄；Action Items 已建 GitHub Issue
+- [ ] retro-log per-session 檔案已新增記錄；Action Items 已建 GitHub Issue（所有 Action 均有 Issue 編號 #N，無「待建立」）
 - [ ] 上個 Sprint `retro-action` Issues 逐項確認；連續兩 Sprint open → 升級 Stakeholder
 - [ ] `ROADMAP.md` 已更新
 - [ ] **ROADMAP 里程碑對齊檢查**（§5.1）
@@ -186,7 +192,7 @@ commit + push 完成後清理同步 signal：`rm -f docs/sprints/.review-signal-
 
 - [ ] Analytics 報告完成（步驟 0，平行）；已讀取同步 signal
 - [ ] Good / Problem / Action 收集（步驟 1-2）；SPACE 量測（步驟 3）；QO 診斷（步驟 4）
-- [ ] 每個 Action 已建 GitHub Issue（步驟 5）；retro-log 已同步（步驟 6）
+- [ ] 每個 Action 已建 GitHub Issue（步驟 5，**HARD-GATE**）：所有 Action 均有 Issue 編號（#N），無「待建立」；回傳 Action Issues 建立清單（含每項 #N）；retro-log 已同步（步驟 6）
 - [ ] 代理人校準儀式（步驟 7）；Retro 會議紀錄寫入（步驟 8）
 
 ### 最終收尾（兩個 subagent 均完成後）
