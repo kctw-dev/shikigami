@@ -2,6 +2,255 @@
 
 > 歷史 Retro 記錄：[RETRO_ARCHIVE](archive/RETRO_ARCHIVE.md)（Sprint 1–87）
 
+> **Source of Truth**：各 Sprint 的原始完整 Retro 記錄儲存於 `docs/km/retro-log/`（per-session 格式）與 `docs/meetings/` 目錄。本文件為**聚合快照**，每次 Sprint Review 後由 Sprint Execution 自動寫入 `docs/km/retro-log/`，並定期由 #647 類型的 Story 聚合至本文件。
+> **覆蓋範圍**：Sprint 88–140（#647 Sprint 141 補完），Sprint 1–87 見 RETRO_ARCHIVE.md。
+> **最後聚合**：2026-03-25（Sprint 141 #647 — 補完 Sprint 98-140）
+
+---
+
+
+## Sprint 140 — 2026-03-24
+
+**Sprint Goal**：落地 ADR-041/ADR-042 決策成果——實作 Crash Recovery 與 Session Watchdog 彈性架構，並根本解決持續發生的 CI Token 輪換問題
+
+### Good
+- Sprint Goal 100% 達成，連續第 14 Sprint 100% 完成率（Sprint 127-140）
+- ADR-041/ADR-042 在同一 Sprint 完成設計+實作閉環，彈性架構里程碑達成
+- 26 個新測試全部 PASS，邊界案例覆蓋充分（graceful degrade NFR 均驗收通過）
+- CI Token 問題識別出根本原因並完成遷移方案，技術債清零進展
+
+### Problem
+- #637 AC4 需要人工操作前置步驟（Anthropic Console 建立 API Key），存在自動化斷點
+- sprint_140.md 在 context compaction 後殘留 TODO 狀態，需 Review 階段手動修正
+- watchdog-monitor.sh 閾值（15m/30m）比 AC 規格（10分鐘）保守，AC 說明未同步更新
+
+### Action Items
+- #643：retro: #637 後續驗證 — ANTHROPIC_API_KEY CI 連續 2 週正常執行確認
+- #644：sprint_N.md TODO→DONE 更新邏輯根本修正
+
+---
+
+## Sprint 139 — 2026-03-24
+
+**Sprint Goal**：落地 TCB 斷點管理實作（ADR-040 決策成果），同步推進 Crash Recovery 與 Session Watchdog 的 ADR 先行工作，並完成 A2A 協議相容性研究評估
+
+### Good
+1. TCB 斷點管理（#404）順利落地，tcb-write.sh 5 subcommands 全部實作，QA 邊界測試 PASS
+2. ADR-041/ADR-042 雙 ADR 在同一 Sprint 並行完成，解鎖 #405/#408 進入下一 Sprint
+3. A2A 協議評估產出結構化「Watch and Wait」決策，3 個觸發條件清楚定義
+4. 連續第 13 Sprint 100% 完成率（Sprint 127-139）
+
+### Problem
+1. CI CLAUDE_CODE_OAUTH_TOKEN 再次過期（第六次），New Issue Intake workflow 持續 401
+2. tcb-write.sh 初始實作有 stderr 污染 stdout 的 bug（`2>&1 || true` 外包造成 TCB_ID 擷取失敗）
+
+### Action Items
+- #637：CI Token 輪換自動化 — CLAUDE_CODE_OAUTH_TOKEN 持續過期根本解決
+- #638：tcb-write.sh 新增 smoke test 防止 stdout 污染回歸
+
+---
+
+## Sprint 138 — 2026-03-24
+
+**Sprint Goal**：落地 ADR-038/ADR-039 決策成果——實作 Kill Switch 緊急停止機制與 Token Cost Routing 風險評分分級，同步修復持續發生的 New Issue Intake CI 認證失敗根因
+
+### Good
+- Kill Switch（#398）與 Token Cost Routing（#402）雙 M-size Story 同 Sprint 完整交付，ADR → 實作閉環
+- CI 401 根本解決：#618 完成遷移至 ANTHROPIC_API_KEY，不再依賴 OAuth Token 輪換
+- 連續第 12 Sprint 100% 完成率（Sprint 127-138）
+
+### Problem
+- New Issue Intake CI 連續失敗，#622 調查根本原因在本 Sprint 啟動但未完成
+
+### Action Items
+- #622 延續調查
+
+---
+
+## Sprint 137 — 2026-03-24
+
+**Sprint Goal**：落地 Sprint 136 Retro Action Items（GAD Schema 範例 + CI 認證升級機制），並推進 ADR 先行工作——為 Kill Switch、Token Cost Routing、TCB 斷點管理三大功能奠定架構基礎
+
+### Good
+1. ADR 三連發（ADR-038/039/040）一個 Sprint 內全部完成，Kill Switch、Token Cost Routing、TCB 三大功能同時解鎖
+2. CI escalation mechanism (#616) 緊湊實作，重複發生偵測 + needs-triage label + 自動建立升級 Issue
+3. Phase 1 Batch 並行執行在 SHIKIGAMI_MAX_PARALLEL=2 限制下順暢完成
+4. 連續第 11 Sprint 100% 完成率（Sprint 127-137）
+
+### Problem
+1. New Issue Intake CI 持續失敗（#622 追蹤中），本 Sprint 未能解決
+
+### Action Items
+- #622：New Issue Intake CI 再發調查
+
+---
+
+## Sprint 136 — 2026-03-24
+
+**Sprint Goal**：建立 Schema-first API Contract 決策基礎（ADR-036）並落地 Schema 先行設計
+
+### Good
+1. CI YAML lint 防護（#609）從本 Sprint 起生效，YAML parse error 不再進入 main
+2. OAuth 401 根本修復（#600）：ANTHROPIC_API_KEY 不過期，決策文件留存
+3. ADR-036 → #406 完整 ADR 先行鏈路執行
+4. 連續第 10 Sprint 100% 完成率（Sprint 127-136）
+
+### Problem
+1. CI 401 問題重複四次才根本解決（#551/#557/#583/#600）
+2. docs/schema/ 缺少具體 JSON Schema Contract 範例
+
+### Action Items
+- #616：CI 認證問題快速升級機制（第二次發生自動建議根本解決）
+- #617：docs/schema/ 新增 GAD workflow JSON Schema Contract 範例
+
+---
+
+## Sprint 135 — 2026-03-24
+
+**Sprint Goal**：推進 Context Engineering 基礎架構（ADR-037 + JIT Retrieval 實作）
+
+### Good
+1. ADR-first 策略有效：#602 ADR 先行使 #400 實作方向明確，Direction C 選定後零重工
+2. 最低侵入性設計：Context Engineering JIT 不修改 29 個 Skill 格式，快速驗證假設
+3. CI 問題同 session 修復，未阻塞主流程
+4. 連續第 9 Sprint 100% 完成率
+
+### Problem
+- Workflow YAML body 含特殊字符（`**`、中文冒號）導致 parse error，PR 合併後才發現
+
+### Action Items
+- #609：新增 GitHub Actions workflow YAML lint CI 步驟
+
+---
+
+## Sprint 134 — 2026-03-24
+
+**Sprint Goal**：強化品質閘道——Security Gate + Parallel Conflict Prediction
+
+### Good
+- Sprint 133 Retro Action Items 100% 落地，閉環表現優秀
+- Security Gate（#393）設計完整一次通過（8/8 tests）
+- Parallel Conflict Prediction（#395）7 步驟流程一次性通過（5/5 tests）
+- 連續第 8 Sprint 100% 完成率
+
+### Problem
+- CI New Issue Intake OAuth token 過期連續 3 次失敗，監控缺失
+
+### Action Items
+- CI Token 輪換問題升級追蹤
+
+---
+
+## Sprint 133 — 2026-03-24
+
+**Sprint Goal**：FREE-MAD QA 制衡框架 + D3 Team Debate + Browser Automation Gate
+
+### Good
+- FREE-MAD（#397）+ D3 Debate（#403）形成完整 QA 制衡生態，技術決策品質機制系統化
+- Batch 1 平行執行無衝突，Batch 2 序列設計正確
+- Sprint 133 ADR-034 補文件修正（Proposed→Accepted），清除長期文件不一致
+
+### Problem
+- PR rebase conflict：worktree 基於舊 main，需人工 force-with-lease rebase 介入
+- sprint_133.md Story 行格式不一致（部分行有 DONE 標記，部分無）
+
+### Action Items
+- #581：並行 worktree 版本衝突預防機制
+- #582：sprint_N.md Story 行格式統一
+
+---
+
+## Sprint 132 — 2026-03-24
+
+**Sprint Goal**：落地 Sprint 131 Retro Actions + RICE Score 標準建立 + ADR-035 TDAD 依賴分析
+
+### Good
+1. Sprint 131 兩個 Retro Action Items（#563/#564）完整落地
+2. ADR-035 採用零依賴原則（Bash grep-based），與框架設計哲學一致
+3. RICE Score 標準文件第一版建立，PO 優先級決策有量化依據
+4. 連續第 6 Sprint 100% 完成率（127-132）
+
+### Problem
+1. developer-prompt.md 修改位置與 Sprint Planning 文件描述有歧義
+2. CI "New Issue Intake" 連續失敗已第 3+ Sprint
+
+### Action Items
+- #573：Developer SKILL 類 Story AC 應明確指定修改路徑
+
+---
+
+## Sprint 131 — 2026-03-24
+
+**Sprint Goal**：鞏固 Sprint Execution 品質閘道
+
+### Good
+1. 連續第 5 Sprint 100% 完成率（127-131）
+2. 2×2 平行架構（Batch 1/2）順暢執行，OOM 防護有效
+
+### Problem
+1. #388 和 #386 在 PO Round 1 時 AC 為空或嚴重不完整，觸發 NEEDS_REVISION
+
+### Action Items
+- #563：Sprint Planning AC 完整性強制檢查
+- #564：Story 獨立性評估強化
+
+---
+
+## Sprint 130 — 2026-03-24
+
+**Sprint Goal**：強化 Cruise 治理 + #493 Retro-Action Grooming 觸發機制
+
+### Good
+1. 連續第 4 Sprint 100% 完成率（127-130），四連勝
+2. #493「自我交付」里程碑：以自身歷史數據完成驗證，框架設計一致性最佳展示
+
+### Problem
+1. #453 長期積壓 8+ Sprint，Won't Fix 決策仍等待 Stakeholder 確認關閉
+
+### Action Items
+- 無新增 Action Items（主要為積壓清理）
+
+---
+
+## Sprint 129 — 2026-03-24
+
+**Sprint Goal**：閉環 Sprint 128 四項 Retro Actions + OOM 防護三層架構
+
+### Good
+1. Sprint 128 四個 Retro Action（#534/#536/#537/#538）在一個 Sprint 內全數閉環（歷史首次）
+2. 連續第 3 Sprint 100% 完成率（127-129）
+3. OOM 防護三層架構同時落地：環境變數上限 + worktree 唯一性檢查 + 殘留清理
+4. CI OAuth 從人工 SOP 升級為 GCE watchdog 自動同步
+
+### Problem
+1. #493（Retro-Action 連續未完成觸發 Grooming）已連續 4 Sprint 未排入，自我矛盾
+2. #453 累積 7+ Sprint，成為永久積壓污染源
+
+### Action Items
+- 明確 #493 排程；#453 決策：排入或關閉
+
+---
+
+## Sprint 128 — 2026-03-24
+
+**Sprint Goal**：修復 #452 INFRA 測試框架技術債 + Cruise Mode 核心行為修復
+
+### Good
+1. 7/7 100% 完成率，連續第 2 Sprint 100%（127+128），容量上限全數交付
+2. #452（連續 6+ Sprint 未完成）透過 #490 RESEARCH 拆分，在 Sprint 128 完整交付
+3. Cruise Mode 雙缺陷（#517/#519）同 Sprint 閉環，project_level=low HARD-GATE 與 SRE 盲區修復
+4. 三項流程品質 Gate 同步落地（#491/#492/#513）
+
+### Problem
+1. Sprint 127 三個「待建立 Action Items」Issue 從未建立，Retro 流程執行缺口
+2. #452 交付後未關閉，Issue Hygiene 缺失
+
+### Action Items
+- #534：Sprint Review 需明確追蹤 Retro Action 建立狀態
+- #536：SHIKIGAMI_MAX_PARALLEL 環境變數控制平行上限
+- #537：Worktree 唯一性檢查 Gate
+- #538：Task 命名格式 repo/sprint-N-phase
+
 ---
 
 ## Sprint 127 — 2026-03-24
@@ -25,6 +274,372 @@
 2. 待建立 — 平行 subagent 數量上限規則（OOM 防護，P0）
 3. 待建立 — 版號 bump v0.83.4 → v0.84.0 補足（P1）
 4. 待建立 — 重複派遣防護 Gate（worktree 唯一性檢查，P1）
+
+---
+
+## Sprint 125 — 2026-03-24
+
+**Sprint Goal**：CI Regression 永久修復 + 框架治理強化 + Multi-Agent Observability 基礎
+
+### Good
+- CI Regression 從多次 workaround 升級為永久解法
+- Cruise 閉環機制首次完整運作（偵測→行動→確認）
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 124 — 2026-03-23
+
+**Sprint Goal**：交付同職能 Team Debate 雙 Agent 機制（ADR-031）+ 修復 #442 CI Regression
+
+### Good
+1. Sprint 123 Retro Action 4/4 全閉環
+2. Team Debate ADR-031 決策落地，Quality 機制升級
+
+### Problem
+1. 框架複雜度預算機制仍未實作（#462 連續多 Sprint 未啟動）
+
+### Action Items
+- Sprint 125 必做：框架複雜度預算機制（#462）
+
+---
+
+## Sprint 123 — 2026-03-23
+
+**Sprint Goal**：消除 Cruise Mode 隨機阻斷 + 交付 Cruise 雙模式（Loop + Once）
+
+### Good
+1. Cruise 根因消除（非 workaround）
+2. Cruise 雙模式（Loop + Once）交付
+
+### Problem
+1. Cruise SKILL.md 兩次 sequential 修改（#449 → #430）造成序列瓶頸
+
+### Action Items
+1. Cruise SKILL.md 拆分（解決瓶頸）
+2. #452 INFRA 測試框架技術債排入
+
+---
+
+## Sprint 122 — 2026-03-23
+
+**Sprint Goal**：修復 CI 基礎設施三大故障點
+
+### Good
+- 三大 CI 故障點修復，CI 可靠性顯著提升
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 121 — 2026-03-23
+
+**Sprint Goal**：解決外部依賴阻塞問題、修復 CI 環境缺陷、提升 Sprint Review 品質
+
+### Good
+1. Retro-action 全數完成：#434/#435/#436 單一 Sprint 解決
+2. Sprint Review 平行化（#420）
+3. 全平行執行：5 Story 零衝突
+
+### Problem
+1. CI 基礎設施脆弱，多個單點故障，無主動檢查機制
+
+### Action Items
+- Retro analytics 建議的 5 個 action items 記錄在案，下輪 Sprint Planning 時由 PO 評估
+
+---
+
+## Sprint 120 — 2026-03-23
+
+**Sprint Goal**：修正 PO patrol 交付物識別缺陷 + Stakeholder 回覆處置表 + Sprint 實質完成偵測
+
+### Good
+- 即時反饋迴圈：Cruise 發現缺陷 → Issue → 當日完成（#412/#422/#415）
+- 單日高速交付：4 Story（8 pts）5 小時內完成 merge
+
+### Problem
+- Sprint 被外部依賴阻塞無法自動 bypass（Stakeholder 回饋）：#381 阻塞導致 17 個 sprint-candidate 積壓
+
+### Action Items
+- #434：Sprint 被單一外部依賴阻塞時應自動 bypass 並推進 backlog
+
+---
+
+## Sprint 119 — 2026-03-23
+
+**Sprint Goal**：ADR-032 + CRITICAL 互動確認 + Review 分層 + Discovery Checklist + Worktree 驗證
+
+### Good
+- Sprint Goal 100% 達成（10/10 pts，5/5 Stories PASS）
+- 品質防線全面升級：ADR-032 三條交付路徑 + CRITICAL 互動確認 + Review 分層 + Discovery Checklist
+- Retro Action A3 閉環：一個 Sprint 內閉環
+
+### Problem
+- CI new-issue-intake workflow 持續 failure（#381 已建立，尚未修復）
+
+### Action Items
+- #381 延續追蹤修復
+
+---
+
+## Sprint 118 — 2026-03-23
+
+**Sprint Goal**：解決 Sprint Execution 漏步驟根因 — Code Review 責任下放至 subagent
+
+### Good
+- Sprint Goal 100% 達成（10/10 pts，5/5 Stories PASS）
+- Sprint Execution 架構重大升級：Code Review Loop 責任下放（ADR-023）+ Story Completion Checklist
+- 緊急 Shoot #379 當日修復 worktree 衝突，AI 團隊自我修復能力展示
+
+### Problem
+- CI new-issue-intake workflow 持續 failure（近 10 次全 failure）
+
+### Action Items
+- A1：修復 new-issue-intake CI workflow（Issue #381，retro-action）
+
+---
+
+## Sprint 116 — 2026-03-22
+
+**Sprint Goal**：完善 Cruise 治理邊界（close policy + 交付鏈配置 + feedback routing）
+
+### Good
+- Cruise 治理邊界補完，close policy / feedback routing 完整定義
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 115 — 2026-03-22
+
+**Sprint Goal**：Cruise 巡查閉環 — PO 自動行動 + SRE 觸發 debugging
+
+### Good
+- Cruise 從「只回報」進化為「自動行動」，PO patrol 自動派遣 + SRE 自動 debug 觸發
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 114 — 2026-03-22
+
+**Sprint Goal**：Cruise Mode 穩定性與可用性改善 — SRE org-level runner + 嚴格模式
+
+### Good
+- SRE org-level runner 設定完成，Cruise 穩定性提升
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 113 — 2026-03-21
+
+**Sprint Goal**：CI 權限分層落地 — 讓 Runner 依場景選擇權限等級
+
+### Good
+- CI 權限分層機制落地，高風險操作與低風險操作明確分離
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 112 — 2026-03-21
+
+**Sprint Goal**：讓 Shikigami Sprint 可從 GitHub Actions 動態觸發
+
+### Good
+- GitHub Actions 動態觸發機制完整落地
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 111 — 2026-03-21
+
+**Sprint Goal**：落地 Cruise Mode Phase 1 — PO 巡邏 + SRE 巡檢自動巡航
+
+### Good
+- Cruise Mode Phase 1 核心功能交付，PO patrol + SRE 巡檢雙模式
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 110 — 2026-03-21
+
+**Sprint Goal**：統一框架共用檔案的跨機器安全模式
+
+### Good
+1. per-session 模式統一擴展成功，全框架 8 個共用檔案完成 per-session 化
+2. CLAUDE.md 開發紅線第 8 條落地，跨機器 git conflict 風險清零
+3. push retry 機制完整（`git pull --rebase` + 3 次重試）
+
+### Problem
+1. protect-main.sh 豁免條目冗餘，邏輯需清理
+
+### Action Items
+- 清理 protect-main.sh 冗餘豁免條目（下 Sprint 評估）
+
+---
+
+## Sprint 109 — 2026-03-20
+
+**Sprint Goal**：完成 AI 團隊績效儀表板，一指令查看當日工作成果
+
+### Good
+1. #317 四個 Phase 完整落地（出勤時數 P1 + 會議紀錄 P2 + 探索紀錄 P3 + 儀表板彙整 P4）
+2. per-session 架構設計天然避免跨機器 conflict
+3. `/performance-dashboard` 作為第 27 個 Skill 正式加入
+4. 0% DISPUTE，TDD 20 TC 全部 PASS
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 108 — 2026-03-20
+
+**Sprint Goal**：修復出勤紀錄跨機器 conflict + 落地探索紀錄收集
+
+### Good
+- 出勤紀錄跨機器 conflict 根本修復，探索紀錄收集機制落地
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 107 — 2026-03-20
+
+**Sprint Goal**：落地 AI 團隊識別碼統一規範與出勤時數可視化
+
+### Good
+- AI 團隊識別碼統一，出勤時數可視化第一版交付
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 106 — 2026-03-20
+
+**Sprint Goal**：建立版號智慧策略與首階段績效可視化（會議紀錄）
+
+### Good
+- 正式討論流程充分，兩個 Story 完全平行執行
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 105 — 2026-03-20
+
+**Sprint Goal**：修復分散式鎖核心缺陷，確保跨機器多 Session 互斥可靠性
+
+### Good
+- 分散式鎖核心缺陷修復，跨機器互斥可靠性達標
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 104 — 2026-03-19
+
+**Sprint Goal**：Sprint Git Flow 改為 PR-based — 禁止直推 main，引入 code review 環節
+
+### Good
+- PR-based flow 完整落地：ADR-023 六項決策清晰，hook + SKILL 實作一致
+- 13/13 測試全數通過，無 DISPUTE
+- squash merge + branch 命名規範統一，main 歷史線性
+
+### Problem
+- ADR-023 存在 2 處文字筆誤（`hooks/main-protect.sh` 應為 `hooks/protect-main.sh`；豁免條目衝突）
+
+### Action Items
+- 修正 ADR-023 兩處筆誤（本 Review 完成）
+
+---
+
+## Sprint 103 — 2026-03-19
+
+**Sprint Goal**：強化多 Session 並行可靠性 — 清理過期測試技術債、定義檔案協調規範
+
+### Good
+- 多 Session 並行可靠性強化，技術債清理完成
+
+### Problem
+- 無顯著問題
+
+### Action Items
+- 無
+
+---
+
+## Sprint 102 — 2026-03-19
+
+**Sprint Goal**：清除 Sprint 100 Retro 遺留測試技術債
+
+### Good
+- Retro Action Items 全數清除（#308/#309/#310 三筆 retro-action 均完成）
+- 三個 Story 完全平行執行，無檔案衝突
+- RESEARCH (#310) 產出高品質評估報告
+
+### Problem
+- #310 評估結論（刪除 test-us13/test-us37）需後續執行，本 Sprint 僅完成評估未清理
+- 技術債評估與清理拆成兩個 Sprint 增加上下文切換成本
+
+### Action Items
+- #314：刪除過期測試 test-us13-dora-metrics.sh 與 test-us37-prompt-injection-protection.sh
 
 ---
 
