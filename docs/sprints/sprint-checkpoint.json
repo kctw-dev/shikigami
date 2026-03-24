@@ -1,12 +1,11 @@
 {
-  "sprint": 137,
+  "sprint": 138,
   "stories": [
-    {"id": "#617", "status": "completed", "pr": "#623"},
-    {"id": "#619", "status": "completed", "pr": "#624"},
-    {"id": "#620", "status": "completed", "pr": "#625"},
-    {"id": "#621", "status": "completed", "pr": "#626"},
-    {"id": "#616", "status": "completed", "pr": "#627"}
+    {"id": "#622", "status": "pending", "pr": null},
+    {"id": "#618", "status": "pending", "pr": null},
+    {"id": "#398", "status": "pending", "pr": null},
+    {"id": "#402", "status": "pending", "pr": null}
   ],
-  "current_step": "all-complete",
-  "updated_at": "2026-03-24T20:34+08:00"
+  "current_step": "execution-start",
+  "updated_at": "2026-03-24T20:52+08:00"
 }
