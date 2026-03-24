@@ -200,6 +200,15 @@ printf '{"session_id":"%s","role":"%s","event":"%s","timestamp":"%s","repo":"%s"
 
 echo "[ATTENDANCE] checkout 紀錄已寫入：$ATTEND_JSONL"
 
+# ── Issue #500：Worktree 自動清理 ──────────────────────────────────────
+# SessionEnd 後自動清理殘留 worktree（不阻塞主流程）
+WORKTREE_CLEANUP_SCRIPT="${SCRIPT_DIR}/worktree-cleanup.sh"
+if [[ -x "$WORKTREE_CLEANUP_SCRIPT" ]]; then
+  bash "$WORKTREE_CLEANUP_SCRIPT" 2>/dev/null || true
+else
+  echo "[WARN] worktree-cleanup.sh 不存在或不可執行，跳過 worktree 清理"
+fi
+
 # ── US-321：Cruise Mode flag file cleanup ────────────────────────────────
 # 清除本 session 的 cruise flag file 與 shoot flag file（若存在）
 CRUISE_FLAG="/tmp/shikigami-cruise-${SESSION_ID}.active"
