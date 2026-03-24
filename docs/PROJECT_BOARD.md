@@ -1,9 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 134 完成 — 5/5 Stories PASS，Velocity 7 pts）
-**當前 Sprint**：Sprint 134（完成）
+**最後更新**：2026-03-24（Sprint 135 啟動 — Context Engineering JIT + Agent Skills 評估 + CI 修復，6 pts）
+**當前 Sprint**：Sprint 135（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 135（進行中）
+
+> Sprint Goal：推進 Context Engineering 基礎架構（ADR-037 + JIT Retrieval 實作），研究 Agent Skills 開放標準對齊可行性，並修復 CI OAuth token 認證失效。
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| RESEARCH: ADR-037 — Context Engineering JIT 架構決策 | #602 | S | 1 | 進行中 |
+| retro: 修復 CI New Issue Intake OAuth token 認證失效 | #597 | S | 1 | 進行中 |
+| research: Agent Skills 開放標準對齊評估 | #396 | M | 2 | 進行中 |
+| feat: Context Engineering — Just-in-Time Retrieval | #400 | M | 2 | 待開始（依賴 #602） |
+
+**Sprint 容量**：6 points
+**執行順序**：ADR Phase（#602）→ Batch 1（#597 | #396 平行）→ Batch 2（#400 序列）
 
 ---
 
@@ -842,6 +859,7 @@
 | 2026-03-15 | SDD 類別圖強制 Gateway 寫入入口 — 新增 DM-4 審查機制 | #268 | 0da8626 |
 | 2026-03-23 | 巡邏留言應編輯而非重複發新留言 | #409 | afd1d37 |
 | 2026-03-23 | #389 PO 巡邏加入 PR comments 掃描（補回歸測試） | #389 | 7370b84 |
+| 2026-03-24 | 測試腳本 grep 語法規範 — 禁止 grep -l 與 && echo found 混用 | #598 | 7cbb54c |
 
 ---
 
