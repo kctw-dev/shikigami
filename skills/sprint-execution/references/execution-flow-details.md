@@ -149,7 +149,7 @@
    - 見流程圖「Story Completion Checklist」步驟 1-5（取得最新 main → 更新狀態文件 → 寫入 checkpoint → release claim → 檢查終止條件）
 
    **[Checklist 步驟 2 — 狀態文件更新]**（主 session，步驟 1 git pull 完成後，直推 main — 豁免清單，ADR-023 決策 3）：
-   更新看板與同步 Sprint 文件：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。
+   更新看板與同步 Sprint 文件：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。**每個完成 Story 行尾必須加 `DONE(#PR)` 標記**（`#PR` 為合併的 PR 編號），確保格式統一、可供自動化掃描。
 
    <HARD-GATE>
    **Developer 更新範圍限制（越權禁止）**
