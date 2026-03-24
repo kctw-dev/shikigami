@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/kctw-dev/shikigami/docs/schema/examples/gad-agent-contract.example.json",
+  "title": "GAD Agent Contract Example",
+  "description": "Shikigami GAD（Group Agent Development）工作流程中，Agent function calling 的 JSON Schema Contract 範例。依 ADR-036 Schema-first 規範建立，供 Architect 設計 API Contract 時參考格式。",
+  "type": "object",
+  "required": ["name", "description", "input_schema"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Agent tool 名稱（對應 Claude tool use 的 name 欄位）。使用 snake_case。",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "examples": ["sprint_planning_trigger", "issue_triage", "shoot_story"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Agent tool 的用途描述（對應 Claude tool use 的 description 欄位）。應清楚說明何時使用此 tool、預期的輸入與輸出。",
+      "minLength": 10,
+      "examples": [
+        "觸發 Sprint Planning 流程。當 sprint-candidate issues 數量達到閾值時調用。回傳 sprint_number 與選入的 stories 清單。"
+      ]
+    },
+    "input_schema": {
+      "type": "object",
+      "description": "Agent tool 的輸入參數定義（對應 Claude tool use 的 input_schema 欄位）。使用 JSON Schema Draft 2020-12 格式。",
+      "$ref": "#/$defs/input_schema_definition",
+      "examples": [
+        {
+          "type": "object",
+          "required": ["repo", "sprint_candidates"],
+          "properties": {
+            "repo": {
+              "type": "string",
+              "description": "目標 repo（格式：owner/repo）",
+              "pattern": "^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$"
+            },
+            "sprint_candidates": {
+              "type": "array",
+              "description": "sprint-candidate issue 編號清單",
+              "items": {"type": "integer", "minimum": 1},
+              "minItems": 1
+            },
+            "capacity_pts": {
+              "type": "integer",
+              "description": "Sprint 容量（points），預設 6",
+              "minimum": 1,
+              "maximum": 8,
+              "default": 6
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "input_schema_definition": {
+      "type": "object",
+      "description": "JSON Schema 定義物件，描述 tool 的輸入參數。",
+      "required": ["type", "properties"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "object"
+        },
+        "required": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "必填參數名稱清單"
+        },
+        "properties": {
+          "type": "object",
+          "description": "參數定義，每個 key 為參數名稱，value 為其 JSON Schema 定義",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["type", "description"],
+            "properties": {
+              "type": {"type": "string"},
+              "description": {"type": "string"}
+            }
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "sprint_planning_trigger",
+      "description": "觸發 Sprint Planning 流程。當 sprint-candidate issues 數量達到閾值時調用。回傳 sprint_number 與選入的 stories 清單。",
+      "input_schema": {
+        "type": "object",
+        "required": ["repo", "sprint_candidates"],
+        "properties": {
+          "repo": {
+            "type": "string",
+            "description": "目標 repo（格式：owner/repo）",
+            "pattern": "^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$"
+          },
+          "sprint_candidates": {
+            "type": "array",
+            "description": "sprint-candidate issue 編號清單",
+            "items": {"type": "integer", "minimum": 1},
+            "minItems": 1
+          },
+          "capacity_pts": {
+            "type": "integer",
+            "description": "Sprint 容量（points），預設 6",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 6
+          }
+        }
+      }
+    },
+    {
+      "name": "issue_triage",
+      "description": "對新開 GitHub Issue 執行自動分類（Triage）。識別 issue 類型（bug / feature-request / question / enhancement），加上對應 label，並補充缺失資訊請求。",
+      "input_schema": {
+        "type": "object",
+        "required": ["issue_number", "repo"],
+        "properties": {
+          "issue_number": {
+            "type": "integer",
+            "description": "GitHub Issue 編號",
+            "minimum": 1
+          },
+          "repo": {
+            "type": "string",
+            "description": "目標 repo（格式：owner/repo）"
+          },
+          "auto_label": {
+            "type": "boolean",
+            "description": "是否自動套用分類 label，預設 true",
+            "default": true
+          }
+        }
+      }
+    }
+  ],
+  "_meta": {
+    "schema_version": "1.0.0",
+    "created_at": "2026-03-24",
+    "created_by": "Sprint 137 #617",
+    "adr_reference": "ADR-036",
+    "usage": "此為範例檔案，供 Architect 設計 GAD Agent function calling contract 時參考格式。實際 contract 請建立於 docs/schema/sprint-N/ 或 docs/schema/locked/ 目錄。"
+  }
+}

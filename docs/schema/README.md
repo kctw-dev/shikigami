@@ -81,6 +81,16 @@ docs/schema/
 
 ---
 
+## 範例檔案
+
+| 範例 | 路徑 | 說明 |
+|------|------|------|
+| GAD Agent Contract 範例 | [`examples/gad-agent-contract.example.json`](examples/gad-agent-contract.example.json) | Claude tool use JSON Schema Draft 2020-12 格式的完整範例，包含 name / description / input_schema 欄位定義，附兩個真實 Agent contract 案例（sprint_planning_trigger / issue_triage） |
+
+> **使用方式**：複製此範例，依實際 Agent tool 需求修改 `name`、`description`、`input_schema.properties`，存至 `sprint-<N>/` 目錄，命名規則見上方「命名規範」。
+
+---
+
 ## 參考
 
 - ADR-036：`docs/adr/ADR-036-schema-first-api-contract.md`
