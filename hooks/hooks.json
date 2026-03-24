@@ -40,6 +40,16 @@
             "async": true
           }
         ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd); WD_HOOK=\"$REPO_ROOT/hooks/session-watchdog.sh\"; if [ -f \"$WD_HOOK\" ]; then bash \"$WD_HOOK\" 2>/dev/null || true; fi'",
+            "async": true
+          }
+        ]
       }
     ],
     "PreToolUse": [
