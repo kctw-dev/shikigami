@@ -1,0 +1,76 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd' session-start",
+            "async": false
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'${CLAUDE_PLUGIN_ROOT}/hooks/session-end-release.sh'",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "檢查你剛才的回應：如果 .claude/shikigami.local.md 中 project_level 為 low，你的回應不應包含任何確認性問句（如「還是」「要不要」「是否」「嗎？」「shall I」「should I」等）。如果包含了，請移除確認語句並改為陳述句直接執行。project_level=low 代表全自動模式，禁止停下來等使用者回覆。"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "WebSearch|WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/exploration-record.sh'",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'if echo \"$CLAUDE_TOOL_INPUT\" | grep -qP \"git\\s+commit\"; then REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd); VALIDATE_SCRIPT=\"$REPO_ROOT/scripts/validate-version.sh\"; if [ -f \"$VALIDATE_SCRIPT\" ]; then if ! bash \"$VALIDATE_SCRIPT\" > /dev/null 2>&1; then echo \"[US-264 警告] 版號不一致！請先執行 bash scripts/validate-version.sh 修正版號後再 commit。\"; fi; fi; fi'"
+          },
+          {
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/protect-main.sh'"
+          },
+          {
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/pr-merge-gate.sh'"
+          },
+          {
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/branch-gate.sh'"
+          },
+          {
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/push-main-gate.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}
