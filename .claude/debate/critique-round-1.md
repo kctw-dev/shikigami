@@ -1,12 +1,13 @@
-# Team Debate — Critic Round 1
-**Story**: #495 feat: INFRA 回歸測試案例實作
-**Branch**: sprint-128/495-infra-test-cases
-**Critic Agent**: Developer Critic (Agent B)
-**Date**: 2026-03-24
+# Team Debate — Critic Round 1 批判結果
+
+**Story**：#493 — Retro-Action 連續未完成自動觸發 Grooming 機制
+**Branch**：sprint-130/493-retro-grooming
+**Critic Agent**：Developer Critic（Agent B）
+**Date**：2026-03-24
 
 ---
 
-## Verdict: PASS
+## Verdict: FAIL
 
 ---
 
@@ -16,56 +17,60 @@
 
 | AC | 說明 | 評估 |
 |----|------|------|
-| AC2a (#423 OIDC) | U-3a/b/c 驗證 id-token:write、permissions 區塊、CLAUDE_CODE_OAUTH_TOKEN；I-4a/b/c 驗證 ci-health-check.sh 的 API endpoint、404/401 判斷 | PASS |
-| AC2b (#442 unzip) | U-4a 冪等安裝（command -v unzip）、U-4b apt-get install -y unzip、U-4c sudo -n 退化偵測 | PASS |
-| AC2c (#424 版本釘定) | I-3a 實際執行 validate-ci-versions.sh、I-3b 輸出 PASS 驗證、I-3c 掃描到 3 個 workflow | PASS |
-| AC3 (CI pipeline) | S-3a/b/c/d 確認 infra-regression.yml 存在、觸發條件、checkout@v4 | PASS |
+| AC1 偵測規則 | retro-grooming.md §1 定義連續 2 Sprint 閾值、情境表格、偵測指令 | PASS |
+| AC2 Sprint Planning 整合 | SKILL.md checklist 第 51 行加入偵測步驟並引用 retro-grooming.md | PASS |
+| AC3 #452 觸發案例 | retro-grooming.md §4 有 #452 的完整說明 | PASS |
 
-邊界條件檢查：
-- 測試在各 workflow 檔案不存在時均有 `skip` fallback，不會誤 FAIL — 正確
-- U-4c 正確排除 YAML 註解行（grep -vE "^[[:space:]]*#"）— 正確
+所有 3 項 AC 均有對應實作，覆蓋完整。
 
 ### 2. 設計（SOLID / 耦合度 / 命名）
 
-**正向觀察：**
-- 新測試段落命名（U-3、U-4、I-3、I-4、S-3）沿用既有框架命名慣例，一致性佳
-- 每個 `assert_contains` 都有具體的 fix_hint，符合框架 INFRA-DIAG 規範
-- `infra-regression.yml` 使用 env 傳遞 `inputs.infra_test_level`（安全最佳實踐）
-- `paths` filter 避免每次 push 都觸發，減少 CI noise
+**問題 1（MED）**：`skills/sprint-review/references/retro-grooming.md` 第 41-42 行：
 
-**可觀察的設計問題（LOW）：**
+§1.3 偵測方式提到「讀取 Issue 的 milestone 歷史（透過 GitHub API）」，但 `gh issue list` 不直接提供 milestone 歷史（只能看當前 milestone），也未給出具體 API endpoint（如 `gh api repos/{owner}/{repo}/issues/{n}/timeline`）。Agent 依此指引執行時可能無法實際完成偵測，陷入無法操作的狀態。
 
-- `tests/test-infra-regression.sh` 第 470 行：`VALIDATE_EXIT=$?` 在 `set -uo pipefail` 環境中，若 subshell 本身出錯可能不如預期。不過此處已用 `2>&1` 捕獲 stderr，且腳本頂部是 `set -uo pipefail`（未含 `-e`），實際風險極低。
-- `infra-regression.yml` 第 53 行：`runs-on: ubuntu-latest` — ubuntu-latest 版本會漂移。在強調版本釘定的專案中略顯矛盾，但屬已知取捨（現有 e2e.yml 亦同），無需在此 Story 修復。
+**問題 2（MED）**：`skills/sprint-review/SKILL.md` §4（第 129 行）原文「連續兩 Sprint open → 升級 Stakeholder」，與 §4.1（第 136-138 行）新增「連續 2 個 Sprint → 觸發 [RETRO-GROOMING-TRIGGER]」並存，兩者觸發條件相同但動作不同，關係（並且/取代）未明確說明，可能導致 Agent 執行不一致。
 
 ### 3. 測試覆蓋
 
-- 新增 12 個測試案例（U-3: 3個、U-4: 3個、I-3: 3個、I-4: 3個、S-3: 4個）
-- 從 20 個擴充至 36 個，覆蓋率顯著提升
-- TDD 流程：Red 階段發現了 U-4c 的真實問題（sudo -n 出現在 grep 結果中），並正確修正為排除注釋行 — 符合 TDD 精神
-- 既有 20 個測試均繼續通過 — 無退化
+- 12 項 TC 覆蓋所有 AC 關鍵詞存在性，符合此類 Skill 文件測試慣例
+- TC-04（第 80-85 行）測試「包含 '2'」過於寬鬆，數字 2 可能出現於任何位置（LOW）
+- 缺少測試覆蓋「升級 Stakeholder 與 RETRO-GROOMING-TRIGGER 並存關係」但屬文件層級測試局限，可接受
 
 ### 4. 安全性
 
-- `infra-regression.yml`：`permissions: contents: read`（最小權限）— 正確
-- input 透過 env 傳遞，無命令注入風險（choice type + env 雙重防護）— 正確
-- 無硬編碼 secrets — 正確
-- validate-ci-versions.sh 透過 `CI_VERSIONS_REPO_ROOT` 環境變數注入，非直接 eval — 正確
+- 無外部輸入處理，無硬編碼金鑰。安全性無問題。
 
 ---
 
 ## Issues Found
 
-無 HIGH severity 問題。LOW 問題不影響 AC 完整性，已記錄供參考，不要求修復。
+### Issue 1
+- **SEVERITY: MED**
+- **位置**：`skills/sprint-review/references/retro-grooming.md` 第 41-44 行
+- **描述**：偵測方式依賴「milestone 歷史 API」但未提供具體指引，實際執行時 Agent 可能無法取得連續排入的歷史資料，導致偵測機制形同虛設
+- **建議**：補充具體 GitHub API 路徑，或明確說明以 `deferred` label 回退方案為主要判定方式
+
+### Issue 2
+- **SEVERITY: MED**
+- **位置**：`skills/sprint-review/SKILL.md` §4（第 129 行）與 §4.1（第 136-138 行）
+- **描述**：「升級 Stakeholder」與「觸發 [RETRO-GROOMING-TRIGGER]」觸發條件相同但動作並存，關係未明確，可能導致 Agent 雙重執行或執行不一致
+- **建議**：在 §4.1 明確說明兩者並存關係（如：同時觸發，GROOMING 處理技術面，Stakeholder 升級處理管理面）
+
+### Issue 3
+- **SEVERITY: LOW**
+- **位置**：`tests/test-493-retro-grooming.sh` 第 80-85 行（TC-04）
+- **描述**：測試「包含 '2'」過於寬鬆，無法精確驗證閾值語義
+- **建議**：改為測試「連續 2 個」或「閾值：連續 2」等更具語義的字串
 
 ---
 
 ## Summary
 
-Worker 正確實作了所有 4 個 AC：
-- AC2a: U-3 (3 tests) + I-4 (3 tests) 覆蓋 #423 OIDC 配置
-- AC2b: U-4 (3 tests) 覆蓋 #442 unzip 深度回歸
-- AC2c: I-3 (3 tests) 覆蓋 #424 版本釘定實際執行
-- AC3: S-3 (4 tests) + infra-regression.yml 覆蓋 CI pipeline 整合
+Worker 覆蓋了全部 3 項 AC，基本框架設計合理。
 
-TDD 流程嚴格執行（Red→Green 可追蹤），無安全漏洞，設計無重大問題。
+2 個 MED 問題需修復：
+1. milestone 歷史偵測方式缺乏可行性指引
+2. 新舊兩個觸發動作的並存關係未明確
+
+1 個 LOW 問題可選修。

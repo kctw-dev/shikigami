@@ -133,9 +133,13 @@ GitHub Issues 追蹤（`retro-action` label）：每個 Action 透過 `issue-man
 每次 Sprint Review §4 執行期間，對所有 open 的 `retro-action` Issues 執行連續未完成偵測：
 
 - **偵測規則與處置流程**：詳見 `references/retro-grooming.md`
-- **觸發條件**：同一 `retro-action` Issue 連續 **2 個**（含）以上 Sprint 排入但未完成
+- **觸發條件**：同一 `retro-action` Issue 連續 **2 個**（含）以上 Sprint 排入但未完成（具有 `deferred` label）
 - **告警關鍵字**：`[RETRO-GROOMING-TRIGGER]`
 - **後續動作**：在下次 Sprint Planning 中執行 Backlog Grooming 重評估（升級 priority、強制排入、拆分或關閉）
+
+**與「升級 Stakeholder」的並存關係**：§4 原有的「連續兩 Sprint open → 升級 Stakeholder」與 §4.1 新增的「觸發 [RETRO-GROOMING-TRIGGER]」**並存且同時執行**：
+- `[RETRO-GROOMING-TRIGGER]`：技術面處置，由 Sprint Planning PO 執行 Backlog Grooming 重評估
+- 升級 Stakeholder：管理面知會，通知 Stakeholder 此 Action Item 持續未完成
 
 ```bash
 # 偵測指令（Sprint Review §4 執行期間）
