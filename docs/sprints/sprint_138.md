@@ -14,7 +14,7 @@
 | Story | Issue | Type | Size | Points | 狀態 | 獨立性 |
 |-------|-------|------|------|--------|------|--------|
 | [SRE] New Issue Intake CI 持続失敗 — 調查根本原因 | #622 | INFRA | S | 1 | 已完成 DONE(comment) | 與 #618 同 new-issue-intake.yml，需先執行 |
-| incident: ANTHROPIC_API_KEY 缺失（第五次）— CI 認證修復 | #618 | INFRA | S | 1 | 待執行（等 #622 完成） | 依賴 #622 調查結果 |
+| incident: ANTHROPIC_API_KEY 缺失（第五次）— CI 認證修復 | #618 | INFRA | S | 1 | 已完成 DONE(#628) | 依賴 #622 調查結果 |
 | feat: Kill Switch — High 自治模式緊急停止 | #398 | FEATURE | M | 2 | 待執行 | 獨立（hooks/kill-switch.sh） |
 | feat: Token Cost Routing — Risk-based Model 分級 | #402 | FEATURE | M | 2 | 待執行 | 獨立（CLAUDE.md + story-lifecycle-prompt.md） |
 
