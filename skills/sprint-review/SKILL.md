@@ -19,25 +19,15 @@ Sprint Review（驗收成果）+ Retrospective（持續改進），採用**兩�
 ### 1.2 平行執行與同步點
 
 ```
-啟動時：
-  ├── Review subagent 開始執行 §1.5 + §2
-  └── Retro subagent 立即開始執行 §3 步驟 0（Analytics，只讀歷史數據，可與 Review 平行）
-
-同步點（Retro subagent 等待）：
-  Review subagent 完成 §2.6（Issue 狀態回寫）後，
-  寫入同步 signal：docs/sprints/.review-signal-<SESSION_ID>
-  內容：REVIEW_DONE=<timestamp>
-
-  Retro subagent 讀取到 signal 後，開始執行 §3 步驟 1（Good / Problem / Action 收集）
-
-最終：兩個 subagent 各自完成後，主流程驗收兩份產出是否完整。
+啟動時：Review subagent → §1.5 + §2；Retro subagent → §3 步驟 0（Analytics，可平行）
+同步點：Review §2.6 完成後寫入 docs/sprints/.review-signal-<SESSION_ID>（REVIEW_DONE=<ts>）
+        Retro subagent 讀到 signal 後繼續 §3 步驟 1
+最終：主流程驗收兩份產出完整性
 ```
 
 ### 1.3 錯誤處理
 
-- **Review subagent 失敗**：Retro subagent 的 §3 步驟 0 結果**仍然保留**（已寫入 per-session 檔案）；§3 步驟 1 以後因缺少同步 signal 而暫停，待 Review subagent 重試完成後繼續。
-- **Retro subagent 失敗**：Review subagent 的所有產出（Issue 回寫、PROJECT_BOARD、sprint_N.md）**仍然保留**；Retro 部分可獨立重試，不影響 Review 結果。
-- **兩者失敗**：各自已完成的步驟產出均保留，重試時從最後失敗步驟繼續。
+各 subagent 失敗互不影響已完成產出。Review 失敗：Retro §3 步驟 0 產出保留，步驟 1 後等待重試完成的 signal。Retro 失敗：Review 產出全保留，可獨立重試。兩者失敗：均從最後失敗步驟繼續。
 
 ## 模型選用建議
 
@@ -84,16 +74,16 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 
 ### 步驟
 
-1. **PO Subagent 展示 Demo 結果** — 角色 prompt：`skills/sprint-review/po-review-prompt.md`
+1. **PO Subagent 展示 Demo 結果** — 角色 prompt：`skills/sprint-review/references/po-review-prompt.md`
 2. **QA 主導邊界案例測試** — 在 Happy Path Demo 完成後，由 QA Subagent 執行「邊界案例測試」環節，測試清單參照 `skills/qa-engineer/SKILL.md §5 常見邊界案例清單`。QA 主導測試並產出初步邊界案例驗證結果。若全部 PASS，直接進入步驟 3。若發現問題，進入步驟 2a。
 <!-- #265 Sprint Review QA 缺陷修復複驗流程 -->
 2a. **Developer 修復 QA 發現的問題** — Developer Subagent 接收 QA 邊界測試的缺陷清單，逐一修復並 commit。修復完成後進入步驟 2b。
 2b. **QA 複驗修復有效性（Hard Gate）** — QA Subagent 針對步驟 2a 的修復執行 targeted regression：(1) 確認原始缺陷已修復、(2) 確認修復未引入新問題（regression）。全部 PASS 方可進入步驟 3。若複驗發現新問題，回到步驟 2a（循環直到 QA PASS）。
-3. **Stakeholder Subagent 確認商業期待** — 角色 prompt：`skills/sprint-review/stakeholder-prompt.md`
+3. **Stakeholder Subagent 確認商業期待** — 角色 prompt：`skills/sprint-review/references/stakeholder-prompt.md`
 4. **更新 `docs/PROJECT_BOARD.md`（已完成欄位）** — 通過驗收 Story 移至 Done，記錄完成日期與 Sprint 編號，更新 Sprint 統計數據
-5. **未達 DoD 的 Story 處理** — 詳見 `po-review-prompt.md`
-6. **回寫 `docs/sprints/sprint_N.md` Story 最終狀態** — 詳見 `po-review-prompt.md`
-7. **寫入 Sprint Review 會議紀錄** — 寫入 `docs/meetings/YYYY-MM-DD-sprint-review.md`（詳見 §5.2 會議紀錄格式）
+5. **未達 DoD 的 Story 處理** — 詳見 `references/po-review-prompt.md`
+6. **回寫 `docs/sprints/sprint_N.md` Story 最終狀態** — 詳見 `references/po-review-prompt.md`
+7. **寫入 Sprint Review 會議紀錄** — 寫入 `docs/meetings/YYYY-MM-DD-sprint-review.md`（詳見 `references/meeting-format.md`）
 
 ## 2.5 Sprint 外完成項目掃描
 
@@ -101,56 +91,9 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 
 ## 2.6 Story Issue 狀態回寫（ADR-010 生命週期閉環）
 
-Story 驗收判定完成後，依判定結果回寫 GitHub Issue 狀態。在 §2 步驟 5 之後、§3 之前執行。
+詳見 `skills/sprint-review/references/issue-writeback.md`。在 §2 步驟 5 之後、§3 之前執行。
 
-### 操作規則
-
-| 驗收判定 | Issue 操作 | 說明 |
-|---------|-----------|------|
-| Story PASS | 依 Issue 建立者判斷執行對應操作 | 內部 Issue 自動關閉；外部 Issue 保持 Open |
-| Story FAIL | Issue 保持 open | 回流 Backlog，等待下次 Sprint 選取 |
-
-### Epic Issue 判斷（優先檢查）
-
-**Epic Issue**：Issue title 含 `epic:` 前綴（大小寫不敏感）。
-
-Epic Issue **不得 close**，無論其為內部或外部 Issue，一律執行：
-
-1. `gh issue edit` 加 `done` label、移除 `in-sprint` label
-2. `gh issue comment` 留言記錄：「Sprint <N> Review PASS，此 Epic Issue 持續追蹤中，不自動關閉。」
-
-> **理由**：Epic 通常跨多個 Sprint，單一 Sprint 完成不代表 Epic 整體收斂，需手動判斷關閉時機。
-
-### Issue 建立者判斷
-
-**內部 Issue**：建立者為 `github-actions[bot]` 或 body 含 `backlog-intake`。其餘為**外部 Issue**。
-
-> Epic Issue 已於上方獨立處理，以下規則僅適用於**非 Epic Issue**。
-
-### Story PASS — 操作步驟
-
-| 情況 | 步驟 1（共通） | 步驟 2 |
-|------|--------------|--------|
-| **Epic Issue**（title 含 `epic:`） | `gh issue edit` 加 `done` label、移除 `in-sprint` label | `gh issue comment` 留言記錄，**不執行 close** |
-| **內部 Issue** | `gh issue edit` 加 `done` label、移除 `in-sprint` label | `gh issue close` 並留言 |
-| **外部 Issue（階段 1）** | 同上 | `gh issue comment` 留言通知，**不執行 close** |
-| **外部 Issue（階段 2）** | — | 觸發條件：**deployment-readiness PASS 且 E2E PASS**，方可執行 `gh issue comment` 補充留言 |
-
-> **負面條件**：若 deployment-readiness 尚未完成（FAIL 或未執行），階段 2 留言**不得補發**，即使 Sprint Review 主流程已結束亦不例外。禁止在主流程結束前預先補發。
-
-### Story FAIL — 操作步驟
-
-Issue 保持 open，移除 `in-sprint` label 並加 `status: backlog` label，留言記錄未完成原因。
-
-### §2.6 完成後：寫入同步 Signal
-
-Review subagent 完成 §2.6 全部 Issue 狀態回寫後，立即執行：
-
-```bash
-echo "REVIEW_DONE=$(date '+%Y-%m-%dT%H:%M+08:00')" > docs/sprints/.review-signal-${CLAUDE_SESSION_ID:-unknown}
-```
-
-Retro subagent 在執行完 §3 步驟 0 後，輪詢此 signal 檔案（每 5 秒一次，最多等 10 分鐘）；讀取到 `REVIEW_DONE=` 後，繼續執行 §3 步驟 1。
+**§2.6 完成後**：Review subagent 立即寫入同步 signal（`docs/sprints/.review-signal-<SESSION_ID>`）。
 
 ---
 
@@ -165,23 +108,19 @@ Retro subagent 在執行完 §3 步驟 0 後，輪詢此 signal 檔案（每 5 �
 
 ### 步驟
 
-0. **Retrospective Analytics**（**可與 Review 平行執行**）— 角色 prompt：`skills/sprint-review/analytics-prompt.md`。僅讀取歷史數據，不依賴 Review 結果。報告完成後等待同步 signal（`docs/sprints/.review-signal-<SESSION_ID>`），signal 到達且報告展示完畢後，才開始步驟 1。
+0. **Retrospective Analytics**（**可與 Review 平行執行**）— 角色 prompt：`skills/sprint-review/references/analytics-prompt.md`。僅讀取歷史數據，不依賴 Review 結果。報告完成後等待同步 signal（`docs/sprints/.review-signal-<SESSION_ID>`），signal 到達且報告展示完畢後，才開始步驟 1。
 1. **在 `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` 新增記錄**（per-session 檔案，US-322 AC-4）
 2. **使用 Good / Problem / Action 格式收集回饋**
-3. **SPACE 五維度量測** — 詳見 `analytics-prompt.md`
-4. **Quality Observer 診斷報告** — 詳見 `analytics-prompt.md`
+3. **SPACE 五維度量測** — 詳見 `references/analytics-prompt.md`
+4. **Quality Observer 診斷報告** — 詳見 `references/analytics-prompt.md`
 5. **每個 Action 建立為 GitHub Issue** — 透過 `issue-management` Skill，標題 `retro:` 前綴，`retro-action` label
 6. **同步記錄至 `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md`**（per-session 檔案，US-322 AC-4）
-7. **代理人校準儀式** — 角色 prompt：`skills/sprint-review/stakeholder-prompt.md`
-8. **寫入 Retro 會議紀錄** — 寫入 `docs/meetings/YYYY-MM-DD-retro.md`（詳見 §5.2 會議紀錄格式）
+7. **代理人校準儀式** — 角色 prompt：`skills/sprint-review/references/stakeholder-prompt.md`
+8. **寫入 Retro 會議紀錄** — 寫入 `docs/meetings/YYYY-MM-DD-retro.md`（詳見 `references/meeting-format.md`）
 
 ## 4. Action Items 驗收機制
 
-透過 GitHub Issues 追蹤（`retro-action` label）：
-1. 每個 Action Item 透過 `issue-management` 建立為 Issue
-2. 每次 Sprint Review 開始前，列出所有 open 的 `retro-action` Issues 並逐項確認
-3. 已完成 → 關閉 Issue；未完成 → 加 `deferred` label
-4. 連續兩個 Sprint 仍為 open → 升級至 Stakeholder
+GitHub Issues 追蹤（`retro-action` label）：每個 Action 透過 `issue-management` 建 Issue；每次 Sprint Review 前逐項確認：完成 → close；未完成 → `deferred` label；連續兩 Sprint open → 升級 Stakeholder。
 
 ---
 
@@ -190,97 +129,26 @@ Retro subagent 在執行完 §3 步驟 0 後，輪詢此 signal 檔案（每 5 �
 | 文件 | 更新內容 |
 |------|----------|
 | `docs/PROJECT_BOARD.md` | 已完成 Story 移至 Done；更新 Sprint 統計 |
-| `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` | 新增 Good / Problem / Action 記錄（per-session，US-322 AC-4） |
-| `docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md` | 追加 Velocity、完成率、趨勢分析（per-session，US-322 AC-3） |
-| `docs/sprints/sprint_N.md` | 回寫各 Story 最終驗收狀態 |
-| `docs/prd/ROADMAP.md` | 更新版本里程碑狀態 |
-| `docs/meetings/YYYY-MM-DD-sprint-review.md` | 新建。Sprint Review 會議紀錄（frontmatter + 結論） |
-| `docs/meetings/YYYY-MM-DD-retro.md` | 新建。Retro 會議紀錄（frontmatter + Good/Problem/Action） |
-
-### 5.2 Sprint Review & Retro 會議紀錄格式
-
-`docs/meetings/` 目錄若不存在，執行 `mkdir -p docs/meetings` 建立。
-
-**Sprint Review 紀錄**（§2 步驟 7）：
-
-檔名規則：`docs/meetings/$(date '+%Y-%m-%d')-sprint-review.md`
-
-```yaml
----
-type: sprint-review
-sprint: <N>
-date: "<YYYY-MM-DD>"
-start_time: "<REVIEW_START_TIME>"
-end_time: "<date '+%Y-%m-%dT%H:%M+08:00'>"
-participants:
-  - role: PO
-  - role: QA
-  - role: Stakeholder
----
-
-# Sprint <N> Review 會議紀錄
-
-## 結論
-- 通過驗收 Stories: <list>
-- 未通過 Stories: <list>
-
-## 決議事項
-1. <decisions>
-```
-
-**Retro 紀錄**（§3 步驟 8）：
-
-檔名規則：`docs/meetings/$(date '+%Y-%m-%d')-retro.md`
-
-```yaml
----
-type: retro
-sprint: <N>
-date: "<YYYY-MM-DD>"
-start_time: "<RETRO_START_TIME>"
-end_time: "<date '+%Y-%m-%dT%H:%M+08:00'>"
-participants:
-  - role: PO
-  - role: Architect
-  - role: QA
-  - role: Stakeholder
----
-
-# Sprint <N> Retrospective 會議紀錄
-
-## Good
-- <items>
-
-## Problem
-- <items>
-
-## Action
-- <items>
-```
+| `docs/km/retro-log/…-session-<ID>.md` | Good / Problem / Action（per-session，US-322 AC-4） |
+| `docs/km/metrics-log/…-session-<ID>.md` | Velocity、完成率、趨勢（per-session，US-322 AC-3） |
+| `docs/sprints/sprint_N.md` | 各 Story 最終驗收狀態 |
+| `docs/prd/ROADMAP.md` | 版本里程碑狀態 |
+| `docs/meetings/YYYY-MM-DD-sprint-review.md` | 格式詳見 `references/meeting-format.md` |
+| `docs/meetings/YYYY-MM-DD-retro.md` | 格式詳見 `references/meeting-format.md` |
 
 ### 5.1 ROADMAP 里程碑對齊檢查
 
-執行時機：產出文件更新完成後、觸發 deployment-readiness 前。
-
-1. 讀取 `docs/prd/ROADMAP.md`，確認各里程碑當前狀態
-2. 逐一檢查活躍里程碑完成狀態，對照本 Sprint 交付 Stories
-3. 判斷里程碑是否完成：完成 → Major bump 候選（需 PO 確認）；未完成 → Minor bump 候選
-4. 更新里程碑狀態（若完成）
-5. 將對齊檢查結果附帶至 `invoke shikigami:deployment-readiness` 觸發指令
+執行時機：產出文件更新完成後、觸發 deployment-readiness 前。讀取 ROADMAP → 逐一核對活躍里程碑 → 完成則 Major bump 候選（需 PO 確認）；未完成則 Minor bump 候選 → 更新狀態 → 結果附帶至 `invoke shikigami:deployment-readiness`。
 
 ---
 
 ## 6. 歸檔觸發檢查
 
-Sprint Review & Retrospective 所有產出文件完成最後修改後，立即 git commit + push。範圍：`PROJECT_BOARD.md`、`docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md`、`docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md`、`sprint_N.md`、`docs/meetings/*.md`。其他 KM 文件不適用，避免觸發 ADR-003 Hard Gate。
+所有產出文件完成後立即 git commit + push（範圍：`PROJECT_BOARD.md`、retro-log、metrics-log、`sprint_N.md`、`docs/meetings/*.md`；其他 KM 文件不適用，避免觸發 ADR-003 Hard Gate）。
 
-commit + push 完成後，清理同步 signal 檔案：
+commit + push 完成後清理同步 signal：`rm -f docs/sprints/.review-signal-${CLAUDE_SESSION_ID:-unknown}`
 
-```bash
-rm -f docs/sprints/.review-signal-${CLAUDE_SESSION_ID:-unknown}
-```
-
-> **per-session 路徑規則**：SESSION_ID 取自 `${CLAUDE_SESSION_ID:-unknown}`；路徑 = `docs/km/retro-log/$(date '+%Y-%m-%d')-session-${SESSION_ID}.md`（retro），`docs/km/metrics-log/$(date '+%Y-%m-%d')-session-${SESSION_ID}.md`（metrics）。結算腳本：`hooks/retro-settle.sh`、`hooks/metrics-settle.sh`（US-322 AC-3/AC-4）。
+> per-session 路徑：`docs/km/retro-log/$(date '+%Y-%m-%d')-session-${CLAUDE_SESSION_ID:-unknown}.md`（retro）、`docs/km/metrics-log/…`（metrics）。結算腳本：`hooks/retro-settle.sh`、`hooks/metrics-settle.sh`（US-322 AC-3/AC-4）。
 
 ---
 
@@ -302,38 +170,24 @@ rm -f docs/sprints/.review-signal-${CLAUDE_SESSION_ID:-unknown}
 - [ ] Stakeholder Subagent 已確認商業期待符合度
 - [ ] 通過驗收 Story 已移至 `PROJECT_BOARD.md` Done 欄位
 - [ ] `sprint_N.md` Story 狀態欄已回寫最終驗收結果
-- [ ] **Story Issue 狀態回寫**（§2.6，HARD-GATE）：
-  - [ ] PASS Story：先判斷是否為 Epic Issue（title 含 `epic:`）
-  - [ ] Epic Issue：done label + 移除 in-sprint + 留言記錄（**不 close**）
-  - [ ] 非 Epic — 查詢 Issue 建立者、判斷內部/外部、執行對應操作
-  - [ ] 內部 Issue：done label + 移除 in-sprint + 關閉
-  - [ ] 外部 Issue：done label + 移除 in-sprint + 階段 1 留言（保持 Open）
-  - [ ] FAIL Story：已回復 backlog 狀態並留言
+- [ ] **Story Issue 狀態回寫**（§2.6，HARD-GATE）：按 `references/issue-writeback.md` 操作規則執行；Epic/內部/外部 Issue 分流完成；FAIL Story 已回復 backlog
 - [ ] 未達 DoD Story 已移回 Backlog 並標注原因
-- [ ] `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` 已新增記錄
-- [ ] 每個 Action Item 已建立為 GitHub Issue
-- [ ] 上個 Sprint 的 `retro-action` Issues 已逐項檢查
-- [ ] 代理人校準儀式已完成
-- [ ] 連續兩個 Sprint 未關閉 Action 已升級至 Stakeholder
+- [ ] retro-log per-session 檔案已新增記錄；Action Items 已建 GitHub Issue
+- [ ] 上個 Sprint `retro-action` Issues 逐項確認；連續兩 Sprint open → 升級 Stakeholder
 - [ ] `ROADMAP.md` 已更新
 - [ ] **ROADMAP 里程碑對齊檢查**（§5.1）
 - [ ] `invoke shikigami:deployment-readiness`（附帶 §5.1 里程碑對齊結果）
 - [ ] **E2E 驗證結果已確認**
 - [ ] 外部 Issue 階段 2 留言（**僅在 deployment-readiness PASS 且 E2E PASS 後執行**；否則不補發）
-- [ ] Sprint Metrics 已計算並追加至 `docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md`（詳見 `po-review-prompt.md`；US-322 AC-3）
+- [ ] Sprint Metrics 已計算並追加至 `docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md`（詳見 `references/po-review-prompt.md`；US-322 AC-3）
 - [ ] 角色制衡案例檢查（若有，更新 `ROLE_BALANCE_CASES.md`）
 
-### Retro subagent Checklist
+### Retro subagent Checklist（§3 步驟 0–8 逐項勾選）
 
-- [ ] §3 步驟 0 Analytics 報告已完成（平行階段）
-- [ ] 已讀取同步 signal `docs/sprints/.review-signal-<SESSION_ID>`（等待 Review §2.6 完成）
-- [ ] Good / Problem / Action 已收集（步驟 1-2）
-- [ ] SPACE 五維度量測完成（步驟 3）
-- [ ] Quality Observer 診斷報告完成（步驟 4）
-- [ ] 每個 Action Item 已建立為 GitHub Issue（步驟 5）
-- [ ] `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` 已同步（步驟 6）
-- [ ] 代理人校準儀式已完成（步驟 7）
-- [ ] Retro 會議紀錄已寫入（步驟 8）
+- [ ] Analytics 報告完成（步驟 0，平行）；已讀取同步 signal
+- [ ] Good / Problem / Action 收集（步驟 1-2）；SPACE 量測（步驟 3）；QO 診斷（步驟 4）
+- [ ] 每個 Action 已建 GitHub Issue（步驟 5）；retro-log 已同步（步驟 6）
+- [ ] 代理人校準儀式（步驟 7）；Retro 會議紀錄寫入（步驟 8）
 
 ### 最終收尾（兩個 subagent 均完成後）
 
