@@ -58,7 +58,7 @@ ADR 並非隨時都需要建立，以下兩個階段是主要的產出時機：
 
 ---
 
-## 8. Subagent 派遣順序
+## 5. Subagent 派遣順序
 
 Architecture Decision 的 Subagent 調度遵循以下固定順序：
 
@@ -80,7 +80,7 @@ Architecture Decision 的 Subagent 調度遵循以下固定順序：
 
 ---
 
-## 10. 與其他 Skill 的關係
+## 6. 與其他 Skill 的關係
 
 | 情境 | 觸發 |
 |------|------|
