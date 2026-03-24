@@ -60,3 +60,34 @@ OAuth token incident 全部 AC 需人工操作，不適合 Agent 執行。已建
 
 ## Sprint Duration
 2026-03-24 ~ 2026-03-31
+
+---
+
+## Sprint Review
+
+**Review 日期**：2026-03-24
+**Session**：session-unknown
+**結果**：3/3 PASS，5 pts，100%
+
+### 驗收結果
+
+| Story | PR | 結果 | 備註 |
+|-------|----|------|------|
+| #526 Node.js 20 deprecation CI 升級 | #552 | PASS | Actions 升級完成，validate-ci-versions.sh PASS |
+| #493 Retro-Action 連續未完成自動觸發 Grooming | #553 | PASS | 偵測邏輯落地，#493 已達自身觸發條件並在本 Sprint 交付 |
+| #487 Skill description 改善 + 章節重新編號 | #554 | PASS | validate-skills.sh 全部 PASS |
+
+### Sprint Goal 達成評估
+
+Sprint Goal「交付 2 個 Feature Story 恢復產品功能前進動能，同步處理 Node.js 20 deprecation CI 升級，維持連續 100% 完成率」完整達成：
+- #493 + #487 兩個 Feature Story 全數交付
+- #526 CI 升級同步完成
+- 連續第 4 Sprint 100% 完成率（127+128+129+130）
+
+### Issue 關閉紀錄
+
+| Issue | 狀態 |
+|-------|------|
+| #493 | CLOSED（Sprint 130 Review 驗收通過） |
+| #487 | CLOSED（Sprint 130 Review 驗收通過） |
+| #526 | CLOSED（Sprint 130 Review 驗收通過） |
