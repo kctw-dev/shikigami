@@ -49,9 +49,6 @@ assert_line_count_le() {
 assert_no_section_jump() {
   local file="$1"
   local label="$2"
-  # 抽取所有頂層 ## N 章節編號
-  local sections
-  sections=$(grep -E '^## [0-9]+[. ]' "$file" | grep -oE '[0-9]+' | head -1 --)
   # 抓所有頂層章節編號（## N 格式），確認無跳號
   local prev=0
   local has_jump=false
