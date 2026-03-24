@@ -153,6 +153,35 @@ if [[ -f "scripts/watchdog-restart.sh" ]]; then
   fi
 fi
 
+# AC1（#646）: watchdog-monitor.sh 預設閾值驗證（10 分鐘）
+# NFR1：hang 偵測延遲 < timeout + 1 分鐘（#408 規格：timeout=10min → 偵測 < 11min）
+# 預設 WD_HANG_MINS 應為 10，WD_WARN_MINS 應為 8（或 ≤ 10）
+echo "[AC1/#646] watchdog-monitor.sh 預設閾值驗證"
+if [[ -f "scripts/watchdog-monitor.sh" ]]; then
+  DEFAULT_HANG=$(grep -E '^WD_HANG_MINS=.*:-[0-9]+' scripts/watchdog-monitor.sh | grep -oE ':-[0-9]+\}' | grep -oE '[0-9]+' | head -1)
+  DEFAULT_WARN=$(grep -E '^WD_WARN_MINS=.*:-[0-9]+' scripts/watchdog-monitor.sh | grep -oE ':-[0-9]+\}' | grep -oE '[0-9]+' | head -1)
+  if [[ "${DEFAULT_HANG}" == "10" ]]; then
+    check "WD_HANG_MINS 預設值 = 10 分鐘（#408 NFR1 規格）" "PASS"
+  else
+    check "WD_HANG_MINS 預設值 = 10 分鐘（實際: ${DEFAULT_HANG:-未設定}）" "FAIL"
+  fi
+  if [[ -n "${DEFAULT_WARN}" ]] && [[ "${DEFAULT_WARN}" -le 10 ]]; then
+    check "WD_WARN_MINS 預設值 ≤ 10 分鐘（實際: ${DEFAULT_WARN}）" "PASS"
+  else
+    check "WD_WARN_MINS 預設值 ≤ 10 分鐘（實際: ${DEFAULT_WARN:-未設定}）" "FAIL"
+  fi
+  # SHIKIGAMI_WATCHDOG_TIMEOUT 環境變數應可覆蓋 WD_HANG_MINS（AC4）
+  if grep -q "SHIKIGAMI_WATCHDOG_TIMEOUT\|SHIKIGAMI_WD_HANG_MINS" scripts/watchdog-monitor.sh 2>/dev/null; then
+    check "SHIKIGAMI_WATCHDOG_TIMEOUT / SHIKIGAMI_WD_HANG_MINS 環境變數覆蓋支援" "PASS"
+  else
+    check "SHIKIGAMI_WATCHDOG_TIMEOUT / SHIKIGAMI_WD_HANG_MINS 環境變數覆蓋支援" "FAIL"
+  fi
+else
+  check "WD_HANG_MINS 預設值 = 10 分鐘" "FAIL"
+  check "WD_WARN_MINS 預設值 ≤ 10 分鐘" "FAIL"
+  check "SHIKIGAMI_WATCHDOG_TIMEOUT / SHIKIGAMI_WD_HANG_MINS 環境變數覆蓋支援" "FAIL"
+fi
+
 echo ""
 echo "=== 結果：$PASS PASS, $FAIL FAIL ==="
 if [[ $FAIL -gt 0 ]]; then
