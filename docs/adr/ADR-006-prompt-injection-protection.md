@@ -272,4 +272,49 @@ JSON Schema 驗證設計為**非阻斷性**架構層：
 - OWASP Top 10 for LLM Applications — LLM01: Prompt Injection
 - Anthropic 官方文件：Prompt Injection Defense Patterns（XML 標記隔離建議）
 - ADR-003：SQA 稽核閘門介入模式（Framework Document Change Audit）
+
+---
+
+## Addendum：Security Gate 擴充決策（Sprint 134，Issue #393）
+
+**日期**：2026-03-24
+**決策者**：Architect + Security Engineer
+**相關 Issue**：#393（Prompt Injection Defense — Security Gate 擴充）、#342（研究報告 Issue 2）
+
+### 背景補充
+
+ADR-006 初始版本（2026-03-02）僅涵蓋 sprint-execution Issue Quick-Scan 流程的輸入隔離。
+Sprint 134 #393 需求擴充此防護至更廣泛的外部輸入進入點，並建立規則外部化機制。
+
+### 擴充決策
+
+**擴充進入點（2 個）**：
+
+| 進入點 | 位置 | 觸發時機 |
+|--------|------|---------|
+| **需求文件輸入** | Intake 階段，PO 收到原始需求後、Architect 開始設計前 | 所有外部需求文件輸入 |
+| **外部 API 回應** | 任何 external API call 回應進入 agent context 前 | Agent 使用外部工具時 |
+
+**規則外部化決策**：
+
+採用外部規則檔 `docs/definition/SECURITY_RULES.md`，理由：
+- Operator 可視部署場景調整規則，無需修改框架 SKILL.md（ADR-003 保護）
+- 規則版本可獨立追蹤（git history）
+- 豁免機制允許已知安全內容標注 `[SECURITY-GATE-EXEMPT: <reason>]`
+
+**風險分級與處置**：
+
+| 風險等級 | 處置 | Log Action |
+|---------|------|-----------|
+| HIGH RISK | 流程暫停，通知 Stakeholder，`ESCALATE: SECURITY_CRITICAL` | `[SECURITY-GATE-HIGH]` |
+| MEDIUM RISK | 繼續執行，附 warning，寫入 trace log（ADR-033 格式）| `[SECURITY-GATE-MEDIUM]` |
+| PASS | 繼續執行 | — |
+
+**不擴充範圍（延續初始 ADR）**：
+- Agent 內部互傳訊息的掃描（ADR-006 §非威脅範圍延伸）
+- ML 分類器（保持 pattern-based，避免引入不確定性）
+- 自動修復機制（發現 injection 後僅暫停通知）
+
+**測試要求**：
+`tests/test-security-gate.sh` 包含 HIGH / MEDIUM / PASS 三類各至少 1 個案例，所有案例必須全數 PASS 後方可合併。
 - TD-002：PO subagent 輸出格式 JSON Schema 正式驗證（Issue #65，Sprint 40）

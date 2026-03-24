@@ -171,7 +171,13 @@ Sprint Checkpoint 偵測（AC-2 斷點續跑，§2.12）
   v
 Issue 快掃（gh issue list --state open --limit 10）
   |-- gh 失敗 --> 靜默略過，繼續下一步（不阻塞）
-  +-- 成功 --> 篩出需回覆的 issue → PO 草稿 → QA 審核 → 發布
+  +-- 成功 --> 篩出需回覆的 issue
+              → **Security Gate 掃描（#393，ADR-006 Security Gate 擴充）**
+                規則檔：`docs/definition/SECURITY_RULES.md`
+                |-- HIGH_RISK  → [SECURITY-GATE-HIGH] 暫停，通知 Stakeholder，ESCALATE: SECURITY_CRITICAL
+                |-- MEDIUM_RISK → [SECURITY-GATE-MEDIUM] 附 warning 繼續，寫入 trace log
+                +-- PASS → 繼續
+              → PO 草稿 → QA 審核 → 發布
   |
   v
 CI 狀態快掃（gh run list --limit 3 --json name,status,conclusion,url）
