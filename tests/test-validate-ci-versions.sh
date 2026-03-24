@@ -195,6 +195,60 @@ assert_output_contains "應顯示 WARN 建議更新 SHA" "WARN" "${sha_output}"
 echo ""
 
 # ──────────────────────────────────────────────
+# Test 5：偵測 setup-node node-version: "20" 並發出警告
+# （#526 Node.js 20 actions deprecation 追蹤）
+# ──────────────────────────────────────────────
+echo "[ T5 ] 偵測 node-version: \"20\" 並發出警告（#526）"
+
+TMP_REPO5=$(mktemp -d)
+mkdir -p "${TMP_REPO5}/.github/workflows"
+cat > "${TMP_REPO5}/.github/workflows/node20.yml" << 'EOF'
+name: Node20 Workflow
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+EOF
+
+set +e
+node20_output=$(CI_VERSIONS_REPO_ROOT="${TMP_REPO5}" bash "${VALIDATE_SCRIPT}" 2>&1)
+node20_exit=$?
+set -e
+
+rm -rf "${TMP_REPO5}"
+
+assert_exit_code "node-version 20 workflow 退出碼應為 0（不是 FAIL，但有 WARNING）" 0 "${node20_exit}"
+assert_output_contains "應發出 node-version 20 警告" "node-version.*20\|node version.*20\|node-version: .20" "${node20_output}"
+
+echo ""
+
+# ──────────────────────────────────────────────
+# Test 6：e2e.yml 不應使用 node-version: "20"
+# （#526 AC — e2e.yml 已升級至 Node.js 24）
+# ──────────────────────────────────────────────
+echo "[ T6 ] e2e.yml 不應使用 node-version: \"20\"（#526）"
+
+E2E_WORKFLOW="${REPO_ROOT}/.github/workflows/e2e.yml"
+if [[ -f "${E2E_WORKFLOW}" ]]; then
+  if grep -q 'node-version:.*"20"' "${E2E_WORKFLOW}" || grep -q "node-version:.*'20'" "${E2E_WORKFLOW}"; then
+    echo "  FAIL: e2e.yml 仍在使用 node-version: 20，需升級至 24（#526）"
+    FAIL_COUNT=$((FAIL_COUNT + 1))
+  else
+    echo "  PASS: e2e.yml 未使用 node-version: 20"
+    PASS_COUNT=$((PASS_COUNT + 1))
+  fi
+else
+  echo "  SKIP: e2e.yml 不存在"
+fi
+
+echo ""
+
+# ──────────────────────────────────────────────
 # 結果摘要
 # ──────────────────────────────────────────────
 TOTAL=$((PASS_COUNT + FAIL_COUNT))

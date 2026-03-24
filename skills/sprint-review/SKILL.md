@@ -128,6 +128,24 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 
 GitHub Issues 追蹤（`retro-action` label）：每個 Action 透過 `issue-management` 建 Issue，並取得實際 Issue 編號（#N）；**Retro 結束前，所有 Action 必須有對應 Issue 編號，不得有「待建立」項目**。每次 Sprint Review 前逐項確認：完成 → close；未完成 → `deferred` label；連續兩 Sprint open → 升級 Stakeholder。
 
+### 4.1 連續未完成自動觸發 Grooming（#493）
+
+每次 Sprint Review §4 執行期間，對所有 open 的 `retro-action` Issues 執行連續未完成偵測：
+
+- **偵測規則與處置流程**：詳見 `references/retro-grooming.md`
+- **觸發條件**：同一 `retro-action` Issue 連續 **2 個**（含）以上 Sprint 排入但未完成
+- **告警關鍵字**：`[RETRO-GROOMING-TRIGGER]`
+- **後續動作**：在下次 Sprint Planning 中執行 Backlog Grooming 重評估（升級 priority、強制排入、拆分或關閉）
+
+```bash
+# 偵測指令（Sprint Review §4 執行期間）
+gh issue list \
+  --label "retro-action" \
+  --state open \
+  --json number,title,labels,milestone \
+  --limit 100
+```
+
 ---
 
 ## 5. 產出文件
