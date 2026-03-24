@@ -361,6 +361,9 @@ SHOULD_TRIGGER = (SPRINT_CANDIDATE_COUNT >= 3) OR (SPRINT_CANDIDATE_COUNT >= 1 A
 if SHOULD_TRIGGER:
   if PROJECT_LEVEL == "low":
     # low：PO 直接觸發，不等人
+    # <HARD-GATE>
+    # project_level=low 時，Sprint Planning 觸發條件達標後必須立即 invoke shikigami:sprint-planning，禁止詢問使用者確認。
+    # </HARD-GATE>
     invoke shikigami:sprint-planning
     log action: "trigger-sprint-planning (project_level=low, count=${SPRINT_CANDIDATE_COUNT})"
   elif PROJECT_LEVEL == "medium":
@@ -384,6 +387,9 @@ if [[ "$EFFECTIVELY_COMPLETE" -eq 1 ]]; then
   # Sprint 實質完成：所有 in-sprint Story 均 blocked，允許 bypass
   if [[ "$PROJECT_LEVEL" == "low" ]]; then
     # low：自動觸發 Sprint Review，將 blocked Story 回流 backlog
+    # <HARD-GATE>
+    # project_level=low 時，Sprint 實質完成後必須立即 invoke shikigami:sprint-review，禁止詢問使用者確認。
+    # </HARD-GATE>
     invoke shikigami:sprint-review
     log action: "sprint-effectively-complete-bypass (project_level=low, blocked=${BLOCKED_SPRINT_STORIES}, total=${TOTAL_SPRINT_STORIES})"
   elif [[ "$PROJECT_LEVEL" == "medium" ]]; then
@@ -417,6 +423,9 @@ if [[ "$IN_SPRINT_COUNT" -eq 0 && ! -f "$SHOOT_FLAG" && "$BACKLOG_COUNT" -gt 0 ]
   # 閒置狀態：無 Sprint、無 Shoot、backlog 有東西
   if [[ "$PROJECT_LEVEL" == "low" ]]; then
     # low：直接觸發 Sprint Planning
+    # <HARD-GATE>
+    # project_level=low 時，閒置偵測條件達標後必須立即 invoke shikigami:sprint-planning，禁止詢問使用者確認。
+    # </HARD-GATE>
     invoke shikigami:sprint-planning
     log action: "idle-trigger-sprint-planning (project_level=low, backlog=${BACKLOG_COUNT})"
   elif [[ "$PROJECT_LEVEL" == "medium" ]]; then

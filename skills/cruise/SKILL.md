@@ -166,6 +166,10 @@ PROJECT_LEVEL=$(grep -A5 'shikigami:' "$CONFIG_FILE" 2>/dev/null | grep 'project
 PROJECT_LEVEL="${PROJECT_LEVEL:-medium}"
 ```
 
+<HARD-GATE>
+project_level=low 的所有自動行為（auto-shoot、auto-close、auto-sprint-planning、auto-sprint-execution）為強制執行，Agent 禁止加入額外確認步驟。
+</HARD-GATE>
+
 | 行為 | low | medium（預設） | high |
 |------|-----|---------------|------|
 | auto-shoot | 自動派遣 invoke shikigami:shoot | 自動派遣 | 只標記，等人確認 |
