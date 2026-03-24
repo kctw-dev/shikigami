@@ -3,9 +3,9 @@
   "stories": [
     {"id": "#397", "status": "completed", "pr": "#576"},
     {"id": "#407", "status": "completed", "pr": "#577"},
-    {"id": "#403", "status": "pending", "pr": null},
+    {"id": "#403", "status": "completed", "pr": "#578"},
     {"id": "#385", "status": "pending", "pr": null}
   ],
-  "current_step": "batch1-completed",
-  "updated_at": "2026-03-24T17:30:00+08:00"
+  "current_step": "batch2a-completed",
+  "updated_at": "2026-03-24T17:27:00+08:00"
 }
