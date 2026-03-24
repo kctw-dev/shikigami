@@ -1,6 +1,6 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 133 Planning 完成）
+**最後更新**：2026-03-24（Sprint 133 Batch 1 完成）
 **當前 Sprint**：Sprint 133（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
@@ -14,8 +14,8 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: QA FREE-MAD 挑戰韌性機制 | #397 | S | 1 | 進行中 |
-| feat: 專案範本 — Skills/Hooks/Script 綁定 | #407 | S | 1 | 進行中 |
+| feat: QA FREE-MAD 挑戰韌性機制 | #397 | S | 1 | 已完成 (#576) |
+| feat: 專案範本 — Skills/Hooks/Script 綁定 | #407 | S | 1 | 已完成 (#577) |
 | feat: D3 Debate Framework（Debate-Deliberate-Decide） | #403 | M | 2 | 待執行 |
 | feat: GAD 接入 Delivery Phase — 雙 Team 視覺對比 | #385 | M | 2 | 待執行 |
 
