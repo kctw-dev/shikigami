@@ -220,6 +220,14 @@ commit + push 完成後清理同步 signal：`rm -f docs/sprints/.review-signal-
 ### 最終收尾（兩個 subagent 均完成後）
 
 - [ ] **產出文件 git commit + push**（HARD-GATE）
+- [ ] **Sprint 後補打 git tag（#574，Sprint 134 Retro Action）**：deployment-readiness PASS 後，補打與 `plugin.json` 一致的版本 tag
+  ```bash
+  VERSION=$(grep '"version"' .claude-plugin/plugin.json | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+  git tag -a "v${VERSION}" -m "Release v${VERSION}" 2>/dev/null || true  # 若 tag 已存在則跳過
+  git push origin "v${VERSION}" 2>/dev/null || true
+  # 驗證：validate-version.sh 應無 tag 告警
+  bash scripts/validate-version.sh 2>/dev/null | grep -i "tag" || echo "[TAG-OK] No tag warnings"
+  ```
 - [ ] 同步 signal 已清理（`docs/sprints/.review-signal-<SESSION_ID>`）
 - [ ] **Sprint Task cleanup（#538 AC5）**：Sprint Review 完成後，將本 Sprint 的三個 Task 標記為 completed
   ```
