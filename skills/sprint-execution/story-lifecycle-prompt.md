@@ -745,3 +745,55 @@ commit 失敗 → 輸出 `[COMMIT-FAIL] 原因: {msg}，影響: {files}` → `ES
 | `references/output-schema.md` | §9 輸出格式（YAML 契約、PASS/ESCALATE 模板、升級決策） |
 
 > **Trace Log 隱私保護**（#392 ADR-033）：trace log 不記錄使用者輸入內容，僅記錄 action metadata（agentRole、action 名稱、timestamp、duration、storyId）。禁止將 `$CLAUDE_TOOL_INPUT`、使用者提供的文字或任何 PII 寫入 trace log。
+
+---
+
+## §12 TCB（Thread Control Block）斷點管理（ADR-040）
+
+<!-- #404 Sprint 139 — TCB Checkpoint 整合 -->
+
+Story-Lifecycle Subagent 在執行**關鍵路徑 action**（高成本或有副作用的操作）時，應使用 `hooks/tcb-write.sh` 記錄 action 狀態，支援 Sprint 中斷後的細粒度恢復。
+
+**觸發條件**：session 中有 `SHIKIGAMI_SESSION_ID` 環境變數（自動觸發），或 SM 明確傳入 `tcb_enabled: true`。
+
+### 12.1 關鍵路徑 Action 分類（ADR-040 決策 1）
+
+| Action 類型 | 記錄 | 說明 |
+|------------|------|------|
+| `git commit` / `git push` | **必記錄** | 有副作用，不可重複 |
+| `gh pr create` / `gh pr merge` | **必記錄** | 外部 API，不可重複 |
+| 文件生成（ADR / Sprint doc / Meeting notes）| **必記錄** | 高成本輸出 |
+| LLM 分析輸出（>500 token）| **必記錄** | 高成本，可快取 |
+| 驗證腳本（validate-*.sh）| 可選 | 低成本，可重跑 |
+| git checkout / worktree 操作 | 不記錄 | 低成本，冪等 |
+
+### 12.2 使用範式
+
+```bash
+# Story 開始時初始化 TCB session
+bash hooks/tcb-write.sh init "${SPRINT_NUM}" "${SHIKIGAMI_SESSION_ID:-unknown}" "${STORY_ID}" 2>/dev/null || true
+
+# 關鍵 action 開始前記錄（保存 tcb_id 供後續 complete/fail 使用）
+TCB_ID=$(bash hooks/tcb-write.sh start "${SPRINT_NUM}" "${SHIKIGAMI_SESSION_ID:-unknown}" "${STORY_ID}" "git-commit" 2>/dev/null)
+
+# ... 執行 action ...
+
+# Action 成功後記錄完成
+bash hooks/tcb-write.sh complete "${SPRINT_NUM}" "${SHIKIGAMI_SESSION_ID:-unknown}" "${TCB_ID}" "${OUTPUT_REF}" 2>/dev/null || true
+
+# Action 失敗時記錄失敗
+bash hooks/tcb-write.sh fail "${SPRINT_NUM}" "${SHIKIGAMI_SESSION_ID:-unknown}" "${TCB_ID}" "${ERROR_MSG}" 2>/dev/null || true
+```
+
+**best-effort 原則（ADR-040 決策 1）**：TCB 寫入失敗（`|| true`）不阻塞主流程。失敗訊息輸出至 stderr，不影響 Story 執行結果。
+
+### 12.3 Sprint 重啟恢復（SM 職責）
+
+SM 在 session 啟動時執行恢復檢測：
+```bash
+# 查詢未完成的 TCB actions
+INCOMPLETE=$(bash hooks/tcb-write.sh resume "${SPRINT_NUM}" "${SHIKIGAMI_SESSION_ID}" 2>/dev/null)
+# 若有 status=running|failed 的 action → [RECOVERY-TRIGGER]，參照 ADR-041 恢復流程
+```
+
+詳見 `docs/adr/ADR-040-tcb-checkpoint-design.md` 與 `docs/adr/ADR-041-crash-recovery-design.md`。
