@@ -1,9 +1,27 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 135 完成 — 4/4 Stories PASS，6 pts）
-**當前 Sprint**：Sprint 135（已完成）
+**最後更新**：2026-03-24（Sprint 136 Planning 完成 — 5 Stories，6 pts）
+**當前 Sprint**：Sprint 136（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 136（進行中）
+
+> Sprint Goal：建立 Schema-first API Contract 決策基礎（ADR-036）並落地 Schema 先行工作流程，同步加固 CI YAML lint 品質防護，修復持續發生的 CI OAuth 401 認證失敗根因
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| RESEARCH: ADR-036 — Schema-first API Contract 統一定義架構決策 | #601 | S | 1 | 待執行 |
+| retro: Workflow issue body 應使用 --body-file 模式避免 YAML 特殊字符衝突 | #610 | S | 1 | 待執行 |
+| retro: 新增 GitHub Actions workflow YAML lint CI 步驟 | #609 | S | 1 | 待執行 |
+| [SRE] CI 持續失敗：New Issue Intake 401 Invalid bearer token | #600 | S | 1 | 待執行 |
+| feat: Schema 先行 — API Contract 統一定義 | #406 | M | 2 | 待執行（依賴 #601） |
+
+**Sprint 容量**：6 points
+**執行順序**：ADR Phase（#601）→ Batch 1（#610 | #609 平行，完成後 #600）→ Batch 2（#406 序列）
 
 ---
 
