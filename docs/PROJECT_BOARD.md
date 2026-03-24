@@ -1,15 +1,33 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 132 Planning 完成）
-**當前 Sprint**：Sprint 132（進行中）
+**最後更新**：2026-03-24（Sprint 133 Planning 完成）
+**當前 Sprint**：Sprint 133（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 132（進行中）
+## Sprint 133（進行中）
+
+> Sprint Goal：提升框架 QA 制衡品質（FREE-MAD + D3 Debate）+ 推進 GAD 研究成果落地（GAD Delivery Phase 視覺對比 Gate），同步完善專案範本降低使用者導入門檻。
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: QA FREE-MAD 挑戰韌性機制 | #397 | S | 1 | 進行中 |
+| feat: 專案範本 — Skills/Hooks/Script 綁定 | #407 | S | 1 | 進行中 |
+| feat: D3 Debate Framework（Debate-Deliberate-Decide） | #403 | M | 2 | 待執行 |
+| feat: GAD 接入 Delivery Phase — 雙 Team 視覺對比 | #385 | M | 2 | 待執行 |
+
+**Sprint 容量**：6 points
+**執行順序**：Batch 0（chore: ADR-034 修正）→ Batch 1（#397 | #407 平行）→ Batch 2（#403 → #385 序列）
+
+---
+
+## Sprint 132（完成）
 
 > Sprint Goal：鞏固 Sprint Planning 品質 + 強化 Developer TDD 精準執行，落地 Sprint 131 Retro Action Items，並完成 TDAD 依賴分析工具選型 ADR。
+> **結果**：Goal 達成（4/4 Stories PASS）。Velocity 6 pts，完成率 100%。連續第 6 Sprint 100%（127+128+129+130+131+132）。
 > **容量**：6 pts
 
 | Story | Issue | Size | Points | 狀態 |

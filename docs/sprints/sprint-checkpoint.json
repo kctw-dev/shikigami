@@ -1,11 +1,11 @@
 {
-  "sprint": 132,
+  "sprint": 133,
   "stories": [
-    {"id": "#563", "status": "completed", "pr": "#568"},
-    {"id": "#567", "status": "completed", "pr": "#569"},
-    {"id": "#564", "status": "completed", "pr": "#570"},
-    {"id": "#394", "status": "completed", "pr": "#571"}
+    {"id": "#397", "status": "pending", "pr": null},
+    {"id": "#407", "status": "pending", "pr": null},
+    {"id": "#403", "status": "pending", "pr": null},
+    {"id": "#385", "status": "pending", "pr": null}
   ],
-  "current_step": "all-stories-completed",
-  "updated_at": "2026-03-24T09:30:00+08:00"
+  "current_step": "planning-completed",
+  "updated_at": "2026-03-24T17:09:00+08:00"
 }
