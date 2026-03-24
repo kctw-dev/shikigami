@@ -638,7 +638,18 @@ commit 失敗 → 輸出 `[COMMIT-FAIL] 原因: {msg}，影響: {files}` → `ES
 
 ## §8.2 共用文件更新（循序執行路徑）
 
-**循序模式**：直接讀取並更新 `PROJECT_BOARD.md` 與 `sprint_N.md` 狀態欄（依 `SKILL.md` §3 步驟 7，含 read-then-compare 衝突偵測），完成後 git commit + git push。**sprint_N.md 每個完成 Story 行尾必須加 `DONE(#PR)` 標記**（`#PR` 為合併的 PR 編號）。
+**循序模式**：直接讀取並更新 `PROJECT_BOARD.md` 與 `sprint_N.md` 狀態欄（依 `SKILL.md` §3 步驟 7，含 read-then-compare 衝突偵測），完成後 git commit + git push。
+
+**sprint_N.md 狀態欄更新步驟**（`#PR` 為合併的 PR 編號）：
+1. 讀取 sprint_N.md 全文（Read 工具）
+2. 找到含當前 Story Issue ID 精確欄位（如 `| #637 |`）的資料列
+3. 將該列**最後一欄**的值替換為 `DONE(#PR)`
+   - 匹配方式：以 `| #NNN |`（pipe-delimited）精確定位資料列，再取代最後一欄值
+   - 不使用 substring 匹配（避免 #63 誤命中 #637）
+   - 不依賴完整行格式（避免 ADR 欄等欄位變動導致 replace 未命中）
+   - 替換後格式：`... | DONE(#640) |`
+4. 以 Edit 工具寫回（old_string = 原始資料列全文，new_string = 替換後全文）
+   - 使用完整資料列作為 old_string 確保精確定位
 
 ## §8.3 共用文件更新（平行執行路徑）
 
