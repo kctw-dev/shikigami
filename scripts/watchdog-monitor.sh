@@ -2,6 +2,7 @@
 # scripts/watchdog-monitor.sh
 # Story #408 — Session Watchdog: Heartbeat Timeout Detection
 # ADR-042 決策 1 + 2：監控 heartbeat 文件更新時間，超過閾值觸發 hang 偵測
+# #646 — 閾值對齊 #408 NFR1：hang 偵測延遲 < timeout + 1 分鐘（timeout=10min）
 #
 # 使用方式：
 #   bash scripts/watchdog-monitor.sh [--check-only] [--session SESSION_ID]
@@ -9,12 +10,18 @@
 #
 # --check-only：單次檢查後退出（不持續監控）
 # 無 --check-only：持續監控循環（每 60 秒檢查一次）
+#
+# 環境變數覆蓋（SHIKIGAMI_WATCHDOG_TIMEOUT 為語意別名，等同 SHIKIGAMI_WD_HANG_MINS）：
+#   SHIKIGAMI_WATCHDOG_TIMEOUT=<分鐘>  — 覆蓋 hang 判定閾值（優先於 SHIKIGAMI_WD_HANG_MINS）
+#   SHIKIGAMI_WD_HANG_MINS=<分鐘>     — 覆蓋 hang 判定閾值
+#   SHIKIGAMI_WD_WARN_MINS=<分鐘>     — 覆蓋警告閾值
 
 set -uo pipefail
 
 # ── 配置 ──
-WD_WARN_MINS="${SHIKIGAMI_WD_WARN_MINS:-15}"   # 警告閾值（分鐘）
-WD_HANG_MINS="${SHIKIGAMI_WD_HANG_MINS:-30}"   # hang 判定閾值（分鐘）
+# SHIKIGAMI_WATCHDOG_TIMEOUT 為語意別名（AC4/#646），優先於 SHIKIGAMI_WD_HANG_MINS
+WD_WARN_MINS="${SHIKIGAMI_WD_WARN_MINS:-8}"    # 警告閾值（分鐘）— #646: 8m（< 10m hang 閾值）
+WD_HANG_MINS="${SHIKIGAMI_WATCHDOG_TIMEOUT:-${SHIKIGAMI_WD_HANG_MINS:-10}}"  # hang 判定閾值（分鐘）— #646: 10m（對齊 #408 NFR1）
 WD_POLL_SECS="${SHIKIGAMI_WD_POLL_SECS:-60}"   # 輪詢間隔（秒）
 
 # ── 引數解析 ──
