@@ -1,15 +1,16 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 131 Planning 完成）
-**當前 Sprint**：Sprint 131（進行中）
+**最後更新**：2026-03-24（Sprint 131 Review 完成）
+**當前 Sprint**：Sprint 131（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 131（進行中）
+## Sprint 131（完成）
 
 > Sprint Goal：框架品質保障自動化 + shoot 進化 + browser-automation 工具選型 ADR，維持連續 100% 完成率。
+> **結果**：Goal 達成（4/4 Stories PASS）。Velocity 6 pts，完成率 100%。連續第 5 Sprint 100%（128+129+130+131）。
 > **容量**：6 pts
 
 | Story | Issue | Size | Points | 狀態 |

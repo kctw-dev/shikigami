@@ -19,6 +19,19 @@
 - Baseline: 5-8 pts
 - 連續 100%: 第 4 Sprint（Sprint 128+129+130）
 
+## Review 結果（2026-03-24）
+
+**Velocity**: 6 pts（4/4 PASS）
+**完成率**: 100%
+**連續 100%**: 第 5 Sprint（128+129+130+131）
+
+| Story | PR | Demo 驗收 | QA 邊界 | 最終結果 |
+|-------|-----|---------|---------|---------|
+| #555 validate-skill-length.sh | #559 | PASS（腳本執行正常，WARNING exit 0）| PASS（空目錄、無 SKILL.md 均 exit 0）| PASS |
+| #386 ADR-034 browser-automation | #560 | PASS（4 選項評估、統一維度、結論明確）| PASS（ADR 結構完整）| PASS |
+| #556 CI 升級確認時機明確化 | #561 | PASS（CLAUDE.md 第 10 條已補充 Sprint Planning 前確認）| N/A | PASS |
+| #388 /shoot 進化版 test→review→PR | #562 | PASS（§7.1 管道存在，332 行 <= 350）| PASS（test-shoot-skill.sh: 78 PASS, 0 FAIL）| PASS |
+
 ## Execution Plan
 
 ### Batch 1（可平行）

@@ -106,6 +106,10 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 99 | 2026-03-15 | 2 points | 100% | 穩定 | Goal 達成，2/2 Stories PASS；#270（S/1pt）+ #269（S/1pt）；S97=1→S98=2→S99=2，S98→S99 持平（2→2，0%，±20% 內）→穩定；SDD-000 補充（空模板→實質內容，解除兩條產品線阻塞）+ Live Log Streaming 含完整 TDD（14 項測試），v0.71.0 |
 | Sprint 100 | 2026-03-19 | 6 points | 100% | 上升趨勢 | Goal 達成，5/5 Stories PASS；US-272（S/1pt）+ US-273（S/1pt）+ US-274（M/2pt）+ US-275（S/1pt）+ US-276（S/1pt）；S98=2→S99=2→S100=6，S99→S100 上升 +200%（超出 ±20%），連續穩定至上升→上升趨勢；git commit Hard Gate + 測試批量修復策略 + KM Anti-Hallucination 機制 + Sprint Planning 並行衝突修復 + CI workflow cancel-in-progress，v0.72.1 |
 | Sprint 101 | 2026-03-19 | 2 points | 100% | 不規則 | Goal 達成，1/1 Stories PASS；#312（M/2pt）；S99=2→S100=6→S101=2，S100→S101 下降 -66.7%（超出 ±20%），先升後降方向不一致→不規則；三層 claim 協調機制（git remote ref + flock + GitHub Issue 展示層）+ 獨立 claim-issue.sh / release-issue.sh 腳本 + SessionEnd hook 自動 release + 26/26 測試全 PASS；外部審查 DISPUTE（4 缺陷）→ 修復後 CONFIRM，v0.73.0 |
+| Sprint 128 | 2026-03-24 | 8 points | 100% | 上升趨勢 | Goal 達成，7/7 Stories PASS；連續 100% 第 1 Sprint；Cruise project_level=low HARD-GATE + SRE main branch 巡檢 + INFRA 測試框架首次交付，v0.85.0 |
+| Sprint 129 | 2026-03-24 | 7 points | 100% | 穩定 | Goal 達成，7/7 Stories PASS；連續 100% 第 2 Sprint（128+129）；S128=8→S129=7 微降（-12.5%，±20% 內）→穩定；Retro-Action 改善 + CI OAuth 修復 + Worktree 自動清理，v0.86.0 |
+| Sprint 130 | 2026-03-24 | 5 points | 100% | 穩定 | Goal 達成，3/3 Stories PASS；連續 100% 第 3 Sprint（128+129+130）；S129=7→S130=5 微降（-28.6%，略超 ±20%）→不規則；Retro-Action 自動偵測機制 + Skill description 改善 + Node.js 20 CI 升級，v0.87.0 |
+| Sprint 131 | 2026-03-24 | 6 points | 100% | 穩定 | Goal 達成，4/4 Stories PASS；連續 100% 第 5 Sprint（128+129+130+131）；S130=5→S131=6 回升（+20%，±20% 內）→穩定；validate-skill-length.sh 品質監控 + ADR-034 browser-automation 工具選型（agent-browser，unblock #385）+ CI 升級確認時機明確化 + /shoot test→review→PR 管道，v0.88.0 |
 
 ---
 
