@@ -621,6 +621,37 @@ if [[ -f "$SKILL_FILE" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# TC-38：#565 PO subagent Step 5 HARD-GATE 驗證
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-38：PO subagent Step 5 HARD-GATE 驗證 ---"
+
+PO_PATROL_FILE_565="${SKILL_DIR}/references/po-patrol.md"
+
+if [[ -f "$PO_PATROL_FILE_565" ]]; then
+  assert_contains "$PO_PATROL_FILE_565" '主 session 派遣 PO subagent 時' \
+    "TC-38a: po-patrol.md Step 5 含 HARD-GATE（主 session 派遣 PO subagent 時）"
+  assert_contains "$PO_PATROL_FILE_565" 'HARD-GATE' \
+    "TC-38b: po-patrol.md Step 5 含 HARD-GATE 標記"
+  assert_contains "$PO_PATROL_FILE_565" '禁止包含觸發條件的描述' \
+    "TC-38c: po-patrol.md HARD-GATE 明確禁止觸發條件描述"
+else
+  fail "TC-38a: po-patrol.md 不存在（${PO_PATROL_FILE_565}）"
+  fail "TC-38b: po-patrol.md 不存在"
+  fail "TC-38c: po-patrol.md 不存在"
+fi
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'Step 5.*PO subagent.*Read|PO subagent.*自行 Read.*po-patrol' \
+    "TC-38d: SKILL.md §6b 標注 Step 5 須由 PO subagent 自行 Read po-patrol.md"
+  assert_contains "$SKILL_FILE" 'HARD-GATE.*po-patrol|po-patrol.*HARD-GATE' \
+    "TC-38e: SKILL.md §6b 引用 po-patrol.md HARD-GATE"
+else
+  fail "TC-38d: SKILL.md 不存在"
+  fail "TC-38e: SKILL.md 不存在"
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""
