@@ -13,11 +13,11 @@
 
 | Story | Issue | Size | Points | 狀態 | 獨立性 |
 |-------|-------|------|--------|------|--------|
-| retro: docs/schema/ 新增 GAD workflow JSON Schema Contract 範例檔案 | #617 | S | 1 | 進行中 | 獨立（docs/schema/examples/） |
-| retro: CI 認證問題快速升級機制 | #616 | M | 2 | 進行中 | 獨立（.github/workflows/） |
-| RESEARCH: ADR-038 — Kill Switch 架構決策 | #619 | S | 1 | 進行中 | 獨立（docs/adr/ADR-038） |
-| RESEARCH: ADR-039 — Token Cost Routing 架構決策 | #620 | S | 1 | 進行中 | 獨立（docs/adr/ADR-039） |
-| RESEARCH: ADR-040 — TCB 斷點管理架構決策 | #621 | S | 1 | 進行中 | 獨立（docs/adr/ADR-040） |
+| retro: docs/schema/ 新增 GAD workflow JSON Schema Contract 範例檔案 | #617 | S | 1 | 已完成 (#623) | 獨立（docs/schema/examples/） |
+| retro: CI 認證問題快速升級機制 | #616 | M | 2 | 已完成 (#627) | 獨立（.github/workflows/） |
+| RESEARCH: ADR-038 — Kill Switch 架構決策 | #619 | S | 1 | 已完成 (#624) | 獨立（docs/adr/ADR-038） |
+| RESEARCH: ADR-039 — Token Cost Routing 架構決策 | #620 | S | 1 | 已完成 (#625) | 獨立（docs/adr/ADR-039） |
+| RESEARCH: ADR-040 — TCB 斷點管理架構決策 | #621 | S | 1 | 已完成 (#626) | 獨立（docs/adr/ADR-040） |
 
 **Sprint 容量**：6 points
 
