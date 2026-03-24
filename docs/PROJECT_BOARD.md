@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 140 完成 — 3/3 Stories DONE）
-**當前 Sprint**：Sprint 140（完成）
+**最後更新**：2026-03-25（Sprint 141 啟動 — 2 Stories IN SPRINT）
+**當前 Sprint**：Sprint 141（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
@@ -12,6 +12,18 @@
 | 日期 | 來源 | 標題 | 結果 | commit |
 |------|------|------|------|--------|
 | 2026-03-24 | #638 | retro: tcb-write.sh smoke test — stdout 污染回歸防護 | PASS | d4e353d |
+
+---
+
+## Sprint 141（進行中）
+
+> Sprint Goal：完成 Sprint 140 殘留改善項目 — watchdog 閾值精確對齊 AC 規格，並聚合 Sprint 98-140 Retrospective Log 確保知識庫完整性
+> **容量**：2 pts（可用 Backlog 完全選入）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: watchdog-monitor.sh 閾值與 #408 AC 規格對齊（10 分鐘） | #646 | S | 1 | TODO |
+| retro log 補完 — Retrospective_Log.md Sprint 98-140 條目聚合 | #647 | S | 1 | TODO |
 
 ---
 
