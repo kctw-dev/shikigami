@@ -36,7 +36,7 @@ assert_file_contains() {
 # 目標檔案路徑
 # 防漂移約束定義在 po-prompt.md（PO subagent 載入的提示詞文件）
 # ---------------------------------------------------------------------------
-SKILL_FILE="$(cd "$(dirname "$0")/.." && pwd)/skills/sprint-planning/po-prompt.md"
+SKILL_FILE="$(cd "$(dirname "$0")/.." && pwd)/skills/sprint-planning/references/po-prompt.md"
 
 # ---------------------------------------------------------------------------
 # TC-01：AC1 — 防漂移約束小節標題存在

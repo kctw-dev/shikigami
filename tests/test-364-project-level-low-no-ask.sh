@@ -43,7 +43,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 CLAUDE_MD="${REPO_ROOT}/CLAUDE.md"
-PO_PROMPT="${REPO_ROOT}/skills/sprint-planning/po-prompt.md"
+PO_PROMPT="${REPO_ROOT}/skills/sprint-planning/references/po-prompt.md"
 CRUISE_SKILL="${REPO_ROOT}/skills/cruise/SKILL.md"
 SPRINT_PLAN_SKILL="${REPO_ROOT}/skills/sprint-planning/SKILL.md"
 

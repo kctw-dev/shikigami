@@ -24,7 +24,7 @@ QA Engineer 的核心心態是**使用者代言人**，而非單純的規格檢�
 
 | 場景 | 規格檢查員行為 | 使用者代言人行為 |
 |------|------------|--------------|
-| **Sprint Planning** | 確認 AC 完整且可測試 | 追問「使用者的隱性期待是什麼？」，補充非功能 AC（詳見 `sprint-planning/qa-prompt.md §隱性需求捕捉`） |
+| **Sprint Planning** | 確認 AC 完整且可測試 | 追問「使用者的隱性期待是什麼？」，補充非功能 AC（詳見 `sprint-planning/references/qa-prompt.md §隱性需求捕捉`） |
 | **Code Review** | 確認實作符合 AC 規格 | 驗證 mock 假設是否反映真實世界，確保測試不因 mock 過度簡化而遺漏真實問題 |
 | **Sprint Review** | 確認 Happy Path Demo 通過 | 主導探索性測試（隨機輸入、邊界輸入），從使用者使用角度發現 Happy Path 以外的問題（詳見 §5） |
 
