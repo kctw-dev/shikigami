@@ -58,6 +58,40 @@ Sprint Execution **派遣 subagent 前**，主 session 執行以下檢查：
                     批次 2+：剩餘 Story 等待批次 1 完成後繼續（可再拆）
 ```
 
+### Worktree 唯一性檢查（#537）
+
+<!-- #537 重複派遣防護 Gate — Sprint 129 -->
+
+Sprint Execution **派遣 Story-Lifecycle subagent 前**，必須執行 worktree 唯一性檢查，防止同一個 Story 被重複派遣：
+
+```
+取得現存 worktree 清單
+  STORY_BRANCH="sprint-*/$(echo ${story_id} | tr '#' '' | tr -d ' ')-*"
+  git worktree list --porcelain | grep "branch" | grep -q "${story_id}"
+  |-- 找到對應 story_id 的 worktree → [DISPATCH-SKIP] 跳過，不重複派遣
+  |     輸出：[DISPATCH-SKIP] Story #{id} 已有 worktree 存在（branch: {branch_name}），跳過重複派遣
+  +-- 未找到 → 繼續後續派遣流程（OOM 上限檢查 → Claim → 派遣）
+```
+
+**重複偵測指令**：
+
+```bash
+# 偵測指定 story_id 是否已有 worktree 執行中
+STORY_ID="537"  # 替換為實際 story_id
+git worktree list --porcelain | grep -E "branch refs/heads/sprint-[0-9]+/${STORY_ID}-"
+# 有輸出 → 重複，輸出 [DISPATCH-SKIP]；無輸出 → 可繼續派遣
+```
+
+**處理規則**：
+
+| 情境 | 行為 |
+|------|------|
+| 偵測到同 Story worktree 存在 | `[DISPATCH-SKIP]` — 自動跳過（不重複派遣），記錄 WARN 日誌 |
+| 未偵測到同 Story worktree | 繼續執行 OOM 上限檢查與後續派遣流程 |
+| `git worktree list` 指令失敗 | 靜默忽略唯一性檢查，繼續派遣（保守策略：不阻塞） |
+
+> **設計意圖**：自動跳過而非要求人工確認，避免在 `project_level=low` 的全自動場景中阻塞流程。若需手動清理殘留 worktree，參見 `references/worktree-cleanup.md`。
+
 ### Cruise Auto-Shoot 同任務防護
 
 Cruise Auto-Shoot 派工前，必須先確認同任務 subagent 是否還在跑（重派前確認）：
@@ -77,6 +111,7 @@ Cruise Auto-Shoot 派工前，必須先確認同任務 subagent 是否還在跑�
 [MAX-PARALLEL-DEFAULT] SHIKIGAMI_MAX_PARALLEL 未設定，使用預設值 2（OOM 防護）
 [OOM-WARN] 現存 worktree 已達上限（{E}/{N}），等待釋放後繼續
 [OOM-SKIP] Story #{id} 已有 worktree 執行中，跳過重派
+[DISPATCH-SKIP] Story #{id} 已有 worktree 存在（branch: {branch_name}），跳過重複派遣
 ```
 
 ## Git Worktree 隔離（#379）
