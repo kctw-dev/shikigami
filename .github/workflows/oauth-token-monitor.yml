@@ -1,0 +1,95 @@
+name: OAuth Token Expiry Monitor
+
+# ADR-030：Claude OAuth Token Watchdog — CI 端定期檢查
+# Issue #597: retro: 修復 CI New Issue Intake OAuth token 認證失效
+# 此 workflow 負責每日定期偵測 CLAUDE_CODE_OAUTH_TOKEN 是否即將過期
+# 偵測到 token 失效（CI 失敗）時自動建立告警 Issue
+
+on:
+  schedule:
+    # 每天 09:00 UTC 執行（台北時間 17:00）
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+    # 允許手動觸發測試
+
+jobs:
+  check-token:
+    name: Check OAuth Token Health
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate OAuth Token
+        id: validate
+        run: |
+          # 嘗試呼叫 Claude API 驗證 token 有效性
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            https://api.anthropic.com/v1/models 2>/dev/null || echo "000")
+          echo "http_code=${HTTP_CODE}" >> $GITHUB_OUTPUT
+          if [[ "${HTTP_CODE}" == "200" ]]; then
+            echo "status=valid" >> $GITHUB_OUTPUT
+            echo "[TOKEN-OK] OAuth token 有效（HTTP ${HTTP_CODE}）"
+          elif [[ "${HTTP_CODE}" == "401" ]]; then
+            echo "status=expired" >> $GITHUB_OUTPUT
+            echo "[TOKEN-FAIL] OAuth token 已失效或過期（HTTP 401）"
+          else
+            echo "status=unknown" >> $GITHUB_OUTPUT
+            echo "[TOKEN-WARN] 無法驗證 token（HTTP ${HTTP_CODE}）"
+          fi
+
+      - name: Create Alert Issue (if token expired)
+        if: steps.validate.outputs.status == 'expired'
+        run: |
+          # 檢查是否已有未關閉的 token 告警 Issue（冪等防重複建立）
+          EXISTING=$(gh issue list \
+            --label "retro-action" \
+            --state open \
+            --search "[TOKEN-ALERT]" \
+            --json number --jq length)
+
+          if [[ "${EXISTING}" -gt 0 ]]; then
+            echo "[TOKEN-ALERT] 已有未關閉告警 Issue，跳過重複建立"
+            exit 0
+          fi
+
+          # 建立告警 Issue
+          gh issue create \
+            --title "[TOKEN-ALERT] CLAUDE_CODE_OAUTH_TOKEN 已失效，需立即更新" \
+            --body "## OAuth Token 告警
+
+**偵測時間**：$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+**觸發原因**：Daily token health check 偵測到 HTTP 401
+
+## 問題說明
+
+\`CLAUDE_CODE_OAUTH_TOKEN\` GitHub Secret 中的 OAuth token 已失效。
+這會導致以下 CI workflows 失敗：
+- \`New Issue Intake\`
+- \`Sprint Dispatch\`（若使用 OAuth token 模式）
+
+## 修復步驟
+
+1. 在本機執行 \`claude auth login\` 取得新的 OAuth token
+2. 至 GitHub Settings → Secrets → Actions，更新 \`CLAUDE_CODE_OAUTH_TOKEN\`
+3. 觸發 New Issue Intake 測試確認修復成功
+4. 關閉此 Issue
+
+## 參考
+
+- ADR-030：OAuth Token Watchdog 策略（偵測+告警，不自動 refresh）
+- Issue #597：retro 修復記錄
+            " \
+            --label "retro-action,priority: must"
+          echo "[TOKEN-ALERT] 已建立 token 失效告警 Issue"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: |
+          echo "Token Status: ${{ steps.validate.outputs.status }}"
+          echo "HTTP Code: ${{ steps.validate.outputs.http_code }}"
