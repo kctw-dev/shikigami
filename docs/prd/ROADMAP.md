@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-24（Sprint 140 完成 — Crash Recovery + Session Watchdog + CI Token 輪換修復 + v0.94.0）
+> 最後更新：2026-03-25（Sprint 141 完成 — watchdog 閾值對齊 + Retro Log 補完 + v0.95.0）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.94.0**（Sprint 140）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.95.0**（Sprint 141）。
 
 | 版號 | 含義 |
 |------|------|
