@@ -142,3 +142,29 @@
 | PASS | 無影響 |
 | WARN（STALE） | 升格為 WARNING（若原為 HEALTHY） |
 | FAIL（EXPIRED） | 升格為 CRITICAL |
+
+---
+
+## 檢查 7：Worktree 殘留偵測（#500）
+
+<!-- Issue #500 Worktree 自動清理 — Sprint 129 -->
+
+掃描 `.claude/worktrees/` 目錄，偵測殘留 worktree 數量與磁碟佔用。
+
+**執行方式**：執行 `bash hooks/worktree-cleanup.sh DRY_RUN=1` 或直接掃描目錄。
+
+**判定規則**：
+
+| 狀態 | 條件 |
+|------|------|
+| PASS | `.claude/worktrees/` 目錄不存在，或目錄下無任何子目錄 |
+| WARN | 發現 1 個以上殘留 worktree 子目錄（列出數量與估計磁碟佔用） |
+
+**WARN 時的修復建議**：「發現 {N} 個殘留 worktree（估計 {X} MB）。可執行 `bash hooks/worktree-cleanup.sh` 自動清理，或手動執行 `git worktree remove --force <path>`。」
+
+**對 Overall Status 的影響：**
+
+| 偵測結果 | Overall Status 影響 |
+|---------|-------------------|
+| PASS | 無影響 |
+| WARN（有殘留） | 升格為 WARNING（若原為 HEALTHY） |

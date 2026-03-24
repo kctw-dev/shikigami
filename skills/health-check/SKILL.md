@@ -25,6 +25,7 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 | 4. CI 最新狀態 | PASS / FAIL / WARN |
 | 5. Retro Action Items 逾期偵測 | PASS / OVERDUE |
 | 6. 知識新鮮度檢查 | PASS / WARN / FAIL |
+| 7. Worktree 殘留偵測（#500） | PASS / WARN |
 
 ---
 
@@ -44,6 +45,7 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 ### 4. CI 最新狀態 — {PASS / FAIL / WARN}
 ### 5. Retro Action Items — {PASS / OVERDUE}
 ### 6. 知識新鮮度 — {PASS / WARN / FAIL}
+### 7. Worktree 殘留偵測 — {PASS / WARN}
 ```
 
 ### Overall Status 判定規則
@@ -63,7 +65,7 @@ Health Check 是框架的自我診斷工具。一鍵掃描 Shikigami 的核心�
 ### 4.1 正常執行流程
 
 1. 主 session 派遣一個 **Health Check Subagent**，並提供以下指令：
-   - 依序執行 [`references/diagnostic-rules.md`](references/diagnostic-rules.md) 定義的 6 項診斷檢查
+   - 依序執行 [`references/diagnostic-rules.md`](references/diagnostic-rules.md) 定義的 7 項診斷檢查（含第 7 項：Worktree 殘留偵測）
    - 使用 Read、Glob、Grep 工具讀取所有必要文件；執行 `gh run list` 取得 CI 狀態
    - 依照 §3 定義的格式產出完整報告字串
 2. Subagent 完成後，將完整報告字串回傳給主 session
