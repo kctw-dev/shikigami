@@ -106,6 +106,14 @@
 
 ---
 
+## Schema Contracts（ADR-036 Schema 先行）
+
+| Contract | 路徑 | 狀態 | 使用 Story |
+|---------|------|------|-----------|
+| GAD Schema-first 命名規範 | docs/schema/README.md | reference | #406 |
+
+---
+
 ## DoD（Definition of Done）
 
 - [ ] 所有 AC 通過
