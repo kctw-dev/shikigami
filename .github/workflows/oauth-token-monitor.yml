@@ -59,22 +59,23 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           DETECTED_TIME=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
-          {
-            echo "ISSUE_BODY<<ISSUE_EOF"
-            echo "OAuth Token Alert - Detected: ${DETECTED_TIME}"
-            echo ""
-            echo "CLAUDE_CODE_OAUTH_TOKEN has expired (HTTP 401)."
-            echo "Affected workflows: New Issue Intake, Sprint Dispatch"
-            echo ""
-            echo "Fix: run claude auth login, update CLAUDE_CODE_OAUTH_TOKEN secret."
-            echo "Ref: ADR-030 OAuth Token Watchdog, Issue #597"
-            echo "ISSUE_EOF"
-          } >> $GITHUB_ENV
+          # --body-file 模式：避免多行 body 含特殊字符導致 YAML parse error（CLAUDE.md 規範 13）
+          BODY_FILE=$(mktemp /tmp/token-alert-body-XXXXXX.txt)
+          printf '%s\n' \
+            "OAuth Token Alert - Detected: ${DETECTED_TIME}" \
+            "" \
+            "CLAUDE_CODE_OAUTH_TOKEN has expired (HTTP 401)." \
+            "Affected workflows: New Issue Intake, Sprint Dispatch" \
+            "" \
+            "Fix: run claude auth login, update CLAUDE_CODE_OAUTH_TOKEN secret." \
+            "Ref: ADR-030 OAuth Token Watchdog, Issue 597" \
+            > "${BODY_FILE}"
           gh issue create \
             --title "[TOKEN-ALERT] CLAUDE_CODE_OAUTH_TOKEN expired - update required" \
-            --body "${ISSUE_BODY}" \
+            --body-file "${BODY_FILE}" \
             --label "retro-action" \
             --label "priority: must"
+          rm -f "${BODY_FILE}"
           echo "[TOKEN-ALERT] Alert issue created"
 
       - name: Summary
