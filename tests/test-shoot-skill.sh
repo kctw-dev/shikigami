@@ -389,6 +389,69 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# 區段 9：test → review → PR 管道驗證（Story #388 AC1-AC3）
+# ---------------------------------------------------------------------------
+echo ""
+echo "=== 區段 9：test → review → PR 管道（#388 AC1-AC3）==="
+
+PIPELINE_REF="${PROJECT_DIR}/skills/shoot/references/pipeline.md"
+assert_file_exists "$PIPELINE_REF" "skills/shoot/references/pipeline.md 存在"
+
+if [ -f "$SHOOT_SKILL_MD" ]; then
+  SKILL_CONTENT=$(cat "$SHOOT_SKILL_MD")
+
+  # 9.1 AC1：SKILL.md 含管道段落（§7.1）
+  assert_contains "$SKILL_CONTENT" "test → review → PR" "SKILL.md 含 test → review → PR 管道說明"
+
+  # 9.2 AC1：含自動串接的三個階段
+  assert_contains "$SKILL_CONTENT" "bash tests/test-*.sh" "SKILL.md 含 test 階段指令"
+
+  # 9.3 AC1：含 PR 建立
+  assert_contains "$SKILL_CONTENT" "gh pr create" "SKILL.md 含 gh pr create"
+
+  # 9.4 AC1：含 squash merge
+  assert_contains "$SKILL_CONTENT" "squash merge" "SKILL.md 含 squash merge 說明"
+
+  # 9.5 AC2：test 失敗中止
+  assert_contains "$SKILL_CONTENT" "test 失敗中止" "SKILL.md 含 test 失敗中止說明（AC2）"
+
+  # 9.6 AC2：不進入 review
+  assert_contains "$SKILL_CONTENT" "不進入 review" "SKILL.md 含 test FAIL 不進入 review 說明"
+
+  # 9.7 AC2：不建立 PR
+  assert_contains "$SKILL_CONTENT" "不建立 PR" "SKILL.md 含 test FAIL 不建立 PR 說明"
+
+  # 9.8 AC3：review 回退修復
+  assert_contains "$SKILL_CONTENT" "review 回退修復" "SKILL.md 含 review 回退修復說明（AC3）"
+
+  # 9.9 AC3：含升級 Architect 說明
+  assert_contains "$SKILL_CONTENT" "升級 Architect" "SKILL.md 含升級 Architect 說明"
+
+  # 9.10 AC4：SKILL.md 行數不超過 350 行
+  LINE_COUNT=$(wc -l < "$SHOOT_SKILL_MD")
+  if [ "$LINE_COUNT" -le 350 ]; then
+    pass "AC4 SKILL.md 行數 ${LINE_COUNT} <= 350 行"
+  else
+    fail "AC4 SKILL.md 行數 ${LINE_COUNT} 超過 350 行限制"
+  fi
+
+else
+  fail "#388 管道測試跳過（SKILL.md 不存在）"
+fi
+
+# 9.11 pipeline.md 含管道三階段
+if [ -f "$PIPELINE_REF" ]; then
+  PIPELINE_CONTENT=$(cat "$PIPELINE_REF")
+  assert_contains "$PIPELINE_CONTENT" "階段 1：test" "pipeline.md 含 test 階段"
+  assert_contains "$PIPELINE_CONTENT" "階段 2：review" "pipeline.md 含 review 階段"
+  assert_contains "$PIPELINE_CONTENT" "階段 3：PR" "pipeline.md 含 PR 階段"
+  assert_contains "$PIPELINE_CONTENT" "HARD-GATE" "pipeline.md 含 HARD-GATE 宣告"
+  assert_contains "$PIPELINE_CONTENT" "回退修復機制" "pipeline.md 含回退修復機制說明"
+else
+  fail "#388 pipeline.md 內容測試跳過（檔案不存在）"
+fi
+
+# ---------------------------------------------------------------------------
 # 總結
 # ---------------------------------------------------------------------------
 echo ""
