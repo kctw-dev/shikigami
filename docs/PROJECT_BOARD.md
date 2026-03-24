@@ -1,9 +1,27 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 136 完成 — 5/5 Stories PASS，6 pts）
-**當前 Sprint**：Sprint 136（已完成）
+**最後更新**：2026-03-24（Sprint 137 Planning — 5 Stories，6 pts）
+**當前 Sprint**：Sprint 137（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 137（進行中）
+
+> Sprint Goal：落地 Sprint 136 Retro Action Items（GAD Schema 範例 + CI 認證升級機制），並推進 ADR 先行工作——為 Kill Switch、Token Cost Routing、TCB 斷點管理三大功能奠定架構基礎
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: docs/schema/ 新增 GAD workflow JSON Schema Contract 範例檔案 | #617 | S | 1 | 進行中 |
+| retro: CI 認證問題快速升級機制（第二次發生時自動建議根本解決） | #616 | M | 2 | 進行中 |
+| RESEARCH: ADR-038 — Kill Switch 架構決策（緊急停止機制設計） | #619 | S | 1 | 進行中 |
+| RESEARCH: ADR-039 — Token Cost Routing 架構決策（Risk-based Model 分級） | #620 | S | 1 | 進行中 |
+| RESEARCH: ADR-040 — TCB 斷點管理架構決策（Agent Action 級 Checkpoint 設計） | #621 | S | 1 | 進行中 |
+
+**Sprint 容量**：6 points
+**執行順序**：Phase 1 Batch 1（#617|#619）→ Batch 2（#620|#621）→ Phase 2（#616）
 
 ---
 
