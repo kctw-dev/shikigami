@@ -1,15 +1,16 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 136 Planning 完成 — 5 Stories，6 pts）
-**當前 Sprint**：Sprint 136（進行中）
+**最後更新**：2026-03-24（Sprint 136 完成 — 5/5 Stories PASS，6 pts）
+**當前 Sprint**：Sprint 136（已完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 136（進行中）
+## Sprint 136（完成）
 
 > Sprint Goal：建立 Schema-first API Contract 決策基礎（ADR-036）並落地 Schema 先行工作流程，同步加固 CI YAML lint 品質防護，修復持續發生的 CI OAuth 401 認證失敗根因
+> **結果**：Goal 達成（5/5 Stories PASS）。Velocity 6 pts，完成率 100%。連續第 10 Sprint 100%（127-136）。
 > **容量**：6 pts
 
 | Story | Issue | Size | Points | 狀態 |
@@ -21,7 +22,6 @@
 | feat: Schema 先行 — API Contract 統一定義 | #406 | M | 2 | 已完成 (#615) |
 
 **Sprint 容量**：6 points
-**執行順序**：ADR Phase（#601）→ Batch 1（#610 | #609 平行，完成後 #600）→ Batch 2（#406 序列）
 
 ---
 

@@ -116,8 +116,8 @@
 
 ## DoD（Definition of Done）
 
-- [ ] 所有 AC 通過
-- [ ] PR 審查通過（pr-review-toolkit）
-- [ ] 版號 bump（v0.91.0）
-- [ ] docs/PROJECT_BOARD.md 更新
-- [ ] git tag v0.91.0
+- [x] 所有 AC 通過（5/5 Stories，PR #611 #612 #613 #614 #615）
+- [x] PR 審查通過（pr-review-toolkit）
+- [x] 版號 bump（v0.91.0）
+- [x] docs/PROJECT_BOARD.md 更新
+- [x] git tag v0.91.0
