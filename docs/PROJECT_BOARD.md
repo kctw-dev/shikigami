@@ -1,22 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 130 Planning 完成）
-**當前 Sprint**：Sprint 130（進行中）
+**最後更新**：2026-03-24（Sprint 130 Execution 完成）
+**當前 Sprint**：Sprint 130（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 130（進行中）
+## Sprint 130（完成）
 
 > Sprint Goal：交付 2 個 Feature Story 恢復產品功能前進動能（Retro-Action 自動偵測機制 + Skill 品質改善），同步處理 Node.js 20 deprecation CI 升級。
+> **結果**：Goal 達成（3/3 Stories PASS）。Velocity 5 pts，完成率 100%。
 > **容量**：5 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: Retro-Action 連續未完成自動觸發 Grooming 機制 | #493 | M | 2 | 待開始 |
-| chore: Skill description 改善 + 章節重新編號 | #487 | M | 2 | 待開始 |
-| [SRE] Node.js 20 deprecation CI 升級 | #526 | S | 1 | 待開始 |
+| feat: Retro-Action 連續未完成自動觸發 Grooming 機制 | #493 | M | 2 | 已完成 |
+| chore: Skill description 改善 + 章節重新編號 | #487 | M | 2 | 已完成 |
+| [SRE] Node.js 20 deprecation CI 升級 | #526 | S | 1 | 已完成 |
 
 **Sprint 容量**：5 points
 **執行順序**：Phase 1（#493 | #526 平行） → Phase 2（#487 序列）
