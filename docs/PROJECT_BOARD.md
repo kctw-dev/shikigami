@@ -1,9 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 131 Review 完成）
-**當前 Sprint**：Sprint 131（完成）
+**最後更新**：2026-03-24（Sprint 132 Planning 完成）
+**當前 Sprint**：Sprint 132（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 132（進行中）
+
+> Sprint Goal：鞏固 Sprint Planning 品質 + 強化 Developer TDD 精準執行，落地 Sprint 131 Retro Action Items，並完成 TDAD 依賴分析工具選型 ADR。
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: Story AC 完整性前置確認 | #563 | S | 1 | Sprint Backlog |
+| ADR RESEARCH: TDAD 依賴分析工具選型 | #567 | S | 1 | Sprint Backlog |
+| retro: Sprint Candidate RICE Score 補充 | #564 | M | 2 | Sprint Backlog |
+| feat: TDAD Dependency Map — 精準 TDD 執行 | #394 | M | 2 | Sprint Backlog |
+
+**Sprint 容量**：6 points
+**執行順序**：Batch 1（#563 | #567 平行） → Batch 2（#564 | #394 平行，#394 依賴 #567）
 
 ---
 
