@@ -1,9 +1,29 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 127 — 4/4 Stories 完成）
-**當前 Sprint**：Sprint 127（完成，待 Review）
+**最後更新**：2026-03-24（Sprint 128 Planning 完成）
+**當前 Sprint**：Sprint 128（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 128（進行中）
+
+> Sprint Goal：修復 Cruise Mode 核心行為缺陷（project_level=low HARD-GATE + SRE main branch 盲區），完成 INFRA 測試框架首次交付，同步落地三項 retro 流程改善。
+> **容量**：8 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| [Cruise] project_level=low 自動行為標為 HARD-GATE | #517 | S | 1 | 待開始 |
+| [SRE] SRE 巡檢補充 main branch CI 獨立檢查 | #519 | S | 1 | 待開始 |
+| Architect Gate for M+ Refactor Story | #491 | S | 1 | 待開始 |
+| INFRA 測試框架架構設計 | #494 | S | 1 | 待開始 |
+| INFRA 回歸測試案例實作 | #495 | M | 2 | 待開始 |
+| Task 工具追蹤 Sprint Stories 進度 | #513 | S | 1 | 待開始 |
+| Sprint 容量估算修訂 | #492 | S | 1 | 待開始 |
+
+**Sprint 容量**：8 points
+**執行順序**：Phase 1（#519 | #494 平行） → Phase 2（#517 → #513 → #491 → #492 序列） → Phase 3（#495 依賴 #494）
 
 ---
 
