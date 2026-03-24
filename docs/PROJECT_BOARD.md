@@ -14,7 +14,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| [SRE] New Issue Intake CI 持続失敗 — 調查根本原因 | #622 | S | 1 | 進行中 |
+| [SRE] New Issue Intake CI 持続失敗 — 調查根本原因 | #622 | S | 1 | 已完成 |
 | incident: ANTHROPIC_API_KEY 缺失（第五次）— CI 認證修復 | #618 | S | 1 | 待執行 |
 | feat: Kill Switch — High 自治模式緊急停止 | #398 | M | 2 | 待執行 |
 | feat: Token Cost Routing — Risk-based Model 分級 | #402 | M | 2 | 待執行 |
