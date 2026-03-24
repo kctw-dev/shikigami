@@ -180,6 +180,6 @@ AC 重新校準（記錄於 Sprint 文件）
 
 | 風險 | 緩解措施 |
 |------|---------|
-| SDD 過時導致 AC 校準錯誤 | ADR 觸發 SDD 更新機制已存在（architecture-decision SKILL §10），本 ADR 強化下游傳播 |
+| SDD 過時導致 AC 校準錯誤 | ADR 觸發 SDD 更新機制已存在（architecture-decision SKILL §6），本 ADR 強化下游傳播 |
 | Sprint Planning 效率下降 | SDD 覆蓋範圍檢查由 Architect subagent 自動執行，非手動操作 |
 | 專案初期無 SDD 時流程卡住 | 降級規則：SDD-000 不存在時全部可省略，回退現行行為 |
