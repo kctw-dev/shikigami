@@ -1,23 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 135 啟動 — Context Engineering JIT + Agent Skills 評估 + CI 修復，6 pts）
-**當前 Sprint**：Sprint 135（進行中）
+**最後更新**：2026-03-24（Sprint 135 完成 — 4/4 Stories PASS，6 pts）
+**當前 Sprint**：Sprint 135（已完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 135（進行中）
+## Sprint 135（完成）
 
 > Sprint Goal：推進 Context Engineering 基礎架構（ADR-037 + JIT Retrieval 實作），研究 Agent Skills 開放標準對齊可行性，並修復 CI OAuth token 認證失效。
+> **結果**：Goal 達成（4/4 Stories PASS）。Velocity 6 pts，完成率 100%。連續第 9 Sprint 100%（127+128+129+130+131+132+133+134+135）。
 > **容量**：6 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| RESEARCH: ADR-037 — Context Engineering JIT 架構決策 | #602 | S | 1 | 進行中 |
-| retro: 修復 CI New Issue Intake OAuth token 認證失效 | #597 | S | 1 | 進行中 |
-| research: Agent Skills 開放標準對齊評估 | #396 | M | 2 | 進行中 |
-| feat: Context Engineering — Just-in-Time Retrieval | #400 | M | 2 | 待開始（依賴 #602） |
+| RESEARCH: ADR-037 — Context Engineering JIT 架構決策 | #602 | S | 1 | 已完成 (#603) |
+| retro: 修復 CI New Issue Intake OAuth token 認證失效 | #597 | S | 1 | 已完成 (#604) |
+| research: Agent Skills 開放標準對齊評估 | #396 | M | 2 | 已完成 (#605) |
+| feat: Context Engineering — Just-in-Time Retrieval | #400 | M | 2 | 已完成 (#607) |
 
 **Sprint 容量**：6 points
 **執行順序**：ADR Phase（#602）→ Batch 1（#597 | #396 平行）→ Batch 2（#400 序列）
