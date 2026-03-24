@@ -1,7 +1,7 @@
 # ADR-034：Browser Automation 工具選型
 
 **日期**：2026-03-24
-**狀態**：Proposed
+**狀態**：Accepted
 **相關 Issue**：#386、#272、#385
 **提案者**：Architect Agent
 **關聯 ADR**：ADR-033（Structured Trace Log）

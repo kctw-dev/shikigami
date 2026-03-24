@@ -49,3 +49,18 @@
 - #394 依賴 #567 ADR 結論，若 ADR 時間盒超出，#394 需退出本 Sprint
 - #563 與 #564 均修改 po-prompt.md，Batch 2 的 #564 必須在 Batch 1 的 #563 完成後執行（避免寫入衝突）
 - Sprint 131 Retro Action Items（#563/#564）直接影響下 Sprint 品質，優先確保交付
+
+## Sprint Review 結果
+
+**Sprint Review 日期**：2026-03-24
+**驗收結果**：4/4 PASS
+**Velocity**：6 pts
+**完成率**：100%
+**連續 100%**：第 6 Sprint（127+128+129+130+131+132）
+
+| Story | 驗收結果 | PR | 備注 |
+|-------|---------|-----|------|
+| #563 retro: Story AC 完整性前置確認 | PASS | #568 | AC Gate 硬性規則已插入 po-prompt.md |
+| #567 ADR RESEARCH: TDAD 依賴分析工具選型 | PASS | #569 | ADR-035 Accepted，#394 Hard Gate 解除 |
+| #564 retro: Sprint Candidate RICE Score 補充 | PASS | #570 | rice-scoring-standard.md 建立，前 10 個 RICE 補充完成 |
+| #394 feat: TDAD Dependency Map — 精準 TDD 執行 | PASS | #571 | developer-prompt.md 已插入 Pre-TDD 步驟，v0.89.2 |
