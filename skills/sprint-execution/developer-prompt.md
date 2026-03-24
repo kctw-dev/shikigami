@@ -312,6 +312,7 @@ LLM 輔助確認：{確認或補充說明，動態 import 漏報標注}
 - [ ] 測試之間互相獨立，無順序依賴
 - [ ] 使用 Arrange-Act-Assert 模式
 - [ ] Mock / Stub 使用適當，不過度 mock
+- [ ] Shell 測試腳本中「存在性偵測」使用 `grep -q`（quiet mode），禁止 `grep -l` 與 `&& echo found` 混用（`grep -l` 會輸出檔案路徑污染比對結果）
 
 ### 安全性
 - [ ] 使用者輸入已做 sanitization
