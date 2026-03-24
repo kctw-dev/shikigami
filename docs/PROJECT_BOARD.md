@@ -1,9 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 130 Execution 完成）
-**當前 Sprint**：Sprint 130（完成）
+**最後更新**：2026-03-24（Sprint 131 Planning 完成）
+**當前 Sprint**：Sprint 131（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 131（進行中）
+
+> Sprint Goal：框架品質保障自動化 + shoot 進化 + browser-automation 工具選型 ADR，維持連續 100% 完成率。
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: 建立 Skill 行數自動偵測腳本 | #555 | S | 1 | 待開始 |
+| ADR RESEARCH: browser-automation 工具選型 ADR | #386 | M | 2 | 待開始 |
+| retro: CI 升級確認時機明確化 | #556 | S | 1 | 待開始 |
+| feat: /shoot 進化版 — test→review→PR 一鍵串接 | #388 | M | 2 | 待開始 |
+
+**Sprint 容量**：6 points
+**執行順序**：Batch 1（#555 | #386 平行） → Batch 2（#556 | #388 平行）
 
 ---
 
