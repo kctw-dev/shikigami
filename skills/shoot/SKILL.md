@@ -142,10 +142,35 @@ Story ID 需**精確比對**（`US-#N` 格式優先，大小寫不敏感）。�
 - 外部獨立審查：`skills/shoot/references/external-review.md`
 - pr-review-toolkit：`skills/shoot/references/pr-review-integration.md`
 - 文件產出：`skills/shoot/references/doc-output.md`
+- **test → review → PR 管道**：`skills/shoot/references/pipeline.md`
 
 ### 明確跳過項目（Sprint 儀式）
 
 `/shoot` 跳過：Sprint Planning、Sprint Review、Sprint Retro、Sprint Metrics（不計算 Velocity）
+
+---
+
+## 7.1 test → review → PR 一鍵管道（#388）
+
+<!-- Story #388 — /shoot 進化版：test → review → PR 一鍵串接 -->
+
+實作完成後自動進入三階段品質管道（完整規則見 `skills/shoot/references/pipeline.md`）：
+
+```
+[test]   bash tests/test-*.sh
+  ↓ PASS
+[review] 外部獨立審查 + pr-review-toolkit（步驟 5.3 + 5.4）
+  ↓ PASS
+[PR]     gh pr create + squash merge（步驟 6）
+```
+
+**test 失敗中止（AC2）**：test FAIL → 觸發 systematic-debugging，修復重試；仍 FAIL → 管道中止，exit code 非 0，不進入 review，不建立 PR。
+
+**review 回退修復（AC3）**：review 發現 CRITICAL/HIGH → 回退至實作修復，修復後重跑 test + review；二審仍 CRITICAL/HIGH → 升級 Architect，管道中止。
+
+<HARD-GATE>
+**test → review → PR 管道 Hard Gate**：任一階段 FAIL 且無法修復，後續階段跳過，exit code 非 0。
+</HARD-GATE>
 
 ---
 
