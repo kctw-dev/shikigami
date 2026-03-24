@@ -587,7 +587,7 @@ commit 失敗 → 輸出 `[COMMIT-FAIL] 原因: {msg}，影響: {files}` → `ES
 
 ## §8.2 共用文件更新（循序執行路徑）
 
-**循序模式**：直接讀取並更新 `PROJECT_BOARD.md` 與 `sprint_N.md` 狀態欄（依 `SKILL.md` §3 步驟 7，含 read-then-compare 衝突偵測），完成後 git commit + git push。
+**循序模式**：直接讀取並更新 `PROJECT_BOARD.md` 與 `sprint_N.md` 狀態欄（依 `SKILL.md` §3 步驟 7，含 read-then-compare 衝突偵測），完成後 git commit + git push。**sprint_N.md 每個完成 Story 行尾必須加 `DONE(#PR)` 標記**（`#PR` 為合併的 PR 編號）。
 
 ## §8.3 共用文件更新（平行執行路徑）
 
