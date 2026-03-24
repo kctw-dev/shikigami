@@ -94,6 +94,13 @@ team_debate: true                          # 可選：是否啟用 Team Debate�
 衝突偵測：確認修改檔案清單無平行 Story 競態（參照 developer-prompt.md §同檔案衝突偵測）
   |
   v
+Worktree 同步（#581，Sprint 134 Retro Action）：在 story branch 建立前強制同步最新 main
+  git fetch origin main
+  git rebase origin/main
+  |-- rebase 成功 → 繼續（worktree 基於最新 main，降低並行版本衝突機率）
+  +-- rebase 有衝突 → 解決衝突後繼續（衝突應極少，worktree 初始狀態幾乎無本地修改）
+  |
+  v
 story_type 路由：
   |-- story_type=DESIGN --> DESIGN 路徑（§4.5）→ 派遣 UI/UX Designer subagent
   |     ├─ 確認 Design Foundation 就緒（Design System、Tokens、Component Library）
