@@ -364,3 +364,38 @@ Architect 在擔任 Refinement Chair 時，必須對每個 M/L Story 逐一回�
 |------|---------|
 | SRE 工作量不可忽略（需要獨立設計、建置或審查） | 拆分為獨立 INFRA Story，Contract Owner 由 SRE 擔任 |
 | SRE 工作量極小（設定調整、參數修改等） | 在 FEATURE Contract 中附加 Infra Prerequisites Checklist，由 SRE 簽核後合併在 FEATURE Story 中執行 |
+
+---
+
+## M+ Refactor/Restructure Story Architect Gate
+
+<!-- #491 Retro Action: Architect Gate for M+ Refactor Story — Sprint 128 -->
+
+<HARD-GATE>
+M size 以上的 Refactor 或 Restructure 類 Story 必須通過 Architect 前置確認才能進入 Sprint。
+</HARD-GATE>
+
+### 觸發條件
+
+| 條件 | 說明 |
+|------|------|
+| Story Size ≥ M（2 points 以上） | T-shirt size 為 M 或 L |
+| Story 含有 Refactor/Restructure 關鍵字 | 標題或 AC 含有：refactor、restructure、重構、拆分、合併、migration |
+
+**兩個條件必須同時成立**才觸發本 Gate。S size Story 或不含上述關鍵字的 Story 不適用。
+
+### Architect 確認項目
+
+| 確認項 | 說明 |
+|--------|------|
+| AC 完整性 | 所有 Acceptance Criteria 是否完整、具體、可測試 |
+| 邊界清晰度 | 修改範圍是否明確，哪些檔案/模組會被影響 |
+| 回退策略 | 若重構失敗，是否有回退方案 |
+| 依賴識別 | 是否有其他 Story 依賴此重構，或此重構依賴其他 Story |
+
+### Gate 判定
+
+| 結果 | 處置 |
+|------|------|
+| READY | 繼續進入 Sprint Planning，Architect 確認摘要記錄於技術評估表格 |
+| NOT_READY | 退回 Backlog，標注缺失項目，PO 補齊後重新提交 |
