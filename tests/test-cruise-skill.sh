@@ -652,6 +652,31 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# TC-39：#590 cruise.patrol 模式分支驗證
+# ---------------------------------------------------------------------------
+echo ""
+echo "--- TC-39：#590 cruise.patrol 模式分支驗證 ---"
+
+if [[ -f "$SKILL_FILE" ]]; then
+  assert_contains "$SKILL_FILE" 'PATROL_MODE' \
+    "TC-39a: SKILL.md 含 PATROL_MODE 變數定義"
+  assert_contains "$SKILL_FILE" 'cruise:.*\n.*patrol:|patrol:' \
+    "TC-39b: SKILL.md 含 cruise.patrol 設定讀取"
+  assert_contains "$SKILL_FILE" 'PATROL_MODE.*both|both.*預設|PATROL_MODE:-both' \
+    "TC-39c: SKILL.md PATROL_MODE 預設值為 both（向後相容）"
+  assert_contains "$SKILL_FILE" 'PATROL_MODE == "po"' \
+    "TC-39d: §6a Once Mode 含 po 分支判斷"
+  assert_contains "$SKILL_FILE" 'PATROL_MODE == "sre"' \
+    "TC-39e: §6b Loop Mode 含 sre 分支判斷"
+  assert_contains "$SKILL_FILE" 'PATROL_MODE == "both"' \
+    "TC-39f: §6a/§6b 含 both 分支判斷"
+else
+  for TC in TC-39a TC-39b TC-39c TC-39d TC-39e TC-39f; do
+    fail "${TC}: SKILL.md 不存在（${SKILL_FILE}）"
+  done
+fi
+
+# ---------------------------------------------------------------------------
 # 結果摘要
 # ---------------------------------------------------------------------------
 echo ""
