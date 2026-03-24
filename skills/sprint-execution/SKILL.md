@@ -347,7 +347,10 @@ Claim Story（§2.11，多 Session 並行協調）
   │  Story Completion Checklist（#368 方向3，每個 Story 完成後） │
   │  1. [ ] git checkout main && git pull                       │
   │  2. [ ] 更新 PROJECT_BOARD.md + sprint_N.md 狀態           │
-  │         sprint_N.md：每個完成 Story 行尾加 DONE(#PR) 標記  │
+  │         sprint_N.md：找到含 Issue ID 的 Story 資料列，     │
+  │         將該列最後一欄（狀態欄）的值替換為 DONE(#PR)。     │
+  │         匹配方式：以 Issue ID 定位列，取代最後一欄值，     │
+  │         不依賴完整行格式（避免欄位變動致 replace 未命中）  │
   │         git commit + push（豁免直推 main，ADR-023 決策 3）  │
   │  3. [ ] 寫入 sprint-checkpoint.json（§2.12，豁免直推 main）  │
   │  4. [ ] release claim：bash hooks/release-issue.sh <id>    │
