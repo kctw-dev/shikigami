@@ -31,10 +31,18 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 
 ### 即時排序計算步驟
 
+<!-- #564 RICE Score 補充 — Sprint 132 -->
+
 1. 從 `gh issue list` 回傳的每個 Issue body，以正則表達式提取 RICE Score 數值（格式：`\*\*RICE Score\*\* \| \*\*(\d+(?:\.\d+)?)\*\*`）；提取失敗時以 RICE Score = 0 計算並記錄警告
 2. 從 Issue labels 提取 MoSCoW tier：`priority: must` → tier 1、`priority: should` → tier 2、`priority: could` → tier 3；無 priority label 時以 tier 3 計算
 3. 排序規則：先依 MoSCoW tier 升序（tier 1 最優先），同 tier 內依 RICE Score 降序
 4. 從排序結果頂部選取符合 Sprint Goal、當前里程碑目標（ROADMAP.md）與 Sprint 容量的 Stories
+
+> **RICE Score 評分標準**：`docs/km/rice-scoring-standard.md`（2026-03-24 建立）
+> - 計算公式：`(Reach × Impact × Confidence) / Effort`
+> - Reach：1-4（影響角色數），Impact：1-5（改善程度），Confidence：50%-100%，Effort = Story Points
+> - Issue body 格式：`**RICE Score** | **N.N**`（po-prompt.md 正則提取使用此格式）
+> - 無 RICE Score 的 Story 以 RICE = 0 計算（排在同 tier 最後），新開 sprint-candidate 時應補充
 
 ### Sprint 容量估算基準
 
