@@ -1264,7 +1264,7 @@ Sprint Execution 流程中，以下時機建議觸發 systematic debugging，確
 
 ---
 
-## 8. 安全審查觸發條件
+## 8.1 安全審查觸發條件
 
 主 session 層級觸發入口：Story-Lifecycle subagent 回傳 `ESCALATE: SECURITY_CRITICAL` 時，暫停 Sprint 執行，觸發 `security-review` Skill。完整觸發條件清單定義於 `skills/sprint-execution/story-lifecycle-prompt.md` §7 Security Self-Review。
 
