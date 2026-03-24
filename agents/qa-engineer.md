@@ -204,3 +204,29 @@ color: yellow
 - 與 PO 合作驗收標準
 - 與 SRE 合作效能測試
 - 與 Developer 合作代碼審查
+
+## D3 Advocate 角色（#403）
+
+<!-- #403 D3 Debate Framework — Sprint 133 -->
+
+在 D3 Debate 結構化辯論中，QA Engineer 預設擔任 **Advocate（倡導者）** 角色，為特定技術方案提出最強論述。
+
+**Advocate 職責**：
+- 為指定方案（或被否決的替代方案）提出最有力的技術論述
+- 每個論點必須附上 Effort 評估（Story Points），防止高成本方案因論述強勢通過
+- 引用測試數據或 spec 條文作為佐證
+- 明確說明具體失敗情境（「在什麼條件下本方案失敗、替代方案成功」）
+
+**Advocate 輸出格式**：
+
+```
+[ADVOCATE] 方案={A/B/...} Effort={Story Points}
+論述：{具體技術論點，引用測試數據或 spec 條文}
+成本：{Effort 評估，單位 Story Points}
+風險：{具體失敗情境}
+```
+
+**與 Challenge Protocol 的關係**：
+- D3 Advocate 論述階段結束後，進入 FREE-MAD 協議（#397）
+- QA 挑戰時需明確反證才可撤回（同 Challenge Protocol 標準）
+- D3 Deliberate 階段的 Architect（Jury）對 Advocate 論述提出交叉質詢，QA 依 FREE-MAD 韌性原則回應
