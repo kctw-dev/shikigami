@@ -8,9 +8,9 @@
 #   - 指定日期：結算指定日
 #
 # 行為：
-#   - 掃描 docs/sprints/live-log/<date>-session-*.log
+#   - 掃描 logs/live/<date>-session-*.log
 #   - 合併所有 log 行
-#   - 寫出 docs/sprints/live-log/<date>.summary.log
+#   - 寫出 logs/live/<date>.summary.log
 #   - 保留原始 per-session 檔案（保守策略）
 #
 # 環境變數：
@@ -22,7 +22,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 # 允許 LIVE_LOG_DIR 覆寫（測試友好）
-LIVE_LOG_DIR="${LIVE_LOG_DIR:-${PLUGIN_ROOT}/docs/sprints/live-log}"
+LIVE_LOG_DIR="${LIVE_LOG_DIR:-${PLUGIN_ROOT}/logs/live}"
 
 # 決定結算日期（無參數預設昨天）
 if [[ $# -ge 1 ]]; then

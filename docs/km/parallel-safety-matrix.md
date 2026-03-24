@@ -77,7 +77,7 @@
 
 | 文件路徑模式 | 說明 |
 |------------|------|
-| `docs/sprints/live-log/YYYY-MM-DD-session-<SESSION_ID>.log` | Sprint 執行即時日誌 |
+| `logs/live/YYYY-MM-DD-session-<SESSION_ID>.log` | Sprint 執行即時日誌 |
 | `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` | Sprint Review retrospective log |
 | `docs/km/metrics-log/YYYY-MM-DD-session-<SESSION_ID>.md` | Sprint Review metrics log |
 | `docs/attendance/YYYY-MM-DD-session-<SESSION_ID>.jsonl` | 出勤紀錄 |

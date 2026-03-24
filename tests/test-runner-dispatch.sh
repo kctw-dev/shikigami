@@ -159,8 +159,8 @@ echo "=== TC-10：AC-5 protect-main.sh 相容（per-session log 路徑豁免）=
 # ---------------------------------------------------------------------------
 
 PROTECT_MAIN="$REPO_ROOT/hooks/protect-main.sh"
-# docs/sprints/live-log/ 已在豁免清單中（US-322 建立）
-assert_contains "$PROTECT_MAIN" "docs/sprints/live-log" "AC-10: protect-main 豁免 live-log 路徑"
+# logs/live/ 已在豁免清單中（US-322 建立）
+assert_contains "$PROTECT_MAIN" "logs/live" "AC-10: protect-main 豁免 live-log 路徑"
 # workflow YAML 不在豁免清單 — 需走 PR 流程
 assert_contains "$PROTECT_MAIN" "docs/sprints/" "AC-10: docs/sprints/ 路徑豁免確認"
 

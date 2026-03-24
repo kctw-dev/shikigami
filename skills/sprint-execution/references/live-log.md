@@ -10,10 +10,10 @@ Sprint Execution 支援 **Live Log Streaming** 功能，讓使用者在另一個
 
 ```bash
 # 監看當前 session 的 live log（路徑含 session ID）
-tail -f docs/sprints/live-log/$(date '+%Y-%m-%d')-session-${SESSION_ID:-unknown-*}.log
+tail -f logs/live/$(date '+%Y-%m-%d')-session-${SESSION_ID:-unknown-*}.log
 
 # 或使用萬用字元觀看當日所有 session
-tail -f docs/sprints/live-log/$(date '+%Y-%m-%d')-session-*.log
+tail -f logs/live/$(date '+%Y-%m-%d')-session-*.log
 ```
 
 > **跨平台說明**：`tail -f` 在 Linux、macOS、WSL 均原生支援。Windows 原生環境需使用 Git Bash 或 WSL。
@@ -21,7 +21,7 @@ tail -f docs/sprints/live-log/$(date '+%Y-%m-%d')-session-*.log
 ## 日誌檔案路徑（US-322 AC-2，per-session）
 
 ```
-docs/sprints/live-log/YYYY-MM-DD-session-<SESSION_ID>.log
+logs/live/YYYY-MM-DD-session-<SESSION_ID>.log
 ```
 
 每個 session 寫入自己的 `.log` 檔案（天然隔離，多台機器無 conflict）。結算腳本 `hooks/live-log-settle.sh` 合併同日日誌為 `YYYY-MM-DD.summary.log`。

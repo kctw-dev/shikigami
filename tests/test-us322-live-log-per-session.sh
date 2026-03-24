@@ -7,7 +7,7 @@
 # TC-3: 不同 session 各自有獨立檔案（天然隔離）
 # TC-4: 原始 per-session 檔案保留（保守策略）
 # TC-5: 結算空目錄不 crash
-# TC-6: protect-main.sh 豁免清單含 docs/sprints/live-log/
+# TC-6: protect-main.sh 豁免清單含 logs/live/
 # TC-7: story-lifecycle-prompt.md 更新為 per-session 路徑
 # TC-8: sprint-execution SKILL.md Live Log 說明更新
 set -euo pipefail
@@ -131,14 +131,14 @@ else
 fi
 rm -rf "$EMPTY_DIR"
 
-# ── TC-6: protect-main.sh 豁免清單含 docs/sprints/live-log/ ──────
+# ── TC-6: protect-main.sh 豁免清單含 logs/live/ ──────
 echo ""
-echo "--- TC-6: protect-main.sh 豁免清單含 docs/sprints/live-log/ ---"
+echo "--- TC-6: protect-main.sh 豁免清單含 logs/live/ ---"
 
-if grep -qE 'docs/sprints/live-log' "$PROTECT_MAIN" 2>/dev/null; then
-  pass "TC-6: protect-main.sh 已包含 docs/sprints/live-log/ 豁免"
+if grep -qE 'logs/live' "$PROTECT_MAIN" 2>/dev/null; then
+  pass "TC-6: protect-main.sh 已包含 logs/live/ 豁免"
 else
-  fail "TC-6: protect-main.sh 未包含 docs/sprints/live-log/ 豁免"
+  fail "TC-6: protect-main.sh 未包含 logs/live/ 豁免"
 fi
 
 # ── TC-7: story-lifecycle-prompt.md 更新為 per-session 路徑 ───────

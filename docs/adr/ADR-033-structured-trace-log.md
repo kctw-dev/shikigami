@@ -17,7 +17,7 @@ Shikigami 目前有兩種日誌形式：
 | 日誌類型 | 路徑 | 用途 | 格式 |
 |---------|------|------|------|
 | cruise-log | `docs/cruise-logs/{date}-{session}.jsonl` | 巡航事件（Cruise Mode 巡邏）| JSONL，每行一筆 cycle 事件 |
-| live-log | `docs/sprints/live-log/{date}-{session}.log` | 即時 Sprint 狀態文字紀錄 | 純文字，人工可讀 |
+| live-log | `logs/live/{date}-{session}.log` | 即時 Sprint 狀態文字紀錄 | 純文字，人工可讀 |
 
 然而，多 Agent 協作情境中，缺乏一層**執行路徑追蹤**機制：
 
@@ -246,7 +246,7 @@ docs/trace-logs/2026-03-24-session-xyz456.jsonl
 | 日誌類型 | 路徑 | 記錄粒度 | 格式 | 用途 |
 |---------|------|---------|------|------|
 | cruise-log | `docs/cruise-logs/{date}-{session}.jsonl` | Cruise cycle 事件 | JSONL | 巡航事件（PO patrol、SRE inspection）|
-| live-log | `docs/sprints/live-log/{date}-{session}.log` | Sprint 即時狀態 | 純文字 | 人工可讀的 Sprint 執行狀態 |
+| live-log | `logs/live/{date}-{session}.log` | Sprint 即時狀態 | 純文字 | 人工可讀的 Sprint 執行狀態 |
 | trace-log | `docs/trace-logs/{date}-{session}.jsonl` | Agent action span | JSONL | 跨 Agent 執行路徑追蹤、效能診斷 |
 
 **職責邊界**：
