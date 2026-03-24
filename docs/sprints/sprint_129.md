@@ -41,3 +41,54 @@
 
 ## Sprint Duration
 2026-03-24 ~ 2026-03-31
+
+---
+
+## Sprint Review 結果
+
+**Review 日期**：2026-03-24
+**Velocity**：7 pts（7/7 PASS，100%）
+**連續 100%**：第 3 Sprint（Sprint 127 + 128 + 129）
+
+### Story 驗收結果
+
+| Story | PR | 狀態 | 備註 |
+|-------|----|------|------|
+| #534 | #540 | PASS | Retro-Action Hard Gate 落地 |
+| #500 | #541 | PASS | worktree-cleanup.sh + SessionEnd hook + health-check 第 7 項 |
+| #536 | #542 | PASS | SHIKIGAMI_MAX_PARALLEL 預設 2 + OOM-WARN |
+| #537 | #543 | PASS | worktree 唯一性檢查 + DISPATCH-SKIP |
+| #538 | #544 | PASS | Task name repo/sprint-N + lifecycle cleanup + hook 強制 |
+| #524 | #545 | PASS | OAuth Token 更新 SOP 交付（AC1/AC2 人工執行，不阻塞 Done）|
+| #539 | #546 | PASS | refresh-claude-token.sh + GCE 部署指引 |
+
+### Issue 關閉確認
+
+所有 7 個 Sprint Stories 對應 Issues 已關閉（#534、#500、#536、#537、#538、#524、#539）。
+
+---
+
+## Retrospective 結果
+
+**Retro 日期**：2026-03-24
+
+### Good
+
+1. Sprint 128 四項 Retro Action 全部在 Sprint 129 閉環（歷史首次 1-Sprint 100% 閉環）
+2. 連續第 3 Sprint 100% 完成率（127+128+129 三連勝）
+3. OOM 防護三層架構同時落地（#536 + #537 + #500）
+4. CI OAuth 長期自動化解決（#524 SOP → #539 GCE watchdog）
+
+### Problem
+
+1. #493 連續第 4 Sprint 未排入，觸發自身定義的觸發條件
+2. #453 累積 7+ Sprint，Backlog 積壓污染源
+3. Sprint 129 全為 Process/Infra，無 Feature 創新
+
+### Retro Action Issues
+
+| Issue | 標題 | 優先級 |
+|-------|------|--------|
+| #547 | retro: #493 強制評估（Sprint 130 排入或關閉） | P1 |
+| #548 | retro: #453 明確決策（排入 or Won't Fix） | P1 |
+| #549 | retro: Sprint 130 排入至少 1 個 Feature/User-Value Story | P2 |
