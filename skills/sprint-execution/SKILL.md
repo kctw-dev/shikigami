@@ -40,9 +40,10 @@ Sprint 執行支援**雙軌派遣機制**：由環境變數 `SHIKIGAMI_MODEL_PRO
 
 <!-- US-188 平行 subagent 禁止直接修改共用文件 — Sprint 72 -->
 <!-- US-255 SHIKIGAMI_MAX_PARALLEL 平行數量上限控制 — Sprint 93 -->
+<!-- #537 Worktree 唯一性檢查（重複派遣防護 Gate） — Sprint 129 -->
 
 <HARD-GATE>
-**平行 Story-Lifecycle subagent 禁止直接修改 `docs/PROJECT_BOARD.md` 和 `docs/sprints/sprint_N.md`**（競態條件防護）。所有平行 subagent 完成後，主 session 統一批次更新。`SHIKIGAMI_MAX_PARALLEL` 環境變數控制最大平行數量（**預設值 2**，未設定時視為 2，OOM 防護，#536）。派遣前必須計算現存 worktree 數量，超限時輸出 `[OOM-WARN]` 並等待釋放（見 `references/parallel-safety.md`）。Git Worktree 隔離（`isolation: "worktree"`）消除大部分並發衝突。
+**平行 Story-Lifecycle subagent 禁止直接修改 `docs/PROJECT_BOARD.md` 和 `docs/sprints/sprint_N.md`**（競態條件防護）。所有平行 subagent 完成後，主 session 統一批次更新。`SHIKIGAMI_MAX_PARALLEL` 環境變數控制最大平行數量（**預設值 2**，未設定時視為 2，OOM 防護，#536）。派遣前必須：(1) 執行 **Worktree 唯一性檢查**：以 `git worktree list --porcelain` 確認同 Story ID 的 worktree 不存在，若已存在則輸出 `[DISPATCH-SKIP]` 跳過（#537）；(2) 計算現存 worktree 數量，超限時輸出 `[OOM-WARN]` 並等待釋放（#536）。Git Worktree 隔離（`isolation: "worktree"`）消除大部分並發衝突。
 </HARD-GATE>
 
 > 詳見 `references/parallel-safety.md`
@@ -170,6 +171,13 @@ Sprint Backlog 中取出 Story
   |-- [FE-PRECHECK-SKIP] 非前端 Story --> 繼續執行
   |-- [FE-PRECHECK-PASS] 設計資訊完整 --> 繼續執行
   +-- [FE-PRECHECK-WARN] 設計資訊缺失 --> 輸出告警，標記「需 UIUX 介入」，繼續執行
+  |
+  v
+Worktree 唯一性檢查（§2.2，重複派遣防護，#537）
+  git worktree list --porcelain | grep -E "branch refs/heads/sprint-[0-9]+/${story_id}-"
+  |-- 找到對應 worktree → [DISPATCH-SKIP] 跳過此 Story，取出下一個 Story 繼續
+  |-- git worktree 指令失敗 → 靜默忽略，繼續執行（不阻塞）
+  +-- 未找到 → 繼續 OOM 上限檢查與 Claim 流程
   |
   v
 Claim Story（§2.11，多 Session 並行協調）
