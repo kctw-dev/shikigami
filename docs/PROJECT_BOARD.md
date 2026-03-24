@@ -1,9 +1,26 @@
 # Project Board
 
-**最後更新**：2026-03-24（Sprint 137 完成 — 5/5 Stories PASS，6 pts）
-**當前 Sprint**：Sprint 137（已完成）
+**最後更新**：2026-03-24（Sprint 138 Planning 完成 — 4 Stories 選入，6 pts）
+**當前 Sprint**：Sprint 138（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 138（進行中）
+
+> Sprint Goal：落地 ADR-038/ADR-039 決策成果——實作 Kill Switch 緊急停止機制與 Token Cost Routing 風險評分分級，同步修復持續發生的 New Issue Intake CI 認證失敗根因（第五次，升級為必修）。
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| [SRE] New Issue Intake CI 持続失敗 — 調查根本原因 | #622 | S | 1 | 進行中 |
+| incident: ANTHROPIC_API_KEY 缺失（第五次）— CI 認證修復 | #618 | S | 1 | 待執行 |
+| feat: Kill Switch — High 自治模式緊急停止 | #398 | M | 2 | 待執行 |
+| feat: Token Cost Routing — Risk-based Model 分級 | #402 | M | 2 | 待執行 |
+
+**Sprint 容量**：6 points
+**執行順序**：Phase 1 序列（#622 → #618）→ Phase 2 平行（#398 | #402）
 
 ---
 

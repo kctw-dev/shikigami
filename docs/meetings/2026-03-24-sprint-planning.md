@@ -1,86 +1,37 @@
 ---
-date: 2026-03-24
 type: sprint-planning
-sprint: 135
+sprint: 138
+date: "2026-03-24"
+start_time: "2026-03-24T20:46+08:00"
+end_time: "2026-03-24T20:50+08:00"
 participants:
-  - PO Agent
-  - Architect (Refinement)
-  - QA
-  - PO Round 2
-start_time: "2026-03-24T18:57+08:00"
-end_time: "2026-03-24T19:05+08:00"
+  - role: PO
+    rounds: [1, 2]
+  - role: Architect
+  - role: QA
 ---
 
-# Sprint 135 Planning 會議紀錄
+# Sprint 138 Planning 會議紀錄
 
-## 觸發來源
+## 結論
 
-PO 巡邏（cron-20260324-185501 Cycle 1）偵測：
-- 10 個 sprint-candidate issues，oldest = 1383 分鐘前
-- SPRINT_CANDIDATE_COUNT >= 3，觸發條件達標
-- project_level=low → 自動觸發 Sprint Planning
+- Sprint Goal: 落地 ADR-038/ADR-039 決策——Kill Switch 實作 + Token Cost Routing 分級，同步修復 CI 認證失敗第五次發生（必修）
+- 選入 Stories: #622（S/1pt）, #618（S/1pt）, #398（M/2pts）, #402（M/2pts）= 6 pts
+- 執行順序：Phase 1 序列（#622 → #618）→ Phase 2 平行（#398 | #402）
 
-## 參與角色
+## 決議事項
 
-- PO（Backlog 排序、Story 選取、文件產出）
-- Architect（Refinement Chair，M/L Story 依賴分析）
-- QA（AC 驗收確認、隱性需求追問）
+1. **CI 認證問題升級為 priority: must**：#618 + #622 為第五次發生，#616 快速升級機制應已觸發，本 Sprint 必修。
 
-## Backlog 掃描結果
+2. **Kill Switch 首次實作**（#398）：ADR-038 Accepted，READY。hooks/kill-switch.sh 新建，不影響現有 Skill 結構。
 
-| Issue | 標題 | AC 狀態 | 判斷 |
-|-------|------|---------|------|
-| #597 | retro: CI OAuth token 修復 | 有 AC1+AC2 | 選入 Sprint 135 |
-| #406 | feat: Schema 先行 | 補充 AC 後 PASS | 移出（超容量，Sprint 136） |
-| #400 | feat: Context Engineering JIT | 補充 AC1-AC5 後 PASS | 選入 Sprint 135 |
-| #396 | research: Agent Skills 標準對齊 | 補充 AC 後 PASS | 選入 Sprint 135 |
-| #402 | feat: Token Cost Routing | AC 缺失 + 需 ADR | 留 Backlog |
-| #404 | feat: TCB 斷點管理 | AC 缺失 + 需 ADR | 留 Backlog |
-| #405 | feat: Crash Recovery | AC 缺失 + 強依賴 #404 | 留 Backlog |
-| #408 | feat: Session Watchdog | AC 缺失 + 強依賴 #405 | 留 Backlog |
-| #398 | feat: Kill Switch | AC 缺失 + 需新 ADR | 留 Backlog |
-| #399 | research: A2A 協議 | AC 缺失 + 有前置依賴 | 留 Backlog |
+3. **Token Cost Routing 首次應用**（#402）：ADR-039 Accepted，本 Sprint 同步進行 Phase 1（靜態評分規則實作）。本 Sprint 為 Token Cost Routing 的首次應用場景，model_routing 欄位在 sprint_138.md 已預先填入。
 
-## Velocity 計算
+4. **TCB 斷點管理（#404）延至下一 Sprint**：ADR-040 Accepted，但 Issue body 標注依賴「SM 狀態圖先完成」，此依賴尚不明確，保守延後。
 
-| Sprint | Velocity |
-|--------|----------|
-| Sprint 132 | 6 pts |
-| Sprint 133 | 6 pts |
-| Sprint 134 | 7 pts |
-| **平均** | **6.3 pts** |
-| **Sprint 135 容量** | **6 pts** |
+5. **複雜度預算 PASS**：Skill=30/40，Agent=8/15，均在預算內。
 
-## Architect Refinement 結論
+## Backlog 健康狀態
 
-| Story | 結論 | 說明 |
-|-------|------|------|
-| #396 (RESEARCH) | READY | 純調查，無前置依賴 |
-| #406 (FEATURE) | READY | 需 ADR-036（補建 #601），移出本 Sprint |
-| #400 (FEATURE) | READY | 需 ADR-037（補建 #602），納入本 Sprint |
-
-### ADR 自動補建（#456）
-- [ADR-AUTO-CREATED] Issue #601 — ADR-036 Schema-first API Contract 架構決策（移出本 Sprint，Sprint 136 排入）
-- [ADR-AUTO-CREATED] Issue #602 — ADR-037 Context Engineering JIT 架構決策（納入本 Sprint ADR Phase）
-
-## QA 隱性需求
-
-- [隱性需求] US-#597：AC2 補充精確化（建議 AC3：token 到期前 7 天告警，Minor）
-- [隱性需求] US-#400：**AC5 補充（graceful fallback，Major）** → 已補充，PASS
-
-## Sprint 135 最終 Backlog
-
-| Story | Issue | Size | Points | Type | 執行順序 |
-|-------|-------|------|--------|------|---------|
-| RESEARCH: ADR-037 | #602 | S | 1 | RESEARCH | ADR Phase（最先） |
-| retro: CI OAuth 修復 | #597 | S | 1 | INFRA | Batch 1（平行） |
-| research: Agent Skills | #396 | M | 2 | RESEARCH | Batch 1（平行） |
-| feat: Context Engineering JIT | #400 | M | 2 | FEATURE | Batch 2（#602 完成後） |
-
-**Sprint Goal**：推進 Context Engineering 基礎架構（ADR-037 + JIT Retrieval 實作），研究 Agent Skills 開放標準對齊可行性，並修復 CI OAuth token 認證失效
-
-## 決策紀錄
-
-1. #406（Schema 先行）超出容量移出至 Sprint 136，與 #601（ADR-036）一起排
-2. SHIKIGAMI_MAX_PARALLEL 未設定，不限制平行數量
-3. SDD-000 不存在，SDD 引用檢查降級（全部 N/A）
+- Sprint Candidates 剩餘（未選入本 Sprint）：#404（SM圖依賴）、#399（PB-2+PB-5 依賴）、#405（TCB 依賴）、#408（Crash Recovery 依賴）
+- 所有 CI/SRE 相關問題已納入本 Sprint
