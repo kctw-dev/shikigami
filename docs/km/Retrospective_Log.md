@@ -4,6 +4,30 @@
 
 ---
 
+## Sprint 127 — 2026-03-24
+
+**Sprint Goal**：鞏固 Sprint Execution 核心品質 — 結構重構 + Skill 技術債清除
+**結果**：Goal 完整達成（4/4 Stories PASS，7/7 pts，完成率 100%）
+
+### Good
+1. 4/4 完成率 100%，Sprint 126 的 60% 反彈至 100%；容量估算修正（#492 retro-action）有效落地
+2. #485（story-lifecycle-prompt：1999→696 行）+ #486（shoot/SKILL.md：1108→307 行）模組化成功，references/ SSOT 機制建立
+3. #490 RESEARCH 系統性拆解 #452（連續 5 Sprint 未完成），產出 #494（S, 1 pt）+ #495（M, 2 pts）可執行子任務
+
+### Problem
+1. 4 個 worktree 平行執行導致 OOM core dump — 資源預算機制缺失，平行上限未定義
+2. 重複派遣同任務 agent — 缺乏 worktree/agent 唯一性檢查 Gate
+3. 19 個殘留 worktree 無人發現 — SessionEnd 清理機制缺位（#500 已開）
+4. #485 #486 Skill 修改未執行版號 bump — v0.83.4 應更新至 v0.84.0（本 Sprint 遺漏）
+
+### Action
+1. #500 — worktree 自動清理機制（P0，已開）
+2. 待建立 — 平行 subagent 數量上限規則（OOM 防護，P0）
+3. 待建立 — 版號 bump v0.83.4 → v0.84.0 補足（P1）
+4. 待建立 — 重複派遣防護 Gate（worktree 唯一性檢查，P1）
+
+---
+
 ## Sprint 126 — 2026-03-24
 
 **Sprint Goal**：Sprint Execution 結構重構 + Observability 端到端驗證 + CI 防回歸
