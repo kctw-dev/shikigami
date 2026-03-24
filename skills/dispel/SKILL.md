@@ -1,6 +1,6 @@
 ---
 name: dispel
-description: "Use when analyzing legacy or unfamiliar codebases — 解咒模式：Legacy 系統考古分析"
+description: "Use when analyzing legacy or unfamiliar codebases — reverse-engineering architecture, tracing dependencies, and building mental models"
 ---
 
 # 解咒 Dispel — Legacy 系統考古分析

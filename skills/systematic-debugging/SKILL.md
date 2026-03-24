@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: "Use when encountering bugs, test failures, or unexpected behavior - 系統化除錯流程"
+description: "Use when encountering bugs, test failures, or unexpected behavior — systematic root cause analysis and regression prevention"
 ---
 
 # Systematic Debugging — 系統化除錯

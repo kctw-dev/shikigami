@@ -1,6 +1,6 @@
 ---
 name: shoot
-description: "Use when executing a single task quickly without full Sprint ceremony. Handles task selection, QA gates, implementation, and lightweight logging."
+description: "Use when executing a single task quickly without full Sprint ceremony — lightweight delivery with QA gates"
 requiredTools:
   - Read
   - Glob
