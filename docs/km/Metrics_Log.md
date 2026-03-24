@@ -363,3 +363,27 @@ shikigami 專案對應目錄：`~/.claude/projects/-home-kevin-shikigami/`
 與實際可存取的 JSONL 結構完全一致，無需修改。
 
 **ADR-003 適用性**：不適用（分支 A 一致，SKILL.md 無需修改；豁免理由已記錄）
+
+---
+
+## Model Routing Log（ADR-039 Token Cost Routing）
+
+<!-- #402 ADR-039 Token Cost Routing 實作 — Sprint 138 -->
+
+Sprint Execution 中各 Story 的 model 路由決策記錄。格式：`model-route #{story_id} tier={1|2|3} score={4-12} model={haiku|sonnet|opus} reason={說明}`
+
+### Sprint 138 Model Routing
+
+| Story | Model Used | Tier | Risk Score | 路由原因 |
+|-------|-----------|------|-----------|---------|
+| #622  | haiku     | 1    | 5          | doc-only 調查（R=1, S=1, C=2, N=1）— 唯讀分析無副作用 |
+| #618  | sonnet    | 2    | 7          | CI workflow fix，影響 production CI，半範本（R=2, S=2, C=2, N=1） |
+| #398  | sonnet    | 2    | 8          | 新建 hooks/ script，影響框架行為，半範本（R=2, S=2, C=2, N=2） |
+| #402  | sonnet    | 2    | 8          | CLAUDE.md + skill 修改，影響所有 agent 行為，半範本（R=2, S=2, C=2, N=2） |
+
+### 說明
+
+- Sprint 138 為 ADR-039 Token Cost Routing 首次應用 Sprint
+- #622 為 Tier 1（haiku）首次套用案例：SRE 調查唯讀任務，風險分數 5
+- 其餘三 Story 均 Tier 2（sonnet），均為有實際框架修改的 FEATURE/INFRA 類
+- 後續 Sprint 從此 log 追蹤路由準確率與成本節省趨勢
