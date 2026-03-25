@@ -162,6 +162,40 @@ ACTIONABLE_ISSUES = PENDING_STORIES.map(task => extract story_number from task.s
 | auto-shoot 開始 | `"auto-shoot-start"` |
 | cruise 清理完成 | `"cruise-cleanup"` |
 
+## §4.3 Doctor 定期觸發（每 10 cycle）（#704）
+
+每 10 個 cruise cycle 自動觸發 `/shikigami:doctor` 診斷，確保消費端專案健康狀態定期被觀察。
+
+```bash
+# §4.3 Doctor 定期觸發（每 10 cycle）
+# AC5: cycle count 持久化於 .claude/cruise-cycle-count
+CRUISE_CYCLE_COUNT_FILE="${REPO_PATH}/.claude/cruise-cycle-count"
+CYCLE_COUNT=$(cat "${CRUISE_CYCLE_COUNT_FILE}" 2>/dev/null || echo 0)
+CYCLE_COUNT=$(( CYCLE_COUNT + 1 ))
+echo "$CYCLE_COUNT" > "${CRUISE_CYCLE_COUNT_FILE}"
+
+# AC2: 每 10 個 cycle 自動觸發
+if (( CYCLE_COUNT % 10 == 0 )); then
+  echo "[DOCTOR-TRIGGER] cycle=${CYCLE_COUNT}, invoking /shikigami:doctor"
+  # AC4: doctor 執行失敗不阻塞 cruise 主流程（降級容錯）
+  invoke shikigami:doctor 2>/dev/null || echo "[DOCTOR-WARN] doctor failed at cycle=${CYCLE_COUNT}, continuing cruise"
+  # AC3: 觸發記錄寫入 cruise log
+  echo "{\"type\":\"doctor-triggered\",\"cycle\":${CYCLE_COUNT},\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" >> "${CRUISE_LOG}"
+fi
+```
+
+**適用範圍**：Loop Mode 每個 cycle 執行（Once Mode 亦執行，使計數遞增）。
+
+| AC | 說明 |
+|----|------|
+| AC1 | 本 §4.3 段落新增於 startup-flow.md |
+| AC2 | `CYCLE_COUNT % 10 == 0` 觸發 doctor |
+| AC3 | `type: doctor-triggered` 記錄寫入 `${CRUISE_LOG}` |
+| AC4 | `doctor` 失敗輸出 `[DOCTOR-WARN]` 並繼續，不中斷 cruise |
+| AC5 | `CYCLE_COUNT` 持久化於 `.claude/cruise-cycle-count`（每 cycle 遞增，跨 session 保持） |
+
+---
+
 ## §4.5 讀取 project_level（#348）
 
 ```bash
