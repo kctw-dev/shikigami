@@ -42,6 +42,29 @@ if [[ ! -d "$LOG_DIR" ]]; then
   exit 0
 fi
 
+# --- Log 格式版本偵測 (#759) ---
+# 掃描 JSONL 內部 "type" 欄位存在性，確認格式相容
+_SAMPLE_LOGS=()
+while IFS= read -r -d '' _f; do
+  _SAMPLE_LOGS+=("$_f")
+  if [[ ${#_SAMPLE_LOGS[@]} -ge 20 ]]; then
+    break
+  fi
+done < <(find "${LOG_DIR}" -maxdepth 1 -name '*.jsonl' -print0 2>/dev/null)
+
+if [[ ${#_SAMPLE_LOGS[@]} -gt 0 ]]; then
+  _COMPATIBLE_COUNT=0
+  for _f in "${_SAMPLE_LOGS[@]}"; do
+    if grep -q '"type":' "$_f" 2>/dev/null; then
+      _COMPATIBLE_COUNT=$((_COMPATIBLE_COUNT + 1))
+    fi
+  done
+  if [[ $_COMPATIBLE_COUNT -eq 0 ]]; then
+    echo "[WARN] No compatible cruise log files found (expected JSONL with 'type' field)"
+    echo "[WARN] Log format may have changed — statistics may be inaccurate"
+  fi
+fi
+
 # Find recent log files (within LAST_N days)
 TODAY=$(date '+%Y-%m-%d')
 FOUND_DAYS=0
