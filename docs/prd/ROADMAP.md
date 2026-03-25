@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.98.0**（Sprint 155 — worktree 清理腳本、容量自動計算、ADR 衝突預偵測、Claim/Release 降級容錯、CACHE-RECOVERY 防失敗）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.99.0**（Sprint 156 — retro-action 自動升格、PR 描述模板、SRE hooks 健康監控、Backlog 健康趨勢報告、cruise logs 搜尋工具、Architect 衝突預防、bash arithmetic 慣例）。
 
 | 版號 | 含義 |
 |------|------|
