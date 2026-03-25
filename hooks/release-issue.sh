@@ -2,12 +2,14 @@
 # release-issue.sh
 # US-312 — 釋放單一 Issue 的 Claim（刪除遠端 ref + 清除展示層）
 # US-316 — 修復：#2 push --delete 失敗不再假成功；DISPUTE 修復：delete 失敗輸出 [CLAIM-RELEASE-FAILED] + exit 1
+# #733  — 強化：git remote 失敗時輸出 [CLAIM-RELEASE-WARN] 繼續（不阻塞，AC2）
 #
 # 用法：bash hooks/release-issue.sh <issue_id>
 #
 # 輸出標記：
 #   [CLAIM-RELEASE] refs/claims/<id>          — 成功釋放 claim（遠端 delete 成功）
-#   [CLAIM-RELEASE-FAILED] refs/claims/<id>   — 釋放失敗（遠端 delete 失敗，exit 1）
+#   [CLAIM-RELEASE-WARN] refs/claims/<id>     — 釋放失敗但繼續（無遠端 ref 或降級，#733 AC2）
+#   [CLAIM-RELEASE-FAILED] refs/claims/<id>   — 釋放失敗（遠端 delete 失敗，exit 1）（保留供嚴格模式）
 #   [WARN] <原因>                              — 降級警告（不阻塞）
 #
 # 失敗不阻塞（AC-5/AC-6）：gh CLI 不可用時輸出 [WARN] 繼續
@@ -35,13 +37,14 @@ if command -v gh &>/dev/null; then
 fi
 
 # ── 1. 刪除遠端 ref ─────────────────────────────────────────────
-# #2 修復（DISPUTE）：delete 成功才輸出 [CLAIM-RELEASE]，失敗輸出 [CLAIM-RELEASE-FAILED] + exit 1
+# #2 修復（DISPUTE）：delete 成功才輸出 [CLAIM-RELEASE]，失敗輸出降級警告
+# #733 AC2: git remote 失敗時輸出 [CLAIM-RELEASE-WARN] 並繼續（不阻塞）
 git push origin --delete "$REF" 2>/dev/null
 DELETE_EXIT=$?
 if [[ $DELETE_EXIT -ne 0 ]]; then
   echo "[WARN] $REF 遠端刪除失敗（exit=$DELETE_EXIT），可能已被他人清除或無網路"
-  echo "[CLAIM-RELEASE-FAILED] $REF"
-  exit 1
+  echo "[CLAIM-RELEASE-WARN] $REF（降級繼續，不阻塞，#733 AC2）"
+  # 降級：繼續展示層清除，不 exit 1
 fi
 
 # ── 2. 展示層清除（gh 可選，AC-5）──────────────────────────────

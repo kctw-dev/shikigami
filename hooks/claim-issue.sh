@@ -2,11 +2,13 @@
 # claim-issue.sh
 # US-312 — 取得單一 Issue 的 Claim（遠端 ref 互斥鎖 + 本地 flock）
 # US-316 — 修復：unfetched SHA 保守拒絕、stale delete WARN、REPO_FP 兩步法、flock/claim_remote 分離
+# #733  — 強化：git remote 失敗時降級繼續（CLAIM-DEGRADED），NFR2 cruise log 寫入
 #
 # 用法：bash hooks/claim-issue.sh <issue_id>
 #
 # 輸出標記：
 #   [CLAIM-OK] refs/claims/<id>          — 成功取得 claim
+#   [CLAIM-DEGRADED] refs/claims/<id>    — git remote 失敗，降級繼續（不阻塞，#733 AC1）
 #   [CLAIM-BLOCKED] refs/claims/<id>     — 已被其他 session 占用
 #   [CLAIM-STALE] refs/claims/<id> 已過期 Xh，強制清除  — stale lock 清除後重新 claim
 #   [WARN] <原因>                        — 降級警告（不阻塞）
@@ -14,6 +16,19 @@
 # 失敗不阻塞（AC-5/AC-6）：gh CLI 不可用時輸出 [WARN] 繼續
 
 set +e
+
+# ── NFR2: 降級告警 cruise log 寫入（#733）────────────────────────
+_write_claim_degraded_log() {
+  local issue_id="$1"
+  local reason="${2:-UNKNOWN}"
+  local ts
+  ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ" 2>/dev/null || echo "UNKNOWN")
+  local log_file
+  log_file="docs/cruise-logs/claim-degraded-$(date +%Y%m%d).jsonl"
+  mkdir -p "docs/cruise-logs" 2>/dev/null || true
+  printf '{"type":"claim-degraded","issue_id":"%s","reason":"%s","ts":"%s"}\n' \
+    "$issue_id" "$reason" "$ts" >> "$log_file" 2>/dev/null || true
+}
 
 ID="${1:-}"
 if [[ -z "$ID" ]]; then
@@ -95,13 +110,21 @@ claim_remote() {
     fi
   fi
 
+  # SHIKIGAMI_CLAIM_SKIP=true 用於測試跳過 git push（#733 測試輔助）
+  if [[ "${SHIKIGAMI_CLAIM_SKIP:-false}" == "true" ]]; then
+    echo "[CLAIM-DEGRADED] $ISSUE_REF（SHIKIGAMI_CLAIM_SKIP=true，跳過遠端鎖，降級繼續）"
+    _write_claim_degraded_log "$ISSUE_ID" "CLAIM_SKIP"
+    return 0
+  fi
+
   # 推送遠端 ref（原子性：同名 ref 若已存在則失敗）
   git push origin HEAD:"$ISSUE_REF" 2>/dev/null
   local PUSH_EXIT=$?
   if [[ $PUSH_EXIT -ne 0 ]]; then
-    # #8 修復：claim_remote push 失敗（區別於 flock 失敗）
-    echo "[CLAIM-BLOCKED] $ISSUE_REF push 失敗（race condition 或無 remote，遠端鎖未取得）"
-    return 1
+    # #733 AC1: git remote 失敗時降級繼續（CLAIM-DEGRADED），不阻塞主流程
+    echo "[CLAIM-DEGRADED] $ISSUE_REF git remote 失敗（push exit=$PUSH_EXIT），降級繼續（不阻塞）"
+    _write_claim_degraded_log "$ISSUE_ID" "GIT_PUSH_FAIL"
+    return 0
   fi
 
   # 展示層：設定 assignee + label（gh 可選，AC-5）
