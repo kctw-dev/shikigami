@@ -1,10 +1,10 @@
 {
   "sprint": 158,
-  "updated_at": "2026-03-25T11:10:39Z",
+  "updated_at": "2026-03-25T11:21:13Z",
   "session_id": "cron-20260325-190002",
   "stories": [
-    {"id": "743", "title": "feat: SRE patrol 記憶體使用趨勢偵測（漸進式洩漏告警）", "status": "pending", "pr": null, "merge_commit": null},
-    {"id": "738", "title": "feat: cruise logs 歸檔每日自動觸發（定時 cron 整合）", "status": "pending", "pr": null, "merge_commit": null}
+    {"id": "743", "title": "feat: SRE patrol 記憶體使用趨勢偵測（漸進式洩漏告警）", "status": "completed", "pr": 769, "merge_commit": "fee65913b7d16b8be2b3c122b9fa86904802b6a4"},
+    {"id": "738", "title": "feat: cruise logs 歸檔每日自動觸發（定時 cron 整合）", "status": "completed", "pr": 770, "merge_commit": "26ff3ca380652ce783ff80b72b5388dce02e0381"}
   ],
-  "sprint_status": "in-progress"
+  "sprint_status": "completed"
 }

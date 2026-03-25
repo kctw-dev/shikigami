@@ -9,8 +9,8 @@
 
 | # | Story | Issue | Points | Status | Assignee |
 |---|-------|-------|--------|--------|----------|
-| 1 | feat: SRE patrol 記憶體使用趨勢偵測（漸進式洩漏告警） | #743 | 2 | TODO | Developer |
-| 2 | feat: cruise logs 歸檔每日自動觸發（定時 cron 整合） | #738 | 2 | TODO | Developer |
+| 1 | feat: SRE patrol 記憶體使用趨勢偵測（漸進式洩漏告警） | #743 | 2 | DONE(#769) | Developer |
+| 2 | feat: cruise logs 歸檔每日自動觸發（定時 cron 整合） | #738 | 2 | DONE(#770) | Developer |
 
 **Total: 4 pts**
 

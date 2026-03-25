@@ -1,19 +1,20 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 158 Planning 完成）
-**當前 Sprint**：Sprint 158（進行中）
+**最後更新**：2026-03-25（Sprint 158 Execution 完成）
+**當前 Sprint**：Sprint 158（完成）
 
 ---
 
-## Sprint 158（進行中）
+## Sprint 158（完成）
 
 > Sprint Goal：強化框架自動化維運能力 — 新增 SRE patrol 記憶體趨勢洩漏告警機制，並為 cruise log 歸檔建立每日定時觸發流程
+> **結果**：Goal 達成（2/2 Stories DONE）。Velocity 4 pts，完成率 100%。
 > **容量**：4 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: SRE patrol 記憶體使用趨勢偵測（漸進式洩漏告警） | #743 | M | 2 | TODO |
-| feat: cruise logs 歸檔每日自動觸發（定時 cron 整合） | #738 | M | 2 | TODO |
+| feat: SRE patrol 記憶體使用趨勢偵測（漸進式洩漏告警） | #743 | M | 2 | DONE(#769) |
+| feat: cruise logs 歸檔每日自動觸發（定時 cron 整合） | #738 | M | 2 | DONE(#770) |
 
 ---
 
