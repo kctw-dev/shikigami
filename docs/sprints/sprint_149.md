@@ -18,9 +18,9 @@ version_target: v0.96.2
 
 | Story | Issue | Type | Size | Points | 狀態 | Assignee | 獨立性 |
 |-------|-------|------|------|--------|------|----------|--------|
-| fix: onboarding 流程缺少 claim/release hooks 安裝步驟 | #692 | FIX | S | 1 | TODO | Developer | Wave 1（獨立，修改 onboarding skill） |
-| retro: Sprint Review §1.5 加入 ROADMAP.md 版號一致性硬性檢查 | #690 | RETRO | S | 1 | TODO | Developer | Wave 1（獨立，修改 sprint-review/SKILL.md） |
-| retro: Backlog Bridge 流程更新 — 引導新 Issue 使用 .github/ISSUE_TEMPLATE 模板 | #691 | RETRO | M | 2 | TODO | Developer | Wave 2（獨立，修改 issue-management skill） |
+| fix: onboarding 流程缺少 claim/release hooks 安裝步驟 | #692 | FIX | S | 1 | DONE(#695) | Developer | Wave 1（獨立，修改 onboarding skill） |
+| retro: Sprint Review §1.5 加入 ROADMAP.md 版號一致性硬性檢查 | #690 | RETRO | S | 1 | DONE(#694) | Developer | Wave 1（獨立，修改 sprint-review/SKILL.md） |
+| retro: Backlog Bridge 流程更新 — 引導新 Issue 使用 .github/ISSUE_TEMPLATE 模板 | #691 | RETRO | M | 2 | DONE(#696) | Developer | Wave 2（獨立，修改 issue-management skill） |
 
 **Sprint 容量**：4 pts（Sprint 146=1, 147=5, 148=4, avg≈3.3；本 Sprint 4pts，Backlog 耗盡）
 

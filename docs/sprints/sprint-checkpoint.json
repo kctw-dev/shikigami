@@ -1,11 +1,11 @@
 {
-  "sprint": 148,
-  "updated_at": "2026-03-25T04:59:01Z",
-  "session_id": "cron-20260325-124001",
+  "sprint": 149,
+  "updated_at": "2026-03-25T05:30:00Z",
+  "session_id": "cron-20260325-131001",
   "stories": [
-    {"id": "682", "title": "chore: logrotate.sh 擴充 — 加入 docs/cruise-logs JSONL 自動歸檔清理", "status": "completed", "pr": 687, "merged_at": "2026-03-25T04:59:01Z"},
-    {"id": "683", "title": "chore: GitHub Issue 模板補充 非功能性需求 欄位 — 減少 Sprint Planning 補充工作", "status": "completed", "pr": 688, "merged_at": "2026-03-25T04:59:01Z"},
-    {"id": "684", "title": "refactor: cruise/SKILL.md 行數超限重構 — 段落移至 references/ 控制在 250 行以內", "status": "completed", "pr": 689, "merged_at": "2026-03-25T04:59:01Z"}
+    {"id": "692", "title": "fix: onboarding 流程缺少 claim/release hooks 安裝步驟", "status": "completed", "pr": 695},
+    {"id": "690", "title": "retro: Sprint Review §1.5 加入 ROADMAP.md 版號一致性硬性檢查", "status": "completed", "pr": 694},
+    {"id": "691", "title": "retro: Backlog Bridge 流程更新 — 引導新 Issue 使用 .github/ISSUE_TEMPLATE 模板", "status": "completed", "pr": 696}
   ],
   "sprint_status": "completed"
 }
