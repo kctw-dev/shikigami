@@ -1,16 +1,30 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 151 Planning — 1 Story / 2 pts）
-**當前 Sprint**：Sprint 151（進行中）
+**最後更新**：2026-03-25（Sprint 152 Planning — 3 Stories / 6 pts）
+**當前 Sprint**：Sprint 152（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 151（進行中）
+## Sprint 152（進行中）
+
+> Sprint Goal：修復品質缺口並補充 Backlog 動能 — 修復 #704 Issue body 截斷、補充 sprint-candidate >= 8、完成 Doctor cruise 定期觸發整合
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: 修復 #704 Issue body 截斷問題（AC/NFR 內容遺失） | #707 | S | 1 | TODO |
+| retro: Sprint 151 PO Backlog Discovery — 補充 sprint-candidate 至 >= 8 | #706 | M | 3 | TODO |
+| retro: /shikigami:doctor cruise 定期觸發整合（AC6 補完） | #704 | S | 2 | TODO |
+
+---
+
+## Sprint 151（完成）
 
 > Sprint Goal：強化 Sprint 自治品質 — 實作 Backlog 健康度自動檢查機制
-> **容量**：2 / 6 pts（Backlog 耗盡，僅 1 可用候選）
+> **結果**：Goal 達成（1/1 Stories DONE）。Velocity 2 pts，完成率 100%。連續第 25 Sprint 100%（127-151）。
+> **容量**：2 pts（Backlog 耗盡）
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
