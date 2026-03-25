@@ -1,13 +1,14 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 154 Planning 完成）
-**當前 Sprint**：Sprint 154（進行中）
+**最後更新**：2026-03-25（Sprint 154 Review 完成）
+**當前 Sprint**：Sprint 155（待規劃）
 
 ---
 
-## Sprint 154（進行中）
+## Sprint 154（完成）
 
 > Sprint Goal：強化框架自動化防護與可觀察性 — 整合 parallel-safety 全自動決策、建立 cruise logs 歸檔機制、補強 WSL2 測試覆蓋、調整 Backlog 補充閾值策略
+> **結果**：Goal 達成（5/5 Stories DONE）。Velocity 7 pts，完成率 100%。連續第 28 Sprint 100%（127-154）。
 > **容量**：7 pts
 
 | Story | Issue | Size | Points | 狀態 |
