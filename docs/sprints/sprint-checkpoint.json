@@ -1,44 +1,15 @@
 {
-  "sprint": 159,
-  "updated_at": "2026-03-25T12:03:32Z",
-  "session_id": "cron-20260325-193001",
+  "sprint": 160,
+  "updated_at": "2026-03-25T20:42:00Z",
+  "session_id": "20260325-202534",
   "stories": [
-    {
-      "id": "783",
-      "title": "feat: Kill Switch — 優雅緊急停止機制",
-      "status": "completed",
-      "pr": 784
-    },
-    {
-      "id": "775",
-      "title": "feat: DM-4 Write Gateway 系統化",
-      "status": "completed",
-      "pr": 786
-    },
-    {
-      "id": "779",
-      "title": "feat: quality-gate 決策記錄機制",
-      "status": "completed",
-      "pr": 788
-    },
-    {
-      "id": "774",
-      "title": "spike: Playwright MCP subagent 穩定性驗證",
-      "status": "completed",
-      "pr": 785
-    },
-    {
-      "id": "778",
-      "title": "feat: ADR 目錄索引自動維護 v2",
-      "status": "completed",
-      "pr": 787
-    },
-    {
-      "id": "773",
-      "title": "feat: quality-gate CRITICAL 互動決策點",
-      "status": "completed",
-      "pr": 789
-    }
+    {"id": "795", "title": "feat: QA FREE-MAD 挑戰韌性", "status": "completed", "pr": 803},
+    {"id": "797", "title": "feat: 專案範本 init-project.sh", "status": "completed", "pr": 804},
+    {"id": "793", "title": "feat: Context Engineering JIT 載入策略", "status": "pending"},
+    {"id": "802", "title": "feat: Schema-First 強制工具", "status": "pending"},
+    {"id": "798", "title": "feat: Quick Ship Pipeline", "status": "pending"},
+    {"id": "794", "title": "feat: Quality Observer MCP Phase 2", "status": "pending"},
+    {"id": "772", "title": "feat: Session Watchdog", "status": "pending"}
   ],
-  "sprint_status": "completed"
+  "sprint_status": "in-progress"
 }

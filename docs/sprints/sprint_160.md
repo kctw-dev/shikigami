@@ -9,8 +9,8 @@
 
 | # | Story | Issue | Points | Status | Assignee |
 |---|-------|-------|--------|--------|----------|
-| 1 | feat: QA FREE-MAD 挑戰韌性 — 制衡立場不受多數壓力撤回機制 | #795 | 1 | TODO | Developer |
-| 2 | feat: 專案範本 — init-project.sh 快速配置 Skills/Hooks/Script 標準化 | #797 | 1 | TODO | Developer |
+| 1 | feat: QA FREE-MAD 挑戰韌性 — 制衡立場不受多數壓力撤回機制 | #795 | 1 | DONE (#803) | Developer |
+| 2 | feat: 專案範本 — init-project.sh 快速配置 Skills/Hooks/Script 標準化 | #797 | 1 | DONE (#804) | Developer |
 | 3 | feat: Context Engineering JIT Skill 載入策略（減少 context 壓力） | #793 | 1 | TODO | Developer |
 | 4 | feat: Schema-First 強制工具 — API Contract 前置驗證腳本（ADR-036 落地） | #802 | 1 | TODO | Developer |
 | 5 | feat: Quick Ship Pipeline — 統一 lint/test/bump/commit/PR 單一指令交付 | #798 | 1 | TODO | Developer |
