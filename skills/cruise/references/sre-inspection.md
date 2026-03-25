@@ -61,6 +61,13 @@ fi
 > **前置條件**：查詢 org-level runner 需要 `admin:org` scope（`gh auth refresh -s admin:org`）。若缺少此 scope 將自動 fallback 至 repo-level。
 
 ```bash
+# Step 0：讀取 runner_min_count 設定（預設 1）
+# 設定來源：.claude/shikigami.local.md（由主 loop 傳入 CONFIG_FILE 或使用預設路徑）
+CONFIG_FILE="${CONFIG_FILE:-${REPO_PATH}/.claude/shikigami.local.md}"
+RUNNER_MIN_COUNT=$(grep 'runner_min_count:' "${CONFIG_FILE}" 2>/dev/null \
+  | awk '{print $2}' | head -1)
+RUNNER_MIN_COUNT="${RUNNER_MIN_COUNT:-1}"
+
 # Step 1：偵測 owner 類型（org vs user）
 # OWNER_REPO 由主 loop 帶入（如 "KCTW/shikigami"）
 OWNER=$(echo "${OWNER_REPO}" | cut -d'/' -f1)
@@ -70,19 +77,34 @@ OWNER_TYPE=$(gh api /orgs/${OWNER} --jq '.type' 2>/dev/null || echo "User")
 if [[ "$OWNER_TYPE" == "User" ]]; then
   # 個人帳號 repo — 直接走 repo-level，不嘗試 org API
   echo "[SRE] owner 為 User，使用 repo-level runner API"
-  gh api /repos/${OWNER}/${REPO}/actions/runners --jq '.runners[] | {name, status, busy}' 2>/dev/null || true
+  RUNNERS_RAW=$(gh api /repos/${OWNER}/${REPO}/actions/runners 2>/dev/null || echo '{"runners":[]}')
 else
   # Step 2：org-level API 優先（需 admin:org scope）
-  RUNNERS=$(gh api /orgs/${OWNER}/actions/runners --jq '.runners[] | {name, status, busy}' 2>/dev/null)
+  RUNNERS_RAW=$(gh api /orgs/${OWNER}/actions/runners 2>/dev/null)
   ORG_EXIT=$?
 
   if [[ $ORG_EXIT -ne 0 ]]; then
     # Step 3：fallback 至 repo-level（403 或 404）
     echo "[SRE] org-level API 不可用，fallback 至 repo-level（可能缺少 admin:org scope）"
-    gh api /repos/${OWNER}/${REPO}/actions/runners --jq '.runners[] | {name, status, busy}' 2>/dev/null || true
-  else
-    echo "$RUNNERS"
+    RUNNERS_RAW=$(gh api /repos/${OWNER}/${REPO}/actions/runners 2>/dev/null || echo '{"runners":[]}')
   fi
+fi
+
+# Step 4：判斷 online runner 數量（對照 runner_min_count）
+ONLINE_COUNT=$(echo "${RUNNERS_RAW}" \
+  | jq '[.runners[] | select(.status == "online")] | length' 2>/dev/null || echo "0")
+
+if [[ "${ONLINE_COUNT}" -ge "${RUNNER_MIN_COUNT}" ]]; then
+  # online 數量符合最低要求 — 正常
+  echo "[SRE] runner-count-normal: online=${ONLINE_COUNT} >= min=${RUNNER_MIN_COUNT}"
+  log action: "runner-count-normal online=${ONLINE_COUNT} min=${RUNNER_MIN_COUNT}"
+  # 不建 Issue，不報警
+else
+  # online 數量低於最低要求 — 觸發 Runner offline Issue 流程
+  echo "[SRE] runner-count-low: online=${ONLINE_COUNT} < min=${RUNNER_MIN_COUNT}，觸發 offline 處理"
+  # OFFLINE_RUNNERS 仍依原邏輯處理（見下方 Runner offline → Issue 段落）
+  OFFLINE_RUNNERS=$(echo "${RUNNERS_RAW}" \
+    | jq '[.runners[] | select(.status == "offline")] // []' 2>/dev/null || echo "[]")
 fi
 ```
 
@@ -322,8 +344,11 @@ done
 ## Runner offline → Issue
 
 ```bash
-# runner offline：偵測 runner status=offline
-OFFLINE_RUNNERS=$(echo "$RUNNERS" | jq '[.[] | select(.status == "offline")] // []')
+# runner offline：OFFLINE_RUNNERS 由 Runner 健康檢查段落的 Step 4 設定
+# （runner-count-low 分支已設定 OFFLINE_RUNNERS；runner-count-normal 分支不進入此段落）
+# 若直接執行此段落（不經由健康檢查），使用 RUNNERS_RAW fallback
+OFFLINE_RUNNERS="${OFFLINE_RUNNERS:-$(echo "${RUNNERS_RAW:-{\\"runners\\":[]}}" \
+  | jq '[.runners[] | select(.status == "offline")] // []' 2>/dev/null || echo "[]")}"
 
 for runner_name in $(echo "$OFFLINE_RUNNERS" | jq -r '.[].name'); do
   ISSUE_TITLE="[SRE] Runner offline: ${runner_name}"
