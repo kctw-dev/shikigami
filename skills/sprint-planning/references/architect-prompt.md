@@ -21,6 +21,30 @@ bash scripts/calculate-sprint-capacity.sh
 
 ---
 
+## ADR 編號衝突預偵測（#730 AC1-AC2）
+
+<!-- #730 Sprint Planning 新增 ADR 編號衝突預偵測機制 — Sprint 155 -->
+<!-- Sprint 154 Retro 觸發：#721 AC3 誤引用已佔用 ADR-041，執行期才發現需臨時修正 -->
+
+**Architect 技術評估開始前**，對所有涉及新建 ADR 的 Story，必須執行 ADR 編號衝突偵測：
+
+```bash
+# AC1: 偵測 ADR 編號是否已被佔用
+bash scripts/check-adr-conflict.sh docs/adr <PROPOSED_NUM>
+# 輸出：[ADR-OK] ADR-NNN 可用
+# 輸出：[ADR-CONFLICT] ADR-NNN 已被佔用（ADR-NNN-xxx.md），建議使用 ADR-MMM（AC2）
+
+# 若不確定擬用編號，直接查詢下一個可用
+bash scripts/check-adr-conflict.sh docs/adr
+# 輸出：[ADR-NEXT] 下一個可用 ADR 編號：ADR-NNN
+```
+
+**衝突處置規則**：
+- `[ADR-CONFLICT]` → 採用腳本建議的下一個可用編號，更新 Story AC，不退回 Backlog
+- `[ADR-OK]` → 繼續正常技術評估流程
+
+---
+
 ## 技術評估
 
 對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若涉及 API 互動的 Story，必須產出 API 契約（參閱 [Architect 角色決策指引 §7](../architect/SKILL.md)）。若發現 Hard Gate 問題，該 Story 退回 Backlog。詳細決策標準（估點策略、ADR 需求判斷、平行分群策略、API 契約產出）請參閱 [Architect 角色決策指引](../architect/SKILL.md)。
