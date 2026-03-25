@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-25（Sprint 160 完成 — 強化框架品質防禦與開發者體驗：QA FREE-MAD 韌性、專案範本、JIT 載入策略、Schema-First 驗證、Quick Ship Pipeline、Quality Observer MCP Phase 2、Session Watchdog）
+> 最後更新：2026-03-25（Sprint 161 完成 — 強化框架安全性與可觀測性基礎：Prompt Injection Defense、Review Suggestions 追蹤台帳、Scrum Master 狀態圖、ROADMAP 版號同步驗證、Shell Test 最佳實踐）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.103.0**（Sprint 160 — 強化框架品質防禦與開發者體驗：QA FREE-MAD 韌性、專案範本、JIT 載入策略、Schema-First 驗證、Quick Ship Pipeline、Quality Observer MCP Phase 2、Session Watchdog）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.104.0**（Sprint 161 — 強化框架安全性與可觀測性基礎：Prompt Injection Defense、Review Suggestions 追蹤台帳、Scrum Master 狀態圖、ROADMAP 版號同步驗證、Shell Test 最佳實踐）。
 
 | 版號 | 含義 |
 |------|------|
