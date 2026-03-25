@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 148 完成 — 3/3 Stories DONE / 4 pts）
-**當前 Sprint**：Sprint 148（完成）
+**最後更新**：2026-03-25（Sprint 149 Planning 完成 — 3 Stories / 4 pts）
+**當前 Sprint**：Sprint 149（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 149（進行中）
+
+> Sprint Goal：強化框架可靠性基線 — 補齊 onboarding hooks 安裝缺口、鎖定 Sprint Review 版號一致性硬性門禁、更新 Backlog Bridge 以確保新 Issue 格式完整性。
+> **容量**：4 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| fix: onboarding 流程缺少 claim/release hooks 安裝步驟 | #692 | S | 1 | TODO |
+| retro: Sprint Review §1.5 加入 ROADMAP.md 版號一致性硬性檢查 | #690 | S | 1 | TODO |
+| retro: Backlog Bridge 流程更新 — 引導新 Issue 使用模板 | #691 | M | 2 | TODO |
 
 ---
 
