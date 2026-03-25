@@ -2,7 +2,7 @@
 sprint: 147
 start_date: 2026-03-25
 end_date: 2026-03-31
-status: active
+status: done
 velocity_baseline: 3.0
 capacity: 5
 version_target: v0.96.2
@@ -18,9 +18,9 @@ version_target: v0.96.2
 
 | Story | Issue | Type | Size | Points | 狀態 | Assignee | 獨立性 |
 |-------|-------|------|------|--------|------|----------|--------|
-| retro: Backlog 補充 — Sprint 146 後 Backlog 清空，建立新 sprint-candidate | #679 | RESEARCH | M | 2 | TODO | Developer | Wave 1（獨立） |
-| feat: doc_only Story 內容品質審查 — Reviewer + Challenger 制衡 | #680 | FEAT | M | 2 | TODO | Developer | Wave 2（獨立，修改 story-lifecycle-prompt.md） |
-| feat: SRE 巡檢讀取 runner_min_count 設定，避免 MIG 正常縮減誤報 | #681 | FEAT | S | 1 | Developer | Developer | Wave 1（獨立，修改 sre-inspection.md） |
+| retro: Backlog 補充 — Sprint 146 後 Backlog 清空，建立新 sprint-candidate | #679 | RESEARCH | M | 2 | DONE | Developer | Wave 1（獨立） |
+| feat: doc_only Story 內容品質審查 — Reviewer + Challenger 制衡 | #680 | FEAT | M | 2 | DONE(#686) | Developer | Wave 2（獨立，修改 story-lifecycle-prompt.md） |
+| feat: SRE 巡檢讀取 runner_min_count 設定，避免 MIG 正常縮減誤報 | #681 | FEAT | S | 1 | DONE(#685) | Developer | Wave 1（獨立，修改 sre-inspection.md） |
 
 **Sprint 容量**：5 pts（Sprint 144=6, 145=2, 146=1, avg≈3；本 Sprint 含 1 retro-action + 2 backlog 補充後建立的 feat candidates，5pt 為現有全部 Backlog）
 

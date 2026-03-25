@@ -1,14 +1,28 @@
 {
-  "sprint": 146,
-  "updated_at": "2026-03-25T10:30:00Z",
-  "session_id": "cron-20260325-101501",
+  "sprint": 147,
+  "updated_at": "2026-03-25T12:22:00Z",
+  "session_id": "cron-20260325-121501",
   "stories": [
     {
-      "id": "677",
-      "title": "retro: 為剩餘 9 個孤兒文件補充引用或 allowlist 豁免",
+      "id": "679",
+      "title": "retro: Backlog 補充 — Sprint 146 後 Backlog 清空，建立新 sprint-candidate",
       "status": "completed",
-      "pr": 678,
-      "merged_at": "2026-03-25T02:30:09Z"
+      "pr": null,
+      "merged_at": "2026-03-25T12:22:00Z"
+    },
+    {
+      "id": "681",
+      "title": "feat: SRE 巡檢讀取 runner_min_count 設定，避免 MIG 正常縮減誤報",
+      "status": "completed",
+      "pr": 685,
+      "merged_at": "2026-03-25T12:22:00Z"
+    },
+    {
+      "id": "680",
+      "title": "feat: doc_only Story 內容品質審查 — Reviewer + Challenger 制衡",
+      "status": "completed",
+      "pr": 686,
+      "merged_at": "2026-03-25T12:22:00Z"
     }
   ],
   "sprint_status": "completed"
