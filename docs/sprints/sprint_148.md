@@ -2,7 +2,7 @@
 sprint: 148
 start_date: 2026-03-25
 end_date: 2026-03-31
-status: in-progress
+status: done
 velocity_baseline: 2.7
 capacity: 4
 version_target: v0.96.2
