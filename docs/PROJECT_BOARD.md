@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-26（Sprint 165 Planning 完成）
-**當前 Sprint**：Sprint 165（Planning 完成，待 Execution）
+**最後更新**：2026-03-26（Sprint 165 Execution 完成）
+**當前 Sprint**：Sprint 165（Execution 完成，5/5 Stories DONE）
 
 ---
 
@@ -12,11 +12,11 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| test: bump-version.sh 自動化測試 — 版號同步 5 檔驗證 | #839 | S | 1 | TODO |
-| test: init-project.sh 自動化測試 — Onboarding 腳本初始化驗證 | #845 | S | 1 | TODO |
-| test: 驗證腳本測試覆蓋率提升 — validate-agents/skills/json 補測試 | #838 | S | 1 | TODO |
-| test: calculate-sprint-capacity.sh 自動化測試 — 容量計算驗證 | #844 | S | 1 | TODO |
-| test: Watchdog 腳本測試覆蓋 — check/monitor/restart 三合一驗證 | #847 | S | 1 | TODO |
+| test: bump-version.sh 自動化測試 — 版號同步 5 檔驗證 | #839 | S | 1 | DONE (#850) |
+| test: init-project.sh 自動化測試 — Onboarding 腳本初始化驗證 | #845 | S | 1 | DONE (de31215) |
+| test: 驗證腳本測試覆蓋率提升 — validate-agents/skills/json 補測試 | #838 | S | 1 | DONE (#851) |
+| test: calculate-sprint-capacity.sh 自動化測試 — 容量計算驗證 | #844 | S | 1 | DONE (03b4970) |
+| test: Watchdog 腳本測試覆蓋 — check/monitor/restart 三合一驗證 | #847 | S | 1 | DONE (#852) |
 
 ---
 

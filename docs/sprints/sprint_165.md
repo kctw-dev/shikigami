@@ -9,11 +9,11 @@
 
 | # | Story | Issue | Points | Status | Assignee |
 |---|-------|-------|--------|--------|----------|
-| 1 | test: bump-version.sh 自動化測試 — 版號同步 5 檔驗證 | #839 | 1 | TODO | Developer |
-| 2 | test: init-project.sh 自動化測試 — Onboarding 腳本初始化驗證 | #845 | 1 | TODO | Developer |
-| 3 | test: 驗證腳本測試覆蓋率提升 — validate-agents/skills/json 補測試 | #838 | 1 | TODO | Developer |
-| 4 | test: calculate-sprint-capacity.sh 自動化測試 — 容量計算驗證（AC 更新：取代舊 test-sprint-capacity.sh） | #844 | 1 | TODO | Developer |
-| 5 | test: Watchdog 腳本測試覆蓋 — check/monitor/restart 三合一驗證 | #847 | 1 | TODO | Developer |
+| 1 | test: bump-version.sh 自動化測試 — 版號同步 5 檔驗證 | #839 | 1 | DONE (#850) | Developer |
+| 2 | test: init-project.sh 自動化測試 — Onboarding 腳本初始化驗證 | #845 | 1 | DONE (de31215) | Developer |
+| 3 | test: 驗證腳本測試覆蓋率提升 — validate-agents/skills/json 補測試 | #838 | 1 | DONE (#851) | Developer |
+| 4 | test: calculate-sprint-capacity.sh 自動化測試 — 容量計算驗證（AC 更新：取代舊 test-sprint-capacity.sh） | #844 | 1 | DONE (03b4970) | Developer |
+| 5 | test: Watchdog 腳本測試覆蓋 — check/monitor/restart 三合一驗證 | #847 | 1 | DONE (#852) | Developer |
 
 **Total: 5 pts**
 
