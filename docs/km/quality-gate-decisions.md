@@ -1,10 +1,12 @@
-# Quality Gate 決策記錄
+# Quality Gate Decisions
 
-> 本文件記錄品質門禁中 CRITICAL 缺陷的非修復決策（選項 B 降級、選項 C 接受風險）。
-> 供 Sprint Review 時檢視品質決策歷史，以及防濫用機制的統計基礎。
+> **用途**：記錄所有 CRITICAL quality-gate 發現的處置決策，用於跨 Sprint 追蹤風險接受模式。
+> **規則**：僅允許 append — 不得截斷或刪除已有記錄（NFR1）。
+> **觸發時機**：Sprint Review 發現 CRITICAL 發現被覆寫（PR 已 merge 儘管有 CRITICAL 告警）時，由主 session 在 `sprint-review` 流程中記錄（AC2）。
 >
-> SSOT 定義：`skills/quality-gate/SKILL.md` §7.1 / §7.2
+> 稽核指令：`bash scripts/quality-gate-audit.sh docs/km/quality-gate-decisions.md`
 
----
+## 決策記錄
 
-<!-- 決策記錄從此處開始，新記錄插入此行下方 -->
+| Date | Story | Finding | Severity | Decision | Rationale | Sprint |
+|------|-------|---------|----------|----------|-----------|--------|
