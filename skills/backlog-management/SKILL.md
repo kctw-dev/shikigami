@@ -108,7 +108,40 @@ RICE（量化排序）與 MoSCoW（標籤分類）雙軌並行：RICE Score = (R
 
 ---
 
-## 8. Subagent 派遣順序
+## 8. Backlog 健康度閾值與提前預警機制（ADR-043）
+
+<!-- #721 Backlog 補充頻率調整 — Sprint 154 -->
+<!-- ADR-043 Backlog Replenishment Strategy (Accepted) -->
+
+**閾值定義**（ADR-043 決策）：
+
+| 指標 | 閾值 | 說明 |
+|------|------|------|
+| 預警閾值 | sprint-candidate < **10** | 觸發 [BACKLOG-REPLENISH-TRIGGER] 信號 |
+| 目標庫存 | sprint-candidate >= **16** | 確保 2-Sprint 提前期（每 Sprint 選約 8pts，2 Sprint = 16 候選） |
+| 觸發時機 | **當前 Sprint 執行中** | 主動觸發，不等到 Sprint Review 後（從「事後補充」改為「提前預警」） |
+
+**預警流程**：
+
+```
+每次 Sprint Review § 2.7 執行時：
+  BACKLOG_THRESHOLD = 10 (ADR-043)
+  SPRINT_CANDIDATE_COUNT = gh issue list --label sprint-candidate --state open | jq length
+
+  SPRINT_CANDIDATE_COUNT < BACKLOG_THRESHOLD
+    → [BACKLOG-REPLENISH-TRIGGER]
+    → project_level=low：自動觸發 /backlog-management 補充（在當前 Sprint 內，不等下一 Sprint）
+    → 目標：補充至 sprint-candidate >= 16（2-Sprint 提前期）
+
+  SPRINT_CANDIDATE_COUNT >= BACKLOG_THRESHOLD
+    → [BACKLOG-HEALTH-OK]
+```
+
+> 決策依據：`docs/adr/ADR-043-backlog-replenishment-strategy.md`
+
+---
+
+## 9. Subagent 派遣順序
 
 > **注意**：Product Discovery 流程已獨立為 `/discovery-phase` Skill，里程碑啟動時請使用 `/discovery-phase`。
 
@@ -117,4 +150,5 @@ RICE（量化排序）與 MoSCoW（標籤分類）雙軌並行：RICE Score = (R
 1. PO → gh issue list 查看 Backlog Issues、關閉過時 Story
 2. PO → gh issue edit 調整 RICE 分數與優先級 labels
 3. PO → gh issue edit 確認 Acceptance Criteria（更新 Issue body）
+4. PO → Backlog 健康度檢查（§8）：sprint-candidate 計數 vs 閾值 10（ADR-043）
 ```
