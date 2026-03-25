@@ -1,13 +1,29 @@
 # Project Board
 
-**最後更新**：2026-03-26（Sprint 164 Execution 完成）
-**當前 Sprint**：Sprint 164（執行完成，等待 Review）
+**最後更新**：2026-03-26（Sprint 165 Planning 完成）
+**當前 Sprint**：Sprint 165（Planning 完成，待 Execution）
 
 ---
 
-## Sprint 164（Sprint Backlog）
+## Sprint 165（Sprint Backlog）
+
+> Sprint Goal：建立核心腳本測試防護網 — 為 bump-version、init-project、validate 系列與 Watchdog 補齊自動化測試，確保紅線邏輯有測試護航
+> **容量**：5 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| test: bump-version.sh 自動化測試 — 版號同步 5 檔驗證 | #839 | S | 1 | TODO |
+| test: init-project.sh 自動化測試 — Onboarding 腳本初始化驗證 | #845 | S | 1 | TODO |
+| test: 驗證腳本測試覆蓋率提升 — validate-agents/skills/json 補測試 | #838 | S | 1 | TODO |
+| test: calculate-sprint-capacity.sh 自動化測試 — 容量計算驗證 | #844 | S | 1 | TODO |
+| test: Watchdog 腳本測試覆蓋 — check/monitor/restart 三合一驗證 | #847 | S | 1 | TODO |
+
+---
+
+## Sprint 164（完成）
 
 > Sprint Goal：Backlog 治理工具強化 — 健康度儀表板、Velocity 趨勢自動化、RICE Score 缺漏掃描、Retrospective 模板預填，提升 Sprint Planning 資料驅動能力
+> **結果**：Goal 達成（4/4 Stories DONE）。Velocity 4 pts，完成率 100%。
 > **容量**：4 pts
 
 | Story | Issue | Size | Points | 狀態 |
