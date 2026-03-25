@@ -1,15 +1,15 @@
 {
   "sprint": 160,
-  "updated_at": "2026-03-25T20:42:00Z",
+  "updated_at": "2026-03-25T20:52:00Z",
   "session_id": "20260325-202534",
   "stories": [
     {"id": "795", "title": "feat: QA FREE-MAD 挑戰韌性", "status": "completed", "pr": 803},
     {"id": "797", "title": "feat: 專案範本 init-project.sh", "status": "completed", "pr": 804},
-    {"id": "793", "title": "feat: Context Engineering JIT 載入策略", "status": "pending"},
-    {"id": "802", "title": "feat: Schema-First 強制工具", "status": "pending"},
-    {"id": "798", "title": "feat: Quick Ship Pipeline", "status": "pending"},
-    {"id": "794", "title": "feat: Quality Observer MCP Phase 2", "status": "pending"},
-    {"id": "772", "title": "feat: Session Watchdog", "status": "pending"}
+    {"id": "793", "title": "feat: Context Engineering JIT 載入策略", "status": "completed", "pr": 805},
+    {"id": "802", "title": "feat: Schema-First 強制工具", "status": "completed", "pr": 806},
+    {"id": "798", "title": "feat: Quick Ship Pipeline", "status": "completed", "pr": 807},
+    {"id": "794", "title": "feat: Quality Observer MCP Phase 2", "status": "completed", "pr": 808},
+    {"id": "772", "title": "feat: Session Watchdog", "status": "completed", "pr": 809}
   ],
-  "sprint_status": "in-progress"
+  "sprint_status": "completed"
 }
