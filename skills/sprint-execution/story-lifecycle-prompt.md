@@ -292,6 +292,57 @@ mkdir -p logs/live
 
 ---
 
+### §8.0 [TRACE] stdout 格式（#782 Sprint 162 — Cruise Log 追蹤）
+
+<!-- #782 Structured Trace Log — JSONL TRACE 格式 -->
+
+在每個重要 action 執行時，輸出 `[TRACE]` 行至 stdout。Cruise log 基礎設施會自動捕獲此 stdout 輸出，不需另建 log 檔案（NFR1：不引入新 log 基礎設施）。
+
+**格式定義**：
+
+```
+[TRACE] {"type":"action-type","story":<N>,"actor":"<role>","action":"<verb>","target":"<path>","timestamp":"<ISO8601>"}
+```
+
+**欄位說明**：
+
+| 欄位 | 說明 | 範例 |
+|------|------|------|
+| `type` | 固定值 `"action-type"` | `"action-type"` |
+| `story` | Story 編號（整數）| `782` |
+| `actor` | 執行動作的角色 | `"developer"` |
+| `action` | 動作動詞 | 見下方 Action 類型清單 |
+| `target` | 目標路徑或識別碼 | `"scripts/trace-analyzer.sh"` |
+| `timestamp` | ISO 8601 帶時區（由 `date` 指令取得）| `"2026-03-25T10:00:00+0800"` |
+
+**Action 類型清單**（`action` 欄位允許值）：
+
+| action | 說明 |
+|--------|------|
+| `file-write` | 寫入或建立檔案 |
+| `file-read` | 讀取檔案 |
+| `test-run` | 執行測試 |
+| `review-start` | 開始自審（Spec / Code Quality / Security）|
+| `review-complete` | 完成自審 |
+| `decision` | 重要技術決策 |
+| `error` | 遇到錯誤或異常 |
+
+**使用範例**：
+
+```bash
+# 寫入檔案時
+echo "[TRACE] {\"type\":\"action-type\",\"story\":${STORY_NUM},\"actor\":\"developer\",\"action\":\"file-write\",\"target\":\"${FILE_PATH}\",\"timestamp\":\"$(date '+%Y-%m-%dT%H:%M:%S%z')\"}"
+
+# 執行測試時
+echo "[TRACE] {\"type\":\"action-type\",\"story\":${STORY_NUM},\"actor\":\"developer\",\"action\":\"test-run\",\"target\":\"${TEST_FILE}\",\"timestamp\":\"$(date '+%Y-%m-%dT%H:%M:%S%z')\"}"
+```
+
+**隱私保護**：`[TRACE]` 格式僅記錄 action metadata（actor、action 名稱、target 路徑、timestamp），不記錄使用者輸入內容或任何 PII。
+
+**與 ADR-033 trace-log 的關係**：本 `[TRACE]` stdout 格式為輕量版追蹤，藉由 cruise log 基礎設施捕獲。ADR-033 的 `docs/trace-logs/` JSONL（含 traceId/spanId/parentSpanId）為深度跨 Agent 追蹤，兩者互補不衝突。
+
+---
+
 ## §3 TDD 開發流程（強制，doc_only=false 時）
 
 <HARD-GATE>
