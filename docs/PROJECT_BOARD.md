@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 142 Review 完成 — 2/2 Stories DONE, Velocity 5 pts, 100%）
-**當前 Sprint**：Sprint 142（完成）
+**最後更新**：2026-03-25（Sprint 143 Planning 完成 — 4 Stories / 6 pts）
+**當前 Sprint**：Sprint 143（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
@@ -12,6 +12,20 @@
 | 日期 | 來源 | 標題 | 結果 | commit |
 |------|------|------|------|--------|
 | 2026-03-24 | #638 | retro: tcb-write.sh smoke test — stdout 污染回歸防護 | PASS | d4e353d |
+
+---
+
+## Sprint 143（進行中）
+
+> Sprint Goal：補強 Sprint Planning 自動化防線、解決框架 CI 遺留資產混亂，並完成 sprint-execution SKILL 長期技術債重構。
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: Sprint Planning Pre-flight Backlog 健康度檢查 | #656 | S | 1 | TODO |
+| retro: 評估 #657 是否與 #652 重複，決定關閉或縮小範疇 | #661 | S | 1 | TODO |
+| chore: 清除 new-issue-intake.yml 殘留引用 | #662 | S | 1 | TODO |
+| refactor: sprint-execution/SKILL.md 行數超限重構 | #654 | M | 3 | TODO |
 
 ---
 
