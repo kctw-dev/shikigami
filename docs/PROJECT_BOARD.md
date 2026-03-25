@@ -1,11 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 157 Planning 完成）
-**當前 Sprint**：Sprint 157（進行中）
+**最後更新**：2026-03-25（Sprint 158 Planning 完成）
+**當前 Sprint**：Sprint 158（進行中）
 
 ---
 
-## Sprint 157（進行中）
+## Sprint 158（進行中）
+
+> Sprint Goal：強化框架自動化維運能力 — 新增 SRE patrol 記憶體趨勢洩漏告警機制，並為 cruise log 歸檔建立每日定時觸發流程
+> **容量**：4 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: SRE patrol 記憶體使用趨勢偵測（漸進式洩漏告警） | #743 | M | 2 | TODO |
+| feat: cruise logs 歸檔每日自動觸發（定時 cron 整合） | #738 | M | 2 | TODO |
+
+---
+
+## Sprint 157（完成）
 
 > Sprint Goal：強化 Sprint 流程品質與觀測能力 — 補充 Sprint Review 測試覆蓋、建立 ADR 索引自動維護、整合 Sprint Planning 會議紀錄模板標準化、Sprint Review 指標收集平行化、ADR-039 Model Routing Dashboard
 > **容量**：7 pts
