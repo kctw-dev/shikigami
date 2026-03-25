@@ -1,29 +1,11 @@
 {
-  "sprint": 147,
-  "updated_at": "2026-03-25T12:22:00Z",
-  "session_id": "cron-20260325-121501",
+  "sprint": 148,
+  "updated_at": "2026-03-25T04:48:06Z",
+  "session_id": "cron-20260325-124001",
   "stories": [
-    {
-      "id": "679",
-      "title": "retro: Backlog 補充 — Sprint 146 後 Backlog 清空，建立新 sprint-candidate",
-      "status": "completed",
-      "pr": null,
-      "merged_at": "2026-03-25T12:22:00Z"
-    },
-    {
-      "id": "681",
-      "title": "feat: SRE 巡檢讀取 runner_min_count 設定，避免 MIG 正常縮減誤報",
-      "status": "completed",
-      "pr": 685,
-      "merged_at": "2026-03-25T12:22:00Z"
-    },
-    {
-      "id": "680",
-      "title": "feat: doc_only Story 內容品質審查 — Reviewer + Challenger 制衡",
-      "status": "completed",
-      "pr": 686,
-      "merged_at": "2026-03-25T12:22:00Z"
-    }
+    {"id": "682", "title": "chore: logrotate.sh 擴充 — 加入 docs/cruise-logs JSONL 自動歸檔清理", "status": "pending", "pr": null, "merged_at": null},
+    {"id": "683", "title": "chore: GitHub Issue 模板補充 非功能性需求 欄位 — 減少 Sprint Planning 補充工作", "status": "pending", "pr": null, "merged_at": null},
+    {"id": "684", "title": "refactor: cruise/SKILL.md 行數超限重構 — 段落移至 references/ 控制在 250 行以內", "status": "pending", "pr": null, "merged_at": null}
   ],
-  "sprint_status": "completed"
+  "sprint_status": "in-progress"
 }
