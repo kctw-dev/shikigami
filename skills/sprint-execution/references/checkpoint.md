@@ -102,6 +102,21 @@ fi
 - Task List 名稱含 SESSION_ID，每個 session 獨立，互不干擾
 - 不同 session 的 Task List 不會互相覆蓋（`sprint-${SESSION_ID}` 命名空間）
 
+### Task 命名格式（#538 AC2）
+
+`{repo}/sprint-{N}-{phase}`
+
+其中 `{repo}` = 從 `git remote get-url origin` 解析的 `owner/repo`（如 `kctw-dev/shikigami`），`{N}` = Sprint 編號（從 sprint_N.md 讀取），`{phase}` = `planning` | `execution` | `review`。
+
+命名範例：
+- `kctw-dev/shikigami/sprint-129-planning`
+- `kctw-dev/shikigami/sprint-129-execution`
+- `kctw-dev/shikigami/sprint-129-review`
+
+compact 後恢復（#538 AC4）：以 `{repo}/sprint-{N}-` 為前綴查詢 TaskList，從第一個非 completed 的 task 繼續。
+
+舊 Sprint 殘留 Task（#538 AC5）：若 TaskList 中存在前一 Sprint 的 Task（status 非 completed），標記為 completed。
+
 ### 容錯設計
 
 - TaskCreate / TaskUpdate 失敗時**靜默略過**，不阻塞主流程
