@@ -62,6 +62,40 @@ fi
 
 TOTAL_ROUTES=$(grep -c "model-route" "$ROUTES_FILE" 2>/dev/null || echo 0)
 
+# ── model-route 格式驗證（#767）─────────────────────────────────────────
+# 從所有掃描來源中偵測疑似 model-route 但格式不符的行
+MALFORMED_FILE="${WORK_DIR}/malformed.txt"
+touch "$MALFORMED_FILE"
+
+ALL_SOURCE_FILES=""
+if [ -n "${RECENT_SPRINT_FILES:-}" ]; then
+  ALL_SOURCE_FILES="$RECENT_SPRINT_FILES"
+fi
+if [ -d "$METRICS_DIR" ] && [ -n "${RECENT_METRICS:-}" ]; then
+  ALL_SOURCE_FILES="${ALL_SOURCE_FILES}
+${RECENT_METRICS}"
+fi
+
+if [ -n "$ALL_SOURCE_FILES" ]; then
+  while IFS= read -r src_file; do
+    [ -f "$src_file" ] || continue
+    # 找出含 "model-route" 但不符合標準格式的行（排除 markdown 標題、註解、腳本內格式說明）
+    grep -n "model-route" "$src_file" 2>/dev/null \
+      | grep -v -E "model-route #[0-9]+ tier=[0-9]+ score=[0-9]+" \
+      | grep -v -E "^[0-9]+:(#|>|//|\*)" \
+      | grep -v -E "^[0-9]+:- model-route log:" \
+      | while IFS= read -r line; do
+          echo "[WARN] 格式不符 ${src_file}:${line}" >> "$MALFORMED_FILE"
+        done || true
+  done <<< "$ALL_SOURCE_FILES"
+fi
+
+MALFORMED_COUNT=$(wc -l < "$MALFORMED_FILE" | tr -d ' ')
+if [ "$MALFORMED_COUNT" -gt 0 ]; then
+  echo "[FORMAT-WARN] 偵測到 ${MALFORMED_COUNT} 行疑似 model-route 但格式不符：" >&2
+  cat "$MALFORMED_FILE" >&2
+fi
+
 # ── 統計計算 ─────────────────────────────────────────────────────────
 
 # Tier 計數（tier= 格式）
