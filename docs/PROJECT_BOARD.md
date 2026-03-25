@@ -1,7 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 156 Review 完成）
-**當前 Sprint**：Sprint 157（待規劃）
+**最後更新**：2026-03-25（Sprint 157 Planning 完成）
+**當前 Sprint**：Sprint 157（進行中）
+
+---
+
+## Sprint 157（進行中）
+
+> Sprint Goal：強化 Sprint 流程品質與觀測能力 — 補充 Sprint Review 測試覆蓋、建立 ADR 索引自動維護、整合 Sprint Planning 會議紀錄模板標準化、Sprint Review 指標收集平行化、ADR-039 Model Routing Dashboard
+> **容量**：7 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: Sprint Review 邊界案例測試自動化（test-sprint-review-boundary.sh） | #732 | S | 1 | TODO |
+| feat: ADR 目錄索引自動維護（docs/adr/README.md 自動更新） | #742 | S | 1 | TODO |
+| feat: Sprint Planning 會議紀錄模板標準化（templates/sprint-planning-meeting.md） | #744 | S | 1 | TODO |
+| feat: Sprint Review 指標收集平行化（Analytics + SPACE + Quality Observer 同步執行） | #709 | M | 3 | TODO |
+| feat: ADR-039 Model Routing 準確率追蹤 Dashboard | #711 | S | 1 | TODO |
 
 ---
 
