@@ -743,3 +743,32 @@ Sprint Review 完成 Issue 狀態回寫（§2.6）後，執行 Backlog 健康度
 ```
 
 **非阻塞降級（AC5）**：若 gh API 失敗（無法取得 sprint-candidate 計數），Sprint Review 輸出 `[BACKLOG-HEALTH-WARN]` 並繼續，不中斷 Review 流程。cruise log 記錄此次失敗。
+
+## Backlog 健康趨勢報告（#736）
+
+<!-- #736 Backlog 健康趨勢報告腳本（backlog-health-report.sh）— Sprint 156 -->
+
+每日 PO patrol 自動執行一次 `scripts/backlog-health-report.sh`，輸出最近 N 天 sprint-candidate 計數趨勢：
+
+```bash
+# 每日自動執行（每個 PO patrol cycle 一次）
+bash "${REPO_PATH}/scripts/backlog-health-report.sh" \
+  --last-n 7 \
+  --log-dir "${REPO_PATH}/docs/cruise-logs" 2>&1 || true
+```
+
+**輸出格式**：
+
+```
+| 日期 | sprint-candidate 計數 | 狀態信號 |
+|------|----------------------|---------|
+| 2026-03-25 | 14 | OK |
+| 2026-03-24 | 3  | TRIGGER |
+```
+
+| 信號 | 意義 |
+|------|------|
+| `OK` | sprint-candidate 計數 >= 閾值（預設 3），健康 |
+| `TRIGGER` | sprint-candidate 計數 < 閾值，建議補充 Backlog |
+
+支援 `--last-n <N>` 指定查看天數（預設 7）。使用 jq 解析 JSONL，不依賴 Python（NFR1）。
