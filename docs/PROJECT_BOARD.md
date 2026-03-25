@@ -1,7 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 155 Review 完成）
-**當前 Sprint**：Sprint 156（待規劃）
+**最後更新**：2026-03-25（Sprint 156 Planning 完成）
+**當前 Sprint**：Sprint 156（進行中）
+
+---
+
+## Sprint 156（進行中）
+
+> Sprint Goal：強化框架自動化觀測與工具鏈品質 — 整合 retro-action 自動升格、PR 描述模板、SRE hooks 健康監控、Backlog 健康趨勢報告、cruise logs 搜尋工具，補強 Architect 衝突預防與 bash arithmetic 慣例
+> **容量**：7 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: retro-action 高優先級自動升格 sprint-candidate | #739 | S | 1 | TODO |
+| feat: GitHub PR 描述模板標準化（story-lifecycle PR 品質一致） | #741 | S | 1 | TODO |
+| feat: validate-hooks.sh 整合 cruise SRE patrol | #740 | S | 1 | TODO |
+| feat: Backlog 健康趨勢報告腳本（backlog-health-report.sh） | #736 | S | 1 | TODO |
+| feat: cruise logs 搜尋查詢腳本（跨 session 診斷） | #731 | S | 1 | TODO |
+| retro: Architect 批次分組新增共同修改檔案衝突預防標注 | #752 | S | 1 | TODO |
+| retro: Developer prompt 新增 bash arithmetic increment 慣例警示 | #751 | S | 1 | TODO |
 
 ---
 
