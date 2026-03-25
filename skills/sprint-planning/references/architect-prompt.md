@@ -4,6 +4,23 @@
 
 ---
 
+## 容量基準計算（#734 AC3）
+
+<!-- #734 Sprint 容量自動計算腳本（基於 3-Sprint Velocity 平均）— Sprint 155 -->
+
+Sprint Planning 開始前，Architect 必須執行以下腳本取得容量基準：
+
+```bash
+# 取得基於 3-Sprint 平均 Velocity 的推薦容量
+bash scripts/calculate-sprint-capacity.sh
+# 輸出格式：[CAPACITY] avg_velocity=Npts, recommended_capacity=Mpts (±20% range: L-Hpts)
+# 若歷史數據不足 3 個 Sprint：[CAPACITY-WARN] 使用現有數量計算
+```
+
+容量決策依據：以 `recommended_capacity` 為基準，PO 可在 `±20% range` 內調整。
+
+---
+
 ## 技術評估
 
 對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若涉及 API 互動的 Story，必須產出 API 契約（參閱 [Architect 角色決策指引 §7](../architect/SKILL.md)）。若發現 Hard Gate 問題，該 Story 退回 Backlog。詳細決策標準（估點策略、ADR 需求判斷、平行分群策略、API 契約產出）請參閱 [Architect 角色決策指引](../architect/SKILL.md)。
