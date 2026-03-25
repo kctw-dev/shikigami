@@ -12,7 +12,7 @@
 | 2 | retro: Sprint 153 parallel-safety 全自動化 — 消除人工決策 | #722 | 2 | DONE(#727) | Developer |
 | 3 | retro: Sprint 153 多平台測試覆蓋強化 — 補充 WSL2 實測 | #720 | 1 | DONE(#725) | Developer |
 | 4 | RESEARCH: ADR-043 — Backlog Replenishment Strategy | #723 | 1 | DONE(#726) | Developer |
-| 5 | retro: Sprint 153 Backlog 補充頻率調整 — 建立提前預警機制 | #721 | 1 | TODO | Developer |
+| 5 | retro: Sprint 153 Backlog 補充頻率調整 — 建立提前預警機制 | #721 | 1 | DONE(#728) | Developer |
 
 **Total: 7 pts**
 

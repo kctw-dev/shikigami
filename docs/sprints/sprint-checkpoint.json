@@ -1,13 +1,13 @@
 {
   "sprint": 154,
-  "updated_at": "2026-03-25T16:30:00Z",
+  "updated_at": "2026-03-25T16:45:00Z",
   "session_id": "cron-20260325-154501",
   "stories": [
     {"id": "708", "title": "feat: cruise logs 壓縮歸檔機制（長期可觀測性）", "status": "completed", "pr": 724},
     {"id": "720", "title": "retro: Sprint 153 多平台測試覆蓋強化 — 補充 WSL2 實測", "status": "completed", "pr": 725},
     {"id": "723", "title": "RESEARCH: ADR-043 — Backlog Replenishment Strategy", "status": "completed", "pr": 726},
     {"id": "722", "title": "retro: Sprint 153 parallel-safety 全自動化 — 消除人工決策", "status": "completed", "pr": 727},
-    {"id": "721", "title": "retro: Sprint 153 Backlog 補充頻率調整 — 建立提前預警機制", "status": "in-progress", "pr": null}
+    {"id": "721", "title": "retro: Sprint 153 Backlog 補充頻率調整 — 建立提前預警機制", "status": "completed", "pr": 728}
   ],
-  "sprint_status": "in-progress"
+  "sprint_status": "completed"
 }
