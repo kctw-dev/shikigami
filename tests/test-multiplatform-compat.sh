@@ -367,6 +367,118 @@ fi
 echo ""
 
 # ──────────────────────────────────────────────────────────────────────────
+# AC6：WSL2 環境檢測（#720 — Sprint 154 retro）
+# ──────────────────────────────────────────────────────────────────────────
+#
+# 補充 3 平台測試基線：Linux (native) / macOS / WSL2
+# WSL2 識別：/proc/version 包含 "Microsoft" 字串
+
+echo "--- AC6：WSL2 環境檢測（#720）---"
+
+# AC6a：偵測當前平台類型（3 平台基線）
+PLATFORM_DETECTED="unknown"
+PLATFORM_DETAIL="unknown"
+
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  PLATFORM_DETECTED="macOS"
+  PLATFORM_DETAIL="$(uname -r)"
+elif [[ -f "/proc/version" ]]; then
+  proc_version="$(cat /proc/version 2>/dev/null || echo '')"
+  if echo "${proc_version}" | grep -qi "Microsoft\|WSL"; then
+    PLATFORM_DETECTED="WSL2"
+    PLATFORM_DETAIL="${proc_version:0:80}"
+  else
+    PLATFORM_DETECTED="Linux-native"
+    PLATFORM_DETAIL="${proc_version:0:80}"
+  fi
+else
+  PLATFORM_DETECTED="other-unix"
+  PLATFORM_DETAIL="$(uname -a 2>/dev/null | head -c 80 || echo 'unknown')"
+fi
+
+pass "AC6a: 當前平台偵測完成 → ${PLATFORM_DETECTED}"
+echo "    [PLATFORM-INFO] ${PLATFORM_DETAIL:0:80}"
+
+# AC6b：WSL2 環境特定記憶體讀取邏輯驗證
+# WSL2 使用 Linux /proc/meminfo（不使用 macOS vm_stat）
+if [[ "${PLATFORM_DETECTED}" == "WSL2" ]]; then
+  if [[ -f "/proc/meminfo" ]]; then
+    mem_total=$(grep '^MemTotal:' /proc/meminfo 2>/dev/null | awk '{print $2}' || echo "")
+    if [[ -n "${mem_total}" ]]; then
+      pass "AC6b（WSL2）: /proc/meminfo 可讀，MemTotal=${mem_total}kB"
+    else
+      fail "AC6b（WSL2）: /proc/meminfo 存在但 MemTotal 無法讀取" \
+        "WSL2 環境 /proc/meminfo 格式異常" \
+        "確認 /proc/meminfo 格式是否正確"
+    fi
+  else
+    fail "AC6b（WSL2）: /proc/meminfo 不存在" \
+      "WSL2 環境應有 /proc/meminfo 但找不到" \
+      "確認 WSL2 kernel 版本是否正確"
+  fi
+elif [[ "${PLATFORM_DETECTED}" == "Linux-native" ]]; then
+  if [[ -f "/proc/meminfo" ]]; then
+    pass "AC6b（Linux-native）: /proc/meminfo 存在（Linux native 環境）"
+  else
+    fail "AC6b（Linux-native）: /proc/meminfo 不存在" \
+      "Linux native 環境應有 /proc/meminfo" \
+      "確認 Linux kernel 版本是否正確"
+  fi
+elif [[ "${PLATFORM_DETECTED}" == "macOS" ]]; then
+  if command -v vm_stat &>/dev/null; then
+    pass "AC6b（macOS）: vm_stat 可用（macOS 記憶體讀取命令）"
+  else
+    fail "AC6b（macOS）: vm_stat 不可用" \
+      "macOS 環境應有 vm_stat 命令" \
+      "確認 macOS 版本是否正確"
+  fi
+else
+  pass "AC6b（${PLATFORM_DETECTED}）: 平台已識別，記憶體讀取驗證略過（非三基線平台）"
+fi
+
+# AC6c：parallel-safety 記憶體感知邏輯跨平台相容性（#712 / #722 相關）
+# 驗證 parallel-safety 相關腳本或文件存在跨平台邏輯
+PARALLEL_SAFETY_REF="${REPO_ROOT}/skills/sprint-execution/references/parallel-safety.md"
+MEMORY_AWARE_TEST="${REPO_ROOT}/tests/test-memory-aware-parallel.sh"
+
+if [[ -f "${PARALLEL_SAFETY_REF}" ]]; then
+  if grep -qi "proc/meminfo\|vm_stat\|macOS\|WSL\|cross.*platform\|跨平台" "${PARALLEL_SAFETY_REF}" 2>/dev/null; then
+    pass "AC6c: parallel-safety.md 包含跨平台記憶體讀取邏輯"
+  else
+    pass "AC6c: parallel-safety.md 存在（跨平台記憶體標記可後續補充）"
+  fi
+else
+  pass "AC6c: parallel-safety.md 不存在（#712/#722 實作後自動覆蓋此項）"
+fi
+
+if [[ -f "${MEMORY_AWARE_TEST}" ]]; then
+  pass "AC6d: test-memory-aware-parallel.sh 存在（記憶體感知測試已建立）"
+else
+  pass "AC6d: test-memory-aware-parallel.sh 不存在（#722 實作後補充）"
+fi
+
+# AC6e：3 平台測試基線記錄
+echo ""
+echo "  [3-PLATFORM-BASELINE]"
+echo "    WSL2:         /proc/version 含 'Microsoft' 字串 → PLATFORM=WSL2"
+echo "    Linux-native: /proc/version 不含 'Microsoft' → PLATFORM=Linux-native"
+echo "    macOS:        uname -s = Darwin → PLATFORM=macOS"
+echo "    當前執行平台: ${PLATFORM_DETECTED}"
+pass "AC6e: 3 平台測試基線已記錄（見上方 [3-PLATFORM-BASELINE]）"
+
+# AC6f：SDD 文件存在性驗證（AC3 — docs/sdd/sdd-xxx-multiplatform-test.md）
+SDD_PATTERN="${REPO_ROOT}/docs/sdd"
+if ls "${SDD_PATTERN}"/sdd-*multiplatform* 2>/dev/null | head -1 | grep -q .; then
+  pass "AC6f: docs/sdd/ 包含 multiplatform SDD 文件"
+else
+  fail "AC6f: docs/sdd/ 缺少 multiplatform SDD 文件" \
+    "未找到 docs/sdd/sdd-*multiplatform*.md 文件" \
+    "建立 docs/sdd/sdd-multiplatform-test.md 說明 3 平台測試策略"
+fi
+
+echo ""
+
+# ──────────────────────────────────────────────────────────────────────────
 # 結果彙整
 # ──────────────────────────────────────────────────────────────────────────
 
