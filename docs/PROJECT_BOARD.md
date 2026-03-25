@@ -16,7 +16,7 @@
 |-------|-------|------|--------|------|
 | retro: 修復 #704 Issue body 截斷問題（AC/NFR 內容遺失） | #707 | S | 1 | DONE(closed) |
 | retro: Sprint 151 PO Backlog Discovery — 補充 sprint-candidate 至 >= 8 | #706 | M | 3 | DONE(closed) |
-| retro: /shikigami:doctor cruise 定期觸發整合（AC6 補完） | #704 | S | 2 | TODO |
+| retro: /shikigami:doctor cruise 定期觸發整合（AC6 補完） | #704 | S | 2 | DONE(#714) |
 
 ---
 

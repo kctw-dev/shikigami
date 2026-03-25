@@ -1,11 +1,11 @@
 {
   "sprint": 152,
-  "updated_at": "2026-03-25T15:05:00Z",
+  "updated_at": "2026-03-25T15:20:00Z",
   "session_id": "cron-20260325-144501",
   "stories": [
     {"id": "707", "title": "retro: 修復 #704 Issue body 截斷問題（AC/NFR 內容遺失）", "status": "completed", "pr": null},
     {"id": "706", "title": "retro: Sprint 151 PO Backlog Discovery — 補充 sprint-candidate 至 >= 8", "status": "completed", "pr": null},
-    {"id": "704", "title": "retro: /shikigami:doctor cruise 定期觸發整合（AC6 補完）", "status": "in-progress", "pr": null}
+    {"id": "704", "title": "retro: /shikigami:doctor cruise 定期觸發整合（AC6 補完）", "status": "completed", "pr": 714}
   ],
-  "sprint_status": "in-progress"
+  "sprint_status": "completed"
 }
