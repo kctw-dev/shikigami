@@ -8,9 +8,9 @@
 
 | # | Story | Points | Status | Assignee |
 |---|-------|--------|--------|----------|
-| 1 | #713 feat: onboarding 安裝後驗證 — hooks 完整性自動確認 | 1 | TODO | Developer |
-| 2 | #710 feat: 多平台相容性驗證測試 | 2 | TODO | Developer |
-| 3 | #712 feat: Sprint Execution parallel-safety 動態記憶體感知 | 2 | TODO | Developer |
+| 1 | #713 feat: onboarding 安裝後驗證 — hooks 完整性自動確認 | 1 | DONE(#715) | Developer |
+| 2 | #710 feat: 多平台相容性驗證測試 | 2 | DONE(#716) | Developer |
+| 3 | #712 feat: Sprint Execution parallel-safety 動態記憶體感知 | 2 | DONE(#717) | Developer |
 
 ## 執行順序
 

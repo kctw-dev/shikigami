@@ -1,11 +1,11 @@
 {
-  "sprint": 152,
-  "updated_at": "2026-03-25T15:20:00Z",
-  "session_id": "cron-20260325-144501",
+  "sprint": 153,
+  "updated_at": "2026-03-25T15:45:00Z",
+  "session_id": "cron-20260325-151001",
   "stories": [
-    {"id": "707", "title": "retro: 修復 #704 Issue body 截斷問題（AC/NFR 內容遺失）", "status": "completed", "pr": null},
-    {"id": "706", "title": "retro: Sprint 151 PO Backlog Discovery — 補充 sprint-candidate 至 >= 8", "status": "completed", "pr": null},
-    {"id": "704", "title": "retro: /shikigami:doctor cruise 定期觸發整合（AC6 補完）", "status": "completed", "pr": 714}
+    {"id": "713", "title": "feat: onboarding 安裝後驗證 — hooks 完整性自動確認", "status": "completed", "pr": 715},
+    {"id": "710", "title": "feat: 多平台相容性驗證測試", "status": "completed", "pr": 716},
+    {"id": "712", "title": "feat: Sprint Execution parallel-safety 動態記憶體感知", "status": "completed", "pr": 717}
   ],
   "sprint_status": "completed"
 }
