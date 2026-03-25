@@ -197,6 +197,34 @@ Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義�
 - 若所有 Story 皆獨立，Phase 2 區塊可省略，填「無」
 - **SHIKIGAMI_MAX_PARALLEL=1 時**：Phase 1 與 Phase 2 合併為單一循序佇列，不出現平行分組（輸出「強制循序，無平行分群」）
 
+### 同檔案衝突預防（#752）
+
+<!-- #752 Architect 批次分組新增共同修改檔案衝突預防標注 — Sprint 156 -->
+
+**歷史案例（Sprint 155）**：#730 與 #734 同時修改 `architect-prompt.md`，導致 rebase conflict，需手動解決。
+
+Architect 在平行分群時，**必須**額外執行同檔案衝突偵測：
+
+1. **列出每個 Story 預計修改的主要檔案**（來自 Issue body 的「納入位置」或 AC 描述）
+2. **偵測跨 Story 的共用修改檔案**：若多個 Story 修改同一檔案，標注「共用修改檔案」
+3. **處置規則**：
+
+| 情況 | 處置 |
+|------|------|
+| 多個 Story 修改同一檔案 | 移至 Phase 2（序列執行），並在衝突原因欄填「shared-file: `path/to/file`」 |
+| 可合併至同一 Story | 在衝突分析欄建議「合併修改」（由 PO 決定） |
+| 序列依賴明確 | 標注執行順序：「必須在 #N 完成後執行」 |
+
+**共用修改檔案標注格式**（加入「檔案衝突分析」表格）：
+
+```markdown
+| 衝突檔案 | 涉及 Story | 建議執行順序 | 衝突類型 |
+|---------|-----------|------------|---------|
+| skills/sprint-planning/references/architect-prompt.md | #730, #734 | #730 → #734 | shared-file conflict |
+```
+
+> **目的**：在 Sprint Planning 階段靜態識別同檔案衝突，排入序列執行批次，避免 worktree rebase conflict（Sprint 155 歷史案例 #730/#734）。
+
 ### ADR 依賴分群規則（#456 AC3）
 
 <!-- #456 ADR 自動納入 Sprint — Sprint 124 -->
