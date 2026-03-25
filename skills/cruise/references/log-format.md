@@ -26,3 +26,23 @@
 | `"auto-shoot-escalated"` | 同一 Issue 連續 2 次 shoot fail，升級為 sprint-candidate（AC-5） |
 | `"auto-shoot-stale-cleared"` | SHOOT_FLAG 殘留超過 30 分鐘，強制清除 |
 | `"trigger-sprint-planning"` | sprint-candidate ≥ 3 或 1 個超過 30min，觸發 Sprint Planning（AC-3） |
+| `"backlog-health"` | Backlog 健康度檢查結果，含 sprint_candidate_count 和 threshold（AC-4） |
+
+## Backlog 健康度 Log Entry 格式
+
+**sprint-candidate < threshold 時，POST Sprint Review 寫入**：
+
+```jsonl
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T11:00:00+0800","type":"backlog-health","repo":"KCTW/shikigami","sprint_candidate_count":5,"threshold":8,"signal":"[BACKLOG-REPLENISH-TRIGGER]","action":"trigger-discovery"}
+```
+
+**字段說明**：
+- `session_id`: cruise session ID
+- `cycle`: cycle 編號
+- `timestamp`: 檢查時間（格式：ISO 8601 with timezone）
+- `type`: `"backlog-health"`（固定）
+- `repo`: owner/repo（如 `KCTW/shikigami`）
+- `sprint_candidate_count`: 當前 sprint-candidate Issues 數量（整數）
+- `threshold`: 設定的閾值，來自 `.claude/shikigami.local.md` 的 `backlog_health.threshold`
+- `signal`: 若 count < threshold，值為 `"[BACKLOG-REPLENISH-TRIGGER]"`；否則值為 `"[BACKLOG-HEALTH-OK]"`
+- `action`: 後續動作（`"trigger-discovery"` 表示應觸發 Backlog Discovery；`"no-action"` 表示健康度達標）
