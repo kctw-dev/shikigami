@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-25（Sprint 158 完成 — SRE patrol 記憶體趨勢洩漏告警機制、cruise log 歸檔每日自動觸發）
+> 最後更新：2026-03-25（Sprint 160 完成 — 強化框架品質防禦與開發者體驗：QA FREE-MAD 韌性、專案範本、JIT 載入策略、Schema-First 驗證、Quick Ship Pipeline、Quality Observer MCP Phase 2、Session Watchdog）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.101.0**（Sprint 158 — SRE patrol 記憶體趨勢洩漏告警機制、cruise log 歸檔每日自動觸發）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.103.0**（Sprint 160 — 強化框架品質防禦與開發者體驗：QA FREE-MAD 韌性、專案範本、JIT 載入策略、Schema-First 驗證、Quick Ship Pipeline、Quality Observer MCP Phase 2、Session Watchdog）。
 
 | 版號 | 含義 |
 |------|------|

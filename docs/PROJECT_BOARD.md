@@ -1,13 +1,14 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 160 Planning 完成）
-**當前 Sprint**：Sprint 160（進行中）
+**最後更新**：2026-03-25（Sprint 160 Review 完成 — v0.103.0）
+**當前 Sprint**：Sprint 161（下一 Sprint 待規劃）
 
 ---
 
-## Sprint 160（進行中）
+## Sprint 160（完成）
 
 > Sprint Goal：強化框架品質防禦與開發者體驗 — 建立 QA 立場韌性機制、專案快速範本、Session Watchdog 心跳監控、Quality Observer MCP Phase 2 端點強化、Context Engineering JIT 載入策略、Quick Ship Pipeline 與 Schema-First 強制驗證工具
+> **結果**：Goal 達成（7/7 Stories DONE）。Velocity 7 pts，完成率 100%。
 > **容量**：7 pts
 
 | Story | Issue | Size | Points | 狀態 |
