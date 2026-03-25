@@ -212,6 +212,24 @@
 
 Story-Lifecycle subagent 在回傳摘要前，會將結果寫入 `docs/sprints/subagent-results/{story_id}.md` 暫存文件（見 story-lifecycle-prompt.md §9.1）。
 
+### AC3 — Sprint Execution 暫存文件確認（#737）
+
+<!-- #737 Story-Lifecycle subagent 結果暫存強化（CACHE-RECOVERY 防失敗）— Sprint 155 -->
+
+主 session 收到 Story-Lifecycle subagent 回傳結果後，**必須執行以下確認步驟**：
+
+```bash
+# AC3：確認暫存文件存在（#737 強化）
+CACHE_FILE="docs/sprints/subagent-results/${story_id}.md"
+if [ -f "$CACHE_FILE" ]; then
+  echo "[CACHE-CONFIRM-OK] story=${story_id} 暫存文件已確認存在"
+else
+  echo "[CACHE-CONFIRM-WARN] story=${story_id} 暫存文件不存在（subagent 可能未寫入 §9.1）"
+fi
+```
+
+**確認失敗處理**：`[CACHE-CONFIRM-WARN]` 為警告，不阻塞主流程。記錄至 cruise log 供後續分析。
+
 ### 暫存文件用途
 
 | 情境 | 行為 |

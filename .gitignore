@@ -30,3 +30,5 @@ logs/
 docs/cruise-logs/archive/**/*.jsonl
 # .gz 檔案允許入版控（! 規則豁免）
 !docs/cruise-logs/archive/**/*.gz
+# Sprint Execution subagent 結果暫存（runtime only，#737 AC NFR1）
+docs/sprints/subagent-results/*.md
