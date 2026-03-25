@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 145 Planning — 2 Stories / 2 pts）
-**當前 Sprint**：Sprint 145（進行中）
+**最後更新**：2026-03-25（Sprint 145 完成 — 2/2 Stories DONE / 2 pts）
+**當前 Sprint**：Sprint 145（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
@@ -15,15 +15,16 @@
 
 ---
 
-## Sprint 145（進行中）
+## Sprint 145（完成）
 
 > Sprint Goal：完成 Sprint 144 遺留的兩個維護性 Action Items：修復 gemini-extension.json 版號不一致，並系統性清理 validate-orphans.sh 剩餘 221 個 WARNING，提升框架版號一致性與工具信噪比。
+> **結果**：Goal 達成（2/2 Stories DONE）。Velocity 2 pts，完成率 100%。連續第 19 Sprint 100%（127-145）。
 > **容量**：2 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| chore: 修復 gemini-extension.json 版號不一致（0.95.0 → 0.95.1） | #673 | S | 1 | TODO |
-| chore: validate-orphans.sh 剩餘 221 WARNING 系統性分類與批次豁免 | #674 | S | 1 | TODO |
+| chore: 修復 gemini-extension.json 版號不一致（0.95.0 → 0.95.1） | #673 | S | 1 | DONE(#675) |
+| chore: validate-orphans.sh 剩餘 221 WARNING 系統性分類與批次豁免 | #674 | S | 1 | DONE(#676) |
 
 ---
 

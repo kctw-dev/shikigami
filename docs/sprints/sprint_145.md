@@ -2,7 +2,7 @@
 sprint: 145
 start_date: 2026-03-25
 end_date: 2026-03-31
-status: in-progress
+status: done
 velocity_baseline: 5.7
 capacity: 2
 version_target: v0.96.2
@@ -18,8 +18,8 @@ version_target: v0.96.2
 
 | Story | Issue | Type | Size | Points | 狀態 | Assignee | 獨立性 |
 |-------|-------|------|------|--------|------|----------|--------|
-| chore: 修復 gemini-extension.json 版號不一致（0.95.0 → 0.95.1） | #673 | CHORE | S | 1 | TODO | Developer | Wave 1（獨立） |
-| chore: validate-orphans.sh 剩餘 221 WARNING 系統性分類與批次豁免 | #674 | CHORE | S | 1 | TODO | Developer | Wave 1（獨立） |
+| chore: 修復 gemini-extension.json 版號不一致（0.95.0 → 0.95.1） | #673 | CHORE | S | 1 | DONE(#675) | Developer | Wave 1（獨立） |
+| chore: validate-orphans.sh 剩餘 221 WARNING 系統性分類與批次豁免 | #674 | CHORE | S | 1 | DONE(#676) | Developer | Wave 1（獨立） |
 
 **Sprint 容量**：2 pts（Sprint 142=5, 143=6, 144=6, avg≈5.7；本 Sprint 僅 2 個 retro-action 候選，低容量正常）
 
@@ -42,8 +42,8 @@ version_target: v0.96.2
 
 ## DoD（Definition of Done）
 
-- [ ] 所有 AC 通過驗收
-- [ ] `bash scripts/validate-version.sh` 全部 PASS
-- [ ] `bash scripts/validate-orphans.sh` WARNING 數量 < 50
-- [ ] git commit + push 完成
-- [ ] GitHub Issues 關閉
+- [x] 所有 AC 通過驗收
+- [x] `bash scripts/validate-version.sh` 全部 PASS
+- [x] `bash scripts/validate-orphans.sh` WARNING 數量 < 50（實際 9 個）
+- [x] git commit + push 完成
+- [x] GitHub Issues 關閉
