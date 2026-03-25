@@ -752,6 +752,35 @@ bash scripts/update-adr-index.sh
 4. 以 Edit 工具寫回（old_string = 原始資料列全文，new_string = 替換後全文）
    - 使用完整資料列作為 old_string 確保精確定位
 
+## §8.2.5 SUGGESTION 記錄（可選，#799，NFR1：永不阻塞 merge）
+
+<!-- #799 Review Suggestions 追蹤 — Sprint 161 -->
+
+**觸發條件**：PR merge 完成後，若本 Story 的 Code Review 中有任何 SUGGESTION tier 建議（非阻塞性改善建議），**可選擇**記錄至 `docs/km/review-suggestions.md`。
+
+**規則**：
+- 此步驟為**完全可選（optional）**，跳過不影響 Story 完成狀態
+- **永不阻塞 merge**：即使記錄失敗（文件不存在、寫入錯誤），Story 仍標記完成
+- append-only：僅允許新增記錄，不可刪除或修改已有記錄
+
+**記錄格式**：
+
+```bash
+# 記錄 SUGGESTION（可選，merge 後執行）
+REVIEW_SUGGESTIONS_LOG="docs/km/review-suggestions.md"
+if [[ -f "$REVIEW_SUGGESTIONS_LOG" && -n "${SUGGESTION_TEXT:-}" ]]; then
+  printf "| %s | #%s | %s | SUGGESTION | open | Sprint %s |\n" \
+    "$(date '+%Y-%m-%d')" "${STORY_ID}" "${SUGGESTION_TEXT}" "${SPRINT_NUM}" \
+    >> "$REVIEW_SUGGESTIONS_LOG" || true  # 永不阻塞
+  echo "[SUGGESTION-RECORDED] #${STORY_ID}: ${SUGGESTION_TEXT}"
+fi
+# 若無 SUGGESTION 或記錄失敗：靜默跳過（不輸出任何 warning）
+```
+
+**稽核**：`bash scripts/review-suggestion-audit.sh docs/km/review-suggestions.md`
+
+---
+
 ## §8.3 共用文件更新（平行執行路徑）
 
 <!-- US-188 平行 subagent 禁止直接修改共用文件 — Sprint 72 -->
