@@ -111,17 +111,51 @@ QA Engineer 在品質門禁之外，還承擔 **Decision Challenger**（Devil's 
 ## 7. 審查失敗處理
 
 <!-- US-384 Review 建議清單分層（MUST FIX vs SUGGESTION）— Sprint 119 -->
+<!-- #773 quality-gate CRITICAL 互動決策點 — Sprint 159 -->
 
 當品質門禁發現問題時，依分層處理：
 
 **MUST FIX 層（阻塞）**：
 
 1. QA subagent 產出問題清單，每個 MUST FIX 問題標注嚴重度（Critical / Important）
-2. **Critical 問題**：進入 `references/review-checklist.md §7.1` CRITICAL 互動決策點，使用者選擇 A/B/C
-3. 選擇 A（修復）：Developer subagent 接收問題清單進行修復，修復完成後重新執行品質門禁審查
-4. 選擇 B/C：強制寫入決策記錄（`references/review-checklist.md §7.2`），流程繼續
-5. 同一門禁連續失敗 3 次（選擇 A 後仍 FAIL），升級至 Architect 評估是否存在設計層面的問題
-6. 同一 Story/PR 連續選擇 B/C 超過 2 次，強制升級至 Architect 審查
+2. **Critical 問題**：執行 CRITICAL 互動決策點（§7.1），使用者選擇 A/B/C（AC1）
+3. 選擇 A（Accept Risk）：需提供非空 rationale，記錄至 `docs/km/quality-gate-decisions.md`，流程繼續（AC2/AC3）
+4. 選擇 B（Reject & Fix）：Developer subagent 接收問題清單進行修復，修復完成後重新執行品質門禁審查；記錄至 `docs/km/quality-gate-decisions.md`（AC2）
+5. 選擇 C（Defer）：強制寫入決策記錄，流程繼續（AC2）
+6. 同一門禁連續失敗 3 次（選擇 B 後仍 FAIL），升級至 Architect 評估是否存在設計層面的問題
+7. 同一 Story/PR 連續選擇 A/C 超過 2 次，強制升級至 Architect 審查
+
+### §7.1 CRITICAL 互動決策點（#773 AC1）
+
+CRITICAL 發現時，呼叫 `scripts/interactive-review.sh`：
+
+```bash
+# project_level=low：自動選 B（Reject），不中斷自動執行
+# project_level=medium/high：輸出互動提示，等待決策
+bash scripts/interactive-review.sh \
+  --story "#<story_id>" \
+  --finding "<finding_summary>" \
+  --severity "CRITICAL" \
+  --decision "<A|B|C>" \          # 使用者決策或 auto-reject
+  --rationale "<non-empty text>"  # A 選項必填
+  --decisions-file "docs/km/quality-gate-decisions.md" \
+  --sprint "<sprint_N>"
+```
+
+**輸出格式（AC1）**：
+```
+=== [CRITICAL] Quality Gate Interactive Decision Point ===
+Story    : #<N>
+Finding  : <finding summary>
+Severity : CRITICAL
+
+Choose a decision:
+  [A] Accept Risk + Reason
+  [B] Reject & Fix (recommended)
+  [C] Defer to Next Sprint
+```
+
+**project_level=low 自動行為（NFR2）**：自動選擇 [B] Reject，輸出 `[INTERACTIVE-REVIEW] project_level=low — auto-selecting [B] Reject`，不停下等待人工介入。
 
 **SUGGESTION 層（非阻塞）**：
 
