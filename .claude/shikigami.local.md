@@ -16,6 +16,7 @@ shikigami:
   cruise:
     patrol: po                        # po | sre | both（預設 both）
     progress_fallback_window: 30m     # 背景 Agent 進度偵測 fallback 視窗（預設 30m，支援 Nm / Nh）
+    cruise_archive_days: 7            # cruise log 歸檔天數門檻（超過此天數的 JSONL 自動壓縮，#738 AC2）
   oauth:
     warn_threshold_hours: 24          # OAuth Token 過期告警門檻（預設 24 小時）
   backlog_health:
