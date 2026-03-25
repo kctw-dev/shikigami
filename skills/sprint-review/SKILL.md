@@ -233,6 +233,12 @@ fi
 6. **同步記錄至 `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md`**（per-session 檔案，US-322 AC-4）
 7. **代理人校準儀式** — 角色 prompt：`skills/sprint-review/references/stakeholder-prompt.md`
 8. **寫入 Retro 會議紀錄** — 寫入 `docs/meetings/YYYY-MM-DD-retro.md`（詳見 `references/meeting-format.md`）
+9. **Model Routing Dashboard 更新（#711，AC4）** — 在 Retro 會議紀錄寫入後，自動執行：
+   ```bash
+   bash scripts/routing-stats.sh
+   # [OK] Model Routing Dashboard 已更新 → 繼續
+   # 失敗 → 輸出 [WARN] routing-stats.sh 執行失敗，繼續（不阻塞主流程）
+   ```
 
 ## 4. Action Items 驗收機制
 
