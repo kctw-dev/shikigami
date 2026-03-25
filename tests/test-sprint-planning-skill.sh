@@ -154,6 +154,52 @@ test_tc11_empty_round1_edge_case_note() {
 }
 
 # ---------------------------------------------------------------------------
+# #656：Pre-flight Backlog 健康度檢查測試
+# 目標檔案：SKILL.md 本體
+# ---------------------------------------------------------------------------
+MAIN_SKILL_FILE="$(cd "$(dirname "$0")/.." && pwd)/skills/sprint-planning/SKILL.md"
+
+# TC-12：AC1 — Pre-flight 健康度檢查步驟存在於 SKILL.md
+test_tc12_preflight_check_step_exists() {
+  assert_file_contains \
+    "Pre-flight Backlog 健康度檢查" \
+    "$MAIN_SKILL_FILE" \
+    "TC-12：Pre-flight Backlog 健康度檢查步驟存在"
+}
+
+# TC-13：AC4 — 健康度檢查指令存在
+test_tc13_preflight_check_command_exists() {
+  assert_file_contains \
+    'sprint-candidate' \
+    "$MAIN_SKILL_FILE" \
+    "TC-13：健康度檢查使用 sprint-candidate label"
+}
+
+# TC-14：AC2 — [BACKLOG-WARN] 關鍵字存在
+test_tc14_backlog_warn_keyword_exists() {
+  assert_file_contains \
+    "[BACKLOG-WARN]" \
+    "$MAIN_SKILL_FILE" \
+    "TC-14：[BACKLOG-WARN] 關鍵字存在於 SKILL.md"
+}
+
+# TC-15：AC3 — [BACKLOG-OK] 關鍵字存在
+test_tc15_backlog_ok_keyword_exists() {
+  assert_file_contains \
+    "[BACKLOG-OK]" \
+    "$MAIN_SKILL_FILE" \
+    "TC-15：[BACKLOG-OK] 關鍵字存在於 SKILL.md"
+}
+
+# TC-16：AC2 — 觸發 backlog-management 說明存在
+test_tc16_backlog_management_trigger_exists() {
+  assert_file_contains \
+    "backlog-management" \
+    "$MAIN_SKILL_FILE" \
+    "TC-16：觸發 /backlog-management 說明存在"
+}
+
+# ---------------------------------------------------------------------------
 # 執行所有測試
 # ---------------------------------------------------------------------------
 echo "=============================="
@@ -172,6 +218,18 @@ test_tc08_no_silent_acceptance
 test_tc09_alert_format_deviation_list
 test_tc10_drift_alert_keyword_exists
 test_tc11_empty_round1_edge_case_note
+
+echo ""
+echo "=============================="
+echo " #656 Pre-flight Backlog 健康度檢查 測試"
+echo "=============================="
+echo ""
+
+test_tc12_preflight_check_step_exists
+test_tc13_preflight_check_command_exists
+test_tc14_backlog_warn_keyword_exists
+test_tc15_backlog_ok_keyword_exists
+test_tc16_backlog_management_trigger_exists
 
 echo ""
 echo "=============================="

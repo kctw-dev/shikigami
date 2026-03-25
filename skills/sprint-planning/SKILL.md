@@ -40,6 +40,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 - [ ] 執行框架健康檢查（<!-- Claude Code -->invoke shikigami:health-check<!-- OpenCode -->使用 health-check skill<!-- /OpenCode -->）*(慢想)*
 - [ ] 角色權重調整檢查（詳見 §7）*(慢想)*
 - [ ] **PO** 掃描 GitHub open issues，對未分類 issues 執行 Triage（<!-- Claude Code -->invoke shikigami:issue-management Triage<!-- OpenCode -->使用 issue-management skill<!-- /OpenCode -->）
+- [ ] **Pre-flight Backlog 健康度檢查**：執行 `gh issue list --label "sprint-candidate" --state open --json number | jq length` 取得 `BACKLOG_COUNT`；若 `BACKLOG_COUNT < 5`，輸出 `[BACKLOG-WARN] sprint-candidate 不足 (N < 5)，建議先執行 backlog-management` 並自動觸發 `/backlog-management` skill 補充；若 `BACKLOG_COUNT >= 5`，輸出 `[BACKLOG-OK] sprint-candidate: N 個，健康度正常` 並繼續
 - [ ] 記錄 Sprint Planning 開始時間：`START_TIME=$(date '+%Y-%m-%dT%H:%M+08:00')`
 - [ ] **PO** 執行 Backlog 排序與 Story 選取（詳見 [po-prompt.md](./references/po-prompt.md) Round 1）
 - [ ] **PO Round 1 ADR 自動納入**（#456）：PO 選取 Story 後，掃描 Architect 技術評估的 ADR 欄位；若有標注「已補建 #N（RESEARCH）」的 ADR Story，自動將該 ADR RESEARCH Story 一併選入同一 Sprint（AC2）
@@ -118,6 +119,7 @@ project_level=low 時，Sprint Planning commit + push 完成後，必須自動 i
 | 0 | 健康檢查 | 完整 4 項檢查 | — | *(慢想)* |
 | 0.5 | 角色權重調整 | 讀取 Retro Log，執行關鍵字比對（§7） | — | *(慢想)* |
 | 0.9 | Issue 快掃 | `/issue-management` 批次模式 | — | — |
+| 0.95 | Backlog 健康度 Pre-flight | `sprint-candidate` open Issues 計數；< 5 → `[BACKLOG-WARN]` + `/backlog-management`；≥ 5 → `[BACKLOG-OK]` | — | — |
 | R1–R3 | Refinement | M/L Story 前置門禁（詳見 [architect-prompt.md](./references/architect-prompt.md)） | opus | [architect-prompt.md](./references/architect-prompt.md) |
 | 1 | PO Round 1 | Backlog 分析、Story 選取、獨立性評估 | sonnet | [po-prompt.md](./references/po-prompt.md) |
 | 2 | Architect | 技術評估、ADR 檢查、平行分群、方法論評估 | opus | [architect-prompt.md](./references/architect-prompt.md) |
