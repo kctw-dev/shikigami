@@ -44,7 +44,7 @@ Shikigami 目前所有 agent 統一使用 `model: sonnet`，無任務風險分�
 
 | Tier | Model | 適用風險分數 | 適用任務類型 |
 |------|-------|------------|------------|
-| **Tier 1：haiku** | `claude-haiku-*`（最新穩定版） | 4–6 | doc-only 修改、log 摘要、格式轉換、retro-action 文件類、schema 範例新增 |
+| **Tier 1：haiku** | `claude-haiku-*`（最新穩定版） | 4–6 | doc-only 修改、log 摘要、格式轉換、retro-action 文件類、schema 範例新增、**backlog-management Issue 建立（新增 sprint-candidate）**、**Cruise PO 巡邏留言操作（comment-only 巡邏 cycle）**、**Sprint Review Metrics 計算**、**Sprint Review Analytics 趨勢分析** |
 | **Tier 2：sonnet** | `claude-sonnet-*`（最新穩定版） | 7–9 | 一般功能實作、CI workflow 修改、Backlog 分析、Sprint Planning PO Round 1 |
 | **Tier 3：opus** | `claude-opus-*`（最新穩定版） | 10–12 | 架構設計（ADR）、安全審查、L-size Story、跨 Sprint 依賴分析、Sprint Planning Architect/QA |
 
@@ -59,6 +59,33 @@ Shikigami 目前所有 agent 統一使用 `model: sonnet`，無任務風險分�
 - QA subagent（Sprint Planning）：固定 `opus`
 - Security self-review：固定 `opus`
 - 所有其他 agent：預設 `sonnet`，可依動態路由升降
+
+---
+
+### 決策 2.5：haiku 適用場景擴充（#817，Sprint 163）
+
+<!-- #817 retro: ADR-039 haiku 路由適用場景擴充 — Sprint 163 -->
+
+**背景**：Sprint 161 Retro [OVER-ROUTING-WARN] 顯示 haiku 比例 21% < 30% 目標，需識別更多可降級場景。
+
+以下任務類型新增至 Tier 1（haiku）適用範圍：
+
+| 任務類型 | 識別條件 | Risk Score 估計 | 說明 |
+|---------|---------|---------------|------|
+| **Backlog 補充 Issue 建立** | `story_type=PROCESS`，任務僅為建立 GitHub Issues 且無程式碼修改 | 4（1+1+1+1） | Issue 建立為可逆操作，僅影響 GitHub，有固定範本，不涉及架構推理 |
+| **Cruise PO 巡邏 comment-only cycle** | Cruise cycle 無 actionable Issues，僅執行 GitHub 留言更新 | 5（1+1+2+1） | 留言操作可覆寫，無代碼修改，半範本（有固定留言格式） |
+| **Sprint Review Metrics 計算** | `task=metrics-calculation`，僅讀取 sprint_N.md 計算 velocity/完成率 | 4（1+1+1+1） | 純數值計算，有明確公式，結果可驗證，docs 僅追加 |
+| **Sprint Review Analytics 趨勢分析** | `task=trend-analysis`，從 Metrics_Log.md 計算趨勢 | 5（1+1+2+1） | 趨勢判斷邏輯固定（連升/連降/穩定/不規則），半範本 |
+| **retro-action doc-only Story** | `doc_only=true`，`story_type=PROCESS`，title 含「retro:」 | 4-5（依新穎程度） | 文件修改為可逆，影響範圍小，通常有前次 retro 範本可循 |
+
+**路由記錄範例（新增規則）**：
+```
+model-route #818 tier=1 score=4 model=haiku reason=backlog-issue-creation+no-code
+model-route cruise-cycle-N tier=1 score=5 model=haiku reason=comment-only+no-actionable
+model-route sprint-163-metrics tier=1 score=4 model=haiku reason=metrics-calculation+template
+```
+
+**預期效果**：haiku 比例從 21% 提升至 >= 25%（AC3 可接受閾值）。
 
 ---
 
