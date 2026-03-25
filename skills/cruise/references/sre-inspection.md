@@ -89,6 +89,46 @@ fi
 **NFR1**：執行時間 < 5s（validate-hooks.sh 本地腳本，無外部 API 呼叫）
 **NFR2**：validate-hooks.sh 失敗不阻塞 SRE patrol 主流程（`|| true` 保護）
 
+## 記憶體使用趨勢偵測（#743）
+
+<!-- #743 SRE patrol 記憶體使用趨勢偵測（漸進式洩漏告警）— Sprint 158 -->
+
+每次 SRE patrol 執行時，記錄系統可用記憶體並分析趨勢，偵測漸進式記憶體洩漏。
+
+```bash
+# 記憶體趨勢偵測（每次 SRE patrol 執行）
+# AC1: 記錄 get_available_memory_mb() 至 cruise log（type: sre-memory-check）
+# AC2: 若連續 3 次下降 > 10%，輸出 [MEMORY-TREND-WARN]
+# NFR: 不阻塞 SRE patrol 主流程
+
+# Source memory detection utilities
+source "${REPO_PATH}/scripts/memory-aware-dispatch.sh" 2>/dev/null || true
+
+AVAILABLE_MB=$(get_available_memory_mb 2>/dev/null || echo "0")
+
+# AC1: 寫入 cruise log（type: sre-memory-check）
+echo "{\"ts\":\"$(date '+%Y-%m-%dT%H:%M:%S%z')\",\"type\":\"sre-memory-check\",\"session\":\"${SESSION_ID}\",\"available_mb\":${AVAILABLE_MB}}" >> "${LOG_FILE}"
+echo "[MEMORY-CHECK] 可用記憶體：${AVAILABLE_MB}MB（已記錄至 cruise log）"
+
+# AC2: 分析趨勢
+MEMORY_TREND_RESULT=$(bash "${REPO_PATH}/scripts/memory-trend-check.sh" \
+  --log-file "${LOG_FILE}" \
+  --window "${MEMORY_TREND_WINDOW:-5}" 2>&1) || true
+echo "${MEMORY_TREND_RESULT}"
+# 不阻塞：無論結果如何，SRE patrol 主流程繼續執行
+```
+
+**輸出說明**：
+
+| 結果 | 輸出 | cruise log type | 嚴重度 |
+|------|------|----------------|--------|
+| 正常 | `[MEMORY-TREND-OK]` | sre-memory-check | 靜默記錄 |
+| 洩漏告警 | `[MEMORY-TREND-WARN]` | sre-memory-check | WARN（不阻塞） |
+
+**設定**：
+- `MEMORY_TREND_WINDOW`（環境變數）：分析窗口（預設 5 次 patrol）
+- 分析腳本：`scripts/memory-trend-check.sh`
+
 ## Runner 健康檢查
 
 > **前置條件**：查詢 org-level runner 需要 `admin:org` scope（`gh auth refresh -s admin:org`）。若缺少此 scope 將自動 fallback 至 repo-level。
