@@ -1,13 +1,13 @@
 {
   "sprint": 157,
-  "updated_at": "2026-03-25T18:25:00+0800",
+  "updated_at": "2026-03-25T18:32:41+0800",
   "session_id": "cron-20260325-180501",
   "stories": [
     {"id": "732", "title": "feat: Sprint Review 邊界案例測試自動化", "status": "completed", "pr": 761, "merge_commit": "a166a3a42e2fad5c0ed1dfbf277eb0356d22b72c"},
     {"id": "742", "title": "feat: ADR 目錄索引自動維護", "status": "completed", "pr": 762, "merge_commit": "8f495cdb394624a9145c30ce4fe0ea66c7cd7f37"},
     {"id": "744", "title": "feat: Sprint Planning 會議紀錄模板標準化", "status": "completed", "pr": 763, "merge_commit": "277d8841b578cc58d7e75484a4c09b5277cd9520"},
-    {"id": "709", "title": "feat: Sprint Review 指標收集平行化", "status": "pending"},
-    {"id": "711", "title": "feat: ADR-039 Model Routing Dashboard", "status": "pending"}
+    {"id": "709", "title": "feat: Sprint Review 指標收集平行化", "status": "completed", "pr": 764, "merge_commit": "744dc8a1f08204d0d22b47f2e6f76105948257cf"},
+    {"id": "711", "title": "feat: ADR-039 Model Routing Dashboard", "status": "completed", "pr": 765, "merge_commit": "132f9a020dc5236d2d08ccaddf2029307dd9f5b5"}
   ],
-  "sprint_status": "in-progress"
+  "sprint_status": "completed"
 }
