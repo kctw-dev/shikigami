@@ -14,9 +14,12 @@ shikigami:
     default: kctw-dev/shikigami       # 預設回報目標
     # Future: pattern-based routing（尚未實作，目前僅使用 default）
   cruise:
+    patrol: po                        # po | sre | both（預設 both）
     progress_fallback_window: 30m     # 背景 Agent 進度偵測 fallback 視窗（預設 30m，支援 Nm / Nh）
   oauth:
     warn_threshold_hours: 24          # OAuth Token 過期告警門檻（預設 24 小時）
+  backlog_health:
+    threshold: 8                      # sprint-candidate 最少數量閾值，低於此值觸發補充信號（預設 8）
 ---
 
 # Shikigami 專案配置

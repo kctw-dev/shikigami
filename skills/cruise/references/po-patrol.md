@@ -683,3 +683,63 @@ SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | t
 | `"auto-close"` | `awaiting-reply`/`pending` 超過 2h 未回應，自動關閉（AC-4） |
 | `"waiting"` | `awaiting-reply`/`pending` 未超時，維持等待（AC-1 全覆蓋） |
 | `"skipped"` | Stakeholder Issue 跳過（含 reason） |
+
+# ── Step 5.6：Backlog 健康度檢查與信號消費（#698）──
+
+## Backlog 健康度信號消費
+
+Sprint Review 流程（`skills/sprint-review/SKILL.md` §2.7）在完成 Issue 狀態回寫後，執行 Backlog 健康度檢查，若 sprint-candidate 數量低於閾值，產生 `[BACKLOG-REPLENISH-TRIGGER]` 信號。
+
+**信號消費流程**（cruise PO-patrol 偵測）：
+
+```bash
+# 偽碼：PO-patrol 掃描完成後，檢查是否有待消費的 [BACKLOG-REPLENISH-TRIGGER] 信號
+# 信號來源：前次 Sprint Review 的 cruise log 中 type="backlog-health" 且 signal="[BACKLOG-REPLENISH-TRIGGER]"
+
+# 讀取最新 backlog-health log entry
+LATEST_BACKLOG_LOG=$(tail -50 docs/cruise-logs/*.jsonl | grep '"type":"backlog-health"' | tail -1)
+
+if [[ -n "$LATEST_BACKLOG_LOG" ]] && echo "$LATEST_BACKLOG_LOG" | jq -e '.signal == "[BACKLOG-REPLENISH-TRIGGER]"' > /dev/null 2>&1; then
+  # 信號已偵測，執行信號消費
+  SPRINT_CANDIDATE_COUNT=$(echo "$LATEST_BACKLOG_LOG" | jq '.sprint_candidate_count')
+  THRESHOLD=$(echo "$LATEST_BACKLOG_LOG" | jq '.threshold')
+  
+  echo "[BACKLOG-REPLENISH-TRIGGER] 偵測到：sprint-candidate=$SPRINT_CANDIDATE_COUNT < threshold=$THRESHOLD"
+  
+  # 根據 project_level 執行 Backlog Discovery
+  if [[ "$PROJECT_LEVEL" == "low" ]]; then
+    # low：自動觸發 Backlog Discovery
+    echo "project_level=low，自動執行 Backlog Discovery"
+    invoke shikigami:backlog-discovery
+    log action: "backlog-replenish-triggered (project_level=low, sprint_candidate=${SPRINT_CANDIDATE_COUNT})"
+  elif [[ "$PROJECT_LEVEL" == "medium" ]]; then
+    # medium：留言通知，等確認
+    gh issue comment <最新 sprint-candidate Issue> -R ${OWNER_REPO} --body "## [Backlog 補充通知]
+
+Backlog 健康度檢查：sprint-candidate Issues 數量 ${SPRINT_CANDIDATE_COUNT} < 閾值 ${THRESHOLD}
+
+Backlog 已不足，建議執行 Backlog Discovery 補充新的候選項目。
+
+project_level=medium，請確認是否執行 Backlog Discovery。"
+    log action: "backlog-replenish-notify (project_level=medium, sprint_candidate=${SPRINT_CANDIDATE_COUNT})"
+  else:  # high
+    # high：只標記
+    log action: "backlog-replenish-marked (project_level=high, sprint_candidate=${SPRINT_CANDIDATE_COUNT})"
+fi
+```
+
+**信號來源**（詳見 `skills/sprint-review/SKILL.md` §2.7）：
+
+Sprint Review 完成 Issue 狀態回寫（§2.6）後，執行 Backlog 健康度檢查：
+1. 讀取 `.claude/shikigami.local.md` 中 `backlog_health.threshold`（預設 8）
+2. 統計當前 open sprint-candidate Issues 數量
+3. 若 count < threshold，產生信號 `[BACKLOG-REPLENISH-TRIGGER]`；否則產生 `[BACKLOG-HEALTH-OK]`
+4. cruise PO-patrol 將本次檢查結果寫入 JSONL log 為 `type="backlog-health"` entry
+
+**日誌格式**（詳見 `skills/cruise/references/log-format.md`）：
+
+```jsonl
+{"session_id":"abc123","cycle":1,"timestamp":"2026-03-21T11:00:00+0800","type":"backlog-health","repo":"KCTW/shikigami","sprint_candidate_count":5,"threshold":8,"signal":"[BACKLOG-REPLENISH-TRIGGER]","action":"trigger-discovery"}
+```
+
+**非阻塞降級（AC5）**：若 gh API 失敗（無法取得 sprint-candidate 計數），Sprint Review 輸出 `[BACKLOG-HEALTH-WARN]` 並繼續，不中斷 Review 流程。cruise log 記錄此次失敗。

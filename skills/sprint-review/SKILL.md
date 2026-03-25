@@ -96,6 +96,62 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 
 **§2.6 完成後**：Review subagent 立即寫入同步 signal（`docs/sprints/.review-signal-<SESSION_ID>`）。
 
+
+## 2.7 Backlog 健康度檢查（AC1-AC2, AC5）
+
+在 §2.6 Issue 狀態回寫完成後執行，目的為檢查 sprint-candidate Issues 數量是否充足。
+
+### 執行步驟
+
+1. **讀取閾值配置**
+   ```bash
+   # 從 .claude/shikigami.local.md 讀取 backlog_health.threshold，預設值 8
+   BACKLOG_THRESHOLD=$(grep -A 2 "backlog_health:" .claude/shikigami.local.md | grep "threshold:" | awk '{print $2}' || echo "8")
+   ```
+
+2. **計算當前 sprint-candidate 數量**（**非阻塞，gh API 失敗時降級**）
+   ```bash
+   # 計算 open sprint-candidate Issues 數量
+   SPRINT_CANDIDATE_COUNT=$(gh issue list -R ${OWNER_REPO} --label sprint-candidate --state open --json number 2>/dev/null | jq 'length' || echo "UNKNOWN")
+   
+   if [ "$SPRINT_CANDIDATE_COUNT" = "UNKNOWN" ]; then
+     echo "[BACKLOG-HEALTH-WARN] gh API 失敗，無法取得 sprint-candidate 計數，降級處理，繼續 Sprint Review"
+     return 0  # 非阻塞，繼續執行
+   fi
+   ```
+
+3. **判斷是否觸發補充信號**
+   ```bash
+   if [ "$SPRINT_CANDIDATE_COUNT" -lt "$BACKLOG_THRESHOLD" ]; then
+     echo "[BACKLOG-REPLENISH-TRIGGER] sprint-candidate 數量 $SPRINT_CANDIDATE_COUNT < 閾值 $BACKLOG_THRESHOLD，觸發 Backlog Discovery"
+     BACKLOG_SIGNAL="[BACKLOG-REPLENISH-TRIGGER]"
+   else
+     echo "[BACKLOG-HEALTH-OK] sprint-candidate 數量 $SPRINT_CANDIDATE_COUNT >= 閾值 $BACKLOG_THRESHOLD"
+     BACKLOG_SIGNAL="[BACKLOG-HEALTH-OK]"
+   fi
+   ```
+
+4. **寫入 cruise 日誌**（AC4）
+   
+   由 cruise PO-patrol cycle 在下次執行時記錄本次檢查結果為 `backlog-health` JSONL entry（詳見 `skills/cruise/references/log-format.md`）。
+   
+   **日誌格式**：
+   ```json
+   {"session_id":"<SESSION_ID>","cycle":<N>,"timestamp":"<ISO-8601>","type":"backlog-health","repo":"<OWNER_REPO>","sprint_candidate_count":<COUNT>,"threshold":<THRESHOLD>,"signal":"<BACKLOG_SIGNAL>","action":"<ACTION>"}
+   ```
+
+5. **信號消費（AC3）**
+   
+   [BACKLOG-REPLENISH-TRIGGER] 信號由 cruise PO-patrol 下次 cycle 偵測，PO 依 project_level 執行：
+   - `project_level=low`：自動觸發 Backlog Discovery（無須確認）
+   - `project_level=medium`：留言通知，由使用者確認後執行 Backlog Discovery
+   - `project_level=high`：只標記信號，由人工決定是否執行 Discovery
+
+### 約束條件（NFR4）
+
+- **非阻塞**：gh API 失敗時輸出 `[BACKLOG-HEALTH-WARN]` 並繼續 Sprint Review，不中斷流程
+- **效能**：檢查步驟需在 < 30 秒內完成（不含 Discovery 執行）
+- **冪等性**：同一 Sprint Review 執行多次不會重複寫信號（由 cruise cycle 機制保證）
 ---
 
 <!-- ======================================================= -->
