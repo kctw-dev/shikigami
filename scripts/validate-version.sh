@@ -263,6 +263,9 @@ main() {
   # AC-CLAUDE：CLAUDE.md vs plugin.json
   check_claude_md_consistency
 
+  # AC-ROADMAP：ROADMAP.md 版號同步（#810）
+  check_roadmap_version_consistency
+
   # AC2 + AC3
   check_ac2_git_tag_consistency "$PLUGIN_VERSION"
 
@@ -277,6 +280,40 @@ main() {
   echo "=============================="
 
   exit "$EXIT_CODE"
+}
+
+
+
+# ---------------------------------------------------------------------------
+# AC-ROADMAP：比較 ROADMAP.md 目前版本 vs plugin.json version（#810）
+# ---------------------------------------------------------------------------
+check_roadmap_version_consistency() {
+  print_section "AC-ROADMAP：ROADMAP.md 版號同步驗證（#810）"
+
+  local roadmap_file="docs/prd/ROADMAP.md"
+
+  if [ ! -f "$roadmap_file" ]; then
+    print_warning "找不到 $roadmap_file，跳過 ROADMAP 版號檢查"
+    return
+  fi
+
+  # Extract version from "目前版本：**vX.Y.Z**" pattern
+  local roadmap_version
+  roadmap_version=$(grep -oP "目前版本：\*\*v\K[0-9]+\.[0-9]+\.[0-9]+" "$roadmap_file" | head -1)
+
+  echo "  plugin.json  version: $PLUGIN_VERSION"
+  echo "  ROADMAP.md   version: ${roadmap_version:-（未找到）}"
+
+  if [ -z "$roadmap_version" ]; then
+    print_fail "ROADMAP.md 中找不到「目前版本：**vX.Y.Z**」格式，無法驗證版號（請確認 bump 時同步更新）"
+    return
+  fi
+
+  if [ "$PLUGIN_VERSION" = "$roadmap_version" ]; then
+    print_pass "ROADMAP.md 與 plugin.json 版號一致 ($PLUGIN_VERSION)"
+  else
+    print_fail "ROADMAP.md 版號落後：plugin.json=$PLUGIN_VERSION，ROADMAP.md=v$roadmap_version（請執行 bump 更新 ROADMAP.md）"
+  fi
 }
 
 main
