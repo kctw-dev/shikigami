@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-25（Sprint 150 完成 — cruise stale worktree 修復、/shikigami:doctor Skill 新增、bug 模板 NFR 補齊）
+> 最後更新：2026-03-25（Sprint 155 完成 — worktree 清理、容量計算、ADR 衝突預偵測、Claim/Release 容錯、CACHE-RECOVERY 強化）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.97.0**（Sprint 150 — cruise stale worktree 修復、/shikigami:doctor Skill 新增（31 Skills）、bug 模板 NFR 補齊）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.98.0**（Sprint 155 — worktree 清理腳本、容量自動計算、ADR 衝突預偵測、Claim/Release 降級容錯、CACHE-RECOVERY 防失敗）。
 
 | 版號 | 含義 |
 |------|------|
