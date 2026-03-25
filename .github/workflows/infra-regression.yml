@@ -22,6 +22,7 @@ on:
       - "scripts/ci-health-check.sh"
       - "scripts/validate-ci-versions.sh"
       - "tests/test-infra-regression.sh"
+      - "tests/test-sprint-review-boundary.sh"
   pull_request:
     branches:
       - main
@@ -30,6 +31,7 @@ on:
       - "scripts/ci-health-check.sh"
       - "scripts/validate-ci-versions.sh"
       - "tests/test-infra-regression.sh"
+      - "tests/test-sprint-review-boundary.sh"
   workflow_dispatch:
     inputs:
       infra_test_level:
@@ -80,3 +82,6 @@ jobs:
 
       - name: Run hooks validation（#713 onboarding 安裝後驗證）
         run: bash scripts/validate-hooks.sh
+
+      - name: Run Sprint Review boundary tests（#732 邊界案例測試）
+        run: bash tests/test-sprint-review-boundary.sh
