@@ -195,7 +195,7 @@ gh issue comment <number> --body "<comment>"
 
 **摘要**：
 - ADR-010 單層 Issue 架構，直接改寫 Issue body
-- Step 1 Injection 防護 → Step 2 前端識別 + AI 填補 Story template → Step 3 RICE 驗證 → Step 4 改寫 body → Step 5-6 套用 labels + 冪等標記 → Step 7 PO Review Gate
+- Step 1 Injection 防護 → Step 2 前端識別 + AI 填補 Story template（以 `.github/ISSUE_TEMPLATE/` 對應模板為基礎，必含 `## 非功能性需求` 欄位）→ Step 3 RICE 驗證 → Step 4 改寫 body → Step 5-6 套用 labels + 冪等標記 → Step 7 PO Review Gate
 
 ---
 

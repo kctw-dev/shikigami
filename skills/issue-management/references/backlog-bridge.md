@@ -46,7 +46,17 @@ PO subagent 角色宣告：
 
 **Step 2.1：AI 填補 Story template**
 
-PO subagent 根據 Issue 內容產生新 Issue body，格式：
+PO subagent 根據 Issue 內容與類型，**以 `.github/ISSUE_TEMPLATE/` 對應模板為基礎**產生新 Issue body。
+
+**模板選擇規則**：
+
+| Issue 類型 | 對應模板 |
+|-----------|---------|
+| Bug / 缺陷 | `.github/ISSUE_TEMPLATE/bug.md` |
+| Feature / 功能需求 | `.github/ISSUE_TEMPLATE/feature.md` |
+| Chore / Refactor / Docs / Infra | `.github/ISSUE_TEMPLATE/story.md` |
+
+PO subagent 根據選定模板結構填補欄位，並在最前方加上 Backlog Bridge 專屬欄位，最後附加入庫資訊。完整格式如下：
 
 ```markdown
 ## 原始需求
@@ -56,6 +66,8 @@ PO subagent 根據 Issue 內容產生新 Issue body，格式：
 ## User Story
 
 身為 <角色>，我希望 <功能描述>，以便 <業務價值>。
+
+{以下欄位依選定 ISSUE_TEMPLATE 模板結構填補，保持與模板一致的欄位名稱與格式}
 
 ## Acceptance Criteria
 
@@ -97,6 +109,13 @@ PO subagent 根據 Issue 內容產生新 Issue body，格式：
 **入庫時間**：<YYYY-MM-DD>
 **入庫狀態**：待 PO 精化
 ```
+
+**欄位完整性規則**：
+
+- `## 非功能性需求` 欄位為必填，不得省略，至少填寫一條 NFR（AC2 需求）
+- `## 原始需求` blockquote 必須完整保留原始 Issue body（Backlog Bridge 專屬，不在 ISSUE_TEMPLATE 中）
+- `## 入庫資訊` 區塊必須附加於 body 末尾（Backlog Bridge 專屬，不在 ISSUE_TEMPLATE 中）
+- 所有 ISSUE_TEMPLATE 模板欄位均須保留，不得刪減
 
 **Step 3：RICE Score 正則驗證**
 

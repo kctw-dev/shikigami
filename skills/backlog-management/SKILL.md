@@ -59,7 +59,7 @@ Backlog Management 負責 **Backlog Grooming** 流程，由 **Product Owner (PO)
     --json number,title,body,labels --limit 200
   ```
 - [ ] 關閉過時或已不再適用的 Story Issue（`gh issue close <number>`）
-- [ ] 根據最新需求與回饋，新開 Issue 或套用 `status: backlog` label 並編寫 Story template
+- [ ] 根據最新需求與回饋，新開 Issue 或套用 `status: backlog` label 並依 `.github/ISSUE_TEMPLATE/` 對應模板編寫 Story body（feature → feature.md、bug → bug.md、chore/refactor/docs/infra → story.md），確保 `## 非功能性需求` 欄位已填寫
 - [ ] 以 `gh issue edit <number>` 調整優先級 label（`priority: must` / `priority: should` / `priority: could`）並更新 RICE 分數
 - [ ] 確保每個 Backlog Issue body 有清楚的 Acceptance Criteria
 
