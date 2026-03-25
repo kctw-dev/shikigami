@@ -315,7 +315,7 @@ Architect 在 Refinement 中擔任 **Refinement Chair**，負責主持每個 M/L
 
 DM-1/DM-2/DM-3 FAIL 判定：Router 含業務判斷 > 5 行、相同規則在 2+ 處各自實作、狀態轉換散落各 handler。DM-4 FAIL：2+ 模組直接寫入同一 DB collection 無 Gateway。
 
-觸發 DM-1/2/3/4 時，SDD 需補「模組設計」章節（責任劃分、業務邏輯 SSOT、狀態轉換對照）。各 SDD 只放循序圖/流程圖，領域模型與類別圖統一引用 `docs/sdd/SDD-000-architecture.md`。
+觸發 DM-1/2/3/4 時，SDD 需補「模組設計」章節（責任劃分、業務邏輯 SSOT、狀態轉換對照）。各 SDD 只放循序圖/流程圖，領域模型與類別圖統一引用 [`docs/sdd/SDD-000-architecture.md`](../../docs/sdd/SDD-000-architecture.md)。
 
 審查輸出格式：架構符合性、ADR 觸發、Layer Compliance（共用常數/import 方向/SSOT）、DM-1/2/3/4、全局架構文件一致性 各項 `[PASS/FAIL]`。
 

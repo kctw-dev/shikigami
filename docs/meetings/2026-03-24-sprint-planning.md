@@ -25,7 +25,7 @@ Sprint 138 全部完成（4/4 DONE，6 pts），連續第 12 Sprint 100%。#622 
 
 ### 巡邏處置結果
 - **#622**（SRE 調查）：Sprint 138 DONE，結案關閉
-- **#404**（TCB Checkpoint）：ADR-040 Accepted，SM 狀態圖（docs/sdd/scrum-master-state-graph.md）已完成 → Hard Gate PASS，選入 Sprint 139
+- **#404**（TCB Checkpoint）：ADR-040 Accepted，SM 狀態圖（[docs/sdd/scrum-master-state-graph.md](../sdd/scrum-master-state-graph.md)）已完成 → Hard Gate PASS，選入 Sprint 139
 - **#405**（Crash Recovery）：需 ADR，ADR-041 尚未存在 → Hard Gate FAIL，退回 Backlog。新建 #631 ADR RESEARCH Story 先行
 - **#408**（Session Watchdog）：需 ADR，ADR-042 尚未存在 → Hard Gate FAIL，退回 Backlog。新建 #632 ADR RESEARCH Story 先行
 - **#399**（A2A Research）：RESEARCH 類型，無需 ADR → PASS，選入 Sprint 139

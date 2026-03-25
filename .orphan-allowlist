@@ -53,3 +53,15 @@ docs/definition/sbe-examples/
 
 # Infrastructure 文件（infra 設定記錄，不需被引用）
 docs/infra/
+
+# Sprint 146 (#677) — 逐一評估剩餘 9 個孤兒文件後的 B 類豁免
+# Skill 寫作規範（自成體系的風格指南，不需被其他文件引用）
+docs/definition/skill-description-guide.md
+# 設計師協作指南（外部受眾文件，不在框架 .md 引用鏈內）
+docs/design/DESIGNER_GUIDE.md
+# M5 完成度評估報告（PRD 評估產物，自成一體）
+docs/prd/M5_COMPLETION_ASSESSMENT.md
+# SDD-001 前端範本（框架範本文件，自成一體供複製使用，不需被引用）
+docs/sdd/SDD-001-frontend-template.md
+# Sprint 122 Retrospective Analytics（analytics 輸出，與 subagent-results 同性質）
+docs/sprints/sprint_122_retrospective_analytics.md
