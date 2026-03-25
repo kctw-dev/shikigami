@@ -1,7 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 153 Review 完成）
-**當前 Sprint**：Sprint 154（準備中）
+**最後更新**：2026-03-25（Sprint 154 Planning 完成）
+**當前 Sprint**：Sprint 154（進行中）
+
+---
+
+## Sprint 154（進行中）
+
+> Sprint Goal：強化框架自動化防護與可觀察性 — 整合 parallel-safety 全自動決策、建立 cruise logs 歸檔機制、補強 WSL2 測試覆蓋、調整 Backlog 補充閾值策略
+> **容量**：7 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: cruise logs 壓縮歸檔機制（長期可觀測性） | #708 | S | 2 | TODO |
+| retro: Sprint 153 parallel-safety 全自動化 — 消除人工決策 | #722 | M | 2 | TODO |
+| retro: Sprint 153 多平台測試覆蓋強化 — 補充 WSL2 實測 | #720 | S | 1 | TODO |
+| RESEARCH: ADR-043 — Backlog Replenishment Strategy | #723 | S | 1 | TODO |
+| retro: Sprint 153 Backlog 補充頻率調整 — 建立提前預警機制 | #721 | S | 1 | TODO |
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
