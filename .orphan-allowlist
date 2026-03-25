@@ -1,0 +1,22 @@
+# .orphan-allowlist — validate-orphans.sh 永久性孤兒豁免清單
+# 每行為一個豁免路徑前綴（支援前綴匹配）
+# 匹配的孤兒文件改為 [INFO] 輸出，不計入 WARNING 數
+# 空行與 # 開頭行視為註解忽略
+#
+# 建立日期：2026-03-25（Sprint 144，#658）
+# 更新方式：直接新增一行路徑前綴，commit 至 repo（專案設定，需可重現）
+
+# Sprint subagent 執行結果（設計上不需要被引用）
+docs/sprints/subagent-results/
+
+# Sprint TCB 斷點文件
+docs/sprints/tcb/
+
+# Sprint Watchdog 監控文件
+docs/sprints/watchdog/
+
+# 決策文件（非 ADR 格式的決策紀錄）
+docs/decisions/
+
+# 文件模板（設計上為範本，不需被引用）
+docs/templates/
