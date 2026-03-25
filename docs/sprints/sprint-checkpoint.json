@@ -1,10 +1,42 @@
 {
-  "sprint": 158,
-  "updated_at": "2026-03-25T11:21:13Z",
-  "session_id": "cron-20260325-190002",
+  "sprint": 159,
+  "updated_at": "2026-03-25T11:57:24Z",
+  "session_id": "cron-20260325-193001",
   "stories": [
-    {"id": "743", "title": "feat: SRE patrol 記憶體使用趨勢偵測（漸進式洩漏告警）", "status": "completed", "pr": 769, "merge_commit": "fee65913b7d16b8be2b3c122b9fa86904802b6a4"},
-    {"id": "738", "title": "feat: cruise logs 歸檔每日自動觸發（定時 cron 整合）", "status": "completed", "pr": 770, "merge_commit": "26ff3ca380652ce783ff80b72b5388dce02e0381"}
+    {
+      "id": "783",
+      "title": "feat: Kill Switch — 優雅緊急停止機制",
+      "status": "completed",
+      "pr": 784
+    },
+    {
+      "id": "775",
+      "title": "feat: DM-4 Write Gateway 系統化",
+      "status": "completed",
+      "pr": 786
+    },
+    {
+      "id": "779",
+      "title": "feat: quality-gate 決策記錄機制",
+      "status": "pending"
+    },
+    {
+      "id": "774",
+      "title": "spike: Playwright MCP subagent 穩定性驗證",
+      "status": "completed",
+      "pr": 785
+    },
+    {
+      "id": "778",
+      "title": "feat: ADR 目錄索引自動維護 v2",
+      "status": "completed",
+      "pr": 787
+    },
+    {
+      "id": "773",
+      "title": "feat: quality-gate CRITICAL 互動決策點",
+      "status": "pending"
+    }
   ],
-  "sprint_status": "completed"
+  "sprint_status": "in-progress"
 }
