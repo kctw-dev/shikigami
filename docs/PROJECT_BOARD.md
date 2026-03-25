@@ -1,9 +1,20 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 150 完成 — 3/3 Stories DONE / 4 pts）
-**當前 Sprint**：Sprint 150（完成）
+**最後更新**：2026-03-25（Sprint 151 Planning — 1 Story / 2 pts）
+**當前 Sprint**：Sprint 151（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 151（進行中）
+
+> Sprint Goal：強化 Sprint 自治品質 — 實作 Backlog 健康度自動檢查機制
+> **容量**：2 / 6 pts（Backlog 耗盡，僅 1 可用候選）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: Backlog 健康度自動檢查 — sprint-candidate < 8 觸發補充信號 | #698 | M | 2 | TODO |
 
 ---
 
