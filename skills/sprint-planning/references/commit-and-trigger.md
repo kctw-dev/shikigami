@@ -2,11 +2,23 @@
 
 ## Sprint Planning 會議紀錄格式
 
+<!-- #744 會議紀錄模板標準化 — Sprint 157 -->
+
 `docs/meetings/` 目錄若不存在，執行 `mkdir -p docs/meetings` 建立。
 
-檔名規則：`docs/meetings/$(date '+%Y-%m-%d')-sprint-planning.md`
+檔名規則：`docs/meetings/$(date '+%Y-%m-%d')-sprint-{N}-planning.md`
 
 時間取得方式：開始時間在流程第一步（記錄 `START_TIME`）取得，結束時間在寫入紀錄時取得。
+
+**標準模板**：`templates/sprint-planning-meeting.md`（#744）
+
+PO Round 2 產出會議紀錄時，**必須**依照 `templates/sprint-planning-meeting.md` 格式，包含以下必要 sections：
+- `## Sprint Goal`
+- `## Velocity Baseline`（表格：Sprint N-2 / N-1 / 平均 / 建議容量 / 本 Sprint）
+- `## Stories Selected`（表格：Story / Issue / Points / AC 確認 / 說明）
+- `## Risk Notes`（已識別風險與緩解措施）
+- `## Next Sprint Preview`（下一 Sprint 候選 Stories）
+- `## 決議事項`（重要決議清單）
 
 ```yaml
 ---
@@ -24,12 +36,25 @@ participants:
 
 # Sprint <N> Planning 會議紀錄
 
-## 結論
-- Sprint Goal: <goal>
-- 選入 Stories: <story list>
+## Sprint Goal
+> {描述本 Sprint 的核心目標}
+
+## Velocity Baseline
+| Sprint | Velocity |
+...
+
+## Stories Selected
+| Story | Issue | Points | AC 確認 | 說明 |
+...
+
+## Risk Notes
+...
+
+## Next Sprint Preview
+...
 
 ## 決議事項
-1. <decisions>
+1. {重要決議}
 ```
 
 ## 並行衝突防護
