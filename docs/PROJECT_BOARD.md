@@ -1,23 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 159 Phase 2 完成）
-**當前 Sprint**：Sprint 159（進行中）
+**最後更新**：2026-03-25（Sprint 159 全部完成）
+**當前 Sprint**：Sprint 159（完成）
 
 ---
 
-## Sprint 159（進行中）
+## Sprint 159（完成）
 
 > Sprint Goal：強化框架可靠性與品質治理基礎 — 建立 Kill Switch 安全停止機制、DM-4 Write Gateway 系統化保護、quality-gate 決策記錄台帳、Playwright MCP 穩定性驗證 Spike、ADR 索引自動維護與互動式 QA 決策點前置設計
+> **結果**：Goal 達成（6/6 Stories DONE）。Velocity 6 pts，完成率 100%。
 > **容量**：6 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | feat: Kill Switch — 優雅緊急停止機制（Story 邊界安全中止自動執行） | #783 | S | 1 | DONE (#784) |
 | feat: DM-4 Write Gateway 系統化 — 平行 subagent 共用文件寫入保護 | #775 | S | 1 | DONE (#786) |
-| feat: quality-gate 決策記錄機制 — CRITICAL 發現處置台帳 + 防濫用稽核腳本 | #779 | S | 1 | TODO |
+| feat: quality-gate 決策記錄機制 — CRITICAL 發現處置台帳 + 防濫用稽核腳本 | #779 | S | 1 | DONE (#788) |
 | spike: Playwright MCP subagent 穩定性驗證（Browser Automation 前置 Spike） | #774 | S | 1 | DONE (#785) |
 | feat: ADR 目錄索引自動維護 v2 — docs/adr/README.md 可搜尋索引 | #778 | S | 1 | DONE (#787) |
-| feat: quality-gate CRITICAL 互動決策點 — 結構化風險接受 / 拒絕 / 延後機制 | #773 | S | 1 | TODO |
+| feat: quality-gate CRITICAL 互動決策點 — 結構化風險接受 / 拒絕 / 延後機制 | #773 | S | 1 | DONE (#789) |
 
 ---
 
