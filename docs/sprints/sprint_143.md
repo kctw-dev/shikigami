@@ -19,9 +19,9 @@ version_target: v0.96.0
 | Story | Issue | Type | Size | Points | 狀態 | Assignee | 獨立性 |
 |-------|-------|------|------|--------|------|----------|--------|
 | feat: Sprint Planning Pre-flight Backlog 健康度檢查 | #656 | FEAT | S | 1 | DONE(#663) | Developer | Group A (Wave 1) |
-| retro: 評估 #657 是否與 #652 重複，決定關閉或縮小範疇 | #661 | RETRO | S | 1 | TODO | PO | Group B (Wave 2) |
+| retro: 評估 #657 是否與 #652 重複，決定關閉或縮小範疇 | #661 | RETRO | S | 1 | DONE(#665) | PO | Group B (Wave 2) |
 | chore: 清除 new-issue-intake.yml 殘留引用 | #662 | CHORE | S | 1 | DONE(#664) | Developer | Group A (Wave 1) |
-| refactor: sprint-execution/SKILL.md 行數超限重構 | #654 | REFACTOR | M | 3 | TODO | Developer | Group B (Wave 2) |
+| refactor: sprint-execution/SKILL.md 行數超限重構 | #654 | REFACTOR | M | 3 | DONE(#666) | Developer | Group B (Wave 2) |
 
 **Sprint 容量**：6 pts（Sprint 140=5, 141=2, 142=5, avg~4, 本次 6pts 含 3pt 重構）
 
