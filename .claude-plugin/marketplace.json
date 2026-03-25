@@ -8,13 +8,13 @@
     {
       "name": "shikigami",
       "description": "AI Agent Scrum Team：8 個專業角色 × 自治協作 × Discovery → Delivery 全週期覆蓋",
-      "version": "0.96.2",
+      "version": "0.97.0",
       "source": "./",
       "author": {
         "name": "KCTW"
       }
     }
   ],
-  "version": "0.96.2"
+  "version": "0.97.0"
 }
 
