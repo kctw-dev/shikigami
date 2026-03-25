@@ -1,15 +1,13 @@
 {
-  "sprint": 156,
-  "updated_at": "2026-03-25T17:45:00+0800",
-  "session_id": "cron-20260325-172001",
+  "sprint": 157,
+  "updated_at": "2026-03-25T18:10:00+0800",
+  "session_id": "cron-20260325-180501",
   "stories": [
-    {"id": "739", "title": "feat: retro-action 高優先級自動升格 sprint-candidate", "status": "completed", "pr": 753, "merge_commit": "ca18cfd74aeb887c6c3980fc01232c32f8b431e3"},
-    {"id": "741", "title": "feat: GitHub PR 描述模板標準化", "status": "completed", "pr": 754, "merge_commit": "28db1a0d52cd5b895fd0bef70bcd4b8ab76b7bf3"},
-    {"id": "740", "title": "feat: validate-hooks.sh 整合 cruise SRE patrol", "status": "completed", "pr": 755, "merge_commit": "a757fadb13d72252e8b9516fc5fa3904f2642af7"},
-    {"id": "736", "title": "feat: Backlog 健康趨勢報告腳本", "status": "completed", "pr": 755, "merge_commit": "a757fadb13d72252e8b9516fc5fa3904f2642af7"},
-    {"id": "731", "title": "feat: cruise logs 搜尋查詢腳本", "status": "completed", "pr": 756, "merge_commit": "f3d6fe024c4ac49d33e0f77f21c3b906428fea3b"},
-    {"id": "752", "title": "retro: Architect 批次分組共同修改檔案衝突預防標注", "status": "completed", "pr": 756, "merge_commit": "f3d6fe024c4ac49d33e0f77f21c3b906428fea3b"},
-    {"id": "751", "title": "retro: Developer prompt bash arithmetic increment 警示", "status": "completed", "pr": 757, "merge_commit": "f95cabdb36c31ec1272d9933a5ca298317f22d7c"}
+    {"id": "732", "title": "feat: Sprint Review 邊界案例測試自動化", "status": "pending"},
+    {"id": "742", "title": "feat: ADR 目錄索引自動維護", "status": "pending"},
+    {"id": "744", "title": "feat: Sprint Planning 會議紀錄模板標準化", "status": "pending"},
+    {"id": "709", "title": "feat: Sprint Review 指標收集平行化", "status": "pending"},
+    {"id": "711", "title": "feat: ADR-039 Model Routing Dashboard", "status": "pending"}
   ],
-  "sprint_status": "completed"
+  "sprint_status": "in-progress"
 }
