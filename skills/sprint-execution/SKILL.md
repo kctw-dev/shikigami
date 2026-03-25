@@ -305,10 +305,16 @@ Kill Switch 前置檢查（#783，AC2）
 Sprint Backlog 中取出 Story
   |
   v
-Parallel Conflict Prediction 靜態衝突分析（#395，AC1）
+Parallel Conflict Prediction 靜態衝突分析（#395 #780）
   # 取出所有 pending Story 後，靜態比對檔案重疊，分為 Group A（可平行）和 Group B（序列）
   # 輸出 [CONFLICT-PREDICTION] dispatch plan：Group A（平行）| Group B（序列）
   # 詳細分組規則與重評估邏輯：references/conflict-prediction.md
+  #
+  # [#780] Run predict-conflicts.sh before dispatching; use output to pre-arrange batches:
+  #   CONFLICT_JSON=$(bash scripts/predict-conflicts.sh ${story_id_list})
+  #   parallel_stories=$(echo "$CONFLICT_JSON" | python3 -c "import sys,json; d=json.load(sys.stdin); print(' '.join(str(x) for x in d['groups']['parallel']))")
+  #   sequential_stories=$(echo "$CONFLICT_JSON" | python3 -c "import sys,json; d=json.load(sys.stdin); print(' '.join(str(x) for x in d['groups']['sequential']))")
+  #   # 先派遣 parallel_stories（可平行），再序列執行 sequential_stories
   |
   v
 前端 Story 設計資訊 Pre-check（§2.10，story_type=FEATURE 時）

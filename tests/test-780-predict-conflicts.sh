@@ -101,7 +101,7 @@ if [[ -f "${PREDICT_SCRIPT}" ]]; then
   fi
 
   # 驗證輸出 JSON 格式（NFR2）
-  if grep -qE '"conflicts"\|json\|JSON\|jq' "${PREDICT_SCRIPT}" 2>/dev/null; then
+  if grep -qE '"conflicts"|json|JSON|jq' "${PREDICT_SCRIPT}" 2>/dev/null; then
     pass "AC3c: predict-conflicts.sh 輸出 JSON 格式（NFR2）"
   else
     fail "AC3c: predict-conflicts.sh 未輸出 JSON 格式" \
