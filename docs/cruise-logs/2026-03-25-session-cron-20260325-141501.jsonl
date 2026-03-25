@@ -1,0 +1,7 @@
+{"type":"cruise-init","cycle":1,"mode":"once","repo":"kctw-dev/shikigami","patrol":"po","project_level":"low","strict":false,"threshold_days":3,"ts":"2026-03-25T06:15:57Z"}
+{"type":"po-patrol-start","cycle":1,"repo":"kctw-dev/shikigami","ts":"2026-03-25T06:19:28Z"}
+{"type":"po-patrol-action","cycle":1,"repo":"kctw-dev/shikigami","issue":704,"action":"sprint-candidate","detail":"already labeled sprint-candidate, Size=M+, no linked PRs","ts":"2026-03-25T06:19:28Z"}
+{"type":"po-patrol-action","cycle":1,"repo":"kctw-dev/shikigami","issue":703,"action":"sprint-candidate","detail":"already labeled sprint-candidate, Size=M+, no linked PRs","ts":"2026-03-25T06:19:28Z"}
+{"type":"po-patrol-action","cycle":1,"repo":"kctw-dev/shikigami","issue":698,"action":"sprint-candidate","detail":"already labeled sprint-candidate, Size=M+, no linked PRs","ts":"2026-03-25T06:19:28Z"}
+{"type":"po-patrol-complete","cycle":1,"repo":"kctw-dev/shikigami","open_issues":3,"actionable":[],"sprint_candidates":[704,703,698],"closed":[],"idle_detected":true,"sprint_planning_trigger":true,"ts":"2026-03-25T06:19:28Z"}
+{"type":"trigger-sprint-planning","cycle":1,"repo":"kctw-dev/shikigami","reason":"step5-count-threshold+step6-idle-detection","sprint_candidate_count":3,"project_level":"low","ts":"2026-03-25T06:19:42Z"}
