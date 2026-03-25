@@ -41,12 +41,33 @@ Sprint 執行支援**雙軌派遣機制**：由環境變數 `SHIKIGAMI_MODEL_PRO
 <!-- US-188 平行 subagent 禁止直接修改共用文件 — Sprint 72 -->
 <!-- US-255 SHIKIGAMI_MAX_PARALLEL 平行數量上限控制 — Sprint 93 -->
 <!-- #537 Worktree 唯一性檢查（重複派遣防護 Gate） — Sprint 129 -->
+<!-- #712 動態記憶體感知調整機制 — Sprint 153 -->
+<!-- #722 parallel-safety 全自動化 — 消除人工決策 — Sprint 154 -->
 
 <HARD-GATE>
-**平行 Story-Lifecycle subagent 禁止直接修改 `docs/PROJECT_BOARD.md` 和 `docs/sprints/sprint_N.md`**（競態條件防護）。所有平行 subagent 完成後，主 session 統一批次更新。`SHIKIGAMI_MAX_PARALLEL` 環境變數控制最大平行數量（**預設值 2**，未設定時視為 2，OOM 防護，#536）。派遣前必須：(1) 執行 **Worktree 唯一性檢查**：以 `git worktree list --porcelain` 確認同 Story ID 的 worktree 不存在，若已存在則輸出 `[DISPATCH-SKIP]` 跳過（#537）；(2) 計算現存 worktree 數量，超限時輸出 `[OOM-WARN]` 並等待釋放（#536）。Git Worktree 隔離（`isolation: "worktree"`）消除大部分並發衝突。
+**平行 Story-Lifecycle subagent 禁止直接修改 `docs/PROJECT_BOARD.md` 和 `docs/sprints/sprint_N.md`**（競態條件防護）。所有平行 subagent 完成後，主 session 統一批次更新。`SHIKIGAMI_MAX_PARALLEL` 環境變數控制最大平行數量（**預設值 2**，未設定時視為 2，OOM 防護，#536）。派遣前必須：(1) 執行 **Worktree 唯一性檢查**：以 `git worktree list --porcelain` 確認同 Story ID 的 worktree 不存在，若已存在則輸出 `[DISPATCH-SKIP]` 跳過（#537）；(2) **自動執行 memory-aware-dispatch.sh** 取得 FINAL_MAX，超限時輸出 `[OOM-WARN]` 並等待釋放（#536 / #712）。Git Worktree 隔離（`isolation: "worktree"`）消除大部分並發衝突。
 </HARD-GATE>
 
-> 詳見 `references/parallel-safety.md`
+### 自動記憶體感知派遣（#712 / #722）
+
+派遣 subagent 前，**自動**執行 `scripts/memory-aware-dispatch.sh` 取得動態安全並行上限，無需人工決策：
+
+```bash
+# 自動派遣決策（無需人工介入）
+source scripts/memory-aware-dispatch.sh
+FINAL_MAX=$(get_dispatch_decision | jq -r '.final_max')
+# FINAL_MAX = min(DYNAMIC_MAX, SHIKIGAMI_MAX_PARALLEL)
+# DYNAMIC_MAX = floor(available_mb / 512)
+# 若 FINAL_MAX < SHIKIGAMI_MAX_PARALLEL → 自動輸出 [OOM-WARN]，採用 FINAL_MAX
+```
+
+| 情境 | 自動行為 |
+|------|---------|
+| 記憶體充足（available_mb ≥ 512 × N） | 採用靜態上限 N，無警告 |
+| 記憶體受限（available_mb < 512 × N） | 自動降級至 FINAL_MAX，輸出 `[OOM-WARN]` |
+| 偵測失敗（/proc/meminfo 不可讀等） | 靜默降級至靜態值 2，無警告 |
+
+> 詳見 `references/parallel-safety.md`、`docs/sdd/sdd-004-parallel-execution-auto.md`
 
 ---
 
