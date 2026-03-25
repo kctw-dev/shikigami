@@ -1,9 +1,20 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 145 完成 — 2/2 Stories DONE / 2 pts）
-**當前 Sprint**：Sprint 145（完成）
+**最後更新**：2026-03-25（Sprint 146 開始 — 1 Story / 1 pt）
+**當前 Sprint**：Sprint 146（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 146（進行中）
+
+> Sprint Goal：完成 Sprint 145 Retrospective Action Item：為剩餘 9 個孤兒文件補充 markdown link 引用或加入 allowlist 豁免，使 validate-orphans.sh WARNING 歸零，提升框架可維護性。
+> **容量**：1 pt
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: 為剩餘 9 個孤兒文件補充引用或 allowlist 豁免 | #677 | S | 1 | TODO |
 
 ---
 
