@@ -16,8 +16,8 @@ if [[ -n "$REPO_ROOT" ]]; then
   cd "$REPO_ROOT"
 fi
 
-pass() { echo "  PASS: $1"; ((PASS++)); }
-fail() { echo "  FAIL: $1"; ((FAIL++)); }
+pass() { echo "  PASS: $1"; PASS=$((PASS+1)); }
+fail() { echo "  FAIL: $1"; FAIL=$((FAIL+1)); }
 
 GAP_DOC="docs/research/agent-skills-standard-gap-analysis.md"
 

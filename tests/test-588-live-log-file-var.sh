@@ -13,10 +13,10 @@ assert() {
   local result="$2"
   if [[ "$result" == "0" ]]; then
     echo "PASS: $desc"
-    ((PASS++)) || true
+    PASS=$((PASS+1))
   else
     echo "FAIL: $desc"
-    ((FAIL++)) || true
+    FAIL=$((FAIL+1))
   fi
 }
 
@@ -38,10 +38,10 @@ FIRST_REF_LINE=$(grep -n '>> "${LIVE_LOG_FILE}"' "$FILE" | head -1 | cut -d: -f1
 
 if [[ -n "$DEF_LINE" && -n "$FIRST_REF_LINE" && "$DEF_LINE" -lt "$FIRST_REF_LINE" ]]; then
   echo "PASS: AC2: 定義 (L${DEF_LINE}) 在第一個引用 (L${FIRST_REF_LINE}) 之前"
-  ((PASS++)) || true
+  PASS=$((PASS+1))
 else
   echo "FAIL: AC2: 定義 (L${DEF_LINE:-?}) 不在第一個引用 (L${FIRST_REF_LINE:-?}) 之前"
-  ((FAIL++)) || true
+  FAIL=$((FAIL+1))
 fi
 
 echo ""
