@@ -1028,3 +1028,96 @@ INCOMPLETE=$(bash hooks/tcb-write.sh resume "${SPRINT_NUM}" "${SHIKIGAMI_SESSION
 ```
 
 詳見 `docs/adr/ADR-040-tcb-checkpoint-design.md` 與 `docs/adr/ADR-041-crash-recovery-design.md`。
+
+---
+
+### §12.4 Phase-Level Checkpoint（#781，Sprint 163）
+
+<!-- #781 feat: TCB 細粒度 Checkpoint — Story-Lifecycle Phase 級別中斷恢復 -->
+
+Story-Lifecycle Subagent 在完成每個**主要 Phase** 後，寫入 Phase Checkpoint 文件，供 Sprint Execution 在 session 恢復時跳過已完成的 Phase。
+
+**目的**：Phase-level checkpoint 比 Story-level checkpoint（`sprint-checkpoint.json`）更細，比 Action-level TCB（§12.1）更粗。適用於「Story 進行中被中斷，需從特定 Phase 繼續」的場景。
+
+#### Phase 分類（4 個主要 Phase）
+
+| Phase | 定義 | 完成標誌 |
+|-------|------|---------|
+| `analysis` | AC 解析、TDD 測試計劃、測試可寫性檢查 | 測試框架確認、AC 解析完成 |
+| `design` | 技術設計、ADR 確認、架構決策 | design 文件 / ADR 確認 done |
+| `implementation` | 程式碼實作、測試通過、PR 建立 | 所有測試 PASS，PR 已開 |
+| `test` | Spec Compliance、Code Quality、Security 審查 | 三階段自審全部 PASS |
+
+#### Phase Checkpoint 文件格式
+
+寫入位置：`docs/sprints/subagent-results/<issue-N>-phase-checkpoint.json`
+
+```json
+{
+  "story": "#781",
+  "sprint": 163,
+  "session_id": "20260325-230001",
+  "phase": "implementation",
+  "status": "completed",
+  "timestamp": "2026-03-25T23:30:00Z",
+  "notes": "（選填）此 Phase 的關鍵輸出摘要"
+}
+```
+
+**欄位說明**：
+- `phase`：`analysis` | `design` | `implementation` | `test`
+- `status`：`completed`（Phase 完成）| `in-progress`（Phase 進行中，中斷點）
+
+#### Phase Checkpoint 寫入指令（best-effort）
+
+在每個 Phase 完成後立即執行（`|| true` 確保不阻塞主流程）：
+
+```bash
+# Phase 完成後寫入（範例：implementation phase）
+STORY_ID="781"
+SPRINT_NUM="163"
+SESSION_ID="${SHIKIGAMI_SESSION_ID:-unknown}"
+PHASE="implementation"
+PHASE_CP_FILE="docs/sprints/subagent-results/${STORY_ID}-phase-checkpoint.json"
+
+python3 -c "
+import json, datetime, os, sys
+data = {
+    'story': '#${STORY_ID}',
+    'sprint': int('${SPRINT_NUM}'),
+    'session_id': '${SESSION_ID}',
+    'phase': '${PHASE}',
+    'status': 'completed',
+    'timestamp': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+}
+os.makedirs(os.path.dirname('${PHASE_CP_FILE}'), exist_ok=True)
+with open('${PHASE_CP_FILE}', 'w') as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
+print('[PHASE-CHECKPOINT] Written: ${PHASE}')
+" 2>/dev/null || echo "[PHASE-CHECKPOINT-WARN] Write failed (non-blocking)"
+```
+
+#### Sprint Execution 恢復邏輯（AC2）
+
+Sprint Execution 在派遣 Story-Lifecycle subagent 前，檢查 Phase checkpoint：
+
+```bash
+STORY_ID="781"
+PHASE_CP_FILE="docs/sprints/subagent-results/${STORY_ID}-phase-checkpoint.json"
+
+if [[ -f "$PHASE_CP_FILE" ]]; then
+    LAST_PHASE=$(python3 -c "import json; d=json.load(open('${PHASE_CP_FILE}')); print(d.get('phase',''))" 2>/dev/null)
+    LAST_STATUS=$(python3 -c "import json; d=json.load(open('${PHASE_CP_FILE}')); print(d.get('status',''))" 2>/dev/null)
+    if [[ "$LAST_STATUS" == "completed" ]]; then
+        echo "[PHASE-RESUME] Story #${STORY_ID} last completed phase: ${LAST_PHASE}, resuming from next phase"
+        # 在 subagent prompt 中傳入 phase_context: "resume from <next_phase>"
+    fi
+else
+    echo "[PHASE-RESUME-FALLBACK] No phase checkpoint found, starting from analysis"
+    # fallback to Story-level checkpoint (NFR2)
+fi
+```
+
+**NFR1（per-session per-story）**：Phase checkpoint 文件的 `session_id` 欄位用於跨 session 識別。若同一 Story 在不同 session 被恢復，主 session 應比對 `session_id` 避免使用舊 session 的 checkpoint。
+
+**NFR2（graceful fallback）**：Phase checkpoint 文件不存在時，自動 fallback 至 Story-level checkpoint，從 Story 重頭開始，不報錯。
