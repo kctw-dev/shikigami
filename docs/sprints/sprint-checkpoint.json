@@ -1,13 +1,13 @@
 {
   "sprint": 161,
-  "updated_at": "2026-03-25T13:30:44Z",
+  "updated_at": "2026-03-25T13:45:00Z",
   "stories": [
     {"id": "776", "title": "feat: Prompt Injection Defense", "status": "completed", "completed_at": "2026-03-25T13:30:44Z", "pr": 812},
     {"id": "799", "title": "feat: Review Suggestions 追蹤", "status": "completed", "completed_at": "2026-03-25T13:30:44Z", "pr": 813},
-    {"id": "796", "title": "docs: Scrum Master 狀態圖", "status": "pending", "completed_at": null},
-    {"id": "810", "title": "retro: 版本 bump ROADMAP 同步", "status": "pending", "completed_at": null},
-    {"id": "811", "title": "retro: shell test 最佳實踐", "status": "pending", "completed_at": null}
+    {"id": "796", "title": "docs: Scrum Master 狀態圖", "status": "completed", "completed_at": "2026-03-25T13:45:00Z", "pr": 814},
+    {"id": "810", "title": "retro: 版本 bump ROADMAP 同步", "status": "completed", "completed_at": "2026-03-25T13:45:00Z", "pr": 815},
+    {"id": "811", "title": "retro: shell test 最佳實踐", "status": "completed", "completed_at": "2026-03-25T13:45:00Z", "pr": 816}
   ],
-  "current_step": "batch-1-complete",
-  "sprint_status": "in-progress"
+  "current_step": "all-complete",
+  "sprint_status": "completed"
 }

@@ -11,9 +11,9 @@
 |---|-------|-------|--------|--------|----------|
 | 1 | feat: Prompt Injection Defense — Security Gate 外部輸入掃描（pipeline 前置防護） | #776 | 3 | DONE (#812) | Developer |
 | 2 | feat: Review Suggestions 追蹤 — 非阻塞建議跨 Sprint 模式識別台帳 | #799 | 1 | DONE (#813) | Developer |
-| 3 | docs: Scrum Master 狀態圖 — Sprint 生命週期路由可視化（Mermaid stateDiagram） | #796 | 1 | TODO | Developer |
-| 4 | retro: 版本 bump checklist — ROADMAP.md 版號同步強制驗證 | #810 | 1 | TODO | Developer |
-| 5 | retro: shell test 腳本最佳實踐 — 禁用 set -e + 統一 counter 模式 | #811 | 1 | TODO | Developer |
+| 3 | docs: Scrum Master 狀態圖 — Sprint 生命週期路由可視化（Mermaid stateDiagram） | #796 | 1 | DONE (#814) | Developer |
+| 4 | retro: 版本 bump checklist — ROADMAP.md 版號同步強制驗證 | #810 | 1 | DONE (#815) | Developer |
+| 5 | retro: shell test 腳本最佳實踐 — 禁用 set -e + 統一 counter 模式 | #811 | 1 | DONE (#816) | Developer |
 
 **Total: 7 pts**
 
