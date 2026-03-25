@@ -380,6 +380,58 @@ mkdir -p logs/live
 | Code Quality self-review | 維持（必須通過） |
 | Runtime Verification（§6.5） | N/A（doc-only Story 豁免，不需 Runtime Verification） |
 
+### §4.1 doc_only 文件內容品質審查（三階段，Reviewer + Challenger）
+
+<!-- #680 doc_only Story 內容品質審查 — Reviewer + Challenger 制衡 — Sprint 147 -->
+
+**觸發條件**：`doc_only=true` 且 Story 交付物為實質文件內容（SOW、提案、報告、SKILL.md 行為定義等）。
+
+**Bypass 條件（AC3）**：以下情況可跳過三階段審查，直接進入 Spec Compliance：
+- 純 SKILL.md 格式修改（無語義變更，如換行、標點修正）— 標記 `[DOC-REVIEW-BYPASS] 純格式修改`
+- retro-action 計點類文件（如 sprint_N.md 狀態更新）— 標記 `[DOC-REVIEW-BYPASS] retro-action 計點`
+- 已有既定範本且無客製化內容（如 meeting notes 填表）— 標記 `[DOC-REVIEW-BYPASS] 範本填表`
+
+**三階段審查流程（不符合 bypass 條件時強制執行）**：
+
+```
+Stage 1: Author 自檢
+  - 對照 AC 確認文件結構完整
+  - 內容自查清單（doc_only content checklist）：
+      [ ] 論點清晰，每個段落有明確主題句
+      [ ] 數據/引用有依據（非憑空捏造）
+      [ ] 格式一致（標題層級、表格、清單符號）
+      [ ] 跨文件引用正確（連結不斷、版本一致）
+
+Stage 2: Reviewer 獨立審查（content checklist，不依賴 TDD）
+  - 以第三方視角重新閱讀文件（不使用 Author 建立的假設）
+  - 審查維度：
+      [ ] 內容品質：論述是否完整、邏輯是否通順
+      [ ] 可讀性：目標讀者（agent 或人類）能否理解
+      [ ] 說服力（若為提案/報告）：論點是否有足夠支撐
+      [ ] 一致性：與其他框架文件的定義是否衝突
+  - 輸出：REVIEWER-PASS / REVIEWER-FAIL（附具體缺陷清單）
+  - FAIL 時：Author 修復後重審（最多 3 次）
+
+Stage 3: Challenger 挑戰（找漏洞，反對意見）
+  - 積極尋找文件的薄弱環節
+  - 挑戰問題：
+      [ ] 「這個定義有哪些反例或邊界條件未覆蓋？」
+      [ ] 「這個規則會不會在某個情境下造成問題？」
+      [ ] 「有無遺漏的假設？讀者可能產生哪些誤解？」
+  - 輸出：CHALLENGER-PASS（無重大漏洞）/ CHALLENGER-FAIL（附漏洞清單）
+  - FAIL 時：Author 修復後重審（最多 2 次）
+  - 兩輪後仍 FAIL：標記 `[DOC-REVIEW-ESCALATE]`，回傳 ESCALATE: DESIGN_ISSUE
+```
+
+**三階段輸出格式**：
+
+```
+[DOC-REVIEW] Stage 1 Author 自檢: PASS / FAIL
+[DOC-REVIEW] Stage 2 Reviewer: PASS / FAIL (<缺陷摘要>)
+[DOC-REVIEW] Stage 3 Challenger: PASS / FAIL (<漏洞摘要>)
+[DOC-REVIEW-COMPLETE] 三階段審查完成，繼續 Spec Compliance
+```
+
 ---
 
 ## §4.5 / §4.6 / §4.7 DESIGN 路徑與視覺審查
