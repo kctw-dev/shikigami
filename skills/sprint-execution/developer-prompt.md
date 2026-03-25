@@ -20,13 +20,34 @@
 ## Pre-TDD Dependency Analysis（TDAD，ADR-035，#394）
 
 <!-- feat: TDAD Dependency Map — Sprint 132，ADR-035 Accepted -->
+<!-- feat: TDAD 可透過設定關閉 — Sprint 144，#653 -->
 
 在進入 TDD 循環之前，若 Story 涉及修改已有測試覆蓋的程式碼模組，**必須**先執行依賴分析，識別受影響的測試集合。
+
+### TDAD 啟用設定（#653）
+
+TDAD 可透過 `.claude/shikigami.local.md` 設定關閉：
+
+```yaml
+shikigami:
+  tdad: true   # true（預設，向後相容）| false（跳過 TDAD，適合小型專案）
+```
+
+**讀取方式**：
+
+```bash
+TDAD_ENABLED=$(grep -A10 'shikigami:' .claude/shikigami.local.md 2>/dev/null \
+  | grep 'tdad:' | awk '{print $2}' | head -1)
+TDAD_ENABLED="${TDAD_ENABLED:-true}"  # 預設 true（向後相容）
+```
+
+若 `tdad=false`，跳過整個 Pre-TDD Dependency Analysis 步驟，直接進入 TDD Red phase。輸出 `[TDAD-SKIP] tdad=false，跳過依賴分析`。
 
 ### 觸發條件
 
 | 情況 | 處置 |
 |------|------|
+| `tdad=false`（設定關閉） | 跳過 TDAD，直接進入 TDD Red |
 | Story 修改已有測試覆蓋的程式碼模組 | 執行 Pre-TDD Dependency Analysis（強制） |
 | Story 為新增功能（無既有測試） | 跳過，直接進入 TDD Red |
 | Story 為 doc-only / RESEARCH | 跳過，TDD 豁免 |
