@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-25（Sprint 149 完成 — onboarding hooks 安裝步驟、Sprint Review 版號硬性檢查、Backlog Bridge 模板引導）
+> 最後更新：2026-03-25（Sprint 150 完成 — cruise stale worktree 修復、/shikigami:doctor Skill 新增、bug 模板 NFR 補齊）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.96.2**（Sprint 149 — onboarding hooks 安裝步驟、Sprint Review 版號硬性檢查、Backlog Bridge 模板引導）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.97.0**（Sprint 150 — cruise stale worktree 修復、/shikigami:doctor Skill 新增（31 Skills）、bug 模板 NFR 補齊）。
 
 | 版號 | 含義 |
 |------|------|
