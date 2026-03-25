@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-25（Sprint 144 完成 — ADR index + validate-orphans allowlist + TDAD 設定關閉 + v0.95.1）
+> 最後更新：2026-03-25（Sprint 145 完成 — gemini-extension.json 版號修復 + validate-orphans 226→9 WARNINGs）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
