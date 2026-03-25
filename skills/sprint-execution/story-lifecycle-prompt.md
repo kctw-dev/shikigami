@@ -664,11 +664,15 @@ commit 失敗 → 輸出 `[COMMIT-FAIL] 原因: {msg}，影響: {files}` → `ES
 <!-- #461 PR Description Quality Gate 強制 Summary + AC Checklist — Sprint 124 -->
 
 <HARD-GATE>
-**PR body 品質門禁**：執行 `gh pr create` 時，PR body **必須**包含：
-1. `## Summary` 段落（1–3 句話說明變更內容、目的與影響）
-2. `## AC Checklist` 段落（逐一列出所有 AC，`- [x] AC1: …`，全部打勾）
+**PR body 品質門禁**（#741 模板標準化）：執行 `gh pr create` 時，PR body **必須**符合 `.github/pull_request_template.md` 格式，包含：
+1. `## Summary` 段落（1–3 bullet points 說明變更內容、目的與影響）
+2. `## Test Results` 段落（格式：`PASS: N/N (tests/test-*.sh)`）
+3. `## AC Coverage` 段落（逐一列出所有 AC 的 PASS/FAIL 結果）
+4. `## Issue Ref` 段落（含 `Closes #<issue_id>`）
 
-任一缺失或 AC Checklist 含 `- [ ]`（未打勾）→ 補充後重新 `gh pr create`，不得繼續流程。此 Gate 不受 `bypass=true` 豁免。
+任一缺失或 AC Coverage 含 FAIL → 補充後重新 `gh pr create`，不得繼續流程。此 Gate 不受 `bypass=true` 豁免。
+
+**模板路徑**：`.github/pull_request_template.md`（#741 新建，Sprint 156）
 </HARD-GATE>
 
 ---
