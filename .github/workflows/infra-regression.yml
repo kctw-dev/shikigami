@@ -77,3 +77,6 @@ jobs:
 
       - name: Run CI Actions version validation（#424 釘定規範驗證）
         run: bash scripts/validate-ci-versions.sh
+
+      - name: Run hooks validation（#713 onboarding 安裝後驗證）
+        run: bash scripts/validate-hooks.sh

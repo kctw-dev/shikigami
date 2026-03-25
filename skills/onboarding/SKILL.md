@@ -76,3 +76,46 @@ Onboarding 是 Shikigami 的一次性安裝引導流程。新使用者安裝框�
 | 目錄與文件就緒後，開始第一個 Sprint | `shikigami:sprint-planning` |
 | 需要建立第一個 ADR | `shikigami:architecture-decision` |
 | Backlog 有需求待討論 | `shikigami:backlog-management` |
+
+---
+
+## 5. 安裝後驗證
+
+Onboarding 的最後一個步驟是驗證 hooks 安裝的完整性。此步驟確認所有必要的 git hooks（特別是多 Session 協調機制所需的 claim/release hooks）已正確安裝並具有執行權限。
+
+### 5.1 驗證執行
+
+Onboarding 完成後，執行以下命令驗證 hooks 安裝狀態：
+
+```bash
+bash scripts/validate-hooks.sh
+```
+
+該腳本會：
+- 檢查 `hooks/claim-issue.sh`、`hooks/release-issue.sh`、`hooks/task-gate.sh` 是否存在且可執行
+- 掃描 `hooks/` 目錄下所有 `.sh` 檔案，確認均具有執行權限（AC2, NFR1）
+- 輸出驗證結果清單，每項標記 `[PASS]` 或 `[FAIL]`（AC3, AC4）
+- Exit code 0 = 全部通過，Exit code 1 = 有缺失
+
+### 5.2 驗證失敗排除
+
+如果驗證失敗，檢查：
+
+1. **File Not Found**：hooks 文件未複製或路徑錯誤
+   - 確認 `hooks/` 目錄存在於專案根目錄
+   - 檢查 `.git/hooks` 中的 symlink 或複製的腳本是否正確
+
+2. **Permission Denied (not executable)**：檔案無執行權限
+   ```bash
+   chmod +x hooks/<missing-hook>.sh
+   ```
+
+3. **多 Session 協調失效**：若 claim-issue.sh 或 release-issue.sh 缺失，多台機器的 Session 協調機制將無法運作，請立即修復
+
+### 5.3 自動化整合
+
+驗證腳本整合至 CI workflow（`.github/workflows/`），確保每次提交都檢查 hooks 完整性（AC5）。
+
+**相關檔案**：
+- 驗證腳本：`scripts/validate-hooks.sh`
+- 測試用例：`tests/test-validate-hooks.sh`（Story #713）
