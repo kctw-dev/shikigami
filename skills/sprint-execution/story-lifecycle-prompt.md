@@ -879,13 +879,43 @@ fi
 ## §9 輸出格式（Output Schema）
 
 <!-- US-249 Subagent 結果暫存 — context compaction 後結果復原機制 — Sprint 92 -->
+<!-- #801 A2A Protocol 結構化輸出 — ADR-044 — Sprint 162 -->
 
 > **[REFERENCE]** 完整輸出格式（§9.0 Live Log、§9.1 暫存寫入、YAML 契約、PASS/ESCALATE Markdown 模板、升級決策規則）已移至 `skills/sprint-execution/references/output-schema.md`。
+
+> **[A2A Protocol]** 所有 subagent 回傳必須附加 A2A JSON Block（ADR-044），詳見 `docs/adr/ADR-044-a2a-protocol.md` 與 `references/output-schema.md` §9.2。
 
 **回傳前必執行**：
 1. 寫 live log `結果：PASS|FAIL|ESCALATE`；stdout `[SHIKIGAMI] event=story_end`；trace span `status=completed|failed`
 2. 寫暫存 `docs/sprints/subagent-results/{story_id}.md`（失敗時 `[CACHE-WRITE-FAIL]`，不阻塞）
 3. 依 Read 後的模板格式回傳標準化摘要給主 session
+4. **（A2A Protocol — ADR-044）** 在摘要末尾附加 A2A JSON Block：
+
+```json
+<!-- A2A-RESULT -->
+{
+  "protocol_version": "1.0",
+  "story_id": <整數>,
+  "actor": "<developer|architect|qa|po|security|sm>",
+  "result": "<PASS|FAIL|ESCALATE>",
+  "summary": "<≤200 字結果說明>",
+  "artifacts": [...],
+  "metrics": {"tests_total": N, "tests_passed": N, "files_created": N, "files_modified": N},
+  "pr": {"number": N, "url": "...", "merge_commit": "..."},
+  "timestamp": "<ISO 8601>"
+}
+```
+
+**A2A 欄位說明**：
+- `protocol_version`：固定 `"1.0"`（ADR-044 v1.0）
+- `story_id`：GitHub Issue 編號（整數，非字串）
+- `actor`：執行角色，合法值：`developer` / `architect` / `qa` / `po` / `security` / `sm`
+- `result`：`PASS` | `FAIL` | `ESCALATE`（與 §9 YAML status 一致）
+- `summary`：≤200 字說明（既有 §9 YAML summary 欄位的 JSON 版本）
+- `escalation`：`result=ESCALATE` 時必填，含 `type` 與 `reason`
+- `timestamp`：`$(date -u +"%Y-%m-%dT%H:%M:%SZ")` 取得
+
+**向後相容（NFR1）**：A2A JSON Block 為附加輸出，不替換既有 Markdown 摘要格式（PASS/FAIL/ESCALATE 模板）。現有 `output-schema.md` YAML 契約仍然有效。
 
 ---
 

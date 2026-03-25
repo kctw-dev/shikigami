@@ -128,3 +128,42 @@ team_debate:            # Team Debate 結果（§7.8，ADR-031，豁免時填 nu
 | DEPENDENCY_MISSING | 暫停 Sprint 執行，解決依賴後重試 |
 | SECURITY_CRITICAL | 暫停 Sprint 執行，觸發 security-review Skill |
 | DEBATE_DESIGN_ISSUE | 暫停 Sprint 執行，升級至 Architect 評估（Team Debate 未解決設計問題） |
+
+## §9.2 A2A Protocol JSON Block（ADR-044，#801 Sprint 162）
+
+<!-- #801 A2A Protocol 結構化輸出 — Sprint 162 -->
+
+在回傳 Markdown 摘要後，**必須附加** A2A JSON Block，供主 session 機器可讀解析（ADR-044 v1.0）。
+
+**完整格式**：
+
+```json
+<!-- A2A-RESULT -->
+{
+  "protocol_version": "1.0",
+  "story_id": <整數>,
+  "actor": "<developer|architect|qa|po|security|sm>",
+  "result": "<PASS|FAIL|ESCALATE>",
+  "summary": "<≤200 字結果說明>",
+  "artifacts": [
+    {"type": "<file|pr|adr|test|doc>", "path": "<路徑或URL>", "description": "<說明>"}
+  ],
+  "metrics": {
+    "tests_total": <整數>,
+    "tests_passed": <整數>,
+    "files_created": <整數>,
+    "files_modified": <整數>
+  },
+  "pr": {"number": <整數>, "url": "<PR URL>", "merge_commit": "<SHA>"},
+  "escalation": {"type": "<升級類型>", "reason": "<說明>"},
+  "timestamp": "<ISO 8601，如 2026-03-25T22:00:00Z>"
+}
+```
+
+**必填欄位**：`protocol_version`、`story_id`、`actor`、`result`、`summary`、`timestamp`
+
+**條件必填**：`escalation`（當 `result=ESCALATE` 時必填）
+
+**驗證**：`bash scripts/validate-a2a-schema.sh <result-file.json>`
+
+**Schema 定義**：`docs/adr/ADR-044-a2a-protocol.md`
