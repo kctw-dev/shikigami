@@ -337,6 +337,22 @@ Claim Story（§2.11，多 Session 並行協調）
   +-- git push 失敗   --> 輸出 [WARN]，繼續執行（保守策略：不阻塞）
   |
   v
+Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
+  # 在派遣 subagent 前，檢查是否有 Phase-level checkpoint 可供恢復
+  PHASE_CP_FILE="docs/sprints/subagent-results/${story_id}-phase-checkpoint.json"
+  if [[ -f "$PHASE_CP_FILE" ]]; then
+    LAST_PHASE=$(python3 -c "import json; d=json.load(open('${PHASE_CP_FILE}')); print(d.get('phase',''))" 2>/dev/null)
+    LAST_STATUS=$(python3 -c "import json; d=json.load(open('${PHASE_CP_FILE}')); print(d.get('status',''))" 2>/dev/null)
+    if [[ "$LAST_STATUS" == "completed" ]]; then
+      echo "[PHASE-RESUME] Story #${story_id} 上次已完成 Phase: ${LAST_PHASE}，從下一 Phase 繼續"
+      PHASE_CONTEXT="resume from phase after ${LAST_PHASE}"
+    fi
+  else
+    echo "[PHASE-RESUME-FALLBACK] 無 Phase checkpoint，從 analysis 開始"
+    PHASE_CONTEXT=""  # fallback: 從頭開始（NFR2）
+  fi
+  |
+  v
 派遣 Story-Lifecycle subagent（story-lifecycle-prompt.md）
   Agent tool / Gemini CLI 雙軌派遣
   model: "sonnet" | isolation: "worktree"（#379）
