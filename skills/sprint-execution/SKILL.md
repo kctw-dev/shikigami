@@ -91,6 +91,44 @@ Sprint Execution 第一個 Story 取出之前，自動驗證已內化的關鍵 A
 
 ---
 
+## 2.8.5 Context Engineering JIT Skill 載入策略（#793）
+
+<!-- #793 Context Engineering JIT Loading — Sprint 160 -->
+
+**目標**：減少 Sprint Execution 啟動時的 context 壓力，改用 Just-in-Time（按需）載入模式取代全量預載。
+
+### JIT vs 預載入分類
+
+| 載入時機 | 文件 | 說明 |
+|---------|------|------|
+| **Session 啟動時預載入（必要）** | `CLAUDE.md` | 框架全域規則，必須立即可用 |
+| **Session 啟動時預載入（必要）** | `.claude/shikigami.local.md` | 專案配置，必須立即可用 |
+| **JIT — Sprint Planning 觸發時才載入** | `skills/sprint-planning/SKILL.md` | 僅 Sprint Planning 期間需要 |
+| **JIT — Sprint Execution 觸發時才載入** | `skills/sprint-execution/SKILL.md` | 僅 Sprint Execution 期間需要 |
+| **JIT — Story 取出後才載入** | `docs/sprints/sprint_N.md` | 含 Story AC，取出 Story 時按需載入 |
+| **JIT — Story 取出後才載入** | `related_adrs`、`related_sdds` | 依 Story 輸入契約按需載入 |
+| **JIT — Cruise 觸發時才載入** | `skills/cruise/SKILL.md` | 僅 Cruise 模式需要 |
+
+### session-start hook 載入原則（AC2）
+
+`hooks/session-start` 僅執行以下最小載入：
+1. 寫入 attendance checkin 紀錄
+2. 偵測 cruise flag / sprint checkpoint（用於 compact 後恢復提示）
+3. **不預載入任何 Skill SKILL.md 文件**（JIT 模式）
+
+### JIT 載入觸發機制
+
+```
+Sprint Execution 啟動時（on-demand）：
+  → 主 session 讀取 skills/sprint-execution/SKILL.md（本文件）
+  → 取出每個 Story 後，subagent 自行讀取 sprint_N.md 取得 AC
+  → related_adrs / related_sdds 作為輸入契約傳入，subagent 自行讀取
+```
+
+**NFR1**：JIT 載入不得破壞既有 Skill 注入路徑。所有 Skill 文件仍可透過 Read tool 按需讀取，僅調整「何時讀取」（按需 vs 預載），不調整「讀取內容」。
+
+---
+
 ## 2.9 合約載入（US-204）
 
 <!-- US-204 統一合約位置 — Sprint 82 -->
