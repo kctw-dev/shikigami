@@ -1,7 +1,7 @@
 # ADR 目錄索引
 
 > 本文件由 `scripts/update-adr-index.sh` 自動產生，請勿手動修改。
-> 最後更新：2026-03-25 19:55:34
+> 最後更新：2026-03-25 22:33:45
 
 ## 架構決策紀錄（Architecture Decision Records）
 
@@ -50,3 +50,4 @@
 | ADR-041 | [ADR-041: Temporal-style Crash Recovery — Session 級別恢復設計](ADR-041-crash-recovery-design.md) | Accepted | 2026-03-24 |
 | ADR-042 | [ADR-042: Session Watchdog — 存活監控與自動重啟設計](ADR-042-session-watchdog-design.md) | Accepted | 2026-03-24 |
 | ADR-043 | [ADR-043: Backlog Replenishment Strategy — 提前預警機制與 2-Sprint 提前期設計](ADR-043-backlog-replenishment-strategy.md) | Accepted | 2026-03-25 |
+| ADR-044 | [ADR-044: A2A Protocol — Agent-to-Agent 結構化通訊協議標準化](ADR-044-a2a-protocol.md) | Accepted | 2026-03-25 |
