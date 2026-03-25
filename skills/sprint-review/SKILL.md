@@ -161,15 +161,68 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 
 ## 3. Sprint Retrospective 流程
 
+<!-- #709 Sprint Review 指標收集平行化 — Sprint 157 -->
+
 記錄 Retro 開始時間：`RETRO_START_TIME=$(date '+%Y-%m-%dT%H:%M+08:00')`
+
+### §3.0 指標收集平行化（AC1–AC5，#709）
+
+**三個指標子流程無資料依賴，平行執行以縮短 Sprint Review 總時長（AC6：目標縮短 >= 30%）。**
+
+#### OOM 防護（NFR3）
+
+```bash
+# 讀取 SHIKIGAMI_MAX_PARALLEL（未設定時預設 2，CLAUDE.md §12）
+MAX_PARALLEL="${SHIKIGAMI_MAX_PARALLEL:-2}"
+EXISTING_WT=$(git worktree list | grep -v "bare\|main\|master" | wc -l)
+AVAILABLE_SLOTS=$((MAX_PARALLEL - EXISTING_WT))
+
+if [ "$AVAILABLE_SLOTS" -lt 3 ]; then
+  echo "[METRICS-PARALLEL-DEGRADE] 可用 slots=${AVAILABLE_SLOTS} < 3，降級為串行執行"
+  # 降級：依序執行 Analytics → SPACE → Quality Observer
+else
+  echo "[METRICS-PARALLEL-START] 同時派遣 3 個指標 subagent（slots=${AVAILABLE_SLOTS}）"
+fi
+```
+
+#### 平行派遣（AC2 / AC3 / AC4）
+
+同時（Task tool 並行）派遣以下三個 subagent：
+
+| Subagent | 職責 | AC | 輸出格式 |
+|----------|------|-----|---------|
+| **Analytics subagent**（可與 Review 平行執行） | 獨立計算 Velocity、Adoption Rate、Completion Rate；讀取歷史 sprint_*.md 數據 | AC2 | `ANALYTICS: velocity={N}, adoption={P}%, completion={Q}%` |
+| **SPACE subagent** | 獨立計算 5 個 SPACE 維度指標（Satisfaction / Performance / Activity / Communication / Efficiency） | AC3 | `SPACE: S={n}/5, P={n}/5, A={n}/5, C={n}/5, E={n}/5` |
+| **Quality Observer subagent** | 獨立查詢 MCP Server 品質指標（`mcp__plugin_shikigami_quality-observer`）；MCP 不可用時輸出 `[QO-UNAVAILABLE]` 並降級 | AC4 | `QUALITY: coverage={N}, debt={D}, health={H}` |
+
+角色 prompt：`skills/sprint-review/references/analytics-prompt.md`
+
+#### 聚合（AC5）
+
+```
+等待三個 subagent 全部完成（或降級回傳 N/A）
+  |
+  v
+任一失敗 → 輸出 [METRICS-DEGRADE] {subagent名稱}: N/A，繼續聚合（NFR2：不阻塞）
+  |
+  v
+聚合結果用於後續 Sprint Doc 產出（§3 步驟 1 起）
+```
+
+#### 時長估算（AC6）
+
+串行基準：Analytics(~60s) + SPACE(~60s) + Quality Observer(~60s) = ~180s
+平行執行：max(Analytics, SPACE, Quality Observer) ≈ ~60s（縮短 66% > 30% 目標）
+
+---
 
 ### 步驟
 
-0. **Retrospective Analytics**（**可與 Review 平行執行**）— 角色 prompt：`skills/sprint-review/references/analytics-prompt.md`。僅讀取歷史數據，不依賴 Review 結果。報告完成後等待同步 signal（`docs/sprints/.review-signal-<SESSION_ID>`），signal 到達且報告展示完畢後，才開始步驟 1。
+0. **指標收集（§3.0 平行化，#709）** — 如上方 §3.0，同時派遣 Analytics / SPACE / Quality Observer 三個 subagent，等待聚合後繼續步驟 1。報告完成後等待同步 signal（`docs/sprints/.review-signal-<SESSION_ID>`），signal 到達且指標聚合完畢後，才開始步驟 1。
 1. **在 `docs/km/retro-log/YYYY-MM-DD-session-<SESSION_ID>.md` 新增記錄**（per-session 檔案，US-322 AC-4）
 2. **使用 Good / Problem / Action 格式收集回饋**
-3. **SPACE 五維度量測** — 詳見 `references/analytics-prompt.md`
-4. **Quality Observer 診斷報告** — 詳見 `references/analytics-prompt.md`
+3. **SPACE 五維度量測結果整合** — 使用 §3.0 SPACE subagent 已聚合的結果；MCP 不可用時 SPACE 降級，詳見 `references/analytics-prompt.md`
+4. **Quality Observer 診斷報告整合** — 使用 §3.0 Quality Observer subagent 已聚合的結果；MCP 不可用時降級輸出 `[QO-UNAVAILABLE]`，詳見 `references/analytics-prompt.md`
 5. **每個 Action 建立為 GitHub Issue（Hard Gate）** — 透過 `issue-management` Skill，標題 `retro:` 前綴，`retro-action` label。**每個 Action 必須在步驟 5 執行期間完成 Issue 建立，取得實際 Issue 編號（#N），不允許標記「待建立」或留空。步驟 5 完成標準：Action Items 清單中每一項均有對應的 GitHub Issue 編號。** 回傳格式：
    ```
    Action Issues 建立清單：
