@@ -28,6 +28,22 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 3. 自行讀取 `docs/PROJECT_BOARD.md` 與 `docs/prd/ROADMAP.md`
 4. 根據即時排序從排序頂部選取符合 Sprint Goal 與 ROADMAP 里程碑的 Stories
 5. 評估各 Story 間的檔案修改獨立性
+6. **[RETRO-AUTO-PROMOTE] retro-action 高優先級自動升格**（#739）：掃描帶有 `retro-action` + `priority: must` label 的 open Issues，自動加入 `sprint-candidate` label，並輸出 `[RETRO-AUTO-PROMOTE] #N → sprint-candidate`。此步驟在 Backlog 排序之前執行，確保高優先 retro-action 不被遺漏。
+
+   ```bash
+   # 自動升格邏輯（偽碼）
+   RETRO_MUST=$(gh issue list -R ${OWNER_REPO} \
+     --label "retro-action" --label "priority: must" \
+     --state open --json number,title,labels \
+     | jq -r '.[] | select(.labels | map(.name) | contains(["sprint-candidate"]) | not) | .number')
+   for N in $RETRO_MUST; do
+     gh issue edit $N -R ${OWNER_REPO} --add-label "sprint-candidate"
+     echo "[RETRO-AUTO-PROMOTE] #${N} → sprint-candidate"
+   done
+   ```
+
+   **NFR1（冪等性）**：僅升格尚未帶有 `sprint-candidate` label 的 Issues，避免重複操作。
+   **NFR2（範圍限定）**：僅針對 `priority: must` 的 retro-action，不升格 should/could，避免過度自動化。
 
 ### 即時排序計算步驟
 
