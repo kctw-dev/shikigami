@@ -1,49 +1,11 @@
 {
-  "sprint": 163,
-  "updated_at": "2026-03-25T23:45:00Z",
+  "sprint": 164,
+  "updated_at": "2026-03-26T02:50:00Z",
   "stories": [
-    {
-      "id": "818",
-      "title": "retro: Backlog 補充",
-      "status": "completed",
-      "completed_at": "2026-03-25T23:10:00Z",
-      "pr": null
-    },
-    {
-      "id": "800",
-      "title": "feat: TDAD Story 依賴圖",
-      "status": "completed",
-      "completed_at": "2026-03-25T23:15:00Z",
-      "pr": 828
-    },
-    {
-      "id": "823",
-      "title": "retro: Story 重疊檢查機制",
-      "status": "completed",
-      "completed_at": "2026-03-25T23:20:00Z",
-      "pr": 829
-    },
-    {
-      "id": "817",
-      "title": "retro: ADR-039 haiku 路由擴充",
-      "status": "completed",
-      "completed_at": "2026-03-25T23:25:00Z",
-      "pr": 830
-    },
-    {
-      "id": "790",
-      "title": "retro: worktree 清理驗收",
-      "status": "completed",
-      "completed_at": "2026-03-25T23:30:00Z",
-      "pr": null
-    },
-    {
-      "id": "781",
-      "title": "feat: TCB Phase Checkpoint",
-      "status": "completed",
-      "completed_at": "2026-03-25T23:45:00Z",
-      "pr": 831
-    }
+    {"id": "824", "title": "feat: Backlog 健康度儀表板", "status": "completed", "completed_at": "2026-03-26T02:45:00Z", "pr": 832},
+    {"id": "825", "title": "feat: Sprint Velocity Trend 自動報告", "status": "completed", "completed_at": "2026-03-26T02:46:00Z", "pr": 833},
+    {"id": "826", "title": "feat: RICE Score 缺漏掃描", "status": "completed", "completed_at": "2026-03-26T02:47:00Z", "pr": 834},
+    {"id": "827", "title": "feat: Sprint Retrospective 自動模板生成", "status": "completed", "completed_at": "2026-03-26T02:48:00Z", "pr": 835}
   ],
   "current_step": "all-complete",
   "sprint_status": "completed"

@@ -9,10 +9,10 @@
 
 | # | Story | Issue | Points | Status | Assignee |
 |---|-------|-------|--------|--------|----------|
-| 1 | feat: Backlog 健康度儀表板 — sprint-candidate 數量/年齡/MoSCoW 分布一覽 | #824 | 1 | TODO | Developer |
-| 2 | feat: Sprint Velocity Trend 自動報告 — 容量估算資料化（最近 5 Sprint 滾動平均） | #825 | 1 | TODO | Developer |
-| 3 | feat: RICE Score 缺漏掃描 — sprint-candidate 補分提醒腳本 | #826 | 1 | TODO | Developer |
-| 4 | feat: Sprint Retrospective 自動模板生成 — 預填 Sprint 指標減少手工填寫 | #827 | 1 | TODO | Developer |
+| 1 | feat: Backlog 健康度儀表板 — sprint-candidate 數量/年齡/MoSCoW 分布一覽 | #824 | 1 | DONE (#832) | Developer |
+| 2 | feat: Sprint Velocity Trend 自動報告 — 容量估算資料化（最近 5 Sprint 滾動平均） | #825 | 1 | DONE (#833) | Developer |
+| 3 | feat: RICE Score 缺漏掃描 — sprint-candidate 補分提醒腳本 | #826 | 1 | DONE (#834) | Developer |
+| 4 | feat: Sprint Retrospective 自動模板生成 — 預填 Sprint 指標減少手工填寫 | #827 | 1 | DONE (#835) | Developer |
 
 **Total: 4 pts**
 

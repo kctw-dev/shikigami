@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-26（Sprint 164 Planning 完成）
-**當前 Sprint**：Sprint 164（規劃中，準備 Execution）
+**最後更新**：2026-03-26（Sprint 164 Execution 完成）
+**當前 Sprint**：Sprint 164（執行完成，等待 Review）
 
 ---
 
@@ -12,10 +12,10 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: Backlog 健康度儀表板 — sprint-candidate 數量/年齡/MoSCoW 分布一覽 | #824 | S | 1 | TODO |
-| feat: Sprint Velocity Trend 自動報告 — 容量估算資料化（最近 5 Sprint 滾動平均） | #825 | S | 1 | TODO |
-| feat: RICE Score 缺漏掃描 — sprint-candidate 補分提醒腳本 | #826 | S | 1 | TODO |
-| feat: Sprint Retrospective 自動模板生成 — 預填 Sprint 指標減少手工填寫 | #827 | S | 1 | TODO |
+| feat: Backlog 健康度儀表板 — sprint-candidate 數量/年齡/MoSCoW 分布一覽 | #824 | S | 1 | DONE (#832) |
+| feat: Sprint Velocity Trend 自動報告 — 容量估算資料化（最近 5 Sprint 滾動平均） | #825 | S | 1 | DONE (#833) |
+| feat: RICE Score 缺漏掃描 — sprint-candidate 補分提醒腳本 | #826 | S | 1 | DONE (#834) |
+| feat: Sprint Retrospective 自動模板生成 — 預填 Sprint 指標減少手工填寫 | #827 | S | 1 | DONE (#835) |
 
 ---
 
