@@ -103,6 +103,43 @@
 
 1. **#844 AC 調整**：採用 QA 建議，AC1 改為取代既有 test-sprint-capacity.sh，新建 test-calculate-sprint-capacity.sh，合併覆蓋 + 擴充邊界場景。已在 GitHub Issue #844 留言記錄。
 
-## Retrospective（待填）
+## Retrospective
 
-_Sprint 結束後由 Sprint Review 填入。_
+**Review 完成時間**：2026-03-26
+
+### Sprint Metrics
+- **Velocity**：5 pts
+- **Completion Rate**：100%（5/5 Stories DONE）
+- **Sprint Goal**：達成 — 核心腳本測試防護網建立完成
+
+### 測試覆蓋成果
+| Story | Issue | 測試結果 |
+|-------|-------|---------|
+| bump-version.sh 測試 | #839 | 18 PASS |
+| init-project.sh 測試 | #845 | 16 PASS |
+| validate-agents/skills/json 補測試 | #838 | 81 PASS（24+23+34） |
+| calculate-sprint-capacity.sh 測試 | #844 | 14 PASS |
+| Watchdog 三合一測試 | #847 | 5 PASS |
+| **合計** | | **134 PASS** |
+
+### Demo 結果
+PASS — 全部 5 個 Story 測試腳本存在且執行通過。
+
+### QA 邊界測試
+PASS — 本地執行確認所有測試腳本 0 FAIL。
+
+### Stakeholder 確認
+PASS — 本 Sprint 全為測試腳本，無使用者面功能變更，商業風險低。
+
+### CRITICAL Quality Gate 覆寫
+無。
+
+### Sprint 外完成項目
+無（Shoot_Log 本 Sprint 期間無新條目）。
+
+### Retro Actions
+- 無系統性問題，本 Sprint 順利交付。
+
+### Issue 回寫
+- 已 close：#839、#845、#838、#844、#847
+- 已移除 `status: in-sprint` label

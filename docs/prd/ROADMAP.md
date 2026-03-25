@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-26（Sprint 164 完成 — Backlog 治理工具強化：Backlog 健康度儀表板、Velocity Trend 自動報告、RICE Score 缺漏掃描、Retrospective 模板預填）
+> 最後更新：2026-03-26（Sprint 165 完成 — 建立核心腳本測試防護網：bump-version、init-project、validate 系列與 Watchdog 自動化測試，153 tests PASS）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.106.0**（Sprint 164 — Backlog 治理工具強化：backlog-dashboard.sh、velocity-report.sh、check-rice-scores.sh、generate-retro-template.sh）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.107.0**（Sprint 165 — 建立核心腳本測試防護網：test-bump-version.sh、test-init-project.sh、test-validate-agents/skills/json.sh、test-calculate-sprint-capacity.sh、test-watchdog.sh）。
 
 | 版號 | 含義 |
 |------|------|

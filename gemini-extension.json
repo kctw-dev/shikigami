@@ -1,10 +1,9 @@
 {
   "name": "shikigami",
-  "version": "0.106.0",
+  "version": "0.107.0",
   "description": "AI Agent Scrum Team：8 個專業角色 × 自治協作 × Discovery → Delivery 全週期覆蓋",
   "author": "KCTW",
   "homepage": "https://github.com/KCTW/shikigami",
   "license": "MIT",
   "contextFileName": "GEMINI.md"
 }
-
