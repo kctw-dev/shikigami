@@ -24,3 +24,9 @@ logs/
 
 # Kill Switch runtime files（ADR-038）— flag と report は runtime のみ、git 対象外
 .kill-switch/
+
+# cruise logs 歸檔機制（#708 §4.4）
+# 歸檔後的原始 JSONL 不入版控，壓縮後的 .gz 保留於 archive 目錄
+docs/cruise-logs/archive/**/*.jsonl
+# .gz 檔案允許入版控（! 規則豁免）
+!docs/cruise-logs/archive/**/*.gz

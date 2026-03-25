@@ -196,6 +196,85 @@ fi
 
 ---
 
+## §4.4 Log 歸檔機制（#708）
+
+每次 cruise 啟動時，自動掃描 `docs/cruise-logs/` 目錄，將超過 7 天的 JSONL 壓縮歸檔，維持 repo 輕量化。
+
+```bash
+# §4.4 Log 歸檔機制（#708）
+# AC2: 超過 7 天的 JSONL 自動壓縮至 docs/cruise-logs/archive/YYYY-MM/
+ARCHIVE_DAYS="${CRUISE_ARCHIVE_DAYS:-7}"
+CRUISE_LOG_DIR="${REPO_PATH}/docs/cruise-logs"
+ARCHIVE_BASE_DIR="${CRUISE_LOG_DIR}/archive"
+
+if [[ -d "${CRUISE_LOG_DIR}" ]]; then
+  # 取得 7 天前時間戳（跨平台：Linux + macOS + WSL2）
+  if date --version &>/dev/null 2>&1; then
+    # GNU date（Linux / WSL2）
+    CUTOFF_DATE=$(date -d "${ARCHIVE_DAYS} days ago" '+%Y-%m-%d')
+  else
+    # BSD date（macOS）
+    CUTOFF_DATE=$(date -v "-${ARCHIVE_DAYS}d" '+%Y-%m-%d')
+  fi
+
+  ARCHIVE_COUNT=0
+  SIZE_BEFORE=0
+  SIZE_AFTER=0
+
+  while IFS= read -r -d '' jsonl_file; do
+    filename="$(basename "${jsonl_file}")"
+    # 從檔名前綴提取日期（格式：YYYY-MM-DD-*）
+    file_date="${filename:0:10}"
+
+    if [[ "${file_date}" < "${CUTOFF_DATE}" ]] 2>/dev/null; then
+      # AC2: 確定歸檔目標目錄（YYYY-MM）
+      file_month="${file_date:0:7}"
+      ARCHIVE_DIR="${ARCHIVE_BASE_DIR}/${file_month}"
+      mkdir -p "${ARCHIVE_DIR}" 2>/dev/null || { echo "[LOG-ARCHIVE-WARN] 無法建立目錄 ${ARCHIVE_DIR}，跳過"; continue; }
+
+      # 記錄壓縮前大小
+      file_size=$(wc -c < "${jsonl_file}" 2>/dev/null || echo 0)
+      SIZE_BEFORE=$((SIZE_BEFORE + file_size))
+
+      # 壓縮至歸檔目錄
+      if gzip -c "${jsonl_file}" > "${ARCHIVE_DIR}/${filename}.gz" 2>/dev/null; then
+        # AC3: 歸檔成功後從 git 追蹤移除原始 JSONL
+        git -C "${REPO_PATH}" rm --cached "${jsonl_file#${REPO_PATH}/}" 2>/dev/null || true
+        rm -f "${jsonl_file}" 2>/dev/null || true
+
+        gz_size=$(wc -c < "${ARCHIVE_DIR}/${filename}.gz" 2>/dev/null || echo 0)
+        SIZE_AFTER=$((SIZE_AFTER + gz_size))
+        ARCHIVE_COUNT=$((ARCHIVE_COUNT + 1))
+      else
+        echo "[LOG-ARCHIVE-WARN] 壓縮失敗：${filename}，跳過（NFR2 降級繼續）"
+        rm -f "${ARCHIVE_DIR}/${filename}.gz" 2>/dev/null || true
+      fi
+    fi
+  done < <(find "${CRUISE_LOG_DIR}" -maxdepth 1 -name "*.jsonl" -type f -print0 2>/dev/null)
+
+  # AC4: 歸檔操作結果寫入 cruise log
+  if [[ "${ARCHIVE_COUNT}" -gt 0 ]]; then
+    echo "[LOG-ARCHIVE] 已歸檔 ${ARCHIVE_COUNT} 個 JSONL 檔案（壓縮前 ${SIZE_BEFORE}B → 壓縮後 ${SIZE_AFTER}B）"
+    echo "{\"type\":\"log-archived\",\"count\":${ARCHIVE_COUNT},\"size_before\":${SIZE_BEFORE},\"size_after\":${SIZE_AFTER},\"archive_days\":${ARCHIVE_DAYS},\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" >> "${CRUISE_LOG}"
+  fi
+fi
+```
+
+**適用範圍**：Loop Mode 與 Once Mode 均執行（每次 cruise 啟動時）。
+**NFR1（效能）**：使用 `find -maxdepth 1` 限制掃描範圍，歸檔最多 100 個檔案時在 1 秒內完成。
+**NFR2（可靠性）**：壓縮失敗時輸出 `[LOG-ARCHIVE-WARN]` 並繼續，不阻塞 cruise 主流程。
+**NFR3（可觀察性）**：log entry 包含壓縮前後大小對比（size_before / size_after）。
+
+| AC | 說明 |
+|----|------|
+| AC1 | 本 §4.4 段落新增於 startup-flow.md |
+| AC2 | 超過 7 天（`ARCHIVE_DAYS` 可設定）的 JSONL 壓縮至 `docs/cruise-logs/archive/YYYY-MM/` |
+| AC3 | 歸檔成功後執行 `git rm --cached`，從 git 追蹤移除原始 JSONL |
+| AC4 | 歸檔結果寫入 `${CRUISE_LOG}`，type: log-archived，含 count/size_before/size_after |
+| AC5 | .gitignore 配置：archive 目錄 .gz 保留，原始 JSONL 豁免（見 .gitignore 更新） |
+
+---
+
 ## §4.5 讀取 project_level（#348）
 
 ```bash
