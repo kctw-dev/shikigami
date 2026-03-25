@@ -229,6 +229,20 @@ gh issue list \
 
 ## 6. 歸檔觸發檢查
 
+<!-- #735 git worktree 自動清理腳本（Sprint 完成後防 OOM）— Sprint 155 -->
+
+**Sprint Review §6 步驟：執行 worktree 清理（#735 AC3）**
+
+在所有產出文件更新完成後，git commit + push 之前，執行 worktree 自動清理：
+
+```bash
+# 清理已合併至 main 的 sprint-N/ worktree（防 OOM）
+bash scripts/cleanup-worktrees.sh --dry-run   # 先預覽
+bash scripts/cleanup-worktrees.sh             # 確認後執行
+```
+
+> 清理結果自動寫入 cruise log（type: worktree-cleanup）。`--dry-run` 模式可安全預覽不刪除。
+
 所有產出文件完成後立即 git commit + push（範圍：`PROJECT_BOARD.md`、retro-log、metrics-log、`sprint_N.md`、`docs/meetings/*.md`；其他 KM 文件不適用，避免觸發 ADR-003 Hard Gate）。
 
 commit + push 完成後清理同步 signal：`rm -f docs/sprints/.review-signal-${CLAUDE_SESSION_ID:-unknown}`
