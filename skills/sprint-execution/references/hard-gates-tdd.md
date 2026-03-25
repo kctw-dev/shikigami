@@ -84,3 +84,19 @@ Story Type 系統與 doc-only 判定規則（見下方「doc-only Story 識別�
 3. **CLAUDE.md 不存在降級**：若 CLAUDE.md 不存在，條件 A 無法觸發，TDD 豁免不生效；此時須退回條件 B 判斷，若條件 B 亦不滿足，則走一般路徑
 
 **判定機制：** QA subagent 在 Sprint Planning 時確認，確認標準為「Story 所有 AC 引用路徑均為 `.md` 副檔名，且路徑均在 `docs/` 目錄下」。判定結果記錄於 `docs/sprints/sprint_N.md` 對應 Story 的備注欄或 QA 狀態欄。
+
+---
+
+## L-size Story 審查增強（§8）
+
+**觸發條件**：Story Size = L（3 points）時自動啟用增強審查，以下 checklist 項目為額外必要通過條件。
+
+- [ ] **Architect 設計審查**：L-size Story 實作開始前，Architect 必須確認設計方向（介面定義、模組邊界、資料流），避免大型 Story 因設計問題在後期返工。Developer subagent 需在 prompt 中包含 Architect 確認的設計摘要，方可開始 TDD 循環。
+- [ ] **分階段驗收**：將 Story 的 Acceptance Criteria 分為至少 2 個驗收批次（例如：核心路徑為第一批，邊界條件與錯誤處理為第二批），每批 AC 通過 Spec Compliance Review 後，再繼續下一批實作。若任一批次不通過，僅需針對該批次修復，不影響已通過批次。
+- [ ] **額外回歸測試掃描**：L-size Story 完成後，除執行新增測試外，必須執行既有測試套件的完整掃描，確認無回歸失敗。掃描結果須明確記錄於 Story 完成 commit message（格式：`全部 N 項測試通過，無回歸`）。
+
+---
+
+## 8.1 安全審查觸發條件
+
+主 session 層級觸發入口：Story-Lifecycle subagent 回傳 `ESCALATE: SECURITY_CRITICAL` 時，暫停 Sprint 執行，觸發 `security-review` Skill。完整觸發條件清單定義於 `skills/sprint-execution/story-lifecycle-prompt.md` §7 Security Self-Review。

@@ -106,71 +106,28 @@ Sprint Execution 開始前，依 Story AC 載入相關共用交付合約：
 
 ---
 
-## 2.14 Crash Recovery — Side Effect Idempotency Guard（#405 / ADR-041）
-
-<!-- #405 Temporal-style Crash Recovery — Sprint 140 -->
-<!-- ADR-041 策略 C：Hybrid Checkpoint + Side Effect Log -->
-
-Session crash 後重啟時，Sprint Execution 自動偵測未完成 checkpoint，並透過 Side Effect Log 防止不可逆操作（git commit、GitHub API 呼叫等）被重複執行。
-
-### Side Effect Guard 使用方式
-
-```bash
-# source hooks/side-effect-guard.sh 後使用
-source hooks/side-effect-guard.sh
-
-# Guard-before-Execute 模式（ADR-041 決策 4）
-if check_side_effect "git-commit" "$COMMIT_HASH"; then
-  git commit -m "..."
-  COMMIT_HASH=$(git rev-parse HEAD)
-  record_side_effect "git-commit" "$COMMIT_HASH"
-fi
-
-# 或使用 side_effect_wrap 便利函數
-side_effect_wrap "gh-pr-create" "$PR_URL" gh pr create --title "..."
-```
-
-### Crash Recovery 觸發（session 重啟時）
-
-```bash
-# 掃描 checkpoint，輸出恢復報告
-bash scripts/crash-recovery.sh --dry-run
-
-# 輸出恢復狀態（供 SM 使用）
-bash scripts/crash-recovery.sh
-```
-
-**[RECOVERY-TRIGGER] 條件**：`sprint-checkpoint.json` 存在且有 `status=in-progress` 的 Story。
-
-> 實作細節：`hooks/side-effect-guard.sh`、`scripts/crash-recovery.sh`
-> 架構決策：`docs/adr/ADR-041-crash-recovery-design.md`
-
-
----
-
 ## 2.13 Sprint Task List — compact 後進度恢復（#469 / #538）
 
 <HARD-GATE>
 **Task List 強制建立（#538 AC7）**：Sprint Execution 啟動時，必須為每個 in-sprint Story 建立對應 Task（格式：`{repo}/sprint-{N}-execution`）。若 TaskList 中缺失本 Sprint 的 Task，必須立即補建再繼續。任何跳過 Task 建立的行為均屬流程違規。hook 腳本 `hooks/task-gate.sh` 可協助驗證（Sprint Execution 啟動時自動呼叫）。
 </HARD-GATE>
 
-<!-- 以下為 §2.13 正文，接原標題 -->
-
 <!-- #469 Cruise/Sprint 執行時建立 Task List — 防止 compact 後跳步 -->
 <!-- #538 Task 命名改為 repo/sprint-N-phase 格式，取代 SESSION_ID 後綴 -->
 
 Sprint Execution 啟動時建立 Task List，以 `{repo}/sprint-{N}-{phase}` 格式命名，記錄三個主要 phase。compact 後查詢 TaskList，以 `{repo}/sprint-{N}-` 為前綴匹配，恢復進度跳過已完成 phase，防止跳步。
 
-**Task 命名格式（#538 AC2）**：`{repo}/sprint-{N}-{phase}`
+> 詳見 `references/checkpoint.md`（含 Task 命名格式、舊 Sprint 殘留清理、compact 恢復流程）
 
-其中 `{repo}` = 從 `git remote get-url origin` 解析的 `owner/repo`（如 `kctw-dev/shikigami`），`{N}` = Sprint 編號（從 sprint_N.md 讀取），`{phase}` = `planning` | `execution` | `review`。
+---
 
-**命名範例**：
-- `kctw-dev/shikigami/sprint-129-planning`
-- `kctw-dev/shikigami/sprint-129-execution`
-- `kctw-dev/shikigami/sprint-129-review`
+## 2.14 Crash Recovery — Side Effect Idempotency Guard（#405 / ADR-041）
 
-> 詳見 `references/checkpoint.md`
+<!-- #405 Temporal-style Crash Recovery — Sprint 140 -->
+
+Session crash 後重啟時，Sprint Execution 自動偵測未完成 checkpoint，並透過 Side Effect Log 防止不可逆操作被重複執行。**[RECOVERY-TRIGGER] 條件**：`sprint-checkpoint.json` 存在且有 `status=in-progress` 的 Story。
+
+> 詳見 `references/crash-recovery.md`（Side Effect Guard 使用方式、Recovery 觸發腳本）
 
 ---
 
@@ -242,19 +199,9 @@ Sprint Backlog 中取出 Story
   |
   v
 Parallel Conflict Prediction 靜態衝突分析（#395，AC1）
-  # 取出所有 pending Story 後，執行靜態衝突預測，決定 dispatch 分組
-  # 詳見 references/conflict-prediction.md
-  1. 推測每個 Story 涉及的檔案路徑（從 AC + sprint_N.md 描述推斷）
-  2. 靜態比對 — 偵測 Story 間的檔案重疊或路徑衝突
-  3. 分組：
-     |-- 無衝突 → Group A（可平行，受 SHIKIGAMI_MAX_PARALLEL 上限控制）
-     +-- 有衝突 → Group B（序列，等 Group A 完成後動態重評估）
-  4. 輸出 dispatch plan 至 live-log：
-     [CONFLICT-PREDICTION] dispatch plan:
-       Group A（平行）: #<id1> | #<id2>
-       Group B（序列）: #<id3>
-  5. Group A Stories 依平行上限派遣
-  6. Group A 全數完成後，重評估 Group B — 若 Group B Stories 間無新衝突，可再次平行；否則依序執行
+  # 取出所有 pending Story 後，靜態比對檔案重疊，分為 Group A（可平行）和 Group B（序列）
+  # 輸出 [CONFLICT-PREDICTION] dispatch plan：Group A（平行）| Group B（序列）
+  # 詳細分組規則與重評估邏輯：references/conflict-prediction.md
   |
   v
 前端 Story 設計資訊 Pre-check（§2.10，story_type=FEATURE 時）
@@ -277,37 +224,12 @@ Claim Story（§2.11，多 Session 並行協調）
   +-- git push 失敗   --> 輸出 [WARN]，繼續執行（保守策略：不阻塞）
   |
   v
-  ┌─────────────────────────────────────────────────────────────┐
-  │  派遣 Story-Lifecycle subagent（story-lifecycle-prompt.md）  │
-  │                                                             │
-  │  Agent tool 派遣參數：                                       │
-  │    subagent_type: "general-purpose"                         │
-  │    model: "sonnet"                                          │
-  │    isolation: "worktree"  ← 新增（#379）                    │
-  │                                                             │
-  │  subagent 內部閉環：                                         │
-  │  ├─ 讀取 sprint_N.md（AC + 需求）                           │
-  │  ├─ git checkout -b sprint-<N>/<story-id>（ADR-023，AC-3）  │
-  │  ├─ TDD 開發（Red → Green → Refactor）                      │
-  │  ├─ Spec Compliance self-review                             │
-  │  │    |-- FAIL --> 修復循環（最多 3 次，內部閉環）            │
-  │  │    +-- PASS                                              │
-  │  ├─ Code Quality self-review                                │
-  │  │    |-- FAIL --> 修復循環（最多 3 次，內部閉環）            │
-  │  │    +-- PASS                                              │
-  │  ├─ Security self-review（條件觸發）                         │
-  │  │    |-- FAIL / ESCALATE --> 升級主 session                │
-  │  │    +-- PASS / SKIP                                       │
-  │  ├─ git commit + git push -u origin sprint-<N>/<story-id>  │
-  │  ├─ gh pr create                                           │
-  │  │    |-- gh 不可用 → [PR-FLOW-DEGRADED] 降級直推            │
-  │  ├─ Code Review Loop（ADR-023 決策 5，pr-review-toolkit）   │
-  │  │    |-- LGTM（無 CRITICAL/HIGH）→ gh pr merge --squash    │
-  │  │    +-- CRITICAL/HIGH → 修復循環（最多 3 輪）              │
-  │  │          |-- 3 輪後仍 CRITICAL/HIGH → [PR-REVIEW-ESCALATE]│
-  │  │          +-- 通過 → gh pr merge --squash --delete-branch  │
-  │  └─ 回傳：PASS/FAIL/ESCALATE + MERGED_COMMIT               │
-  └─────────────────────────────────────────────────────────────┘
+派遣 Story-Lifecycle subagent（story-lifecycle-prompt.md）
+  Agent tool / Gemini CLI 雙軌派遣
+  model: "sonnet" | isolation: "worktree"（#379）
+  subagent 內部閉環：TDD → Spec Compliance → Code Quality → Security → PR → merge
+  回傳：PASS/FAIL/ESCALATE + MERGED_COMMIT
+  （詳細派遣參數與雙軌路徑：references/execution-flow-details.md）
   |
   v
 接收 Story-Lifecycle subagent 回傳
@@ -320,21 +242,14 @@ Claim Story（§2.11，多 Session 並行協調）
   +-- PASS（含 MERGED_COMMIT）
         |
         v
-  ┌─────────────────────────────────────────────────────────────┐
-  │  Checkpoint: 重讀流程定義（US-229）                          │
-  │  (a) 重讀 §3 完整流程步驟定義                               │
-  │  (b) 比對下一步驟是否符合流程定義                            │
-  │  (c) 記錄 [CHECKPOINT-PASS] 或 [CHECKPOINT-FAIL]           │
-  │  詳見 references/execution-flow-details.md §3.1            │
-  └─────────────────────────────────────────────────────────────┘
+  Checkpoint 重讀流程定義（§3.1 / references/execution-flow-details.md）
+  輸出 [CHECKPOINT-PASS] 或 [CHECKPOINT-FAIL]
         |
         v
-  ┌─────────────────────────────────────────────────────────────┐
-  │  外部抽樣審查決策（ADR-007 §AC3 Phase 2）                    │
-  │  TC-1：L-size → 100%全量；TC-2：安全相關→100%；             │
-  │  TC-3：前次品質問題→100%；TC-4：連續2次FAIL→100%；          │
-  │  其他：30% 基礎抽樣率（取上整）                              │
-  └─────────────────────────────────────────────────────────────┘
+  外部抽樣審查決策（ADR-007 §AC3 Phase 2）
+  TC-1: L-size→100%全量；TC-2: 安全相關→100%；TC-3: 前次品質問題→100%；
+  TC-4: 連續2次FAIL→100%；其他: 30% 基礎抽樣率（取上整）
+  （詳見 references/external-sampling.md）
         |
         +-- 不觸發抽樣 → 更新 PROJECT_BOARD（Story 狀態 → 完成）
         |
@@ -343,22 +258,15 @@ Claim Story（§2.11，多 Session 並行協調）
                 +-- DISPUTE → 執行 DISPUTE 處理流程（見 references/external-review-dispute.md §4.2）
   |
   v（不觸發抽樣 / CONFIRM 完成後匯合）
-  ┌─────────────────────────────────────────────────────────────┐
-  │  Story Completion Checklist（#368 方向3，每個 Story 完成後） │
-  │  1. [ ] git checkout main && git pull                       │
-  │  2. [ ] 更新 PROJECT_BOARD.md + sprint_N.md 狀態           │
-  │         sprint_N.md：找到含 Issue ID 的 Story 資料列，     │
-  │         將該列最後一欄（狀態欄）的值替換為 DONE(#PR)。     │
-  │         匹配方式：以 Issue ID 定位列，取代最後一欄值，     │
-  │         不依賴完整行格式（避免欄位變動致 replace 未命中）  │
-  │         git commit + push（豁免直推 main，ADR-023 決策 3）  │
-  │  3. [ ] 寫入 sprint-checkpoint.json（§2.12，豁免直推 main）  │
-  │  4. [ ] release claim：bash hooks/release-issue.sh <id>    │
-  │  5. [ ] 檢查 Sprint Backlog 是否清空                        │
-  │         |-- 有剩餘 Story → 取出下一個 Story 繼續            │
-  │         +-- 全部完成 → 立即 invoke shikigami:sprint-review  │
-  │  ※ 步驟 1-4 任一失敗不阻塞，輸出 WARN 後繼續步驟 5          │
-  └─────────────────────────────────────────────────────────────┘
+  Story Completion Checklist（#368 方向3，每個 Story 完成後）
+  1. [ ] git checkout main && git pull
+  2. [ ] 更新 PROJECT_BOARD.md + sprint_N.md 狀態（以 Issue ID 定位列，取代最後一欄值）；git commit + push（豁免直推 main，ADR-023 決策 3）
+  3. [ ] 寫入 sprint-checkpoint.json（§2.12，豁免直推 main）
+  4. [ ] release claim：bash hooks/release-issue.sh <id>
+  5. [ ] 檢查 Sprint Backlog 是否清空
+         |-- 有剩餘 Story → 取出下一個 Story 繼續
+         +-- 全部完成 → 立即 invoke shikigami:sprint-review
+  ※ 步驟 1-4 任一失敗不阻塞，輸出 WARN 後繼續步驟 5
 ```
 
 > 完整步驟詳解（CI 快掃判定、派遣參數、PR 合併流程、Push Retry、升級類型處置表、Subagent 結果暫存）：`references/execution-flow-details.md`
@@ -393,41 +301,10 @@ DESIGN Story 優先執行，依賴其 Contract 的 FEATURE Story 須等 Contract
 ## 4.7 Delivery Phase 雙 Team 視覺對比 Gate（#385 / ADR-034）
 
 <!-- #385 GAD Delivery Phase 視覺對比 Gate — Sprint 133 -->
-<!-- 依賴：ADR-034 browser-automation tool selection（Accepted，PR#560） -->
 
-**適用條件**：Story 為 frontend FEATURE（AC 含有 Figma Prototype URL），Story-Lifecycle subagent 完成 Code Review 通過後、執行 `gh pr merge` 之前觸發。
+**適用條件**：Story 為 frontend FEATURE（AC 含有 Figma Prototype URL），Code Review 通過後、`gh pr merge` 之前觸發。**跳過條件**：後端 / Infra / DESIGN / RESEARCH Story（AC 或 issue body 中無 Figma Prototype URL），輸出 `[VISUAL-GATE-SKIP]`。
 
-**跳過條件（AC5）**：後端 / Infra / DESIGN / RESEARCH Story 自動跳過（判斷：AC 或 issue body 中無 Figma Prototype URL）。跳過時輸出 `[VISUAL-GATE-SKIP] 非前端 Story，跳過視覺對比 Gate`。
-
-### 執行流程
-
-```
-[VISUAL-GATE-START] story={id} 時間={timestamp}
-
-1. 取得 Figma Prototype URL（從 issue body 或 DESIGN Contract）
-   |-- 找不到 URL → [VISUAL-GATE-SKIP] 跳過
-   |-- 找到 URL → 繼續
-
-2. Agent B（Vision Critic）執行雙 Team 視覺對比：
-   a. 截圖 Agent 實作結果（agent-browser screenshot）
-   b. 截圖 Figma Prototype（Figma Export / talk-to-figma）
-   c. 呼叫 skills/vision-critic/SKILL.md 執行分數評估
-
-3. 產出結構化差異報告（AC3）：
-   - 截圖路徑：/tmp/visual-gate/{story-id}-impl.png + {story-id}-figma.png
-   - Vision Critic 分數：{0-100}
-   - 差異項目清單：{具體差異描述}
-   - 判定：PASS（分數 ≥ 80）/ FAIL（分數 < 80）
-
-4. 判定結果（AC4）：
-   |-- PASS（Vision Critic ≥ 80） → [VISUAL-GATE-PASS] 繼續 gh pr merge
-   +-- FAIL（Vision Critic < 80） → [VISUAL-GATE-FAIL] 阻擋 merge
-         - 輸出具體差異描述（NFR1 要求：包含足夠資訊讓 Developer 定位問題）
-         - 差異報告含截圖對比路徑 + 量化分數（NFR2）
-         - 通知 Developer 修復後重新觸發
-```
-
-**降級（agent-browser 或 talk-to-figma 不可用）**：輸出 `[VISUAL-GATE-DEGRADED] 視覺對比工具不可用，降級為人工確認`，不阻擋 merge，但在 PR description 標記「需人工視覺確認」。
+> 詳見 `references/visual-gate.md`（執行流程、判定規則、降級機制）
 
 ---
 
@@ -449,50 +326,23 @@ DESIGN Story 優先執行，依賴其 Contract 的 FEATURE Story 須等 Contract
 
 Story Type 對 TDD 豁免與 Review 策略的影響（FEATURE 必須 TDD；DESIGN 豁免；INFRA 條件性；SECURITY 強制；INTEGRATION 必須；RESEARCH 豁免）。doc-only Story 優先判定 TDD 豁免，但雙階段 Review 維持必要。
 
-> 詳見 `references/hard-gates-tdd.md`
+> 詳見 `references/hard-gates-tdd.md`（L-size 審查增強、§8.1 安全審查觸發條件）
 
 ---
 
 ## 6. DoD 自檢
 
-每個 Story 完成前，Developer 必須逐項檢查 Definition of Done。DoD 條件定義請參照 `skills/scrum-master/SKILL.md` §8，以下為執行時 checkbox 格式：
+每個 Story 完成前，Developer 必須逐項檢查 Definition of Done。DoD 條件定義請參照 `skills/scrum-master/SKILL.md` §8。
 
-| 層次 | 自檢 |
-|------|------|
-| 功能：所有 Acceptance Criteria 通過 | [ ] |
-| 測試：單元測試 + 整合測試全部通過（0 failed） | [ ] |
-| 安全：外部輸入通過安全驗證與去活化處理 | [ ] |
-| 文件：設計文件對應章節已更新，代碼含設計文件引用 | [ ] |
-| 設定：無硬編碼金鑰，配置透過環境變數管理 | [ ] |
-| 度量：Metrics_Log.md 本 Sprint 數據已更新 | [ ] |
-| 反回歸：既有測試全部仍然通過 | [ ] |
-| 技術債：取捷徑情況已用 `[TECH-DEBT]` 標記並更新 Tech_Debt_Registry.md | [ ] |
-
-### 6.1 執行流程 Checkpoint 檢查項
-
-<!-- US-229 Checkpoint 強制重讀步驟 — Sprint 83 -->
-
-每個 Story-Lifecycle subagent 回傳 PASS 後，主 session 必須完成以下 Checkpoint 相關檢查：
-
-- [ ] **每個 Story-Lifecycle subagent 回傳後，Checkpoint 重讀步驟已執行**：已依 §3.1 三個子動作，重讀 `skills/sprint-execution/SKILL.md` §3 流程定義、比對下一步驟一致性，並輸出 Checkpoint 標記。
-- [ ] **Checkpoint 結果已記錄（PASS 或 FAIL + 處置）**：已輸出 `[CHECKPOINT-PASS]` 或 `[CHECKPOINT-FAIL]` 標記（格式見 §3.1.2）；若為 FAIL，已依 §3.1.1 執行對應失敗處置方案並記錄處置結果。
+> DoD checkbox 格式與 §6.1 Checkpoint 檢查項：`references/dod-checklist.md`
 
 ---
 
 ## 7. Systematic Debugging 觸發指引（CI FAIL / Deploy 後 / Bug 修復後）
 
-<!-- US-247 Sprint 90 — Deploy 後與 Bug 修復後 systematic debugging 觸發指引 -->
-<!-- v0.64.1 patch — 新增 CI FAIL 觸發點 -->
+以下時機均為**建議，非強制**，觸發方式統一為 `invoke shikigami:systematic-debugging`。
 
-Sprint Execution 流程中，以下時機建議觸發 systematic debugging，確認系統健康並防止回歸。
-
-以下時機均為**建議，非強制**，觸發方式統一為 `invoke shikigami:systematic-debugging`（附上觸發目的與相關資訊）。
-
-| 時機 | 觸發條件 | 目的 | 可省略條件 |
-|------|---------|------|-----------|
-| **7.0 CI FAIL** | §3 CI 快掃或 §8.2 CI Gate 回傳 FAIL | 根因排查（環境、依賴、隱性回歸） | CI 失敗原因明確（lint/型別錯誤等） |
-| **7.1 Deploy 後** | `deployment-readiness` 完成、部署至生產環境後 | Post-deploy health check | 緊急修復可延後至 Sprint Review 前（Sprint Review 前為 HARD-GATE） |
-| **7.2 Bug 修復後** | Bug 修復通過 Review 後、下一 Story 前 | 回歸確認 | Bug 範圍小且有明確測試覆蓋 |
+> 詳見 `references/systematic-debugging.md`（觸發時機表：CI FAIL / Deploy 後 / Bug 修復後）
 
 ---
 
@@ -505,21 +355,7 @@ Sprint Execution 流程中，以下時機建議觸發 systematic debugging，確
 3. 修復完成後，重新執行該審查階段
 4. 同一審查階段連續失敗 3 次，升級至 Architect 評估是否有設計問題
 
----
-
-### L-size Story 審查增強
-
-**觸發條件**：Story Size = L（3 points）時自動啟用增強審查，以下 checklist 項目為額外必要通過條件。
-
-- [ ] **Architect 設計審查**：L-size Story 實作開始前，Architect 必須確認設計方向（介面定義、模組邊界、資料流），避免大型 Story 因設計問題在後期返工。Developer subagent 需在 prompt 中包含 Architect 確認的設計摘要，方可開始 TDD 循環。
-- [ ] **分階段驗收**：將 Story 的 Acceptance Criteria 分為至少 2 個驗收批次（例如：核心路徑為第一批，邊界條件與錯誤處理為第二批），每批 AC 通過 Spec Compliance Review 後，再繼續下一批實作。若任一批次不通過，僅需針對該批次修復，不影響已通過批次。
-- [ ] **額外回歸測試掃描**：L-size Story 完成後，除執行新增測試外，必須執行既有測試套件的完整掃描，確認無回歸失敗。掃描結果須明確記錄於 Story 完成 commit message（格式：`全部 N 項測試通過，無回歸`）。
-
----
-
-## 8.1 安全審查觸發條件
-
-主 session 層級觸發入口：Story-Lifecycle subagent 回傳 `ESCALATE: SECURITY_CRITICAL` 時，暫停 Sprint 執行，觸發 `security-review` Skill。完整觸發條件清單定義於 `skills/sprint-execution/story-lifecycle-prompt.md` §7 Security Self-Review。
+> L-size Story 審查增強（觸發條件：Story Size = L）與 §8.1 安全審查觸發條件：`references/hard-gates-tdd.md`
 
 ---
 
@@ -561,15 +397,4 @@ Sprint Execution 支援 Live Log Streaming，讓使用者在另一個 terminal �
 
 Developer 在 Refinement 中負責提供技術實作面的輸入，協助 Architect（Refinement Chair）識別實作風險與依賴，確保 Story 進入 Sprint 後不因技術細節阻塞開發。Developer 在 Refinement 中為**諮詢（Consulted）**角色，不主持、不輸出正式報告。
 
-### 職責說明
-
-| 面向 | 職責內容 |
-|------|---------|
-| **技術可行性回應** | 針對 Architect 在 Q1–Q5 分析中提出的技術問題，提供實作可行性評估 |
-| **實作風險識別** | 指出已知的技術限制、潛在邊界條件或可能的實作陷阱 |
-| **Story 可拆分性判斷** | 從實作角度建議 Story 是否可合理拆分，或提出拆分邊界建議 |
-| **測試覆蓋初評** | 初步評估 AC 中的 `[動態]` 項目是否具備可測試的技術條件 |
-
-### Refinement 輸出
-
-Developer 不產出正式文件，於 Refinement 中提供：技術可行性評估意見（FEASIBLE / CONCERN / BLOCKED）與實作風險備注（由 Architect 記錄於 Refinement 報告）。
+> 詳見 `references/developer-refinement.md`（職責說明表、Refinement 輸出定義）
