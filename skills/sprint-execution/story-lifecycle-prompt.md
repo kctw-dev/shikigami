@@ -642,6 +642,33 @@ Security Self-Review — {story_id}
 
 ---
 
+## §8.04.1 Bash 慣例警示（#751）
+
+<!-- #751 Developer prompt 新增 bash arithmetic increment 慣例警示（set -e 相容）— Sprint 156 -->
+
+**適用範圍**：所有涉及 Bash 腳本實作的 Story（INFRA、FEATURE 含腳本、CI workflow）。
+
+### Bash Arithmetic Increment 慣例
+
+**問題**：`set -euo pipefail` 模式下，`((VAR++))` 算術遞增在 `VAR=0` 時返回 **exit code 1**，觸發 `set -e` 提前結束腳本，導致靜默錯誤。
+
+**必須使用**：
+
+```bash
+# 正確（set -e 相容）
+VAR=$((VAR + 1))
+
+# 錯誤（禁止，set -e 下 VAR=0 時觸發 exit code 1）
+((VAR++))  # BANNED
+((VAR+=1)) # BANNED（同理）
+```
+
+**Developer 自審 Checklist 新增項目**：
+
+- [ ] bash 腳本中無 `((VAR++))`、`((VAR+=N))` 形式的算術遞增（使用 `VAR=$((VAR+N))` 替代）
+
+---
+
 ## §8.05 HARD-GATE：Git Commit 強制執行（US-272）
 
 <!-- US-272 Story-Lifecycle subagent 完成後強制 git commit Hard Gate — Sprint 100 -->
