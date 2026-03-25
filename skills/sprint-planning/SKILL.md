@@ -37,9 +37,9 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 
 > **模式選擇**：預設為**快思模式**，跳過標記 *(慢想)* 的項目。使用者傳入 `--deep` 時執行完整流程。
 
-- [ ] 執行框架健康檢查（<!-- Claude Code -->invoke shikigami:health-check<!-- OpenCode -->使用 health-check skill<!-- /OpenCode -->）*(慢想)*
+- [ ] 執行框架健康檢查（<!-- Claude Code -->invoke shikigami:health-check<!-- /Claude Code --><!-- OpenCode -->使用 health-check skill<!-- /OpenCode -->）*(慢想)*
 - [ ] 角色權重調整檢查（詳見 §7）*(慢想)*
-- [ ] **PO** 掃描 GitHub open issues，對未分類 issues 執行 Triage（<!-- Claude Code -->invoke shikigami:issue-management Triage<!-- OpenCode -->使用 issue-management skill<!-- /OpenCode -->）
+- [ ] **PO** 掃描 GitHub open issues，對未分類 issues 執行 Triage（<!-- Claude Code -->invoke shikigami:issue-management Triage<!-- /Claude Code --><!-- OpenCode -->使用 issue-management skill<!-- /OpenCode -->）
 - [ ] **Pre-flight Backlog 健康度檢查**：執行 `gh issue list --label "sprint-candidate" --state open --json number | jq length` 取得 `BACKLOG_COUNT`；若 `BACKLOG_COUNT < 5`，輸出 `[BACKLOG-WARN] sprint-candidate 不足 (N < 5)，建議先執行 backlog-management` 並自動觸發 `/backlog-management` skill 補充；若 `BACKLOG_COUNT >= 5`，輸出 `[BACKLOG-OK] sprint-candidate: N 個，健康度正常` 並繼續
 - [ ] 記錄 Sprint Planning 開始時間：`START_TIME=$(date '+%Y-%m-%dT%H:%M+08:00')`
 - [ ] **PO** 執行 Backlog 排序與 Story 選取（詳見 [po-prompt.md](./references/po-prompt.md) Round 1）
