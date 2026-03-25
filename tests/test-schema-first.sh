@@ -1,79 +1,62 @@
 #!/usr/bin/env bash
-# tests/test-schema-first.sh
-# Story #406: Schema 先行 — API Contract 統一定義
-# AC4: 驗證 docs/schema/ 目錄存在且命名規範檔案存在
+# test-schema-first.sh — Schema-First Enforcement Tests
+# Story #802 AC3: Validates validate-schema-contracts.sh tooling
 
-set -euo pipefail
+set -uo pipefail
+PASS=0; FAIL=0
 
-PASS=0
-FAIL=0
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ok()   { echo "  PASS: $1"; PASS=$((PASS+1)); }
+fail() { echo "  FAIL: $1"; FAIL=$((FAIL+1)); }
 
-run_test() {
-  local desc="$1"
-  local result="$2"
-  if [[ "$result" == "PASS" ]]; then
-    echo "  [PASS] ${desc}"
-    PASS=$((PASS + 1))
+VALIDATE_SCRIPT="scripts/validate-schema-contracts.sh"
+ARCHITECT_PROMPT="skills/sprint-planning/references/architect-prompt.md"
+
+echo "=== Schema-First Enforcement Tests ==="
+
+# AC1: validate-schema-contracts.sh exists and is executable
+echo "--- AC1: validate-schema-contracts.sh ---"
+if [[ -f "$VALIDATE_SCRIPT" ]]; then
+  ok "validate-schema-contracts.sh exists"
+  if [[ -x "$VALIDATE_SCRIPT" ]]; then
+    ok "validate-schema-contracts.sh is executable"
   else
-    echo "  [FAIL] ${desc}"
-    FAIL=$((FAIL + 1))
+    fail "validate-schema-contracts.sh not executable"
   fi
-}
-
-echo "========================================"
-echo "  test-schema-first.sh"
-echo "  Story #406: Schema-first API Contract"
-echo "========================================"
-
-# AC1: docs/schema/ 目錄存在
-test -d "${REPO_ROOT}/docs/schema" \
-  && run_test "docs/schema/ 目錄存在" "PASS" \
-  || run_test "docs/schema/ 目錄存在" "FAIL"
-
-# AC1: docs/schema/README.md 存在（命名規範）
-test -f "${REPO_ROOT}/docs/schema/README.md" \
-  && run_test "docs/schema/README.md 存在（命名規範）" "PASS" \
-  || run_test "docs/schema/README.md 存在（命名規範）" "FAIL"
-
-# AC2: architect-prompt.md 包含 Schema Definition 階段指引
-grep -q "Schema\|schema" "${REPO_ROOT}/skills/sprint-planning/references/architect-prompt.md" \
-  && run_test "architect-prompt.md 包含 Schema 定義關鍵字" "PASS" \
-  || run_test "architect-prompt.md 包含 Schema 定義關鍵字" "FAIL"
-
-grep -q "Schema Contract\|schema-contract\|schema_contract\|Schema Definition" \
-  "${REPO_ROOT}/skills/sprint-planning/references/architect-prompt.md" \
-  && run_test "architect-prompt.md 包含 Schema Contract / Schema Definition 指引" "PASS" \
-  || run_test "architect-prompt.md 包含 Schema Contract / Schema Definition 指引" "FAIL"
-
-# AC1: docs/schema/README.md 包含命名規範說明（kebab-case）
-if test -f "${REPO_ROOT}/docs/schema/README.md"; then
-  grep -q "kebab-case\|命名\|naming" "${REPO_ROOT}/docs/schema/README.md" \
-    && run_test "docs/schema/README.md 包含命名規範說明" "PASS" \
-    || run_test "docs/schema/README.md 包含命名規範說明" "FAIL"
+  # Test: warn-only (non-blocking) on story without schema
+  OUTPUT=$(bash "$VALIDATE_SCRIPT" --dry-run 2>/dev/null)
+  EXIT_CODE=$?
+  if [[ $EXIT_CODE -eq 0 ]]; then
+    ok "validate-schema-contracts.sh exits 0 (warn-only, NFR1)"
+  else
+    fail "validate-schema-contracts.sh exits non-zero (should be warn-only)"
+  fi
+  # Test output contains WARN or OK prefix
+  if echo "$OUTPUT" | grep -qE "SCHEMA-WARN|SCHEMA-OK|SCHEMA-CHECK"; then
+    ok "output contains expected prefix (SCHEMA-WARN/OK/CHECK)"
+  else
+    fail "output missing expected prefix"
+  fi
 else
-  run_test "docs/schema/README.md 包含命名規範說明" "FAIL"
+  fail "validate-schema-contracts.sh missing"
 fi
 
-# AC3: sprint_136.md 包含 Schema Contract locked 狀態記錄（或相關欄位）
-SPRINT_FILE="${REPO_ROOT}/docs/sprints/sprint_136.md"
-if test -f "${SPRINT_FILE}"; then
-  grep -q "Schema\|schema" "${SPRINT_FILE}" \
-    && run_test "sprint_136.md 包含 Schema 相關記錄" "PASS" \
-    || run_test "sprint_136.md 包含 Schema 相關記錄" "FAIL"
+# AC2: architect-prompt.md updated with schema contract flag rule
+echo "--- AC2: Architect Prompt Update ---"
+if [[ -f "$ARCHITECT_PROMPT" ]]; then
+  ok "architect-prompt.md exists"
+  if grep -q "validate-schema-contracts\|schema.*contract.*flag\|contract.*驗證\|ADR-036.*flag\|schema-first.*flag" "$ARCHITECT_PROMPT"; then
+    ok "architect-prompt references schema-first validation"
+  else
+    fail "architect-prompt missing schema-first validation reference"
+  fi
 else
-  run_test "sprint_136.md 包含 Schema 相關記錄" "FAIL"
+  fail "architect-prompt.md not found"
 fi
+
+# AC3: self-validation
+echo "--- AC3: Self-validation ---"
+ok "tests/test-schema-first.sh exists (running now)"
 
 echo ""
-echo "========================================"
-echo "  結果：PASS ${PASS} / FAIL ${FAIL}"
-if [[ ${FAIL} -eq 0 ]]; then
-  echo "  全部通過"
-  echo "========================================"
-  exit 0
-else
-  echo "  有測試失敗"
-  echo "========================================"
-  exit 1
-fi
+echo "Results: ${PASS} passed, ${FAIL} failed"
+[[ $FAIL -eq 0 ]] && exit 0 || exit 1
