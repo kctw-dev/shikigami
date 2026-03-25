@@ -14,7 +14,7 @@
 |-------|-------|------|--------|------|
 | feat: Sprint Review 邊界案例測試自動化（test-sprint-review-boundary.sh） | #732 | S | 1 | DONE(#761) |
 | feat: ADR 目錄索引自動維護（docs/adr/README.md 自動更新） | #742 | S | 1 | DONE(#762) |
-| feat: Sprint Planning 會議紀錄模板標準化（templates/sprint-planning-meeting.md） | #744 | S | 1 | TODO |
+| feat: Sprint Planning 會議紀錄模板標準化（templates/sprint-planning-meeting.md） | #744 | S | 1 | DONE(#763) |
 | feat: Sprint Review 指標收集平行化（Analytics + SPACE + Quality Observer 同步執行） | #709 | M | 3 | TODO |
 | feat: ADR-039 Model Routing 準確率追蹤 Dashboard | #711 | S | 1 | TODO |
 
