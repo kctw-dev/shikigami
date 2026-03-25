@@ -1,15 +1,29 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 152 Planning — 3 Stories / 6 pts）
-**當前 Sprint**：Sprint 152（進行中）
+**最後更新**：2026-03-25（Sprint 153 Planning 完成）
+**當前 Sprint**：Sprint 153（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 152（進行中）
+## Sprint 153（進行中）
+
+> Sprint Goal：強化框架可靠性防護層 — 補齊 onboarding hooks 驗證、防止 OOM 靜默崩潰、建立多平台相容性測試基線
+> **容量**：5 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: onboarding 安裝後驗證 — hooks 完整性自動確認 | #713 | S | 1 | TODO |
+| feat: 多平台相容性驗證測試 | #710 | S | 2 | TODO |
+| feat: Sprint Execution parallel-safety 動態記憶體感知 | #712 | S | 2 | TODO |
+
+---
+
+## Sprint 152（完成）
 
 > Sprint Goal：修復品質缺口並補充 Backlog 動能 — 修復 #704 Issue body 截斷、補充 sprint-candidate >= 8、完成 Doctor cruise 定期觸發整合
+> **結果**：Goal 達成（3/3 Stories DONE）。Velocity 6 pts，完成率 100%。連續第 26 Sprint 100%（127-152）。
 > **容量**：6 pts
 
 | Story | Issue | Size | Points | 狀態 |
