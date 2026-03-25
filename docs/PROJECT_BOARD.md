@@ -12,13 +12,13 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: retro-action 高優先級自動升格 sprint-candidate | #739 | S | 1 | TODO |
-| feat: GitHub PR 描述模板標準化（story-lifecycle PR 品質一致） | #741 | S | 1 | TODO |
-| feat: validate-hooks.sh 整合 cruise SRE patrol | #740 | S | 1 | TODO |
-| feat: Backlog 健康趨勢報告腳本（backlog-health-report.sh） | #736 | S | 1 | TODO |
-| feat: cruise logs 搜尋查詢腳本（跨 session 診斷） | #731 | S | 1 | TODO |
-| retro: Architect 批次分組新增共同修改檔案衝突預防標注 | #752 | S | 1 | TODO |
-| retro: Developer prompt 新增 bash arithmetic increment 慣例警示 | #751 | S | 1 | TODO |
+| feat: retro-action 高優先級自動升格 sprint-candidate | #739 | S | 1 | DONE(#753) |
+| feat: GitHub PR 描述模板標準化（story-lifecycle PR 品質一致） | #741 | S | 1 | DONE(#754) |
+| feat: validate-hooks.sh 整合 cruise SRE patrol | #740 | S | 1 | DONE(#755) |
+| feat: Backlog 健康趨勢報告腳本（backlog-health-report.sh） | #736 | S | 1 | DONE(#755) |
+| feat: cruise logs 搜尋查詢腳本（跨 session 診斷） | #731 | S | 1 | DONE(#756) |
+| retro: Architect 批次分組新增共同修改檔案衝突預防標注 | #752 | S | 1 | DONE(#756) |
+| retro: Developer prompt 新增 bash arithmetic increment 慣例警示 | #751 | S | 1 | DONE(#757) |
 
 ---
 

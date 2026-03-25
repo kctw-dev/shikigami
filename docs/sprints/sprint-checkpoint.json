@@ -1,14 +1,15 @@
 {
-  "sprint": 155,
-  "updated_at": "2026-03-25T09:03:41Z",
-  "session_id": "20260325-163532",
+  "sprint": 156,
+  "updated_at": "2026-03-25T17:45:00+0800",
+  "session_id": "cron-20260325-172001",
   "stories": [
-    {"id": "737", "title": "feat: Story-Lifecycle subagent 結果暫存強化（CACHE-RECOVERY 防失敗）", "status": "completed", "pr": 745, "merge_commit": "b8b95917b0218df394f101c6df8295d6c37281ae"},
-    {"id": "735", "title": "feat: git worktree 自動清理腳本（Sprint 完成後防 OOM）", "status": "completed", "pr": 746, "merge_commit": "a00e8df8646b2ce8fc10a7aa96f5ad46d6c611aa"},
-    {"id": "734", "title": "feat: Sprint 容量自動計算腳本（基於 3-Sprint Velocity 平均）", "status": "completed", "pr": 747, "merge_commit": "80a8a2fb92518be2277192ea561b9ee90acdaa52"},
-    {"id": "719", "title": "retro: Sprint 153 容量估算校準 — 識別隱性工作", "status": "completed", "pr": 750, "merge_commit": "a479628aa2ea4c956dc11db625224e2b0564f7ac"},
-    {"id": "730", "title": "retro: Sprint Planning 新增 ADR 編號衝突預偵測機制", "status": "completed", "pr": 748, "merge_commit": "7fc397acdef79805203f892928db3a514cbab5f1"},
-    {"id": "733", "title": "feat: Claim/Release 機制降級容錯強化（git remote 失敗處理）", "status": "completed", "pr": 749, "merge_commit": "ea092fc698e0a78049ad010b12e23e235718b0dd"}
+    {"id": "739", "title": "feat: retro-action 高優先級自動升格 sprint-candidate", "status": "completed", "pr": 753, "merge_commit": "ca18cfd74aeb887c6c3980fc01232c32f8b431e3"},
+    {"id": "741", "title": "feat: GitHub PR 描述模板標準化", "status": "completed", "pr": 754, "merge_commit": "28db1a0d52cd5b895fd0bef70bcd4b8ab76b7bf3"},
+    {"id": "740", "title": "feat: validate-hooks.sh 整合 cruise SRE patrol", "status": "completed", "pr": 755, "merge_commit": "a757fadb13d72252e8b9516fc5fa3904f2642af7"},
+    {"id": "736", "title": "feat: Backlog 健康趨勢報告腳本", "status": "completed", "pr": 755, "merge_commit": "a757fadb13d72252e8b9516fc5fa3904f2642af7"},
+    {"id": "731", "title": "feat: cruise logs 搜尋查詢腳本", "status": "completed", "pr": 756, "merge_commit": "f3d6fe024c4ac49d33e0f77f21c3b906428fea3b"},
+    {"id": "752", "title": "retro: Architect 批次分組共同修改檔案衝突預防標注", "status": "completed", "pr": 756, "merge_commit": "f3d6fe024c4ac49d33e0f77f21c3b906428fea3b"},
+    {"id": "751", "title": "retro: Developer prompt bash arithmetic increment 警示", "status": "completed", "pr": 757, "merge_commit": "f95cabdb36c31ec1272d9933a5ca298317f22d7c"}
   ],
   "sprint_status": "completed"
 }

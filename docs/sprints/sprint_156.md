@@ -8,13 +8,13 @@
 
 | # | Story | Issue | Points | Status | Assignee |
 |---|-------|-------|--------|--------|----------|
-| 1 | feat: retro-action 高優先級自動升格 sprint-candidate（Sprint Planning 整合） | #739 | 1 | TODO | Developer |
-| 2 | feat: GitHub PR 描述模板標準化（story-lifecycle PR 品質一致） | #741 | 1 | TODO | Developer |
-| 3 | feat: validate-hooks.sh 整合 cruise SRE patrol（持續健康監控） | #740 | 1 | TODO | Developer |
-| 4 | feat: Backlog 健康趨勢報告腳本（backlog-health-report.sh） | #736 | 1 | TODO | Developer |
-| 5 | feat: cruise logs 搜尋查詢腳本（跨 session 診斷） | #731 | 1 | TODO | Developer |
-| 6 | retro: Architect 批次分組新增共同修改檔案衝突預防標注 | #752 | 1 | TODO | Developer |
-| 7 | retro: Developer prompt 新增 bash arithmetic increment 慣例警示（set -e 相容） | #751 | 1 | TODO | Developer |
+| 1 | feat: retro-action 高優先級自動升格 sprint-candidate（Sprint Planning 整合） | #739 | 1 | DONE(#753) | Developer |
+| 2 | feat: GitHub PR 描述模板標準化（story-lifecycle PR 品質一致） | #741 | 1 | DONE(#754) | Developer |
+| 3 | feat: validate-hooks.sh 整合 cruise SRE patrol（持續健康監控） | #740 | 1 | DONE(#755) | Developer |
+| 4 | feat: Backlog 健康趨勢報告腳本（backlog-health-report.sh） | #736 | 1 | DONE(#755) | Developer |
+| 5 | feat: cruise logs 搜尋查詢腳本（跨 session 診斷） | #731 | 1 | DONE(#756) | Developer |
+| 6 | retro: Architect 批次分組新增共同修改檔案衝突預防標注 | #752 | 1 | DONE(#756) | Developer |
+| 7 | retro: Developer prompt 新增 bash arithmetic increment 慣例警示（set -e 相容） | #751 | 1 | DONE(#757) | Developer |
 
 **Total: 7 pts**
 
