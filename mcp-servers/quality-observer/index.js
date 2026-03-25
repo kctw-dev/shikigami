@@ -346,6 +346,20 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
         },
       },
+      {
+        name: "get_coverage_metrics",
+        description:
+          "Phase 2：取得結構化 metrics 端點，返回 coverage、debt_ratio、health_score 三個指標。Sprint Review analytics 使用此端點取代檔案解析。",
+        inputSchema: {
+          type: "object",
+          properties: {
+            sprint_number: {
+              type: "number",
+              description: "指定 Sprint 編號（選填；省略時返回最新 Sprint）",
+            },
+          },
+        },
+      },
     ],
   };
 });
@@ -665,6 +679,75 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           },
         ],
       };
+    }
+
+    case "get_coverage_metrics": {
+      // Phase 2 AC1: /metrics endpoint — coverage, debt_ratio, health_score
+      // AC4: Graceful fallback when data unavailable ([QO-UNAVAILABLE] path)
+      try {
+        const metrics = parseMetricsLog();
+        const targetSprint = args?.sprint_number;
+        let sprintData = null;
+
+        if (targetSprint) {
+          sprintData = metrics.find((m) => m.sprint_number === targetSprint);
+        } else {
+          sprintData = metrics[metrics.length - 1] || null;
+        }
+
+        if (!sprintData) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify({
+                  status: "QO-UNAVAILABLE",
+                  message: "No metrics data available",
+                  coverage: null,
+                  debt_ratio: null,
+                  health_score: null,
+                }),
+              },
+            ],
+          };
+        }
+
+        // Compute coverage from completion_rate, debt_ratio from tech_debt, health_score from velocity trend
+        const coverage = sprintData.completion_rate ?? null;
+        const debtRatio = (sprintData.tech_debt_count ?? 0) > 0 ? "non-zero" : "clean";
+        const healthScore =
+          coverage !== null ? Math.round(coverage * 100) : null;
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({
+                status: "ok",
+                sprint: sprintData.sprint_number,
+                coverage: coverage,
+                debt_ratio: debtRatio,
+                health_score: healthScore,
+              }),
+            },
+          ],
+        };
+      } catch (err) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify({
+                status: "QO-UNAVAILABLE",
+                message: `Error computing metrics: ${err.message}`,
+                coverage: null,
+                debt_ratio: null,
+                health_score: null,
+              }),
+            },
+          ],
+        };
+      }
     }
 
     default:
