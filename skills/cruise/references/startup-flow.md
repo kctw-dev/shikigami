@@ -68,6 +68,33 @@ for REPO_PATH in "${REPOS[@]}"; do
 done
 ```
 
+## §3.5 自動清理 Stale Worktree（#697）
+
+在建立 Flag File 之前，對所有偵測到的 repo 執行 worktree 清理，釋放被 prunable worktree 佔用的 `SHIKIGAMI_MAX_PARALLEL` 額度，防止 auto-shoot 永遠被 OOM 擋住的死循環（#697 歷史案例）。
+
+```bash
+# §3.5 Stale Worktree 自動清理（#697）
+for REPO_PATH in "${REPOS[@]}"; do
+  # AC2: 對所有 REPOS 執行 git worktree prune
+  git -C "$REPO_PATH" worktree prune 2>/dev/null || true  # AC4: 失敗不阻塞 cruise
+
+  # AC3: 移除超過 1 小時的 orphan worktree 目錄
+  WORKTREE_DIR="${REPO_PATH}/.claude/worktrees"
+  if [[ -d "$WORKTREE_DIR" ]]; then
+    find "$WORKTREE_DIR" -maxdepth 1 -mindepth 1 -type d -mmin +60 | while read -r orphan_dir; do
+      git -C "$REPO_PATH" worktree remove --force "$orphan_dir" 2>/dev/null || true  # AC4: 失敗不阻塞
+    done
+  fi
+done
+echo "[CRUISE] §3.5 worktree prune 完成"
+```
+
+**適用範圍**：每次 cruise 啟動時（Loop Mode 與 Once Mode 均執行）。
+**AC1**：本步驟位於 §4 之前，確保建立 Flag File 前額度已釋放。
+**AC5**：驗證方式 — 執行後 `git worktree list` 不應出現 prunable 條目。
+
+---
+
 ## §4 建立 Flag File（SSOT — #449 AC4）
 
 ```bash
