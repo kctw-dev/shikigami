@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 147 完成 — 3/3 Stories DONE / 5 pts）
-**當前 Sprint**：Sprint 147（完成）
+**最後更新**：2026-03-25（Sprint 148 Planning — 3 Stories / 4 pts）
+**當前 Sprint**：Sprint 148（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 148（進行中）
+
+> Sprint Goal：強化框架維護性與可讀性：清理 Cruise SKILL 行數超限、補充 GitHub Issue 模板 NFR 欄位、建立 cruise-logs 自動歸檔機制，提升框架長期健康度。
+> **容量**：4 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| chore: logrotate.sh 擴充 — 加入 docs/cruise-logs JSONL 自動歸檔清理 | #682 | S | 1 | TODO |
+| chore: GitHub Issue 模板補充 非功能性需求 欄位 | #683 | S | 1 | TODO |
+| refactor: cruise/SKILL.md 行數超限重構 — 段落移至 references/ 控制在 250 行以內 | #684 | M | 2 | TODO |
 
 ---
 
