@@ -1,2 +1,3 @@
 {"type":"cruise-init","cycle":1,"mode":"once","patrol":"po","project_level":"low","repos":["kctw-dev/shikigami"],"ts":"2026-03-25T07:45:24Z"}
 {"timestamp":"2026-03-25T08:23:06Z","type":"backlog-health","repo":"kctw-dev/shikigami","sprint_candidate_count":3,"threshold":10,"signal":"[BACKLOG-REPLENISH-TRIGGER]","action":"backlog-replenish-triggered (project_level=low, sprint_candidate=3)"}
+{"timestamp":"2026-03-25T08:31:17Z","type":"backlog-health","repo":"kctw-dev/shikigami","sprint_candidate_count":18,"threshold":10,"signal":"[BACKLOG-HEALTH-OK]","action":"backlog-replenish-complete (added 15 new stories, total=18)"}
