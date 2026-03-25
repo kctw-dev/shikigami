@@ -264,6 +264,28 @@ API 文件版本驗證（§2.8，知識老化偵測事件觸發層）
   +-- [KS-FAIL] 有 EXPIRED 條目 --> 要求確認是否繼續
   |
   v
+Injection Scan 前置檢查（#776，AC2）
+  # 每次 Story dispatch 開始前，對 Story body 執行 prompt injection 掃描
+  # 將 Story body 寫入臨時檔案，傳入 injection-scan.sh
+  STORY_BODY_TMP=$(mktemp)
+  echo "${STORY_BODY}" > "$STORY_BODY_TMP"
+  INJECTION_RESULT=$(bash scripts/injection-scan.sh "$STORY_BODY_TMP" 2>/dev/null | tail -1)
+  rm -f "$STORY_BODY_TMP"
+  if [[ "$INJECTION_RESULT" == "BLOCK" ]]; then
+    echo "[INJECTION-GATE] Story #${STORY_ID} body 偵測到高風險 prompt injection 模式，停止 dispatch"
+    echo "  請人工確認 Story body 後重新執行 Sprint Execution"
+    # 不 exit，跳過此 Story 繼續下一個
+    skip_story=true
+  elif [[ "$INJECTION_RESULT" == "WARN" ]]; then
+    echo "[INJECTION-WARN] Story #${STORY_ID} body 含可疑模式，附警告繼續執行"
+  fi
+  # injection-scan.sh 不存在時靜默跳過（降級容錯）
+  |-- scripts/injection-scan.sh 不存在 → 靜默跳過，輸出 [INJECTION-SCAN-SKIP]，繼續執行
+  |-- BLOCK → [INJECTION-GATE]，跳過此 Story，取下一個 Story 繼續
+  |-- WARN  → 附警告繼續執行
+  +-- PASS  → 繼續執行
+  |
+  v
 Kill Switch 前置檢查（#783，AC2）
   # 每次 Story dispatch 開始前，檢查 kill-switch sentinel
   # Session ID 來源：$SESSION_ID 環境變數，或 .claude/shikigami.local.md session_id 欄位
