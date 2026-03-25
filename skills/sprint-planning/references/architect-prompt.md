@@ -92,8 +92,24 @@ Architect 在技術評估時，必須檢查每個 Story 是否涉及 SDD 定義�
 ## Schema Contract 定義（ADR-036，#406 Schema 先行）
 
 <!-- ADR-036 Schema-first API Contract — Sprint 136 #406 -->
+<!-- #802 Schema-First 強制工具 — validate-schema-contracts.sh — Sprint 160 -->
 
 **觸發條件**：Story AC 涉及 Agent-to-Agent 資料交換、function calling 介面、或 HTTP REST API 文件時，Architect 必須在技術評估中產出對應的 Schema Contract。
+
+### Schema-First Contract 前置驗證（#802 ADR-036 落地）
+
+Sprint Planning 開始前，Architect 應執行自動化驗證腳本，掃描 Sprint Stories 是否有涉及 API 但缺少 Schema Contract 的情況：
+
+```bash
+# AC1：Schema-First 前置驗證（warn-only，不阻擋 Planning）
+bash scripts/validate-schema-contracts.sh
+# 輸出：
+#   [SCHEMA-OK]   #{N}：Schema contract 存在
+#   [SCHEMA-WARN] #{N}：AC 涉及 API/endpoint 但無對應 Schema Contract
+#   （NFR1：warn-only，exit 0，不阻斷 Sprint Planning 流程）
+```
+
+**schema-first flag 規則**：若輸出 `[SCHEMA-WARN]`，Architect 在技術評估表格的 `Schema Contract` 欄位必須標記「**需補建**」，提醒 Developer 在開發前先建立 Schema Contract。
 
 ### Schema Contract 輸出規則
 
