@@ -46,6 +46,16 @@ Sprint 執行支援**雙軌派遣機制**：由環境變數 `SHIKIGAMI_MODEL_PRO
 
 <HARD-GATE>
 **平行 Story-Lifecycle subagent 禁止直接修改 `docs/PROJECT_BOARD.md` 和 `docs/sprints/sprint_N.md`**（競態條件防護）。所有平行 subagent 完成後，主 session 統一批次更新。`SHIKIGAMI_MAX_PARALLEL` 環境變數控制最大平行數量（**預設值 2**，未設定時視為 2，OOM 防護，#536）。派遣前必須：(1) 執行 **Worktree 唯一性檢查**：以 `git worktree list --porcelain` 確認同 Story ID 的 worktree 不存在，若已存在則輸出 `[DISPATCH-SKIP]` 跳過（#537）；(2) **自動執行 memory-aware-dispatch.sh** 取得 FINAL_MAX，超限時輸出 `[OOM-WARN]` 並等待釋放（#536 / #712）。Git Worktree 隔離（`isolation: "worktree"`）消除大部分並發衝突。
+
+<!-- #775 DM-4 Write Gateway 系統化 — Sprint 159 -->
+
+**Coordinator-only 檔案清單**（#775 AC1）：subagent 禁止直接寫入下列檔案，所有寫入須透過主 session 批次更新：
+
+| 檔案 | 說明 |
+|------|------|
+| `docs/PROJECT_BOARD.md` | Sprint 看板狀態（coordinator-only） |
+| `docs/sprints/sprint_N.md` | Sprint Backlog 與結果文件（coordinator-only） |
+| `docs/sprints/sprint-checkpoint.json` | Sprint 進度 checkpoint（coordinator-only） |
 </HARD-GATE>
 
 ### 自動記憶體感知派遣（#712 / #722）
