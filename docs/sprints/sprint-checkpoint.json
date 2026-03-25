@@ -1,15 +1,13 @@
 {
-  "sprint": 160,
-  "updated_at": "2026-03-25T20:52:00Z",
-  "session_id": "20260325-202534",
+  "sprint": 161,
+  "updated_at": "2026-03-25T13:30:44Z",
   "stories": [
-    {"id": "795", "title": "feat: QA FREE-MAD 挑戰韌性", "status": "completed", "pr": 803},
-    {"id": "797", "title": "feat: 專案範本 init-project.sh", "status": "completed", "pr": 804},
-    {"id": "793", "title": "feat: Context Engineering JIT 載入策略", "status": "completed", "pr": 805},
-    {"id": "802", "title": "feat: Schema-First 強制工具", "status": "completed", "pr": 806},
-    {"id": "798", "title": "feat: Quick Ship Pipeline", "status": "completed", "pr": 807},
-    {"id": "794", "title": "feat: Quality Observer MCP Phase 2", "status": "completed", "pr": 808},
-    {"id": "772", "title": "feat: Session Watchdog", "status": "completed", "pr": 809}
+    {"id": "776", "title": "feat: Prompt Injection Defense", "status": "completed", "completed_at": "2026-03-25T13:30:44Z", "pr": 812},
+    {"id": "799", "title": "feat: Review Suggestions 追蹤", "status": "completed", "completed_at": "2026-03-25T13:30:44Z", "pr": 813},
+    {"id": "796", "title": "docs: Scrum Master 狀態圖", "status": "pending", "completed_at": null},
+    {"id": "810", "title": "retro: 版本 bump ROADMAP 同步", "status": "pending", "completed_at": null},
+    {"id": "811", "title": "retro: shell test 最佳實踐", "status": "pending", "completed_at": null}
   ],
-  "sprint_status": "completed"
+  "current_step": "batch-1-complete",
+  "sprint_status": "in-progress"
 }
