@@ -1,9 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 146 完成 — 1/1 Stories DONE / 1 pt）
-**當前 Sprint**：Sprint 146（完成）
+**最後更新**：2026-03-25（Sprint 147 Planning 完成 — 3 Stories / 5 pts）
+**當前 Sprint**：Sprint 147（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
+
+---
+
+## Sprint 147（進行中）
+
+> Sprint Goal：補充 Backlog 存量、強化 doc_only Story 內容品質審查機制、並修復 SRE 巡檢 runner 誤報問題，提升框架自治品質與 Backlog 健康度。
+> **容量**：5 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: Backlog 補充 — Sprint 146 後 Backlog 清空，建立新 sprint-candidate | #679 | M | 2 | TODO |
+| feat: doc_only Story 內容品質審查 — Reviewer + Challenger 制衡 | #680 | M | 2 | TODO |
+| feat: SRE 巡檢讀取 runner_min_count 設定，避免 MIG 正常縮減誤報 | #681 | S | 1 | TODO |
 
 ---
 
