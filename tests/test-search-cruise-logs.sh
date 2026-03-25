@@ -66,11 +66,13 @@ else
 fi
 
 # NFR2: 執行時間 < 5s（搜尋 today，使用寬鬆閾值避免環境差異誤判）
+# 使用 date +%s 秒級計時，避免 $SECONDS 整秒進位誤判
 if [[ -f "$SCRIPT" ]]; then
   LOG_DIR="$REPO_ROOT/docs/cruise-logs"
-  START_T=$SECONDS
+  START_T=$(date +%s)
   bash "$SCRIPT" "po-action" --date today --log-dir "$LOG_DIR" > /dev/null 2>&1 || true
-  ELAPSED=$((SECONDS - START_T))
+  END_T=$(date +%s)
+  ELAPSED=$(( END_T - START_T ))
   if [[ $ELAPSED -lt 5 ]]; then
     check "NFR2: 執行時間 ${ELAPSED}s < 5s（AC 要求 < 2s，測試寬鬆 5s 閾值）" "pass"
   else
