@@ -105,8 +105,8 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 
 1. **讀取閾值配置**
    ```bash
-   # 從 .claude/shikigami.local.md 讀取 backlog_health.threshold，預設值 8
-   BACKLOG_THRESHOLD=$(grep -A 2 "backlog_health:" .claude/shikigami.local.md | grep "threshold:" | awk '{print $2}' || echo "8")
+   # 從 .claude/shikigami.local.md 讀取 backlog_health.threshold，預設值 10（ADR-043 決策）
+   BACKLOG_THRESHOLD=$(grep -A 2 "backlog_health:" .claude/shikigami.local.md | grep "threshold:" | awk '{print $2}' || echo "10")
    ```
 
 2. **計算當前 sprint-candidate 數量**（**非阻塞，gh API 失敗時降級**）

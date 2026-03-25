@@ -19,7 +19,7 @@ shikigami:
   oauth:
     warn_threshold_hours: 24          # OAuth Token 過期告警門檻（預設 24 小時）
   backlog_health:
-    threshold: 8                      # sprint-candidate 最少數量閾值，低於此值觸發補充信號（預設 8）
+    threshold: 10                     # sprint-candidate 最少數量閾值，低於此值觸發補充信號（ADR-043 決策：從 8 調整為 10，目標庫存 >= 16）
 ---
 
 # Shikigami 專案配置
