@@ -14,7 +14,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: 為剩餘 9 個孤兒文件補充引用或 allowlist 豁免 | #677 | S | 1 | TODO |
+| retro: 為剩餘 9 個孤兒文件補充引用或 allowlist 豁免 | #677 | S | 1 | DONE(#678) |
 
 ---
 

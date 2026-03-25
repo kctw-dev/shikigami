@@ -18,7 +18,7 @@ version_target: v0.96.2
 
 | Story | Issue | Type | Size | Points | 狀態 | Assignee | 獨立性 |
 |-------|-------|------|------|--------|------|----------|--------|
-| retro: 為剩餘 9 個孤兒文件補充引用或 allowlist 豁免 | #677 | CHORE | S | 1 | TODO | Developer | Wave 1（獨立） |
+| retro: 為剩餘 9 個孤兒文件補充引用或 allowlist 豁免 | #677 | CHORE | S | 1 | DONE(#678) | Developer | Wave 1（獨立） |
 
 **Sprint 容量**：1 pt（Sprint 143=6, 144=6, 145=2, avg≈4.7；本 Sprint 僅 1 個 retro-action 候選，低容量正常）
 
@@ -39,9 +39,9 @@ version_target: v0.96.2
 
 ## DoD（Definition of Done）
 
-- [ ] 9 個孤兒文件逐一評估，每個有明確處置決定（A 補引用 或 B 加 allowlist）
-- [ ] `bash scripts/validate-orphans.sh` WARNING = 0
-- [ ] `.orphan-allowlist` 或引用文件已更新
-- [ ] `bash scripts/validate-orphans.sh` 全部通過
-- [ ] git commit + push 完成
-- [ ] GitHub Issue #677 關閉
+- [x] 9 個孤兒文件逐一評估，每個有明確處置決定（A 補引用 或 B 加 allowlist）
+- [x] `bash scripts/validate-orphans.sh` WARNING = 0
+- [x] `.orphan-allowlist` 或引用文件已更新
+- [x] `bash scripts/validate-orphans.sh` 全部通過
+- [x] git commit + push 完成
+- [x] GitHub Issue #677 關閉

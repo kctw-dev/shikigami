@@ -1,21 +1,14 @@
 {
-  "sprint": 145,
-  "updated_at": "2026-03-25T09:40:00Z",
-  "session_id": "cron-20260325-093001",
+  "sprint": 146,
+  "updated_at": "2026-03-25T10:30:00Z",
+  "session_id": "cron-20260325-101501",
   "stories": [
     {
-      "id": "673",
-      "title": "chore: 修復 gemini-extension.json 版號不一致（0.95.0 → 0.95.1）",
+      "id": "677",
+      "title": "retro: 為剩餘 9 個孤兒文件補充引用或 allowlist 豁免",
       "status": "completed",
-      "pr": 675,
-      "merged_at": "2026-03-25T09:37:00Z"
-    },
-    {
-      "id": "674",
-      "title": "chore: validate-orphans.sh 剩餘 221 WARNING 系統性分類與批次豁免",
-      "status": "completed",
-      "pr": 676,
-      "merged_at": "2026-03-25T09:39:00Z"
+      "pr": 678,
+      "merged_at": "2026-03-25T02:30:09Z"
     }
   ],
   "sprint_status": "completed"
