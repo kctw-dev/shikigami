@@ -56,6 +56,39 @@ fi
 
 **重要**：即使所有可見 failure 都在 feature branch，仍必須執行 main branch 獨立檢查，不可因 feature branch 有既有 Issue 而跳過。
 
+## Hooks 完整性健康檢查（#740）
+
+<!-- #740 validate-hooks.sh 整合 cruise SRE patrol — Sprint 156 -->
+
+每次 SRE patrol 執行時，自動執行 `scripts/validate-hooks.sh` 驗證 hooks 完整性。
+
+```bash
+# Hooks 健康檢查（每次 SRE patrol 執行）
+# NFR2: validate-hooks.sh 失敗不阻塞 SRE patrol 主流程（|| true）
+HOOKS_RESULT=$(bash "${REPO_PATH}/scripts/validate-hooks.sh" 2>&1) || true
+HOOKS_EXIT=$?
+
+if [[ $HOOKS_EXIT -ne 0 ]]; then
+  echo "[HOOKS-HEALTH-FAIL] validate-hooks.sh 驗證失敗，詳見下方輸出"
+  # 寫入 cruise log（type: hooks-health）
+  echo "{\"ts\":\"$(date '+%Y-%m-%dT%H:%M:%S%z')\",\"type\":\"hooks-health\",\"session\":\"${SESSION_ID}\",\"result\":\"FAIL\",\"detail\":\"$(echo "$HOOKS_RESULT" | head -3 | tr '\n' '|')\"}" >> "${LOG_FILE}"
+else
+  echo "[HOOKS-HEALTH-OK] validate-hooks.sh 驗證通過"
+  echo "{\"ts\":\"$(date '+%Y-%m-%dT%H:%M:%S%z')\",\"type\":\"hooks-health\",\"session\":\"${SESSION_ID}\",\"result\":\"PASS\",\"detail\":\"all hooks valid\"}" >> "${LOG_FILE}"
+fi
+# 不阻塞：無論結果如何，SRE patrol 主流程繼續執行
+```
+
+**輸出說明**：
+
+| 結果 | 輸出 | cruise log type | 嚴重度 |
+|------|------|----------------|--------|
+| PASS | `[HOOKS-HEALTH-OK]` | hooks-health | 靜默記錄 |
+| FAIL | `[HOOKS-HEALTH-FAIL]` | hooks-health | WARN（不阻塞） |
+
+**NFR1**：執行時間 < 5s（validate-hooks.sh 本地腳本，無外部 API 呼叫）
+**NFR2**：validate-hooks.sh 失敗不阻塞 SRE patrol 主流程（`|| true` 保護）
+
 ## Runner 健康檢查
 
 > **前置條件**：查詢 org-level runner 需要 `admin:org` scope（`gh auth refresh -s admin:org`）。若缺少此 scope 將自動 fallback 至 repo-level。
