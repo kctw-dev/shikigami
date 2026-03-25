@@ -18,7 +18,7 @@ version_target: v0.96.2
 
 | Story | Issue | Type | Size | Points | 狀態 | Assignee | 獨立性 |
 |-------|-------|------|------|--------|------|----------|--------|
-| chore: logrotate.sh 擴充 — 加入 docs/cruise-logs JSONL 自動歸檔清理 | #682 | CHORE | S | 1 | TODO | Developer | Wave 1（獨立，修改 scripts/logrotate.sh） |
+| chore: logrotate.sh 擴充 — 加入 docs/cruise-logs JSONL 自動歸檔清理 | #682 | CHORE | S | 1 | DONE(#687) | Developer | Wave 1（獨立，修改 scripts/logrotate.sh） |
 | chore: GitHub Issue 模板補充 非功能性需求 欄位 — 減少 Sprint Planning 補充工作 | #683 | CHORE | S | 1 | TODO | Developer | Wave 1（獨立，建立 .github/ISSUE_TEMPLATE/） |
 | refactor: cruise/SKILL.md 行數超限重構 — 段落移至 references/ 控制在 250 行以內 | #684 | REFACTOR | M | 2 | TODO | Developer | Wave 2（獨立，修改 skills/cruise/SKILL.md + references/） |
 

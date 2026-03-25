@@ -1,9 +1,9 @@
 {
   "sprint": 148,
-  "updated_at": "2026-03-25T04:48:06Z",
+  "updated_at": "2026-03-25T04:51:56Z",
   "session_id": "cron-20260325-124001",
   "stories": [
-    {"id": "682", "title": "chore: logrotate.sh 擴充 — 加入 docs/cruise-logs JSONL 自動歸檔清理", "status": "pending", "pr": null, "merged_at": null},
+    {"id": "682", "title": "chore: logrotate.sh 擴充 — 加入 docs/cruise-logs JSONL 自動歸檔清理", "status": "completed", "pr": 687, "merged_at": "2026-03-25T04:51:56Z"},
     {"id": "683", "title": "chore: GitHub Issue 模板補充 非功能性需求 欄位 — 減少 Sprint Planning 補充工作", "status": "pending", "pr": null, "merged_at": null},
     {"id": "684", "title": "refactor: cruise/SKILL.md 行數超限重構 — 段落移至 references/ 控制在 250 行以內", "status": "pending", "pr": null, "merged_at": null}
   ],
