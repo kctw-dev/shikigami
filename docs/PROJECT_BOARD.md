@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 143 Planning 完成 — 4 Stories / 6 pts）
-**當前 Sprint**：Sprint 143（進行中）
+**最後更新**：2026-03-25（Sprint 144 Planning 完成 — 4 Stories / 6 pts）
+**當前 Sprint**：Sprint 144（進行中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
@@ -15,17 +15,32 @@
 
 ---
 
-## Sprint 143（進行中）
+## Sprint 144（進行中）
 
-> Sprint Goal：補強 Sprint Planning 自動化防線、解決框架 CI 遺留資產混亂，並完成 sprint-execution SKILL 長期技術債重構。
+> Sprint Goal：消除框架 validate-orphans.sh 長期 263 WARNING 噪音，補強驗證腳本覆蓋完整性，並完成 TDAD 設定關閉功能，提升框架可維護性與開發者體驗。
 > **容量**：6 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: Sprint Planning Pre-flight Backlog 健康度檢查 | #656 | S | 1 | TODO |
-| retro: 評估 #657 是否與 #652 重複，決定關閉或縮小範疇 | #661 | S | 1 | TODO |
-| chore: 清除 new-issue-intake.yml 殘留引用 | #662 | S | 1 | TODO |
-| refactor: sprint-execution/SKILL.md 行數超限重構 | #654 | M | 3 | TODO |
+| retro: 驗證 validate-skills.sh 覆蓋完整性 | #667 | S | 1 | TODO |
+| feat: TDAD 依賴分析可透過設定關閉 | #653 | S | 1 | TODO |
+| chore: ADR index 修復 263 WARNING | #655 | M | 3 | TODO |
+| feat: validate-orphans.sh 豁免清單機制 | #658 | S | 1 | TODO |
+
+---
+
+## Sprint 143（完成）
+
+> Sprint Goal：補強 Sprint Planning 自動化防線、解決框架 CI 遺留資產混亂，並完成 sprint-execution SKILL 長期技術債重構。
+> **結果**：Goal 達成（4/4 Stories DONE）。Velocity 6 pts，完成率 100%。連續第 17 Sprint 100%（127-143）。
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: Sprint Planning Pre-flight Backlog 健康度檢查 | #656 | S | 1 | DONE(#663) |
+| retro: 評估 #657 是否與 #652 重複，決定關閉或縮小範疇 | #661 | S | 1 | DONE(#665) |
+| chore: 清除 new-issue-intake.yml 殘留引用 | #662 | S | 1 | DONE(#664) |
+| refactor: sprint-execution/SKILL.md 行數超限重構 | #654 | M | 3 | DONE(#666) |
 
 ---
 
