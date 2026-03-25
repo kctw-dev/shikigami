@@ -1,7 +1,7 @@
 # ADR-039 Model Routing Dashboard
 
 > 本文件由 `scripts/routing-stats.sh` 自動產生，請勿手動修改。
-> 最後更新：2026-03-25 18:31:01
+> 最後更新：2026-03-25 18:34:32
 > 資料範圍：最近 10 個 Sprint（Sprint 148 149 150 151 152 153 154 155 156 157）
 
 ## Tier 分布

@@ -1,7 +1,7 @@
 # ADR 目錄索引
 
 > 本文件由 `scripts/update-adr-index.sh` 自動產生，請勿手動修改。
-> 最後更新：2026-03-25 18:18:53
+> 最後更新：2026-03-25 18:34:32
 
 ## 架構決策紀錄（Architecture Decision Records）
 

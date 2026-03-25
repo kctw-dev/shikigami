@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-25（Sprint 155 完成 — worktree 清理、容量計算、ADR 衝突預偵測、Claim/Release 容錯、CACHE-RECOVERY 強化）
+> 最後更新：2026-03-25（Sprint 157 完成 — Sprint Review 測試自動化、ADR 索引自動維護、Planning 模板標準化、Review 指標收集平行化、ADR-039 Model Routing Dashboard）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.99.0**（Sprint 156 — retro-action 自動升格、PR 描述模板、SRE hooks 健康監控、Backlog 健康趨勢報告、cruise logs 搜尋工具、Architect 衝突預防、bash arithmetic 慣例）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.100.0**（Sprint 157 — Sprint Review 測試自動化、ADR 索引自動維護、Planning 模板標準化、Review 指標收集平行化、ADR-039 Model Routing Dashboard）。
 
 | 版號 | 含義 |
 |------|------|

@@ -968,3 +968,23 @@
 
 ---
 
+
+---
+
+## Sprint 157（2026-03-25）
+
+**Sprint Goal**：強化 Sprint 流程品質與觀測能力 — 補充 Sprint Review 測試覆蓋、建立 ADR 索引自動維護、整合 SRE 記憶體趨勢偵測、Sprint Planning 會議紀錄模板標準化、ADR-039 Model Routing Dashboard、Sprint Review 指標收集平行化
+**結果**：Goal 達成（5/5 Stories PASS）
+
+### Good
+- 全部 5 Stories 完成，Sprint Goal 完整達成
+- Sprint Review 邊界案例測試自動化（#732），17/17 PASS，為後續 Review 提供品質保障
+- ADR 目錄索引自動維護（#742），43 個 ADR 自動索引，解決手動維護痛點
+- ADR-039 Model Routing Dashboard（#711）建立持久性路由分析能力，haiku 71%（ROUTING-OK）
+- 串行約束（#709→#711 共用 SKILL.md）處理正確，無 merge conflict
+
+### Problem
+- P1: routing-stats.sh 格式驗證缺失，model-route 記錄格式不規範時靜默漏記
+
+### Action Items
+- routing-stats.sh 新增 model-route 格式驗證警告（#767）
