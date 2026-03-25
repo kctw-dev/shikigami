@@ -143,7 +143,54 @@ project_level=low 時，Sprint Planning commit + push 完成後，必須自動 i
 
 ---
 
-## 9. SBE 範例體系（Specification by Example）
+## 9. D3 Debate Protocol — Architect vs QA 技術辯論（#777）
+
+D3（Design Disagreement Debate）是 **選擇性觸發** 的結構化辯論機制，**僅在 Architect 與 QA 對同一 Story 意見不同（disagree）產生分歧時啟動**。
+
+### 觸發條件
+
+- Architect 技術評估與 QA 驗收確認對同一 Story 的技術方案出現明確衝突
+- 非強制——若雙方無分歧，跳過 D3 直接進入 PO Round 2
+
+### 三輪結構（3-round structure）
+
+| 輪次 | 角色 | 職責 |
+|------|------|------|
+| Round 1 | **Advocate（Architect）** | 提出技術方案立場，說明設計理由與技術可行性 |
+| Round 2 | **Challenge（QA）** | 針對 Architect 方案提出挑戰：測試難度、邊界條件、AC 覆蓋風險 |
+| Round 3 | **Cost-aware rebuttal（Architect）** | 考量實作成本後回應 QA 挑戰，可接受部分讓步 |
+| 裁決 | **Judge decision（SM）** | Scrum Master 綜合三輪輸出，給出最終技術方向裁決 |
+
+> **最多 3 輪（3 rounds maximum）**，禁止無限循環。若 3 輪後仍無共識，SM 強制裁決，記錄 `[D3-UNRESOLVED]` 並升級至 Architect 複審。
+
+### 記錄規則（AC2）
+
+D3 決策必須記錄至 `docs/km/d3-decisions.md`，欄位包含：
+
+- Date、Sprint、Story
+- Round 1 Advocate Position（Architect 立場）
+- Round 2 Challenge（QA 挑戰）
+- Round 3 Rebuttal（Architect Cost-aware 回應）
+- Judge Rationale（SM 裁決理由）
+- Final Decision（最終決策）
+
+### Sprint Planning 文件整合（AC3）
+
+當 D3 被觸發時，Sprint Planning 會議紀錄（§5.1）必須包含 `## D3 Record` 段落，格式如下：
+
+```markdown
+## D3 Record
+
+**Story**: #NNN Story Title
+**觸發原因**: Architect 與 QA 分歧摘要
+**Final Decision**: 最終決策結果
+**Judge Rationale**: SM 裁決理由（簡述）
+**完整記錄**: 見 docs/km/d3-decisions.md
+```
+
+---
+
+## 10. SBE 範例體系（Specification by Example）
 
 Sprint Planning 流程中的業務規則以 SBE 範例作為 ground truth，格式標準與相關文件：
 
