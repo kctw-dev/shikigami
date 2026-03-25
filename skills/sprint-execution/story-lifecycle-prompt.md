@@ -719,6 +719,24 @@ commit 失敗 → 輸出 `[COMMIT-FAIL] 原因: {msg}，影響: {files}` → `ES
 
 ---
 
+## §8.15 ADR 目錄索引自動更新（#742）
+
+<!-- #742 ADR 目錄索引自動維護 — Sprint 157 -->
+
+**觸發條件**：`story_type = RESEARCH` 且 Story 通過雙階段審查後（§8.1 完成後）
+
+**執行步驟**：
+
+```bash
+bash scripts/update-adr-index.sh
+# [OK] ADR 索引已更新 → 繼續
+# 失敗 → 輸出 [WARN] ADR 索引更新失敗，繼續（不阻塞主流程）
+```
+
+**豁免條件**：`story_type ≠ RESEARCH` 時跳過，輸出 `[ADR-INDEX-SKIP] 非 RESEARCH Story，跳過 ADR 索引更新`。
+
+---
+
 ## §8.2 共用文件更新（循序執行路徑）
 
 **循序模式**：直接讀取並更新 `PROJECT_BOARD.md` 與 `sprint_N.md` 狀態欄（依 `SKILL.md` §3 步驟 7，含 read-then-compare 衝突偵測），完成後 git commit + git push。
