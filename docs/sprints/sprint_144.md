@@ -2,7 +2,7 @@
 sprint: 144
 start_date: 2026-03-25
 end_date: 2026-03-31
-status: in-progress
+status: done
 velocity_baseline: 4.7
 capacity: 6
 version_target: v0.96.1
@@ -21,7 +21,7 @@ version_target: v0.96.1
 | retro: 驗證 validate-skills.sh 覆蓋完整性 | #667 | RETRO | S | 1 | DONE(#669) | Developer | Wave 1（獨立） |
 | feat: TDAD 依賴分析可透過設定關閉 | #653 | FEAT | S | 1 | DONE(#670) | Developer | Wave 1（獨立） |
 | chore: ADR index 修復 263 WARNING | #655 | CHORE | M | 3 | DONE(#671) | Developer | Wave 1（獨立） |
-| feat: validate-orphans.sh 豁免清單機制 | #658 | FEAT | S | 1 | TODO | Developer | Wave 2（依賴 #655） |
+| feat: validate-orphans.sh 豁免清單機制 | #658 | FEAT | S | 1 | DONE(#672) | Developer | Wave 2（依賴 #655） |
 
 **Sprint 容量**：6 pts（Sprint 141=2, 142=5, 143=6, avg≈4.7, 建議 5-6 pts）
 

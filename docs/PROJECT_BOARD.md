@@ -25,7 +25,7 @@
 | retro: 驗證 validate-skills.sh 覆蓋完整性 | #667 | S | 1 | DONE(#669) |
 | feat: TDAD 依賴分析可透過設定關閉 | #653 | S | 1 | DONE(#670) |
 | chore: ADR index 修復 263 WARNING | #655 | M | 3 | DONE(#671) |
-| feat: validate-orphans.sh 豁免清單機制 | #658 | S | 1 | TODO |
+| feat: validate-orphans.sh 豁免清單機制 | #658 | S | 1 | DONE(#672) |
 
 ---
 
