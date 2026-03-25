@@ -947,4 +947,4 @@ claude -p "/schedule issue-management --remove"
 
 **注意事項**：
 - issue-management 執行時依賴 gh CLI OAuth 認證（除 claude CLI OAuth 外），兩者均可能因 token 過期而失敗，需定期確認認證狀態
-- 新 Issue 入庫已由 GitHub Action（`new-issue-intake.yml`）即時處理，排程主要用於批次補齊與 comment 回覆
+- 新 Issue 入庫由 Cruise PO 巡邏即時處理（`new-issue-intake.yml` 已於 Sprint 142 移除），排程主要用於批次補齊與 comment 回覆

@@ -4,7 +4,7 @@
 **版本**：v1.0.0
 **建立日期**：2026-03-11（Sprint 77）
 **關聯文件**：
-- `.github/workflows/e2e.yml`（E2E workflow 模板，US-197）
+- `.github/workflows/e2e.yml`（E2E workflow 模板，US-197）（**已於 Sprint 142 移除**，workflow 範例見本文件 §4.2 / §4.3）
 - `docs/sdd/SDD-UIUX-E2E.md`（三層 Agent 管線 E2E 規格，US-108）
 - `skills/deployment-readiness/SKILL.md`（E2E Soft Gate，US-199）
 - `docs/ci-cd-guide/README.md`（CI/CD workflow 拆分指引，US-93）

@@ -64,7 +64,7 @@ L2 驗證結果必須記錄於部署就緒檢查的 Checklist 備注欄。
 
 > **注意**：L3 E2E 驗證為 **Soft Gate**。失敗時輸出 `[E2E-SOFT-GATE]`，需 PO 確認後方可繼續。
 
-> **模板參照**：Playwright workflow 模板 `.github/workflows/e2e.yml`、Firebase 登入腳本 `docs/templates/ci-firebase-login.js`。依模板內佔位符說明設定即可。
+> **模板參照**：Playwright workflow 模板 `docs/guides/E2E-TEST-MANAGEMENT.md`（`.github/workflows/e2e.yml` 已於 Sprint 142 移除，請依文件中的 workflow 範例自行建立）、Firebase 登入腳本 `docs/templates/ci-firebase-login.js`。依模板內佔位符說明設定即可。
 
 ### 驗證結果判斷
 

@@ -50,23 +50,9 @@ if [[ -f "docs/km/ci-token-rotation-strategy.md" ]]; then
   fi
 fi
 
-# AC4 (實作驗證): workflow 使用 anthropic_api_key
-echo "[AC4] Workflow 認證方式驗證"
-WORKFLOW=".github/workflows/new-issue-intake.yml"
-if [[ -f "$WORKFLOW" ]]; then
-  if grep -q "anthropic_api_key" "$WORKFLOW"; then
-    check "workflow 使用 anthropic_api_key" "PASS"
-  else
-    check "workflow 使用 anthropic_api_key（目前仍用 oauth token）" "FAIL"
-  fi
-  if ! grep -q "claude_code_oauth_token:" "$WORKFLOW"; then
-    check "workflow 不再使用 claude_code_oauth_token" "PASS"
-  else
-    check "workflow 不再使用 claude_code_oauth_token（仍存在，需修改）" "FAIL"
-  fi
-else
-  check "workflow 檔案存在" "FAIL"
-fi
+# AC4 (實作驗證): new-issue-intake.yml 已移除（Sprint 142 #660），跳過 workflow 認證驗證
+echo "[AC4] Workflow 認證方式驗證（已跳過：new-issue-intake.yml 已移除）"
+echo "  SKIP: new-issue-intake.yml 已於 Sprint 142 移除，AC4 認證驗證不再適用"
 
 echo ""
 echo "=== 結果：$PASS PASS, $FAIL FAIL ==="

@@ -31,8 +31,9 @@
 ```
 
 > `{GITHUB_ACTION_STATUS}` 由 §2.6 執行結果填入，例如：
-> - `new-issue-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）`
-> - `new-issue-intake 待設定（見 §2.6 手動指引）`
+> - `GitHub Actions runner 已就緒（self-hosted runner 已連線）`
+> - `GitHub Actions runner 待設定（見 §2.6 手動指引）`
+> - `new-issue-intake workflow 已移除（Sprint 142），Issue 自動入庫由 Cruise PO 巡邏取代`
 
 ---
 

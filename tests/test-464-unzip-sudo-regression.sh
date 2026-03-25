@@ -22,6 +22,14 @@ check() {
 
 echo "=== Test #464: unzip core invariants (sudo -n ACs superseded by #472) ==="
 
+if [[ ! -f "$WORKFLOW" ]]; then
+  echo "  SKIP: new-issue-intake.yml 已移除（Sprint 142），跳過所有 CORE 驗證"
+  echo ""
+  echo "Results: PASS=$PASS FAIL=$FAIL SKIP=all"
+  echo "All tests passed (skipped)."
+  exit 0
+fi
+
 # 核心不變量：使用 apt-get install unzip（#472 已確保不帶 -n）
 grep -q "apt-get install -y unzip" "$WORKFLOW"
 check "CORE: apt-get install -y unzip present" $?

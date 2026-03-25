@@ -230,6 +230,7 @@ echo ""
 # ──────────────────────────────────────────────
 # Test 6：e2e.yml 不應使用 node-version: "20"
 # （#526 AC — e2e.yml 已升級至 Node.js 24）
+# 注意：e2e.yml 已於 Sprint 142 移除，本測試永遠 SKIP
 # ──────────────────────────────────────────────
 echo "[ T6 ] e2e.yml 不應使用 node-version: \"20\"（#526）"
 
@@ -243,7 +244,7 @@ if [[ -f "${E2E_WORKFLOW}" ]]; then
     PASS_COUNT=$((PASS_COUNT + 1))
   fi
 else
-  echo "  SKIP: e2e.yml 不存在"
+  echo "  SKIP: e2e.yml 已移除（Sprint 142），跳過驗證"
 fi
 
 echo ""
