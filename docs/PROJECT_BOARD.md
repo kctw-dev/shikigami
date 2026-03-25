@@ -1,23 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 155 Planning 完成）
-**當前 Sprint**：Sprint 155（進行中）
+**最後更新**：2026-03-25（Sprint 155 Review 完成）
+**當前 Sprint**：Sprint 156（待規劃）
 
 ---
 
-## Sprint 155（進行中）
+## Sprint 155（完成）
 
 > Sprint Goal：強化框架自動化工具鏈 — 新增 worktree 清理與容量計算腳本、強化 Claim/Release 容錯與 Story-Lifecycle 結果暫存、校準容量估算方法論、補強 ADR 衝突預偵測
+> **結果**：Goal 達成（6/6 Stories DONE）。Velocity 6 pts，完成率 100%。連續第 29 Sprint 100%（127-155）。
 > **容量**：6 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: Story-Lifecycle subagent 結果暫存強化（CACHE-RECOVERY 防失敗） | #737 | S | 1 | TODO |
-| feat: git worktree 自動清理腳本（Sprint 完成後防 OOM） | #735 | S | 1 | TODO |
-| feat: Sprint 容量自動計算腳本（基於 3-Sprint Velocity 平均） | #734 | S | 1 | TODO |
-| retro: Sprint 153 容量估算校準 — 識別隱性工作 | #719 | S | 1 | TODO |
-| retro: Sprint Planning 新增 ADR 編號衝突預偵測機制 | #730 | S | 1 | TODO |
-| feat: Claim/Release 機制降級容錯強化（git remote 失敗處理） | #733 | S | 1 | TODO |
+| feat: Story-Lifecycle subagent 結果暫存強化（CACHE-RECOVERY 防失敗） | #737 | S | 1 | DONE(#745) |
+| feat: git worktree 自動清理腳本（Sprint 完成後防 OOM） | #735 | S | 1 | DONE(#746) |
+| feat: Sprint 容量自動計算腳本（基於 3-Sprint Velocity 平均） | #734 | S | 1 | DONE(#747) |
+| retro: Sprint 153 容量估算校準 — 識別隱性工作 | #719 | S | 1 | DONE(#750) |
+| retro: Sprint Planning 新增 ADR 編號衝突預偵測機制 | #730 | S | 1 | DONE(#748) |
+| feat: Claim/Release 機制降級容錯強化（git remote 失敗處理） | #733 | S | 1 | DONE(#749) |
 
 ---
 

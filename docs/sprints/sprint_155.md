@@ -8,12 +8,12 @@
 
 | # | Story | Issue | Points | Status | Assignee |
 |---|-------|-------|--------|--------|----------|
-| 1 | feat: Story-Lifecycle subagent 結果暫存強化（CACHE-RECOVERY 防失敗） | #737 | 1 | TODO | Developer |
-| 2 | feat: git worktree 自動清理腳本（Sprint 完成後防 OOM） | #735 | 1 | TODO | Developer |
-| 3 | feat: Sprint 容量自動計算腳本（基於 3-Sprint Velocity 平均） | #734 | 1 | TODO | Developer |
-| 4 | retro: Sprint 153 容量估算校準 — 識別隱性工作 | #719 | 1 | TODO | Developer |
-| 5 | retro: Sprint Planning 新增 ADR 編號衝突預偵測機制 | #730 | 1 | TODO | Developer |
-| 6 | feat: Claim/Release 機制降級容錯強化（git remote 失敗處理） | #733 | 1 | TODO | Developer |
+| 1 | feat: Story-Lifecycle subagent 結果暫存強化（CACHE-RECOVERY 防失敗） | #737 | 1 | DONE(#745) | Developer |
+| 2 | feat: git worktree 自動清理腳本（Sprint 完成後防 OOM） | #735 | 1 | DONE(#746) | Developer |
+| 3 | feat: Sprint 容量自動計算腳本（基於 3-Sprint Velocity 平均） | #734 | 1 | DONE(#747) | Developer |
+| 4 | retro: Sprint 153 容量估算校準 — 識別隱性工作 | #719 | 1 | DONE(#750) | Developer |
+| 5 | retro: Sprint Planning 新增 ADR 編號衝突預偵測機制 | #730 | 1 | DONE(#748) | Developer |
+| 6 | feat: Claim/Release 機制降級容錯強化（git remote 失敗處理） | #733 | 1 | DONE(#749) | Developer |
 
 **Total: 6 pts**
 
