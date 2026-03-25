@@ -15,7 +15,7 @@
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
 | chore: logrotate.sh 擴充 — 加入 docs/cruise-logs JSONL 自動歸檔清理 | #682 | S | 1 | DONE(#687) |
-| chore: GitHub Issue 模板補充 非功能性需求 欄位 | #683 | S | 1 | TODO |
+| chore: GitHub Issue 模板補充 非功能性需求 欄位 | #683 | S | 1 | DONE(#688) |
 | refactor: cruise/SKILL.md 行數超限重構 — 段落移至 references/ 控制在 250 行以內 | #684 | M | 2 | TODO |
 
 ---
