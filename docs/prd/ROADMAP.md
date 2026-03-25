@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.104.0**（Sprint 161 — 強化框架安全性與可觀測性基礎：Prompt Injection Defense、Review Suggestions 追蹤台帳、Scrum Master 狀態圖、ROADMAP 版號同步驗證、Shell Test 最佳實踐）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.105.0**（Sprint 162 — Agent 通訊與可觀測性強化：Structured Trace Log、平行任務衝突預測、A2A Protocol、D3 Debate Protocol）。
 
 | 版號 | 含義 |
 |------|------|
