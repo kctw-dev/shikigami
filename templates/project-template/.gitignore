@@ -1,0 +1,17 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Logs
+*.log
+logs/
+
+# Claude Code
+.claude/cruise-cycle-count
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+/tmp/shikigami-*
