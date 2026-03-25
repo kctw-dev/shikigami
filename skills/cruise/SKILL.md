@@ -74,6 +74,7 @@ Cruise Mode 支援兩種執行模式：
 2. 偵測 Repo 列表（單一 repo 或多 repo 模式）
 2.5. 驗證 Repo Remote（排除 local:* 或無效 GitHub remote）
 3. 列出偵測結果
+3.5. 自動清理 Stale Worktree（git worktree prune + orphan 目錄清除，#697）
 4. 建立 Flag File（SESSION_ID 命名，互不干擾）
 4.2. 建立 Sprint Stories Task List（{repo}/cruise-cycle-{N}）
 4.5. 讀取 project_level（.claude/shikigami.local.md）
