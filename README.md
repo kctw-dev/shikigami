@@ -2,8 +2,8 @@
 
 ![Version](https://img.shields.io/badge/version-v0.95.1-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-![Sprints](https://img.shields.io/badge/sprints-130%2B-orange?style=flat-square)
-![Skills](https://img.shields.io/badge/skills-29-purple?style=flat-square)
+![Sprints](https://img.shields.io/badge/sprints-140%2B-orange?style=flat-square)
+![Skills](https://img.shields.io/badge/skills-30-purple?style=flat-square)
 
 **為你的 AI 開發工具注入 8 個專業角色，涵蓋 Discovery → Definition → Delivery 全產品生命週期。**
 
@@ -228,7 +228,8 @@ Architect：ADR-002 狀態 → Accepted
 | **schedule** | Sprint 自動排程執行、cron 腳本生成、序列排程保護 |
 | **shoot** | 短衝模式、單 Story 快速執行、不起 Sprint 的輕量交付 |
 | **browser-automation** | Web 應用瀏覽器自動化測試與驗證、E2E 測試、Synthetic Monitoring |
-| **cruise** | PO 定期巡邏 + SRE 基礎設施巡檢的背景自動化模式 |
+| **cruise** | PO 定期巡邏 + SRE 基礎設施巡檢的背景自動化模式（支援 cron 排程） |
+| **debate** | D3 Framework 結構化辯論與決策（Debate-Deliberate-Decide） |
 | **performance-dashboard** | 團隊績效報告生成（出勤、探索紀錄、會議摘要） |
 | **diagram** | 架構圖自動化生成（drawio-mcp-server stdio 整合、雙格式輸出、多雲圖標集） |
 
@@ -274,6 +275,29 @@ shikigami.project_level: medium
 | [OpenCode 安裝](docs/INSTALL_OPENCODE.md) | OpenCode 平台詳細安裝步驟 |
 | [Gemini CLI 安裝](docs/INSTALL_GEMINI.md) | Gemini CLI 平台詳細安裝步驟 |
 | [Cursor 安裝](docs/INSTALL_CURSOR.md) | Cursor 平台詳細安裝步驟 |
+
+---
+
+## 自動巡航模式（Cruise + Cron）
+
+設定後 Shikigami 全自動運作 — 巡邏 Issues、觸發 Sprint、執行 Stories、Review、版本發布，無需人工介入：
+
+```bash
+/schedule cruise --interval 15m
+```
+
+每 15 分鐘啟動一個乾淨 session 執行 `/cruise --once`，flock 防重複，每次 session 獨立（無 context 汙染）。
+
+```bash
+# 查看即時狀態
+tail -f logs/schedule-cruise.log
+
+# 查看 subagent 動態
+tail -f logs/live/*.log
+
+# 停止排程
+/schedule cruise --remove
+```
 
 ---
 
