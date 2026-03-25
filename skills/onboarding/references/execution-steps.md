@@ -242,9 +242,11 @@ gh label list --json name --limit 100
 
 所有步驟完成後，依據 §2.6 執行結果填入 `{GITHUB_ACTION_STATUS}`，輸出 completion-checklist.md 定義的完成清單。
 
-### 2.6 GitHub Action 串接（new-issue-intake 自動化）
+### 2.6 GitHub Action 串接（Runner 就緒確認）
 
-**目的**：確認 GitHub Actions self-hosted runner 已就緒、OAuth 已認證、new-issue-intake workflow 已存在，讓 Backlog 自動化管線在 Onboarding 後立即可用，無需手動配置。
+> **注意**：`new-issue-intake.yml` workflow 已於 Sprint 142 移除（OAuth 401 持續失敗，功能由 Cruise PO 巡邏取代）。此節改為只確認 self-hosted runner 基礎設施就緒狀態，不再驗證特定 workflow 檔案。
+
+**目的**：確認 GitHub Actions self-hosted runner 已就緒，讓後續 Sprint Execution CI 管線可正常使用。
 
 **安全邊界**：此階段僅執行「偵測與驗證」，不自動安裝 runner 或儲存認證憑證。所有安裝步驟均輸出為手動指引，由使用者決定是否執行。
 
@@ -252,22 +254,21 @@ gh label list --json name --limit 100
 
 執行前先判斷是否已就緒，避免重複操作：
 
-**條件**：runner 已存在 **且** OAuth 已認證 **且** workflow 文件存在
+**條件**：runner 已存在 **且** OAuth 已認證
 
 ```
-若以上三個條件同時成立 → 輸出：
+若以上條件同時成立 → 輸出：
   [略過] GitHub Action 串接已就緒
   - Self-hosted runner：已連線
   - OAuth 認證（claude auth status）：已認證
-  - .github/workflows/new-issue-intake.yml：存在
-並跳至 §2.5 下一步清單，填入「new-issue-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）」
+並跳至 §2.5 下一步清單，填入「GitHub Actions runner 已就緒（self-hosted runner 已連線）」
 ```
 
-若任一條件不成立，繼續執行 §2.6.2 ~ §2.6.4 各步驟。
+若任一條件不成立，繼續執行 §2.6.2 ~ §2.6.3 各步驟。
 
 #### 2.6.2 Runner 偵測
 
-**目的**：確認 GitHub repo 已有 self-hosted runner 連線（new-issue-intake workflow 需要 self-hosted runner 執行）。
+**目的**：確認 GitHub repo 已有 self-hosted runner 連線（Sprint Execution CI 管線需要 self-hosted runner 執行）。
 
 執行指令：
 
@@ -285,7 +286,7 @@ API 回傳結果中 total_count > 0 且至少一個 runner.status = "online"？
 └── 否 → 輸出警告與手動指引：
 
   [警告] 未偵測到 online 狀態的 self-hosted runner。
-  new-issue-intake workflow 需要 self-hosted runner 才能在本機執行 Claude Code。
+  Sprint Execution CI 管線需要 self-hosted runner 才能在本機執行 Claude Code。
 
   手動安裝步驟：
   1. 前往 GitHub repo 的 Settings → Actions → Runners → New self-hosted runner
@@ -298,7 +299,7 @@ API 回傳結果中 total_count > 0 且至少一個 runner.status = "online"？
 
 #### 2.6.3 OAuth 驗證狀態確認
 
-**目的**：確認 Claude Code 已完成 OAuth 認證，new-issue-intake workflow 的 claude CLI 呼叫才能正常執行。
+**目的**：確認 Claude Code 已完成 OAuth 認證，CI 管線的 claude CLI 呼叫才能正常執行。
 
 執行指令：
 
@@ -314,7 +315,7 @@ claude auth status
 └── 否 → 輸出警告與手動指引：
 
   [警告] Claude OAuth 未認證。
-  new-issue-intake workflow 在 runner 上執行時需要有效的 OAuth 認證。
+  CI 管線在 runner 上執行時需要有效的 OAuth 認證。
 
   手動認證步驟：
   1. 在 runner 主機上執行：claude auth
@@ -325,35 +326,11 @@ claude auth status
   安全提醒：憑證由 Claude Code 安全儲存，不儲存於任何明文文件或環境變數。
 ```
 
-#### 2.6.4 Workflow 存在性確認
+#### 2.6.4 串接狀態摘要
 
-**目的**：確認 `.github/workflows/new-issue-intake.yml` 已存在於 repo，這是 backlog 自動化管線的觸發入口。
-
-執行方式：使用 Glob 工具確認 `.github/workflows/new-issue-intake.yml` 是否存在。
-
-**判定規則**：
+依據 §2.6.2 ~ §2.6.3 的各項結果，決定 §2.5 的 `{GITHUB_ACTION_STATUS}` 填入值：
 
 ```
-.github/workflows/new-issue-intake.yml 存在？
-├── 是 → 輸出：[Pass] new-issue-intake.yml workflow 已就緒
-└── 否 → 輸出警告：
-
-  [警告] .github/workflows/new-issue-intake.yml 不存在。
-  此 workflow 文件是 backlog 自動化管線的觸發入口。
-
-  修復步驟：
-  此 workflow 由 US-87 相關步驟建立。請先完成以下其中一項：
-  - 執行 US-87 對應的 Sprint Story（建立 new-issue-intake workflow）
-  - 或從 Shikigami 官方 repository 複製範本至 .github/workflows/new-issue-intake.yml
-
-  完成後重新執行 Onboarding 以驗證。
-```
-
-#### 2.6.5 串接狀態摘要
-
-依據 §2.6.2 ~ §2.6.4 的各項結果，決定 §2.5 的 `{GITHUB_ACTION_STATUS}` 填入值：
-
-```
-全部 Pass → 填入：new-issue-intake 已就緒（self-hosted runner 已連線，OAuth 已認證）
-任一 Warning → 填入：new-issue-intake 待設定（見 §2.6 手動指引）
+全部 Pass → 填入：GitHub Actions runner 已就緒（self-hosted runner 已連線）
+任一 Warning → 填入：GitHub Actions runner 待設定（見 §2.6 手動指引）
 ```

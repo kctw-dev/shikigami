@@ -28,4 +28,4 @@
 
 `/schedule issue-management --interval 1h` — 每小時掃描 GitHub Issues 執行入庫、分類、回覆。移除：`/schedule issue-management --remove`。
 
-**注意**：依賴 gh CLI OAuth 與 claude CLI OAuth 兩者認證，需定期確認。新 Issue 入庫已由 GitHub Action（`new-issue-intake.yml`）即時處理，排程用於批次補齊。
+**注意**：依賴 gh CLI OAuth 與 claude CLI OAuth 兩者認證，需定期確認。新 Issue 入庫由 Cruise PO 巡邏即時處理（`new-issue-intake.yml` 已於 Sprint 142 移除），排程用於批次補齊與補充處理。

@@ -486,12 +486,14 @@ if should_run "integration"; then
       "#424" \
       "確認 validate-ci-versions.sh 在版本合規時輸出 PASS 狀態，格式未被改動"
 
-    # AC2c：確認至少掃描到 3 個 workflow 檔案（防止 workflows 目錄被清空的回歸）
+    # AC2c：確認至少掃描到 workflow 檔案（防止 workflows 目錄被清空的回歸）
+    # 注意：new-issue-intake.yml / sprint-dispatch.yml / e2e.yml 已於 Sprint 142 移除
+    # 改為驗證 validate-ci-versions.sh 仍能掃描到存在的 workflow 檔案
     assert_output_contains "${VALIDATE_OUTPUT}" \
-      "e2e\.yml|new-issue-intake\.yml|sprint-dispatch\.yml" \
-      "I-3c: validate-ci-versions.sh 掃描到預期的 workflow 檔案" \
+      "\.yml" \
+      "I-3c: validate-ci-versions.sh 掃描到至少一個 workflow 檔案" \
       "#424" \
-      "確認 .github/workflows/ 中的三個核心 workflow 檔案均存在且被掃描"
+      "確認 .github/workflows/ 中存在至少一個 workflow 檔案且被 validate-ci-versions.sh 掃描"
   else
     skip "I-3: validate-ci-versions.sh 不存在，跳過版本釘定執行驗證"
   fi
