@@ -8,7 +8,7 @@
 
 | # | Story | Points | Status | Assignee |
 |---|-------|--------|--------|----------|
-| 1 | #698 retro: Backlog 健康度自動檢查 — sprint-candidate < 8 觸發補充信號 | 2 | TODO | — |
+| 1 | #698 retro: Backlog 健康度自動檢查 — sprint-candidate < 8 觸發補充信號 | 2 | DONE(#705) | — |
 
 ## Notes
 - Backlog 健康度警告：sprint-candidate 僅 3 個（含本 Story），遠低於閾值 8

@@ -14,7 +14,7 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: Backlog 健康度自動檢查 — sprint-candidate < 8 觸發補充信號 | #698 | M | 2 | TODO |
+| retro: Backlog 健康度自動檢查 — sprint-candidate < 8 觸發補充信號 | #698 | M | 2 | DONE(#705) |
 
 ---
 
