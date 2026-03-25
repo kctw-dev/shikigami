@@ -170,6 +170,63 @@ gh label list --json name --limit 100
           如需重置，請手動刪除後重新執行。
   ```
 
+#### 2.3.1 安裝 Claim/Release Hooks（必要）
+
+**目的**：claim-issue.sh 與 release-issue.sh 是 Shikigami 跨機器協調機制的核心 hooks（見 ADR-024）。消費端專案必須有這兩個 hooks 才能使用 Sprint Execution 和 Cruise 的互斥鎖功能。
+
+**Plugin cache 路徑偵測**（依序嘗試）：
+
+```bash
+# 方法 1：從 plugin 安裝路徑推算（預設路徑）
+PLUGIN_CACHE="${HOME}/.claude/plugins/shikigami/hooks"
+# 方法 2：環境變數覆蓋（CI 或特殊安裝路徑）
+PLUGIN_CACHE="${SHIKIGAMI_PLUGIN_PATH:-${PLUGIN_CACHE}}"
+```
+
+**執行步驟**：
+
+```bash
+# 確保消費端 hooks/ 目錄存在
+mkdir -p hooks/
+
+# 複製兩個 claim hooks（冪等：已存在則跳過）
+for HOOK in claim-issue.sh release-issue.sh; do
+  DEST="hooks/${HOOK}"
+  SRC="${PLUGIN_CACHE}/${HOOK}"
+  if [[ -f "$DEST" ]]; then
+    echo "[略過] ${DEST} 已存在，跳過複製"
+  elif [[ -f "$SRC" ]]; then
+    cp "$SRC" "$DEST"
+    chmod +x "$DEST"
+    echo "[複製] ${SRC} → ${DEST}"
+  else
+    echo "[警告] 找不到 ${SRC}，跳過（Cruise self-heal 將在下次巡邏補裝）"
+  fi
+done
+```
+
+**判定規則**：
+
+| 情況 | 行動 |
+|------|------|
+| 兩個 hooks 均已安裝 | 輸出 `[略過]` 訊息，繼續 |
+| Plugin cache 存在，複製成功 | 輸出 `[複製]` 訊息，繼續 |
+| Plugin cache 不存在或 hooks 缺失 | 輸出 `[警告]`，在 §2.5 完成清單標記「claim hooks 待補裝」，繼續（不阻塞） |
+| hooks/ 已存在但無 +x 權限 | 執行 `chmod +x hooks/claim-issue.sh hooks/release-issue.sh`，繼續 |
+
+**驗證**：
+
+```bash
+# 確認 hooks 存在且可執行
+for HOOK in hooks/claim-issue.sh hooks/release-issue.sh; do
+  if [[ -f "$HOOK" ]] && [[ -x "$HOOK" ]]; then
+    echo "[Pass] ${HOOK} 已安裝且可執行"
+  else
+    echo "[警告] ${HOOK} 安裝不完整（Cruise self-heal 將在下次巡邏補裝）"
+  fi
+done
+```
+
 ### 2.4 生成專案配置文件（CLAUDE.md / GEMINI.md）
 
 **目的**：建立框架啟動設定文件，定義專案資訊與自治等級。
