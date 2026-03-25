@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 144 Planning 完成 — 4 Stories / 6 pts）
-**當前 Sprint**：Sprint 144（進行中）
+**最後更新**：2026-03-25（Sprint 144 Review 完成 — 4/4 Stories DONE / 6 pts，連續第 18 Sprint 100%）
+**當前 Sprint**：Sprint 144（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
@@ -15,9 +15,10 @@
 
 ---
 
-## Sprint 144（進行中）
+## Sprint 144（完成）
 
 > Sprint Goal：消除框架 validate-orphans.sh 長期 263 WARNING 噪音，補強驗證腳本覆蓋完整性，並完成 TDAD 設定關閉功能，提升框架可維護性與開發者體驗。
+> **結果**：Goal 達成（4/4 Stories DONE）。Velocity 6 pts，完成率 100%。連續第 18 Sprint 100%（127-144）。v0.96.1。
 > **容量**：6 pts
 
 | Story | Issue | Size | Points | 狀態 |
