@@ -20,3 +20,36 @@ docs/decisions/
 
 # 文件模板（設計上為範本，不需被引用）
 docs/templates/
+
+# Sprint 會議紀錄（設計上為記錄產物，不需被其他文件引用）
+docs/meetings/
+
+# 知識管理記錄（retro-log, metrics-log, shoot-log, runbook — 時序記錄，不需被引用）
+docs/km/
+
+# Discovery session 記錄（探索階段產物，不需被引用）
+docs/discovery/
+
+# 研究報告（research reports — 點性分析，不需被引用）
+docs/research/
+
+# 評估報告（assessment reports — 點性評估，不需被引用）
+docs/reports/
+
+# 規劃文件（planning docs — Sprint 外規劃記錄，不需被引用）
+docs/plans/
+
+# Solo mode 實驗文件（非正式框架功能，不需被引用）
+docs/solo-mode/
+
+# Kotodama 記錄（不需被引用）
+docs/kotodama/
+
+# Cruise log .md 文件（session 記錄，不需被引用）
+docs/cruise-logs/
+
+# SBE 範例文件（定義在 SKILL.md 中以路徑引用，非 markdown link 格式）
+docs/definition/sbe-examples/
+
+# Infrastructure 文件（infra 設定記錄，不需被引用）
+docs/infra/
