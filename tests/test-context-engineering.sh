@@ -21,8 +21,8 @@ if [[ -n "$REPO_ROOT" ]]; then
   cd "$REPO_ROOT"
 fi
 
-pass() { echo "  PASS: $1"; ((PASS++)); }
-fail() { echo "  FAIL: $1"; ((FAIL++)); }
+pass() { echo "  PASS: $1"; PASS=$((PASS+1)); }
+fail() { echo "  FAIL: $1"; FAIL=$((FAIL+1)); }
 
 MANIFEST="agents/context-manifest.yaml"
 ADR_FILE="docs/adr/ADR-037-context-engineering-jit.md"

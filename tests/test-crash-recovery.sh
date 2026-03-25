@@ -20,10 +20,10 @@ check() {
   local result="$2"
   if [[ "$result" == "PASS" ]]; then
     echo "  PASS: $desc"
-    ((PASS++)) || true
+    PASS=$((PASS+1))
   else
     echo "  FAIL: $desc"
-    ((FAIL++)) || true
+    FAIL=$((FAIL+1))
   fi
 }
 

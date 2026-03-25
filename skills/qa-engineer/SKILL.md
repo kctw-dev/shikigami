@@ -124,6 +124,41 @@ QA 在 AC Review 時逐一比對：
 
 ---
 
+## §1.18 Shell Test 腳本最佳實踐（#811，Sprint 161）
+
+<!-- #811 Shell test 最佳實踐 — 禁用 set -e + 統一 counter 模式 -->
+<!-- Sprint 160 Retro Action：多個 test 腳本因 bash ((PASS++)) 與 set -e 相互作用觸發意外退出 -->
+
+**QA 在 Code Review 時，必須確認所有 Shell test 腳本（`tests/*.sh`）遵循以下最佳實踐**：
+
+### 禁用 `set -e`
+
+| 規則 | 說明 |
+|------|------|
+| 禁止在 test 腳本中使用 `set -e` | `set -e` 在 counter 操作（如 `((PASS++))` 當 PASS=0 時）返回 exit code 1，導致意外中止 |
+| 允許 `set -u` | 未定義變量保護，不影響 counter 邏輯 |
+| 允許 `set -uo pipefail`（不含 `-e`）| 可用於嚴格管道錯誤偵測 |
+
+### Counter 變量遞增模式
+
+| 模式 | 狀態 | 說明 |
+|------|------|------|
+| `PASS=$((PASS+1))` | **正確** | 算術展開，始終返回 0 |
+| `FAIL=$((FAIL+1))` | **正確** | 算術展開，始終返回 0 |
+| `((PASS++))` | **禁止** | 當 PASS=0 時，`((0++))` 結果為 0（假值），set -e 環境下觸發退出 |
+| `((PASS++)) || true` | **可接受（但建議改用正確模式）** | `|| true` workaround 有效但不清晰 |
+
+### QA Code Review Checklist（Shell test 腳本）
+
+- [ ] 無 `set -e` 出現（`set -u`, `set -o pipefail` 不受影響）
+- [ ] Counter 遞增使用 `$((VAR+1))` 模式（無 `((VAR++))` 殘留）
+- [ ] 最終輸出 `PASS=N FAIL=N Total=N` 格式
+- [ ] 檔案末尾 `[[ $FAIL -eq 0 ]]` 或 `exit $FAIL` 作為 exit code
+
+**參考模板**：`templates/test-template.sh`（Sprint 161 建立）
+
+---
+
 ## §1.2 AC 驗證策略
 
 > 詳細規則：[`references/ac-verification-strategy.md`](references/ac-verification-strategy.md)
