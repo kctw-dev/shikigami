@@ -755,9 +755,18 @@ bash scripts/update-adr-index.sh
 ## §8.3 共用文件更新（平行執行路徑）
 
 <!-- US-188 平行 subagent 禁止直接修改共用文件 — Sprint 72 -->
+<!-- #775 DM-4 Write Gateway 系統化 — Sprint 159 -->
 
 <HARD-GATE>
-**禁止行為**：平行執行時，本 subagent 不得直接寫入 `docs/PROJECT_BOARD.md` 或 `docs/sprints/sprint_N.md`（競態條件 → 互相覆蓋）。
+**DM-4 Write Gateway — 禁止 subagent 直接寫入以下協調者專屬（coordinator-only）文件**：
+
+| 文件 | 原因 |
+|------|------|
+| `docs/PROJECT_BOARD.md` | 多 subagent 並行覆蓋 → 競態條件 |
+| `docs/sprints/sprint_N.md` | 多 subagent 並行覆蓋 → 競態條件 |
+| `docs/sprints/sprint-checkpoint.json` | Checkpoint 狀態由主 session 統一維護 |
+
+所有對上述文件的寫入，**必須透過主 session 批次更新機制處理（DM-4，#775）**。subagent 直接呼叫 Write/Edit 工具修改上述文件屬於流程違規。
 </HARD-GATE>
 
 **平行模式**：跳過共用文件直接寫入，在 §9 摘要中包含（story_id、應更新狀態、modified_files），供主 session 所有 subagent 完成後統一批次更新（`SKILL.md` §2.2）。§8.1 Done checkbox 仍可直接執行（各 Story 操作不同區段，無衝突）。
