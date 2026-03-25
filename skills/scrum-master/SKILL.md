@@ -16,6 +16,9 @@ description: "Use when Shikigami needs to route a request to the right workflow 
 - 調度 Subagent 派遣，確保角色分工與協作順暢
 - 日常開發時自行完成任務，不需啟動角色
 
+**Sprint 生命週期狀態圖**（#796，Sprint 161）：完整 Sprint lifecycle 路由決策可視化，見
+`docs/sdd/scrum-master-state-graph.md`（Mermaid stateDiagram，符合 SDD-000 §sprint lifecycle routing）。
+
 ---
 
 ## 2. 可用 Skills 清單
