@@ -1,22 +1,32 @@
 {
-  "sprint": 142,
-  "updated_at": "2026-03-24T23:55:00Z",
-  "session_id": "cron-20260325-073001",
+  "sprint": 143,
+  "updated_at": "2026-03-25T00:35:00Z",
+  "session_id": "cron-20260325-081501",
   "stories": [
     {
-      "id": "650",
-      "title": "retro: 調查並修正 New Issue Intake CI workflow 連續失敗",
+      "id": "656",
+      "title": "feat: Sprint Planning Pre-flight Backlog 健康度檢查",
       "status": "completed",
-      "pr": 652,
-      "merged_at": "2026-03-24T23:50:00Z"
+      "pr": 663,
+      "merged_at": "2026-03-25T00:33:00Z"
     },
     {
-      "id": "651",
-      "title": "retro: Backlog 補充 — 掃描 open Issues 提升可執行 Story 存量",
+      "id": "661",
+      "title": "retro: 評估 #657 是否與 #652 重複，決定關閉或縮小範疇",
+      "status": "pending"
+    },
+    {
+      "id": "662",
+      "title": "chore: 清除 new-issue-intake.yml 殘留引用",
       "status": "completed",
-      "pr": 659,
-      "merged_at": "2026-03-24T23:55:00Z"
+      "pr": 664,
+      "merged_at": "2026-03-25T00:34:00Z"
+    },
+    {
+      "id": "654",
+      "title": "refactor: sprint-execution/SKILL.md 行數超限重構",
+      "status": "pending"
     }
   ],
-  "sprint_status": "completed"
+  "sprint_status": "in-progress"
 }
