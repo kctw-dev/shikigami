@@ -1,7 +1,24 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 159 全部完成）
-**當前 Sprint**：Sprint 159（完成）
+**最後更新**：2026-03-25（Sprint 160 Planning 完成）
+**當前 Sprint**：Sprint 160（進行中）
+
+---
+
+## Sprint 160（進行中）
+
+> Sprint Goal：強化框架品質防禦與開發者體驗 — 建立 QA 立場韌性機制、專案快速範本、Session Watchdog 心跳監控、Quality Observer MCP Phase 2 端點強化、Context Engineering JIT 載入策略、Quick Ship Pipeline 與 Schema-First 強制驗證工具
+> **容量**：7 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: QA FREE-MAD 挑戰韌性 — 制衡立場不受多數壓力撤回機制 | #795 | S | 1 | TODO |
+| feat: 專案範本 — init-project.sh 快速配置 Skills/Hooks/Script 標準化 | #797 | S | 1 | TODO |
+| feat: Context Engineering JIT Skill 載入策略（減少 context 壓力） | #793 | S | 1 | TODO |
+| feat: Schema-First 強制工具 — API Contract 前置驗證腳本（ADR-036 落地） | #802 | S | 1 | TODO |
+| feat: Quick Ship Pipeline — 統一 lint/test/bump/commit/PR 單一指令交付 | #798 | S | 1 | TODO |
+| feat: Quality Observer MCP Phase 2 — metrics 端點強化（coverage/debt/health） | #794 | S | 1 | TODO |
+| feat: Session Watchdog — 存活監控心跳機制（無聲 hang 偵測） | #772 | S | 1 | TODO |
 
 ---
 
