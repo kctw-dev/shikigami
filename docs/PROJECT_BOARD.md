@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 148 Planning — 3 Stories / 4 pts）
-**當前 Sprint**：Sprint 148（進行中）
+**最後更新**：2026-03-25（Sprint 148 完成 — 3/3 Stories DONE / 4 pts）
+**當前 Sprint**：Sprint 148（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
@@ -16,7 +16,7 @@
 |-------|-------|------|--------|------|
 | chore: logrotate.sh 擴充 — 加入 docs/cruise-logs JSONL 自動歸檔清理 | #682 | S | 1 | DONE(#687) |
 | chore: GitHub Issue 模板補充 非功能性需求 欄位 | #683 | S | 1 | DONE(#688) |
-| refactor: cruise/SKILL.md 行數超限重構 — 段落移至 references/ 控制在 250 行以內 | #684 | M | 2 | TODO |
+| refactor: cruise/SKILL.md 行數超限重構 — 段落移至 references/ 控制在 250 行以內 | #684 | M | 2 | DONE(#689) |
 
 ---
 
