@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-25（Sprint 148 完成 — cruise/SKILL.md 重構 + Issue 模板 NFR 欄位 + cruise-logs 歸檔）
+> 最後更新：2026-03-25（Sprint 149 完成 — onboarding hooks 安裝步驟、Sprint Review 版號硬性檢查、Backlog Bridge 模板引導）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.96.1**（Sprint 148 — cruise/SKILL.md 重構 + Issue 模板 NFR 欄位 + cruise-logs 歸檔）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.96.2**（Sprint 149 — onboarding hooks 安裝步驟、Sprint Review 版號硬性檢查、Backlog Bridge 模板引導）。
 
 | 版號 | 含義 |
 |------|------|

@@ -2,7 +2,7 @@
 sprint: 149
 start_date: 2026-03-25
 end_date: 2026-03-31
-status: active
+status: done
 velocity_baseline: 3.3
 capacity: 4
 version_target: v0.96.2
@@ -46,8 +46,8 @@ version_target: v0.96.2
 
 ## DoD（Definition of Done）
 
-- [ ] US-#692：onboarding 流程包含 claim/release hooks 安裝步驟，cruise self-heal 可偵測缺漏
-- [ ] US-#690：Sprint Review §1.5 版號一致性為硬性檢查，不一致時 Review FAIL
-- [ ] US-#691：Backlog Bridge 引導新 Issue 使用 ISSUE_TEMPLATE 模板，格式完整性提升
-- [ ] 所有修改 git commit + push 完成
-- [ ] 關聯 GitHub Issues 關閉
+- [x] US-#692：onboarding 流程包含 claim/release hooks 安裝步驟，cruise self-heal 可偵測缺漏
+- [x] US-#690：Sprint Review §1.5 版號一致性為硬性檢查，不一致時 Review FAIL
+- [x] US-#691：Backlog Bridge 引導新 Issue 使用 ISSUE_TEMPLATE 模板，格式完整性提升
+- [x] 所有修改 git commit + push 完成
+- [x] 關聯 GitHub Issues 關閉
