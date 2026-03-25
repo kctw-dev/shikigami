@@ -1,36 +1,22 @@
 {
-  "sprint": 144,
-  "updated_at": "2026-03-25T09:19:02Z",
-  "session_id": "cron-20260325-090001",
+  "sprint": 145,
+  "updated_at": "2026-03-25T09:35:00Z",
+  "session_id": "cron-20260325-093001",
   "stories": [
     {
-      "id": "667",
-      "title": "retro: 驗證 validate-skills.sh 覆蓋完整性",
-      "status": "completed",
-      "pr": 669,
-      "merged_at": "2026-03-25T09:13:00Z"
+      "id": "673",
+      "title": "chore: 修復 gemini-extension.json 版號不一致（0.95.0 → 0.95.1）",
+      "status": "in-progress",
+      "pr": null,
+      "merged_at": null
     },
     {
-      "id": "653",
-      "title": "feat: TDAD 依賴分析可透過設定關閉",
-      "status": "completed",
-      "pr": 670,
-      "merged_at": "2026-03-25T09:13:00Z"
-    },
-    {
-      "id": "655",
-      "title": "chore: ADR index 修復 263 WARNING",
-      "status": "completed",
-      "pr": 671,
-      "merged_at": "2026-03-25T09:13:00Z"
-    },
-    {
-      "id": "658",
-      "title": "feat: validate-orphans.sh 豁免清單機制",
-      "status": "completed",
-      "pr": 672,
-      "merged_at": "2026-03-25T09:18:00Z"
+      "id": "674",
+      "title": "chore: validate-orphans.sh 剩餘 221 WARNING 系統性分類與批次豁免",
+      "status": "in-progress",
+      "pr": null,
+      "merged_at": null
     }
   ],
-  "sprint_status": "completed"
+  "sprint_status": "in-progress"
 }
