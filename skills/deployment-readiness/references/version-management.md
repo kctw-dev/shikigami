@@ -19,6 +19,7 @@ Sprint Review 驗收通過後，由 SRE subagent 負責打 tag 與更新版號�
 3. Commit：`chore: bump version to vX.Y.Z`
 4. 打 tag：`git tag vX.Y.Z`
 5. Push：`git push && git push --tags`
+6. 建立 GitHub Release：`gh release create vX.Y.Z --title "vX.Y.Z" --notes "<release notes>" --latest`
 
 ## 觸發時機
 
