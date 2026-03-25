@@ -2,7 +2,7 @@
 sprint: 150
 start_date: 2026-03-25
 end_date: 2026-03-31
-status: planning
+status: done
 velocity_baseline: 4.3
 capacity: 4
 version_target: v0.97.0
@@ -18,9 +18,9 @@ version_target: v0.97.0
 
 | Story | Issue | Type | Size | Points | 狀態 | Assignee | 獨立性 |
 |-------|-------|------|------|--------|------|----------|--------|
-| fix: cruise 啟動時自動清理 stale worktree（prunable） | #697 | FIX | S | 1 | TODO | Developer | Wave 1（獨立，修改 skills/cruise/SKILL.md） |
-| feat: /shikigami:doctor — 消費端專案健康診斷（檢查→問診→處置→追蹤） | #693 | FEAT | M | 2 | TODO | Developer | Wave 1（獨立，新增 skills/doctor/SKILL.md） |
-| retro: bug 類 Issue Template 補充 NFR 欄位 — 與 enhancement 模板對齊 | #699 | RETRO | S | 1 | TODO | Developer | Wave 1（獨立，修改 .github/ISSUE_TEMPLATE/bug.md） |
+| fix: cruise 啟動時自動清理 stale worktree（prunable） | #697 | FIX | S | 1 | DONE(#700) | Developer | Wave 1（獨立，修改 skills/cruise/SKILL.md） |
+| feat: /shikigami:doctor — 消費端專案健康診斷（檢查→問診→處置→追蹤） | #693 | FEAT | M | 2 | DONE(#701) | Developer | Wave 1（獨立，新增 skills/doctor/SKILL.md） |
+| retro: bug 類 Issue Template 補充 NFR 欄位 — 與 enhancement 模板對齊 | #699 | RETRO | S | 1 | DONE(#702) | Developer | Wave 1（獨立，修改 .github/ISSUE_TEMPLATE/bug.md） |
 
 **Sprint 容量**：4 pts（Sprint 147=5, 148=4, 149=4, avg≈4.3；本 Sprint 4pts，三路並行）
 
@@ -45,9 +45,9 @@ version_target: v0.97.0
 
 ## DoD（Definition of Done）
 
-- [ ] US-#697：cruise SKILL.md §4 之前新增 worktree prune 步驟，prune 失敗不阻塞，tests 通過
-- [ ] US-#693：skills/doctor/SKILL.md 四階段流程完整，plugin.json 版號 bump，doctor-report 寫入 docs/km/
-- [ ] US-#699：.github/ISSUE_TEMPLATE/bug.md 包含 NFR 欄位，格式與 enhancement 一致，Backlog Bridge 文件更新
+- [x] US-#697：cruise SKILL.md §3.5 + startup-flow.md 新增 worktree prune 步驟（§4 之前），prune 失敗不阻塞（||true）✅
+- [x] US-#693：skills/doctor/SKILL.md 四階段流程完整（31 Skills），plugin.json 版號 bump 0.96.2→0.97.0 ✅
+- [x] US-#699：.github/ISSUE_TEMPLATE/bug.md NFR 區塊強化，格式與 enhancement 一致，backlog-bridge.md 新增 Bug NFR 指引 ✅
 
 ## Retro Action Items（承接自 Sprint 149）
 

@@ -1,11 +1,11 @@
 {
-  "sprint": 149,
-  "updated_at": "2026-03-25T05:30:00Z",
-  "session_id": "cron-20260325-131001",
+  "sprint": 150,
+  "updated_at": "2026-03-25T06:06:33Z",
+  "session_id": "cron-20260325-134501",
   "stories": [
-    {"id": "692", "title": "fix: onboarding 流程缺少 claim/release hooks 安裝步驟", "status": "completed", "pr": 695},
-    {"id": "690", "title": "retro: Sprint Review §1.5 加入 ROADMAP.md 版號一致性硬性檢查", "status": "completed", "pr": 694},
-    {"id": "691", "title": "retro: Backlog Bridge 流程更新 — 引導新 Issue 使用 .github/ISSUE_TEMPLATE 模板", "status": "completed", "pr": 696}
+    {"id": "697", "title": "fix: cruise 啟動時自動清理 stale worktree（prunable）", "status": "completed", "pr": 700},
+    {"id": "693", "title": "feat: /shikigami:doctor — 消費端專案健康診斷（檢查→問診→處置→追蹤）", "status": "completed", "pr": 701},
+    {"id": "699", "title": "retro: bug 類 Issue Template 補充 NFR 欄位 — 與 enhancement 模板對齊", "status": "completed", "pr": 702}
   ],
   "sprint_status": "completed"
 }

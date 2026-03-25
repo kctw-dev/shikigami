@@ -1,22 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 150 Planning — 3 Stories / 4 pts）
-**當前 Sprint**：Sprint 150（進行中）
+**最後更新**：2026-03-25（Sprint 150 完成 — 3/3 Stories DONE / 4 pts）
+**當前 Sprint**：Sprint 150（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 150（進行中）
+## Sprint 150（完成）
 
 > Sprint Goal：提升框架健壯性與可觀察性 — 修復 stale worktree 死循環、引入消費端健康診斷 Skill、補齊 bug 類 Issue 模板 NFR 欄位。
+> **結果**：Goal 達成（3/3 Stories DONE）。Velocity 4 pts，完成率 100%。連續第 24 Sprint 100%（127-150）。
 > **容量**：4 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| fix: cruise 啟動時自動清理 stale worktree（prunable） | #697 | S | 1 | TODO |
-| feat: /shikigami:doctor — 消費端專案健康診斷（檢查→問診→處置→追蹤） | #693 | M | 2 | TODO |
-| retro: bug 類 Issue Template 補充 NFR 欄位 — 與 enhancement 模板對齊 | #699 | S | 1 | TODO |
+| fix: cruise 啟動時自動清理 stale worktree（prunable） | #697 | S | 1 | DONE(#700) |
+| feat: /shikigami:doctor — 消費端專案健康診斷（檢查→問診→處置→追蹤） | #693 | M | 2 | DONE(#701) |
+| retro: bug 類 Issue Template 補充 NFR 欄位 — 與 enhancement 模板對齊 | #699 | S | 1 | DONE(#702) |
 
 ---
 
