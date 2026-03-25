@@ -97,6 +97,30 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 **§2.6 完成後**：Review subagent 立即寫入同步 signal（`docs/sprints/.review-signal-<SESSION_ID>`）。
 
 
+## 2.65 CRITICAL 決策記錄（#779 AC2）
+
+<!-- #779 quality-gate 決策記錄機制 — Sprint 159 -->
+
+在 §2.6 Issue 狀態回寫後，掃描本 Sprint 已 merge 的 PR 中是否有 CRITICAL quality-gate 發現被覆寫（即 PR 合併儘管 QA 報告含 CRITICAL 問題）。若有，append 記錄至 `docs/km/quality-gate-decisions.md`。
+
+**觸發條件**：Sprint Review 中偵測到以下任一情況：
+1. Sprint 期間 PR 包含 `[SECURITY-GATE-HIGH]` 但仍合併
+2. Story-Lifecycle subagent 回傳 FAIL 但主 session 強制標記為 DONE
+3. External QA 抽樣 DISPUTE 後第二輪仍 DISPUTE 但繼續
+
+**記錄格式（append-only）**：
+```bash
+# 在 docs/km/quality-gate-decisions.md 末尾 append
+printf '| %s | %s | %s | %s | %s | %s | %s |\n' \
+  "$(date '+%Y-%m-%d')" "#<story_id>" "<finding_summary>" "CRITICAL" \
+  "<Accept|Reject|Defer>" "<rationale>" "<sprint_N>" \
+  >> docs/km/quality-gate-decisions.md
+```
+
+**稽核**：執行 `bash scripts/quality-gate-audit.sh docs/km/quality-gate-decisions.md` 查看摘要。
+
+**非阻塞**：若無 CRITICAL override，輸出 `[QG-DECISIONS-SKIP] 本 Sprint 無 CRITICAL 決策覆寫` 繼續。
+
 ## 2.7 Backlog 健康度檢查（AC1-AC2, AC5）
 
 在 §2.6 Issue 狀態回寫完成後執行，目的為檢查 sprint-candidate Issues 數量是否充足。
