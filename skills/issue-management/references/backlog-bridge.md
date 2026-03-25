@@ -117,6 +117,20 @@ PO subagent 根據選定模板結構填補欄位，並在最前方加上 Backlog
 - `## 入庫資訊` 區塊必須附加於 body 末尾（Backlog Bridge 專屬，不在 ISSUE_TEMPLATE 中）
 - 所有 ISSUE_TEMPLATE 模板欄位均須保留，不得刪減
 
+**Bug 類 Issue NFR 填寫指引**（#699）：
+
+Bug 類 Issue 與 enhancement 類 Issue 一樣需要填寫 NFR 欄位，且格式一致。Bug 修復的 NFR 聚焦於修復後的品質保證，常見建議如下：
+
+| NFR 屬性 | 適用情境 | 填寫範例 |
+|---------|---------|---------|
+| reliability（可靠性） | 所有 bug 修復 | `NFR1: reliability — 修復後既有測試全部通過，無回歸失敗` |
+| performance（效能） | 效能退化類 bug | `NFR1: performance — 修復後回應時間不超過修復前基線的 110%` |
+| stability（穩定性） | 偶發性 bug | `NFR1: stability — 修復後相同條件下連續 5 次驗證無復現` |
+| security（安全性） | 安全漏洞修復 | `NFR1: security — 修復不引入新的輸入驗證漏洞` |
+| compatibility（相容性） | 跨平台問題 | `NFR1: compatibility — 修復在 macOS / Linux / WSL 均驗證通過` |
+
+PO 在 Backlog Bridge 填補 Bug 類 Issue 時，若原始 Issue body 未填寫 NFR，**應自動補充最少一條 NFR**（優先選擇 reliability），不可留下 `NFR1: <屬性名稱> — <可量化描述>` 預設文字。
+
 **Step 3：RICE Score 正則驗證**
 
 ```bash
