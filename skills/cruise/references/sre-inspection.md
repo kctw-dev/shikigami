@@ -438,3 +438,126 @@ done
 | `"spot-preemption-or-failure"` | SPOT 回收或 VM 故障（異常），`recommendedSize = 之前 VM 數` 但 VM 減少 |
 | `"no-change"` | VM 數量無變化，跳過查證 |
 | `"skipped"` | gcloud 不可用，跳過 MIG 查證（`[SRE] gcloud 不可用，跳過 MIG 查證`） |
+
+## Claim Hooks 健康檢查（CLAIM-WARN）
+
+> **背景**：claim-issue.sh 與 release-issue.sh 是 Shikigami 跨機器協調機制的核心 hooks。若消費端 repo 缺少這兩個 hooks，Sprint Execution 和 Cruise 的互斥鎖功能將無法運作，導致多機器並行時發生競態條件。
+
+### 偵測邏輯
+
+```bash
+# 檢查 claim hooks 是否存在且可執行
+CLAIM_HOOK="${REPO_PATH}/hooks/claim-issue.sh"
+RELEASE_HOOK="${REPO_PATH}/hooks/release-issue.sh"
+
+CLAIM_WARN=false
+CLAIM_WARN_REASON=""
+
+if [[ ! -f "$CLAIM_HOOK" ]]; then
+  CLAIM_WARN=true
+  CLAIM_WARN_REASON="${CLAIM_WARN_REASON} claim-issue.sh 缺失"
+  echo "[CLAIM-WARN] ${REPO_PATH}/hooks/claim-issue.sh 不存在"
+elif [[ ! -x "$CLAIM_HOOK" ]]; then
+  CLAIM_WARN=true
+  CLAIM_WARN_REASON="${CLAIM_WARN_REASON} claim-issue.sh 不可執行"
+  echo "[CLAIM-WARN] ${REPO_PATH}/hooks/claim-issue.sh 缺少 +x 權限"
+fi
+
+if [[ ! -f "$RELEASE_HOOK" ]]; then
+  CLAIM_WARN=true
+  CLAIM_WARN_REASON="${CLAIM_WARN_REASON} release-issue.sh 缺失"
+  echo "[CLAIM-WARN] ${REPO_PATH}/hooks/release-issue.sh 不存在"
+elif [[ ! -x "$RELEASE_HOOK" ]]; then
+  CLAIM_WARN=true
+  CLAIM_WARN_REASON="${CLAIM_WARN_REASON} release-issue.sh 不可執行"
+  echo "[CLAIM-WARN] ${REPO_PATH}/hooks/release-issue.sh 缺少 +x 權限"
+fi
+```
+
+### Self-Heal：自動從 Plugin Cache 補裝
+
+若偵測到 `CLAIM_WARN=true`，嘗試自動從 plugin cache 複製：
+
+```bash
+if [[ "$CLAIM_WARN" == "true" ]]; then
+  echo "[SRE] CLAIM-WARN 偵測到，嘗試 self-heal..."
+
+  # Plugin cache 路徑（與 onboarding §2.3.1 一致）
+  PLUGIN_CACHE="${SHIKIGAMI_PLUGIN_PATH:-${HOME}/.claude/plugins/shikigami/hooks}"
+
+  SELF_HEAL_OK=true
+  mkdir -p "${REPO_PATH}/hooks"
+
+  for HOOK in claim-issue.sh release-issue.sh; do
+    DEST="${REPO_PATH}/hooks/${HOOK}"
+    SRC="${PLUGIN_CACHE}/${HOOK}"
+    if [[ -f "$DEST" ]] && [[ -x "$DEST" ]]; then
+      echo "[SRE] ${HOOK} 已就緒，跳過"
+      continue
+    fi
+    if [[ -f "$SRC" ]]; then
+      cp "$SRC" "$DEST"
+      chmod +x "$DEST"
+      echo "[SRE] self-heal 成功：${HOOK} 已安裝至 ${REPO_PATH}/hooks/"
+      log action: "claim-hooks-self-heal ${HOOK}"
+    else
+      echo "[SRE] self-heal 失敗：找不到 plugin cache ${SRC}"
+      SELF_HEAL_OK=false
+    fi
+  done
+
+  if [[ "$SELF_HEAL_OK" == "true" ]]; then
+    echo "[SRE] claim hooks self-heal 完成"
+    CLAIM_WARN=false
+  else
+    # AC3: 自動安裝失敗 → 建 Issue 提醒
+    ISSUE_TITLE="[SRE] claim hooks 缺失，需手動安裝"
+    EXISTING=$(gh issue list -R ${OWNER_REPO} \
+      --search "\"${ISSUE_TITLE}\"" \
+      --state open \
+      --json number,title \
+      2>/dev/null || echo "[]")
+
+    if echo "$EXISTING" | jq -e '. | length > 0' &>/dev/null; then
+      echo "[SRE] 跳過重複 Issue：$ISSUE_TITLE"
+      log action: "跳過重複 Issue: ${ISSUE_TITLE}"
+    else
+      printf '%s\n' \
+        "## SRE 巡檢發現 claim hooks 缺失" \
+        "" \
+        "**發現時間**：$(date '+%Y-%m-%dT%H:%M:%S')" \
+        "**Session**：${SESSION_ID}" \
+        "**Repo**：${OWNER_REPO}" \
+        "**問題**：${CLAIM_WARN_REASON}" \
+        "" \
+        "### 影響" \
+        "缺少 claim hooks 時，多機器同時執行 Sprint Execution 或 Cruise 可能發生競態條件，導致重複派工或狀態不一致。" \
+        "" \
+        "### 手動安裝步驟" \
+        "1. 確認 Shikigami plugin 已安裝" \
+        "2. 執行：\`bash hooks/lib/install-claim-hooks.sh\`（若存在）" \
+        "3. 或手動複製：\`cp ~/.claude/plugins/shikigami/hooks/claim-issue.sh hooks/\`" \
+        "4. 設定可執行：\`chmod +x hooks/claim-issue.sh hooks/release-issue.sh\`" \
+        "" \
+        "### 參考" \
+        "- Onboarding §2.3.1 安裝 Claim/Release Hooks" \
+        "- ADR-024 attendance-hook" \
+        "" \
+        "> 此 Issue 由 SRE Cruise Agent 自動建立（CLAIM-WARN self-heal 失敗）。請勿重複建立。" \
+        > /tmp/claim-hooks-issue-body.txt
+
+      gh issue create -R ${OWNER_REPO} \
+        --title "$ISSUE_TITLE" \
+        --body-file /tmp/claim-hooks-issue-body.txt \
+        --label "sre,needs-triage"
+      log action: "create-issue-claim-hooks-missing"
+    fi
+  fi
+fi
+```
+
+### 自動行動決策表（補充）
+
+| 情境 | 判斷條件 | 自動行動 | label | log action 類型 |
+|------|----------|----------|-------|-----------------|
+| **Claim hooks 缺失** | `hooks/claim-issue.sh` 或 `hooks/release-issue.sh` 不存在或無 +x 權限 | 嘗試 self-heal（從 plugin cache 複製）；失敗時建 Issue | `sre,needs-triage` | `"claim-hooks-self-heal"` / `"create-issue-claim-hooks-missing"` |
