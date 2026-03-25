@@ -58,6 +58,7 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 - [ ] **狀態標注一致性**：統一使用「完成 / 進行中 / 未完成」中文術語；PROJECT_BOARD.md 區塊劃分正確；未完成 Story 的 Issue 已回復 `status: backlog` label
 - [ ] **Issue 連結有效性**：sprint_N.md Issue # 填寫完整；Issue 狀態符合預期；Retrospective Log Action Items 連結有效
 - [ ] **版本與里程碑一致性**：ROADMAP.md 里程碑狀態與交付進度相符；版本 Tag 描述一致
+- [ ] **ROADMAP.md 版號一致性**（硬性檢查）：比對 `docs/prd/ROADMAP.md` 中「目前版本」欄位與 `.claude-plugin/plugin.json` 的 `version` 字段。不一致時必須修正後才繼續。檢查指令：`grep -E '(目前版本|current version)' docs/prd/ROADMAP.md | head -1` 與 `jq -r '.version' .claude-plugin/plugin.json` 必須相符（格式皆為 vX.Y.Z）
 - [ ] **CI 狀態確認**：`gh run list --limit 1 --json conclusion` 最新為 `success`
 
 **FAIL 處理**：發現不一致立即修正，全部 PASS 後才進入 §2。
