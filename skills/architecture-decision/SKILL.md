@@ -110,3 +110,22 @@ Architecture Decision 的 Subagent 調度遵循以下固定順序：
 ```
 
 **失敗處理**：若無法確定受影響範圍（Sprint 文件缺失或 `related_sdds` 欄位不完整），輸出 `[SDD-CASCADE-INCOMPLETE]` 並 ESCALATE 至主 session。主 session 收到後：(a) 暫停所有尚未開始實作的當前 Sprint Story，已開始實作的 Story 暫不影響直到手動列舉完成；(b) 請 Architect 手動列出可能受影響的 Story；(c) 完成手動列舉後重新執行連鎖校準，若列舉結果包含已開始實作的 Story，依正常連鎖校準規則從 Red 階段重新開始
+
+---
+
+## 7. ADR 完成後自動更新索引（#778 AC2）
+
+<!-- #778 ADR 目錄索引自動維護 v2 — Sprint 159 -->
+
+每次新 ADR 完成並寫入 `docs/adr/ADR-NNN-*.md` 後，**必須**執行以下步驟更新可搜尋索引：
+
+```bash
+# ADR 建立/更新後，自動重建索引
+bash scripts/update-adr-index.sh
+# 輸出：[OK] ADR 索引已更新：docs/adr/README.md
+# 輸出：[OK] 共掃描 N 個 ADR 檔案
+```
+
+**觸發時機**：ADR 狀態更新為 `Accepted` 或 `Superseded` 時必須執行一次。
+
+**失敗處理**：`update-adr-index.sh` 執行失敗時，輸出 `[ADR-INDEX-WARN] 索引更新失敗，請手動執行 scripts/update-adr-index.sh` 並繼續（不阻塞 ADR 建立流程）。
