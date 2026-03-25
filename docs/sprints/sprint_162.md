@@ -9,10 +9,10 @@
 
 | # | Story | Issue | Points | Status | Assignee |
 |---|-------|-------|--------|--------|----------|
-| 1 | feat: Structured Trace Log — Sprint 執行動作結構化追蹤（JSONL TRACE 格式） | #782 | 1 | TODO | Developer |
-| 2 | feat: 平行任務衝突預測 — 事前靜態分析取代執行時序列化等待 | #780 | 1 | TODO | Developer |
-| 3 | feat: A2A Protocol — Agent-to-Agent 結構化通訊協議標準化（JSON Schema） | #801 | 3 | TODO | Developer |
-| 4 | feat: D3 Debate Protocol — Architect/QA 技術辯論結構化 | #777 | 1 | TODO | Developer |
+| 1 | feat: Structured Trace Log — Sprint 執行動作結構化追蹤（JSONL TRACE 格式） | #782 | 1 | DONE (#821) | Developer |
+| 2 | feat: 平行任務衝突預測 — 事前靜態分析取代執行時序列化等待 | #780 | 1 | DONE (#820) | Developer |
+| 3 | feat: A2A Protocol — Agent-to-Agent 結構化通訊協議標準化（JSON Schema） | #801 | 3 | DONE (#822) | Developer |
+| 4 | feat: D3 Debate Protocol — Architect/QA 技術辯論結構化 | #777 | 1 | DONE (#819) | Developer |
 
 **Total: 6 pts**
 
