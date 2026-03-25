@@ -1,22 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 153 Planning 完成）
-**當前 Sprint**：Sprint 153（進行中）
+**最後更新**：2026-03-25（Sprint 153 Review 完成）
+**當前 Sprint**：Sprint 154（準備中）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
 ---
 
-## Sprint 153（進行中）
+## Sprint 153（完成）
 
 > Sprint Goal：強化框架可靠性防護層 — 補齊 onboarding hooks 驗證、防止 OOM 靜默崩潰、建立多平台相容性測試基線
+> **結果**：Goal 達成（3/3 Stories DONE）。Velocity 5 pts，完成率 100%。連續第 27 Sprint 100%（127-153）。
 > **容量**：5 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: onboarding 安裝後驗證 — hooks 完整性自動確認 | #713 | S | 1 | TODO |
-| feat: 多平台相容性驗證測試 | #710 | S | 2 | TODO |
-| feat: Sprint Execution parallel-safety 動態記憶體感知 | #712 | S | 2 | TODO |
+| feat: onboarding 安裝後驗證 — hooks 完整性自動確認 | #713 | S | 1 | DONE(#715) |
+| feat: 多平台相容性驗證測試 | #710 | S | 2 | DONE(#716) |
+| feat: Sprint Execution parallel-safety 動態記憶體感知 | #712 | S | 2 | DONE(#717) |
 
 ---
 
