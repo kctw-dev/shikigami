@@ -1,23 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 163 Planning 完成）
-**當前 Sprint**：Sprint 163（進行中）
+**最後更新**：2026-03-25（Sprint 163 Execution 完成）
+**當前 Sprint**：Sprint 163（執行完成，等待 Review）
 
 ---
 
-## Sprint 163（進行中）
+## Sprint 163（執行完成）
 
 > Sprint Goal：框架品質自動化與 Backlog 治理強化 — Backlog 補充執行、Story 依賴靜態分析、重疊檢查機制、haiku 路由擴充、TCB Phase-Level Checkpoint、worktree 清理驗收
 > **容量**：8 pts
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: Backlog 補充 — sprint-candidate 低於閾值 10（目前 7） | #818 | S | 1 | TODO |
-| feat: TDAD Story 依賴圖 — Sprint 平行執行衝突自動靜態分析 | #800 | S | 1 | TODO |
-| retro: Story 重疊檢查機制 — Sprint Planning 時自動偵測候選 Story 與已完成功能的重疊 | #823 | S | 1 | TODO |
-| retro: ADR-039 haiku 路由適用場景擴充 — 識別可降級低風險任務 | #817 | S | 1 | TODO |
-| retro: Sprint 159 — worktree 自動清理整合驗證（#735） | #790 | S | 1 | TODO |
-| feat: TCB 細粒度 Checkpoint — Story-Lifecycle Phase 級別中斷恢復（action 粒度防損失） | #781 | M | 3 | TODO |
+| retro: Backlog 補充 — sprint-candidate 低於閾值 10（目前 7） | #818 | S | 1 | DONE |
+| feat: TDAD Story 依賴圖 — Sprint 平行執行衝突自動靜態分析 | #800 | S | 1 | DONE (#828) |
+| retro: Story 重疊檢查機制 — Sprint Planning 時自動偵測候選 Story 與已完成功能的重疊 | #823 | S | 1 | DONE (#829) |
+| retro: ADR-039 haiku 路由適用場景擴充 — 識別可降級低風險任務 | #817 | S | 1 | DONE (#830) |
+| retro: Sprint 159 — worktree 自動清理整合驗證（#735） | #790 | S | 1 | DONE |
+| feat: TCB 細粒度 Checkpoint — Story-Lifecycle Phase 級別中斷恢復（action 粒度防損失） | #781 | M | 3 | DONE (#831) |
 
 ---
 

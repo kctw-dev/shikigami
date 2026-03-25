@@ -9,12 +9,12 @@
 
 | # | Story | Issue | Points | Status | Assignee |
 |---|-------|-------|--------|--------|----------|
-| 1 | retro: Backlog 補充 — sprint-candidate 低於閾值 10（目前 7） | #818 | 1 | TODO | Developer |
-| 2 | feat: TDAD Story 依賴圖 — Sprint 平行執行衝突自動靜態分析 | #800 | 1 | TODO | Developer |
-| 3 | retro: Story 重疊檢查機制 — Sprint Planning 時自動偵測候選 Story 與已完成功能的重疊 | #823 | 1 | TODO | Developer |
-| 4 | retro: ADR-039 haiku 路由適用場景擴充 — 識別可降級低風險任務 | #817 | 1 | TODO | Developer |
-| 5 | retro: Sprint 159 — worktree 自動清理整合驗證（#735） | #790 | 1 | TODO | Developer |
-| 6 | feat: TCB 細粒度 Checkpoint — Story-Lifecycle Phase 級別中斷恢復（action 粒度防損失） | #781 | 3 | TODO | Developer |
+| 1 | retro: Backlog 補充 — sprint-candidate 低於閾值 10（目前 7） | #818 | 1 | DONE | Developer |
+| 2 | feat: TDAD Story 依賴圖 — Sprint 平行執行衝突自動靜態分析 | #800 | 1 | DONE (#828) | Developer |
+| 3 | retro: Story 重疊檢查機制 — Sprint Planning 時自動偵測候選 Story 與已完成功能的重疊 | #823 | 1 | DONE (#829) | Developer |
+| 4 | retro: ADR-039 haiku 路由適用場景擴充 — 識別可降級低風險任務 | #817 | 1 | DONE (#830) | Developer |
+| 5 | retro: Sprint 159 — worktree 自動清理整合驗證（#735） | #790 | 1 | DONE | Developer |
+| 6 | feat: TCB 細粒度 Checkpoint — Story-Lifecycle Phase 級別中斷恢復（action 粒度防損失） | #781 | 3 | DONE (#831) | Developer |
 
 **Total: 8 pts**
 

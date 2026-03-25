@@ -1,11 +1,49 @@
 {
-  "sprint": 162,
-  "updated_at": "2026-03-25T22:30:00Z",
+  "sprint": 163,
+  "updated_at": "2026-03-25T23:45:00Z",
   "stories": [
-    {"id": "782", "title": "feat: Structured Trace Log", "status": "completed", "completed_at": "2026-03-25T22:15:00Z", "pr": 821},
-    {"id": "780", "title": "feat: 平行任務衝突預測", "status": "completed", "completed_at": "2026-03-25T22:10:00Z", "pr": 820},
-    {"id": "801", "title": "feat: A2A Protocol", "status": "completed", "completed_at": "2026-03-25T22:25:00Z", "pr": 822},
-    {"id": "777", "title": "feat: D3 Debate Protocol", "status": "completed", "completed_at": "2026-03-25T22:10:00Z", "pr": 819}
+    {
+      "id": "818",
+      "title": "retro: Backlog 補充",
+      "status": "completed",
+      "completed_at": "2026-03-25T23:10:00Z",
+      "pr": null
+    },
+    {
+      "id": "800",
+      "title": "feat: TDAD Story 依賴圖",
+      "status": "completed",
+      "completed_at": "2026-03-25T23:15:00Z",
+      "pr": 828
+    },
+    {
+      "id": "823",
+      "title": "retro: Story 重疊檢查機制",
+      "status": "completed",
+      "completed_at": "2026-03-25T23:20:00Z",
+      "pr": 829
+    },
+    {
+      "id": "817",
+      "title": "retro: ADR-039 haiku 路由擴充",
+      "status": "completed",
+      "completed_at": "2026-03-25T23:25:00Z",
+      "pr": 830
+    },
+    {
+      "id": "790",
+      "title": "retro: worktree 清理驗收",
+      "status": "completed",
+      "completed_at": "2026-03-25T23:30:00Z",
+      "pr": null
+    },
+    {
+      "id": "781",
+      "title": "feat: TCB Phase Checkpoint",
+      "status": "completed",
+      "completed_at": "2026-03-25T23:45:00Z",
+      "pr": 831
+    }
   ],
   "current_step": "all-complete",
   "sprint_status": "completed"
