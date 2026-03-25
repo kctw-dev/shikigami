@@ -216,6 +216,22 @@ API 文件版本驗證（§2.8，知識老化偵測事件觸發層）
   +-- [KS-FAIL] 有 EXPIRED 條目 --> 要求確認是否繼續
   |
   v
+Kill Switch 前置檢查（#783，AC2）
+  # 每次 Story dispatch 開始前，檢查 kill-switch sentinel
+  # Session ID 來源：$SESSION_ID 環境變數，或 .claude/shikigami.local.md session_id 欄位
+  SENTINEL="/tmp/shikigami-kill-${SESSION_ID}.flag"
+  if [[ -f "$SENTINEL" ]]; then
+    echo "[KILL-SWITCH-ACTIVATED] Kill switch 已啟動，安全停止 Sprint 執行"
+    echo "  Sentinel: $SENTINEL"
+    echo "  在完成當前 Story 後停止（NFR1：不強制中止已派遣的 subagent）"
+    echo "  Active worktrees（NFR2）："
+    bash scripts/kill-switch.sh --list "$SESSION_ID" 2>/dev/null || git worktree list 2>/dev/null
+    # 寫入 checkpoint 記錄 kill-switch 停止點
+    # 然後清潔退出 Sprint Execution
+    exit 0
+  fi
+  |
+  v
 Sprint Backlog 中取出 Story
   |
   v

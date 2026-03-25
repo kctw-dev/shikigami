@@ -83,6 +83,18 @@ fi
 # NFR1: 歸檔失敗不影響 cruise 主流程（archive block 與 cruise 執行獨立）
 # ────────────────────────────────────────────────────────────────────────
 
+# ── Kill Switch 前置檢查（#783，AC3）─────────────────────────────────────
+# Cruise main loop 在每個 patrol cycle 開始前檢查 kill-switch sentinel
+# SESSION_ID 前綴 "cron-" 供使用者以 kill-switch.sh cron-<date> 停止排程
+KILL_SENTINEL="/tmp/shikigami-kill-cron.flag"
+if [[ -f "$KILL_SENTINEL" ]]; then
+  log "[KILL-SWITCH-ACTIVATED] Kill switch sentinel detected — skipping this patrol cycle"
+  log "  Sentinel: $KILL_SENTINEL"
+  log "  To reactivate cruise, remove sentinel: rm -f $KILL_SENTINEL"
+  exit 0
+fi
+# ────────────────────────────────────────────────────────────────────────
+
 # 執行 cruise --once（每次乾淨 session）
 export PATH="/home/kevin/.local/bin:/home/kevin/.nvm/versions/node/v24.14.0/bin:$PATH"
 export CLAUDE_SESSION_ID="cron-$(date '+%Y%m%d-%H%M%S')"
