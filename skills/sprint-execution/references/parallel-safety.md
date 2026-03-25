@@ -18,6 +18,7 @@
 
 <!-- US-255 低記憶體環境平行 Subagent 數量上限控制 — Sprint 93 -->
 <!-- #536 平行 subagent OOM 防護 — Sprint 129 -->
+<!-- #712 動態記憶體感知調整機制 — Sprint 153 -->
 
 環境變數 `SHIKIGAMI_MAX_PARALLEL` 控制 Sprint Execution 平行派遣 subagent 的最大數量，用於防止記憶體不足（OOM）。
 
@@ -30,6 +31,97 @@
 | 未設定 | **預設 2**：最多同時 2 個 subagent（OOM 防護預設值） |
 | `1` | 強制循序執行：所有 Story 一個接一個執行，不出現平行派遣 |
 | `N`（N ≥ 2） | 最多同時 N 個 subagent；超出部分排入下一批次依序執行 |
+
+### 動態記憶體感知調整（#712）
+
+<!-- #712 Sprint Execution parallel-safety 動態記憶體感知調整機制 — Sprint 153 -->
+
+除了靜態上限外，Sprint Execution 派遣 subagent 前自動執行**動態記憶體偵測**，根據實時可用系統記憶體動態調整並行上限，防止在低記憶體環境中仍超配並行數量。
+
+#### 設計原理
+
+靜態上限 `SHIKIGAMI_MAX_PARALLEL = N` 為保守值，適用於「平均情況」。但實際可承受的並行數量取決於：
+- **可用系統記憶體** — 實時檢測 `/proc/meminfo`（Linux）、`sysctl hw.memsize`（macOS）或 WSL2 fallback
+- **估計每個 worktree subagent 的記憶體佔用** — baseline 512MB（包含 Claude model context、git worktree、node 進程）
+- **動態計算安全並行上限** — `DYNAMIC_MAX = min(N, floor(available_mb / 512))`
+
+#### 偵測流程
+
+派遣 subagent 前：
+
+```
+1. 取得環境變數 SHIKIGAMI_MAX_PARALLEL（靜態上限，無則預設 2）
+2. 偵測系統可用記憶體
+   |-- Linux: 讀取 /proc/meminfo
+   |           優先使用 MemAvailable（kernel 3.14+），fallback 至 MemFree
+   |-- macOS: 透過 sysctl hw.memsize 取得總記憶體，保守估計 60% 可用
+   |-- WSL2:  /proc/meminfo MemFree（同 Linux）
+   |-- 偵測失敗: 靜默降級至靜態值 2
+3. 計算動態上限
+   DYNAMIC_MAX = floor(available_mb / 512)
+   FINAL_MAX = min(DYNAMIC_MAX, SHIKIGAMI_MAX_PARALLEL)
+4. 決策
+   |-- FINAL_MAX == SHIKIGAMI_MAX_PARALLEL → 不觸發警告，正常派遣
+   |-- FINAL_MAX < SHIKIGAMI_MAX_PARALLEL  → 記憶體受限，輸出 [OOM-WARN]，採用 FINAL_MAX
+5. 記錄決策
+   →  cruise log（type: memory-aware-dispatch）
+      含：detected_method, available_mb, dynamic_max, static_max, warning_triggered
+```
+
+#### 範例
+
+| 環境 | 可用記憶體 | 靜態上限 N | 動態上限 | 結果 | 輸出 |
+|------|----------|----------|--------|------|------|
+| 低記憶體 Linux（1GB） | 1024 MB | 2 | floor(1024/512)=2 | 採用 2 | 無警告 |
+| 低記憶體 Linux（512MB） | 512 MB | 2 | floor(512/512)=1 | 採用 1 | `[OOM-WARN]` |
+| 高記憶體 Linux（8GB） | 8192 MB | 2 | floor(8192/512)=16 | 採用 2 | 無警告 |
+| 高記憶體 Linux（8GB） | 8192 MB | 4 | floor(8192/512)=16 | 採用 4 | 無警告 |
+| macOS（16GB） | ~9600 MB | 2 | floor(9600/512)=18 | 採用 2 | 無警告 |
+
+#### 實作細節
+
+**偵測腳本**：`scripts/memory-aware-dispatch.sh`
+
+主要函式：
+- `get_available_memory_mb()` — 傳回系統可用記憶體（MB）
+- `get_memory_detection_method()` — 傳回偵測方法名稱（proc / sysctl / wsl2-proc / unknown）
+- `calculate_dynamic_max_parallel(available_mb, static_max)` — 計算動態上限
+- `log_memory_dispatch_decision(...)` — 記錄決策至 cruise log（JSONL type: "memory-aware-dispatch"）
+- `get_dispatch_decision()` — 主函式，執行完整偵測流程並傳回決策資訊
+
+**環境變數**（可選調整）：
+- `MEMORY_PER_AGENT_MB=512` — 每個 worktree subagent 的估計記憶體佔用（default: 512MB）
+- `SHIKIGAMI_MAX_PARALLEL=N` — 靜態上限（default: 2，若未設定視為 2）
+
+**效能承諾**：偵測操作 < 100ms（記憶體讀取不阻塞派遣流程）
+
+#### 降級與容錯
+
+| 情況 | 處理 |
+|------|------|
+| 記憶體偵測失敗 | 靜默降級至靜態值 2，無警告，繼續派遣 |
+| `/proc/meminfo` 不可讀（permission） | 自動 fallback 至偵測方法 unknown，採用靜態值 |
+| macOS sysctl 失敗 | 自動 fallback，採用靜態值 |
+| WSL2 混合環境異常 | WSL2-proc fallback，採用 MemFree，採用靜態值 |
+
+#### 可觀察性
+
+每次派遣決策均記錄至 cruise log（`docs/cruise-logs/`），JSONL 格式：
+
+```json
+{
+  "timestamp": "2026-03-25T13:45:23Z",
+  "type": "memory-aware-dispatch",
+  "available_mb": 1024,
+  "dynamic_max": 2,
+  "static_max": 2,
+  "detection_method": "proc",
+  "warning_triggered": false,
+  "memory_per_agent_mb": 512
+}
+```
+
+事後可查詢 cruise log 追蹤動態調整決策歷史。
 
 ### 上限檢查規則（含現存 Worktree 計數）
 
