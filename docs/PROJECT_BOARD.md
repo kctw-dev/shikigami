@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 142 Planning 完成 — 2 Stories, 5 pts）
-**當前 Sprint**：Sprint 142（active）
+**最後更新**：2026-03-25（Sprint 142 Review 完成 — 2/2 Stories DONE, Velocity 5 pts, 100%）
+**當前 Sprint**：Sprint 142（完成）
 
 工件導覽：[ROADMAP](prd/ROADMAP.md) → [Backlog](prd/PRODUCT_BACKLOG.md) → 本看板 | [Tutorial](tutorial/README.md)
 
@@ -15,9 +15,10 @@
 
 ---
 
-## Sprint 142（active）
+## Sprint 142（完成）
 
 > Sprint Goal：修復 New Issue Intake CI 持續失敗根因，並完成 Backlog 健康補充，確保後續 Sprint 容量充足。
+> **結果**：Goal 達成（2/2 Stories DONE）。Velocity 5 pts，完成率 100%。連續第 16 Sprint 100%（127-142）。v0.95.1。
 > **容量**：5 pts
 
 | Story | Issue | Size | Points | 狀態 |
@@ -25,7 +26,7 @@
 | retro: 調查並修正 New Issue Intake CI workflow 連續失敗 | #650 | M | 2 | DONE(#652) |
 | retro: Backlog 補充 — 掃描 open Issues 提升可執行 Story 存量 | #651 | M | 3 | DONE(#659) |
 
-**平行分群**：Group A — #650 與 #651 完全獨立，可平行執行
+**外部依賴**：AC2b Admin secret setup (ANTHROPIC_API_KEY) — 等待 Admin 操作
 
 ---
 
