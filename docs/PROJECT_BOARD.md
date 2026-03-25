@@ -1,7 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-25（Sprint 160 Review 完成 — v0.103.0）
-**當前 Sprint**：Sprint 161（下一 Sprint 待規劃）
+**最後更新**：2026-03-25（Sprint 161 Planning 完成）
+**當前 Sprint**：Sprint 161（進行中）
+
+---
+
+## Sprint 161（進行中）
+
+> Sprint Goal：強化框架安全性與可觀測性基礎 — Prompt Injection Defense、Review Suggestions 追蹤台帳、Scrum Master 狀態圖、版本 bump ROADMAP 同步強制驗證、Shell Test 最佳實踐統一
+> **容量**：7 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: Prompt Injection Defense — Security Gate 外部輸入掃描（pipeline 前置防護） | #776 | M | 3 | TODO |
+| feat: Review Suggestions 追蹤 — 非阻塞建議跨 Sprint 模式識別台帳 | #799 | S | 1 | TODO |
+| docs: Scrum Master 狀態圖 — Sprint 生命週期路由可視化（Mermaid stateDiagram） | #796 | S | 1 | TODO |
+| retro: 版本 bump checklist — ROADMAP.md 版號同步強制驗證 | #810 | S | 1 | TODO |
+| retro: shell test 腳本最佳實踐 — 禁用 set -e + 統一 counter 模式 | #811 | S | 1 | TODO |
 
 ---
 
