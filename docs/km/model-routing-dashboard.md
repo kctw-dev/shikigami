@@ -1,34 +1,34 @@
 # ADR-039 Model Routing Dashboard
 
 > 本文件由 `scripts/routing-stats.sh` 自動產生，請勿手動修改。
-> 最後更新：2026-03-25 18:34:32
-> 資料範圍：最近 10 個 Sprint（Sprint 148 149 150 151 152 153 154 155 156 157）
+> 最後更新：2026-03-25 20:07:37
+> 資料範圍：最近 10 個 Sprint（Sprint 150 151 152 153 154 155 156 157 158 159）
 
 ## Tier 分布
 
 | Tier | Model | 路由次數 | 比例 | 適用分數範圍 |
 |------|-------|---------|------|------------|
-| Tier 1 | haiku | 5 | 71% | 4–6 |
-| Tier 2 | sonnet | 2 | 28% | 7–9 |
+| Tier 1 | haiku | 6 | 28% | 4–6 |
+| Tier 2 | sonnet | 15 | 71% | 7–9 |
 | Tier 3 | opus | 0 | 0% | 10–12 |
-| **合計** | — | **7** | **100%** | — |
+| **合計** | — | **21** | **100%** | — |
 
 ## Risk Score 統計
 
 | 指標 | 值 |
 |------|-----|
-| 平均 Risk Score | 5 |
-| 樣本數 | 7 |
+| 平均 Risk Score | 6 |
+| 樣本數 | 21 |
 
 ## 健康度評估
 
-> **[ROUTING-OK]** haiku tier 比例 71% >= 30%，路由分布正常
+> **[OVER-ROUTING-WARN]** haiku tier 比例 28% < 30%，疑似 over-routing
 
 ## 路由建議（NFR3）
 
 > 基於當前統計資料的具體建議：
 
-- **路由分布健康**：目前 Tier 分布符合 ADR-039 目標（haiku >= 30%，opus <= 20%，平均分數合理）
+- **降低 haiku 使用門檻**：Score 4-5 的 Story 應路由至 haiku（目前 haiku 比例偏低 28%）
 - Score 4-5 的 Story 可降至 haiku（doc-only retro / 格式轉換 / log 摘要）
 - Score 10-12 的 Story 應路由至 opus（架構設計 ADR / 安全審查 / L-size Story）
 

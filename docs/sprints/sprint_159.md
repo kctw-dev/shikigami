@@ -98,3 +98,19 @@
 - model-route #774 tier=1 score=5 model=haiku reason=RESEARCH-S-no-code
 - model-route #778 tier=2 score=6 model=sonnet reason=FEATURE-S-standard
 - model-route #773 tier=2 score=6 model=sonnet reason=FEATURE-S-standard
+
+## Sprint Review 結果
+
+**日期**：2026-03-25
+**Velocity**：6 pts（100% 完成率）
+
+| Story | Issue | 結果 | PR |
+|-------|-------|------|-----|
+| Kill Switch | #783 | DONE | #784 |
+| Playwright MCP Spike | #774 | DONE | #785 |
+| DM-4 Write Gateway | #775 | DONE | #786 |
+| ADR Index v2 | #778 | DONE | #787 |
+| quality-gate Decision Log | #779 | DONE | #788 |
+| Interactive Review Mode | #773 | DONE | #789 |
+
+**Retro Action Items**：#790（worktree cleanup），#791（watchdog planning）
