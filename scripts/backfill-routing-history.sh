@@ -149,33 +149,42 @@ ROUTE_COUNT=$(wc -l < "$FILTERED_ROUTES" | tr -d ' ')
 
 # ── 輸出結果 ──────────────────────────────────────────────────────────────
 
-if [ "$ROUTE_COUNT" -eq 0 ]; then
-  echo "[OK] No new routing records to backfill (all sprints already recorded)"
-  exit 0
-fi
-
 if [ "$DRY_RUN" = true ]; then
-  echo "[DRY-RUN] 將新增以下 $ROUTE_COUNT 條記錄："
-  echo "---"
-  cat "$FILTERED_ROUTES"
-  echo "---"
-  echo "[DRY-RUN] 未修改 Metrics_Log.md 和 metrics-log/"
-else
-  # 追加至 Metrics_Log.md（在文件末尾）
-  {
-    echo ""
-    echo "# Sprint Execution 中各 Story 的 model 路由決策記錄"
-    echo ""
+  if [ "$ROUTE_COUNT" -eq 0 ]; then
+    echo "[DRY-RUN] No new routing records to backfill (all sprints already recorded)"
+  else
+    echo "[DRY-RUN] 將新增以下 $ROUTE_COUNT 條記錄："
+    echo "---"
     cat "$FILTERED_ROUTES"
-  } >> "$METRICS_LOG"
+    echo "---"
+    echo "[DRY-RUN] 未修改 Metrics_Log.md 和 metrics-log/"
+  fi
+else
+  # 實際執行模式
+
+  # 追加新記錄至 Metrics_Log.md（如果有的話）
+  if [ "$ROUTE_COUNT" -gt 0 ]; then
+    {
+      echo ""
+      echo "# Sprint Execution 中各 Story 的 model 路由決策記錄"
+      echo ""
+      cat "$FILTERED_ROUTES"
+    } >> "$METRICS_LOG"
+    echo "[OK] 已新增 $ROUTE_COUNT 條路由記錄至 Metrics_Log.md"
+  else
+    echo "[OK] No new routing records to backfill (all sprints already recorded)"
+  fi
 
   # 同時建立 metrics-log 中的 session 記錄（用於 routing-stats.sh 讀取）
+  # 這個檔案應該包含所有從 sprint 檔案找到的記錄（不只是新的）
   METRICS_LOG_DIR="${REPO_ROOT}/docs/km/metrics-log"
   mkdir -p "$METRICS_LOG_DIR"
 
   TIMESTAMP=$(date '+%Y-%m-%d')
-  BACKFILL_SESSION="${METRICS_LOG_DIR}/${TIMESTAMP}-backfill-routing-history.md"
+  # 使用時間戳確保不會覆蓋同一天的檔案
+  BACKFILL_SESSION="${METRICS_LOG_DIR}/${TIMESTAMP}-backfill-routing-history-$(date '+%s').md"
 
+  # 輸出所有從 sprint 找到的記錄（包括已經在 Metrics_Log 中的）
   {
     echo "# Model Routing Backfill — ${TIMESTAMP}"
     echo ""
@@ -183,10 +192,9 @@ else
     echo ""
     echo "## Model Routing Records"
     echo ""
-    cat "$FILTERED_ROUTES"
+    cat "$NEW_ROUTES"
   } > "$BACKFILL_SESSION"
 
-  echo "[OK] 已新增 $ROUTE_COUNT 條路由記錄至 Metrics_Log.md"
   echo "[OK] 已建立 metrics-log 補齊記錄：$BACKFILL_SESSION"
 fi
 

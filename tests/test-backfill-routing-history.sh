@@ -26,8 +26,8 @@ cleanup() {
     cp "$METRICS_BACKUP" "$METRICS_LOG"
     rm -f "$METRICS_BACKUP"
   fi
-  # 移除臨時建立的 backfill session 檔案
-  rm -f "${METRICS_LOG_DIR}/"*-backfill-routing-history.md
+  # 移除臨時建立的 backfill session 檔案（支援帶時間戳的檔名）
+  rm -f "${METRICS_LOG_DIR}/"*-backfill-routing-history*.md
 }
 
 trap cleanup EXIT
@@ -94,8 +94,8 @@ else
   test_fail "Metrics_Log.md 未包含 model-route 記錄"
 fi
 
-# 檢查 metrics-log 補齊檔案是否被建立
-if ls "${METRICS_LOG_DIR}/"*-backfill-routing-history.md > /dev/null 2>&1; then
+# 檢查 metrics-log 補齊檔案是否被建立（支援帶時間戳的檔名）
+if ls "${METRICS_LOG_DIR}/"*-backfill-routing-history*.md > /dev/null 2>&1; then
   test_pass "metrics-log 補齊檔案已建立"
 else
   test_fail "metrics-log 補齊檔案未建立"
