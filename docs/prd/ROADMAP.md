@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.116.0**（Sprint 174 — 提升 Backlog 健康度與 CI 資料積累品質：Discovery 補充 8 sprint-candidates、complexity-trend CI 觸發機制、Discovery 流程優化 Spike、retro-action-analysis.sh 工具）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.117.0**（Sprint 175 — 強化 Hook 基礎建設可靠性與開發標準：hook-runner.sh timeout+隔離機制、Hook 開發標準規範指南、Hook 整合測試套件、sprint-candidate 水位持續監控）。。
 
 | 版號 | 含義 |
 |------|------|

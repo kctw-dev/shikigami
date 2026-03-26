@@ -109,3 +109,45 @@
 **haiku_ratio = 3/4 = 75% ≥ 20%** ✓
 
 ---
+
+---
+
+## Sprint Review 結果（2026-03-26）
+
+**Velocity**：7 pts
+**完成率**：4/4（100%）
+**Sprint Goal 達成**：是
+
+### 驗收結果
+
+| Story | AC 達成 | 驗收判定 | 備註 |
+|-------|---------|---------|------|
+| #923 Hook 執行超時與隔離機制 | AC1(timeout 30s 可配置 ✓), AC2(subshell 隔離 ✓), AC3(JSONL metrics ✓), AC4(10 tests PASS ✓) | PASS | PR #936 |
+| #924 建立 Hook 開發標準規範 | AC1(guide 含命名/入參/error handling ✓), AC2(3類別 ✓), AC3(template.sh ✓), AC4(5 hooks 注解 ✓) | PASS | PR #937 |
+| #925 Hook 整合測試補齊 | AC1(9 hooks ✓), AC2(5 場景 ✓), AC3(6s <= 30s ✓), AC4(exit 0/1/124 ✓) | PASS | PR #938 |
+| #934 sprint-candidate 水位監控 | AC1(水位 10 >= 10 ✓), AC2(Discovery 觸發補充至 10 ✓), NFR1(cruise log ✓) | PASS | PR #943 |
+
+### QA 邊界案例驗證
+
+| 邊界案例 | 判定 |
+|---------|------|
+| hook-runner.sh — slow hook 被 kill（2s timeout） | PASS（TC-1.2） |
+| hook-runner.sh — fail hook 後 success hook 仍執行 | PASS（TC-2.2） |
+| Integration suite — timeout hook metrics 記錄 | PASS（SC-5.3） |
+| hook-runner.sh 無參數 | PASS（exit 1，TC-1 NFR）|
+| #934 水位 6 < 10 → Discovery 自動觸發 | PASS（4 issues created） |
+
+### PR 流程合規
+
+| Story | PR | 狀態 |
+|-------|-----|------|
+| #923 | #936 | [PR-COMPLIANCE-OK] |
+| #924 | #937 | [PR-COMPLIANCE-OK] |
+| #925 | #938 | [PR-COMPLIANCE-OK] |
+| #934 | #943 | [PR-COMPLIANCE-OK] |
+
+**PR 合規率**：4/4（100%）
+
+### Discovery 產出（#934）
+
+新建 Issues：#939, #940, #941, #942（sprint-candidate 水位維持 10）
