@@ -1,11 +1,10 @@
 {
-  "sprint": 173,
-  "updated_at": "2026-03-26T18:55:00Z",
+  "sprint": 174,
+  "updated_at": "",
   "stories": [
-    {"id": "886", "status": "completed", "pr": "#918", "merge_commit": "62b7bbe"},
-    {"id": "848", "status": "completed", "pr": "#914", "merge_commit": "37d56a5"},
-    {"id": "842", "status": "completed", "pr": "#915", "merge_commit": "9ddf602"},
-    {"id": "898", "status": "completed", "pr": "#916", "merge_commit": "3155455"},
-    {"id": "896", "status": "completed", "pr": "#917", "merge_commit": "7c299b3"}
+    {"id": "919", "status": "pending", "pr": null, "merge_commit": null},
+    {"id": "922", "status": "pending", "pr": null, "merge_commit": null},
+    {"id": "887", "status": "pending", "pr": null, "merge_commit": null},
+    {"id": "872", "status": "pending", "pr": null, "merge_commit": null}
   ]
 }
