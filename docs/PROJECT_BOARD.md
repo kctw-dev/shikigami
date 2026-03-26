@@ -1,7 +1,22 @@
 # Project Board
 
-**最後更新：2026-03-26（Sprint 172 Review 完成，v0.114.0）**
-**當前 Sprint**：Sprint 172（完成，5/5 DONE，6 pts，100%）
+**最後更新：2026-03-26（Sprint 173 Planning 完成）**
+**當前 Sprint**：Sprint 173（進行中，0/5 DONE，6 pts，0%）
+
+---
+
+## Sprint 173（Sprint Backlog）
+
+> Sprint Goal：補齊驗證腳本效能與整合測試基礎建設、強化 Cruise Log 搜尋與複雜度趨勢追蹤
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: 驗證腳本整合測試補齊 | #886 | M | 2 | TODO |
+| feat: 複雜度趨勢追蹤 — measure-complexity 歷史記錄與增速預警 | #848 | S | 1 | TODO |
+| feat: Cruise Log 搜尋增強 — type 篩選、時間範圍、統計摘要 | #842 | S | 1 | TODO |
+| retro: validate-orphans.sh 整合測試效能優化 — 14s > 10s NFR1 門檻 | #898 | S | 1 | TODO |
+| retro: routing-stats.sh 支援 custom section 保護 | #896 | S | 1 | TODO |
 
 ---
 
