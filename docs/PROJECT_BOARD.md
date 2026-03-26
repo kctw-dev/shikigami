@@ -1,7 +1,22 @@
 # Project Board
 
-**最後更新：2026-03-26（Sprint 171 Review 完成）**
-**當前 Sprint**：Sprint 171（完成，6/6 DONE，bump v0.113.0）
+**最後更新：2026-03-26（Sprint 172 Planning 完成）**
+**當前 Sprint**：Sprint 172（進行中，0/5 TODO，6 pts）
+
+---
+
+## Sprint 172（Sprint Backlog）
+
+> Sprint Goal：補齊 Retro Action 文件規範、建立 Routing History 正式 Schema、並交付 Backlog 健康度自動告警機制
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: script-testability-guide 補充 grep+set-e 陷阱說明 | #907 | S | 1 | TODO |
+| retro: script-testability-guide 補充 sentinel 字串衝突防護指引 | #908 | S | 1 | TODO |
+| feat: Backlog Health 自動告警 — sprint-candidate 低水位 GitHub Issue 通知 | #882 | M | 2 | TODO |
+| retro: 建立 routing-history schema 規格文件 | #895 | S | 1 | TODO |
+| retro: validate-a2a-schema.sh 補充 story_id integer 型別文件 | #894 | S | 1 | TODO |
 
 ---
 
