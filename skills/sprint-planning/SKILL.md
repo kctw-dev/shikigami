@@ -41,6 +41,7 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 - [ ] 角色權重調整檢查（詳見 §7）*(慢想)*
 - [ ] **PO** 掃描 GitHub open issues，對未分類 issues 執行 Triage（<!-- Claude Code -->invoke shikigami:issue-management Triage<!-- /Claude Code --><!-- OpenCode -->使用 issue-management skill<!-- /OpenCode -->）
 - [ ] **Pre-flight Backlog 健康度檢查**：執行 `gh issue list --label "sprint-candidate" --state open --json number | jq length` 取得 `BACKLOG_COUNT`；若 `BACKLOG_COUNT < 5`，輸出 `[BACKLOG-WARN] sprint-candidate 不足 (N < 5)，建議先執行 backlog-management` 並自動觸發 `/backlog-management` skill 補充；若 `BACKLOG_COUNT >= 5`，輸出 `[BACKLOG-OK] sprint-candidate: N 個，健康度正常` 並繼續
+- [ ] **Pre-flight Model Routing 健康度掃描**（ADR-039 決策 2.6，#854，Sprint 166）：執行 `bash scripts/routing-stats.sh 2>/dev/null | grep -q "\[OVER-ROUTING-WARN\]"` 判斷是否存在 routing 警告；若存在 `[OVER-ROUTING-WARN]`，輸出提示 `[ROUTING-SCAN-TRIGGER] 檢測到 haiku 比例偏低，本次 Planning 啟動 haiku 適用場景擴充掃描`，PO 在 Story 選取後額外執行 RICE Score 與 Routing Tier 交叉審查（詳見 po-prompt.md §haiku 交叉審查）；若無警告或腳本不存在，靜默略過（非阻塞）
 - [ ] 記錄 Sprint Planning 開始時間：`START_TIME=$(date '+%Y-%m-%dT%H:%M+08:00')`
 - [ ] **PO** 執行 Backlog 排序與 Story 選取（詳見 [po-prompt.md](./references/po-prompt.md) Round 1）
 - [ ] **PO Round 1 ADR 自動納入**（#456）：PO 選取 Story 後，掃描 Architect 技術評估的 ADR 欄位；若有標注「已補建 #N（RESEARCH）」的 ADR Story，自動將該 ADR RESEARCH Story 一併選入同一 Sprint（AC2）

@@ -89,6 +89,50 @@ model-route sprint-163-metrics tier=1 score=4 model=haiku reason=metrics-calcula
 
 ---
 
+### 決策 2.6：Score 4-5 TEST/DOC/LOG 強制 haiku 規則（#854，Sprint 166）
+
+<!-- #854 retro: haiku 路由比例偏低（18%）— ADR-039 Score 4-5 TEST/DOC 強制 haiku 規則 — Sprint 166 -->
+
+**背景**：Sprint 165 Retro 顯示 haiku 路由比例僅 18%（目標 >= 30%），Planning 階段 Risk Scoring 偏保守，Score 4-5 的低風險任務仍被路由至 sonnet。
+
+**新增強制規則**：
+
+<HARD-RULE id="haiku-force-route-456">
+**Score 4-5 且 Story Type ∈ {TEST, DOC, LOG} 時，一律路由至 haiku（Tier 1），不依賴 agent 主觀判斷。**
+
+此規則優先於 agent 評分結果。Planning 時若 Story 符合條件但被評為 Tier 2+，PO 必須降級至 haiku 並說明理由。
+</HARD-RULE>
+
+**識別規則**：
+
+| 條件 | Story Type 判斷標準 |
+|------|------------------|
+| `TEST` | 標題含「test:」前綴、或 AC 主要內容為新建/修改 tests/ 腳本 |
+| `DOC` | 標題含「doc:」「retro:」前綴、或 AC 主要為修改 .md 文件 |
+| `LOG` | Story 主要輸出為 log 記錄、metrics 計算或報告生成 |
+
+**防 over-correction 規則**（AC4 — QA 建議補充）：
+
+此強制規則不影響 Score >= 7 的 Story 路由。Score >= 7 的 Story 仍依動態評分路由至 sonnet 或 opus，不被此規則強制降至 haiku。
+
+**RICE Score 與路由 Tier 交叉審查（Sprint Planning PO Round 新增步驟）**：
+
+Sprint Planning PO Round 完成 Story 選取後，計算本 Sprint haiku 比例預估值：
+```
+haiku_ratio = haiku_stories / total_stories
+```
+若 `haiku_ratio < 20%`，PO 必須逐一說明 Tier 2+ 選用理由，確認無可降級的 TEST/DOC/LOG Stories 被誤評。
+
+**路由記錄範例（新增規則）**：
+```
+model-route #853 tier=1 score=5 model=haiku reason=score-4-5+story-type=DOC(retro:)
+model-route #840 tier=1 score=6 model=haiku reason=score-4-6+story-type=TEST(tests/)
+```
+
+**預期效果**：haiku 比例從 18% 提升至 >= 30%（Sprint 166 起生效）。
+
+---
+
 ### 決策 3：路由決策的可觀測性
 
 **路由記錄位置**：`docs/km/Metrics_Log.md` 每個 Sprint 的 token 消耗紀錄中，新增 `model_routing` 欄位：

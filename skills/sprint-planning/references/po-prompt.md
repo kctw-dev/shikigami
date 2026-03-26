@@ -94,6 +94,28 @@ PO 在 Sprint Planning Round 1 掃描 Backlog 時，**必須**確認每個候選
 
 逐一列出每個 Story 預計修改的主要檔案，判斷哪些 Story 修改不同檔案（可平行執行），哪些 Story 修改相同檔案（有衝突，需順序執行）。
 
+### RICE Score 與路由 Tier 交叉審查（ADR-039 決策 2.6，#854，Sprint 166）
+
+<!-- #854 retro: haiku 路由比例偏低 — ADR-039 Score 4-5 TEST/DOC 強制 haiku 規則 — Sprint 166 -->
+
+PO 完成 Story 選取後，必須執行 haiku 比例交叉審查：
+
+1. 對每個選入 Story，評估 Story Type（TEST / DOC / LOG / FEATURE / INFRA...）與風險分數
+2. Score 4-5 且 Story Type ∈ {TEST, DOC, LOG} → 強制路由至 haiku（Tier 1），不可依賴 agent 主觀判斷
+3. 計算 haiku 預估比例：`haiku_ratio = haiku_stories / total_stories`
+4. 若 `haiku_ratio < 20%`，PO 必須逐一說明 Tier 2+ 選用理由，確認無可降級 Stories
+
+**AC2 交叉審查輸出格式**（加入 Round 1 回傳表格）：
+
+```markdown
+| Story ID | 標題 | 估點 | AC 確認結果 | 獨立性評估 | Story Type | Risk Score | Routing Tier |
+|----------|------|------|------------|-----------|-----------|-----------|-------------|
+| US-#N    | ...  | S    | PASS       | 獨立      | TEST      | 5         | haiku（強制） |
+| US-#M    | ...  | M    | PASS       | 獨立      | FEATURE   | 8         | sonnet       |
+```
+
+若 `haiku_ratio < 20%`：輸出 `[HAIKU-RATIO-WARN] haiku 比例 X% < 20%，請確認是否有可降級 Stories`
+
 ### Round 1 回傳格式
 
 ```markdown

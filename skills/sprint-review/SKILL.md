@@ -97,6 +97,24 @@ Read: contracts/numerical-consistency-contract.md（若本 Sprint 有數值修�
 **§2.6 完成後**：Review subagent 立即寫入同步 signal（`docs/sprints/.review-signal-<SESSION_ID>`）。
 
 
+## 2.64 PR 流程合規檢查（Sprint 165 Retro #853）
+
+在 §2.6 Issue 狀態回寫後，對本 Sprint 每個 Story 確認是否有對應 PR：
+
+```bash
+for story_id in ${SPRINT_STORY_IDS}; do
+  PR_COUNT=$(gh pr list -R ${OWNER_REPO} --state merged --search "#${story_id}" --json number | jq length 2>/dev/null || echo "0")
+  if [ "$PR_COUNT" -eq 0 ]; then
+    echo "[PROCESS-VIOLATION] Story #${story_id} 未透過 PR 交付（直推 main），違反 Sprint 165 Retro #853 規範"
+    # 記錄至 Sprint Review 會議紀錄 process_violations 欄位
+  else
+    echo "[PR-COMPLIANCE-OK] Story #${story_id} 有對應 PR"
+  fi
+done
+```
+
+**非阻塞**：`[PROCESS-VIOLATION]` 僅記錄，不阻擋 Sprint Review 完成。但違規次數需列入下次 Retro 討論。
+
 ## 2.65 CRITICAL 決策記錄（#779 AC2）
 
 <!-- #779 quality-gate 決策記錄機制 — Sprint 159 -->
