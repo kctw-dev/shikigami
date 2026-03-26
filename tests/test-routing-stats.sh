@@ -163,6 +163,55 @@ else
   fail "NFR3: dashboard 缺少具體路由建議"
 fi
 
+# ── #885 AC3: routing-history.json 存在且格式符合 schema ─────────────
+
+echo ""
+echo "── #885 AC3: routing-history.json schema 驗證 ──"
+
+ROUTING_HISTORY="${REPO_ROOT}/docs/km/routing-history.json"
+
+if [ -f "$ROUTING_HISTORY" ]; then
+  pass "#885 AC3: routing-history.json 存在"
+
+  # Validate JSON syntax
+  if python3 -c "import json; json.load(open('${ROUTING_HISTORY}'))" 2>/dev/null; then
+    pass "#885 AC3: routing-history.json 為合法 JSON"
+  else
+    fail "#885 AC3: routing-history.json JSON 格式錯誤"
+  fi
+
+  # Validate required schema fields
+  SCHEMA_CHECK=$(python3 -c "
+import json, sys
+d = json.load(open('${ROUTING_HISTORY}'))
+assert 'schema_version' in d, 'Missing schema_version'
+assert 'history' in d, 'Missing history array'
+assert isinstance(d['history'], list), 'history must be array'
+if len(d['history']) > 0:
+    first = d['history'][0]
+    required = ['sprint_number', 'story_id', 'risk_score', 'routing_tier', 'model', 'reason']
+    for field in required:
+        assert field in first, f'Missing required field: {field}'
+print('SCHEMA_VALID')
+" 2>/dev/null || echo "SCHEMA_INVALID")
+
+  if [ "$SCHEMA_CHECK" = "SCHEMA_VALID" ]; then
+    pass "#885 AC3: routing-history.json schema 包含必要欄位（sprint_number, story_id, risk_score, routing_tier, model, reason）"
+  else
+    fail "#885 AC3: routing-history.json schema 驗證失敗"
+  fi
+
+  # Validate coverage note exists
+  if python3 -c "import json; d=json.load(open('${ROUTING_HISTORY}')); assert 'coverage' in d or 'missing_periods' in d" 2>/dev/null; then
+    pass "#885 AC3: routing-history.json 含缺漏期間說明（coverage/missing_periods）"
+  else
+    fail "#885 AC3: routing-history.json 缺少缺漏期間說明"
+  fi
+
+else
+  fail "#885 AC3: routing-history.json 不存在（需先執行 Story #885 補回作業）"
+fi
+
 # ── 冪等性測試 ───────────────────────────────────────────────────────
 
 echo ""
