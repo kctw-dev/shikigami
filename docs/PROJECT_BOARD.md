@@ -1,7 +1,21 @@
 # Project Board
 
-**最後更新：2026-03-26（Sprint 175 Execution 完成）**
-**當前 Sprint**：Sprint 175（Execution 完成，4/4 DONE，7/7 pts）
+**最後更新：2026-03-26（Sprint 176 Planning 完成）**
+**當前 Sprint**：Sprint 176（Planning 完成，0/4 DONE，0/6 pts）
+
+---
+
+## Sprint 176（Sprint Backlog）
+
+> Sprint Goal：強化 CI 自動化與品質基礎建設 — 交付水位監控週期性腳本、SessionEnd Hook 遷移至 hook-runner.sh 保護、輕量版 Discovery SOP 實現，以及 MCP Server quality-observer 端到端測試
+> **容量**：6 pts | **Velocity 基準**：avg 6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: 自動化 sprint-candidate 水位週期性監控機制 | #944 | S | 1 | TODO |
+| chore: 將高風險 SessionEnd Hook 遷移至 hook-runner.sh | #939 | S | 1 | TODO |
+| chore: 輕量版 Backlog Discovery 流程與 SOP 實現 | #930 | M | 2 | TODO |
+| test: MCP Server 端到端測試 — quality-observer | #926 | M | 2 | TODO |
 
 ---
 
