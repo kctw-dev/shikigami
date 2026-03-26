@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "description": "ADR-039 Model Routing History — Sprint 159-168 完整記錄（#885 補回）",
+  "updated_at": "2026-03-26T14:30:00Z",
+  "coverage": {
+    "sprint_from": 159,
+    "sprint_to": 168,
+    "note": "Sprint 161-165 記錄從 metrics-log 和 sprint_*.md 回溯補充，部分 Sprint 記錄缺漏（見 missing_periods）"
+  },
+  "missing_periods": [
+    {
+      "sprint_range": "161-166",
+      "reason": "sprint_*.md 未記錄 model-route 決策，metrics-log 無對應記錄",
+      "resolution": "以 Sprint Planning 路由決策規則重建：S-size TEST/DOC Story → haiku，其他 → sonnet",
+      "repaired_at": "2026-03-26",
+      "repaired_by": "Story #885 歷史路由記錄補回與審計"
+    }
+  ],
+  "history": [
+    {"sprint_number": 159, "story_id": "783", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "INFRA-S-standard"},
+    {"sprint_number": 159, "story_id": "775", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "INFRA-S-standard"},
+    {"sprint_number": 159, "story_id": "779", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "FEATURE-S-standard"},
+    {"sprint_number": 159, "story_id": "774", "risk_score": 5, "routing_tier": 1, "model": "haiku", "reason": "RESEARCH-S-no-code"},
+    {"sprint_number": 159, "story_id": "778", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "FEATURE-S-standard"},
+    {"sprint_number": 159, "story_id": "773", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "FEATURE-S-standard"},
+    {"sprint_number": 160, "story_id": "795", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "FEATURE-S-standard"},
+    {"sprint_number": 160, "story_id": "797", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "FEATURE-S-standard"},
+    {"sprint_number": 160, "story_id": "793", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "FEATURE-S-standard"},
+    {"sprint_number": 160, "story_id": "802", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "INFRA-S-standard"},
+    {"sprint_number": 160, "story_id": "798", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "INFRA-S-standard"},
+    {"sprint_number": 160, "story_id": "794", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "FEATURE-S-standard"},
+    {"sprint_number": 160, "story_id": "772", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "FEATURE-S-standard"},
+    {"sprint_number": 161, "story_id": "backfill-estimated", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "backfill-estimated-from-missing-period"},
+    {"sprint_number": 162, "story_id": "backfill-estimated", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "backfill-estimated-from-missing-period"},
+    {"sprint_number": 163, "story_id": "817", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "FEATURE-S-haiku-expansion"},
+    {"sprint_number": 164, "story_id": "backfill-estimated", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "backfill-estimated-from-missing-period"},
+    {"sprint_number": 165, "story_id": "840", "risk_score": 5, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-165-TEST"},
+    {"sprint_number": 165, "story_id": "853", "risk_score": 5, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-165-retro"},
+    {"sprint_number": 166, "story_id": "853", "risk_score": 5, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-166"},
+    {"sprint_number": 166, "story_id": "854", "risk_score": 7, "routing_tier": 2, "model": "sonnet", "reason": "backfill-from-sprint-166"},
+    {"sprint_number": 166, "story_id": "855", "risk_score": 7, "routing_tier": 2, "model": "sonnet", "reason": "backfill-from-sprint-166"},
+    {"sprint_number": 166, "story_id": "840", "risk_score": 5, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-166"},
+    {"sprint_number": 167, "story_id": "857", "risk_score": 5, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-167"},
+    {"sprint_number": 167, "story_id": "843", "risk_score": 5, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-167"},
+    {"sprint_number": 167, "story_id": "841", "risk_score": 5, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-167"},
+    {"sprint_number": 167, "story_id": "846", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "backfill-from-sprint-167"},
+    {"sprint_number": 167, "story_id": "849", "risk_score": 6, "routing_tier": 2, "model": "sonnet", "reason": "backfill-from-sprint-167"},
+    {"sprint_number": 168, "story_id": "864", "risk_score": 7, "routing_tier": 2, "model": "sonnet", "reason": "PROCESS-M-standard"},
+    {"sprint_number": 168, "story_id": "863", "risk_score": 5, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-168"},
+    {"sprint_number": 168, "story_id": "867", "risk_score": 5, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-168"},
+    {"sprint_number": 168, "story_id": "870", "risk_score": 4, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-168"},
+    {"sprint_number": 168, "story_id": "865", "risk_score": 4, "routing_tier": 1, "model": "haiku", "reason": "backfill-from-sprint-168"}
+  ]
+}
