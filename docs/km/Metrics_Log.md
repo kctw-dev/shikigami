@@ -469,3 +469,12 @@ model-route #865 tier=1 score=4 model=haiku reason=backfill-from-sprint-168
 - #919 DISCOVERY Tier-1（haiku）— 唯讀調查與 Issue 建立，低風險
 - #887 RESEARCH Tier-1（haiku）— Spike Report 分析，無框架修改
 - #922/#872 Tier-2（sonnet）— CI pipeline 修改與 FEATURE M-size 腳本新增
+
+### Sprint 176 Model Routing
+
+| Story | Model Used | Tier | Risk Score | 路由原因 |
+|-------|-----------|------|-----------|----------|
+| #944 | haiku | 1 | 5 | INFRA script, retro-action, doc+script, reversible |
+| #939 | sonnet | 2 | 6 | config migration, hooks.json, medium reversibility |
+| #930 | haiku | 1 | 4 | DOC/RESEARCH, SOP document, fully reversible |
+| #926 | haiku | 1 | 5 | TEST only, new test file, reversible |

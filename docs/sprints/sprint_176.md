@@ -13,10 +13,10 @@
 
 | Story | Issue | Size | Points | 狀態 | 負責 | Routing Tier |
 |-------|-------|------|--------|------|------|-------------|
-| retro: 自動化 sprint-candidate 水位週期性監控機制 | #944 | S | 1 | TODO | — | haiku（Score 5, INFRA script） |
-| chore: 將高風險 SessionEnd Hook 遷移至 hook-runner.sh | #939 | S | 1 | TODO | — | sonnet（Score 6, config migration） |
-| chore: 輕量版 Backlog Discovery 流程與 SOP 實現 | #930 | M | 2 | TODO | — | haiku（Score 4, DOC/RESEARCH） |
-| test: MCP Server 端到端測試 — quality-observer | #926 | M | 2 | TODO | — | haiku（Score 5, TEST） |
+| retro: 自動化 sprint-candidate 水位週期性監控機制 | #944 | S | 1 | DONE | PR#945 | haiku（Score 5, INFRA script） |
+| chore: 將高風險 SessionEnd Hook 遷移至 hook-runner.sh | #939 | S | 1 | DONE | PR#946 | sonnet（Score 6, config migration） |
+| chore: 輕量版 Backlog Discovery 流程與 SOP 實現 | #930 | M | 2 | DONE | PR#951 | haiku（Score 4, DOC/RESEARCH） |
+| test: MCP Server 端到端測試 — quality-observer | #926 | M | 2 | DONE | PR#952 | haiku（Score 5, TEST） |
 
 **總計**：4 Stories / 6 pts
 
