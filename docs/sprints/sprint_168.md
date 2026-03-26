@@ -13,11 +13,11 @@
 
 | Story | Issue | Size | Points | Story Type | Routing Tier | 狀態 |
 |-------|-------|------|--------|-----------|-------------|------|
-| retro: Backlog 嚴重不足 | #864 | M | 2 | PROCESS | sonnet | TODO |
-| retro: routing-stats haiku 比例偏低 | #863 | S | 1 | LOG | haiku（強制） | TODO |
-| feat: routing-stats 歷史趨勢補齊 | #867 | S | 1 | INFRA | haiku（強制） | TODO |
-| feat: injection-scan.sh 自動化測試 | #870 | S | 1 | TEST | haiku（強制） | TODO |
-| feat: measure-complexity.sh 自動化測試 | #865 | S | 1 | TEST | haiku（強制） | TODO |
+| retro: Backlog 嚴重不足 | #864 | M | 2 | PROCESS | sonnet | DONE (#877-#884) |
+| retro: routing-stats haiku 比例偏低 | #863 | S | 1 | LOG | haiku（強制） | DONE (1872e02) |
+| feat: routing-stats 歷史趨勢補齊 | #867 | S | 1 | INFRA | haiku（強制） | DONE (be27820) |
+| feat: injection-scan.sh 自動化測試 | #870 | S | 1 | TEST | haiku（強制） | DONE (c20da05) |
+| feat: measure-complexity.sh 自動化測試 | #865 | S | 1 | TEST | haiku（強制） | DONE (9239de1) |
 
 **總計：6 pts**
 

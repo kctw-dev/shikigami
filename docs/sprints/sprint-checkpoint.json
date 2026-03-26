@@ -1,13 +1,13 @@
 {
-  "sprint": 167,
+  "sprint": 168,
   "stories": [
-    {"id": "857", "title": "retro: model-route 記錄補齊", "status": "completed", "pr": 858, "completed_at": "2026-03-26T04:01:40Z"},
-    {"id": "846", "title": "feat: ADR 狀態儀表板", "status": "completed", "pr": 859, "completed_at": "2026-03-26T04:01:40Z"},
-    {"id": "843", "title": "feat: validate-gemini.sh 自動化測試", "status": "completed", "pr": 860, "completed_at": "2026-03-26T04:01:40Z"},
-    {"id": "841", "title": "feat: validate-orphans.sh 自動化測試", "status": "completed", "pr": 861, "completed_at": "2026-03-26T04:01:40Z"},
-    {"id": "849", "title": "feat: Shoot Log 統計工具", "status": "completed", "pr": 862, "completed_at": "2026-03-26T04:01:40Z"}
+    {"id": "864", "title": "retro: Backlog 嚴重不足", "status": "completed", "completed_at": "2026-03-26T06:00:00Z"},
+    {"id": "863", "title": "retro: routing-stats haiku 比例偏低", "status": "completed", "pr": "1872e02", "completed_at": "2026-03-26T05:45:00Z"},
+    {"id": "867", "title": "feat: routing-stats 歷史趨勢補齊", "status": "completed", "pr": "be27820", "completed_at": "2026-03-26T05:50:00Z"},
+    {"id": "870", "title": "feat: injection-scan.sh 自動化測試", "status": "completed", "pr": "c20da05", "completed_at": "2026-03-26T05:30:00Z"},
+    {"id": "865", "title": "feat: measure-complexity.sh 自動化測試", "status": "completed", "pr": "9239de1", "completed_at": "2026-03-26T05:30:00Z"}
   ],
   "current_step": "all-complete",
   "sprint_status": "completed",
-  "updated_at": "2026-03-26T04:01:40Z"
+  "updated_at": "2026-03-26T06:05:00Z"
 }
