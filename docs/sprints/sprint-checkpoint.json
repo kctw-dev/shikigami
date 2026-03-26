@@ -1,13 +1,42 @@
 {
-  "sprint": 168,
+  "sprint": 169,
+  "updated_at": "2026-03-26T06:42:37Z",
   "stories": [
-    {"id": "864", "title": "retro: Backlog 嚴重不足", "status": "completed", "completed_at": "2026-03-26T06:00:00Z"},
-    {"id": "863", "title": "retro: routing-stats haiku 比例偏低", "status": "completed", "pr": "1872e02", "completed_at": "2026-03-26T05:45:00Z"},
-    {"id": "867", "title": "feat: routing-stats 歷史趨勢補齊", "status": "completed", "pr": "be27820", "completed_at": "2026-03-26T05:50:00Z"},
-    {"id": "870", "title": "feat: injection-scan.sh 自動化測試", "status": "completed", "pr": "c20da05", "completed_at": "2026-03-26T05:30:00Z"},
-    {"id": "865", "title": "feat: measure-complexity.sh 自動化測試", "status": "completed", "pr": "9239de1", "completed_at": "2026-03-26T05:30:00Z"}
-  ],
-  "current_step": "all-complete",
-  "sprint_status": "completed",
-  "updated_at": "2026-03-26T06:05:00Z"
+    {
+      "id": "879",
+      "status": "completed",
+      "merge_commit": "f6213cf",
+      "pr": "#888"
+    },
+    {
+      "id": "885",
+      "status": "completed",
+      "merge_commit": "dcbf499",
+      "pr": "#893"
+    },
+    {
+      "id": "884",
+      "status": "completed",
+      "merge_commit": "ed687e03",
+      "pr": "#889"
+    },
+    {
+      "id": "883",
+      "status": "completed",
+      "merge_commit": "b8313db",
+      "pr": "#890"
+    },
+    {
+      "id": "881",
+      "status": "completed",
+      "merge_commit": "1d3eb8c",
+      "pr": "#891"
+    },
+    {
+      "id": "871",
+      "status": "completed",
+      "merge_commit": "aae6892",
+      "pr": "#892"
+    }
+  ]
 }

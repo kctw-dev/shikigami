@@ -13,12 +13,12 @@
 
 | Story | Issue | Size | Points | Story Type | Routing Tier | 狀態 |
 |-------|-------|------|--------|-----------|-------------|------|
-| feat: memory-aware-dispatch.sh 自動化測試 | #879 | S | 1 | TEST | haiku（強制） | TODO |
-| retro: 歷史路由記錄補回與審計 | #885 | S | 1 | INFRA/AUDIT | sonnet | TODO |
-| feat: validate-schema-contracts.sh 自動化測試 | #884 | S | 1 | TEST | haiku（強制） | TODO |
-| feat: validate-a2a-schema.sh 自動化測試 | #883 | S | 1 | TEST | haiku（強制） | TODO |
-| feat: validate-trace-log.sh 自動化測試 | #881 | S | 1 | TEST | haiku（強制） | TODO |
-| feat: detect-story-overlap.sh 自動化測試 | #871 | S | 1 | TEST | haiku（強制） | TODO |
+| feat: memory-aware-dispatch.sh 自動化測試 | #879 | S | 1 | TEST | haiku（強制） | DONE (#888) |
+| retro: 歷史路由記錄補回與審計 | #885 | S | 1 | INFRA/AUDIT | sonnet | DONE (#893) |
+| feat: validate-schema-contracts.sh 自動化測試 | #884 | S | 1 | TEST | haiku（強制） | DONE (#889) |
+| feat: validate-a2a-schema.sh 自動化測試 | #883 | S | 1 | TEST | haiku（強制） | DONE (#890) |
+| feat: validate-trace-log.sh 自動化測試 | #881 | S | 1 | TEST | haiku（強制） | DONE (#891) |
+| feat: detect-story-overlap.sh 自動化測試 | #871 | S | 1 | TEST | haiku（強制） | DONE (#892) |
 
 **總計：6 pts**
 
