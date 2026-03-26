@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新：2026-03-26（Sprint 173 Planning 完成）**
-**當前 Sprint**：Sprint 173（進行中，0/5 DONE，6 pts，0%）
+**最後更新：2026-03-26（Sprint 173 Execution 完成，6 pts，100%）**
+**當前 Sprint**：Sprint 173（完成，5/5 DONE，6 pts，100%）
 
 ---
 
@@ -12,11 +12,11 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: 驗證腳本整合測試補齊 | #886 | M | 2 | TODO |
-| feat: 複雜度趨勢追蹤 — measure-complexity 歷史記錄與增速預警 | #848 | S | 1 | TODO |
-| feat: Cruise Log 搜尋增強 — type 篩選、時間範圍、統計摘要 | #842 | S | 1 | TODO |
-| retro: validate-orphans.sh 整合測試效能優化 — 14s > 10s NFR1 門檻 | #898 | S | 1 | TODO |
-| retro: routing-stats.sh 支援 custom section 保護 | #896 | S | 1 | TODO |
+| retro: 驗證腳本整合測試補齊 | #886 | M | 2 | DONE (#918) |
+| feat: 複雜度趨勢追蹤 — measure-complexity 歷史記錄與增速預警 | #848 | S | 1 | DONE (#914) |
+| feat: Cruise Log 搜尋增強 — type 篩選、時間範圍、統計摘要 | #842 | S | 1 | DONE (#915) |
+| retro: validate-orphans.sh 整合測試效能優化 — 14s > 10s NFR1 門檻 | #898 | S | 1 | DONE (#916) |
+| retro: routing-stats.sh 支援 custom section 保護 | #896 | S | 1 | DONE (#917) |
 
 ---
 

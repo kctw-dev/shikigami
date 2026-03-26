@@ -13,11 +13,11 @@
 
 | Story | 標題 | Size | pts | Story Type | Risk Score | Routing Tier | 平行分群 | 狀態 |
 |-------|------|------|-----|-----------|-----------|-------------|---------|------|
-| US-#886 | retro: 驗證腳本整合測試補齊 | M | 2 | TEST | 6 | sonnet | Group C | TODO |
-| US-#848 | feat: 複雜度趨勢追蹤 — measure-complexity 歷史記錄與增速預警 | S | 1 | FEATURE | 5 | haiku（強制） | Group A | TODO |
-| US-#842 | feat: Cruise Log 搜尋增強 — type 篩選、時間範圍、統計摘要 | S | 1 | FEATURE | 5 | haiku（強制） | Group A | TODO |
-| US-#898 | retro: validate-orphans.sh 整合測試效能優化 — 14s > 10s NFR1 門檻 | S | 1 | TEST | 5 | haiku（強制） | Group B | TODO |
-| US-#896 | retro: routing-stats.sh 支援 custom section 保護 | S | 1 | FEATURE | 5 | haiku（強制） | Group B | TODO |
+| US-#886 | retro: 驗證腳本整合測試補齊 | M | 2 | TEST | 6 | sonnet | Group C | DONE（PR #918） |
+| US-#848 | feat: 複雜度趨勢追蹤 — measure-complexity 歷史記錄與增速預警 | S | 1 | FEATURE | 5 | haiku（強制） | Group A | DONE（PR #914） |
+| US-#842 | feat: Cruise Log 搜尋增強 — type 篩選、時間範圍、統計摘要 | S | 1 | FEATURE | 5 | haiku（強制） | Group A | DONE（PR #915） |
+| US-#898 | retro: validate-orphans.sh 整合測試效能優化 — 14s > 10s NFR1 門檻 | S | 1 | TEST | 5 | haiku（強制） | Group B | DONE（PR #916） |
+| US-#896 | retro: routing-stats.sh 支援 custom section 保護 | S | 1 | FEATURE | 5 | haiku（強制） | Group B | DONE（PR #917） |
 
 **總計：6 pts**
 

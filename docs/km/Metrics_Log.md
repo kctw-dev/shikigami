@@ -442,3 +442,13 @@ model-route #863 tier=1 score=5 model=haiku reason=backfill-from-sprint-168
 model-route #867 tier=1 score=5 model=haiku reason=backfill-from-sprint-168
 model-route #870 tier=1 score=4 model=haiku reason=backfill-from-sprint-168
 model-route #865 tier=1 score=4 model=haiku reason=backfill-from-sprint-168
+
+### Sprint 173 Model Routing
+
+| Story | Model Used | Tier | Risk Score | 路由原因 |
+|-------|-----------|------|-----------|----------|
+| #886 | sonnet | 2 | 6 | TEST M-size，多模組協調，Score 6 → sonnet |
+| #848 | haiku | 1 | 5 | FEATURE S-size，haiku-eligible，Score 5 → haiku 強制 |
+| #842 | haiku | 1 | 5 | FEATURE S-size，haiku-eligible，Score 5 → haiku 強制 |
+| #898 | haiku | 1 | 5 | TEST S-size，haiku-eligible，Score 5 → haiku 強制 |
+| #896 | haiku | 1 | 5 | FEATURE S-size，haiku-eligible，Score 5 → haiku 強制 |
