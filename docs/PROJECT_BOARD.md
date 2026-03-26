@@ -1,7 +1,22 @@
 # Project Board
 
-**最後更新**：2026-03-26（Sprint 167 Execution 完成）
-**當前 Sprint**：Sprint 167（Execution 完成，5/5 Stories DONE）
+**最後更新**：2026-03-26（Sprint 168 Planning 完成）
+**當前 Sprint**：Sprint 168（Planning 完成，0/5 Stories TODO）
+
+---
+
+## Sprint 168（Sprint Backlog）
+
+> Sprint Goal：可觀測性強化 x 測試防護補齊 — Backlog Discovery 補充、路由歷史修正、高 RICE 測試覆蓋優先交付
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: Backlog 嚴重不足 | #864 | M | 2 | TODO |
+| retro: routing-stats haiku 比例偏低 | #863 | S | 1 | TODO |
+| feat: routing-stats 歷史趨勢補齊 | #867 | S | 1 | TODO |
+| feat: injection-scan.sh 自動化測試 | #870 | S | 1 | TODO |
+| feat: measure-complexity.sh 自動化測試 | #865 | S | 1 | TODO |
 
 ---
 

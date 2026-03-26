@@ -403,3 +403,20 @@ Sprint Execution 中各 Story 的 model 路由決策記錄。格式：`model-rou
 - Sprint 167 haiku ratio = 3/5 = 60%（超過 ADR-039 要求的 20%）
 - #857 LOG Tier-1（haiku）首次應用於 retro-action 文件類修改
 - #843/#841 TEST Tier-1（haiku）— 測試腳本新增為低風險 fixture 隔離任務
+
+### Sprint 168 Model Routing
+
+| Story | Model Used | Tier | Risk Score | 路由原因 |
+|-------|-----------|------|-----------|---------|
+| #864  | sonnet    | 2    | 8          | PROCESS type retro-action, Backlog Discovery 產出多 Issue 含 AC/RICE（R=2,S=2,C=2,N=2） |
+| #863  | haiku     | 1    | 5          | LOG type retro-action, routing-stats 調查唯讀分析（R=1,S=1,C=2,N=1） |
+| #867  | haiku     | 1    | 5          | INFRA type, Metrics_Log.md 歷史記錄補齊，唯讀調查+doc修改（R=1,S=1,C=2,N=1） |
+| #870  | haiku     | 1    | 4          | TEST type，新增測試腳本，fixture隔離（R=1,S=1,C=1,N=1） |
+| #865  | haiku     | 1    | 4          | TEST type，新增測試腳本，fixture隔離（R=1,S=1,C=1,N=1） |
+
+### 說明
+
+- Sprint 168 haiku ratio = 4/5 = 80%（超過 ADR-039 要求的 20%）
+- #864 PROCESS Tier-2（sonnet）— Backlog Discovery 需生成多個含 User Story+AC+RICE 的 Issue，風險較高
+- #863/#867 Tier-1（haiku）— 唯讀調查與 doc 修改，低風險
+- #870/#865 TEST Tier-1（haiku）— 測試腳本新增為低風險 fixture 隔離任務
