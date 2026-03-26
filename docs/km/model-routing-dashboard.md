@@ -1,8 +1,8 @@
 # ADR-039 Model Routing Dashboard
 
 > 本文件由 `scripts/routing-stats.sh` 自動產生，請勿手動修改。
-> 最後更新：2026-03-26 17:37:08
-> 資料範圍：最近 10 個 Sprint（Sprint 162 163 164 165 166 167 168 169 170 171）
+> 最後更新：2026-03-26 18:52:41
+> 資料範圍：最近 10 個 Sprint（Sprint 164 165 166 167 168 169 170 171 172 173）
 
 ## Tier 分布
 
@@ -36,3 +36,7 @@
 
 - ADR-039 Token Cost Routing：`docs/adr/ADR-039-token-cost-routing.md`
 - Sprint Planning 路由記錄格式：`model-route #N tier=X score=Y model=M reason=說明`
+
+<!-- custom-section-start -->
+
+<!-- custom-section-end -->

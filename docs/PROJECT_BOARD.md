@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新：2026-03-26（Sprint 173 Execution 完成，6 pts，100%）**
-**當前 Sprint**：Sprint 173（完成，5/5 DONE，6 pts，100%）
+**最後更新：2026-03-26（Sprint 173 Review 完成，6 pts，100%）**
+**當前 Sprint**：Sprint 173（Review 完成，5/5 DONE，6 pts，100%）
 
 ---
 

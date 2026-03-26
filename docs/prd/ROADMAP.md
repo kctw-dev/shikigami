@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.114.0**（Sprint 172 — 補齊 Retro Action 文件規範、建立 Routing History 正式 Schema、並交付 Backlog 健康度自動告警機制）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.115.0**（Sprint 173 — 補齊驗證腳本整合測試基礎建設、強化 Cruise Log 搜尋與複雜度趨勢追蹤）。
 
 | 版號 | 含義 |
 |------|------|
