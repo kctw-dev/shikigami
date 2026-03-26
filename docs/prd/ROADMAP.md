@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-26（Sprint 167 完成 — 工具品質與可觀測性強化：model-route 記錄補齊、ADR/Gemini/Orphan 驗證自動化、Shoot Log 統計）
+> 最後更新：2026-03-26（Sprint 168 完成 — 可觀測性強化 x 測試防護補齊：Backlog Discovery 補充、路由歷史修正、injection-scan/measure-complexity 自動化測試）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.109.0**（Sprint 167 — 工具品質與可觀測性強化：model-route 記錄補齊、ADR/Gemini/Orphan 驗證自動化、Shoot Log 統計）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.110.0**（Sprint 168 — 可觀測性強化 x 測試防護補齊：Backlog Discovery 補充、路由歷史修正、injection-scan/measure-complexity 自動化測試）。
 
 | 版號 | 含義 |
 |------|------|
