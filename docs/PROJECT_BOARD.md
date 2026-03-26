@@ -1,7 +1,21 @@
 # Project Board
 
-**最後更新：2026-03-26（Sprint 174 Review 完成）**
-**當前 Sprint**：Sprint 174（Review 完成，4/4 DONE，5 pts）
+**最後更新：2026-03-26（Sprint 175 Planning 完成）**
+**當前 Sprint**：Sprint 175（進行中，0/4 DONE，0/7 pts）
+
+---
+
+## Sprint 175（Sprint Backlog）
+
+> Sprint Goal：強化 Hook 基礎建設可靠性與開發標準，並落地 Backlog 水位監控機制 — 交付 Hook 執行超時與隔離機制、Hook 開發標準規範、Hook 整合測試套件，以及 sprint-candidate 水位持續監控流程
+> **容量**：7 pts | **Velocity 基準**：avg 6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: Hook 執行超時與隔離機制 | #923 | M | 2 | 待開始 |
+| chore: 建立 Hook 開發標準規範 | #924 | M | 2 | 待開始 |
+| test: Hook 整合測試補齊 | #925 | M | 2 | 待開始 |
+| retro: sprint-candidate 水位持續監控與補充機制 | #934 | S | 1 | 待開始 |
 
 ---
 
