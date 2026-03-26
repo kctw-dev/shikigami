@@ -12,12 +12,12 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: 為 #894 #895 #886 補充非功能性需求欄位 | #899 | S | 1 | TODO |
-| feat: Sprint Goal 達成率歷史追蹤 | #874 | S | 1 | TODO |
-| feat: Sprint Metrics 歷史趨勢儀表板 | #869 | S | 1 | TODO |
-| feat: ADR 老化偵測 | #868 | S | 1 | TODO |
-| feat: ci-health-check.sh 自動化測試 | #876 | S | 1 | TODO |
-| retro: 測試輔助規範 — REPO_ROOT 環境變數覆蓋機制 | #900 | S | 1 | TODO |
+| retro: 為 #894 #895 #886 補充非功能性需求欄位 | #899 | S | 1 | DONE (#901) |
+| feat: Sprint Goal 達成率歷史追蹤 | #874 | S | 1 | DONE (#902) |
+| feat: Sprint Metrics 歷史趨勢儀表板 | #869 | S | 1 | DONE (#903) |
+| feat: ADR 老化偵測 | #868 | S | 1 | DONE (#905) |
+| feat: ci-health-check.sh 自動化測試 | #876 | S | 1 | DONE (#904) |
+| retro: 測試輔助規範 — REPO_ROOT 環境變數覆蓋機制 | #900 | S | 1 | DONE (#906) |
 
 ---
 

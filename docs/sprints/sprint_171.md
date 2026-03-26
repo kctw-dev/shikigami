@@ -13,12 +13,12 @@
 
 | Story | 標題 | Size | pts | Story Type | Risk Score | Routing Tier | 狀態 |
 |-------|------|------|-----|-----------|-----------|-------------|------|
-| US-#899 | retro: 為 #894 #895 #886 補充非功能性需求欄位 | S | 1 | DOC | 4 | haiku（強制） | TODO |
-| US-#874 | feat: Sprint Goal 達成率歷史追蹤 — sprint_*.md 目標達成統計分析 | S | 1 | INFRA | 5 | haiku（強制） | TODO |
-| US-#869 | feat: Sprint Metrics 歷史趨勢儀表板 — metrics-log 多 Sprint 比較分析 | S | 1 | INFRA | 5 | haiku（強制） | TODO |
-| US-#868 | feat: ADR 老化偵測 — 超過 90 天未更新的 Accepted ADR 自動告警 | S | 1 | INFRA | 5 | haiku（強制） | TODO |
-| US-#876 | feat: ci-health-check.sh 自動化測試 — CI 健康檢查腳本單元測試 | S | 1 | TEST | 5 | haiku（強制） | TODO |
-| US-#900 | retro: 測試輔助規範 — 腳本應提供 REPO_ROOT 環境變數覆蓋機制 | S | 1 | DOC | 4 | haiku（強制） | TODO |
+| US-#899 | retro: 為 #894 #895 #886 補充非功能性需求欄位 | S | 1 | DOC | 4 | haiku（強制） | DONE (#901) |
+| US-#874 | feat: Sprint Goal 達成率歷史追蹤 — sprint_*.md 目標達成統計分析 | S | 1 | INFRA | 5 | haiku（強制） | DONE (#902) |
+| US-#869 | feat: Sprint Metrics 歷史趨勢儀表板 — metrics-log 多 Sprint 比較分析 | S | 1 | INFRA | 5 | haiku（強制） | DONE (#903) |
+| US-#868 | feat: ADR 老化偵測 — 超過 90 天未更新的 Accepted ADR 自動告警 | S | 1 | INFRA | 5 | haiku（強制） | DONE (#905) |
+| US-#876 | feat: ci-health-check.sh 自動化測試 — CI 健康檢查腳本單元測試 | S | 1 | TEST | 5 | haiku（強制） | DONE (#904) |
+| US-#900 | retro: 測試輔助規範 — 腳本應提供 REPO_ROOT 環境變數覆蓋機制 | S | 1 | DOC | 4 | haiku（強制） | DONE (#906) |
 
 **總計：6 pts**
 
