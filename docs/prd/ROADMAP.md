@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-26（Sprint 165 完成 — 建立核心腳本測試防護網：bump-version、init-project、validate 系列與 Watchdog 自動化測試，153 tests PASS）
+> 最後更新：2026-03-26（Sprint 167 完成 — 工具品質與可觀測性強化：model-route 記錄補齊、ADR/Gemini/Orphan 驗證自動化、Shoot Log 統計）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.108.0**（Sprint 166 — 強化流程紀律：PR 強制化、haiku 路由規則自動化、Backlog 健康觸發、validate-xrefs 測試）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.109.0**（Sprint 167 — 工具品質與可觀測性強化：model-route 記錄補齊、ADR/Gemini/Orphan 驗證自動化、Shoot Log 統計）。
 
 | 版號 | 含義 |
 |------|------|
