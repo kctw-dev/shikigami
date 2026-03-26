@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新：2026-03-26（Sprint 172 Planning 完成）**
-**當前 Sprint**：Sprint 172（進行中，0/5 TODO，6 pts）
+**最後更新：2026-03-26（Sprint 172 Review 完成，v0.114.0）**
+**當前 Sprint**：Sprint 172（完成，5/5 DONE，6 pts，100%）
 
 ---
 
@@ -12,11 +12,11 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: script-testability-guide 補充 grep+set-e 陷阱說明 | #907 | S | 1 | TODO |
-| retro: script-testability-guide 補充 sentinel 字串衝突防護指引 | #908 | S | 1 | TODO |
-| feat: Backlog Health 自動告警 — sprint-candidate 低水位 GitHub Issue 通知 | #882 | M | 2 | TODO |
-| retro: 建立 routing-history schema 規格文件 | #895 | S | 1 | TODO |
-| retro: validate-a2a-schema.sh 補充 story_id integer 型別文件 | #894 | S | 1 | TODO |
+| retro: script-testability-guide 補充 grep+set-e 陷阱說明 | #907 | S | 1 | DONE (#911) |
+| retro: script-testability-guide 補充 sentinel 字串衝突防護指引 | #908 | S | 1 | DONE (#913) |
+| feat: Backlog Health 自動告警 — sprint-candidate 低水位 GitHub Issue 通知 | #882 | M | 2 | DONE (#912) |
+| retro: 建立 routing-history schema 規格文件 | #895 | S | 1 | DONE (#909) |
+| retro: validate-a2a-schema.sh 補充 story_id integer 型別文件 | #894 | S | 1 | DONE (#910) |
 
 ---
 

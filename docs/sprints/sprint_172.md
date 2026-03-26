@@ -13,11 +13,11 @@
 
 | Story | 標題 | Size | pts | Story Type | Risk Score | Routing Tier | 平行分群 | 狀態 |
 |-------|------|------|-----|-----------|-----------|-------------|---------|------|
-| US-#907 | retro: script-testability-guide 補充 grep+set-e 陷阱說明 | S | 1 | DOC | 4 | haiku | Group A（順序 1） | TODO |
-| US-#908 | retro: script-testability-guide 補充 sentinel 字串衝突防護指引 | S | 1 | DOC | 4 | haiku | Group A（順序 2） | TODO |
-| US-#882 | feat: Backlog Health 自動告警 — sprint-candidate 低水位 GitHub Issue 通知 | M | 2 | INFRA | 6 | sonnet | Group B | TODO |
-| US-#895 | retro: 建立 routing-history schema 規格文件 | S | 1 | DOC | 4 | haiku | Group B | TODO |
-| US-#894 | retro: validate-a2a-schema.sh 補充 story_id integer 型別文件 | S | 1 | DOC | 4 | haiku | Group B | TODO |
+| US-#907 | retro: script-testability-guide 補充 grep+set-e 陷阱說明 | S | 1 | DOC | 4 | haiku | Group A（順序 1） | DONE（PR #911） |
+| US-#908 | retro: script-testability-guide 補充 sentinel 字串衝突防護指引 | S | 1 | DOC | 4 | haiku | Group A（順序 2） | DONE（PR #913） |
+| US-#882 | feat: Backlog Health 自動告警 — sprint-candidate 低水位 GitHub Issue 通知 | M | 2 | INFRA | 6 | sonnet | Group B | DONE（PR #912） |
+| US-#895 | retro: 建立 routing-history schema 規格文件 | S | 1 | DOC | 4 | haiku | Group B | DONE（PR #909） |
+| US-#894 | retro: validate-a2a-schema.sh 補充 story_id integer 型別文件 | S | 1 | DOC | 4 | haiku | Group B | DONE（PR #910） |
 
 **總計：6 pts**
 
@@ -57,6 +57,26 @@
 
 - **Group A 順序依賴**：#907 與 #908 修改同一檔案，必須依序執行，若 #907 延誤則 #908 連帶受阻 → 緩解：兩個都是 S(1) DOC，低風險
 - **#882 gh CLI 依賴**：Backlog Health 告警需要 gh CLI 認證與 Issue 建立權限 → 緩解：CI 環境已有 GITHUB_TOKEN
+
+---
+
+## Sprint Review 結果
+
+**Review 日期**：2026-03-26
+**版本**：v0.114.0
+
+| Story | PR | Merge Commit | 驗收 |
+|-------|-----|-------------|------|
+| US-#907 | #911 | `34c21cd` | PASS |
+| US-#908 | #913 | `3800a4b` | PASS |
+| US-#882 | #912 | `cbfdc97` | PASS |
+| US-#895 | #909 | `79ae69c` | PASS |
+| US-#894 | #910 | `36eae57` | PASS |
+
+- **Velocity**：6 pts
+- **Completion Rate**：100%（5/5）
+- **Sprint Goal 達成**：YES
+- **SPACE**：4.8/5
 
 ---
 

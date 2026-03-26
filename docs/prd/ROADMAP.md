@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.113.0**（Sprint 171 — 可觀測性工具補齊 x Retro Action 清倉：NFR 補充、sprint-goal-stats/sprint-metrics-trend/adr-status-dashboard --check-staleness/ci-health-check 單元測試、script-testability-guide.md 建立）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.114.0**（Sprint 172 — 補齊 Retro Action 文件規範、建立 Routing History 正式 Schema、並交付 Backlog 健康度自動告警機制）。
 
 | 版號 | 含義 |
 |------|------|
