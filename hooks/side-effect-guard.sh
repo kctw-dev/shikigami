@@ -3,12 +3,20 @@
 # Story #405 — Crash Recovery: Side Effect Idempotency Guard
 # ADR-041 決策 4：Guard-before-Execute 模式
 #
+# Hook 類別: utility（source 載入，提供 check/record 函式）
+#
 # 使用方式：
 #   source hooks/side-effect-guard.sh
 #   if check_side_effect "$EFFECT_TYPE" "$IDEMPOTENCY_KEY"; then
 #     <執行操作>
 #     record_side_effect "$EFFECT_TYPE" "$IDEMPOTENCY_KEY"
 #   fi
+#
+# 輸出標記（stdout）：
+#   [SIDE-EFFECT-GUARD-SKIP]  — 操作已執行過，冪等保護觸發
+#   [SIDE-EFFECT-GUARD-PASS]  — 首次執行，允許繼續
+#
+# 失敗行為：降級繼續（check_side_effect 失敗時回傳 true，允許操作執行）
 
 # ── 路徑解析 ──
 # 支援 SE_LOG_OVERRIDE 覆蓋（測試用）

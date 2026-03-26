@@ -2,6 +2,8 @@
 # hooks/worktree-cleanup.sh
 # Issue #500 — SessionEnd / Sprint Review 後自動清理殘留 worktree
 #
+# Hook 類別: settle（SessionEnd 後清理）
+#
 # 功能：
 #   - 掃描 .claude/worktrees/ 目錄，找出所有殘留 worktree
 #   - 檢查每個 worktree 是否有活躍進程（NFR1：不刪執行中的 subagent）
@@ -10,6 +12,13 @@
 #
 # 環境變數：
 #   DRY_RUN=1   — 只掃描不刪除，輸出預計清理的 worktree 列表
+#
+# 輸出標記（stdout）：
+#   [WORKTREE-CLEANUP-OK]    — 清理完成（含清理數量）
+#   [WORKTREE-CLEANUP-SKIP]  — 無殘留 worktree 需清理
+#   [WORKTREE-CLEANUP-WARN]  — 清理失敗（部分 worktree 仍有進程），降級繼續
+#
+# 失敗行為：降級繼續（`set +e`），單一 worktree 清理失敗不影響其他
 #
 # 輸出標記：
 #   [WORKTREE-CLEANUP] 清除 N 個殘留 worktree，釋放 X MB

@@ -2,8 +2,17 @@
 # low-mode-guard.sh — project_level=low 確認語句攔截
 # Stop hook：偵測 agent 輸出含確認語句，block 並要求直接執行
 #
+# Hook 類別: gate（Stop event 觸發）
+#
 # 觸發時機：agent 每次回應完成後（Stop event）
 # 行為：讀取 CLAUDE_TOOL_INPUT（agent 輸出），比對確認語句模式
+#
+# 輸出標記（stdout）：
+#   [LOW-MODE-GUARD-BLOCK]  — 偵測到確認語句，要求直接執行
+#   [LOW-MODE-GUARD-PASS]   — 無確認語句，允許通過
+#   [LOW-MODE-GUARD-SKIP]   — project_level != low，不適用
+#
+# 失敗行為：exit 1 阻擋（Gate Hook，project_level=low 下嚴格執行）
 
 set -euo pipefail
 
