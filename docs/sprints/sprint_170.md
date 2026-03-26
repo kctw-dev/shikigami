@@ -13,12 +13,12 @@
 
 | Story | Issue | Size | Points | Story Type | Routing Tier | 狀態 |
 |-------|-------|------|--------|-----------|-------------|------|
-| feat: review-suggestion-audit.sh 自動化測試 | #880 | S | 1 | TEST | haiku（強制） | TODO |
-| feat: logrotate.sh 自動化測試 | #878 | S | 1 | TEST | haiku（強制） | TODO |
-| feat: analyze-dependencies.sh 自動化測試 | #877 | S | 1 | TEST | haiku（強制） | TODO |
-| feat: validate-orphans.sh 整合測試 | #875 | S | 1 | TEST | haiku（強制） | TODO |
-| feat: update-adr-index.sh 自動化測試 | #873 | S | 1 | TEST | haiku（強制） | TODO |
-| feat: predict-conflicts.sh 自動化測試 | #866 | S | 1 | TEST | haiku（強制） | TODO |
+| feat: review-suggestion-audit.sh 自動化測試 | #880 | S | 1 | TEST | haiku（強制） | DONE (#897) |
+| feat: logrotate.sh 自動化測試 | #878 | S | 1 | TEST | haiku（強制） | DONE (#897) |
+| feat: analyze-dependencies.sh 自動化測試 | #877 | S | 1 | TEST | haiku（強制） | DONE (#897) |
+| feat: validate-orphans.sh 整合測試 | #875 | S | 1 | TEST | haiku（強制） | DONE (#897) |
+| feat: update-adr-index.sh 自動化測試 | #873 | S | 1 | TEST | haiku（強制） | DONE (#897) |
+| feat: predict-conflicts.sh 自動化測試 | #866 | S | 1 | TEST | haiku（強制） | DONE (#897) |
 
 **總計：6 pts**
 

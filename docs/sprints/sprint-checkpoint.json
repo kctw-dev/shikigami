@@ -1,42 +1,12 @@
 {
-  "sprint": 169,
-  "updated_at": "2026-03-26T06:42:37Z",
+  "sprint": 170,
+  "updated_at": "2026-03-26T15:30:00Z",
   "stories": [
-    {
-      "id": "879",
-      "status": "completed",
-      "merge_commit": "f6213cf",
-      "pr": "#888"
-    },
-    {
-      "id": "885",
-      "status": "completed",
-      "merge_commit": "dcbf499",
-      "pr": "#893"
-    },
-    {
-      "id": "884",
-      "status": "completed",
-      "merge_commit": "ed687e03",
-      "pr": "#889"
-    },
-    {
-      "id": "883",
-      "status": "completed",
-      "merge_commit": "b8313db",
-      "pr": "#890"
-    },
-    {
-      "id": "881",
-      "status": "completed",
-      "merge_commit": "1d3eb8c",
-      "pr": "#891"
-    },
-    {
-      "id": "871",
-      "status": "completed",
-      "merge_commit": "aae6892",
-      "pr": "#892"
-    }
+    {"id": "880", "status": "completed", "merge_commit": "a2c5417", "pr": "#897"},
+    {"id": "878", "status": "completed", "merge_commit": "a2c5417", "pr": "#897"},
+    {"id": "877", "status": "completed", "merge_commit": "a2c5417", "pr": "#897"},
+    {"id": "875", "status": "completed", "merge_commit": "a2c5417", "pr": "#897"},
+    {"id": "873", "status": "completed", "merge_commit": "a2c5417", "pr": "#897"},
+    {"id": "866", "status": "completed", "merge_commit": "a2c5417", "pr": "#897"}
   ]
 }

@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-26（Sprint 170 Planning 完成）
-**當前 Sprint**：Sprint 170（進行中，0/6 Stories DONE）
+**最後更新：2026-03-26（Sprint 170 Execution 完成，6/6 Stories DONE）
+**當前 Sprint**：Sprint 170（Review 待確認，6/6 Stories DONE，#897）
 
 ---
 
@@ -12,12 +12,12 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: review-suggestion-audit.sh 自動化測試 | #880 | S | 1 | TODO |
-| feat: logrotate.sh 自動化測試 | #878 | S | 1 | TODO |
-| feat: analyze-dependencies.sh 自動化測試 | #877 | S | 1 | TODO |
-| feat: validate-orphans.sh 整合測試 | #875 | S | 1 | TODO |
-| feat: update-adr-index.sh 自動化測試 | #873 | S | 1 | TODO |
-| feat: predict-conflicts.sh 自動化測試 | #866 | S | 1 | TODO |
+| feat: review-suggestion-audit.sh 自動化測試 | #880 | S | 1 | DONE (#897) |
+| feat: logrotate.sh 自動化測試 | #878 | S | 1 | DONE (#897) |
+| feat: analyze-dependencies.sh 自動化測試 | #877 | S | 1 | DONE (#897) |
+| feat: validate-orphans.sh 整合測試 | #875 | S | 1 | DONE (#897) |
+| feat: update-adr-index.sh 自動化測試 | #873 | S | 1 | DONE (#897) |
+| feat: predict-conflicts.sh 自動化測試 | #866 | S | 1 | DONE (#897) |
 
 ---
 
@@ -44,11 +44,11 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: Backlog 嚴重不足 | #864 | M | 2 | TODO |
-| retro: routing-stats haiku 比例偏低 | #863 | S | 1 | TODO |
-| feat: routing-stats 歷史趨勢補齊 | #867 | S | 1 | TODO |
-| feat: injection-scan.sh 自動化測試 | #870 | S | 1 | TODO |
-| feat: measure-complexity.sh 自動化測試 | #865 | S | 1 | TODO |
+| retro: Backlog 嚴重不足 | #864 | M | 2 | DONE (#897) |
+| retro: routing-stats haiku 比例偏低 | #863 | S | 1 | DONE (#897) |
+| feat: routing-stats 歷史趨勢補齊 | #867 | S | 1 | DONE (#897) |
+| feat: injection-scan.sh 自動化測試 | #870 | S | 1 | DONE (#897) |
+| feat: measure-complexity.sh 自動化測試 | #865 | S | 1 | DONE (#897) |
 
 ---
 
