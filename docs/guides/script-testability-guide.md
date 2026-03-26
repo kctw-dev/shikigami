@@ -54,6 +54,39 @@ REPO_ROOT="/tmp/fixture-dir" bash scripts/my-script.sh
 
 ---
 
+## grep 搭配 set -e 的陷阱
+
+### 問題說明
+
+當腳本使用 `set -euo pipefail` 時，`grep` 未找到匹配內容會返回 exit code 1，導致腳本非預期退出。這是 grep 的設計特性（0 = 有匹配，1 = 無匹配，2+ = 錯誤），與 `set -e` 的「任何非零退出碼即停止」衝突。
+
+### 錯誤模式
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# 如果 file.log 中找不到 "ERROR"，grep 返回 1，腳本非預期終止
+ERROR_COUNT=$(grep -c "ERROR" file.log)
+echo "錯誤數：$ERROR_COUNT"
+```
+
+### 正確模式
+
+```bash
+#!/usr/bin/env bash
+set -uo pipefail
+
+# 方法 1：搭配 || true（推薦）
+ERROR_COUNT=$(grep -c "ERROR" file.log || true)
+echo "錯誤數：${ERROR_COUNT:-0}"
+
+# 方法 2：移除 set -e（若允許其他命令失敗未偵測）
+# ⚠️   僅在確實不需監控其他失敗時使用
+```
+
+---
+
 ## 測試隔離技術
 
 ### 1. Fixture 目錄（推薦）
