@@ -13,10 +13,10 @@
 
 | Story | 標題 | Size | pts | Story Type | Risk Score | Routing Tier | 平行分群 | 狀態 |
 |-------|------|------|-----|-----------|-----------|-------------|---------|------|
-| US-#919 | retro: Backlog Discovery 補充 -- sprint-candidate 水位低於閾值 | S | 1 | DISCOVERY | 4 | haiku | Batch 1 | TODO |
-| US-#922 | retro: complexity-trend.sh 定期 CI 觸發機制 | S | 1 | INFRA/CI | 6 | sonnet | Batch 1 | TODO |
-| US-#887 | retro: Backlog Discovery 流程最佳化 | S | 1 | RESEARCH | 4 | haiku | Phase 2（等 #919） | TODO |
-| US-#872 | feat: Retro Action Items 歷史分析工具 | M | 2 | FEATURE | 7 | sonnet | Batch 2 | TODO |
+| US-#919 | retro: Backlog Discovery 補充 -- sprint-candidate 水位低於閾值 | S | 1 | DISCOVERY | 4 | haiku | Batch 1 | DONE |
+| US-#922 | retro: complexity-trend.sh 定期 CI 觸發機制 | S | 1 | INFRA/CI | 6 | sonnet | Batch 1 | DONE (#931) |
+| US-#887 | retro: Backlog Discovery 流程最佳化 | S | 1 | RESEARCH | 4 | haiku | Phase 2（等 #919） | DONE (#932) |
+| US-#872 | feat: Retro Action Items 歷史分析工具 | M | 2 | FEATURE | 7 | sonnet | Batch 2 | DONE (#933) |
 
 **總計：5 pts**
 
