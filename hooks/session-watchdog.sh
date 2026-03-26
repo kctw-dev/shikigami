@@ -3,11 +3,21 @@
 # Story #408 — Session Watchdog: Hook-based Heartbeat
 # ADR-042 決策 1：每次 PostToolUse hook 觸發時更新 heartbeat 文件
 #
+# Hook 類別: settle（PostToolUse 事件，被動觸發）
+#
 # 使用方式（PostToolUse hook 或直接呼叫）：
 #   bash hooks/session-watchdog.sh
 #   SESSION_ID=my-session bash hooks/session-watchdog.sh
 #
-# 支援 WATCHDOG_HEARTBEAT_FILE 環境變數覆蓋路徑（測試用）
+# 環境變數：
+#   SESSION_ID               — Session 識別碼（可選，從 shikigami.local.md 讀取）
+#   WATCHDOG_HEARTBEAT_FILE  — 覆蓋 heartbeat 文件路徑（測試用）
+#
+# 輸出標記（stdout）：
+#   [WATCHDOG-OK]    — heartbeat 已更新
+#   [WATCHDOG-SKIP]  — 無法取得 SESSION_ID，跳過
+#
+# 失敗行為：靜默降級（heartbeat 寫入失敗不影響主流程）
 
 set -uo pipefail
 

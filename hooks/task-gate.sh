@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # task-gate.sh — #538 AC7：Sprint Execution 啟動時檢查 Task List 完整性
 #
+# Hook 類別: gate（Sprint Execution 啟動時呼叫）
+#
 # 用途：
 #   Sprint Execution 啟動時，由 agent 主動呼叫此腳本檢查 Task List 是否已為
 #   當前 Sprint 建立對應 Task（格式：{repo}/sprint-{N}-{phase}）。
@@ -9,6 +11,12 @@
 #   「標記 + WARN 輸出」模式：
 #     - 若 SPRINT_TASK_INITIALIZED 標記不存在 → 輸出 [TASK-GATE-WARN]，要求 agent 補建 Task
 #     - 若標記存在 → [TASK-GATE-PASS]，繼續執行
+#
+# 輸出標記（stdout）：
+#   [TASK-GATE-PASS]  — Task List 已初始化，可繼續執行
+#   [TASK-GATE-WARN]  — Task List 未初始化，要求 agent 補建後繼續
+#
+# 失敗行為：輸出 WARN 後不阻塞（agent 自行決定是否補建 Task）
 #
 # 呼叫方式（由 agent 在 Sprint Execution 啟動時執行）：
 #   SPRINT_NUM=<N> bash hooks/task-gate.sh
