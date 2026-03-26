@@ -13,10 +13,10 @@
 
 | Story | 標題 | Size | pts | Story Type | Risk Score | Routing Tier | 平行分群 | 狀態 |
 |-------|------|------|-----|-----------|-----------|-------------|---------|------|
-| US-#923 | feat: Hook 執行超時與隔離機制 | M | 2 | FEATURE | 7 | sonnet | Batch 1 | 待開始 |
-| US-#924 | chore: 建立 Hook 開發標準規範 | M | 2 | DOC | 4 | haiku（強制） | Batch 1 | 待開始 |
-| US-#925 | test: Hook 整合測試補齊 | M | 2 | TEST | 5 | haiku（強制） | Batch 2 | 待開始 |
-| US-#934 | retro: sprint-candidate 水位持續監控與補充機制 | S | 1 | CHORE | 3 | haiku（強制） | Batch 2 | 待開始 |
+| US-#923 | feat: Hook 執行超時與隔離機制 | M | 2 | FEATURE | 7 | sonnet | Batch 1 | 完成（PR #936, b895904） |
+| US-#924 | chore: 建立 Hook 開發標準規範 | M | 2 | DOC | 4 | haiku（強制） | Batch 1 | 完成（PR #937, b264772） |
+| US-#925 | test: Hook 整合測試補齊 | M | 2 | TEST | 5 | haiku（強制） | Batch 2 | 完成（PR #938, 6b8d27f） |
+| US-#934 | retro: sprint-candidate 水位持續監控與補充機制 | S | 1 | CHORE | 3 | haiku（強制） | Batch 2 | 完成（PR #943, 9dc2994） |
 
 **總計：7 pts**
 
