@@ -988,3 +988,25 @@
 
 ### Action Items
 - routing-stats.sh 新增 model-route 格式驗證警告（#767）
+
+---
+
+## Sprint 174（2026-03-26）
+
+**Sprint Goal**：提升 Backlog 健康度與 CI 資料積累品質 -- 補充 sprint-candidate 水位、優化 Discovery 流程、建立 Retro Action 分析工具，並讓 complexity-trend 資料自動持續積累
+**結果**：Goal 達成（4/4 Stories PASS）
+
+### Good
+- 全部 4 Stories 完成，Sprint Goal 達成，Velocity 5 pts 與計畫完全一致
+- retro-action-analysis.sh TDD Green phase 完整，AC1-AC5 及 NFR 全覆蓋（#872）
+- #919 Discovery 產出 8 個高品質 sprint-candidate（#923-#930），Hook 框架與測試方向清晰
+- complexity-trend.yml CI 觸發機制建立，complexity 趨勢資料積累自動化解決長期問題（#922）
+- Spike Report (#887) 質量高，555 行完整分析 Discovery 流程優化方向
+
+### Problem
+- P1：sprint-candidate 水位 8 仍低於閾值 10（Review 後即觸發 [BACKLOG-REPLENISH-TRIGGER]）
+- P2：#887（RESEARCH）依賴 #919（DISCOVERY）形成序列約束，Phase 2 無法與 Batch 1 完全並行
+
+### Action Items
+- sprint-candidate 水位持續監控與補充機制（#934）
+- 評估 Discovery/RESEARCH Story 序列依賴優化機會（#935）

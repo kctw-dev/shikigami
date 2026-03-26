@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.115.0**（Sprint 173 — 補齊驗證腳本整合測試基礎建設、強化 Cruise Log 搜尋與複雜度趨勢追蹤）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.116.0**（Sprint 174 — 提升 Backlog 健康度與 CI 資料積累品質：Discovery 補充 8 sprint-candidates、complexity-trend CI 觸發機制、Discovery 流程優化 Spike、retro-action-analysis.sh 工具）。
 
 | 版號 | 含義 |
 |------|------|

@@ -1,21 +1,21 @@
 # Project Board
 
-**最後更新：2026-03-26（Sprint 174 Planning 完成）**
-**當前 Sprint**：Sprint 174（Planning 完成，0/4 DONE，5 pts）
+**最後更新：2026-03-26（Sprint 174 Review 完成）**
+**當前 Sprint**：Sprint 174（Review 完成，4/4 DONE，5 pts）
 
 ---
 
-## Sprint 174（Sprint Backlog）
+## Sprint 174（完成）
 
 > Sprint Goal：提升 Backlog 健康度與 CI 資料積累品質 -- 補充 sprint-candidate 水位、優化 Discovery 流程、建立 Retro Action 分析工具，並讓 complexity-trend 資料自動持續積累
-> **容量**：5 pts
+> **結果**：Goal 達成（4/4 Stories DONE）。Velocity 5 pts，完成率 100%。
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: Backlog Discovery 補充 -- sprint-candidate 水位低於閾值 | #919 | S | 1 | TODO |
-| retro: complexity-trend.sh 定期 CI 觸發機制 | #922 | S | 1 | TODO |
-| retro: Backlog Discovery 流程最佳化 | #887 | S | 1 | TODO |
-| feat: Retro Action Items 歷史分析工具 | #872 | M | 2 | TODO |
+| retro: Backlog Discovery 補充 -- sprint-candidate 水位低於閾值 | #919 | S | 1 | DONE |
+| retro: complexity-trend.sh 定期 CI 觸發機制 | #922 | S | 1 | DONE (#931) |
+| retro: Backlog Discovery 流程最佳化 | #887 | S | 1 | DONE (#932) |
+| feat: Retro Action Items 歷史分析工具 | #872 | M | 2 | DONE (#933) |
 
 ---
 

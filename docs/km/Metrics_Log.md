@@ -110,6 +110,7 @@ Sprint Review 完成後自動追加 Velocity、完成率與趨勢分析。
 | Sprint 129 | 2026-03-24 | 7 points | 100% | 穩定 | Goal 達成，7/7 Stories PASS；連續 100% 第 2 Sprint（128+129）；S128=8→S129=7 微降（-12.5%，±20% 內）→穩定；Retro-Action 改善 + CI OAuth 修復 + Worktree 自動清理，v0.86.0 |
 | Sprint 130 | 2026-03-24 | 5 points | 100% | 穩定 | Goal 達成，3/3 Stories PASS；連續 100% 第 3 Sprint（128+129+130）；S129=7→S130=5 微降（-28.6%，略超 ±20%）→不規則；Retro-Action 自動偵測機制 + Skill description 改善 + Node.js 20 CI 升級，v0.87.0 |
 | Sprint 131 | 2026-03-24 | 6 points | 100% | 穩定 | Goal 達成，4/4 Stories PASS；連續 100% 第 5 Sprint（128+129+130+131）；S130=5→S131=6 回升（+20%，±20% 內）→穩定；validate-skill-length.sh 品質監控 + ADR-034 browser-automation 工具選型（agent-browser，unblock #385）+ CI 升級確認時機明確化 + /shoot test→review→PR 管道，v0.88.0 |
+| Sprint 174 | 2026-03-26 | 5 points | 100% | 穩定 | Goal 達成，4/4 Stories PASS；S172=5→S173=6→S174=5，波動在 ±20% 以內→穩定；Backlog Discovery 補充 8 sprint-candidates（#923-#930）+ complexity-trend.yml CI 觸發機制 + Discovery 流程優化 Spike Report + retro-action-analysis.sh；v0.116.0 |
 
 ---
 
@@ -452,3 +453,19 @@ model-route #865 tier=1 score=4 model=haiku reason=backfill-from-sprint-168
 | #842 | haiku | 1 | 5 | FEATURE S-size，haiku-eligible，Score 5 → haiku 強制 |
 | #898 | haiku | 1 | 5 | TEST S-size，haiku-eligible，Score 5 → haiku 強制 |
 | #896 | haiku | 1 | 5 | FEATURE S-size，haiku-eligible，Score 5 → haiku 強制 |
+
+### Sprint 174 Model Routing
+
+| Story | Model Used | Tier | Risk Score | 路由原因 |
+|-------|-----------|------|-----------|----------|
+| #919 | haiku | 1 | 4 | DISCOVERY S-size，唯讀調查+issue建立（R=1,S=1,C=1,N=1） |
+| #922 | sonnet | 2 | 6 | INFRA/CI S-size，workflow 修改影響 CI pipeline（R=1,S=2,C=2,N=1） |
+| #887 | haiku | 1 | 4 | RESEARCH S-size，Spike Report 唯讀分析（R=1,S=1,C=1,N=1） |
+| #872 | sonnet | 2 | 7 | FEATURE M-size，新增腳本+文件，AC 多（R=2,S=2,C=2,N=1） |
+
+### 說明
+
+- Sprint 174 haiku ratio = 2/4 = 50%（超過 ADR-039 要求的 20%，ROUTING-OK）
+- #919 DISCOVERY Tier-1（haiku）— 唯讀調查與 Issue 建立，低風險
+- #887 RESEARCH Tier-1（haiku）— Spike Report 分析，無框架修改
+- #922/#872 Tier-2（sonnet）— CI pipeline 修改與 FEATURE M-size 腳本新增
