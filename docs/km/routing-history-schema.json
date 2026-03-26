@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/kctw-dev/shikigami/main/docs/km/routing-history-schema.json",
+  "title": "Routing History Schema",
+  "description": "ADR-039 Model Routing History — routing-history.json 的 JSON Schema 規格定義",
+  "type": "object",
+  "required": ["schema_version", "description", "updated_at", "coverage", "history"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema URI reference"
+    },
+    "schema_version": {
+      "type": "string",
+      "description": "Schema 版本號，採用 semver 格式（如 '1.0'）",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "description": "文件描述，說明記錄範圍和目的"
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "最後更新時間，ISO 8601 格式",
+      "format": "date-time"
+    },
+    "coverage": {
+      "type": "object",
+      "description": "覆蓋範圍元數據",
+      "required": ["sprint_from", "sprint_to"],
+      "properties": {
+        "sprint_from": {
+          "type": "integer",
+          "description": "覆蓋起始 Sprint 號"
+        },
+        "sprint_to": {
+          "type": "integer",
+          "description": "覆蓋結束 Sprint 號（包含）"
+        },
+        "note": {
+          "type": "string",
+          "description": "覆蓋說明備註"
+        }
+      },
+      "additionalProperties": false
+    },
+    "missing_periods": {
+      "type": "array",
+      "description": "缺漏期間記錄，列出無法取得路由決策的 Sprint 區間及原因",
+      "items": {
+        "type": "object",
+        "required": ["sprint_range", "reason"],
+        "properties": {
+          "sprint_range": {
+            "type": "string",
+            "description": "Sprint 範圍，格式：'NNN-MMM'",
+            "pattern": "^\\d+-\\d+$"
+          },
+          "reason": {
+            "type": "string",
+            "description": "缺漏原因"
+          },
+          "resolution": {
+            "type": "string",
+            "description": "修復方案說明"
+          },
+          "repaired_at": {
+            "type": "string",
+            "description": "修復日期",
+            "format": "date"
+          },
+          "repaired_by": {
+            "type": "string",
+            "description": "修復來源（Story 編號或說明）"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "history": {
+      "type": "array",
+      "description": "路由決策歷史陣列",
+      "items": {
+        "type": "object",
+        "required": ["sprint_number", "story_id", "risk_score", "routing_tier", "model", "reason"],
+        "properties": {
+          "sprint_number": {
+            "type": "integer",
+            "description": "Sprint 編號",
+            "minimum": 1
+          },
+          "story_id": {
+            "type": "string",
+            "description": "Story ID（數字或特殊值如 'backfill-estimated'）"
+          },
+          "risk_score": {
+            "type": "integer",
+            "description": "風險分數，範圍 1-12（低→高）",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "routing_tier": {
+            "type": "integer",
+            "description": "路由層級：1=haiku, 2=sonnet, 3=opus",
+            "enum": [1, 2, 3]
+          },
+          "model": {
+            "type": "string",
+            "description": "分配的 AI 模型名稱",
+            "enum": ["haiku", "sonnet", "opus"]
+          },
+          "reason": {
+            "type": "string",
+            "description": "路由決策理由，格式建議：<STORY_TYPE>-<SIZE>-<CONDITION>"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
