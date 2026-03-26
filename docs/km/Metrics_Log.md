@@ -387,3 +387,19 @@ Sprint Execution 中各 Story 的 model 路由決策記錄。格式：`model-rou
 - #622 為 Tier 1（haiku）首次套用案例：SRE 調查唯讀任務，風險分數 5
 - 其餘三 Story 均 Tier 2（sonnet），均為有實際框架修改的 FEATURE/INFRA 類
 - 後續 Sprint 從此 log 追蹤路由準確率與成本節省趨勢
+
+### Sprint 167 Model Routing
+
+| Story | Model Used | Tier | Risk Score | 路由原因 |
+|-------|-----------|------|-----------|---------|
+| #857  | haiku     | 1    | 4          | LOG type retro-action, doc修改 story-lifecycle-prompt.md §0.5（R=1,S=1,C=1,N=1） |
+| #846  | sonnet    | 2    | 6          | FEATURE script新增，影響內部工具，半範本（R=1,S=2,C=2,N=1） |
+| #843  | haiku     | 1    | 5          | TEST type，新增測試腳本，fixture隔離（R=1,S=1,C=2,N=1） |
+| #841  | haiku     | 1    | 5          | TEST type，新增測試腳本，fixture隔離（R=1,S=1,C=2,N=1） |
+| #849  | sonnet    | 2    | 6          | FEATURE script新增，影響內部工具，半範本（R=1,S=2,C=2,N=1） |
+
+### 說明
+
+- Sprint 167 haiku ratio = 3/5 = 60%（超過 ADR-039 要求的 20%）
+- #857 LOG Tier-1（haiku）首次應用於 retro-action 文件類修改
+- #843/#841 TEST Tier-1（haiku）— 測試腳本新增為低風險 fixture 隔離任務

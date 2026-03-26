@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-26（Sprint 167 Planning 完成）
-**當前 Sprint**：Sprint 167（Planning 完成，Execution 待啟動）
+**最後更新**：2026-03-26（Sprint 167 Execution 完成）
+**當前 Sprint**：Sprint 167（Execution 完成，5/5 Stories DONE）
 
 ---
 
@@ -12,11 +12,11 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: Sprint 166 model-route 記錄補齊 — Metrics_Log.md 路由記錄自動化 | #857 | S | 1 | TODO |
-| feat: ADR 狀態儀表板 — Proposed/Draft 追蹤自動化 | #846 | S | 1 | TODO |
-| feat: validate-gemini.sh 自動化測試 — Gemini CLI 擴充結構驗證 | #843 | S | 1 | TODO |
-| feat: validate-orphans.sh 自動化測試 — 孤兒偵測 allowlist 驗證 | #841 | S | 1 | TODO |
-| feat: Shoot Log 統計工具 — 成功率/吞吐量/趨勢分析 | #849 | S | 1 | TODO |
+| retro: Sprint 166 model-route 記錄補齊 — Metrics_Log.md 路由記錄自動化 | #857 | S | 1 | DONE (#858) |
+| feat: ADR 狀態儀表板 — Proposed/Draft 追蹤自動化 | #846 | S | 1 | DONE (#859) |
+| feat: validate-gemini.sh 自動化測試 — Gemini CLI 擴充結構驗證 | #843 | S | 1 | DONE (#860) |
+| feat: validate-orphans.sh 自動化測試 — 孤兒偵測 allowlist 驗證 | #841 | S | 1 | DONE (#861) |
+| feat: Shoot Log 統計工具 — 成功率/吞吐量/趨勢分析 | #849 | S | 1 | DONE (#862) |
 
 ---
 
