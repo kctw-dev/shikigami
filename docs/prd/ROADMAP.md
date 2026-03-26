@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.117.0**（Sprint 175 — 強化 Hook 基礎建設可靠性與開發標準：hook-runner.sh timeout+隔離機制、Hook 開發標準規範指南、Hook 整合測試套件、sprint-candidate 水位持續監控）。。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.118.0**（Sprint 175 — 強化 Hook 基礎建設可靠性與開發標準：hook-runner.sh timeout+隔離機制、Hook 開發標準規範指南、Hook 整合測試套件、sprint-candidate 水位持續監控）。。
 
 | 版號 | 含義 |
 |------|------|
