@@ -1,93 +1,93 @@
 {
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup|resume|clear|compact",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd' session-start",
-            "async": false
-          }
+    "hooks": {
+        "SessionStart": [
+            {
+                "matcher": "startup|resume|clear|compact",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "'${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd' session-start",
+                        "async": false
+                    }
+                ]
+            }
+        ],
+        "SessionEnd": [
+            {
+                "matcher": "",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "bash -c 'bash \"${CLAUDE_PLUGIN_ROOT}/hooks/hook-runner.sh\" \"${CLAUDE_PLUGIN_ROOT}/hooks/session-end-release.sh\"'",
+                        "async": true
+                    },
+                    {
+                        "type": "command",
+                        "command": "bash -c 'SESSION_ID=\"${SHIKIGAMI_SESSION_ID:-unknown}\"; if [ -f \"$(git rev-parse --show-toplevel 2>/dev/null || pwd)/.kill-switch/${SESSION_ID}.flag\" ]; then bash \"$(git rev-parse --show-toplevel 2>/dev/null || pwd)/hooks/kill-switch.sh\" clear \"${SESSION_ID}\" || true; fi'",
+                        "async": true
+                    }
+                ]
+            }
+        ],
+        "Stop": [],
+        "PostToolUse": [
+            {
+                "matcher": "Agent",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/posttooluse-agent-livelog.sh'",
+                        "async": true
+                    }
+                ]
+            },
+            {
+                "matcher": "",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "bash -c 'REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd); WD_HOOK=\"$REPO_ROOT/hooks/session-watchdog.sh\"; if [ -f \"$WD_HOOK\" ]; then bash \"$WD_HOOK\" 2>/dev/null || true; fi'",
+                        "async": true
+                    }
+                ]
+            }
+        ],
+        "PreToolUse": [
+            {
+                "matcher": "WebSearch|WebFetch",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/exploration-record.sh'",
+                        "async": true
+                    }
+                ]
+            },
+            {
+                "matcher": "Bash",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "bash -c 'if echo \"$CLAUDE_TOOL_INPUT\" | grep -qP \"git\\s+commit\"; then REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd); VALIDATE_SCRIPT=\"$REPO_ROOT/scripts/validate-version.sh\"; if [ -f \"$VALIDATE_SCRIPT\" ]; then if ! bash \"$VALIDATE_SCRIPT\" > /dev/null 2>&1; then echo \"[US-264 \u8b66\u544a] \u7248\u865f\u4e0d\u4e00\u81f4\uff01\u8acb\u5148\u57f7\u884c bash scripts/validate-version.sh \u4fee\u6b63\u7248\u865f\u5f8c\u518d commit\u3002\"; fi; fi; fi'"
+                    },
+                    {
+                        "type": "command",
+                        "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/protect-main.sh'"
+                    },
+                    {
+                        "type": "command",
+                        "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/pr-merge-gate.sh'"
+                    },
+                    {
+                        "type": "command",
+                        "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/branch-gate.sh'"
+                    },
+                    {
+                        "type": "command",
+                        "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/push-main-gate.sh'"
+                    }
+                ]
+            }
         ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'${CLAUDE_PLUGIN_ROOT}/hooks/session-end-release.sh'",
-            "async": true
-          },
-          {
-            "type": "command",
-            "command": "bash -c 'SESSION_ID=\"${SHIKIGAMI_SESSION_ID:-unknown}\"; if [ -f \"$(git rev-parse --show-toplevel 2>/dev/null || pwd)/.kill-switch/${SESSION_ID}.flag\" ]; then bash \"$(git rev-parse --show-toplevel 2>/dev/null || pwd)/hooks/kill-switch.sh\" clear \"${SESSION_ID}\" || true; fi'",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "Stop": [],
-    "PostToolUse": [
-      {
-        "matcher": "Agent",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/posttooluse-agent-livelog.sh'",
-            "async": true
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd); WD_HOOK=\"$REPO_ROOT/hooks/session-watchdog.sh\"; if [ -f \"$WD_HOOK\" ]; then bash \"$WD_HOOK\" 2>/dev/null || true; fi'",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "WebSearch|WebFetch",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/exploration-record.sh'",
-            "async": true
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'if echo \"$CLAUDE_TOOL_INPUT\" | grep -qP \"git\\s+commit\"; then REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd); VALIDATE_SCRIPT=\"$REPO_ROOT/scripts/validate-version.sh\"; if [ -f \"$VALIDATE_SCRIPT\" ]; then if ! bash \"$VALIDATE_SCRIPT\" > /dev/null 2>&1; then echo \"[US-264 警告] 版號不一致！請先執行 bash scripts/validate-version.sh 修正版號後再 commit。\"; fi; fi; fi'"
-          },
-          {
-            "type": "command",
-            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/protect-main.sh'"
-          },
-          {
-            "type": "command",
-            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/pr-merge-gate.sh'"
-          },
-          {
-            "type": "command",
-            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/branch-gate.sh'"
-          },
-          {
-            "type": "command",
-            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/push-main-gate.sh'"
-          }
-        ]
-      }
-    ]
-  }
+    }
 }
