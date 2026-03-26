@@ -199,6 +199,29 @@ EOF
 bash "$SCRIPT" "$ESCALATE_NO_DETAIL" > /dev/null 2>&1
 assert_exit_code 1 $? "AC4: ESCALATE 結果缺少 escalation 欄位 exit 1"
 
+# String story_id (type error) — #894 新增
+INVALID_STORY_ID_STRING="${FIXTURE_DIR}/invalid-story-id-string.json"
+cat > "$INVALID_STORY_ID_STRING" << 'EOF'
+{
+  "protocol_version": "1.0",
+  "story_id": "879",
+  "actor": "developer",
+  "result": "PASS",
+  "summary": "story_id as string",
+  "timestamp": "2026-03-26T14:00:00Z"
+}
+EOF
+
+STRING_OUT=$(bash "$SCRIPT" "$INVALID_STORY_ID_STRING" 2>/dev/null)
+if echo "$STRING_OUT" | grep -q "story_id.*整數\|story_id.*integer"; then
+    pass "AC4: story_id 字串型別錯誤訊息含型別提示"
+else
+    fail "AC4: story_id 字串型別錯誤訊息應含型別提示"
+fi
+
+bash "$SCRIPT" "$INVALID_STORY_ID_STRING" > /dev/null 2>&1
+assert_exit_code 1 $? "AC4: story_id 為字串型別 exit 1"
+
 # ─── AC5: /tmp fixture 使用與清理驗證 ──────────────────────────────────────────
 
 echo ""
