@@ -1,0 +1,92 @@
+name: Backlog Health Monitor
+
+# Story #944: 自動化 sprint-candidate 水位週期性監控機制
+#
+# 觸發時機：
+#   - 每週一、三、五 UTC 09:00（週期性自動檢查）
+#   - 手動觸發（workflow_dispatch）
+#
+# 執行內容：
+#   - bash scripts/check-backlog-health.sh 檢查 sprint-candidate 水位
+#   - 水位不足時輸出 [BACKLOG-REPLENISH-TRIGGER]（可被 CI log 監控捕捉）
+#   - 每次執行結果寫入 JSONL 趨勢記錄（NFR2）
+#
+# NFR1: continue-on-error: true 確保本 workflow 失敗不阻擋其他 CI pipeline
+# 設計參考：complexity-trend.yml（AC3 要求）
+
+on:
+  schedule:
+    - cron: '0 9 * * 1,3,5'  # 週一、三、五 UTC 09:00
+  workflow_dispatch:
+    inputs:
+      threshold:
+        description: "sprint-candidate 水位閾值（預設 10）"
+        required: false
+        default: "10"
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  backlog-health-monitor:
+    name: "Backlog Health 水位監控"
+    runs-on: ubuntu-latest
+    continue-on-error: true  # NFR1: 失敗不阻擋其他 CI pipeline
+
+    permissions:
+      contents: write  # 寫入 JSONL 趨勢記錄並 commit
+      issues: read
+
+    env:
+      THRESHOLD: ${{ inputs.threshold || '10' }}
+      REPO: ${{ github.repository }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install jq
+        run: |
+          if ! command -v jq > /dev/null 2>&1; then
+            sudo apt-get install -y jq
+          fi
+
+      - name: Run backlog health check
+        id: health_check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "[BACKLOG-MONITOR] 開始水位監控檢查..."
+          echo "[BACKLOG-MONITOR] threshold=${THRESHOLD}"
+
+          bash scripts/check-backlog-health.sh \
+            --threshold "${THRESHOLD}" \
+            --repo "${REPO}"
+
+          echo "[BACKLOG-MONITOR] 檢查完成"
+
+      - name: Commit JSONL trend record
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 尋找今日 JSONL 趨勢記錄
+          TODAY=$(date '+%Y%m%d')
+          JSONL_FILE="docs/cruise-logs/backlog-water-${TODAY}.jsonl"
+
+          if [[ -f "$JSONL_FILE" ]]; then
+            git add "$JSONL_FILE"
+            if ! git diff --cached --quiet; then
+              git commit -m "chore: backlog-health 水位監控趨勢記錄 $(date '+%Y-%m-%d')"
+              git push
+              echo "[BACKLOG-MONITOR] JSONL 趨勢記錄已推送"
+            else
+              echo "[BACKLOG-MONITOR] 無新趨勢記錄需 commit"
+            fi
+          else
+            echo "[BACKLOG-MONITOR] 今日 JSONL 記錄未建立（可能 gh CLI 靜默降級），跳過 commit"
+          fi
