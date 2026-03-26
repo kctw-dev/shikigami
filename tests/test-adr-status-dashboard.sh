@@ -161,6 +161,100 @@ else
   FAIL=$((FAIL + 1))
 fi
 
+# ── Story #868: --check-staleness テスト ─────────────────────────────────────
+echo ""
+echo "=== Story #868: --check-staleness 老化偵測テスト ==="
+
+REPO_ROOT="${REPO_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
+
+# Fixture: Stale Accepted ADR（超過 90 天 — 使用 git log 會傳回空，降級用檔案 mtime）
+# 建立一個很舊的 ADR fixture（touch 設舊 mtime）
+STALE_FIXTURE_DIR=$(mktemp -d)
+trap "rm -rf ${STALE_FIXTURE_DIR}" EXIT
+
+cat > "${STALE_FIXTURE_DIR}/ADR-010-stale.md" << 'ADR_EOF'
+# ADR-010：老化測試 ADR
+
+**狀態**：Accepted
+**日期**：2025-01-01
+**決策者**：Architect
+ADR_EOF
+# 設定超過 90 天前的 mtime
+touch -t "202501010000" "${STALE_FIXTURE_DIR}/ADR-010-stale.md"
+
+cat > "${STALE_FIXTURE_DIR}/ADR-011-fresh.md" << 'ADR_EOF'
+# ADR-011：新鮮測試 ADR
+
+**狀態**：Accepted
+**日期**：2026-03-01
+**決策者**：Architect
+ADR_EOF
+# 設定 10 天前的 mtime (新鮮)
+touch -t "202603160000" "${STALE_FIXTURE_DIR}/ADR-011-fresh.md"
+
+# Test S1: --check-staleness 旗標執行不崩潰
+echo ""
+echo "--- S1: --check-staleness 旗標執行不崩潰 ---"
+EXIT_CODE=0
+bash "$REPO_ROOT/$SCRIPT" --check-staleness "$STALE_FIXTURE_DIR" > /dev/null 2>&1 || EXIT_CODE=$?
+if [[ "$EXIT_CODE" -le 1 ]]; then
+  echo "  PASS: --check-staleness 執行正常（exit $EXIT_CODE）"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL: --check-staleness 崩潰（exit $EXIT_CODE）"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test S2: 老化 ADR 輸出 [ADR-STALE] 標記
+echo ""
+echo "--- S2: 老化 ADR 輸出 [ADR-STALE] ---"
+STALE_OUTPUT=$(bash "$REPO_ROOT/$SCRIPT" --check-staleness "$STALE_FIXTURE_DIR" 2>/dev/null || true)
+if echo "$STALE_OUTPUT" | grep -q "\[ADR-STALE\]"; then
+  echo "  PASS: [ADR-STALE] 標記出現在輸出"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL: [ADR-STALE] 標記未出現（輸出：$(echo "$STALE_OUTPUT" | head -3)）"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test S3: 新鮮 ADR 不輸出 [ADR-STALE]
+echo ""
+echo "--- S3: 新鮮 ADR 不輸出 [ADR-STALE] ---"
+FRESH_ONLY_DIR=$(mktemp -d)
+trap "rm -rf ${FRESH_ONLY_DIR}" EXIT
+cat > "${FRESH_ONLY_DIR}/ADR-020-fresh.md" << 'ADR_EOF'
+# ADR-020：新鮮 ADR
+
+**狀態**：Accepted
+**日期**：2026-03-20
+**決策者**：Architect
+ADR_EOF
+touch -t "202603200000" "${FRESH_ONLY_DIR}/ADR-020-fresh.md"
+FRESH_OUTPUT=$(bash "$REPO_ROOT/$SCRIPT" --check-staleness "${FRESH_ONLY_DIR}" 2>/dev/null || true)
+STALE_COUNT=$(echo "$FRESH_OUTPUT" | grep -c "\[ADR-STALE\]" 2>/dev/null || true)
+if [[ "$STALE_COUNT" -eq 0 ]]; then
+  echo "  PASS: 新鮮 ADR 無 [ADR-STALE] 標記"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL: 新鮮 ADR 出現 $STALE_COUNT 個 [ADR-STALE]（不應有）"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test S4: --check-staleness 執行時間 < 3s（NFR1）
+echo ""
+echo "--- S4: 執行時間 < 3s（NFR1）---"
+START_NS=$(date +%s%N 2>/dev/null || echo 0)
+bash "$REPO_ROOT/$SCRIPT" --check-staleness "$STALE_FIXTURE_DIR" > /dev/null 2>&1 || true
+END_NS=$(date +%s%N 2>/dev/null || echo 3000000000)
+ELAPSED_MS=$(( (END_NS - START_NS) / 1000000 ))
+if [[ "$ELAPSED_MS" -lt 3000 ]]; then
+  echo "  PASS: 執行時間 ${ELAPSED_MS}ms < 3000ms（NFR1）"
+  PASS=$((PASS + 1))
+else
+  echo "  FAIL: 執行時間 ${ELAPSED_MS}ms >= 3000ms（NFR1 違反）"
+  FAIL=$((FAIL + 1))
+fi
+
 # Summary
 echo ""
 echo "=== 測試結果 ==="
