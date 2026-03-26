@@ -1,0 +1,162 @@
+name: Backlog Health Alert
+
+# #882 Backlog Health 自動告警 — sprint-candidate 低水位 GitHub Issue 通知
+#
+# 觸發時機：
+#   - 手動觸發（workflow_dispatch）— 用於 Sprint Review 完成後人工觸發
+#   - schedule：每週一 09:00 UTC（定期自動檢查）
+#
+# 執行內容：
+#   - 執行 scripts/backlog-health-report.sh --alert 檢查低水位
+#   - 低水位時建立 GitHub Issue（含去重保護）
+#   - Issue body 使用 --body-file 模式（Rule #13）
+
+on:
+  workflow_dispatch:
+    inputs:
+      min_candidates:
+        description: "MIN_CANDIDATES 閾值（預設 10）"
+        required: false
+        default: "10"
+        type: string
+  schedule:
+    # 每週一 09:00 UTC（定期低水位巡查）
+    - cron: "0 9 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  backlog-health-check:
+    name: "Backlog Health 低水位檢查"
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      issues: write
+
+    env:
+      MIN_CANDIDATES: ${{ inputs.min_candidates || '10' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: |
+          if ! command -v jq > /dev/null 2>&1; then
+            sudo apt-get install -y jq
+          fi
+
+      - name: Run backlog health alert check
+        id: health_check
+        run: |
+          # --alert 模式：低水位時 exit 1，高水位時 exit 0
+          if bash scripts/backlog-health-report.sh \
+            --alert \
+            --min-candidates "${MIN_CANDIDATES}" \
+            --last-n 7; then
+            echo "alert_needed=false" >> "${GITHUB_OUTPUT}"
+            echo "[BACKLOG-HEALTH] 水位正常，無需建立告警 Issue"
+          else
+            echo "alert_needed=true" >> "${GITHUB_OUTPUT}"
+            echo "[BACKLOG-HEALTH] 低水位偵測，準備建立告警 Issue"
+          fi
+        continue-on-error: true
+
+      - name: Check for existing open alert issue（NFR1 去重）
+        id: dedup_check
+        if: steps.health_check.outputs.alert_needed == 'true'
+        run: |
+          # 搜尋已存在的 open 告警 Issue（去重保護）
+          EXISTING=$(gh issue list \
+            --state open \
+            --label "backlog-alert" \
+            --json number,title \
+            --jq '.[0].number // empty' 2>/dev/null || echo "")
+
+          if [[ -n "$EXISTING" ]]; then
+            echo "duplicate_found=true" >> "${GITHUB_OUTPUT}"
+            echo "existing_issue=${EXISTING}" >> "${GITHUB_OUTPUT}"
+            echo "[BACKLOG-HEALTH] 已存在 open 告警 Issue #${EXISTING}，跳過建立"
+          else
+            echo "duplicate_found=false" >> "${GITHUB_OUTPUT}"
+            echo "[BACKLOG-HEALTH] 無已存在告警 Issue，準備建立"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get current sprint-candidate count
+        id: get_count
+        if: |
+          steps.health_check.outputs.alert_needed == 'true' &&
+          steps.dedup_check.outputs.duplicate_found == 'false'
+        run: |
+          # 取得實際數量（從腳本輸出提取）
+          COUNT_OUTPUT=$(bash scripts/backlog-health-report.sh \
+            --alert \
+            --min-candidates "${MIN_CANDIDATES}" \
+            --last-n 7 2>&1 || true)
+          ACTUAL_COUNT=$(echo "${COUNT_OUTPUT}" \
+            | grep "目前 sprint-candidate 數量" \
+            | grep -oE '[0-9]+' | tail -1 || echo "0")
+          echo "candidate_count=${ACTUAL_COUNT}" >> "${GITHUB_OUTPUT}"
+          echo "[BACKLOG-HEALTH] 實際數量：${ACTUAL_COUNT}"
+
+      - name: Create alert GitHub Issue（NFR2 --body-file 模式）
+        id: create_issue
+        if: |
+          steps.health_check.outputs.alert_needed == 'true' &&
+          steps.dedup_check.outputs.duplicate_found == 'false'
+        run: |
+          CANDIDATE_COUNT="${{ steps.get_count.outputs.candidate_count }}"
+          ALERT_DATE=$(date '+%Y-%m-%d')
+          ISSUE_TITLE="retro: Backlog 低水位告警 — sprint-candidate 僅剩 ${CANDIDATE_COUNT} 個"
+
+          # 使用 --body-file 模式（Rule #13：避免冒號等特殊字符問題）
+          printf '%s\n' \
+            "## Backlog 低水位告警" \
+            "" \
+            "**偵測日期**：${ALERT_DATE}" \
+            "**目前數量**：sprint-candidate 僅剩 ${CANDIDATE_COUNT} 個" \
+            "**告警閾值**：MIN_CANDIDATES = ${MIN_CANDIDATES}" \
+            "" \
+            "## 建議行動" \
+            "" \
+            "1. PO 立即執行 Backlog Refinement 補充 sprint-candidate" \
+            "2. 目標：將 sprint-candidate 數量補充至 >= 16（ADR-043）" \
+            "3. 本 Issue 關閉條件：sprint-candidate >= MIN_CANDIDATES" \
+            "" \
+            "## 背景" \
+            "" \
+            "此告警由 GitHub Actions workflow backlog-health-alert 自動建立。" \
+            "相關 Story：#882（Backlog Health 自動告警）" \
+            "歷史案例：Sprint 168 Retro #864（Backlog 枯竭導致 Sprint Planning 阻塞）" \
+            > /tmp/backlog-alert-body.txt
+
+          gh issue create \
+            --title "${ISSUE_TITLE}" \
+            --body-file /tmp/backlog-alert-body.txt \
+            --label "backlog-alert" \
+            2>&1 || echo "[BACKLOG-HEALTH] Issue 建立失敗（可能缺少 label），請手動建立"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "=== Backlog Health Alert Summary ==="
+          ALERT_NEEDED="${{ steps.health_check.outputs.alert_needed }}"
+          echo "Alert needed: ${ALERT_NEEDED}"
+          if [[ "${ALERT_NEEDED}" == "true" ]]; then
+            DEDUP="${{ steps.dedup_check.outputs.duplicate_found }}"
+            echo "Duplicate found: ${DEDUP}"
+            if [[ "${DEDUP}" == "true" ]]; then
+              EXISTING_NUM="${{ steps.dedup_check.outputs.existing_issue }}"
+              echo "Skipped: existing open issue #${EXISTING_NUM}"
+            else
+              CCOUNT="${{ steps.get_count.outputs.candidate_count }}"
+              echo "Created alert for candidate count: ${CCOUNT}"
+            fi
+          fi
