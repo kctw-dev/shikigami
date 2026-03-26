@@ -138,6 +138,32 @@ Architect 在 Sprint Planning 技術評估涉及路徑硬編碼的 Story 時，�
 
 ---
 
+## Sentinel 字串衝突防護
+
+### 問題說明
+
+腳本 footer 或說明段落若直接輸出 **測試用的 sentinel 字串**（如 `[ADR-STALE]`、`[ADR-PENDING]`、`[WARN]`），會導致測試 grep 命令產生假陽性。
+
+### 禁止模式（❌ 錯誤）
+
+```bash
+# footer 直接輸出 sentinel —— 測試 grep 誤判
+echo "> [ADR-STALE] 上述 ADR 已標記為老化"
+```
+
+### 允許模式（✅ 正確）
+
+```bash
+# 用不同措辭描述狀態，避免與 sentinel 字串重複
+echo "> 上述 ADR 已被標記為老化（請重新評估）"
+```
+
+### 真實案例（Sprint 171）
+
+`scripts/adr-status-dashboard.sh` 修復前輸出 `[ADR-STALE]` footer，測試中 grep 檢查 `[ADR-STALE]` 狀態表報時產生假陽性。改為使用「已標記」替代 literal `[ADR-STALE]` 關鍵字後解決。
+
+---
+
 ## 歷史案例（#900 背景）
 
 Sprint 169 `update-adr-index.sh` 硬編碼 `REPO_ROOT`，測試需要額外 wrapper script 迂迴。對比 `logrotate.sh` 已提供 `CRUISE_LOG_DIR` 環境變數覆蓋，是更好的設計。本規範確保後續腳本遵循 logrotate.sh 的可測試性模式。

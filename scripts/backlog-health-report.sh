@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
 # backlog-health-report.sh — #736 Backlog 健康趨勢報告腳本
 # 掃描最近 N 天 cruise logs，輸出每日 sprint-candidate 計數趨勢
-# Usage: backlog-health-report.sh [--last-n <N>] [--log-dir <dir>]
+# Usage: backlog-health-report.sh [--last-n <N>] [--log-dir <dir>] [--alert] [--min-candidates <N>]
+#
+# --alert 模式（#882）：
+#   掃描最新一天的 sprint-candidate 計數，若 < MIN_CANDIDATES 則 exit 1
+#   用於 GitHub Actions workflow 觸發告警
 
 set -euo pipefail
 
 # Default values
 LAST_N=7
 LOG_DIR="${REPO_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}/docs/cruise-logs"
-THRESHOLD=3  # sprint-candidate 告警閾值
+THRESHOLD=3       # sprint-candidate 告警閾值（trend 報告用）
+MIN_CANDIDATES=10 # --alert 模式低水位閾值（#882，預設 10）
+ALERT_MODE=false  # --alert 模式開關
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -24,6 +30,14 @@ while [[ $# -gt 0 ]]; do
     --threshold)
       THRESHOLD="$2"
       shift 2
+      ;;
+    --min-candidates)
+      MIN_CANDIDATES="$2"
+      shift 2
+      ;;
+    --alert)
+      ALERT_MODE=true
+      shift
       ;;
     *)
       shift
@@ -115,4 +129,40 @@ if [[ $FOUND_DAYS -eq 0 ]]; then
   echo "[BACKLOG-HEALTH] No cruise logs found in the last ${LAST_N} days."
 else
   echo "[BACKLOG-HEALTH] 報告完成。TRIGGER 信號表示 sprint-candidate < ${THRESHOLD}，建議補充 Backlog。"
+fi
+
+# --- --alert 模式（#882）---
+# 統計最近 LAST_N 天所有 sprint-candidate（去重），判斷是否低水位
+if [[ "$ALERT_MODE" == "true" ]]; then
+  echo ""
+  echo "[BACKLOG-HEALTH-ALERT] 執行低水位檢查（MIN_CANDIDATES=${MIN_CANDIDATES}）..."
+
+  TOTAL_CANDIDATES=0
+  if [[ -d "$LOG_DIR" ]]; then
+    for i in $(seq 0 $((LAST_N - 1))); do
+      if date -d "${TODAY} -${i} days" '+%Y-%m-%d' &>/dev/null 2>&1; then
+        SCAN_DAY=$(date -d "${TODAY} -${i} days" '+%Y-%m-%d')
+      else
+        SCAN_DAY=$(date -v "-${i}d" '+%Y-%m-%d' 2>/dev/null || echo "")
+      fi
+      [[ -z "$SCAN_DAY" ]] && continue
+
+      SCAN_LOGS=$(ls "${LOG_DIR}/${SCAN_DAY}-session-"*.jsonl 2>/dev/null || true)
+      for LOG_FILE in $SCAN_LOGS; do
+        COUNT=$(jq -r 'select(.action == "sprint-candidate") | .issue' "$LOG_FILE" 2>/dev/null \
+          | sort -u | wc -l | tr -d ' ')
+        TOTAL_CANDIDATES=$((TOTAL_CANDIDATES + COUNT))
+      done
+    done
+  fi
+
+  echo "[BACKLOG-HEALTH-ALERT] 目前 sprint-candidate 數量：${TOTAL_CANDIDATES}"
+
+  if [[ $TOTAL_CANDIDATES -lt $MIN_CANDIDATES ]]; then
+    echo "[BACKLOG-HEALTH-ALERT] 低水位觸發！${TOTAL_CANDIDATES} < ${MIN_CANDIDATES}，需補充 Backlog"
+    exit 1
+  else
+    echo "[BACKLOG-HEALTH-ALERT] 水位正常（${TOTAL_CANDIDATES} >= ${MIN_CANDIDATES}）"
+    exit 0
+  fi
 fi
