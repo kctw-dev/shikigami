@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新：2026-03-26（Sprint 171 Planning 完成）**
-**當前 Sprint**：Sprint 171（Planning 完成，6 Stories 待執行）
+**最後更新：2026-03-26（Sprint 171 Review 完成）**
+**當前 Sprint**：Sprint 171（完成，6/6 DONE，bump v0.113.0）
 
 ---
 
