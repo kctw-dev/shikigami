@@ -1,9 +1,29 @@
 # Project Board
 
-**最後更新**：2026-03-26（Sprint 165 Execution 完成）
-**當前 Sprint**：Sprint 165（Execution 完成，5/5 Stories DONE）
+**最後更新**：2026-03-26（Sprint 166 Planning 完成）
+**當前 Sprint**：Sprint 166（Planning 完成，0/4 Stories DONE）
 
 ---
+
+## Sprint 166（Sprint Backlog）
+
+> Sprint Goal：強化流程紀律與工具品質 — PR 強制化、haiku 路由規則自動化、Backlog 健康度觸發、validate-xrefs 測試覆蓋
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: 測試腳本 Story 必須走 PR 流程（Sprint 165 直推 main 改善）| #853 | S | 1 | TODO |
+| retro: haiku 路由比例偏低（18%）— ADR-039 Score 4-5 TEST/DOC 強制 haiku 規則 | #854 | M | 2 | TODO |
+| retro: Backlog 候選不足導致 velocity 波動 — 自動補充觸發機制 | #855 | M | 2 | TODO |
+| feat: validate-xrefs.sh 自動化測試 — 交叉引用驗證完整性 | #840 | S | 1 | TODO |
+
+---
+
+## Sprint 165（完成）
+
+> Sprint Goal：建立核心腳本測試防護網 — 為 bump-version、init-project、validate 系列與 Watchdog 補齊自動化測試，確保紅線邏輯有測試護航
+> **結果**：Goal 達成（5/5 Stories DONE）。Velocity 5 pts，完成率 100%。
+> **容量**：5 pts
 
 ## Sprint 165（Sprint Backlog）
 
