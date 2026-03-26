@@ -1,7 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-26（Sprint 168 Planning 完成）
-**當前 Sprint**：Sprint 168（Planning 完成，0/5 Stories TODO）
+**最後更新**：2026-03-26（Sprint 169 Planning 完成）
+**當前 Sprint**：Sprint 169（Planning 完成，0/6 Stories TODO）
+
+---
+
+## Sprint 169（Sprint Backlog）
+
+> Sprint Goal：OOM 防護測試強化 x 測試覆蓋補齊 — memory-aware-dispatch 防護、Schema/A2A/TraceLog/StoryOverlap 測試、路由歷史補回
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: memory-aware-dispatch.sh 自動化測試 | #879 | S | 1 | TODO |
+| retro: 歷史路由記錄補回與審計 | #885 | S | 1 | TODO |
+| feat: validate-schema-contracts.sh 自動化測試 | #884 | S | 1 | TODO |
+| feat: validate-a2a-schema.sh 自動化測試 | #883 | S | 1 | TODO |
+| feat: validate-trace-log.sh 自動化測試 | #881 | S | 1 | TODO |
+| feat: detect-story-overlap.sh 自動化測試 | #871 | S | 1 | TODO |
 
 ---
 
