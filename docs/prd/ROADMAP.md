@@ -1,6 +1,6 @@
 # 產品路線圖
 
-> 最後更新：2026-03-26（Sprint 168 完成 — 可觀測性強化 x 測試防護補齊：Backlog Discovery 補充、路由歷史修正、injection-scan/measure-complexity 自動化測試）
+> 最後更新：2026-03-26（Sprint 169 完成 — OOM 防護測試強化 x 測試覆蓋補齊：memory-aware-dispatch/Schema/A2A/TraceLog/StoryOverlap 自動化測試、路由歷史補回）
 > 擁有者：Product Owner
 
 本文件是里程碑規劃的**唯一來源（Single Source of Truth）**。
@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.110.0**（Sprint 168 — 可觀測性強化 x 測試防護補齊：Backlog Discovery 補充、路由歷史修正、injection-scan/measure-complexity 自動化測試）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.111.0**（Sprint 169 — OOM 防護測試強化 x 測試覆蓋補齊：memory-aware-dispatch/Schema/A2A/TraceLog/StoryOverlap 自動化測試、路由歷史補回）。
 
 | 版號 | 含義 |
 |------|------|
