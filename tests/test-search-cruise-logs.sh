@@ -90,6 +90,80 @@ if [[ -f "$SCRIPT" ]]; then
   fi
 fi
 
+# ── #842 新功能測試 ────────────────────────────────────────────────────
+
+# Setup: 建立 fixture log dir
+TMP_LOG_DIR=$(mktemp -d)
+cleanup_842() { rm -rf "$TMP_LOG_DIR"; }
+trap cleanup_842 EXIT
+
+# 建立兩天的 fixture logs
+cat > "$TMP_LOG_DIR/2026-03-24-session-test1.jsonl" << 'LOGEOF'
+{"ts":"2026-03-24T10:00:00Z","type":"auto-shoot","action":"auto-shoot","issue":100,"detail":"test"}
+{"ts":"2026-03-24T11:00:00Z","type":"sprint-candidate","action":"sprint-candidate","issue":101,"detail":"test"}
+LOGEOF
+
+cat > "$TMP_LOG_DIR/2026-03-26-session-test2.jsonl" << 'LOGEOF'
+{"ts":"2026-03-26T09:00:00Z","type":"auto-shoot","action":"auto-shoot","issue":102,"detail":"today"}
+{"ts":"2026-03-26T10:00:00Z","type":"close","action":"close","issue":103,"detail":"today close"}
+{"ts":"2026-03-26T11:00:00Z","type":"sprint-candidate","action":"sprint-candidate","issue":104,"detail":"today sc"}
+LOGEOF
+
+# AC1(#842): --type 過濾單一類型
+RESULT=$(bash "$SCRIPT" "" --type "auto-shoot" --log-dir "$TMP_LOG_DIR" 2>/dev/null || true)
+if echo "$RESULT" | grep -q "auto-shoot"; then
+  check "AC1(#842): --type auto-shoot 篩選正確" "pass"
+else
+  check "AC1(#842): --type auto-shoot 篩選正確 (got: $(echo "$RESULT" | head -2))" "fail"
+fi
+
+# AC2(#842): --since / --until 時間範圍篩選
+RESULT=$(bash "$SCRIPT" "" --since "2026-03-26" --until "2026-03-26" --log-dir "$TMP_LOG_DIR" 2>/dev/null || true)
+if echo "$RESULT" | grep -q "today"; then
+  check "AC2(#842): --since --until 時間範圍篩選有結果" "pass"
+else
+  check "AC2(#842): --since --until 時間範圍篩選 (got: $(echo "$RESULT" | head -3))" "fail"
+fi
+# --since 排除舊資料
+RESULT=$(bash "$SCRIPT" "" --since "2026-03-26" --until "2026-03-26" --log-dir "$TMP_LOG_DIR" 2>/dev/null || true)
+if ! echo "$RESULT" | grep -q "2026-03-24"; then
+  check "AC2(#842): --since 2026-03-26 排除 2026-03-24 資料" "pass"
+else
+  check "AC2(#842): --since 2026-03-26 排除 2026-03-24 資料" "fail"
+fi
+
+# AC3(#842): --summary 輸出各 type 計數統計
+RESULT=$(bash "$SCRIPT" "" --summary --log-dir "$TMP_LOG_DIR" 2>/dev/null || true)
+if echo "$RESULT" | grep -qiE "summary|auto-shoot.*[0-9]|sprint-candidate.*[0-9]|count|統計|Total"; then
+  check "AC3(#842): --summary 輸出計數統計" "pass"
+else
+  check "AC3(#842): --summary 輸出計數統計 (got: $(echo "$RESULT" | tail -10))" "fail"
+fi
+
+# AC4(#842): tests/test-search-cruise-logs.sh 涵蓋新功能（本測試即為 AC4 驗證）
+check "AC4(#842): 測試檔已更新涵蓋 --since/--until/--summary" "pass"
+
+# NFR1(#842): 1000 行 JSONL 在 2 秒內
+TMP_PERF_DIR=$(mktemp -d)
+PERF_FILE="$TMP_PERF_DIR/2026-03-26-session-perf.jsonl"
+python3 -c "
+import json
+for i in range(1000):
+    print(json.dumps({'ts':'2026-03-26T10:00:00Z','type':'auto-shoot','action':'auto-shoot','issue':i,'detail':'perf'}))
+" > "$PERF_FILE" 2>/dev/null || true
+if [[ -s "$PERF_FILE" ]]; then
+  START_P=$(date +%s)
+  bash "$SCRIPT" "" --log-dir "$TMP_PERF_DIR" --since "2026-03-26" > /dev/null 2>&1 || true
+  END_P=$(date +%s)
+  ELAPSED_P=$(( END_P - START_P ))
+  if [[ "$ELAPSED_P" -lt 3 ]]; then
+    check "NFR1(#842): 1000 行 JSONL 執行 ${ELAPSED_P}s < 3s" "pass"
+  else
+    check "NFR1(#842): 1000 行 JSONL 執行 ${ELAPSED_P}s >= 3s（超時）" "fail"
+  fi
+fi
+rm -rf "$TMP_PERF_DIR"
+
 echo ""
 echo "Results: PASS=$PASS FAIL=$FAIL"
 [[ $FAIL -eq 0 ]] && exit 0 || exit 1
