@@ -1,7 +1,23 @@
 # Project Board
 
-**最後更新：2026-03-26（Sprint 170 Review 完成，bump v0.112.0）
-**當前 Sprint**：Sprint 170（Review 完成，6/6 Stories DONE，v0.112.0）
+**最後更新：2026-03-26（Sprint 171 Planning 完成）**
+**當前 Sprint**：Sprint 171（Planning 完成，6 Stories 待執行）
+
+---
+
+## Sprint 171（Sprint Backlog）
+
+> Sprint Goal：可觀測性工具補齊 x Retro Action 清倉 — NFR 補充、Sprint/ADR/CI 健康度指標腳本交付、測試可測試性規範建立
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: 為 #894 #895 #886 補充非功能性需求欄位 | #899 | S | 1 | TODO |
+| feat: Sprint Goal 達成率歷史追蹤 | #874 | S | 1 | TODO |
+| feat: Sprint Metrics 歷史趨勢儀表板 | #869 | S | 1 | TODO |
+| feat: ADR 老化偵測 | #868 | S | 1 | TODO |
+| feat: ci-health-check.sh 自動化測試 | #876 | S | 1 | TODO |
+| retro: 測試輔助規範 — REPO_ROOT 環境變數覆蓋機制 | #900 | S | 1 | TODO |
 
 ---
 
