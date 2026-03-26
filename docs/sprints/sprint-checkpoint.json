@@ -1,12 +1,12 @@
 {
   "sprint": 166,
-  "updated_at": "2026-03-26T08:07:00Z",
+  "updated_at": "2026-03-26T08:15:00Z",
   "stories": [
-    {"id": "853", "title": "retro: 測試腳本 Story 必須走 PR 流程", "status": "pending"},
-    {"id": "854", "title": "retro: haiku 路由比例偏低 — ADR-039 規則", "status": "pending"},
-    {"id": "855", "title": "retro: Backlog 候選不足 — 自動補充觸發", "status": "pending"},
-    {"id": "840", "title": "feat: validate-xrefs.sh 自動化測試", "status": "pending"}
+    {"id": "853", "title": "retro: 測試腳本 Story 必須走 PR 流程", "status": "completed", "pr": 856},
+    {"id": "854", "title": "retro: haiku 路由比例偏低 — ADR-039 規則", "status": "completed", "pr": 856},
+    {"id": "855", "title": "retro: Backlog 候選不足 — 自動補充觸發", "status": "completed", "pr": 856},
+    {"id": "840", "title": "feat: validate-xrefs.sh 自動化測試", "status": "completed", "pr": 856}
   ],
-  "current_step": "execution",
-  "sprint_status": "in-progress"
+  "current_step": "all-complete",
+  "sprint_status": "completed"
 }

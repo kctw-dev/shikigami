@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.107.0**（Sprint 165 — 建立核心腳本測試防護網：test-bump-version.sh、test-init-project.sh、test-validate-agents/skills/json.sh、test-calculate-sprint-capacity.sh、test-watchdog.sh）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.108.0**（Sprint 166 — 強化流程紀律：PR 強制化、haiku 路由規則自動化、Backlog 健康觸發、validate-xrefs 測試）。
 
 | 版號 | 含義 |
 |------|------|

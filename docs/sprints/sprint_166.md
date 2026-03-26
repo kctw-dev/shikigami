@@ -32,10 +32,10 @@
 
 | # | Story | Issue | Points | Status | Owner |
 |---|-------|-------|--------|--------|-------|
-| 1 | retro: 測試腳本 Story 必須走 PR 流程 | #853 | 1 | TODO | Developer |
-| 2 | retro: haiku 路由比例偏低 — ADR-039 Score 4-5 TEST/DOC 強制 haiku 規則 | #854 | 2 | TODO | Developer |
-| 3 | retro: Backlog 候選不足導致 velocity 波動 — 自動補充觸發機制 | #855 | 2 | TODO | Developer |
-| 4 | feat: validate-xrefs.sh 自動化測試 — 交叉引用驗證完整性 | #840 | 1 | TODO | Developer |
+| 1 | retro: 測試腳本 Story 必須走 PR 流程 | #853 | 1 | DONE (#856) | Developer |
+| 2 | retro: haiku 路由比例偏低 — ADR-039 Score 4-5 TEST/DOC 強制 haiku 規則 | #854 | 2 | DONE (#856) | Developer |
+| 3 | retro: Backlog 候選不足導致 velocity 波動 — 自動補充觸發機制 | #855 | 2 | DONE (#856) | Developer |
+| 4 | feat: validate-xrefs.sh 自動化測試 — 交叉引用驗證完整性 | #840 | 1 | DONE (#856) | Developer |
 
 **Total: 6 pts**
 

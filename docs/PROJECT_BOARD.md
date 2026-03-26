@@ -1,7 +1,7 @@
 # Project Board
 
-**最後更新**：2026-03-26（Sprint 166 Planning 完成）
-**當前 Sprint**：Sprint 166（Planning 完成，0/4 Stories DONE）
+**最後更新**：2026-03-26（Sprint 166 Execution 完成）
+**當前 Sprint**：Sprint 166（Execution 完成，4/4 Stories DONE）
 
 ---
 
@@ -12,10 +12,10 @@
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: 測試腳本 Story 必須走 PR 流程（Sprint 165 直推 main 改善）| #853 | S | 1 | TODO |
-| retro: haiku 路由比例偏低（18%）— ADR-039 Score 4-5 TEST/DOC 強制 haiku 規則 | #854 | M | 2 | TODO |
-| retro: Backlog 候選不足導致 velocity 波動 — 自動補充觸發機制 | #855 | M | 2 | TODO |
-| feat: validate-xrefs.sh 自動化測試 — 交叉引用驗證完整性 | #840 | S | 1 | TODO |
+| retro: 測試腳本 Story 必須走 PR 流程（Sprint 165 直推 main 改善）| #853 | S | 1 | DONE (#856) |
+| retro: haiku 路由比例偏低（18%）— ADR-039 Score 4-5 TEST/DOC 強制 haiku 規則 | #854 | M | 2 | DONE (#856) |
+| retro: Backlog 候選不足導致 velocity 波動 — 自動補充觸發機制 | #855 | M | 2 | DONE (#856) |
+| feat: validate-xrefs.sh 自動化測試 — 交叉引用驗證完整性 | #840 | S | 1 | DONE (#856) |
 
 ---
 
