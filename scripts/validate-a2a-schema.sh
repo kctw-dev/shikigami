@@ -7,6 +7,7 @@
 # 驗證項目：
 #   - 必要欄位存在：protocol_version, story_id, actor, result, summary, timestamp
 #   - protocol_version 值為 "1.0"
+#   - story_id 為整數型別（integer），不可為字串
 #   - actor 合法值：developer | architect | qa | po | security | sm
 #   - result 合法值：PASS | FAIL | ESCALATE
 #   - timestamp 格式為 ISO 8601（含基本格式檢查）
@@ -150,7 +151,7 @@ else:
 
 # story_id 型別驗證
 if not isinstance(obj["story_id"], int):
-    errors.append(f"story_id 必須為整數，實際類型：{type(obj['story_id']).__name__}")
+    errors.append(f"story_id 必須為整數型別（integer），不可為字串。實際值：{obj['story_id']!r}（型別：{type(obj['story_id']).__name__}）")
 else:
     passes.append(f"story_id = {obj['story_id']}（整數）")
 
