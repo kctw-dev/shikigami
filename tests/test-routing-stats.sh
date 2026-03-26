@@ -224,6 +224,77 @@ else
   fail "冪等性：重複執行後 dashboard 消失"
 fi
 
+# ── #896: Custom Section 保護測試 ─────────────────────────────────────
+
+echo ""
+echo "--- #896: custom section 保護 ---"
+
+# 建立含 custom section 的 dashboard fixture
+TMP_DASH=$(mktemp)
+cat > "$TMP_DASH" << 'DASHEOF'
+# Model Routing Dashboard
+
+## 統計
+
+(stats content)
+
+<!-- custom-section-start -->
+- 2026-03-26T10:00:00 這是一個重要的手動說明，不應被覆蓋
+<!-- custom-section-end -->
+DASHEOF
+
+# 備份原始 dashboard
+ORIG_DASHBOARD="$OUTPUT"
+if [[ -f "$ORIG_DASHBOARD" ]]; then
+  TMP_BACKUP=$(mktemp)
+  cp "$ORIG_DASHBOARD" "$TMP_BACKUP"
+fi
+
+# 複製 fixture 為 dashboard
+cp "$TMP_DASH" "$ORIG_DASHBOARD"
+
+# 執行 routing-stats.sh（重新生成）
+bash "$SCRIPT" > /dev/null 2>&1 || true
+
+# AC1(#896): custom section 內容被保留
+if grep -q "這是一個重要的手動說明" "$ORIG_DASHBOARD" 2>/dev/null; then
+  pass "AC1(#896): custom section 內容在重新生成後保留"
+else
+  fail "AC1(#896): custom section 內容應在重新生成後保留"
+fi
+
+# AC2(#896): custom-section 標記存在
+if grep -q "<!-- custom-section-start -->" "$ORIG_DASHBOARD" 2>/dev/null && \
+   grep -q "<!-- custom-section-end -->" "$ORIG_DASHBOARD" 2>/dev/null; then
+  pass "AC2(#896): custom-section-start/end 標記存在"
+else
+  fail "AC2(#896): custom-section 標記應存在"
+fi
+
+# AC3(#896): --append-note 追加說明
+bash "$SCRIPT" --append-note "測試追加說明 sprint-173" > /dev/null 2>&1 || true
+if grep -q "測試追加說明 sprint-173" "$ORIG_DASHBOARD" 2>/dev/null; then
+  pass "AC3(#896): --append-note 成功追加說明至 custom section"
+else
+  fail "AC3(#896): --append-note 應追加說明至 custom section"
+fi
+
+# NFR(#896): 冪等性 — --append-note 重複執行不重複追加
+bash "$SCRIPT" --append-note "測試追加說明 sprint-173" > /dev/null 2>&1 || true
+DUPLICATE_COUNT=$(grep -c "測試追加說明 sprint-173" "$ORIG_DASHBOARD" 2>/dev/null || echo "0")
+if [[ "$DUPLICATE_COUNT" -eq 1 ]]; then
+  pass "NFR(#896): --append-note 冪等，重複執行不重複追加（count=1）"
+else
+  fail "NFR(#896): --append-note 應冪等，實際 count=${DUPLICATE_COUNT}"
+fi
+
+# 恢復原始 dashboard
+if [[ -f "${TMP_BACKUP:-}" ]]; then
+  cp "$TMP_BACKUP" "$ORIG_DASHBOARD"
+  rm -f "$TMP_BACKUP"
+fi
+rm -f "$TMP_DASH"
+
 # ── 結果摘要 ─────────────────────────────────────────────────────────
 
 END_TIME=$(date +%s)
