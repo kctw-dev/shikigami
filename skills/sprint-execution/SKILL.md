@@ -453,6 +453,12 @@ DESIGN Story 優先執行，依賴其 Contract 的 FEATURE Story 須等 Contract
 例外：標注為 [SPIKE] 的探索性任務可豁免，但進入正式開發時必須補測試。
 </HARD-GATE>
 
+<HARD-GATE>
+**所有 Story（含 test-only Story）交付必須透過 Pull Request，不得直推 main。**
+Sprint Review 時將逐一確認每個 Story 是否有對應 PR；若無，標記 `[PROCESS-VIOLATION]`。
+此規則自 Sprint 166 起強制生效（Sprint 165 Retro Action #853）。
+</HARD-GATE>
+
 Story Type 對 TDD 豁免與 Review 策略的影響（FEATURE 必須 TDD；DESIGN 豁免；INFRA 條件性；SECURITY 強制；INTEGRATION 必須；RESEARCH 豁免）。doc-only Story 優先判定 TDD 豁免，但雙階段 Review 維持必要。
 
 > 詳見 `references/hard-gates-tdd.md`（L-size 審查增強、§8.1 安全審查觸發條件）

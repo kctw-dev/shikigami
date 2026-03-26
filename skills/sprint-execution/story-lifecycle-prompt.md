@@ -690,6 +690,7 @@ Security Self-Review — {story_id}
 | 設定 | 無硬編碼金鑰，配置透過環境變數管理 | [ ] |
 | 反回歸 | 既有測試全部仍然通過（0 regression） | [ ] |
 | 技術債 | 取捷徑情況已用 `[TECH-DEBT]` 標記，並更新 Registry（若無則 N/A） | [ ] |
+| **PR 流程** | **所有 Story（含 test-only）交付必須透過 PR，不得直推 main**（Sprint 165 Retro #853） | [ ] |
 
 ---
 

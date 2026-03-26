@@ -772,3 +772,49 @@ bash "${REPO_PATH}/scripts/backlog-health-report.sh" \
 | `TRIGGER` | sprint-candidate 計數 < 閾值，建議補充 Backlog |
 
 支援 `--last-n <N>` 指定查看天數（預設 7）。使用 jq 解析 JSONL，不依賴 Python（NFR1）。
+
+## Backlog 健康度每日巡查 Warning（#855 AC2，Sprint 166）
+
+<!-- #855 retro: Backlog 候選不足 — 自動補充觸發機制 — Sprint 166 -->
+
+每個 PO Cruise patrol cycle 中，backlog-health-report.sh 輸出後自動判斷是否需輸出警告：
+
+```bash
+CURRENT_COUNT=$(gh issue list -R ${OWNER_REPO} --label sprint-candidate --state open --json number 2>/dev/null | jq 'length' || echo "UNKNOWN")
+WARN_THRESHOLD="${BACKLOG_WARN_THRESHOLD:-8}"  # 讀取 .claude/shikigami.local.md，預設 8
+
+if [ "$CURRENT_COUNT" != "UNKNOWN" ] && [ "$CURRENT_COUNT" -lt "$WARN_THRESHOLD" ]; then
+  echo "[BACKLOG-DAILY-WARN] sprint-candidate=$CURRENT_COUNT < 每日警戒閾值=$WARN_THRESHOLD，建議補充 Backlog"
+  log action: "backlog-daily-warn (sprint_candidate=${CURRENT_COUNT}, threshold=${WARN_THRESHOLD})"
+fi
+```
+
+**冪等性（AC4 — QA 建議補充）**：同一 cycle 內 [BACKLOG-DAILY-WARN] 僅輸出一次，不重複觸發 Discovery（Discovery 觸發依賴 [BACKLOG-REPLENISH-TRIGGER] 信號機制，由 Sprint Review §2.7 控制）。
+
+## Sprint Planning 前 48h Backlog 健康度提醒（#855 AC3，Sprint 166）
+
+<!-- #855 AC3：Sprint Planning 前 48h 若候選 < 容量上限，自動提醒 PO 補充 -->
+
+當 PO patrol 偵測到「距上次 Sprint Review 時間 >= 6 天」（即 Sprint 週期近末），且 sprint-candidate 數量 < Sprint 容量上限（預設 6 pts，可從 calculate-sprint-capacity.sh 取得）時，自動在最新 sprint-candidate Issue 留言提醒：
+
+```bash
+# 計算距上次 Sprint Review 的天數（從 docs/sprints/sprint-checkpoint.json 讀取）
+LAST_REVIEW_DATE=$(jq -r '.updated_at // empty' docs/sprints/sprint-checkpoint.json 2>/dev/null | cut -c1-10)
+DAYS_SINCE_REVIEW=$(( ( $(date +%s) - $(date -d "${LAST_REVIEW_DATE}" +%s 2>/dev/null || echo 0) ) / 86400 ))
+
+# 取得 Sprint 容量上限
+CAPACITY_UPPER=$(bash scripts/calculate-sprint-capacity.sh 2>/dev/null | grep -oP '(?<=range: \d-)\d+' || echo "6")
+
+if [ "$DAYS_SINCE_REVIEW" -ge 6 ] && [ "$CURRENT_COUNT" -lt "$CAPACITY_UPPER" ]; then
+  FIRST_CANDIDATE=$(gh issue list -R ${OWNER_REPO} --label sprint-candidate --state open --json number --jq '.[0].number' 2>/dev/null)
+  if [ -n "$FIRST_CANDIDATE" ]; then
+    printf '%s\n' "## [Backlog 健康度提醒]" "" \
+      "Sprint 週期接近尾聲（距上次 Review ${DAYS_SINCE_REVIEW} 天），sprint-candidate 數量 ${CURRENT_COUNT} < Sprint 容量上限 ${CAPACITY_UPPER}。" "" \
+      "建議 PO 在下次 Sprint Planning 前補充候選項目，確保有足夠 Backlog 支撐 Sprint 容量。" > /tmp/backlog-remind-body.txt
+    gh issue comment "${FIRST_CANDIDATE}" -R ${OWNER_REPO} --body-file /tmp/backlog-remind-body.txt 2>/dev/null || true
+    log action: "backlog-48h-remind (sprint_candidate=${CURRENT_COUNT}, capacity_upper=${CAPACITY_UPPER}, days=${DAYS_SINCE_REVIEW})"
+  fi
+fi
+```
+
+**非阻塞**：gh API 失敗時靜默跳過，不中斷 patrol cycle。使用 `--body-file` 模式避免特殊字符 YAML parse error（CLAUDE.md 紅線 13）。
