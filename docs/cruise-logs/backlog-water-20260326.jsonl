@@ -1,0 +1,1 @@
+{"type":"backlog-water-check","sprint":175,"story":"#934","timestamp":"2026-03-26T20:01:50Z","sprint_candidate_before":6,"sprint_candidate_after":10,"threshold":10,"action":"discovery-triggered","new_issues":["#939","#940","#941","#942"],"result":"OK"}
