@@ -1,13 +1,12 @@
 {
-  "sprint": 165,
-  "updated_at": "2026-03-26T04:30:00Z",
+  "sprint": 166,
+  "updated_at": "2026-03-26T08:07:00Z",
   "stories": [
-    {"id": "839", "title": "test: bump-version.sh 自動化測試", "status": "completed", "pr": 850},
-    {"id": "845", "title": "test: init-project.sh 自動化測試", "status": "completed", "commit": "de31215"},
-    {"id": "838", "title": "test: 驗證腳本測試覆蓋率提升", "status": "completed", "pr": 851},
-    {"id": "844", "title": "test: calculate-sprint-capacity.sh 自動化測試", "status": "completed", "commit": "03b4970"},
-    {"id": "847", "title": "test: Watchdog 腳本測試覆蓋", "status": "completed", "pr": 852}
+    {"id": "853", "title": "retro: 測試腳本 Story 必須走 PR 流程", "status": "pending"},
+    {"id": "854", "title": "retro: haiku 路由比例偏低 — ADR-039 規則", "status": "pending"},
+    {"id": "855", "title": "retro: Backlog 候選不足 — 自動補充觸發", "status": "pending"},
+    {"id": "840", "title": "feat: validate-xrefs.sh 自動化測試", "status": "pending"}
   ],
-  "current_step": "all-complete",
-  "sprint_status": "completed"
+  "current_step": "execution",
+  "sprint_status": "in-progress"
 }
