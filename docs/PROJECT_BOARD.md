@@ -1,7 +1,23 @@
 # Project Board
 
-**最後更新**：2026-03-26（Sprint 169 Review 完成，bump v0.111.0）
-**當前 Sprint**：Sprint 169（Review 完成，6/6 Stories DONE，v0.111.0）
+**最後更新**：2026-03-26（Sprint 170 Planning 完成）
+**當前 Sprint**：Sprint 170（進行中，0/6 Stories DONE）
+
+---
+
+## Sprint 170（Sprint Backlog）
+
+> Sprint Goal：測試覆蓋補齊 Vol.2 — 補齊驗證腳本與衝突預測工具的自動化測試防護
+> **容量**：6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| feat: review-suggestion-audit.sh 自動化測試 | #880 | S | 1 | TODO |
+| feat: logrotate.sh 自動化測試 | #878 | S | 1 | TODO |
+| feat: analyze-dependencies.sh 自動化測試 | #877 | S | 1 | TODO |
+| feat: validate-orphans.sh 整合測試 | #875 | S | 1 | TODO |
+| feat: update-adr-index.sh 自動化測試 | #873 | S | 1 | TODO |
+| feat: predict-conflicts.sh 自動化測試 | #866 | S | 1 | TODO |
 
 ---
 
