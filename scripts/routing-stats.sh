@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 # scripts/routing-stats.sh
 # Story #711 — ADR-039 Model Routing 準確率追蹤 Dashboard
+# Story #896 — custom section 保護（<!-- custom-section-start/end -->）
 #
 # AC1: 從 docs/sprints/sprint_*.md 及 docs/km/metrics-log/ 提取 model-route 記錄
 # AC2: 統計輸出：tier 分布比例、平均 risk score、各維度均值
-# AC3: 輸出寫入 docs/km/model-routing-dashboard.md（每次執行覆寫）
+# AC3: 輸出寫入 docs/km/model-routing-dashboard.md（每次執行覆寫，保留 custom section）
 # AC5: 若 haiku tier 比例 < 30%，輸出警告
 # NFR2: 覆蓋最近 10 個 Sprint 的路由記錄
 # NFR3: dashboard 包含具體建議
+#
+# #896: custom section 保護
+#   在 dashboard 中，<!-- custom-section-start --> 到 <!-- custom-section-end -->
+#   之間的內容在每次重新生成時被保留（不覆蓋）。
+#   冪等性：重複執行不累積重複內容。
+#
+#   --append-note "文字"：將說明追加至 custom section 底部（含時間戳）
+#   使用方式：
+#     bash scripts/routing-stats.sh                       # 重新生成，保留 custom section
+#     bash scripts/routing-stats.sh --append-note "說明"  # 追加說明至 custom section
 
 set -euo pipefail
 
@@ -16,6 +27,48 @@ SPRINTS_DIR="${REPO_ROOT}/docs/sprints"
 METRICS_DIR="${REPO_ROOT}/docs/km/metrics-log"
 OUTPUT_FILE="${REPO_ROOT}/docs/km/model-routing-dashboard.md"
 RECENT_SPRINTS=10
+
+# #896: 解析 --append-note
+APPEND_NOTE=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --append-note) APPEND_NOTE="$2"; shift 2 ;;
+    *) shift ;;
+  esac
+done
+
+# #896: --append-note 模式 — 追加說明至 custom section，不重新生成 dashboard
+if [[ -n "$APPEND_NOTE" ]]; then
+  if [[ ! -f "$OUTPUT_FILE" ]]; then
+    echo "[WARN] routing-stats.sh --append-note: $OUTPUT_FILE 不存在，請先執行一次 routing-stats.sh 生成 dashboard"
+    exit 0
+  fi
+  # 確保 custom section 存在
+  if ! grep -q "<!-- custom-section-start -->" "$OUTPUT_FILE" 2>/dev/null; then
+    printf '\n<!-- custom-section-start -->\n\n<!-- custom-section-end -->\n' >> "$OUTPUT_FILE"
+  fi
+  # 冪等：若完全相同的 note 已存在，跳過
+  if grep -qF "$APPEND_NOTE" "$OUTPUT_FILE" 2>/dev/null; then
+    echo "[OK] routing-stats.sh --append-note: 相同內容已存在，跳過（冪等）"
+    exit 0
+  fi
+  # 在 <!-- custom-section-end --> 前插入
+  NOTE_LINE="- $(date '+%Y-%m-%dT%H:%M:%S') ${APPEND_NOTE}"
+  TMPFILE=$(mktemp)
+  awk -v note="$NOTE_LINE" '
+    /<!-- custom-section-end -->/ { print note }
+    { print }
+  ' "$OUTPUT_FILE" > "$TMPFILE" && mv "$TMPFILE" "$OUTPUT_FILE"
+  echo "[OK] routing-stats.sh --append-note: 說明已追加至 $OUTPUT_FILE"
+  exit 0
+fi
+
+# #896: 生成前，提取既有 custom section 內容（若存在）
+CUSTOM_SECTION_CONTENT=""
+if [[ -f "$OUTPUT_FILE" ]] && grep -q "<!-- custom-section-start -->" "$OUTPUT_FILE" 2>/dev/null; then
+  # 提取 custom-section-start 到 custom-section-end 之間的內容（含標記行）
+  CUSTOM_SECTION_CONTENT=$(awk '/<!-- custom-section-start -->/,/<!-- custom-section-end -->/' "$OUTPUT_FILE" 2>/dev/null || true)
+fi
 
 # ── 提取 model-route 記錄 ────────────────────────────────────────────
 
@@ -236,6 +289,20 @@ ADVICE
 FOOTER
 
 } > "$OUTPUT_FILE"
+
+# #896: 重新生成後，恢復 custom section（若原本有保留的內容）
+if [[ -n "$CUSTOM_SECTION_CONTENT" ]]; then
+  # dashboard 中若已包含 custom section 標記（不應有，因為我們剛覆寫），跳過
+  if ! grep -q "<!-- custom-section-start -->" "$OUTPUT_FILE" 2>/dev/null; then
+    printf '\n%s\n' "$CUSTOM_SECTION_CONTENT" >> "$OUTPUT_FILE"
+    echo "[OK] routing-stats.sh: custom section 已恢復至 $OUTPUT_FILE"
+  fi
+else
+  # 若從未有 custom section，在 dashboard 末尾加入空 custom section 供後續使用
+  if ! grep -q "<!-- custom-section-start -->" "$OUTPUT_FILE" 2>/dev/null; then
+    printf '\n<!-- custom-section-start -->\n\n<!-- custom-section-end -->\n' >> "$OUTPUT_FILE"
+  fi
+fi
 
 echo "[OK] Model Routing Dashboard 已更新：${OUTPUT_FILE}"
 echo "[OK] 共分析 ${TOTAL_ROUTES} 條 model-route 記錄（最近 ${RECENT_SPRINTS} 個 Sprint）"
