@@ -1,0 +1,88 @@
+name: Complexity Trend Snapshot
+
+# #922 retro: complexity-trend.sh 定期 CI 觸發機制
+#
+# 觸發時機：
+#   - 每週一 UTC 00:00（weekly cron）
+#   - 手動觸發（workflow_dispatch）
+#
+# 執行內容：
+#   - scripts/complexity-trend.sh（量測複雜度並追加至 docs/km/complexity-trend.csv）
+#   - 若有變更，commit CSV 更新回 main branch
+#
+# NFR1: continue-on-error: true 確保本 workflow 失敗不阻擋其他 CI pipeline
+# NFR2: complexity-trend.sh 執行時間 < 30s
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # 每週一 UTC 00:00
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run（只量測，不 commit）"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+jobs:
+  complexity-snapshot:
+    name: "Complexity Trend Snapshot"
+    runs-on: ubuntu-latest
+    continue-on-error: true # NFR1: 失敗不阻擋其他 CI pipeline
+
+    permissions:
+      contents: write # 需要寫入 CSV 並 commit
+
+    env:
+      # 安全：choice input 透過 env 傳遞，避免直接插值至 run: 指令
+      INPUT_DRY_RUN: ${{ inputs.dry_run || 'false' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run complexity-trend.sh
+        id: measure
+        run: |
+          echo "[COMPLEXITY-TREND] 開始量測複雜度快照..."
+          START_TIME=$(date +%s)
+
+          bash scripts/complexity-trend.sh --no-trend
+
+          END_TIME=$(date +%s)
+          ELAPSED=$((END_TIME - START_TIME))
+          echo "[COMPLEXITY-TREND] 執行時間：${ELAPSED}s"
+
+          if [[ "${ELAPSED}" -ge 30 ]]; then
+            echo "[WARN] complexity-trend.sh 執行時間 ${ELAPSED}s 超過 NFR2 門檻（30s）"
+          fi
+        env:
+          CI: "true"
+
+      - name: Show trend summary
+        run: bash scripts/complexity-trend.sh --trend-only
+        env:
+          CI: "true"
+
+      - name: Commit CSV update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet docs/km/complexity-trend.csv; then
+            echo "[COMPLEXITY-TREND] CSV 無變更（今日快照已存在），跳過 commit"
+          else
+            git add docs/km/complexity-trend.csv
+            git commit -m "chore: complexity-trend 週期快照 $(date '+%Y-%m-%d')"
+            if [[ "${INPUT_DRY_RUN}" != "true" ]]; then
+              git push
+              echo "[COMPLEXITY-TREND] CSV 更新已推送至 main"
+            else
+              echo "[COMPLEXITY-TREND] dry_run=true，跳過 push"
+            fi
+          fi
