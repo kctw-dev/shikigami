@@ -53,7 +53,7 @@
 └── marketplace.json         # Marketplace 發布資訊
 
 agents/                      # 8 個角色定義
-skills/                      # 29 個 Skill
+skills/                      # 31 個 Skill
 hooks/                       # Hook 配置（hooks.json + session-start/）
 commands/                    # 4 個 slash command
 mcp-servers/                 # MCP server（quality-observer：品質指標查詢，stdio transport）

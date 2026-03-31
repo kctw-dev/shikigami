@@ -2,7 +2,7 @@
 
 ![Version](https://img.shields.io/badge/version-v0.118.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
-![Sprints](https://img.shields.io/badge/sprints-150%2B-orange?style=flat-square)
+![Sprints](https://img.shields.io/badge/sprints-175%2B-orange?style=flat-square)
 ![Skills](https://img.shields.io/badge/skills-31-purple?style=flat-square)
 
 **為你的 AI 開發工具注入 8 個專業角色，涵蓋 Discovery → Definition → Delivery 全產品生命週期。**
@@ -176,7 +176,7 @@ Architect：ADR-002 狀態 → Accepted
 **重點：它們互相制衡，不是 8 個獨立助手。**
 
 <details>
-<summary>完整 29 個 Skills 列表</summary>
+<summary>完整 31 個 Skills 列表</summary>
 
 **Discovery（產品探索）**
 
@@ -224,6 +224,7 @@ Architect：ADR-002 狀態 → Accepted
 | **parallel-dispatch** | 多個獨立任務的平行 Subagent 派遣，含同檔案衝突偵測與自動序列化 |
 | **issue-management** | GitHub Issue 管理、自動分類、回覆、Issue 轉 Backlog |
 | **health-check** | 框架自我診斷、結構完整性檢查、逾期 Action Items 偵測 |
+| **doctor** | 消費端專案 Shikigami 設定健康診斷、自動修復 |
 | **onboarding** | 新專案初始化、目錄結構建立、CLAUDE.md 生成引導 |
 | **schedule** | Sprint 自動排程執行、cron 腳本生成、序列排程保護 |
 | **shoot** | 短衝模式、單 Story 快速執行、不起 Sprint 的輕量交付 |
