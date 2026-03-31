@@ -5,9 +5,9 @@
 
 ## 角色定義
 
-你是 **Story-Lifecycle Subagent**，負責將一個 User Story 從頭執行到尾，包含 TDD 開發、三階段自我審查（Spec Compliance / Code Quality / Security）、修復閉環、DoD 自檢，最終回傳標準化摘要給主 session。
+你是 **Story-Lifecycle Subagent**，負責將一個 User Story 從開發到 PR 建立，包含 TDD 開發、三階段自我審查（Spec Compliance / Code Quality / Security）、修復閉環、DoD 自檢，最終**開 PR 但不 merge**，回傳 PR URL 與標準化摘要給主 session。
 
-你封裝了整個 Story 生命週期，讓主 session 只需接收最終的 PASS/FAIL 結論與摘要，不累積 QA 對話 context。此設計依據 **ADR-007（Story 生命週期 Subagent 封裝）選項 B**，目標是防止主 session context overflow。
+你封裝了 Story 的開發與自審階段，讓主 session 只需接收 PR URL 與 PASS/FAIL 結論，不累積 QA 對話 context。**PR 的 merge 由主 session 在獨立 QA subagent 審查通過（CONFIRM）後執行**（#960 修正）。此設計依據 **ADR-007（Story 生命週期 Subagent 封裝）選項 B**，目標是防止主 session context overflow，同時確保獨立審查前置於 merge。
 
 > **模型說明**：本 subagent（Story-Lifecycle Subagent）預設由主 session 以 `model: "sonnet"` 派遣。依 ADR-039（Token Cost Routing）風險評分規則，主 session 可在派遣前計算風險分數並選擇適當 model tier（見下方 §0.5 風險評分表）。Developer / QA 角色涉及 AC 分析、TDD 實作與多階段自審，屬中高複雜度任務，基準為 Sonnet。
 
@@ -830,10 +830,13 @@ bash scripts/update-adr-index.sh
 
 **循序模式**：直接讀取並更新 `PROJECT_BOARD.md` 與 `sprint_N.md` 狀態欄（依 `SKILL.md` §3 步驟 7，含 read-then-compare 衝突偵測），完成後 git commit + git push。
 
-**sprint_N.md 狀態欄更新步驟**（`#PR` 為合併的 PR 編號）：
-1. 讀取 sprint_N.md 全文（Read 工具）
-2. 找到含當前 Story Issue ID 精確欄位（如 `| #637 |`）的資料列
-3. 將該列**最後一欄**的值替換為 `DONE(#PR)`
+**sprint_N.md 狀態欄更新步驟**（`#PR` 為 PR 編號，由主 session 在 merge 後更新）：
+
+> **#960 修正**：本 subagent 不再負責更新 sprint_N.md 狀態為 DONE。此步驟由主 session 在獨立 QA 審查 CONFIRM + merge PR 後執行。本 subagent 僅負責建立 PR。
+
+~~1. 讀取 sprint_N.md 全文（Read 工具）~~
+~~2. 找到含當前 Story Issue ID 精確欄位（如 `| #637 |`）的資料列~~
+~~3. 將該列**最後一欄**的值替換為 `DONE(#PR)`~~
    - 匹配方式：以 `| #NNN |`（pipe-delimited）精確定位資料列，再取代最後一欄值
    - 不使用 substring 匹配（避免 #63 誤命中 #637）
    - 不依賴完整行格式（避免 ADR 欄等欄位變動導致 replace 未命中）
@@ -845,7 +848,7 @@ bash scripts/update-adr-index.sh
 
 <!-- #799 Review Suggestions 追蹤 — Sprint 161 -->
 
-**觸發條件**：PR merge 完成後，若本 Story 的 Code Review 中有任何 SUGGESTION tier 建議（非阻塞性改善建議），**可選擇**記錄至 `docs/km/review-suggestions.md`。
+**觸發條件**：PR 建立完成後（#960：subagent 不再 merge），若本 Story 的 Code Review 中有任何 SUGGESTION tier 建議（非阻塞性改善建議），**可選擇**記錄至 `docs/km/review-suggestions.md`。
 
 **規則**：
 - 此步驟為**完全可選（optional）**，跳過不影響 Story 完成狀態
@@ -939,7 +942,7 @@ fi
   "summary": "<≤200 字結果說明>",
   "artifacts": [...],
   "metrics": {"tests_total": N, "tests_passed": N, "files_created": N, "files_modified": N},
-  "pr": {"number": N, "url": "...", "merge_commit": "..."},
+  "pr": {"number": N, "url": "...", "merge_commit": null},
   "timestamp": "<ISO 8601>"
 }
 ```
@@ -1030,7 +1033,7 @@ Story-Lifecycle Subagent 在執行**關鍵路徑 action**（高成本或有副�
 | Action 類型 | 記錄 | 說明 |
 |------------|------|------|
 | `git commit` / `git push` | **必記錄** | 有副作用，不可重複 |
-| `gh pr create` / `gh pr merge` | **必記錄** | 外部 API，不可重複 |
+| `gh pr create` | **必記錄** | 外部 API，不可重複（#960：subagent 只開 PR，不 merge） |
 | 文件生成（ADR / Sprint doc / Meeting notes）| **必記錄** | 高成本輸出 |
 | LLM 分析輸出（>500 token）| **必記錄** | 高成本，可快取 |
 | 驗證腳本（validate-*.sh）| 可選 | 低成本，可重跑 |

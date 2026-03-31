@@ -154,7 +154,7 @@ team_debate:            # Team Debate 結果（§7.8，ADR-031，豁免時填 nu
     "files_created": <整數>,
     "files_modified": <整數>
   },
-  "pr": {"number": <整數>, "url": "<PR URL>", "merge_commit": "<SHA>"},
+  "pr": {"number": <整數>, "url": "<PR URL>", "merge_commit": null},
   "escalation": {"type": "<升級類型>", "reason": "<說明>"},
   "timestamp": "<ISO 8601，如 2026-03-25T22:00:00Z>"
 }

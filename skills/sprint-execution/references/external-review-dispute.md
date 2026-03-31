@@ -11,9 +11,10 @@
 
 外部抽樣審查 subagent 回傳 **CONFIRM**（即確認 Story-Lifecycle subagent 自審結論正確）時，執行以下步驟：
 
-1. **記錄抽樣結果**：在 Sprint 執行記錄中記錄「{Story ID} 外部抽樣審查：CONFIRM」
-2. **更新品質指標**：Sprint Review 結束時，將「外部抽樣執行率」與「DISPUTE 率」更新至 `docs/km/Metrics_Log.md`
-3. **繼續下一個 Story**：標記當前 Story 為完成，取出 Sprint Backlog 中下一個待辦 Story 繼續執行
+1. **記錄審查結果**：在 Sprint 執行記錄中記錄「{Story ID} 外部審查：CONFIRM」
+2. **主 session merge PR**：執行 `gh pr merge <PR_URL>`（#960 修正：CONFIRM 後才 merge）
+3. **更新品質指標**：Sprint Review 結束時，將「外部審查執行率」與「DISPUTE 率」更新至 `docs/km/Metrics_Log.md`
+4. **繼續下一個 Story**：標記當前 Story 為完成，取出 Sprint Backlog 中下一個待辦 Story 繼續執行
 
 ---
 
@@ -21,13 +22,13 @@
 
 外部抽樣審查 subagent 回傳 **DISPUTE**（即發現自審結論有誤，存在自審未偵測到的缺陷）時，執行以下步驟：
 
-1. **記錄 DISPUTE 事件**：在 Sprint 執行記錄中記錄「{Story ID} 外部抽樣審查：DISPUTE」，標記為 Retrospective Problem
-2. **回退 Story 狀態**：將相關 Story 狀態從「進行中」回退至「待修復」（`docs/PROJECT_BOARD.md` 對應欄位更新）
-3. **傳入缺陷清單**：將外部抽樣審查 subagent 回傳的**具體缺陷清單**傳入 Story-Lifecycle subagent，要求修復（缺陷清單須完整，不得省略）
-4. **執行修復**：Story-Lifecycle subagent 接收缺陷清單後，在內部閉環修復所有列舉缺陷，修復完成後回傳 PASS 摘要
-5. **強制第二輪外部審查**：修復完成後，強制對該 Story 執行第二輪外部獨立審查（無條件觸發）
+1. **記錄 DISPUTE 事件**：在 Sprint 執行記錄中記錄「{Story ID} 外部審查：DISPUTE」，標記為 Retrospective Problem
+2. **PR 保持未合併**：PR 不 merge（#960 修正：審查通過前不 merge）
+3. **傳入缺陷清單**：將外部審查 subagent 回傳的**具體缺陷清單**傳入 Story-Lifecycle subagent，要求修復（缺陷清單須完整，不得省略）
+4. **執行修復**：Story-Lifecycle subagent 接收缺陷清單後，push 修復 commit 至 PR branch，修復完成後回傳 PASS 摘要
+5. **強制第二輪外部審查**：修復完成後，強制對該 PR 執行第二輪外部獨立審查（無條件觸發）
 6. **第二輪結果處理**：
-   - 第二輪 CONFIRM → 執行 CONFIRM 路徑步驟（記錄結果，繼續下一 Story）
+   - 第二輪 CONFIRM → 主 session 執行 `gh pr merge` → 記錄結果，繼續下一 Story
    - 第二輪 DISPUTE → 暫停 Sprint 執行，升級至 Architect 評估（多次 DISPUTE 視為系統性設計問題）
 
 ---

@@ -356,8 +356,8 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
 派遣 Story-Lifecycle subagent（story-lifecycle-prompt.md）
   Agent tool / Gemini CLI 雙軌派遣
   model: "sonnet" | isolation: "worktree"（#379）
-  subagent 內部閉環：TDD → Spec Compliance → Code Quality → Security → PR → merge
-  回傳：PASS/FAIL/ESCALATE + MERGED_COMMIT
+  subagent 內部閉環：TDD → Spec Compliance → Code Quality → Security → 開 PR（不 merge）
+  回傳：PASS/FAIL/ESCALATE + PR_URL
   （詳細派遣參數與雙軌路徑：references/execution-flow-details.md）
   |
   v
@@ -368,7 +368,7 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
   |           +-- 檔案不存在 → 輸出 [CACHE-RECOVERY-FAIL]，視同 ESCALATE: CONTEXT_OVERFLOW
   |-- ESCALATE --> 依升級類型處置（見 references/execution-flow-details.md 升級表）
   |-- FAIL     --> 記錄失敗原因，更新看板，繼續下一 Story
-  +-- PASS（含 MERGED_COMMIT）
+  +-- PASS（含 PR_URL，PR 尚未 merge）
         |
         v
   Checkpoint 重讀流程定義（§3.1 / references/execution-flow-details.md）
@@ -376,13 +376,14 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
         |
         v
   外部獨立審查（#958 修正：100% 全量，不再抽樣）
-  所有 PASS Story 必須接受獨立 QA subagent 審查
+  所有 PASS Story 必須接受獨立 QA subagent 審查 PR diff
   （詳見 references/external-sampling.md）
         |
         v
-  派遣獨立 QA subagent【model: "sonnet"】
-                |-- CONFIRM → 記錄結果，更新 PROJECT_BOARD
-                +-- DISPUTE → 執行 DISPUTE 處理流程（見 references/external-review-dispute.md §4.2）
+  派遣獨立 QA subagent【model: "sonnet"】審查 PR diff（`gh pr diff <PR_URL>`）
+        |-- CONFIRM → 主 session 執行 `gh pr merge <PR_URL>` → 記錄結果，更新 PROJECT_BOARD
+        +-- DISPUTE → subagent push fix to PR branch → 強制二審 → CONFIRM 後 merge
+                      （見 references/external-review-dispute.md §4.2）
   |
   v（不觸發抽樣 / CONFIRM 完成後匯合）
   Story Completion Checklist（#368 方向3，每個 Story 完成後）
@@ -402,8 +403,8 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
 
 ## 4. 外部抽樣審查結果處理（CONFIRM / DISPUTE）
 
-CONFIRM → 記錄抽樣結果，更新品質指標，繼續下一 Story。
-DISPUTE → 回退 Story、傳入缺陷清單至 Story-Lifecycle subagent 修復、強制第二輪外部抽樣；第二輪 DISPUTE → 升級至 Architect。Circuit Breaker：連續 3 Sprint DISPUTE 率 > 20% → 通知 Architect + 下 Sprint 全量抽樣。
+CONFIRM → 主 session merge PR → 記錄結果，更新品質指標，繼續下一 Story（#960 修正：審查通過才 merge）。
+DISPUTE → PR 保持未合併、傳入缺陷清單至 Story-Lifecycle subagent push fix to PR branch、強制第二輪外部審查；第二輪 CONFIRM → merge；第二輪 DISPUTE → 升級至 Architect。Circuit Breaker：連續 3 Sprint DISPUTE 率 > 20% → 通知 Architect。
 
 > 詳見 `references/external-review-dispute.md`
 
