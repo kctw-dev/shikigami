@@ -382,8 +382,10 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
         v
   派遣獨立 QA subagent【model: "sonnet"】審查 PR diff（`gh pr diff <PR_URL>`）
         |-- CONFIRM → 主 session 執行 `gh pr merge <PR_URL>` → 記錄結果，更新 PROJECT_BOARD
-        +-- DISPUTE → subagent push fix to PR branch → 強制二審 → CONFIRM 後 merge
-                      （見 references/external-review-dispute.md §4.2）
+        |-- DISPUTE → subagent push fix to PR branch → 強制二審 → CONFIRM 後 merge
+        |             （見 references/external-review-dispute.md §4.2）
+        +-- 無回傳 / crash / timeout → [QA-REVIEW-RECOVERY] 重新派遣 QA subagent（最多 2 次）
+                      仍無回傳 → ESCALATE: QA_SUBAGENT_FAILURE，PR 保持未合併，升級 Architect
   |
   v（CONFIRM + merge 完成後）
   Story Completion Checklist（#368 方向3，每個 Story 完成後）

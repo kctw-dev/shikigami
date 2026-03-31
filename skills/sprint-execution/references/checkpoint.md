@@ -11,7 +11,7 @@
 
 ### Checkpoint 寫入時機
 
-**每個 Story 完成後**（§3 步驟 7 PR merge + 狀態文件 git push 完成之後）立即執行。
+**每個 Story 完成後**（外部獨立審查 CONFIRM → 主 session merge PR → 狀態文件 git push 完成之後）立即執行。
 
 ### Checkpoint 格式
 

@@ -25,7 +25,7 @@
 1. **記錄 DISPUTE 事件**：在 Sprint 執行記錄中記錄「{Story ID} 外部審查：DISPUTE」，標記為 Retrospective Problem
 2. **PR 保持未合併**：PR 不 merge（#960 修正：審查通過前不 merge）
 3. **傳入缺陷清單**：將外部審查 subagent 回傳的**具體缺陷清單**傳入 Story-Lifecycle subagent，要求修復（缺陷清單須完整，不得省略）
-4. **執行修復**：Story-Lifecycle subagent 接收缺陷清單後，push 修復 commit 至 PR branch，修復完成後回傳 PASS 摘要
+4. **執行修復**：Story-Lifecycle subagent 接收缺陷清單後，push 修復 commit 至 PR branch，修復完成後回傳 PASS 摘要。**subagent 不得執行 `gh pr merge`**（#960：merge 權限僅限主 session 在 CONFIRM 後行使）
 5. **強制第二輪外部審查**：修復完成後，強制對該 PR 執行第二輪外部獨立審查（無條件觸發）
 6. **第二輪結果處理**：
    - 第二輪 CONFIRM → 主 session 執行 `gh pr merge` → 記錄結果，繼續下一 Story
