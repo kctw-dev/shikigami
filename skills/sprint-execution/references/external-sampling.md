@@ -53,7 +53,7 @@
 **判斷規則：**
 - 條件：前次 Sprint Review 或 Retrospective 中記錄了「自審遺漏缺陷」問題（即外部審查或 Stakeholder 發現了 Story-Lifecycle self-review 未偵測到的問題）
 - 觸發：是 → 本 Sprint **所有 Story** 均接受外部抽樣審查（100% 全量）
-- 持續時間：全量觸發持續至**連續 2 個 Sprint 無自審品質問題**為止，之後恢復基礎 30% 抽樣率
+- 持續時間：全量觸發持續至**連續 2 個 Sprint 無自審品質問題**為止（已失效：基礎率已為 100%，此規則不再影響行為）
 - 計數規則：
   - 若當次 Sprint 在全量觸發下無 DISPUTE 事件 → 清潔計數 +1
   - 若當次 Sprint 出現 DISPUTE 事件 → 清潔計數重置為 0

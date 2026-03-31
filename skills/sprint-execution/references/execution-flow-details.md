@@ -116,10 +116,10 @@
 
    > **backward compatibility**：`developer-prompt.md`、`spec-reviewer-prompt.md`、`quality-reviewer-prompt.md` 保留，供獨立使用或 ADR-007 Phase 2 外部抽樣審查時引用。
 
-4. **Story-Lifecycle subagent 執行**：subagent 在內部閉環執行 TDD 開發（Red → Green → Refactor）、Spec Compliance self-review、Code Quality self-review、Security self-review（條件觸發）、Code Review Loop、PR merge，最終回傳 PASS/FAIL/ESCALATE 結論與標準化摘要（含 `MERGED_COMMIT` SHA）。主 session **不累積 QA 對話 context**。
+4. **Story-Lifecycle subagent 執行**：subagent 在內部閉環執行 TDD 開發（Red → Green → Refactor）、Spec Compliance self-review、Code Quality self-review、Security self-review（條件觸發）、Code Review Loop、**開 PR（不 merge）**，最終回傳 PASS/FAIL/ESCALATE 結論與標準化摘要（含 `PR_URL`）。主 session **不累積 QA 對話 context**。（#960 修正：subagent 不再 merge，merge 由主 session 在獨立 QA 審查 CONFIRM 後執行）
 
 5. **接收回傳並處置**：依 Story-Lifecycle subagent 回傳結論處置：
-   - `PASS`（含 `MERGED_COMMIT`）：繼續步驟 6（Story Completion Checklist）
+   - `PASS`（含 `PR_URL`，PR 尚未 merge）：進入外部獨立審查（100% 全量，#958），CONFIRM 後主 session 執行 `gh pr merge`
    - `FAIL`：記錄失敗原因，更新看板標記為失敗，繼續下一 Story
    - `ESCALATE`：依升級類型表決定是否暫停 Sprint（見上方流程圖）
 
@@ -141,12 +141,13 @@
          |-- LGTM（無 CRITICAL/HIGH）→ 繼續 7.8
          +-- CRITICAL/HIGH → 修復 → commit → push → 重新審查（最多 3 輪）
                |-- 第 3 輪仍 CRITICAL/HIGH → `[PR-REVIEW-ESCALATE]` 升級主 session
-   - 7.8 `gh pr merge --squash --delete-branch`
-         |-- merge conflict → 嘗試 rebase 後重試；仍失敗 → `[PR-MERGE-CONFLICT]` 升級主 session
-   - 7.9 回傳 `MERGED_COMMIT: <commit-sha>`（merge 後的 commit SHA，主 session 憑此確認 merge 已完成）
+   - 7.8 **不執行 merge**（#960 修正：merge 由主 session 在獨立 QA 審查 CONFIRM 後執行）
+   - 7.9 回傳 `PR_URL: <PR URL>`（PR 連結，主 session 憑此派遣獨立 QA subagent 審查 PR diff）
 
-   **[主 session 職責]**（接收 MERGED_COMMIT 後，按 Story Completion Checklist 執行）：
-   - 見流程圖「Story Completion Checklist」步驟 1-5（取得最新 main → 更新狀態文件 → 寫入 checkpoint → release claim → 檢查終止條件）
+   **[主 session 職責]**（接收 PR_URL 後）：
+   - 派遣獨立 QA subagent 審查 PR diff（`gh pr diff <PR_URL>`）— 100% 全量（#958）
+   - CONFIRM → 執行 `gh pr merge --squash --delete-branch` → Story Completion Checklist 步驟 1-5
+   - DISPUTE → subagent push fix to PR branch → 強制二審 → CONFIRM 後 merge
 
    **[Checklist 步驟 2 — 狀態文件更新]**（主 session，步驟 1 git pull 完成後，直推 main — 豁免清單，ADR-023 決策 3）：
    更新看板與同步 Sprint 文件：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。**每個完成 Story 行尾必須加 `DONE(#PR)` 標記**（`#PR` 為合併的 PR 編號），確保格式統一、可供自動化掃描。

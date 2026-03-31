@@ -385,7 +385,7 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
         +-- DISPUTE → subagent push fix to PR branch → 強制二審 → CONFIRM 後 merge
                       （見 references/external-review-dispute.md §4.2）
   |
-  v（不觸發抽樣 / CONFIRM 完成後匯合）
+  v（CONFIRM + merge 完成後）
   Story Completion Checklist（#368 方向3，每個 Story 完成後）
   1. [ ] git checkout main && git pull
   2. [ ] 更新 PROJECT_BOARD.md + sprint_N.md 狀態（以 Issue ID 定位列，取代最後一欄值）；git commit + push（豁免直推 main，ADR-023 決策 3）
@@ -401,7 +401,7 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
 
 ---
 
-## 4. 外部抽樣審查結果處理（CONFIRM / DISPUTE）
+## 4. 外部獨立審查結果處理（CONFIRM / DISPUTE）
 
 CONFIRM → 主 session merge PR → 記錄結果，更新品質指標，繼續下一 Story（#960 修正：審查通過才 merge）。
 DISPUTE → PR 保持未合併、傳入缺陷清單至 Story-Lifecycle subagent push fix to PR branch、強制第二輪外部審查；第二輪 CONFIRM → merge；第二輪 DISPUTE → 升級至 Architect。Circuit Breaker：連續 3 Sprint DISPUTE 率 > 20% → 通知 Architect。

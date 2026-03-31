@@ -906,14 +906,14 @@ fi
 
 ---
 
-## §AC3 外部抽樣審查觸發邏輯（ADR-007 Phase 2）
+## §AC3 外部獨立審查規則（ADR-007 Phase 2，#958 修正）
 
 <!-- ADR-007 Phase 2 實作 — Sprint 24 / US-41 -->
 
-> **[REFERENCE]** 完整觸發條件（TC-1 ~ TC-4）與抽樣率計算已移至 `skills/sprint-execution/references/external-sampling.md`。
-> 主 session 在 Story 回傳 PASS 後，Read 該檔案執行外部抽樣審查判斷。
+> **[REFERENCE]** 完整規則已移至 `skills/sprint-execution/references/external-sampling.md`。
+> 主 session 在 Story 回傳 PASS 後，Read 該檔案執行外部獨立審查。
 
-**抽樣率摘要**：基礎 30%（取上整）。L-size Story、安全相關 AC、前次品質問題、連續 self-review FAIL 均可升至 100% 全量。
+**審查率摘要**：100% 全量（#958 修正）。所有 PASS Story 必須接受獨立 QA subagent 外部審查，審查通過（CONFIRM）後主 session 才 merge PR（#960 修正）。
 
 ---
 
@@ -1013,7 +1013,7 @@ fi
 | `references/cicd-dual-review.md` | §6.8 CI/CD QA + SRE 雙審查 |
 | `references/km-api-verification.md` | §7.6 KM 第三方 API 文件驗證 |
 | `references/team-debate-prompt.md` | §7.8 Team Debate（Worker/Critic 流程，§7.8.1–§7.8.4） |
-| `references/external-sampling.md` | §AC3 外部抽樣審查（TC-1~TC-4，30% 基礎抽樣率） |
+| `references/external-sampling.md` | §AC3 外部獨立審查規則（100% 全量，#958 修正） |
 | `references/output-schema.md` | §9 輸出格式（YAML 契約、PASS/ESCALATE 模板、升級決策） |
 
 > **Trace Log 隱私保護**（#392 ADR-033）：trace log 不記錄使用者輸入內容，僅記錄 action metadata（agentRole、action 名稱、timestamp、duration、storyId）。禁止將 `$CLAUDE_TOOL_INPUT`、使用者提供的文字或任何 PII 寫入 trace log。

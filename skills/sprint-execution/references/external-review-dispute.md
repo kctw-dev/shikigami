@@ -1,9 +1,9 @@
-# 外部抽樣審查結果處理（CONFIRM / DISPUTE）+ Circuit Breaker
+# 外部獨立審查結果處理（CONFIRM / DISPUTE）+ Circuit Breaker
 
 <!-- ADR-007 Phase 2 實作 — Sprint 24 / US-41 AC3 -->
 <!-- 來源：docs/adr/ADR-007-story-lifecycle-subagent.md §AC3 DISPUTE 處理 -->
 
-主 session 接收外部抽樣審查 subagent 回傳結果後，依以下兩個路徑處理。
+主 session 接收外部獨立審查 subagent 回傳結果後，依以下兩個路徑處理。
 
 ---
 
@@ -55,8 +55,8 @@
 1. 在 Sprint Review / Retrospective 文件中記錄「Circuit Breaker 已觸發」事件
 2. 通知 Architect：自審品質持續退化，需在**下一個 Sprint Planning 前**評估是否：
    - 回退至部分封裝模式（ADR-007 選項 C）
-   - 引入其他補償機制（如提高基礎抽樣率至 50%、強制全量外部審查等）
-3. 在 Architect 完成評估並做出決策前，下一個 Sprint **自動升級為全量外部抽樣**（100%）
+   - 引入其他補償機制（如回退至部分封裝模式、增加 Architect 審查層等）
+3. 在 Architect 完成評估並做出決策前，維持全量外部審查（基礎率已為 100%，#958 修正）
 
 ### 重置條件
 
