@@ -528,7 +528,7 @@ Sprint Execution 中各角色的具體決策標準請參閱以下文件：
 
 ---
 
-<!-- ADR-007 Phase 2 外部抽樣審查機制已於 Sprint 24 US-41 完成實作並通過 QA 驗收，詳見 `docs/adr/ADR-007-story-lifecycle-subagent.md`。 -->
+<!-- ADR-007 Phase 2 外部獨立審查機制已於 Sprint 24 US-41 完成實作並通過 QA 驗收，詳見 `docs/adr/ADR-007-story-lifecycle-subagent.md`。 -->
 
 ---
 

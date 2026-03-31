@@ -18,7 +18,7 @@
 
 <!-- US-229 Checkpoint 強制重讀步驟 — Sprint 83 -->
 
-每個 Story-Lifecycle subagent 回傳 PASS 後，在進入「外部抽樣審查決策」前，**強制執行以下 Checkpoint 步驟**，確保主 session 不發生流程跳步或遺漏。
+每個 Story-Lifecycle subagent 回傳 PASS 後，在進入「外部獨立審查決策」前，**強制執行以下 Checkpoint 步驟**，確保主 session 不發生流程跳步或遺漏。
 
 ### 三個子動作
 
@@ -114,7 +114,7 @@
    - `size`：Story Size（S/M/L）
    - `bypass`：true / false（是否為 [BYPASS] Story）
 
-   > **backward compatibility**：`developer-prompt.md`、`spec-reviewer-prompt.md`、`quality-reviewer-prompt.md` 保留，供獨立使用或 ADR-007 Phase 2 外部抽樣審查時引用。
+   > **backward compatibility**：`developer-prompt.md`、`spec-reviewer-prompt.md`、`quality-reviewer-prompt.md` 保留，供獨立使用或 ADR-007 Phase 2 外部獨立審查時引用。
 
 4. **Story-Lifecycle subagent 執行**：subagent 在內部閉環執行 TDD 開發（Red → Green → Refactor）、Spec Compliance self-review、Code Quality self-review、Security self-review（條件觸發）、Code Review Loop、**開 PR（不 merge）**，最終回傳 PASS/FAIL/ESCALATE 結論與標準化摘要（含 `PR_URL`）。主 session **不累積 QA 對話 context**。（#960 修正：subagent 不再 merge，merge 由主 session 在獨立 QA 審查 CONFIRM 後執行）
 

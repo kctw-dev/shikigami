@@ -9,7 +9,7 @@
 
 ## 4.1 CONFIRM 路徑
 
-外部抽樣審查 subagent 回傳 **CONFIRM**（即確認 Story-Lifecycle subagent 自審結論正確）時，執行以下步驟：
+外部獨立審查 subagent 回傳 **CONFIRM**（即確認 Story-Lifecycle subagent 自審結論正確）時，執行以下步驟：
 
 1. **記錄審查結果**：在 Sprint 執行記錄中記錄「{Story ID} 外部審查：CONFIRM」
 2. **主 session merge PR**：執行 `gh pr merge <PR_URL>`（#960 修正：CONFIRM 後才 merge）
@@ -20,7 +20,7 @@
 
 ## 4.2 DISPUTE 路徑
 
-外部抽樣審查 subagent 回傳 **DISPUTE**（即發現自審結論有誤，存在自審未偵測到的缺陷）時，執行以下步驟：
+外部獨立審查 subagent 回傳 **DISPUTE**（即發現自審結論有誤，存在自審未偵測到的缺陷）時，執行以下步驟：
 
 1. **記錄 DISPUTE 事件**：在 Sprint 執行記錄中記錄「{Story ID} 外部審查：DISPUTE」，標記為 Retrospective Problem
 2. **PR 保持未合併**：PR 不 merge（#960 修正：審查通過前不 merge）
@@ -38,7 +38,7 @@
 <!-- ADR-007 Phase 2 實作 — Sprint 24 / US-41 AC4 -->
 <!-- 來源：docs/adr/ADR-007-story-lifecycle-subagent.md §AC3 機制回退 -->
 
-**定義**：當外部抽樣審查的 DISPUTE 率持續偏高，表示 Story-Lifecycle self-review 品質已出現系統性退化，需要框架自動觸發架構重評估。
+**定義**：當外部獨立審查的 DISPUTE 率持續偏高，表示 Story-Lifecycle self-review 品質已出現系統性退化，需要框架自動觸發架構重評估。
 
 ### 觸發條件
 
