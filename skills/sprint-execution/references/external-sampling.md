@@ -1,30 +1,23 @@
-# §AC3 外部抽樣審查觸發邏輯（ADR-007 Phase 2）
+# §AC3 外部獨立審查規則（ADR-007 Phase 2 → #958 修正）
 
 <!-- SSOT：story-lifecycle-prompt.md §AC3 已移至此處（Sprint 127 #485 模組化拆分） -->
 <!-- ADR-007 Phase 2 實作 — Sprint 24 / US-41 -->
 <!-- 來源：docs/adr/ADR-007-story-lifecycle-subagent.md §AC3 -->
+<!-- #958 修正：基礎抽樣率從 30% 提升至 100%（全量外部審查） -->
 
-本 subagent 回傳 PASS 後，主 session 依以下規則判斷是否觸發外部抽樣審查（External Sampling Review）。**判斷與派遣行為由主 session 執行**；本節定義判斷規則，供主 session 參照。
+本 subagent 回傳 PASS 後，主 session **必須**對該 Story 派遣獨立 QA subagent 執行外部審查。**判斷與派遣行為由主 session 執行**；本節定義規則，供主 session 參照。
 
-## 基礎抽樣率
+## 外部審查率
 
-**基礎抽樣率：30%（取上整）**
+**外部審查率：100%（全量）**
 
-計算方式：當前 Sprint Story 總數 × 30%，結果取上整（ceiling）。
+所有 Story-Lifecycle subagent 回傳 PASS 的 Story，**必須**接受獨立 QA subagent 外部審查。不得跳過、不得降級、不受 bypass 豁免。
 
-範例：
-- 4 Story Sprint → 4 × 0.30 = 1.2 → 取上整 = **2 個 Story** 接受外部抽樣
-- 5 Story Sprint → 5 × 0.30 = 1.5 → 取上整 = **2 個 Story** 接受外部抽樣
-- 3 Story Sprint → 3 × 0.30 = 0.9 → 取上整 = **1 個 Story** 接受外部抽樣
+> **#958 修正理由**：原 30% 抽樣率導致 70% Story 僅靠 self-review（Reviewer = Developer）就 merge，seiryu-dev 多次遇到品質問題。Self-review 保留作為第一道過濾，但獨立外部審查是 merge 前的必要 Hard Gate。
 
-**基礎抽樣 Story 選取優先順序：**
-1. 優先選取 Size 最大的 Story（M 優先於 S）
-2. 次優先選取本 Sprint 中修改檔案數量最多的 Story（依回傳的修改檔案清單計算）
-3. 隨機保底：若所有 Story 規模和修改量相近，隨機選取達到 30% 門檻
+## 觸發條件（TC-1 ~ TC-4）— 歷史參考
 
-## 觸發條件評估（TC-1 ~ TC-4）
-
-以下觸發條件依序評估（TC-1 → TC-2 → TC-3 → TC-4），**任一條件觸發即執行全量外部審查（抽樣率提升至 100%）**，不繼續評估後續條件。
+> 以下觸發條件為基礎審查率 30% 時期的升級規則。基礎率已提升至 100% 後，TC-1~TC-4 自動滿足，不再影響行為。保留供歷史追溯。
 
 ---
 
@@ -87,20 +80,11 @@
 ## 觸發條件優先順序總結
 
 ```
-評估順序：TC-1 → TC-2 → TC-3 → TC-4
+#958 修正後流程（簡化）：
 
-TC-1 觸發（L-size Story 存在）
-  → 本 Sprint 全量 100%，跳過後續評估
+Story-Lifecycle subagent 回傳 PASS
+  → 100% 全量外部獨立審查（無例外）
+  → CONFIRM / DISPUTE 處理（見 external-review-dispute.md）
 
-TC-2 觸發（安全相關 AC）
-  → 本 Sprint 全量 100%，跳過後續評估
-
-TC-3 觸發（前次 Sprint 自審品質問題）
-  → 本 Sprint 全量 100%，跳過後續評估
-
-TC-4 觸發（當前 Story 連續 2 次 self-review FAIL）
-  → 當前 Story 強制外部抽樣
-
-以上條件均未觸發
-  → 基礎 30% 抽樣率（依優先順序選取 Story）
+（TC-1~TC-4 歷史參考，不再影響行為）
 ```

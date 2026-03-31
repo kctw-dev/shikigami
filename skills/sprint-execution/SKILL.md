@@ -375,14 +375,12 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
   輸出 [CHECKPOINT-PASS] 或 [CHECKPOINT-FAIL]
         |
         v
-  外部抽樣審查決策（ADR-007 §AC3 Phase 2）
-  TC-1: L-size→100%全量；TC-2: 安全相關→100%；TC-3: 前次品質問題→100%；
-  TC-4: 連續2次FAIL→100%；其他: 30% 基礎抽樣率（取上整）
+  外部獨立審查（#958 修正：100% 全量，不再抽樣）
+  所有 PASS Story 必須接受獨立 QA subagent 審查
   （詳見 references/external-sampling.md）
         |
-        +-- 不觸發抽樣 → 更新 PROJECT_BOARD（Story 狀態 → 完成）
-        |
-        +-- 觸發外部抽樣 → 派遣獨立 QA subagent【model: "sonnet"】
+        v
+  派遣獨立 QA subagent【model: "sonnet"】
                 |-- CONFIRM → 記錄結果，更新 PROJECT_BOARD
                 +-- DISPUTE → 執行 DISPUTE 處理流程（見 references/external-review-dispute.md §4.2）
   |
@@ -457,6 +455,21 @@ DESIGN Story 優先執行，依賴其 Contract 的 FEATURE Story 須等 Contract
 **所有 Story（含 test-only Story）交付必須透過 Pull Request，不得直推 main。**
 Sprint Review 時將逐一確認每個 Story 是否有對應 PR；若無，標記 `[PROCESS-VIOLATION]`。
 此規則自 Sprint 166 起強制生效（Sprint 165 Retro Action #853）。
+</HARD-GATE>
+
+<HARD-GATE>
+**外部獨立審查 Hard Gate（Sprint Execution）**：所有 Story-Lifecycle subagent 回傳 PASS 的 Story，
+必須接受 100% 外部獨立 QA subagent 審查。不得跳過、不得降級。
+DISPUTE → 強制二審；二審 DISPUTE → 升級 Architect。
+（#958 修正：自審不可替代獨立 QA，與 /shoot 100% 外部審查對齊）
+</HARD-GATE>
+
+<HARD-GATE>
+**Prompt Template Integrity（派遣指令不可變）**：主 session 派遣 Story-Lifecycle subagent 時，
+僅允許傳入 story-lifecycle-prompt.md 定義的 YAML 契約欄位（§輸入格式）。
+禁止追加任何自然語言指示（如「快速處理」「跳過 QA」「簡化審查」）覆寫 Hard Gate。
+違反此規則等同流程違規（Process Violation），Sprint Review 時標記 [PROMPT-INTEGRITY-VIOLATION]。
+（#959 修正：主 session 不得追加 ad-hoc 指令覆寫 subagent Hard Gate）
 </HARD-GATE>
 
 Story Type 對 TDD 豁免與 Review 策略的影響（FEATURE 必須 TDD；DESIGN 豁免；INFRA 條件性；SECURITY 強制；INTEGRATION 必須；RESEARCH 豁免）。doc-only Story 優先判定 TDD 豁免，但雙階段 Review 維持必要。

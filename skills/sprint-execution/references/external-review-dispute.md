@@ -25,7 +25,7 @@
 2. **回退 Story 狀態**：將相關 Story 狀態從「進行中」回退至「待修復」（`docs/PROJECT_BOARD.md` 對應欄位更新）
 3. **傳入缺陷清單**：將外部抽樣審查 subagent 回傳的**具體缺陷清單**傳入 Story-Lifecycle subagent，要求修復（缺陷清單須完整，不得省略）
 4. **執行修復**：Story-Lifecycle subagent 接收缺陷清單後，在內部閉環修復所有列舉缺陷，修復完成後回傳 PASS 摘要
-5. **強制第二輪外部抽樣**：修復完成後，**不論是否達到 30% 抽樣門檻**，強制對該 Story 執行第二輪外部抽樣審查（無條件觸發）
+5. **強制第二輪外部審查**：修復完成後，強制對該 Story 執行第二輪外部獨立審查（無條件觸發）
 6. **第二輪結果處理**：
    - 第二輪 CONFIRM → 執行 CONFIRM 路徑步驟（記錄結果，繼續下一 Story）
    - 第二輪 DISPUTE → 暫停 Sprint 執行，升級至 Architect 評估（多次 DISPUTE 視為系統性設計問題）
@@ -76,5 +76,5 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 | 指標 | 說明 | 用途 |
 |------|------|------|
 | 自審通過率 | Story-Lifecycle self-review PASS 數 / 總 Story 數 | 監控 subagent 自審效能 |
-| 外部抽樣執行率 | 實際外部抽樣 Story 數 / 應抽樣 Story 數 | 驗證 30% 門檻是否落實 |
+| 外部審查執行率 | 實際外部審查 Story 數 / 總 PASS Story 數 | 驗證 100% 全量審查是否落實（#958 修正） |
 | DISPUTE 率 | 外部抽樣中 DISPUTE 數 / 外部抽樣執行數 | Circuit Breaker 計數依據 |
