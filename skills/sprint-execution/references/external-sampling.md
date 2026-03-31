@@ -25,7 +25,7 @@
 
 **判斷規則：**
 - 條件：本 Sprint 的 Story 中存在 Size = L 的 Story
-- 觸發：是 → 本 Sprint **所有 Story** 均接受外部抽樣審查（100% 全量）
+- 觸發：是 → 本 Sprint **所有 Story** 均接受外部獨立審查（100% 全量）
 - 說明：L-size Story 涉及範圍廣、AC 數多，自審遺漏風險高，強制全量確保品質
 
 **評估時機：** Sprint 執行開始前或每個 Story 處理時，檢查 Sprint Backlog 中是否含 L-size Story。
@@ -41,7 +41,7 @@
   - AC 描述涉及認證（authentication）/ 授權（authorization）
   - AC 描述涉及加密、金鑰、secrets 管理
   - AC 描述涉及 API 端點新增或修改
-- 觸發：是 → 本 Sprint **所有 Story** 均接受外部抽樣審查（100% 全量）
+- 觸發：是 → 本 Sprint **所有 Story** 均接受外部獨立審查（100% 全量）
 - 說明：安全問題一旦遺漏，修復成本高且可能產生合規風險
 
 **評估時機：** 每個 Story 的 AC 清單讀取後立即評估。
@@ -52,12 +52,12 @@
 
 **判斷規則：**
 - 條件：前次 Sprint Review 或 Retrospective 中記錄了「自審遺漏缺陷」問題（即外部審查或 Stakeholder 發現了 Story-Lifecycle self-review 未偵測到的問題）
-- 觸發：是 → 本 Sprint **所有 Story** 均接受外部抽樣審查（100% 全量）
-- 持續時間：全量觸發持續至**連續 2 個 Sprint 無自審品質問題**為止，之後恢復基礎 30% 抽樣率
+- 觸發：是 → 本 Sprint **所有 Story** 均接受外部獨立審查（100% 全量）
+- 持續時間：全量觸發持續至**連續 2 個 Sprint 無自審品質問題**為止（已失效：基礎率已為 100%，此規則不再影響行為）
 - 計數規則：
   - 若當次 Sprint 在全量觸發下無 DISPUTE 事件 → 清潔計數 +1
   - 若當次 Sprint 出現 DISPUTE 事件 → 清潔計數重置為 0
-  - 清潔計數達到 2 → 下一 Sprint 恢復基礎抽樣率
+  - 清潔計數達到 2 → 下一 Sprint 恢復基礎抽樣率（已失效：基礎率已為 100%）
 
 **觸發來源識別：** 從 `docs/km/Retrospective_Log.md` 中查找前次 Sprint 的「自審品質問題」記錄項目。
 
@@ -69,7 +69,7 @@
 
 **判斷規則：**
 - 條件：Story-Lifecycle subagent 在同一 Story 的任一審查階段（Spec Compliance 或 Code Quality）連續自審 FAIL 達 **2 次**
-- 觸發：是 → 該 Story **強制接受外部抽樣審查**（不等 Story 最終回傳 PASS）
+- 觸發：是 → 該 Story **強制接受外部獨立審查**（不等 Story 最終回傳 PASS）
 - 說明：連續 self-review FAIL 表示自審機制可能存在盲點，需外部獨立視角介入
 - 注意：TC-4 僅影響當前 Story，不自動升級為全 Sprint 全量（但可與其他 TC 疊加）
 

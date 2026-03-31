@@ -64,7 +64,7 @@ team_debate:            # Team Debate 結果（§7.8，ADR-031，豁免時填 nu
   final_verdict: null   # Critic 最終 Verdict（PASS / FAIL / null）
   critique_files: []    # 批判紀錄檔案路徑清單（如 .claude/debate/critique-round-1.md）
 # --- Phase 2 欄位（AC3 抽樣邏輯已實作，schema 啟用待後續版本）---
-# sampling_triggered: false   # Phase 2 AC3：是否觸發外部抽樣審查
+# sampling_triggered: false   # Phase 2 AC3：是否觸發外部獨立審查
 # batch_index: null           # Phase 2 AC4：M/L size 分批執行批次索引
 # total_batches: null         # Phase 2 AC4：總批次數
 ```

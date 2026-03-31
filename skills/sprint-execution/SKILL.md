@@ -382,10 +382,12 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
         v
   派遣獨立 QA subagent【model: "sonnet"】審查 PR diff（`gh pr diff <PR_URL>`）
         |-- CONFIRM → 主 session 執行 `gh pr merge <PR_URL>` → 記錄結果，更新 PROJECT_BOARD
-        +-- DISPUTE → subagent push fix to PR branch → 強制二審 → CONFIRM 後 merge
-                      （見 references/external-review-dispute.md §4.2）
+        |-- DISPUTE → subagent push fix to PR branch → 強制二審 → CONFIRM 後 merge
+        |             （見 references/external-review-dispute.md §4.2）
+        +-- 無回傳 / crash / timeout → [QA-REVIEW-RECOVERY] 重新派遣 QA subagent（最多 2 次）
+                      仍無回傳 → ESCALATE: QA_SUBAGENT_FAILURE，PR 保持未合併，升級 Architect
   |
-  v（不觸發抽樣 / CONFIRM 完成後匯合）
+  v（CONFIRM + merge 完成後）
   Story Completion Checklist（#368 方向3，每個 Story 完成後）
   1. [ ] git checkout main && git pull
   2. [ ] 更新 PROJECT_BOARD.md + sprint_N.md 狀態（以 Issue ID 定位列，取代最後一欄值）；git commit + push（豁免直推 main，ADR-023 決策 3）
@@ -401,7 +403,7 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
 
 ---
 
-## 4. 外部抽樣審查結果處理（CONFIRM / DISPUTE）
+## 4. 外部獨立審查結果處理（CONFIRM / DISPUTE）
 
 CONFIRM → 主 session merge PR → 記錄結果，更新品質指標，繼續下一 Story（#960 修正：審查通過才 merge）。
 DISPUTE → PR 保持未合併、傳入缺陷清單至 Story-Lifecycle subagent push fix to PR branch、強制第二輪外部審查；第二輪 CONFIRM → merge；第二輪 DISPUTE → 升級至 Architect。Circuit Breaker：連續 3 Sprint DISPUTE 率 > 20% → 通知 Architect。
@@ -430,7 +432,7 @@ DESIGN Story 優先執行，依賴其 Contract 的 FEATURE Story 須等 Contract
 
 <!-- #385 GAD Delivery Phase 視覺對比 Gate — Sprint 133 -->
 
-**適用條件**：Story 為 frontend FEATURE（AC 含有 Figma Prototype URL），Code Review 通過後、`gh pr merge` 之前觸發。**跳過條件**：後端 / Infra / DESIGN / RESEARCH Story（AC 或 issue body 中無 Figma Prototype URL），輸出 `[VISUAL-GATE-SKIP]`。
+**適用條件**：Story 為 frontend FEATURE（AC 含有 Figma Prototype URL），Code Review 通過後、建立 PR 之前觸發（#960 修正）。**跳過條件**：後端 / Infra / DESIGN / RESEARCH Story（AC 或 issue body 中無 Figma Prototype URL），輸出 `[VISUAL-GATE-SKIP]`。
 
 > 詳見 `references/visual-gate.md`（執行流程、判定規則、降級機制）
 
@@ -526,7 +528,7 @@ Sprint Execution 中各角色的具體決策標準請參閱以下文件：
 
 ---
 
-<!-- ADR-007 Phase 2 外部抽樣審查機制已於 Sprint 24 US-41 完成實作並通過 QA 驗收，詳見 `docs/adr/ADR-007-story-lifecycle-subagent.md`。 -->
+<!-- ADR-007 Phase 2 外部獨立審查機制已於 Sprint 24 US-41 完成實作並通過 QA 驗收，詳見 `docs/adr/ADR-007-story-lifecycle-subagent.md`。 -->
 
 ---
 

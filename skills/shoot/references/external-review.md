@@ -6,7 +6,7 @@
 
 ## 外部獨立審查（步驟 5.3）
 
-<!-- Issue #257 — 移植 sprint-execution/SKILL.md §3-4 外部抽樣機制 -->
+<!-- Issue #257 — 移植 sprint-execution/SKILL.md §3-4 外部獨立審查機制 -->
 
 在 QA Post-check 通過後、CI/CD 雙審查 Gate 前，由**獨立 QA subagent**（非執行實作的 agent）重新驗證品質。
 
@@ -14,7 +14,7 @@
 
 | 面向 | Sprint Execution | Shoot |
 |------|-----------------|-------|
-| 抽樣率 | 30% 基礎，風險升級至 100% | **固定 100%**（單任務，無抽樣意義） |
+| 審查率 | **100% 全量**（#958 修正） | **固定 100%**（單任務，無抽樣意義） |
 | 審查內容 | Spec Compliance + Code Quality | **相同** |
 | DISPUTE 處理 | 回傳缺陷 → 修復 → 二審 | **相同** |
 | 審查 agent | 獨立 sonnet subagent | **相同** |
