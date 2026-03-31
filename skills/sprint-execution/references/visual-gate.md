@@ -35,4 +35,4 @@
          - 通知 Developer 修復後重新觸發
 ```
 
-**降級（agent-browser 或 talk-to-figma 不可用）**：輸出 `[VISUAL-GATE-DEGRADED] 視覺對比工具不可用，降級為人工確認`，不阻擋 merge，但在 PR description 標記「需人工視覺確認」。
+**降級（agent-browser 或 talk-to-figma 不可用）**：輸出 `[VISUAL-GATE-DEGRADED] 視覺對比工具不可用，降級為人工確認`，不阻擋 PR 建立，但在 PR description 標記「需人工視覺確認」。

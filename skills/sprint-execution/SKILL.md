@@ -432,7 +432,7 @@ DESIGN Story 優先執行，依賴其 Contract 的 FEATURE Story 須等 Contract
 
 <!-- #385 GAD Delivery Phase 視覺對比 Gate — Sprint 133 -->
 
-**適用條件**：Story 為 frontend FEATURE（AC 含有 Figma Prototype URL），Code Review 通過後、`gh pr merge` 之前觸發。**跳過條件**：後端 / Infra / DESIGN / RESEARCH Story（AC 或 issue body 中無 Figma Prototype URL），輸出 `[VISUAL-GATE-SKIP]`。
+**適用條件**：Story 為 frontend FEATURE（AC 含有 Figma Prototype URL），Code Review 通過後、建立 PR 之前觸發（#960 修正）。**跳過條件**：後端 / Infra / DESIGN / RESEARCH Story（AC 或 issue body 中無 Figma Prototype URL），輸出 `[VISUAL-GATE-SKIP]`。
 
 > 詳見 `references/visual-gate.md`（執行流程、判定規則、降級機制）
 

@@ -6,7 +6,7 @@
 
 ## 外部獨立審查（步驟 5.3）
 
-<!-- Issue #257 — 移植 sprint-execution/SKILL.md §3-4 外部抽樣機制 -->
+<!-- Issue #257 — 移植 sprint-execution/SKILL.md §3-4 外部獨立審查機制 -->
 
 在 QA Post-check 通過後、CI/CD 雙審查 Gate 前，由**獨立 QA subagent**（非執行實作的 agent）重新驗證品質。
 

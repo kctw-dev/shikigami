@@ -57,7 +57,7 @@
 - 計數規則：
   - 若當次 Sprint 在全量觸發下無 DISPUTE 事件 → 清潔計數 +1
   - 若當次 Sprint 出現 DISPUTE 事件 → 清潔計數重置為 0
-  - 清潔計數達到 2 → 下一 Sprint 恢復基礎抽樣率
+  - 清潔計數達到 2 → 下一 Sprint 恢復基礎抽樣率（已失效：基礎率已為 100%）
 
 **觸發來源識別：** 從 `docs/km/Retrospective_Log.md` 中查找前次 Sprint 的「自審品質問題」記錄項目。
 
