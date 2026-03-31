@@ -43,9 +43,9 @@
 ### 觸發條件
 
 - **閾值**：連續 **3 個 Sprint** 的 DISPUTE 率均超過 **20%**
-- **DISPUTE 率計算方式**：當次 Sprint 外部抽樣中 DISPUTE 數 / 外部抽樣執行數
-  - 範例：Sprint 中抽樣 3 個 Story，2 個回傳 DISPUTE → DISPUTE 率 = 67%（超過 20%）
-  - 範例：Sprint 中抽樣 5 個 Story，1 個回傳 DISPUTE → DISPUTE 率 = 20%（不超過，恰好在閾值）
+- **DISPUTE 率計算方式**：當次 Sprint 外部審查中 DISPUTE 數 / 外部審查執行數
+  - 範例：Sprint 中審查 3 個 Story，2 個回傳 DISPUTE → DISPUTE 率 = 67%（超過 20%）
+  - 範例：Sprint 中審查 5 個 Story，1 個回傳 DISPUTE → DISPUTE 率 = 20%（不超過，恰好在閾值）
   - 超過：DISPUTE 率 > 20%（嚴格大於，非大於等於）
 
 ### 觸發後動作
@@ -78,4 +78,4 @@ Circuit Breaker 計數採用**滾動 3 Sprint 窗口**，重置規則如下：
 |------|------|------|
 | 自審通過率 | Story-Lifecycle self-review PASS 數 / 總 Story 數 | 監控 subagent 自審效能 |
 | 外部審查執行率 | 實際外部審查 Story 數 / 總 PASS Story 數 | 驗證 100% 全量審查是否落實（#958 修正） |
-| DISPUTE 率 | 外部抽樣中 DISPUTE 數 / 外部抽樣執行數 | Circuit Breaker 計數依據 |
+| DISPUTE 率 | 外部審查中 DISPUTE 數 / 外部審查執行數 | Circuit Breaker 計數依據 |
