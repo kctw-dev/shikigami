@@ -58,6 +58,23 @@ Sprint 執行支援**雙軌派遣機制**：由環境變數 `SHIKIGAMI_MODEL_PRO
 | `docs/sprints/sprint-checkpoint.json` | Sprint 進度 checkpoint（coordinator-only） |
 </HARD-GATE>
 
+### Worktree Branch Base 隔離檢查（#968）
+
+<!-- #968 worktree 平行執行時確保 branch 從乾淨 base 建立 — Sprint 178 -->
+
+平行派遣 worktree subagent 前，必須確保所有 worktree branch 都從乾淨的 `origin/main` 起點建立，防止 commit 交叉污染（Sprint 177 Retro Action）。
+
+**主 session 派遣準備清單**：
+
+1. **執行全局 fetch**：`git fetch origin main`（一次性準備）
+2. **記錄 epoch commit**：`EPOCH_COMMIT=$(git rev-parse origin/main)` — 記錄派遣時刻的 main 版本
+3. **派遣各 Story subagent**，各自執行：
+   - 建立 worktree 時明確指定 base ref：`git worktree add <path> -b <branch> origin/main`
+   - 驗證初始 commit：`WORKTREE_HEAD=$(git rev-parse HEAD)` 應等於 EPOCH_COMMIT
+4. **平行完成後**：主 session 驗證所有 PR 的 commit 歷史無污染（PR review 時檢查）
+
+詳細流程見 `references/parallel-safety.md` **Worktree Branch Base 隔離檢查（#968）**
+
 ### 自動記憶體感知派遣（#712 / #722）
 
 派遣 subagent 前，**自動**執行 `scripts/memory-aware-dispatch.sh` 取得動態安全並行上限，無需人工決策：
