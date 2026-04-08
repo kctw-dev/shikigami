@@ -389,6 +389,9 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
   |
   v（CONFIRM + merge 完成後）
   Story Completion Checklist（#368 方向3，每個 Story 完成後）
+  0. [ ] **Worktree Cleanup**（#969 AC-1/AC-2/AC-3）：PR merge 後、步驟 1 前執行
+         bash scripts/worktree-cleanup.sh <branch_name>
+         若 cleanup 失敗，輸出 [WORKTREE-CLEANUP-WARN] 但繼續步驟 1（不阻塞）
   1. [ ] git checkout main && git pull
   2. [ ] 更新 PROJECT_BOARD.md + sprint_N.md 狀態（以 Issue ID 定位列，取代最後一欄值）；git commit + push（豁免直推 main，ADR-023 決策 3）
   3. [ ] 寫入 sprint-checkpoint.json（§2.12，豁免直推 main）
@@ -396,7 +399,7 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
   5. [ ] 檢查 Sprint Backlog 是否清空
          |-- 有剩餘 Story → 取出下一個 Story 繼續
          +-- 全部完成 → 立即 invoke shikigami:sprint-review
-  ※ 步驟 1-4 任一失敗不阻塞，輸出 WARN 後繼續步驟 5
+  ※ 步驟 0-4 任一失敗不阻塞，輸出 WARN 後繼續步驟 5
 ```
 
 > 完整步驟詳解（CI 快掃判定、派遣參數、PR 合併流程、Push Retry、升級類型處置表、Subagent 結果暫存）：`references/execution-flow-details.md`

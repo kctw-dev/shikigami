@@ -146,8 +146,21 @@
 
    **[主 session 職責]**（接收 PR_URL 後）：
    - 派遣獨立 QA subagent 審查 PR diff（`gh pr diff <PR_URL>`）— 100% 全量（#958）
-   - CONFIRM → 執行 `gh pr merge --squash --delete-branch` → Story Completion Checklist 步驟 1-5
+   - CONFIRM → 執行 `gh pr merge --squash --delete-branch` → **清理 worktree**（#969 AC-1、AC-2、AC-3） → Story Completion Checklist 步驟 1-5
    - DISPUTE → subagent push fix to PR branch → 強制二審 → CONFIRM 後 merge
+
+   **[Worktree Cleanup — #969 AC-1/AC-2/AC-3]**（PR merge 後、Story Completion Checklist 前）：
+   ```bash
+   # 抽出 PR 關聯的 branch 名稱（從 gh pr 讀取或傳入參數）
+   BRANCH_NAME=$(gh pr view <PR_NUM> --json headRefName --jq '.headRefName')
+   
+   # 執行 cleanup（在 Story Completion Checklist 的 git pull 之前）
+   # AC-1：執行 git worktree remove
+   # AC-2：cleanup 在 branch delete 之前執行，確保刪除不失敗
+   # AC-3：若 worktree 不存在或已清理，graceful skip 不中斷流程
+   bash scripts/worktree-cleanup.sh "$BRANCH_NAME"
+   ```
+   cleanup 失敗時輸出 `[WORKTREE-CLEANUP-WARN]` 但不阻塞流程，繼續 Checklist 步驟 1（git checkout main && git pull）。
 
    **[Checklist 步驟 2 — 狀態文件更新]**（主 session，步驟 1 git pull 完成後，直推 main — 豁免清單，ADR-023 決策 3）：
    更新看板與同步 Sprint 文件：Story 移至「已完成」，更新 `docs/PROJECT_BOARD.md`。同時同步 `docs/sprints/sprint_N.md` 的 Sprint Backlog 狀態欄（N 從 PROJECT_BOARD.md 符合 `/^## Sprint (\d+)/` 的最近「進行中」標題提取）：開啟 `docs/sprints/sprint_N.md`，將對應 Story 列的「狀態」欄更新為與 PROJECT_BOARD.md 一致。**每個完成 Story 行尾必須加 `DONE(#PR)` 標記**（`#PR` 為合併的 PR 編號），確保格式統一、可供自動化掃描。
