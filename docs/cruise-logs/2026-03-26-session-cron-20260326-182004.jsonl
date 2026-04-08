@@ -1,9 +1,0 @@
-{"type":"cruise-init","mode":"once","session_id":"cron-20260326-182004","repos":["kctw-dev/shikigami"],"patrol_mode":"po","project_level":"low","strict_mode":false,"cycle":1,"timestamp":"2026-03-26T10:21:17Z"}
-{"type":"po-patrol-start","repo":"kctw-dev/shikigami","cycle":1,"timestamp":"2026-03-26T10:21:53Z"}
-{"type":"po-patrol-complete","repo":"kctw-dev/shikigami","cycle":1,"result":{"sprint_review_triggered":true,"sprint_review":"Sprint 173 complete, v0.114.0→v0.115.0","new_issues":[920,921,922],"backlog_signal":"sprint-candidate 2 < threshold 10","velocity":6,"completion":"5/5"},"timestamp":"2026-03-26T10:56:02Z"}
-{"type":"sprint-planning-trigger","repo":"kctw-dev/shikigami","reason":"sprint-candidate count 3 >= 3, project_level=low HARD-GATE","sprint_candidates":[919,887,872],"cycle":1,"timestamp":"2026-03-26T10:57:13Z"}
-{"type":"sprint-planning-complete","sprint":174,"stories":[919,922,887,872],"points":5,"commit":"807fc5b","timestamp":"2026-03-26T11:07:09Z"}
-{"type":"sprint-execution-complete","sprint":174,"stories_completed":4,"points":5,"prs":[931,932,933],"timestamp":"2026-03-26T11:20:59Z"}
-{"type":"sprint-review-complete","sprint":174,"velocity":5,"completion":"4/4","version_bump":"v0.115.0→v0.116.0","retro_actions":[934,935],"backlog_signal":"BACKLOG-REPLENISH-TRIGGER","timestamp":"2026-03-26T11:32:10Z"}
-{"type":"once-mode-complete","session_id":"cron-20260326-182004","cycle":1,"timestamp":"2026-03-26T11:32:10Z"}
-{"type":"cruise-cleanup","session_id":"cron-20260326-182004","timestamp":"2026-03-26T11:32:10Z"}
