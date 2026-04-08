@@ -151,6 +151,41 @@ else
   check "Functional: 正常模式（無 --alert）仍可正常執行" "fail"
 fi
 
+# --- AC5: MIN_CANDIDATES 同步至 10（ADR-043 驗收） ---
+echo ""
+echo "=== AC5: MIN_CANDIDATES 同步驗證（ADR-043 閾值 = 10） ==="
+
+# 檢查 backlog-health-report.sh 中 MIN_CANDIDATES=10
+if grep -q "^MIN_CANDIDATES=10" "$SCRIPT" 2>/dev/null; then
+  check "AC5.1: backlog-health-report.sh 預設值為 10" "pass"
+else
+  check "AC5.1: backlog-health-report.sh 預設值為 10" "fail"
+fi
+
+# 檢查 backlog-health-alert.yml 中 default: "10"
+if grep -q 'default: "10"' "$WORKFLOW" 2>/dev/null; then
+  check "AC5.2: backlog-health-alert.yml 預設值為 10" "pass"
+else
+  check "AC5.2: backlog-health-alert.yml 預設值為 10" "fail"
+fi
+
+# 檢查 workflow 中 MIN_CANDIDATES 環境變數設定
+if grep -q "MIN_CANDIDATES:.*'10'" "$WORKFLOW" 2>/dev/null; then
+  check "AC5.3: workflow env 中 MIN_CANDIDATES 預設為 10" "pass"
+else
+  check "AC5.3: workflow env 中 MIN_CANDIDATES 預設為 10" "fail"
+fi
+
+# 檢查沒有其他不同的 MIN_CANDIDATES 值（應該全是 10）
+# 更精確的檢查：MIN_CANDIDATES=10 或 default: "10" 或 || '10'
+SCRIPT_VALUES=$(grep -E "^MIN_CANDIDATES=|default:" "$SCRIPT" "$WORKFLOW" 2>/dev/null | grep -oE "MIN_CANDIDATES=[0-9]+|default: \"[0-9]+\"" | grep -oE "[0-9]+" | sort -u | grep -v "^10$" || true)
+if [[ -z "$SCRIPT_VALUES" ]]; then
+  check "AC5.4: 所有 MIN_CANDIDATES 值一致（皆為 10）" "pass"
+else
+  check "AC5.4: 所有 MIN_CANDIDATES 值一致（皆為 10）" "fail"
+  echo "    發現非 10 的值：$SCRIPT_VALUES"
+fi
+
 echo ""
 echo "Results: PASS=$PASS FAIL=$FAIL"
 [[ $FAIL -eq 0 ]] && exit 0 || exit 1
