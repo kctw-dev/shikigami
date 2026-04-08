@@ -1,7 +1,23 @@
 # Project Board
 
-**最後更新：2026-04-09（Sprint 177 Review 完成）**
-**當前 Sprint**：Sprint 178（待規劃）
+**最後更新：2026-04-09（Sprint 178 Planning 完成）**
+**當前 Sprint**：Sprint 178（進行中）
+
+---
+
+## Sprint 178（進行中）
+
+> Sprint Goal：鞏固 Sprint 177 Retro 行動項目 — worktree 生命週期改善、AC 前置品質強化、框架驗證工具鏈補強
+> **容量**：6 pts | **Velocity 基準**：avg 6 pts
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: PR merge 後自動清理 worktree | #969 | S | 1 | TODO |
+| retro: worktree 平行執行時確保 branch 從乾淨 base 建立 | #968 | S | 1 | TODO |
+| retro: sprint-candidate issue 應在 Grooming 階段補齊 AC | #967 | S | 1 | TODO |
+| chore: backlog-health-alert MIN_CANDIDATES 同步 | #947 | S | 1 | TODO |
+| feat: validate-xrefs.sh 擴充 skill-to-skill 路徑驗證 | #949 | S | 1 | TODO |
+| chore: sprint-checkpoint.json 過期偵測 | #950 | S | 1 | TODO |
 
 ---
 
