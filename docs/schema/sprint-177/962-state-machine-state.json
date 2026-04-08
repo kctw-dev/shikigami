@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sprint Execution State Machine State",
+  "description": "外部狀態機的狀態檔 schema（Story #962, ADR-045）。描述 sprint-execution 前 3 步的執行狀態。",
+  "type": "object",
+  "required": ["sprint_number", "steps", "last_updated"],
+  "properties": {
+    "sprint_number": {
+      "type": "integer",
+      "description": "Sprint 編號",
+      "minimum": 1
+    },
+    "steps": {
+      "type": "object",
+      "description": "各步驟的執行狀態",
+      "required": ["task-list-init", "checkpoint-detection", "issue-ci-scan"],
+      "properties": {
+        "task-list-init": { "$ref": "#/$defs/step_state" },
+        "checkpoint-detection": { "$ref": "#/$defs/step_state" },
+        "issue-ci-scan": { "$ref": "#/$defs/step_state" }
+      },
+      "additionalProperties": false
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "最後更新時間（ISO-8601）"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "step_state": {
+      "type": "object",
+      "required": ["status", "completed_at", "exit_code"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["pending", "completed", "failed"],
+          "description": "步驟執行狀態"
+        },
+        "completed_at": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "完成時間（ISO-8601），pending 時為 null"
+        },
+        "exit_code": {
+          "type": ["integer", "null"],
+          "description": "退出碼，pending 時為 null，completed=0，failed=1"
+        },
+        "failure_reason": {
+          "type": "string",
+          "description": "失敗原因（僅 failed 狀態有值）"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
