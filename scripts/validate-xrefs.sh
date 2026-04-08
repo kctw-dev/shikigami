@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 # scripts/validate-xrefs.sh
-# US-T05：交叉引用驗證腳本
+# Story #949：交叉引用驗證腳本（含 skill-to-skill 交叉引用路徑驗證）
 #
-# 掃描倉庫中所有 .md 檔案的 shikigami:[a-z-]+ 引用，
-# 驗證對應的 skills/<name>/SKILL.md 存在。
+# 掃描倉庫中所有 .md 檔案的 shikigami:[a-z-]+ 引用，驗證對應資源存在。
+# 包括：
+#   - 頂層 .md 中的 skill/agent/command 引用
+#   - skills/*/references/*.md 內的 skill-to-skill 交叉引用
 #
-# AC1：掃描所有 .md 的 shikigami:[a-z-]+ 引用
-# AC2：驗證對應 skills/<name>/SKILL.md 存在
+# AC1：掃描所有 .md 的 shikigami:[a-z-]+ 引用（包含 references/*.md）
+# AC2：驗證引用路徑存在 — skills/<name>/SKILL.md、agents/<name>.md、commands/<name>.md
 # AC3：broken reference 輸出格式 ERROR: <file>:<line>: broken reference 'shikigami:<name>'
 # AC4：exit 0 = 無 broken reference，非 0 = 至少一個
 #
