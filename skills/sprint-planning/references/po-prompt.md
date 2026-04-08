@@ -175,7 +175,8 @@ PO 在 Sprint Planning 中為 **Developer SKILL 類 Story**（涉及 Developer s
 3. 更新 `docs/PROJECT_BOARD.md`，反映新 Sprint 的 Stories 配置
 4. 為所有選入的 Issues 執行 GitHub 操作：
    - 套用 `status: in-sprint` label（移除 `status: backlog`）
-   - 設定對應的 Sprint Milestone（`gh issue edit <number> --milestone "Sprint N" --add-label "status: in-sprint" --remove-label "status: backlog"`）
+   - 移除 `sprint-candidate` label（retro #954）
+   - 設定對應的 Sprint Milestone（`gh issue edit <number> --milestone "Sprint N" --add-label "status: in-sprint" --remove-label "status: backlog" --remove-label "sprint-candidate"`）
 5. **產出 Sprint Planning 會議紀錄**，依照 `templates/sprint-planning-meeting.md` 格式（#744），寫入 `docs/meetings/$(date '+%Y-%m-%d')-sprint-{N}-planning.md`，必須包含：Sprint Goal、Velocity Baseline、Stories Selected、Risk Notes、Next Sprint Preview、決議事項
 6. 回傳最終 Sprint Backlog 結構化摘要（Markdown 表格：Story ID / 標題 / 估點 / AC 確認結果）
 
