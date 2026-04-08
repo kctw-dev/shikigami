@@ -1,10 +1,11 @@
 {
   "sprint": 177,
-  "updated_at": "2026-04-08T16:47:32Z",
+  "updated_at": "2026-04-08T16:48:53Z",
   "stories": [
     {
       "id": "962",
-      "status": "pending"
+      "status": "completed",
+      "pr": "#964"
     },
     {
       "id": "954",

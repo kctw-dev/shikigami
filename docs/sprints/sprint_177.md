@@ -13,7 +13,7 @@
 
 | Story | Issue | Size | Points | 狀態 | 負責 | Routing Tier |
 |-------|-------|------|--------|------|------|-------------|
-| feat: 解決 LLM 規則衰減 — 外部狀態機 + 短命 Agent 架構 | #962 | L | 3 | TODO | — | opus（Score 10, FEATURE 架構變更） |
+| feat: 解決 LLM 規則衰減 — 外部狀態機 + 短命 Agent 架構 | #962 | L | 3 | DONE | PR#964 | opus（Score 10, FEATURE 架構變更） |
 | retro: sprint-candidate label 應於 Sprint Planning 選入時自動移除 | #954 | S | 1 | DONE | PR#963 | haiku（Score 4, CHORE label 自動化） |
 | retro: 評估 Discovery/RESEARCH Story 序列依賴優化機會 | #935 | M | 2 | DONE | PR#966 | haiku（Score 5, RESEARCH） |
 
