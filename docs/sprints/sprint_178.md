@@ -15,10 +15,10 @@
 |-------|-------|------|--------|------|------|-------------|
 | retro: PR merge 後自動清理 worktree | #969 | S | 1 | DONE | PR#971 | haiku（Score 4, RETRO） |
 | retro: worktree 平行執行時確保 branch 從乾淨 base 建立 | #968 | S | 1 | DONE | PR#972 | haiku（Score 4, RETRO） |
-| retro: sprint-candidate issue 應在 Grooming 階段補齊 AC | #967 | S | 1 | TODO | — | haiku（Score 3, RETRO） |
+| retro: sprint-candidate issue 應在 Grooming 階段補齊 AC | #967 | S | 1 | DONE | PR#975 | haiku（Score 3, RETRO） |
 | chore: backlog-health-alert MIN_CANDIDATES 同步 | #947 | S | 1 | DONE | PR#970 | haiku（Score 3, CHORE） |
 | feat: validate-xrefs.sh 擴充 skill-to-skill 路徑驗證 | #949 | S | 1 | DONE | PR#973 | haiku（Score 4, FEAT） |
-| chore: sprint-checkpoint.json 過期偵測 | #950 | S | 1 | TODO | — | haiku（Score 4, CHORE） |
+| chore: sprint-checkpoint.json 過期偵測 | #950 | S | 1 | DONE | PR#974 | haiku（Score 4, CHORE） |
 
 **總計**：6 Stories / 6 pts
 
