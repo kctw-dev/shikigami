@@ -86,9 +86,15 @@ mkdir -p "$FIXTURE_DIR/commands"
 cp "$VALIDATE_SCRIPT" "$FIXTURE_DIR/scripts/validate-xrefs.sh"
 cp "$REPO_ROOT/scripts/lib/validate-helpers.sh" "$FIXTURE_DIR/scripts/lib/validate-helpers.sh"
 
+# 建立 skill 的 references 目錄結構（用於 skill-to-skill 交叉引用驗證 — Story #949）
+mkdir -p "$FIXTURE_DIR/skills/sprint-planning/references"
+mkdir -p "$FIXTURE_DIR/skills/sprint-execution/references"
+mkdir -p "$FIXTURE_DIR/skills/systematic-debugging/references"
+
 # 建立 SKILL.md 供有效引用使用（fixture 內）
 touch "$FIXTURE_DIR/skills/sprint-planning/SKILL.md"
 touch "$FIXTURE_DIR/skills/sprint-execution/SKILL.md"
+touch "$FIXTURE_DIR/skills/systematic-debugging/SKILL.md"
 
 # ---------------------------------------------------------------------------
 # TEST 1：腳本在 skills/ 目錄存在時能正常執行（AC1 基礎可執行性）
@@ -133,6 +139,37 @@ assert_exit_code 1 "$BROKEN_EXIT" "TC5: broken reference 存在時 exit 1"
 
 # 清除 broken-doc 讓後續測試乾淨
 rm -f "$FIXTURE_DIR/broken-doc.md"
+
+# ---------------------------------------------------------------------------
+# TEST 7：skill-to-skill 交叉引用驗證（Story #949 AC2）
+# 在 references/*.md 內的 shikigami:xxx 引用必須指向存在的 skill
+# ---------------------------------------------------------------------------
+cat > "$FIXTURE_DIR/skills/sprint-planning/references/process.md" << 'EOF'
+This process invokes shikigami:sprint-execution for next steps.
+When debugging is needed, use shikigami:systematic-debugging.
+EOF
+
+SKILL_XREF_OUTPUT=$(cd "$FIXTURE_DIR" && bash scripts/validate-xrefs.sh 2>&1)
+SKILL_XREF_EXIT=$?
+
+assert_output_not_contains "broken reference" "$SKILL_XREF_OUTPUT" "TC7: skill references/process.md 中的有效 skill 引用不應報錯"
+assert_exit_code 0 "$SKILL_XREF_EXIT" "TC7: skill references 中的有效引用，exit 0"
+
+# ---------------------------------------------------------------------------
+# TEST 8：skill references 中的無效 skill 引用（Story #949 AC2 FAIL 場景）
+# ---------------------------------------------------------------------------
+cat > "$FIXTURE_DIR/skills/sprint-planning/references/invalid-ref.md" << 'EOF'
+This references a nonexistent skill: shikigami:nonexistent-debugger
+EOF
+
+INVALID_SKILL_XREF=$(cd "$FIXTURE_DIR" && bash scripts/validate-xrefs.sh 2>&1)
+INVALID_SKILL_EXIT=$?
+
+assert_output_contains "broken reference 'shikigami:nonexistent-debugger'" "$INVALID_SKILL_XREF" "TC8: skill references 中的無效引用應被偵測"
+assert_exit_code 1 "$INVALID_SKILL_EXIT" "TC8: skill references 中有無效引用時 exit 1"
+
+# 清除無效引用檔案
+rm -f "$FIXTURE_DIR/skills/sprint-planning/references/invalid-ref.md"
 
 # ---------------------------------------------------------------------------
 # TEST 6：placeholder 引用 shikigami:xxx 被跳過（邊界條件）
