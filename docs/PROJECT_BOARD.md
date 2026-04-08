@@ -1,23 +1,24 @@
 # Project Board
 
-**最後更新：2026-04-09（Sprint 178 Planning 完成）**
-**當前 Sprint**：Sprint 178（進行中）
+**最後更新：2026-04-09（Sprint 178 Review 完成）**
+**當前 Sprint**：Sprint 179（待規劃）
 
 ---
 
-## Sprint 178（進行中）
+## Sprint 178（完成）
 
 > Sprint Goal：鞏固 Sprint 177 Retro 行動項目 — worktree 生命週期改善、AC 前置品質強化、框架驗證工具鏈補強
 > **容量**：6 pts | **Velocity 基準**：avg 6 pts
+> **結果**：Goal 達成（6/6 Stories DONE）。Velocity 6 pts，完成率 100%。haiku ratio 100%（6/6）。
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| retro: PR merge 後自動清理 worktree | #969 | S | 1 | TODO |
-| retro: worktree 平行執行時確保 branch 從乾淨 base 建立 | #968 | S | 1 | TODO |
-| retro: sprint-candidate issue 應在 Grooming 階段補齊 AC | #967 | S | 1 | TODO |
-| chore: backlog-health-alert MIN_CANDIDATES 同步 | #947 | S | 1 | TODO |
-| feat: validate-xrefs.sh 擴充 skill-to-skill 路徑驗證 | #949 | S | 1 | TODO |
-| chore: sprint-checkpoint.json 過期偵測 | #950 | S | 1 | TODO |
+| retro: PR merge 後自動清理 worktree | #969 | S | 1 | DONE (PR#971) |
+| retro: worktree 平行執行時確保 branch 從乾淨 base 建立 | #968 | S | 1 | DONE (PR#972) |
+| retro: sprint-candidate issue 應在 Grooming 階段補齊 AC | #967 | S | 1 | DONE (PR#975) |
+| chore: backlog-health-alert MIN_CANDIDATES 同步 | #947 | S | 1 | DONE (PR#970) |
+| feat: validate-xrefs.sh 擴充 skill-to-skill 路徑驗證 | #949 | S | 1 | DONE (PR#973) |
+| chore: sprint-checkpoint.json 過期偵測 | #950 | S | 1 | DONE (PR#974) |
 
 ---
 
