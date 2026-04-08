@@ -60,11 +60,44 @@ fi
 # 檢查 sprint checkpoint
 # 複用已有的 REPO_ROOT_PATH（不重複 git rev-parse）
 CHECKPOINT_FILE="${REPO_ROOT_PATH}/docs/sprints/sprint-checkpoint.json"
+CHECKPOINT_CLEANUP_LOG="${REPO_ROOT_PATH}/.claude/hooks/checkpoint-cleanup.log"
+
+# AC1: 讀取當前 Sprint 編號（從 sprint_N.md 檔案）
+get_current_sprint_num() {
+  local sprint_file
+  sprint_file=$(ls -1 "${REPO_ROOT_PATH}/docs/sprints/sprint_"*.md 2>/dev/null | sort -V | tail -1)
+  if [[ -z "$sprint_file" ]]; then
+    echo "0"
+    return
+  fi
+  echo "$sprint_file" | sed -E 's/.*sprint_([0-9]+)\.md/\1/'
+}
+
+CURRENT_SPRINT=$(get_current_sprint_num)
+
 if [[ -f "$CHECKPOINT_FILE" ]]; then
-  SPRINT_NUM=$(grep -o '"sprint": *[0-9]*' "$CHECKPOINT_FILE" 2>/dev/null | grep -o '[0-9]*' || echo "?")
-  PENDING=$(grep -c '"pending"' "$CHECKPOINT_FILE" 2>/dev/null || echo "0")
-  if [[ "$PENDING" -gt 0 ]]; then
-    RECOVERY_HINTS="${RECOVERY_HINTS}[SPRINT-RECOVER] Sprint ${SPRINT_NUM} 進行中，${PENDING} 個 Story 待完成。讀取 ${CHECKPOINT_FILE} 恢復進度。\n"
+  CHECKPOINT_SPRINT=$(grep -o '"sprint": *[0-9]*' "$CHECKPOINT_FILE" 2>/dev/null | grep -o '[0-9]*' || echo "")
+
+  # AC1: 若 checkpoint sprint < 當前 sprint，自動清除
+  if [[ -n "$CHECKPOINT_SPRINT" && "$CURRENT_SPRINT" -gt 0 ]] && [[ "$CHECKPOINT_SPRINT" -lt "$CURRENT_SPRINT" ]]; then
+    rm -f "$CHECKPOINT_FILE" 2>/dev/null || true
+    # 記錄清除操作
+    mkdir -p "$(dirname "$CHECKPOINT_CLEANUP_LOG")"
+    printf '[%s] Removed stale checkpoint: sprint %s (current: %s)\n' \
+      "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$CHECKPOINT_SPRINT" "$CURRENT_SPRINT" \
+      >> "$CHECKPOINT_CLEANUP_LOG" 2>/dev/null || true
+  elif [[ -z "$CHECKPOINT_SPRINT" ]]; then
+    # AC1: 若無法解析 sprint 欄位（無效 JSON），刪除
+    rm -f "$CHECKPOINT_FILE" 2>/dev/null || true
+    mkdir -p "$(dirname "$CHECKPOINT_CLEANUP_LOG")"
+    printf '[%s] Removed invalid checkpoint JSON\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" \
+      >> "$CHECKPOINT_CLEANUP_LOG" 2>/dev/null || true
+  else
+    # checkpoint sprint 與當前 sprint 相同或無法判斷，保留並檢查 pending stories
+    PENDING=$(grep -c '"pending"' "$CHECKPOINT_FILE" 2>/dev/null || echo "0")
+    if [[ "$PENDING" -gt 0 ]]; then
+      RECOVERY_HINTS="${RECOVERY_HINTS}[SPRINT-RECOVER] Sprint ${CHECKPOINT_SPRINT} 進行中，${PENDING} 個 Story 待完成。讀取 ${CHECKPOINT_FILE} 恢復進度。\n"
+    fi
   fi
 fi
 
