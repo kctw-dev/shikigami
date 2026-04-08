@@ -1,20 +1,21 @@
 # Project Board
 
-**最後更新：2026-04-09（Sprint 177 Planning 完成）**
-**當前 Sprint**：Sprint 177（Planning 完成，0/3 TODO，0/6 pts）
+**最後更新：2026-04-09（Sprint 177 Review 完成）**
+**當前 Sprint**：Sprint 178（待規劃）
 
 ---
 
-## Sprint 177（Sprint Backlog）
+## Sprint 177（完成）
 
 > Sprint Goal：根治 LLM 規則衰減問題 — 交付 ADR-045 外部狀態機架構評估、sprint-execution PoC 驗證，同步完善 Backlog 自動化與 Discovery 序列依賴優化
 > **容量**：6 pts | **Velocity 基準**：avg 6 pts
+> **結果**：Goal 達成（3/3 Stories DONE）。Velocity 6 pts，完成率 100%。
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: 解決 LLM 規則衰減 — 外部狀態機 + 短命 Agent 架構 | #962 | L | 3 | TODO |
-| retro: sprint-candidate label 應於 Sprint Planning 選入時自動移除 | #954 | S | 1 | TODO |
-| retro: 評估 Discovery/RESEARCH Story 序列依賴優化機會 | #935 | M | 2 | TODO |
+| feat: 解決 LLM 規則衰減 — 外部狀態機 + 短命 Agent 架構 | #962 | L | 3 | DONE (PR#964) |
+| retro: sprint-candidate label 應於 Sprint Planning 選入時自動移除 | #954 | S | 1 | DONE (PR#963) |
+| retro: 評估 Discovery/RESEARCH Story 序列依賴優化機會 | #935 | M | 2 | DONE (PR#966) |
 
 ---
 
