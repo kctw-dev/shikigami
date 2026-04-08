@@ -51,9 +51,20 @@ git check-ignore -q .worktrees
 
 ## 2.3 建立 Worktree + Feature Branch
 
+建立 worktree 時，應明確指定 base ref 以確保從乾淨狀態起點開始（#968）：
+
 ```bash
-git worktree add <worktree-path> -b <branch-name>
+# 準備：同步遠端 main
+git fetch origin main
+
+# 建立 worktree，明確指定 origin/main 作為 base
+git worktree add <worktree-path> -b <branch-name> origin/main
 ```
+
+**重要**：
+- 使用 `origin/main` 作為 base，而非本地 `main` 或 `.`（current HEAD）
+- 這確保 worktree 從遠端乾淨的 main 起點建立
+- 尤其在平行執行多個 worktree 時，此做法防止 commit 交叉污染（#968 Retro Action）
 
 ---
 

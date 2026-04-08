@@ -219,6 +219,71 @@ Sprint Execution 派遣 Story-Lifecycle subagent 時，使用 Claude Code Agent 
 > 每個 subagent 在獨立工作目錄操作，共用文件衝突風險大幅降低。
 > 但 PR merge 順序仍可能造成衝突，主 session 負責 merge conflict 解決。
 
+### Worktree Branch Base 隔離檢查（#968）
+
+<!-- #968 worktree 平行執行時確保 branch 從乾淨 base 建立 — Sprint 178 -->
+
+平行派遣 worktree subagent 時，必須確保每個 worktree 的 branch 都從乾淨的 `origin/main` 起點建立。防止 Sprint 177 中 #935 PR 混入 #954 commit 的問題（root cause：worktree branch 不是從乾淨的 main 建立）。
+
+#### 建立 Worktree 前的準備步驟
+
+派遣 Story-Lifecycle subagent 建立 worktree 前，執行以下準備步驟以確保 base 隔離：
+
+```
+步驟 1：同步遠端 main
+  git fetch origin main
+  |-- 取得最新遠端 main commit
+
+步驟 2：驗證本地 main 狀態
+  CURRENT_MAIN_COMMIT=$(git rev-parse origin/main)
+  |-- 記錄當前 origin/main 的 commit hash
+
+步驟 3：建立 worktree 並明確指定 base
+  git worktree add <worktree-path> -b <branch-name> origin/main
+  |-- 使用 origin/main 作為 base ref，確保從乾淨起點建立
+  |-- 禁止使用本地 main 或 HEAD（可能含有未推送變更）
+
+步驟 4：驗證 worktree 初始 commit
+  cd <worktree-path>
+  WORKTREE_COMMIT=$(git rev-parse HEAD)
+  |-- 確保 worktree HEAD == origin/main，無污染
+  |-- 若 WORKTREE_COMMIT != CURRENT_MAIN_COMMIT → 報錯 [BASE-ISOLATION-FAIL]
+```
+
+#### 快速參考：完整命令序列
+
+```bash
+# 準備：同步遠端並記錄 base commit
+git fetch origin main
+BASE_COMMIT=$(git rev-parse origin/main)
+
+# 建立隔離 worktree，明確指定 base
+BRANCH_NAME="sprint-${SPRINT_NUM}/${STORY_ID}-feature"
+WORKTREE_PATH=".claude/worktrees/${BRANCH_NAME}"
+
+git worktree add "${WORKTREE_PATH}" -b "${BRANCH_NAME}" origin/main
+
+# 驗證初始狀態
+cd "${WORKTREE_PATH}"
+WORKTREE_HEAD=$(git rev-parse HEAD)
+if [[ "${WORKTREE_HEAD}" != "${BASE_COMMIT}" ]]; then
+  echo "[BASE-ISOLATION-FAIL] worktree HEAD (${WORKTREE_HEAD}) != origin/main (${BASE_COMMIT})"
+  exit 1
+fi
+echo "[BASE-ISOLATION-OK] worktree branch created from clean origin/main"
+```
+
+#### 平行派遣時的檢查
+
+多個 Story 平行派遣時，每個 subagent **獨立執行**上述準備步驟。主 session 派遣前：
+
+1. 執行 `git fetch origin main`（全局準備，一次性）
+2. 記錄 `origin/main` commit hash 作為 epoch
+3. 派遣各 Story subagent，各自在 worktree 中執行步驟 3-4
+4. 所有 subagent 完成後，驗證無 commit 混入（PR review 時檢查）
+
+**目標**：即使平行執行，每個 worktree 都基於同一乾淨 main epoch，避免版本漂移或 commit 交叉污染。
+
 ## 主 session 批次更新機制
 
 所有平行 subagent 完成後，**主 session 統一批次更新**：收集所有 PASS/FAIL/ESCALATE 結果 → 一次性讀取 `PROJECT_BOARD.md` 與 `sprint_N.md` → 依序套用狀態更新 → 單次 commit 提交。
