@@ -219,8 +219,33 @@ Session crash 後重啟時，Sprint Execution 自動偵測未完成 checkpoint�
 
 ## 3. 執行流程
 
+<!-- #983 Task List 初始化改為 short-lived step subagent 派遣 — Sprint 180 -->
+
 ```
-Task List 初始化（§2.13，#469 AC1/AC3，#538 AC2）
+Task List 初始化（§2.13，#469 AC1/AC3，#538 AC2，#983 ADR-045 落地）
+  # ── Step Subagent 派遣模式（#983 AC-1）──
+  # 此節點改為派遣 short-lived step subagent 執行，遵循 ADR-045 §3 契約
+  # 契約文件：references/step-subagent-contract.md
+  # 派遣 SOP：references/execution-flow-details.md §Step-Subagent-SOP
+  #
+  # 主 session 執行步驟：
+  # 1. 生成 prompt（規則佔比需 >= 10%，由 rule-ratio-measure.sh 驗證）
+  #    bash scripts/state-machine/step-subagent-poc.sh generate-prompt task-list-init <SPRINT_NUM>
+  #
+  # 2. 使用 Agent tool 派遣 short-lived subagent：
+  #    Agent tool prompt = 讀取 .state-machine/poc-output/prompt-task-list-init.md 內容
+  #    subagent 完成後輸出結果 JSON（格式見 references/step-subagent-contract.md §2）
+  #
+  # 3. 驗證結果 JSON 契約（status = "completed"，output_artifacts 非空）
+  #
+  # 4. 更新 progress tracker
+  #    bash scripts/state-machine/state-machine.sh complete task-list-init
+  #
+  # ── 退化模式（claude CLI 不可用時）──
+  # 若環境不支援 Agent tool 派遣，可降級為模擬模式：
+  #    bash scripts/state-machine/step-subagent-poc.sh simulate task-list-init <SPRINT_NUM>
+  #
+  # ── 原有 Task List 建立邏輯（subagent 內部執行）──
   # Sprint 啟動時建立 Task List，記錄三個主要 phase
   # 從 git remote 解析 OWNER_REPO（如 kctw-dev/shikigami）
   OWNER_REPO=$(git remote get-url origin | sed -E 's#^(https?://[^/]+/|git@[^:]+:)##; s#\.git$##')

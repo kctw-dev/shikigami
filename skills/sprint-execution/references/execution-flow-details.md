@@ -1,5 +1,69 @@
 # 執行流程步驟詳解（§3）
 
+## Step Subagent 派遣 SOP（#983 ADR-045 落地）
+
+<!-- #983 task-list-init 整合為 short-lived step subagent — Sprint 180 -->
+
+### 背景
+
+ADR-045（Sprint 179 #977）確立：規則衰減是**注意力問題**，不是記憶力問題。Short-lived step subagent 的核心優勢在於每次啟動時規則完整在 context window 頂部，對抗注意力衰減。
+
+### 目前實作：task-list-init 步驟
+
+| 項目 | 說明 |
+|------|------|
+| 適用範圍 | SKILL.md §3 Task List 初始化節點 |
+| 契約文件 | `references/step-subagent-contract.md` |
+| PoC 腳本 | `scripts/state-machine/step-subagent-poc.sh` |
+| 規則量測 | `scripts/state-machine/rule-ratio-measure.sh` |
+
+### 派遣流程（主 session 執行）
+
+```
+Step 1: 生成 prompt 模板
+  bash scripts/state-machine/step-subagent-poc.sh generate-prompt task-list-init <SPRINT_NUM>
+  → 輸出：.state-machine/poc-output/prompt-task-list-init.md
+  |
+  v
+Step 2: 規則佔比驗證（AC-2）
+  bash scripts/state-machine/rule-ratio-measure.sh <prompt_file>
+  → 輸出 JSON：{ rule_tokens, total_tokens, ratio, passed }
+  |-- passed=true (ratio >= 10%) → 繼續派遣
+  +-- passed=false (ratio < 10%) → [RULE-RATIO-WARN]，建議改善 prompt 規則內容
+  |
+  v
+Step 3: Agent tool 派遣 short-lived subagent
+  使用 Agent tool，prompt = prompt 模板內容
+  subagent 執行任務後寫入結果 JSON（ADR-045 §3 格式）
+  |
+  v
+Step 4: 驗證結果 JSON
+  結果 JSON 欄位：{ step_name, status, output_artifacts, duration_ms, error }
+  |-- status="completed" + output_artifacts 非空 → 派遣成功
+  +-- status="failed" → 記錄 error，升級處置（依失敗類型）
+  |
+  v
+Step 5: 更新 progress tracker
+  bash scripts/state-machine/state-machine.sh complete task-list-init
+```
+
+### 降級策略
+
+| 情境 | 自動行為 |
+|------|---------|
+| claude CLI 可用，Agent tool 正常 | 真實 dispatch 模式 |
+| claude CLI 不可用 | 自動降級為 simulate 模式，輸出 `[DISPATCH-FALLBACK]` |
+| rule-ratio-measure.sh 不可用 | 跳過規則量測，輸出 `[RULE-RATIO-SKIP]`，繼續派遣 |
+
+### 擴充原則
+
+新增步驟 subagent 時，遵循 `references/step-subagent-contract.md §5.1` 擴充指引：
+- Prompt 必須包含 4 個必要區塊（規則片段、輸入契約、輸出契約、成功/失敗判定）
+- 規則佔比 >= 10%（rule-ratio-measure.sh passed=true）
+- 結果 JSON 遵循 ADR-045 §3 契約格式
+
+---
+
 ## 升級類型處置表（主 session 職責）
 
 <!-- US-240 新增 REQUIREMENT_AMBIGUITY 觸發來源說明 — Sprint 88 -->
