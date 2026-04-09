@@ -1,21 +1,26 @@
 {
-  "sprint": 177,
-  "updated_at": "2026-04-08T18:45:47Z",
+  "sprint": 179,
+  "updated_at": "2026-04-09T09:55:00Z",
   "stories": [
     {
-      "id": "962",
+      "id": "977",
       "status": "completed",
-      "pr": "#964"
+      "pr": "#979"
     },
     {
-      "id": "954",
+      "id": "976",
       "status": "completed",
-      "pr": "#963"
+      "pr": "#978"
     },
     {
-      "id": "935",
-      "status": "completed",
-      "pr": "#966"
+      "id": "948",
+      "status": "pending",
+      "pr": null
+    },
+    {
+      "id": "955",
+      "status": "pending",
+      "pr": null
     }
   ]
 }
