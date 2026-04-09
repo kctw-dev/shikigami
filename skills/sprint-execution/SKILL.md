@@ -36,6 +36,71 @@ Sprint 執行支援**雙軌派遣機制**：由環境變數 `SHIKIGAMI_MODEL_PRO
 
 ---
 
+## 2.1.1 API Error Fallback 策略
+
+<!-- #995 Subagent API Error Fallback — opus 529/500 自動降級或退避 — Sprint 182 -->
+
+Sprint Execution 中 subagent 呼叫 LLM API 遇到錯誤時，依以下決策樹自動處理。**不降級至 haiku**（haiku 不在 fallback 路徑中）。
+
+### HTTP 429（Rate Limit）路徑
+
+指數退避重試**同模型**，耗盡後降級 sonnet：
+
+| 步驟 | 行為 |
+|------|------|
+| 第 1 次 | 等待 30s → 重試同模型 |
+| 第 2 次 | 等待 60s → 重試同模型 |
+| 第 3 次 | 等待 120s → 重試同模型 |
+| 3 次全失敗 | 降級至 sonnet 重試 1 次 |
+| sonnet 亦失敗 | → `[API-FALLBACK-EXHAUSTED]`，Story=BLOCKED |
+
+### HTTP 500 / HTTP 529（Server Error / Overload）路徑
+
+立即降級至 sonnet，不重試原模型：
+
+| 步驟 | 行為 |
+|------|------|
+| 立即降級 | 立即降級至 sonnet 重試 1 次 |
+| sonnet 失敗 | 指數退避 sonnet：30s → 60s → 120s，最多 3 次 |
+| 3 次全失敗 | → `[API-FALLBACK-EXHAUSTED]`，Story=BLOCKED |
+
+### 終止條件
+
+所有重試耗盡後：
+1. stdout 輸出：`[API-FALLBACK-EXHAUSTED]`
+2. 將 Story 標記為 `BLOCKED`（在 sprint checkpoint 記錄原因）
+
+### 降級 Log（AC-4）
+
+每次降級事件寫入 `docs/cruise-logs/model-fallback-<date>.jsonl`（每日一檔）：
+
+```jsonc
+{
+  "timestamp": "2026-04-10T12:00:00Z",  // ISO 8601 UTC
+  "story_id": "#995",                    // GitHub Issue 號碼
+  "from_model": "opus",                  // 原始模型
+  "to_model": "sonnet",                  // 降級目標模型
+  "reason": "HTTP529",                   // HTTP429 | HTTP500 | HTTP529
+  "retry_count": 0                       // 本次為第幾次重試（0-based）
+}
+```
+
+stdout 格式：`[MODEL-FALLBACK] #N from=opus to=sonnet reason=HTTP529`
+
+### 靜態例外 Agent（不參與動態路由，AC-5）
+
+下列 agent 固定使用 opus，但遇到 API 錯誤時仍依 fallback 路徑降級：
+
+| Agent | 正常模型 | 429 fallback | 500/529 fallback | 耗盡後 |
+|-------|---------|-------------|-----------------|--------|
+| Architect | opus | 退避 opus → sonnet 1次 | 立即 sonnet → 退避 sonnet | BLOCKED |
+| QA | opus | 退避 opus → sonnet 1次 | 立即 sonnet → 退避 sonnet | BLOCKED |
+| Security | opus | 退避 opus → sonnet 1次 | 立即 sonnet → 退避 sonnet | BLOCKED |
+
+> 靜態例外 agent 降級為 sonnet 時必須在降級 log 記錄，並在 Story 完成摘要中標注「降級執行」。
+
+---
+
 ## 2.2 平行執行安全防護（共用文件保護）
 
 <!-- US-188 平行 subagent 禁止直接修改共用文件 — Sprint 72 -->
