@@ -373,8 +373,11 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
 派遣 Story-Lifecycle subagent（story-lifecycle-prompt.md）
   Agent tool / Gemini CLI 雙軌派遣
   model: "sonnet" | isolation: "worktree"（#379）
-  subagent 內部閉環：TDD → Spec Compliance → Code Quality → Security → 開 PR（不 merge）
-  回傳：PASS/FAIL/ESCALATE + PR_URL
+  ※ 模型選擇（#976 AC-1）：依 ADR-039 風險評分路由，可派遣 haiku（Tier 1）執行 doc-only Story
+  subagent 內部閉環：TDD → Spec Compliance → Code Quality → Security → **必須開 PR（不 merge）**
+  ※ PR 建立是必要交付物（#976 AC-1）：所有 Story 無論大小或複雜度，包括 doc-only 修改，均**必須**執行 `gh pr create`
+  ※ 派遣 prompt 明確要求（#976 AC-1）：在 story-lifecycle-prompt.md 角色定義中明確指示 subagent 必須建立 PR
+  回傳：PASS/FAIL/ESCALATE + PR_URL（PR_URL 為必要欄位，無 PR 時回傳 ESCALATE）
   （詳細派遣參數與雙軌路徑：references/execution-flow-details.md）
   |
   v
@@ -386,6 +389,15 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
   |-- ESCALATE --> 依升級類型處置（見 references/execution-flow-details.md 升級表）
   |-- FAIL     --> 記錄失敗原因，更新看板，繼續下一 Story
   +-- PASS（含 PR_URL，PR 尚未 merge）
+        |
+        v（#976 AC-2：PR 存在性驗證）
+  **PR 存在性驗證**（Wave 完成後主 agent 執行）
+  ├─ 取出 subagent 回傳的 branch_name（或從 story_id 推導）
+  ├─ 執行驗證命令：`gh pr list --head <branch> --json number,state --jq '.[] | select(.state=="OPEN")'`
+  ├─ 結果分類：
+  │  |-- 有 open PR → 記錄 PR number，繼續下一步
+  │  +-- 無 open PR → 輸出 **[PR-MISSING-WARN]** ，記錄告警，升級為 ESCALATE: PR_MISSING
+  └─ PR 存在驗證完成後輸出 [CHECKPOINT-PASS] 或 [CHECKPOINT-FAIL]
         |
         v
   Checkpoint 重讀流程定義（§3.1 / references/execution-flow-details.md）
