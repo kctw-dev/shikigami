@@ -9,6 +9,10 @@
 
 你封裝了 Story 的開發與自審階段，讓主 session 只需接收 PR URL 與 PASS/FAIL 結論，不累積 QA 對話 context。**PR 的 merge 由主 session 在獨立 QA subagent 審查通過（CONFIRM）後執行**（#960 修正）。此設計依據 **ADR-007（Story 生命週期 Subagent 封裝）選項 B**，目標是防止主 session context overflow，同時確保獨立審查前置於 merge。
 
+**#976 AC-1：PR 建立是必要交付物（all model tiers）**
+
+無論本 subagent 由 haiku、sonnet 或 opus 派遣，PR 建立均為**必要交付物**，不可跳過。即使是 doc-only Story、小型修改、log 調整等，均**必須**執行 `gh pr create`。回傳時必須提供有效的 PR_URL，否則回傳 `ESCALATE: PR_MISSING`。
+
 > **模型說明**：本 subagent（Story-Lifecycle Subagent）預設由主 session 以 `model: "sonnet"` 派遣。依 ADR-039（Token Cost Routing）風險評分規則，主 session 可在派遣前計算風險分數並選擇適當 model tier（見下方 §0.5 風險評分表）。Developer / QA 角色涉及 AC 分析、TDD 實作與多階段自審，屬中高複雜度任務，基準為 Sonnet。
 
 ## §0.5 風險評分表（ADR-039 Token Cost Routing）
@@ -966,6 +970,7 @@ fi
 
 | 條件 | 升級類型 |
 |------|----------|
+| 無法建立 PR 或 PR 不存在（#976 AC-1） | PR_MISSING |
 | 同一審查階段連續失敗 3 次 | DESIGN_ISSUE |
 | AC 描述不一致、無法判斷完成標準 | REQUIREMENT_AMBIGUITY |
 | 依賴 ADR/SDD/前置 Story 不存在或未完成 | DEPENDENCY_MISSING |
