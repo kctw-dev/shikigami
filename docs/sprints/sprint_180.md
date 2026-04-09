@@ -14,9 +14,9 @@
 | Story | Issue | Size | Points | 狀態 | 負責 | Routing Tier |
 |-------|-------|------|--------|------|------|-------------|
 | retro: sprint-execution 整合 short-lived subagent — ADR-045 落地第一步 | #983 | M-L | 3 | DONE | PR#985 | sonnet（Score 9, FEAT） |
-| retro: backlog 水位趨勢腳本整合至自動化報告 | #982 | S | 1 | TODO | - | haiku（Score 5, FEAT） |
-| retro: 建立 hooks 架構說明文件 — hook-runner.sh 使用時機指南 | #984 | S | 1 | TODO | - | haiku（Score 4, DOC） |
-| retro: TDD 外部工具模擬最佳實踐指南 — fake binary vs PATH 清空陷阱 | #953 | S | 1 | TODO | - | haiku（Score 4, DOC） |
+| retro: backlog 水位趨勢腳本整合至自動化報告 | #982 | S | 1 | DONE | PR#986 | haiku（Score 5, FEAT） |
+| retro: 建立 hooks 架構說明文件 — hook-runner.sh 使用時機指南 | #984 | S | 1 | DONE | PR#987 | haiku（Score 4, DOC） |
+| retro: TDD 外部工具模擬最佳實踐指南 — fake binary vs PATH 清空陷阱 | #953 | S | 1 | DONE (PROCESS-VIOLATION) | direct-main | haiku（Score 4, DOC） |
 
 **總計**：4 Stories / 6 pts
 
