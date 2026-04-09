@@ -1,0 +1,16 @@
+## 規則片段
+
+Brief rule.
+
+## 輸入契約
+
+This is a much longer input contract section that contains many more tokens and words.
+We need this to be very long to make the rule section less than 5% of the total.
+This filler text continues to grow and grow with more and more content lines.
+Another line of filler content to reduce the overall rule ratio further and further.
+More filler content here. More filler content there. Filler everywhere you look.
+The rule section is tiny compared to all this extra input contract text content.
+We are trying to make sure the rule ratio is definitely less than 5 percent total.
+This line adds more content. And this one. And another. And yet another line here.
+Repeat repeat repeat filler filler filler more more more text text text content.
+The total ratio must stay below 5 percent to trigger the BLOCK threshold gate.
