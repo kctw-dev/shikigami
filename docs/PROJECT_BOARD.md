@@ -1,21 +1,37 @@
 # Project Board
 
-**最後更新：2026-04-09（Sprint 181 Planning 完成）**
-**當前 Sprint**：Sprint 181（進行中）
+**最後更新：2026-04-10（Sprint 182 Planning 完成）**
+**當前 Sprint**：Sprint 182（進行中）
 
 ---
 
-## Sprint 181（進行中）
+## Sprint 182（進行中）
+
+> Sprint Goal：強化 QA 品質防線三要素 — PO 輸出自律（#994）、API 容錯自動化（#995）、閾值彈性化（#996），加上 Skill 依賴驗證補強（#940）
+> **容量**：6 pts | **Velocity 基準**：avg 6 pts（Sprint 179=6, 180=6, 181=6）
+> **開始**：2026-04-10 | **結束**：2026-04-17
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| PO Prompt Template 禁用軟性字樣 | #994 | S | 1 | TODO |
+| rule-ratio-measure.sh 支援 per-prompt THRESHOLD | #996 | S | 1 | TODO |
+| Subagent API Error Fallback | #995 | M | 3 | TODO |
+| Skill 依賴宣告一致性驗證 | #940 | S | 1 | TODO |
+
+---
+
+## Sprint 181（完成）
 
 > Sprint Goal：以外部機械性驗證取代 agent 自我回報 — 雙層 PR 存在性防護（主 session inline + 獨立 step subagent）封堵 #953 類 process violation，自動化 prompt 規則佔比監控
 > **容量**：6 pts | **Velocity 基準**：avg 6 pts（Sprint 178=6, 179=6, 180=6）
+> **結果**：Goal 達成（3/3 Stories DONE）。Velocity 6 pts，完成率 100%。
 > **開始**：2026-04-09 | **結束**：2026-04-16
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| post-execution PR 強制驗證（L1 主 session inline） | #989 | S-M | 2 | TODO |
-| ADR-045 Phase 2 — delivery-completion-check step subagent（L2 獨立 agent） | #988 | M-L | 3 | TODO |
-| rule-ratio-measure.sh 整合到 dispatch 流程（preflight hook） | #990 | S | 1 | TODO |
+| post-execution PR 強制驗證（L1 主 session inline） | #989 | S-M | 2 | DONE (PR#991) |
+| ADR-045 Phase 2 — delivery-completion-check step subagent（L2 獨立 agent） | #988 | M-L | 3 | DONE (PR#992) |
+| rule-ratio-measure.sh 整合到 dispatch 流程（preflight hook） | #990 | S | 1 | DONE (PR#993) |
 
 ---
 
