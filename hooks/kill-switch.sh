@@ -19,6 +19,14 @@
 #
 # Story: #398 Sprint 138
 # ADR: docs/adr/ADR-038-kill-switch-design.md
+#
+# ─── Spike #955 Assessment (2026-04-09) ───────────────────────────────────────
+# Timeout Protection: NOT NEEDED
+# Rationale: The `clear` operation (used in SessionEnd) is trivial (file deletion
+#            only, < 1ms execution time). Already protected by async=true in
+#            hooks.json. No risk of hanging. Migration to hook-runner.sh would add
+#            complexity without safety benefit. Recommended: keep inline async.
+# See: docs/km/spike-955-kill-switch-assessment.md
 
 set -euo pipefail
 
