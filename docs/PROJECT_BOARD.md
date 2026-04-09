@@ -1,7 +1,22 @@
 # Project Board
 
-**最後更新：2026-04-09（Sprint 179 Review 完成）**
-**當前 Sprint**：Sprint 179（完成）
+**最後更新：2026-04-09（Sprint 180 Planning 完成）**
+**當前 Sprint**：Sprint 180（Planning 完成，等待 Execution）
+
+---
+
+## Sprint 180（Sprint Backlog）
+
+> Sprint Goal：將 ADR-045 short-lived subagent 從 PoC 模擬升級為 sprint-execution task-list-init 步驟的真實整合，同步補完 Sprint 179 Retro Action Items 的可觀測性與文件缺口
+> **容量**：6 pts | **Velocity 基準**：avg 6 pts
+> **平行分群**：Wave 1（#983 獨占）→ Wave 2（#982 + #984）→ Wave 3（#953）
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| retro: sprint-execution 整合 short-lived subagent — ADR-045 落地第一步 | #983 | M-L | 3 | TODO |
+| retro: backlog 水位趨勢腳本整合至自動化報告 | #982 | S | 1 | TODO |
+| retro: 建立 hooks 架構說明文件 — hook-runner.sh 使用時機指南 | #984 | S | 1 | TODO |
+| retro: TDD 外部工具模擬最佳實踐指南 — fake binary vs PATH 清空陷阱 | #953 | S | 1 | TODO |
 
 ---
 
