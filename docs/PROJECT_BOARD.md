@@ -1,7 +1,21 @@
 # Project Board
 
-**最後更新：2026-04-09（Sprint 180 Review 完成）**
-**當前 Sprint**：Sprint 181（待 Planning）
+**最後更新：2026-04-09（Sprint 181 Planning 完成）**
+**當前 Sprint**：Sprint 181（進行中）
+
+---
+
+## Sprint 181（進行中）
+
+> Sprint Goal：以外部機械性驗證取代 agent 自我回報 — 雙層 PR 存在性防護（主 session inline + 獨立 step subagent）封堵 #953 類 process violation，自動化 prompt 規則佔比監控
+> **容量**：6 pts | **Velocity 基準**：avg 6 pts（Sprint 178=6, 179=6, 180=6）
+> **開始**：2026-04-09 | **結束**：2026-04-16
+
+| Story | Issue | Size | Points | 狀態 |
+|-------|-------|------|--------|------|
+| post-execution PR 強制驗證（L1 主 session inline） | #989 | S-M | 2 | TODO |
+| ADR-045 Phase 2 — delivery-completion-check step subagent（L2 獨立 agent） | #988 | M-L | 3 | TODO |
+| rule-ratio-measure.sh 整合到 dispatch 流程（preflight hook） | #990 | S | 1 | TODO |
 
 ---
 
