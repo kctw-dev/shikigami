@@ -1,34 +1,43 @@
-# ADR-045: 外部狀態機 + 短命 Agent 架構 — 解決 LLM 規則衰減
+# ADR-045: Short-lived Subagent + Progress Tracker — 解決 LLM 規則衰減
 
 **狀態**：Accepted
 **日期**：2026-04-09
+**修訂日期**：2026-04-09
+**修訂理由**：原方案誤判問題根因為「記憶力」（忘記規則），實際為「注意力」（知道規則但權重不足而忽略）。State machine gate 解的是記憶力問題，對注意力問題無效。改用 short-lived subagent（每步驟獨立 context）直接解決注意力佔比問題，state machine 降級為 progress tracker。
 **決策者**：Architect Agent + Developer Agent
-**觸發 Story**：#962（feat: 解決 LLM 規則衰減 — 外部狀態機 + 短命 Agent 架構）
-**Unblocks**：Sprint 177 PoC 實作
+**觸發 Story**：#962（原始）→ #977（方向修正）
+**Unblocks**：Sprint 179 細粒度 subagent 派遣
 
 ---
 
 ## 背景與問題
 
-LLM agent 在長 context 下會出現「規則衰減」現象：隨著 conversation 增長，早期注入的流程規則（SKILL.md §3 執行流程、HARD-GATE 條件）逐漸被稀釋，導致：
+LLM agent 在長 context 下會出現「規則衰減」現象。**此問題的根因是注意力（attention），不是記憶力（memory）**。
 
-1. **步驟跳過**：sprint-execution 的 gate 條件（如 checkpoint 偵測、CI 快掃）被靜默略過
-2. **順序錯亂**：步驟執行順序不符 SKILL.md 定義（如未完成 Task List 初始化就開始 Story 選取）
-3. **HARD-GATE 失效**：compact 後的 context 遺失 gate 條件，後續步驟缺乏正確前置驗證
+### 正確診斷：注意力權重稀釋
+
+1. **LLM 知道規則存在，但選擇不遵守**：規則仍在 context 中（未被 compact 丟棄），但 attention 機制在長 context 中分散注意力，導致規則的權重不足以影響輸出
+2. **佔比是關鍵**：2000 token 的流程規則在 100K token context 中僅佔 ~2%，被忽略是 transformer attention 機制的本質行為
+3. **LLM 會自圓其說**：不是靜默跳過步驟，而是編造合理理由（「考慮到效率，這個步驟可以合併」「這兩步可以同時進行」），將違規偽裝成合理決策
 4. **不可觀測**：步驟執行與否缺乏外部可驗證的 log，僅依賴 LLM 自述
 
-### 與 scrum-master-state-graph.md 的關係（AC4）
+### 原始診斷的錯誤
+
+原方案（方向 3：外部腳本驅動 + 現有 subagent 模型）假設問題是「LLM 忘記做到哪一步」，因此用 state machine gate 來「提醒」。但實際上：
+
+- Gate 驅動仍依賴 LLM 主動呼叫 — 若 LLM 注意力不足以遵守「每步呼叫 gate」的指令，gate 本身就會被跳過
+- 「LLM 不呼叫 gate check 則形同虛設」在原 ADR 已被列為風險，但未認識到這正是核心矛盾
+
+### 與 scrum-master-state-graph.md 的關係
 
 現有 `docs/sdd/scrum-master-state-graph.md` 定義了 Scrum Master 的完整調度狀態機（§2-§5），覆蓋 Sprint lifecycle、exception path、意圖路由、自動觸發。該狀態圖為**文件化行為描述**（documentation），不直接驅動執行。
 
-本 ADR 提出的外部狀態機是**執行層**的補充：將 sprint-execution §3 流程從「LLM 內部記憶」遷移至「外部腳本驗證」，與 scrum-master-state-graph.md 形成互補關係：
+本 ADR 修訂版的 progress tracker 與 scrum-master-state-graph.md 形成互補：
 
 | 層級 | 文件 | 性質 |
 |------|------|------|
 | 設計層（Design） | scrum-master-state-graph.md | 行為文件化，描述「應該怎麼走」 |
-| 執行層（Runtime） | scripts/state-machine/ | 外部驗證，確保「真的有走到」 |
-
-兩層的狀態命名應保持一致。外部狀態機的 step name 應能對應到 scrum-master-state-graph.md §2 SprintExecution 子狀態。
+| 執行層（Runtime） | scripts/state-machine/ | 進度追蹤，記錄「實際走到哪」 |
 
 ---
 
@@ -36,100 +45,175 @@ LLM agent 在長 context 下會出現「規則衰減」現象：隨著 conversat
 
 ### 方向 1：外部狀態機（Shell Script 持有狀態）
 
-**概念**：以 shell script 作為流程驅動器，每一步定義 gate condition（產出物存在性檢查），通過才放行下一步。狀態持久化至 JSON 檔案。
+**概念**：以 shell script 作為流程驅動器，每一步定義 gate condition，通過才放行下一步。
 
-**優點**：
-- 狀態外化，不依賴 LLM context 記憶
-- Gate condition 為硬性檢查（file exists、exit code），不可被 LLM 繞過
-- 可觀測：每步留下結構化 log（step_name、exit_code、timestamp、failure_reason）
-- 冪等重入：重執行時自動跳過已完成步驟（NFR4）
-- 執行時間 < 1s（純 shell 操作）
-- 向後相容：新目錄隔離（scripts/state-machine/），不影響既有流程
-
-**缺點**：
-- Shell script 能力有限，複雜邏輯需回退至 LLM
-- 需要 LLM 主動呼叫外部腳本（依賴 prompt 指令）
+**問題**：解的是「記憶力」問題（怕忘了做到哪），但真正的問題是「注意力」。Gate 驅動仍依賴 LLM 主動呼叫，在注意力衰減時 gate 本身就會被跳過。
 
 ### 方向 2：短命 Agent（每步驟獨立 subagent）
 
-**概念**：每個流程步驟派遣一個全新 subagent，確保 context 乾淨、無歷史污染。
+**概念**：每個流程步驟派遣一個全新 subagent，確保 context 乾淨、規則佔比高。
 
 **優點**：
 - 徹底消除 context 衰減（每步驟從零開始）
-- 每個 subagent 可用最小 prompt（僅注入該步驟所需規則）
+- 每個 subagent 的 prompt 中規則佔比 ~17%（2K/12K），遠高於長 context 的 ~2%（2K/100K）
+- Attention 權重集中在少數規則上，遵守率顯著提高
 
 **缺點**：
 - 派遣成本高（每步驟建立 subagent 有啟動延遲）
 - 步驟間狀態傳遞需要額外機制
-- 增加 OOM 風險（更多 subagent 同時存在的可能性）
-- 與現有 Story-Lifecycle subagent 模型（ADR-007）有架構衝突
 
-### 方向 3：組合方案 — 外部腳本驅動 + 現有 subagent（選定）
+### 方向 3：組合方案 — 外部腳本驅動 + 現有 subagent（原選定，已廢棄）
 
-**概念**：以外部 shell script 作為流程驅動器和 gate 守門人，但不改變現有 subagent 派遣模型。sprint-execution 主流程在執行每個步驟前，先呼叫外部腳本驗證 gate condition，通過才繼續。
+原方案，不再贅述。核心問題：gate 驅動依賴 LLM 主動呼叫，無法解決注意力衰減。
+
+### 方向 4：Short-lived Subagent + Progress Tracker（修訂版，選定）
+
+**概念**：
+- **核心機制**：將執行性步驟拆為細粒度 short-lived subagent，每個 subagent 的 context 只包含該步驟所需的規則和輸入，確保規則佔比高
+- **輔助機制**：state-machine.sh 降級為 progress tracker，僅記錄進度（做到哪）和狀態（成功/失敗），不驅動流程、不做 gate 攔截
 
 **優點**：
-- 結合方向 1 的「硬性 gate」與現有 subagent 模型的「成熟穩定」
-- 不引入額外 subagent 派遣開銷
-- Gate 驗證獨立於 LLM context（外部腳本持有狀態）
-- 向後相容：既有流程不變，僅在步驟間插入 gate check
-- 漸進式遷移：可逐步將更多步驟納入外部狀態機管控
+- 直接解決注意力問題 — 短 context 中規則佔比高，LLM 被迫關注
+- Progress tracker 提供可觀測性 — 事後可審計每步執行結果
+- 與 ADR-007 Story-Lifecycle subagent 共存 — Story-level 和 Step-level 是不同粒度
+- 冪等重入 — progress tracker 記錄斷點，crash recovery 可從斷點續跑
 
 **缺點**：
-- LLM 仍需主動呼叫 gate check（需 prompt 約束）
-- 不能徹底消除 context 衰減，僅能在關鍵點攔截
+- 步驟間狀態傳遞需要明確契約（JSON 結果回傳）
+- 增加 subagent 派遣開銷（但每個 subagent 更小更快完成）
 
 ---
 
 ## 決策內容
 
-**選擇方向 3：組合方案（外部腳本驅動 + 現有 subagent 模型）**
+**選擇方向 4：Short-lived Subagent + Progress Tracker（修訂版）**
 
 ### 理由
 
-1. **風險最小**：不改變 ADR-007 的 Story-Lifecycle subagent 封裝模型
-2. **ROI 最高**：在最容易衰減的關鍵步驟（前 3 步）加入硬性 gate，以最小成本解決 80% 問題
-3. **可觀測性**：每步產出結構化 log，可事後審計
-4. **漸進式**：PoC 驗證成功後，可逐步擴展至全流程
+1. **對症下藥**：注意力問題用「縮短 context + 提高規則佔比」解決，而非「外部 gate 提醒」
+2. **不依賴 LLM 自律**：派遣 subagent 是主 session 的行為，subagent 本身只需完成一個小任務
+3. **可觀測性**：progress tracker 記錄每步結果，事後可審計
+4. **漸進式**：可逐步將步驟改為 subagent 派遣，不必一次全改
 
-### PoC 範圍
-
-sprint-execution §3 前 3 步：
-1. **Task List 初始化**（§2.13）— gate: task list 建立成功
-2. **Sprint Checkpoint 偵測**（§2.12）— gate: checkpoint 檔案狀態已判定
-3. **Issue/CI 快掃**（gh issue list + gh run list）— gate: 掃描結果已記錄
-
-### 狀態機設計
+### 架構概覽
 
 ```
-State File: .state-machine/sprint-execution-state.json
+主 Session（Orchestrator）
+  │
+  ├─ 讀取 progress tracker → 判斷從哪一步續跑
+  │
+  ├─ Step 1: 派遣 subagent（task-list-init）
+  │    └─ subagent 完成 → 回傳 JSON 結果
+  │    └─ 主 session 更新 progress tracker
+  │
+  ├─ Step 2: 派遣 subagent（story-selection）
+  │    └─ ...
+  │
+  └─ Step N: 純檢查步驟（可留在主 session）
+       └─ checkpoint 偵測、CI 快掃等
+```
 
+### Progress Tracker（原 state-machine.sh 降級）
+
+state-machine.sh 保留以下功能：
+- `init` — 初始化進度檔
+- `complete` — 標記步驟完成
+- `fail` — 標記步驟失敗
+- `status` — 查詢目前進度
+- `check` — 查詢某步驟狀態（純 query，不 block）
+
+移除：
+- `gate` — 不再做流程攔截（gate 依賴 LLM 主動呼叫，是注意力問題的另一種表現）
+
+---
+
+## § 細粒度 Short-lived Subagent 派遣方案
+
+### 1. 適用步驟選擇
+
+sprint-execution §3 流程中的步驟分類：
+
+| 步驟 | 類型 | 派遣方式 | 理由 |
+|------|------|---------|------|
+| Task List 初始化 | 執行性 | **subagent** | 需要讀取 Sprint 資訊、建立結構化 task list |
+| Sprint Checkpoint 偵測 | 純檢查 | 主 session | 僅讀取 checkpoint 檔案判斷狀態，無複雜邏輯 |
+| Issue/CI 快掃 | 純檢查 | 主 session | 僅呼叫 gh CLI 取得狀態 |
+| Story 選取 | 執行性 | **subagent** | 需要 RICE 評分、依賴分析等判斷 |
+| Story 實作 | 執行性 | **subagent** | ADR-007 Story-Lifecycle subagent（已存在） |
+| Story 審查 | 執行性 | **subagent** | 需要獨立 QA 審查，已存在 |
+| Sprint Review | 執行性 | **subagent** | 需要統計、產出報告 |
+
+**選擇原則**：
+- 執行性步驟（需要判斷、生成、修改檔案）→ 獨立 subagent
+- 純檢查步驟（僅讀取狀態、回傳布林值）→ 留在主 session
+- 已有 subagent 的步驟（Story 實作、審查）→ 維持現狀
+
+### 2. Prompt 模板格式
+
+每個 step subagent 的 prompt 應包含四個區塊：
+
+```markdown
+# Step Subagent: {step_name}
+
+## 規則片段
+{從 SKILL.md 提取該步驟的相關規則，限制在 2K token 以內}
+
+## 輸入契約
+- 前一步驟產出物路徑：{file_path}
+- Sprint 編號：{sprint_number}
+- 其他必要 context：{...}
+
+## 輸出契約
+- 必須產出的檔案：{output_files}
+- 必須回傳的 JSON 結果（寫入 {result_file}）
+
+## 成功/失敗判定
+- 成功條件：{success_criteria}
+- 失敗條件：{failure_criteria}
+- 遇到失敗時：寫入失敗 JSON 並結束，不嘗試自行修復
+```
+
+### 3. 結果回傳 JSON 契約
+
+每個 step subagent 完成後，必須寫入標準化結果 JSON：
+
+```json
 {
-  "sprint_number": N,
-  "steps": {
-    "task-list-init":       { "status": "pending|completed|failed", "completed_at": null, "exit_code": null },
-    "checkpoint-detection": { "status": "pending|completed|failed", "completed_at": null, "exit_code": null },
-    "issue-ci-scan":        { "status": "pending|completed|failed", "completed_at": null, "exit_code": null }
-  },
-  "last_updated": "ISO-8601"
+  "step_name": "task-list-init",
+  "status": "completed|failed|escalate",
+  "output_artifacts": [
+    "docs/sprints/sprint-179/task-list.md"
+  ],
+  "duration_ms": 3200,
+  "error": null
 }
 ```
 
-### Gate 條件定義
+欄位說明：
+- `step_name`：步驟名稱，與 progress tracker 的 step name 一致
+- `status`：`completed`（成功）、`failed`（失敗，可重試）、`escalate`（需人工介入）
+- `output_artifacts`：本步驟產出的檔案路徑列表
+- `duration_ms`：執行耗時（毫秒）
+- `error`：失敗時的錯誤訊息，成功時為 `null`
 
-| Step | Gate Condition | 驗證方式 |
-|------|---------------|---------|
-| task-list-init | state file 中 task-list-init.status == "completed" | `jq` 讀取 |
-| checkpoint-detection | state file 中 checkpoint-detection.status == "completed" | `jq` 讀取 |
-| issue-ci-scan | state file 中 issue-ci-scan.status == "completed" | `jq` 讀取 |
+主 session 收到結果後：
+1. 驗證 `output_artifacts` 中的檔案是否存在
+2. 根據 `status` 更新 progress tracker
+3. 若 `status` 為 `failed`，可重試或 escalate
+4. 若 `status` 為 `escalate`，停止流程等待人工介入
 
-### 與 scrum-master-state-graph.md 的對應
+### 4. 與 ADR-007 的關係
 
-| 外部狀態機 step name | scrum-master-state-graph.md 對應 |
-|---------------------|----------------------------------|
-| task-list-init | SprintExecution → [*] → StorySelection（前置準備） |
-| checkpoint-detection | SprintExecution → StorySelection（斷點續跑判定） |
-| issue-ci-scan | SprintExecution → PreflightCheck（環境掃描） |
+ADR-007 定義了 Story-Lifecycle subagent：每個 Story 一個 subagent，在 worktree 中獨立工作。
+
+本方案引入 Step-level subagent，與 Story-level subagent 共存：
+
+| 粒度 | 定義 | 典型 context 大小 | 典型壽命 |
+|------|------|------------------|---------|
+| Story-level（ADR-007） | 一個 Story 的完整生命週期 | 50-100K token | 10-30 分鐘 |
+| Step-level（本 ADR） | Sprint 流程中的一個步驟 | 10-15K token | 1-5 分鐘 |
+
+Step-level subagent 的 context 小、壽命短，規則佔比高，正是解決注意力衰減的核心。
 
 ---
 
@@ -137,19 +221,20 @@ State File: .state-machine/sprint-execution-state.json
 
 ### 正面
 
-- Sprint execution 關鍵步驟有外部可驗證的 gate
-- 規則衰減導致的步驟跳過可被事後審計發現
-- 冪等重入支援 crash recovery 場景
+- 規則遵守率提高 — 短 context 中規則佔比從 ~2% 提升至 ~17%
+- 可觀測 — progress tracker 記錄每步狀態，可事後審計
+- 冪等重入 — crash recovery 可從 progress tracker 的斷點續跑
+- 漸進遷移 — 可逐步將步驟改為 subagent 派遣
 
 ### 負面
 
-- 增加 shell script 維護成本
-- LLM 仍需主動呼叫 gate check（prompt 層面的約束）
+- 步驟間狀態傳遞需要額外的 JSON 契約維護
+- 增加 subagent 派遣開銷（但每個 subagent 更快完成）
 
 ### 風險
 
-- 若 LLM 完全不呼叫 gate check 腳本，外部狀態機形同虛設
-  - 緩解：未來可透過 hook 機制自動注入 gate check（Phase 2）
+- Step subagent 過多導致 OOM — 緩解：遵守 SHIKIGAMI_MAX_PARALLEL 限制，step subagent 為序列執行（非平行）
+- Prompt 模板維護成本 — 緩解：模板可由腳本從 SKILL.md 自動提取
 
 ---
 
