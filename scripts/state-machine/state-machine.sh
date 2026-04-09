@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
-# state-machine.sh — Sprint Execution 外部狀態機 PoC（Story #962）
+# state-machine.sh — Sprint Execution Progress Tracker（Story #962 → #977 修訂）
+#
+# 角色：Progress Tracker（記錄進度，不驅動流程）
+# 修訂：#977 將 gate 驅動邏輯移除，降級為純 progress tracker
 #
 # 用法：
-#   state-machine.sh init <sprint_number>     初始化狀態檔（冪等）
-#   state-machine.sh gate <step_name>         檢查 gate 條件（前置步驟完成？）
-#   state-machine.sh complete <step_name>     標記步驟完成
-#   state-machine.sh fail <step_name> [reason] 標記步驟失敗
-#   state-machine.sh status                   輸出目前狀態摘要
+#   state-machine.sh init <sprint_number>       初始化進度檔（冪等）
+#   state-machine.sh check <step_name>          查詢步驟狀態（純 query，不 block）
+#   state-machine.sh complete <step_name>       標記步驟完成
+#   state-machine.sh fail <step_name> [reason]  標記步驟失敗
+#   state-machine.sh status                     輸出目前進度摘要
 #
 # 環境變數：
 #   STATE_MACHINE_DIR — 狀態檔存放目錄（預設 .state-machine/）
@@ -20,13 +23,6 @@ set -euo pipefail
 # ── 常數 ──
 
 STEPS_ORDERED=("task-list-init" "checkpoint-detection" "issue-ci-scan")
-
-# step -> predecessor mapping
-declare -A STEP_PREDECESSOR=(
-  ["task-list-init"]=""
-  ["checkpoint-detection"]="task-list-init"
-  ["issue-ci-scan"]="checkpoint-detection"
-)
 
 # ── 路徑 ──
 
@@ -107,45 +103,31 @@ EOF
   log_entry "init" "init" 0 "sprint ${sprint_number}"
 }
 
-# ── 指令：gate ──
+# ── 指令：check（純 status query，不 block）──
 
-cmd_gate() {
-  local step="${1:?Usage: state-machine.sh gate <step_name>}"
+cmd_check() {
+  local step="${1:?Usage: state-machine.sh check <step_name>}"
 
   if ! is_valid_step "${step}"; then
-    log_entry "${step}" "gate" 1 "unknown step"
-    echo "[GATE-FAIL] Unknown step: ${step}" >&2
+    log_entry "${step}" "check" 1 "unknown step"
+    echo "[CHECK-FAIL] Unknown step: ${step}" >&2
     return 1
   fi
 
   if [[ ! -f "${STATE_FILE}" ]]; then
-    log_entry "${step}" "gate" 1 "state file not found"
-    echo "[GATE-FAIL] State file not found. Run 'init' first." >&2
+    log_entry "${step}" "check" 1 "state file not found"
+    echo "[CHECK-FAIL] State file not found. Run 'init' first." >&2
     return 1
   fi
 
-  local predecessor="${STEP_PREDECESSOR[${step}]}"
+  local step_status
+  step_status=$(get_step_status "${step}")
 
-  # 無前置依賴 → 直接放行
-  if [[ -z "${predecessor}" ]]; then
-    log_entry "${step}" "gate" 0
-    echo "[GATE-PASS] ${step} — no predecessor required"
-    return 0
-  fi
-
-  # 檢查前置步驟狀態
-  local pred_status
-  pred_status=$(get_step_status "${predecessor}")
-
-  if [[ "${pred_status}" == "completed" ]]; then
-    log_entry "${step}" "gate" 0
-    echo "[GATE-PASS] ${step} — predecessor '${predecessor}' completed"
-    return 0
-  else
-    log_entry "${step}" "gate" 1 "predecessor '${predecessor}' status=${pred_status}"
-    echo "[GATE-FAIL] ${step} — predecessor '${predecessor}' status=${pred_status} (need completed)" >&2
-    return 1
-  fi
+  log_entry "${step}" "check" 0
+  echo "[CHECK] ${step} — status: ${step_status}"
+  # 輸出 JSON 格式供程式解析
+  jq -c --arg s "${step}" '{step: $s, status: .steps[$s].status, completed_at: .steps[$s].completed_at}' "${STATE_FILE}"
+  return 0
 }
 
 # ── 指令：complete ──
@@ -228,7 +210,7 @@ cmd_status() {
 
   local sprint_num
   sprint_num=$(jq -r '.sprint_number' "${STATE_FILE}")
-  echo "=== Sprint ${sprint_num} Execution State ==="
+  echo "=== Sprint ${sprint_num} Execution Progress ==="
 
   for step in "${STEPS_ORDERED[@]}"; do
     local status completed_at
@@ -250,12 +232,17 @@ main() {
 
   case "${cmd}" in
     init)     cmd_init "$@" ;;
-    gate)     cmd_gate "$@" ;;
+    check)    cmd_check "$@" ;;
     complete) cmd_complete "$@" ;;
     fail)     cmd_fail "$@" ;;
     status)   cmd_status "$@" ;;
+    # 向後相容：gate 別名指向 check（已棄用，印警告）
+    gate)
+      echo "[DEPRECATED] 'gate' command is deprecated. Use 'check' instead." >&2
+      cmd_check "$@"
+      ;;
     *)
-      echo "Usage: state-machine.sh {init|gate|complete|fail|status} [args...]" >&2
+      echo "Usage: state-machine.sh {init|check|complete|fail|status} [args...]" >&2
       return 1
       ;;
   esac

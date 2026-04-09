@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# test-state-machine.sh — 外部狀態機 PoC 測試（Story #962 AC3）
-# 驗證 gate 條件：步驟產出物不存在時不放行下一步
+# test-state-machine.sh — Progress Tracker 測試（Story #962 → #977 修訂）
+# 驗證 progress tracker 功能：init、check、complete、fail、status
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -74,13 +74,25 @@ assert_log_contains() {
   fi
 }
 
+assert_output_contains() {
+  local desc="$1" pattern="$2" output="$3"
+  TOTAL=$((TOTAL + 1))
+  if echo "${output}" | grep -q "${pattern}"; then
+    echo "  PASS: ${desc}"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL: ${desc} (pattern '${pattern}' not found in output)"
+    FAIL=$((FAIL + 1))
+  fi
+}
+
 # ── Test 1: init 建立初始狀態檔 ──
 
 test_init_creates_state_file() {
   echo "Test 1: init 建立初始狀態檔"
   setup
 
-  bash "${SM_DIR}/state-machine.sh" init 177
+  bash "${SM_DIR}/state-machine.sh" init 179
   assert_file_exists "state file created" "${STATE_DIR}/sprint-execution-state.json"
 
   local status
@@ -95,55 +107,45 @@ test_init_creates_state_file() {
 
   local sprint_num
   sprint_num=$(jq -r '.sprint_number' "${STATE_DIR}/sprint-execution-state.json")
-  assert_eq "sprint_number is 177" "177" "${sprint_num}"
+  assert_eq "sprint_number is 179" "179" "${sprint_num}"
 
   teardown
 }
 
-# ── Test 2: gate 阻擋 — 前置步驟未完成時不放行 ──
+# ── Test 2: check 回傳步驟狀態（純 query，不 block）──
 
-test_gate_blocks_when_predecessor_incomplete() {
-  echo "Test 2: gate 阻擋 — 前置步驟未完成時不放行"
+test_check_returns_status() {
+  echo "Test 2: check 回傳步驟狀態（純 query，不 block）"
   setup
 
-  bash "${SM_DIR}/state-machine.sh" init 177
+  bash "${SM_DIR}/state-machine.sh" init 179
 
-  # checkpoint-detection 的 gate 應該被阻擋（task-list-init 未完成）
-  assert_exit_code "gate blocks checkpoint-detection when task-list-init pending" 1 \
-    bash "${SM_DIR}/state-machine.sh" gate checkpoint-detection
+  # check 未完成的步驟 — 應回傳 exit 0（不 block）
+  assert_exit_code "check pending step returns 0 (no blocking)" 0 \
+    bash "${SM_DIR}/state-machine.sh" check task-list-init
 
-  # issue-ci-scan 的 gate 應該被阻擋（checkpoint-detection 未完成）
-  assert_exit_code "gate blocks issue-ci-scan when checkpoint-detection pending" 1 \
-    bash "${SM_DIR}/state-machine.sh" gate issue-ci-scan
+  # check 應包含狀態資訊
+  local output
+  output=$(bash "${SM_DIR}/state-machine.sh" check task-list-init)
+  assert_output_contains "check output contains status" "pending" "${output}"
 
-  teardown
-}
-
-# ── Test 3: gate 放行 — 前置步驟完成後允許通過 ──
-
-test_gate_passes_when_predecessor_complete() {
-  echo "Test 3: gate 放行 — 前置步驟完成後允許通過"
-  setup
-
-  bash "${SM_DIR}/state-machine.sh" init 177
-
-  # 第一步 gate 無前置依賴，應該直接通過
-  assert_exit_code "gate passes task-list-init (no predecessor)" 0 \
-    bash "${SM_DIR}/state-machine.sh" gate task-list-init
-
-  # 完成第一步
+  # 完成後 check 應顯示 completed
   bash "${SM_DIR}/state-machine.sh" complete task-list-init
+  output=$(bash "${SM_DIR}/state-machine.sh" check task-list-init)
+  assert_output_contains "check output shows completed" "completed" "${output}"
 
-  # 第二步 gate 應該通過
-  assert_exit_code "gate passes checkpoint-detection after task-list-init completed" 0 \
-    bash "${SM_DIR}/state-machine.sh" gate checkpoint-detection
+  teardown
+}
 
-  # 完成第二步
-  bash "${SM_DIR}/state-machine.sh" complete checkpoint-detection
+# ── Test 3: check 對未知步驟報錯 ──
 
-  # 第三步 gate 應該通過
-  assert_exit_code "gate passes issue-ci-scan after checkpoint-detection completed" 0 \
-    bash "${SM_DIR}/state-machine.sh" gate issue-ci-scan
+test_check_unknown_step_errors() {
+  echo "Test 3: check 對未知步驟報錯"
+  setup
+
+  bash "${SM_DIR}/state-machine.sh" init 179
+  assert_exit_code "check rejects unknown step" 1 \
+    bash "${SM_DIR}/state-machine.sh" check nonexistent-step
 
   teardown
 }
@@ -154,7 +156,7 @@ test_complete_updates_status() {
   echo "Test 4: complete 更新狀態與時間戳"
   setup
 
-  bash "${SM_DIR}/state-machine.sh" init 177
+  bash "${SM_DIR}/state-machine.sh" init 179
   bash "${SM_DIR}/state-machine.sh" complete task-list-init
 
   local status completed_at exit_code
@@ -176,7 +178,7 @@ test_fail_records_failure() {
   echo "Test 5: fail 記錄失敗狀態"
   setup
 
-  bash "${SM_DIR}/state-machine.sh" init 177
+  bash "${SM_DIR}/state-machine.sh" init 179
   bash "${SM_DIR}/state-machine.sh" fail task-list-init "task creation timeout"
 
   local status reason exit_code
@@ -198,7 +200,7 @@ test_observable_log() {
   echo "Test 6: 可觀測 log（NFR2 — step_name、exit_code、失敗原因）"
   setup
 
-  bash "${SM_DIR}/state-machine.sh" init 177
+  bash "${SM_DIR}/state-machine.sh" init 179
   bash "${SM_DIR}/state-machine.sh" complete task-list-init
 
   local logfile="${STATE_DIR}/state-machine.log"
@@ -219,11 +221,11 @@ test_idempotent_reentry() {
   echo "Test 7: 冪等重入（NFR4）— 重新執行時跳過已完成步驟"
   setup
 
-  bash "${SM_DIR}/state-machine.sh" init 177
+  bash "${SM_DIR}/state-machine.sh" init 179
   bash "${SM_DIR}/state-machine.sh" complete task-list-init
 
   # 再次 init 不應覆蓋已完成的步驟
-  bash "${SM_DIR}/state-machine.sh" init 177
+  bash "${SM_DIR}/state-machine.sh" init 179
 
   local status
   status=$(jq -r '.steps["task-list-init"].status' "${STATE_DIR}/sprint-execution-state.json")
@@ -247,12 +249,12 @@ test_execution_time() {
 
   local start end elapsed
   start=$(date +%s%N)
-  bash "${SM_DIR}/state-machine.sh" init 177
-  bash "${SM_DIR}/state-machine.sh" gate task-list-init
+  bash "${SM_DIR}/state-machine.sh" init 179
+  bash "${SM_DIR}/state-machine.sh" check task-list-init
   bash "${SM_DIR}/state-machine.sh" complete task-list-init
-  bash "${SM_DIR}/state-machine.sh" gate checkpoint-detection
+  bash "${SM_DIR}/state-machine.sh" check checkpoint-detection
   bash "${SM_DIR}/state-machine.sh" complete checkpoint-detection
-  bash "${SM_DIR}/state-machine.sh" gate issue-ci-scan
+  bash "${SM_DIR}/state-machine.sh" check issue-ci-scan
   bash "${SM_DIR}/state-machine.sh" complete issue-ci-scan
   end=$(date +%s%N)
 
@@ -275,7 +277,7 @@ test_status_output() {
   echo "Test 9: status 命令輸出"
   setup
 
-  bash "${SM_DIR}/state-machine.sh" init 177
+  bash "${SM_DIR}/state-machine.sh" init 179
   bash "${SM_DIR}/state-machine.sh" complete task-list-init
 
   local output
@@ -289,6 +291,16 @@ test_status_output() {
     FAIL=$((FAIL + 1))
   fi
 
+  # 驗證 status 顯示 "Progress" 而非 "State"
+  TOTAL=$((TOTAL + 1))
+  if echo "${output}" | grep -q "Progress"; then
+    echo "  PASS: status header says Progress (not State)"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL: status header should say Progress"
+    FAIL=$((FAIL + 1))
+  fi
+
   teardown
 }
 
@@ -298,25 +310,52 @@ test_unknown_step_errors() {
   echo "Test 10: 未知步驟名應報錯"
   setup
 
-  bash "${SM_DIR}/state-machine.sh" init 177
-  assert_exit_code "gate rejects unknown step" 1 \
-    bash "${SM_DIR}/state-machine.sh" gate nonexistent-step
+  bash "${SM_DIR}/state-machine.sh" init 179
+  assert_exit_code "check rejects unknown step" 1 \
+    bash "${SM_DIR}/state-machine.sh" check nonexistent-step
   assert_exit_code "complete rejects unknown step" 1 \
     bash "${SM_DIR}/state-machine.sh" complete nonexistent-step
 
   teardown
 }
 
+# ── Test 11: gate 別名（向後相容，已棄用）──
+
+test_gate_backward_compat() {
+  echo "Test 11: gate 別名（向後相容，已棄用）"
+  setup
+
+  bash "${SM_DIR}/state-machine.sh" init 179
+
+  # gate 應仍然可用（但印棄用警告），行為等同 check（不 block）
+  assert_exit_code "gate alias works (backward compat)" 0 \
+    bash "${SM_DIR}/state-machine.sh" gate task-list-init
+
+  # gate 的 stderr 應包含 DEPRECATED 警告
+  local stderr_output
+  stderr_output=$(bash "${SM_DIR}/state-machine.sh" gate task-list-init 2>&1 >/dev/null || true)
+  TOTAL=$((TOTAL + 1))
+  if echo "${stderr_output}" | grep -q "DEPRECATED"; then
+    echo "  PASS: gate prints DEPRECATED warning"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL: gate should print DEPRECATED warning"
+    FAIL=$((FAIL + 1))
+  fi
+
+  teardown
+}
+
 # ── 執行所有測試 ──
 
-echo "=== State Machine PoC Tests (Story #962) ==="
+echo "=== Progress Tracker Tests (Story #962 → #977) ==="
 echo ""
 
 test_init_creates_state_file
 echo ""
-test_gate_blocks_when_predecessor_incomplete
+test_check_returns_status
 echo ""
-test_gate_passes_when_predecessor_complete
+test_check_unknown_step_errors
 echo ""
 test_complete_updates_status
 echo ""
@@ -331,6 +370,8 @@ echo ""
 test_status_output
 echo ""
 test_unknown_step_errors
+echo ""
+test_gate_backward_compat
 echo ""
 
 echo "=== Results: ${PASS}/${TOTAL} passed, ${FAIL} failed ==="
