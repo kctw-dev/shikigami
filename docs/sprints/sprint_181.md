@@ -13,9 +13,9 @@
 
 | Story | Issue | Size | Points | 狀態 | 負責 | Routing Tier |
 |-------|-------|------|--------|------|------|-------------|
-| post-execution PR 強制驗證（L1 主 session inline） | #989 | S-M | 2 | TODO | — | sonnet（Score 6, PROCESS） |
-| ADR-045 Phase 2 — delivery-completion-check step subagent（L2 獨立 agent） | #988 | M-L | 3 | TODO | — | sonnet（Score 9, PROCESS+ARCH） |
-| rule-ratio-measure.sh 整合到 dispatch 流程（preflight hook） | #990 | S | 1 | TODO | — | haiku（Score 5, PROCESS+TEST） |
+| post-execution PR 強制驗證（L1 主 session inline） | #989 | S-M | 2 | DONE | sonnet | sonnet（Score 6, PROCESS） |
+| ADR-045 Phase 2 — delivery-completion-check step subagent（L2 獨立 agent） | #988 | M-L | 3 | DONE | sonnet | sonnet（Score 9, PROCESS+ARCH） |
+| rule-ratio-measure.sh 整合到 dispatch 流程（preflight hook） | #990 | S | 1 | DONE | haiku | haiku（Score 5, PROCESS+TEST） |
 
 **總計**：3 Stories / 6 pts
 
@@ -194,4 +194,23 @@
 
 ## Sprint Review 結果
 
-（待 Sprint 結束後填入）
+**Review 日期**：2026-04-09
+**Velocity**：6 pts（3/3 Stories DONE）
+
+| Story | Issue | PR | 狀態 | 測試通過 |
+|-------|-------|----|------|---------|
+| L1 post-execution PR 強制驗證 | #989 | PR#991 MERGED | DONE | 3/3 |
+| ADR-045 Phase 2 — L2 delivery-completion-check | #988 | PR#992 MERGED | DONE | 12/12 |
+| rule-ratio preflight hook | #990 | PR#993 MERGED | DONE | 27/27 |
+
+**Sprint Goal 達成度**：100%
+**Process Violations**：無（對比 Sprint 180 #953 事件進步）
+**QA 測試**：42/42 TC 通過（含 #953 回歸驗證 PASS）
+**Backlog 健康度**：sprint-candidate 4 個（正常水位）
+
+### 核心交付
+
+- L1（主 session inline）+ L2（獨立 step subagent）雙層 PR 驗證防護正式到位
+- dispatch preflight rule-ratio 三段式硬性門檻（PASS/WARN/BLOCK），fail-safe 設計
+- #953 情境 TC2 回歸驗證 PASS — 新防護有效攔截直推 main 情境
+- 會議紀錄：`docs/meetings/2026-04-09-sprint-181-review.md`
