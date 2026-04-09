@@ -161,6 +161,33 @@ Token 估算規則（零依賴，純 bash）：
 | 輸出 artifact | `docs/sprints/sprint-{N}/task-list.md` |
 | 規則佔比 | 實測 44.78%（Sprint 180 prompt）|
 
+### delivery-completion-check
+
+<!-- ADR-045 Phase 2 落地 — Story #988 Sprint 181 -->
+
+| 項目 | 內容 |
+|------|------|
+| 步驟名稱 | `delivery-completion-check` |
+| ADR-045 Phase | Phase 2（L2 獨立驗證層） |
+| 對應 SKILL.md | §3 POST-EXECUTION 驗證流程 — L1 inline bash 通過後的 L2 驗證節點 |
+| Prompt 模板檔 | `skills/sprint-execution/steps/delivery-completion-check.md` |
+| 生成指令 | `step-subagent-poc.sh generate-prompt delivery-completion-check <sprint> [story_id] [branch]` |
+| 派遣指令 | `step-subagent-poc.sh dispatch delivery-completion-check <sprint> <story_id> <branch> <claimed_pr_url>` |
+| Model | haiku（固定，model-route step=delivery-completion-check tier=haiku reason=short-task-high-ratio）|
+| 輸出 artifact | 無（唯讀驗證，不產出檔案） |
+| 結果 JSON 路徑 | `docs/cruise-logs/delivery-checks-<date>.jsonl`（append-only per-date） |
+| 規則佔比 | 實測 44.07%（Sprint 181 prompt，>= 30% AC-2 要求） |
+| 三態輸出 | `completed` / `failed` (NO_PR_FOUND) / `escalate` (PR_MISMATCH_SUSPECTED_FABRICATION) |
+| 禁止工具 | git push, gh pr create, gh pr merge, git commit, 任何檔案修改 |
+| 允許工具 | gh pr list, gh pr view, git log, cat, 讀取 state machine |
+| 前置條件 | L1 [POST-EXEC-PR-PASS] 已輸出；若 L1 BLOCKED 則跳過 L2 |
+
+**Phase 2 落地決策摘要**（Sprint 181）：
+- L1（#989）已交付 main session inline bash 驗證（PR #991 merged）
+- L2（#988）新增獨立 step subagent，進一步防止 PR 偽造（#953 歷史案例）
+- 雙軌驗證：L1 快速 bash 過濾 + L2 短任務 haiku subagent 深度確認
+- Progress tracker 使用 per-date JSONL 檔案（`delivery-checks-<date>.jsonl`），避免 git conflict（多機器場景）
+
 ---
 
 ## 5. 擴充指引
