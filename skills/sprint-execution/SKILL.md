@@ -415,14 +415,26 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
   |-- FAIL     --> 記錄失敗原因，更新看板，繼續下一 Story
   +-- PASS（含 PR_URL，PR 尚未 merge）
         |
-        v（#976 AC-2：PR 存在性驗證）
-  **PR 存在性驗證**（Wave 完成後主 agent 執行）
-  ├─ 取出 subagent 回傳的 branch_name（或從 story_id 推導）
-  ├─ 執行驗證命令：`gh pr list --head <branch> --json number,state --jq '.[] | select(.state=="OPEN")'`
-  ├─ 結果分類：
-  │  |-- 有 open PR → 記錄 PR number，繼續下一步
-  │  +-- 無 open PR → 輸出 **[PR-MISSING-WARN]** ，記錄告警，升級為 ESCALATE: PR_MISSING
-  └─ PR 存在驗證完成後輸出 [CHECKPOINT-PASS] 或 [CHECKPOINT-FAIL]
+        v（#989 AC-1：[MANDATORY] POST-EXECUTION PR 強制驗證 — 見 §5 Hard Gates）
+
+  **[MANDATORY] POST-EXECUTION PR 強制驗證**（主 session 必須強制執行，不可省略）
+  ├─ 取出 subagent 回傳的 BRANCH_NAME（或從 story_id 推導：feat/#<N>-<slug>）
+  ├─ **強制執行以下 bash 指令**（實際指令，非流程圖語意）：
+  │     BRANCH_NAME="<subagent 回傳的 branch name>"
+  │     bash scripts/state-machine/post-execution-pr-verify.sh --branch "$BRANCH_NAME"
+  │     VERIFY_EXIT=$?
+  ├─ 升級動作矩陣（根據腳本輸出標記）：
+  │  |-- 輸出 [POST-EXEC-PR-MISSING]   → PR_COUNT==0
+  │  │     → 拒絕 PASS，Story=BLOCKED，暫停 Sprint，通知人工介入
+  │  |-- 輸出 [POST-EXEC-PR-WRONG-BASE]→ baseRefName != "main"
+  │  │     → 拒絕 PASS，不自動補救
+  │  |-- 輸出 [POST-EXEC-PR-NOT-OPEN]  → state != "OPEN"
+  │  │     → 拒絕 PASS，不自動補救
+  │  +-- 輸出 [POST-EXEC-PR-PASS]      → base=main, state=OPEN
+  │        → VERIFY_EXIT==0，繼續下一步
+  ├─ **不得自動補救**（不自動建 PR、不自動 push、不自動 merge）
+  ├─ 多 PR 邊界：取 base=main + state=OPEN 的第一個（腳本自動處理）
+  └─ 驗證完成後輸出 [POST-EXEC-PR-PASS] 或對應錯誤標記
         |
         v
   Checkpoint 重讀流程定義（§3.1 / references/execution-flow-details.md）
@@ -515,6 +527,20 @@ DESIGN Story 優先執行，依賴其 Contract 的 FEATURE Story 須等 Contract
 **所有 Story（含 test-only Story）交付必須透過 Pull Request，不得直推 main。**
 Sprint Review 時將逐一確認每個 Story 是否有對應 PR；若無，標記 `[PROCESS-VIOLATION]`。
 此規則自 Sprint 166 起強制生效（Sprint 165 Retro Action #853）。
+</HARD-GATE>
+
+<HARD-GATE>
+**[MANDATORY] POST-EXECUTION PR 強制驗證 Hard Gate（#989 L1 止血）**：
+Story-Lifecycle subagent 回傳 PASS 後，主 session **必須強制執行**：
+  bash scripts/state-machine/post-execution-pr-verify.sh --branch "$BRANCH_NAME"
+升級動作矩陣：
+  [POST-EXEC-PR-MISSING]    → Story=BLOCKED，拒絕 PASS，暫停 Sprint
+  [POST-EXEC-PR-WRONG-BASE] → 拒絕 PASS，不自動補救
+  [POST-EXEC-PR-NOT-OPEN]   → 拒絕 PASS，不自動補救
+  [POST-EXEC-PR-PASS]       → 繼續外部 QA 審查
+不得自動補救（不建 PR、不 push、不 merge）。
+此 Hard Gate 為 §3 流程強制嵌入點，跳過等同 PROCESS-VIOLATION。
+（#989 修正：取代 #976 軟性流程圖語意，升級為強制 bash 指令）
 </HARD-GATE>
 
 <HARD-GATE>
