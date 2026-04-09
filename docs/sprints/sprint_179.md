@@ -15,8 +15,8 @@
 |-------|-------|------|--------|------|------|-------------|
 | feat: ADR-045 方向修正 — 規則衰減是注意力問題，改用細粒度 short-lived subagent | #977 | L | 3 | DONE | PR#979 | opus（Score 11, ARCH） |
 | retro: haiku subagent 任務理解不完整 — 確保派遣 prompt 明確要求建立 PR | #976 | S | 1 | DONE | PR#978 | haiku（Score 5, FIX） |
-| feat: backlog 水位歷史趨勢查詢腳本（JSONL 可視化） | #948 | S | 1 | TODO | — | haiku（Score 5, FEAT） |
-| retro: 評估 SessionEnd kill-switch hook 是否需遷移至 hook-runner.sh | #955 | S | 1 | TODO | — | haiku（Score 4, RESEARCH） |
+| feat: backlog 水位歷史趨勢查詢腳本（JSONL 可視化） | #948 | S | 1 | DONE | PR#980 | haiku（Score 5, FEAT） |
+| retro: 評估 SessionEnd kill-switch hook 是否需遷移至 hook-runner.sh | #955 | S | 1 | DONE | PR#981 | haiku（Score 4, RESEARCH） |
 
 **總計**：4 Stories / 6 pts
 
