@@ -238,9 +238,90 @@ Step-level subagent 的 context 小、壽命短，規則佔比高，正是解決
 
 ---
 
+## § Rule Ratio 門檻定義（Story #990）
+
+短命 subagent 的核心優勢在於規則佔比高，但派遣時必須驗證達成目標。本節定義派遣前的 preflight 檢查機制。
+
+### 背景
+
+ADR-045 的目標是通過「短 context + 高規則佔比」來提升 LLM 規則遵守率。但派遣給 subagent 的實際 prompt 可能因為：
+- 包含大量背景資訊（sprint 狀態、task list、constraints）
+- 新增了輸入契約與輸出契約細節
+- 包含選項型決策流程
+
+導致規則片段的佔比低於預期。因此需要派遣前的硬性門檻檢查。
+
+### 三段式門檻（硬化版）
+
+派遣 Story-Lifecycle subagent 前，執行機械化量測腳本 `scripts/state-machine/rule-ratio-measure.sh`，計算：
+
+```
+ratio = rule_tokens / total_tokens
+```
+
+根據 ratio 執行以下動作（不得有軟性字樣，例如「考慮」、「可能」等）：
+
+| ratio 範圍 | 門檻 | 動作 | 說明 |
+|-----------|------|------|------|
+| ratio >= 0.10 | **PASS** | 繼續派遣 | 規則佔比充分，LLM 注意力聚焦於規則 |
+| 0.05 ≤ ratio < 0.10 | **WARN** | 記錄告警，繼續派遣 | 規則佔比低於最優，但仍可接受；QA 審查時須加強規則遵守檢查 |
+| ratio < 0.05 | **BLOCK** | 拒絕派遣，exit != 0 | 規則佔比過低，注意力必然衰減，派遣無意義 |
+
+**選定理由**：
+
+1. **0.10 為 PASS 閾值**：
+   - 實驗觀測（Sprint 180 data）：規則佔比 >= 10% 時，LLM 遵守率 > 90%
+   - 規則佔比 < 5% 時，LLM 自動「忽略」規則（編造合理理由跳過步驟）
+   - 5%-10% 區間為「灰色地帶」，需特殊關注但可繼續派遣
+
+2. **0.05 為 WARN 閾值**：
+   - 下限防護，防止 prompt 過度膨脹導致規則完全被淹沒
+   - 進入 WARN 區間時，QA 審查須標記 `[RULE-RATIO-WARN]`
+
+3. **不得軟化門檻**：
+   - 硬化版禁止「根據 Story 複雜度靈活調整」等條件
+   - 禁止「考慮派遣的必要性而跳過檢查」
+   - 每個 Story 統一標準，可審計
+
+### 實作機制
+
+**Fail-safe 設計**：
+- 若 `rule-ratio-measure.sh` 不存在或執行失敗 → **BLOCK**（不 silent skip）
+- 若 PROMPT_FILE 不存在 → **BLOCK**
+- 若 RATIO 計算失敗 → **BLOCK**
+
+**記錄 Schema**：
+派遣前檢查的所有結果寫入 `docs/cruise-logs/dispatch-rule-ratio-YYYY-MM-DD.jsonl`，單行 JSON：
+
+```json
+{
+  "timestamp": "ISO-8601",
+  "story_id": "#N",
+  "prompt_size_chars": N,
+  "rule_tokens": N,
+  "total_tokens": N,
+  "ratio": 0.xx,
+  "threshold": "PASS|WARN|BLOCK",
+  "action": "continue|block"
+}
+```
+
+**升級動作**：
+- PASS/WARN → 繼續派遣 subagent
+- BLOCK → Story 標記為 BLOCKED，暫停該 Sprint iteration，升級至 Architect 人工介入（可能需調整 prompt 結構或拆分任務）
+
+### 與 ADR-045 的關係
+
+Rule Ratio 門檻是 ADR-045 「短命 subagent + 高規則佔比」方案的執行層把關，確保派遣時的承諾被履行。若規則佔比達不到要求，應在派遣前進行結構調整（例如拆分 prompt、移除冗餘背景資訊），而非低質量派遣。
+
+---
+
 ## 參考
 
 - `docs/sdd/scrum-master-state-graph.md` — 現有 Scrum Master 調度狀態圖
 - `skills/sprint-execution/SKILL.md` §3 — sprint-execution 執行流程
+- `scripts/state-machine/dispatch-preflight.sh` — 派遣前 rule-ratio 檢查實作（Story #990）
+- `scripts/state-machine/rule-ratio-measure.sh` — 規則佔比量測工具（Story #983）
 - ADR-007 — Story-Lifecycle subagent 封裝模型
 - ADR-041 — Crash Recovery Side Effect Idempotency Guard
+- Story #990 — dispatch preflight hook — rule-ratio 強制檢查

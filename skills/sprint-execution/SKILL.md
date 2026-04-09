@@ -395,6 +395,25 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
   fi
   |
   v
+  **[MANDATORY] PREFLIGHT 強制檢查 — rule-ratio 派遣前把關**（#990 AC-1/AC-2/AC-3）
+  ├─ **量測對象**：主 session 組裝完成的完整 dispatch prompt（含所有規則、輸入、契約）
+  ├─ **執行**：
+  │     FULL_PROMPT_FILE="/tmp/dispatch-prompt-${story_id}-$$.md"
+  │     # 組裝 full prompt（包含 story-lifecycle-prompt.md 的規則 + 當前 story 的輸入）
+  │     bash scripts/state-machine/dispatch-preflight.sh \
+  │       --prompt "$FULL_PROMPT_FILE" \
+  │       --story-id "#${story_id}"
+  │     PREFLIGHT_EXIT=$?
+  ├─ **三段式硬性門檻**：
+  │  |-- ratio >= 0.10  → PASS（繼續派遣）
+  │  |-- 0.05 ≤ ratio < 0.10 → WARN（記錄告警，繼續派遣）
+  │  +-- ratio < 0.05   → BLOCK（拒絕派遣，exit != 0，停止 Story）
+  ├─ **Fail-safe**：若 rule-ratio-measure.sh 不存在或執行失敗 → BLOCK（不 silent skip）
+  ├─ **記錄**：所有結果自動寫入 docs/cruise-logs/dispatch-rule-ratio-<date>.jsonl
+  │           （schema：timestamp、story_id、prompt_size_chars、rule_tokens、total_tokens、ratio、threshold、action）
+  └─ **升級動作**：若 PREFLIGHT_EXIT != 0 → Story=BLOCKED，暫停 Sprint，通知 Architect 人工介入
+  |
+  v
 派遣 Story-Lifecycle subagent（story-lifecycle-prompt.md）
   Agent tool / Gemini CLI 雙軌派遣
   model: "sonnet" | isolation: "worktree"（#379）

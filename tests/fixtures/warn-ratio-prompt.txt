@@ -1,0 +1,11 @@
+## 規則片段
+
+Follow rules carefully.
+
+## 輸入契約
+
+Input contract section contains additional context information about the workflow.
+This is the input specification for the test case scenario details here.
+More input details here including workflow state information and requirements.
+Additional requirements and constraints documented in this section of the contract.
+Extra filler content to dilute the rule section ratio significantly. More filler.
