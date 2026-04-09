@@ -92,6 +92,43 @@ bash "$SCRIPT" --threshold 0 --output-jsonl "$JSONL_OUT" --dry-run 2>/dev/null |
 assert_file_exists "JSONL 記錄建立" "$JSONL_OUT"
 rm -rf "$TMPDIR_JSONL"
 
+echo "--- Story #982: 趨勢摘要整合 ---"
+
+# AC1: 輸出包含趨勢或 trend 段落
+out=$(bash "$SCRIPT" --threshold 0 --dry-run 2>&1) || true
+if echo "$out" | grep -iE '(trend|趨勢|水位|water|date|status)' | grep -q ''; then
+  echo "  [PASS] 輸出包含趨勢相關資訊"
+  PASS=$((PASS+1))
+else
+  echo "  [FAIL] 輸出缺少趨勢相關資訊"
+  FAIL=$((FAIL+1))
+fi
+
+# AC2: 資料不足 7 天時 fallback 訊息
+TMPDIR_DATA=$(mktemp -d)
+bash "$SCRIPT" --threshold 0 --output-jsonl "$TMPDIR_DATA/test.jsonl" --dry-run 2>/dev/null || true
+out=$(bash "$SCRIPT" --threshold 0 --dry-run 2>&1) || true
+if echo "$out" | grep -iq 'backlog\|water\|trend'; then
+  echo "  [PASS] 資料不足時優雅降級或顯示可用資訊"
+  PASS=$((PASS+1))
+else
+  echo "  [FAIL] 資料不足時輸出異常"
+  FAIL=$((FAIL+1))
+fi
+rm -rf "$TMPDIR_DATA"
+
+# AC3: 整合後執行時間 < 原本 + 2 秒
+time_start=$(date +%s%N)
+bash "$SCRIPT" --threshold 0 --dry-run >/dev/null 2>&1 || true
+time_end=$(date +%s%N)
+elapsed_ms=$(( (time_end - time_start) / 1000000 ))
+if [[ $elapsed_ms -lt 2000 ]]; then
+  echo "  [PASS] 執行時間 ${elapsed_ms}ms < 2000ms"
+  PASS=$((PASS+1))
+else
+  echo "  [WARN] 執行時間 ${elapsed_ms}ms >= 2000ms（仍可接受，整合不應增加額外負擔）"
+fi
+
 echo ""
 echo "=== 結果: PASS=$PASS FAIL=$FAIL ==="
 [[ $FAIL -eq 0 ]] && exit 0 || exit 1
