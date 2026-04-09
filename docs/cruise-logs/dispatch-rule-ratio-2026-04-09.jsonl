@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-04-09T14:23:57Z",
+  "story_id": "#990",
+  "prompt_size_chars": 460,
+  "rule_tokens": 5,
+  "total_tokens": 98,
+  "ratio": 0.051,
+  "threshold": "WARN",
+  "action": "continue"
+}
