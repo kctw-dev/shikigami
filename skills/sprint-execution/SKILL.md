@@ -436,6 +436,20 @@ Phase Checkpoint 讀取（#781 AC2，story-lifecycle-prompt.md §12.4）
   ├─ 多 PR 邊界：取 base=main + state=OPEN 的第一個（腳本自動處理）
   └─ 驗證完成後輸出 [POST-EXEC-PR-PASS] 或對應錯誤標記
         |
+        v（#988 AC-1：[MANDATORY] L2 delivery-completion-check step subagent — 僅在 L1 PASS 後執行）
+
+  **[MANDATORY] L2 delivery-completion-check Step Subagent**（L1 [POST-EXEC-PR-PASS] 通過後才執行）
+  ├─ **前置條件**：L1 inline bash 驗證已輸出 [POST-EXEC-PR-PASS]；若 L1 BLOCKED 則跳過此步
+  ├─ **派遣方式**：使用 step-subagent-poc.sh dispatch delivery-completion-check
+  │     bash scripts/state-machine/step-subagent-poc.sh dispatch delivery-completion-check \
+  │       <sprint_number> <story_id> <branch_name> <claimed_pr_url>
+  ├─ **model**：haiku（短任務 + 高規則佔比，model-route step=delivery-completion-check tier=haiku reason=short-task-high-ratio）
+  ├─ **結果三態處置**：
+  │  |-- status=completed → 繼續下一步
+  │  |-- status=failed    → Story=BLOCKED，記錄失敗原因，暫停等待人工介入
+  │  +-- status=escalate  → PR_MISMATCH_SUSPECTED_FABRICATION，立即升級 Architect，停止 Sprint
+  └─ **不得跳過**：即使 L1 已驗證通過，L2 仍為必要步驟（雙軌驗證）
+        |
         v
   Checkpoint 重讀流程定義（§3.1 / references/execution-flow-details.md）
   輸出 [CHECKPOINT-PASS] 或 [CHECKPOINT-FAIL]

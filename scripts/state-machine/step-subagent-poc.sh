@@ -98,6 +98,96 @@ PROMPT_EOF
   echo "[PROMPT-GENERATED] ${output_file}"
 }
 
+generate_prompt_delivery_completion_check() {
+  local sprint_number="$1"
+  local story_id="${2:-STORY_ID}"
+  local branch="${3:-BRANCH_NAME}"
+  local output_file="${POC_OUTPUT_DIR}/prompt-delivery-completion-check.md"
+
+  mkdir -p "${POC_OUTPUT_DIR}"
+
+  # 讀取 prompt template（從 SKILL steps 目錄）
+  local script_dir
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  local repo_root
+  repo_root="$(cd "${script_dir}/../.." && pwd)"
+  local template_file="${repo_root}/skills/sprint-execution/steps/delivery-completion-check.md"
+
+  if [[ -f "${template_file}" ]]; then
+    cp "${template_file}" "${output_file}"
+  else
+    # fallback：內嵌最小版本
+    cat > "${output_file}" <<'PROMPT_EOF'
+# Step Subagent: delivery-completion-check
+
+## 規則片段
+
+你是 Sprint Execution 的 delivery-completion-check 步驟 subagent。你的唯一任務是驗證 Story 交付的 PR 是否真實存在且合規。
+
+### 必須遵守的規則
+
+1. **禁止 git push**：不可執行任何 `git push` 指令，你是唯讀驗證者
+2. **禁止 gh pr create**：不可建立任何 PR，即使你認為缺少 PR 也絕對不可自行建立
+3. **禁止 gh pr merge**：不可合併任何 PR，merge 決策由主 session 執行
+4. **禁止代建 PR**：不可代替 Story-Lifecycle subagent 補建 PR，任何 PR 缺失必須回報 status=failed
+5. **禁止接受 doc-only 無需 PR 自圓其說**：doc-only 不是豁免理由，所有 Story 交付必須有 PR
+
+### 禁止工具清單
+
+- git push（任何形式）
+- gh pr create（任何形式）
+- gh pr merge（任何形式）
+- git commit（任何形式）
+- 任何寫入或修改檔案的操作
+
+### 唯一允許的工具
+
+- gh pr list：查詢 PR 清單
+- gh pr view：讀取 PR 詳情
+- git log：查閱 commit 歷史
+- cat：讀取本地檔案
+- 讀取 state machine 狀態檔
+
+## 輸入契約
+
+- Story ID：{story_id}
+- Branch name：{branch_name}
+- Claimed PR URL：{claimed_pr_url}
+- 結果輸出路徑：{result_file}
+
+## 輸出契約
+
+必須產出：
+- {result_file}（步驟結果 JSON，遵循 ADR-045 §3 格式）
+
+## 成功/失敗判定
+
+成功條件：
+- PR 存在（gh pr list 非空）
+- PR state = OPEN
+- PR baseRefName = main
+- claimed_pr_url（若非空）與實查 url 一致
+
+失敗條件：
+- PR 不存在（NO_PR_FOUND）
+- PR state != OPEN 或 baseRefName != main
+
+升級條件（escalate）：
+- claimed_pr_url 非空但與實查 PR URL 不符（PR_MISMATCH_SUSPECTED_FABRICATION）
+
+遇到失敗或升級時：寫入對應 JSON 並結束，不嘗試自行修復。
+PROMPT_EOF
+  fi
+
+  # 替換 placeholder
+  sed -i "s/{sprint_number}/${sprint_number}/g" "${output_file}"
+  sed -i "s/{story_id}/${story_id}/g" "${output_file}"
+  sed -i "s/{branch_name}/${branch}/g" "${output_file}"
+  sed -i "s|{result_file}|${POC_OUTPUT_DIR}/result-delivery-completion-check-${story_id}.json|g" "${output_file}"
+
+  echo "[PROMPT-GENERATED] ${output_file}"
+}
+
 generate_prompt() {
   local step_name="${1:?Usage: step-subagent-poc.sh generate-prompt <step_name> <sprint_number>}"
   local sprint_number="${2:?Usage: step-subagent-poc.sh generate-prompt <step_name> <sprint_number>}"
@@ -106,9 +196,12 @@ generate_prompt() {
     task-list-init)
       generate_prompt_task_list_init "${sprint_number}"
       ;;
+    delivery-completion-check)
+      generate_prompt_delivery_completion_check "${sprint_number}"
+      ;;
     *)
       echo "[ERROR] No prompt template for step: ${step_name}" >&2
-      echo "[INFO] Currently supported: task-list-init" >&2
+      echo "[INFO] Currently supported: task-list-init, delivery-completion-check" >&2
       return 1
       ;;
   esac
@@ -157,13 +250,102 @@ EOF
   echo "[RESULT] ${result_file}"
 }
 
+simulate_delivery_completion_check() {
+  local sprint_number="$1"
+  # 解析額外引數（--story-id / --branch / --claimed-pr-url / --output）
+  local story_id="STORY_ID"
+  local branch_name="BRANCH_NAME"
+  local claimed_pr_url=""
+  local result_file=""
+
+  shift || true
+  for arg in "$@"; do
+    case "${arg}" in
+      --story-id=*)   story_id="${arg#--story-id=}" ;;
+      --branch=*)     branch_name="${arg#--branch=}" ;;
+      --claimed-pr-url=*) claimed_pr_url="${arg#--claimed-pr-url=}" ;;
+      --output=*)     result_file="${arg#--output=}" ;;
+      *) ;;
+    esac
+  done
+
+  [[ -z "${result_file}" ]] && result_file="${POC_OUTPUT_DIR}/result-delivery-completion-check-${story_id}.json"
+
+  mkdir -p "${POC_OUTPUT_DIR}"
+
+  local start_ms end_ms duration_ms
+  start_ms=$(timestamp_ms)
+
+  # ── 核心驗證邏輯 ──
+  local status="completed"
+  local error_val="null"
+
+  # 1. 查詢 PR（使用 gh pr list，帶 --head branch filter）
+  local pr_json=""
+  local pr_list_exit=0
+  pr_json=$(gh pr list --head "${branch_name}" --json number,state,baseRefName,url 2>/dev/null) || pr_list_exit=$?
+
+  # 2. 判斷 PR 是否存在（空陣列或空字串）
+  local pr_count=0
+  if [[ -n "${pr_json}" ]] && echo "${pr_json}" | jq -e '.[0]' >/dev/null 2>&1; then
+    pr_count=$(echo "${pr_json}" | jq 'length' 2>/dev/null || echo "0")
+  fi
+
+  if [[ "${pr_count}" -eq 0 ]]; then
+    # TC2 情境：無 PR
+    status="failed"
+    error_val='"NO_PR_FOUND"'
+  else
+    # 取第一個 PR
+    local pr_url pr_state pr_base
+    pr_url=$(echo "${pr_json}"   | jq -r '.[0].url'         2>/dev/null || echo "")
+    pr_state=$(echo "${pr_json}" | jq -r '.[0].state'       2>/dev/null || echo "")
+    pr_base=$(echo "${pr_json}"  | jq -r '.[0].baseRefName' 2>/dev/null || echo "")
+
+    # 3. 狀態 / base 分支驗證
+    if [[ "${pr_state}" != "OPEN" || "${pr_base}" != "main" ]]; then
+      status="failed"
+      error_val="\"PR_NOT_OPEN_OR_WRONG_BASE\""
+    else
+      # 4. claimed_pr_url 比對（若非空）
+      if [[ -n "${claimed_pr_url}" && "${claimed_pr_url}" != "${pr_url}" ]]; then
+        # TC3 情境：URL 不符，疑似偽造
+        status="escalate"
+        error_val='"PR_MISMATCH_SUSPECTED_FABRICATION"'
+      fi
+      # 否則 status=completed
+    fi
+  fi
+
+  end_ms=$(timestamp_ms)
+  duration_ms=$((end_ms - start_ms))
+
+  # 產出結果 JSON
+  cat > "${result_file}" <<EOF
+{
+  "step_name": "delivery-completion-check",
+  "status": "${status}",
+  "output_artifacts": [],
+  "duration_ms": ${duration_ms},
+  "error": ${error_val}
+}
+EOF
+
+  echo "[SIMULATE-OK] delivery-completion-check status=${status} in ${duration_ms}ms"
+  echo "[RESULT] ${result_file}"
+}
+
 simulate() {
   local step_name="${1:?Usage: step-subagent-poc.sh simulate <step_name> <sprint_number>}"
   local sprint_number="${2:?Usage: step-subagent-poc.sh simulate <step_name> <sprint_number>}"
+  shift 2 || true
 
   case "${step_name}" in
     task-list-init)
       simulate_task_list_init "${sprint_number}"
+      ;;
+    delivery-completion-check)
+      simulate_delivery_completion_check "${sprint_number}" "$@"
       ;;
     *)
       echo "[ERROR] No simulation for step: ${step_name}" >&2
@@ -249,6 +431,100 @@ EOF
   echo "[RESULT] ${result_file}"
 }
 
+dispatch_delivery_completion_check() {
+  local story_id="$1"
+  local sprint_number="${2:-0}"
+  local branch_name="${3:-}"
+  local claimed_pr_url="${4:-}"
+  local result_file="${POC_OUTPUT_DIR}/result-delivery-completion-check-${story_id}.json"
+  local start_ms end_ms duration_ms
+
+  mkdir -p "${POC_OUTPUT_DIR}"
+
+  # model-route 記錄（AC-5）
+  echo "[MODEL-ROUTE] model-route step=delivery-completion-check tier=haiku reason=short-task-high-ratio"
+
+  # 1. 生成 prompt 模板
+  generate_prompt_delivery_completion_check "${sprint_number}" "${story_id}" "${branch_name}"
+  local prompt_file="${POC_OUTPUT_DIR}/prompt-delivery-completion-check.md"
+
+  start_ms=$(timestamp_ms)
+
+  # 2. 量測規則佔比
+  local script_dir
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  local measure_script="${script_dir}/rule-ratio-measure.sh"
+  if [[ -x "${measure_script}" ]]; then
+    local ratio_result
+    ratio_result=$(bash "${measure_script}" "${prompt_file}" 2>/dev/null || echo '{"rule_tokens":0,"total_tokens":0,"ratio":0,"passed":false}')
+    local ratio_passed
+    ratio_passed=$(echo "${ratio_result}" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['passed'])" 2>/dev/null || echo "False")
+    if [[ "${ratio_passed}" == "True" ]]; then
+      echo "[RULE-RATIO-PASS] 規則佔比達標（>= 10%）"
+    else
+      local ratio_val
+      ratio_val=$(echo "${ratio_result}" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['ratio'])" 2>/dev/null || echo "0")
+      echo "[RULE-RATIO-WARN] 規則佔比 ${ratio_val} < 10%，建議增加規則內容" >&2
+    fi
+  fi
+
+  # 3. 更新 progress tracker（delivery-checks JSONL，per-date append-only）
+  local today
+  today=$(date '+%Y-%m-%d')
+  local checks_log
+  checks_log="${script_dir}/../../docs/cruise-logs/delivery-checks-${today}.jsonl"
+  mkdir -p "$(dirname "${checks_log}")"
+  local log_entry
+  log_entry="{\"ts\":\"$(timestamp)\",\"story_id\":\"${story_id}\",\"branch\":\"${branch_name}\",\"claimed_pr_url\":\"${claimed_pr_url}\",\"dispatch\":\"prepared\"}"
+  echo "${log_entry}" >> "${checks_log}"
+  echo "[DELIVERY-CHECKS-LOG] ${checks_log}"
+
+  # 4. 檢查 claude CLI 可用性
+  if command -v claude &>/dev/null; then
+    echo "[DISPATCH-MODE] claude CLI 可用，準備真實派遣 short-lived subagent (model: haiku)..."
+    echo "[DISPATCH-PROMPT] 使用 prompt: ${prompt_file}"
+    echo ""
+    echo "--- subagent prompt preview ---"
+    head -20 "${prompt_file}"
+    echo "--- (end of preview) ---"
+    echo ""
+    echo "[DISPATCH-INFO] 真實派遣需要在主 session 使用 Agent tool 執行以下 prompt："
+    echo "[DISPATCH-INFO] 請主 session 讀取 ${prompt_file} 並使用 Agent tool 派遣"
+    echo "[DISPATCH-INFO] 結果 JSON 應寫入 ${result_file}"
+    echo ""
+    echo "[DISPATCH-READY] prompt 已就緒，等待主 session 使用 Agent tool 派遣"
+  else
+    echo "[DISPATCH-FALLBACK] claude CLI 不可用，降級為 simulate 模式" >&2
+    simulate_delivery_completion_check "${sprint_number}" \
+      "--story-id=${story_id}" \
+      "--branch=${branch_name}" \
+      "--claimed-pr-url=${claimed_pr_url}" \
+      "--output=${result_file}"
+    return
+  fi
+
+  end_ms=$(timestamp_ms)
+  duration_ms=$((end_ms - start_ms))
+
+  # 5. 產出 dispatch 結果 JSON
+  cat > "${result_file}" <<EOF
+{
+  "step_name": "delivery-completion-check",
+  "status": "dispatch_ready",
+  "mode": "dispatch",
+  "model": "haiku",
+  "prompt_file": "${prompt_file}",
+  "output_artifacts": [],
+  "duration_ms": ${duration_ms},
+  "error": null,
+  "note": "Prompt generated and ready for Agent tool dispatch by main session"
+}
+EOF
+
+  echo "[DISPATCH-OK] delivery-completion-check dispatch preparation completed in ${duration_ms}ms"
+  echo "[RESULT] ${result_file}"
+}
+
 dispatch() {
   local step_name="${1:?Usage: step-subagent-poc.sh dispatch <step_name> <sprint_number>}"
   local sprint_number="${2:?Usage: step-subagent-poc.sh dispatch <step_name> <sprint_number>}"
@@ -257,9 +533,14 @@ dispatch() {
     task-list-init)
       dispatch_task_list_init "${sprint_number}"
       ;;
+    delivery-completion-check)
+      shift 2 || true
+      # dispatch_delivery_completion_check <story_id> [sprint] [branch] [claimed_pr_url]
+      dispatch_delivery_completion_check "${1:-STORY_ID}" "${sprint_number}" "${2:-}" "${3:-}"
+      ;;
     *)
       echo "[ERROR] No dispatch implementation for step: ${step_name}" >&2
-      echo "[INFO] Currently supported: task-list-init" >&2
+      echo "[INFO] Currently supported: task-list-init, delivery-completion-check" >&2
       return 1
       ;;
   esac
