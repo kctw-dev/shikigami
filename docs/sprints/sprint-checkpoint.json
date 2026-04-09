@@ -1,27 +1,21 @@
 {
-  "sprint": 180,
-  "updated_at": "2026-04-09T13:40:00Z",
+  "sprint": 181,
+  "updated_at": "2026-04-09T14:20:00Z",
   "stories": [
     {
-      "id": "983",
+      "id": "989",
       "status": "completed",
-      "pr": "#985"
+      "pr": "#991"
     },
     {
-      "id": "982",
-      "status": "completed",
-      "pr": "#986"
+      "id": "988",
+      "status": "pending",
+      "pr": null
     },
     {
-      "id": "984",
-      "status": "completed",
-      "pr": "#987"
-    },
-    {
-      "id": "953",
-      "status": "completed",
-      "pr": "DIRECT-MAIN-VIOLATION",
-      "notes": "haiku subagent committed directly to main despite PR requirement in prompt. Process violation per Sprint 165 Retro #853."
+      "id": "990",
+      "status": "pending",
+      "pr": null
     }
   ]
 }
