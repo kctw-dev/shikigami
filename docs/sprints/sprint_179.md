@@ -22,6 +22,17 @@
 
 ---
 
+## Sprint Review 結果（2026-04-09）
+
+**Review 狀態**：PASS
+**Velocity 實績**：6 pts（4/4 Stories）
+**CI 狀態**：success（最新 run）
+**PR 合規**：全部 4 PR 已 merged（PR#979, PR#978, PR#980, PR#981）
+**Issue 關閉**：#977, #976, #948, #955 全部 closed
+**Backlog 健康度**：sprint-candidate 水位 5 → [BACKLOG-REPLENISH-TRIGGER]
+
+---
+
 ## 驗收標準摘要
 
 ### #977 feat: ADR-045 方向修正 — 規則衰減是注意力問題，改用細粒度 short-lived subagent

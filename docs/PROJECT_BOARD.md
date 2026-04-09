@@ -1,21 +1,22 @@
 # Project Board
 
-**最後更新：2026-04-09（Sprint 179 Planning 完成）**
-**當前 Sprint**：Sprint 179（進行中）
+**最後更新：2026-04-09（Sprint 179 Review 完成）**
+**當前 Sprint**：Sprint 179（完成）
 
 ---
 
-## Sprint 179（Sprint Backlog）
+## Sprint 179（完成）
 
 > Sprint Goal：落地 ADR-045 架構方向修正（short-lived subagent 模型），同步清理 Sprint 178 Retro 遺留行動項目，強化框架自動化工具鏈
 > **容量**：6 pts | **Velocity 基準**：avg 6 pts
+> **結果**：Goal 達成（4/4 Stories DONE）。Velocity 6 pts，完成率 100%。
 
 | Story | Issue | Size | Points | 狀態 |
 |-------|-------|------|--------|------|
-| feat: ADR-045 方向修正 — 規則衰減是注意力問題，改用細粒度 short-lived subagent | #977 | L | 3 | TODO |
-| retro: haiku subagent 任務理解不完整 — 確保派遣 prompt 明確要求建立 PR | #976 | S | 1 | TODO |
-| feat: backlog 水位歷史趨勢查詢腳本（JSONL 可視化） | #948 | S | 1 | TODO |
-| retro: 評估 SessionEnd kill-switch hook 是否需遷移至 hook-runner.sh | #955 | S | 1 | TODO |
+| feat: ADR-045 方向修正 — 規則衰減是注意力問題，改用細粒度 short-lived subagent | #977 | L | 3 | DONE (PR#979) |
+| retro: haiku subagent 任務理解不完整 — 確保派遣 prompt 明確要求建立 PR | #976 | S | 1 | DONE (PR#978) |
+| feat: backlog 水位歷史趨勢查詢腳本（JSONL 可視化） | #948 | S | 1 | DONE (PR#980) |
+| retro: 評估 SessionEnd kill-switch hook 是否需遷移至 hook-runner.sh | #955 | S | 1 | DONE (PR#981) |
 
 ---
 
