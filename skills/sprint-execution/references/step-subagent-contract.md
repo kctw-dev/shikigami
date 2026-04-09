@@ -21,7 +21,12 @@ ADR-045 方向修正（Sprint 179 #977）確立了以下核心觀點：
 
 **位置**：Prompt 第一個主要區塊（context window 頂部）
 **目的**：確保規則在注意力最強的位置，避免長文後段注意力衰減導致規則被忽略
-**規則佔比要求**：使用 `rule-ratio-measure.sh` 量測，規則區塊 token 數 >= 10% 的總 token 數
+**規則佔比要求**：使用 `rule-ratio-measure.sh` 量測，規則區塊 token 數 >= 建議門檻值
+
+不同 step 有不同門檻要求，詳見 [`scripts/state-machine/THRESHOLD_GUIDE.md`](../../state-machine/THRESHOLD_GUIDE.md)（Story #996 AC-4）：
+- **delivery-completion-check**：>= 30%
+- **task-list-init**：>= 20%
+- **其他通用 step**：>= 10%
 
 ```markdown
 ## 規則片段
