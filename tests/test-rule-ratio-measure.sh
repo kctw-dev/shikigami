@@ -448,9 +448,199 @@ test_task_list_init_prompt_ratio() {
   unset STATE_MACHINE_DIR POC_OUTPUT_DIR
 }
 
+# ── Test 10: --threshold CLI 參數（Story #996 AC-1）──
+
+test_threshold_cli_parameter() {
+  echo "Test 10: --threshold CLI 參數"
+  setup
+
+  # 建立一個規則佔比約 25% 的 prompt
+  cat > "${TMP_DIR}/test-threshold.md" <<'PROMPT_EOF'
+## 規則片段
+
+You must follow these rules.
+規則一、規則二、規則三。
+Important constraints to follow.
+
+## 輸入契約
+
+Input file: docs/sprints/sprint-180/planning.md
+Output file: task-list.md
+PROMPT_EOF
+
+  # TC-1: 預設值應為 0.10
+  local output
+  output=$(bash "${MEASURE_SCRIPT}" "${TMP_DIR}/test-threshold.md")
+  local ratio
+  ratio=$(echo "${output}" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['ratio'])" 2>/dev/null)
+
+  TOTAL=$((TOTAL + 1))
+  local default_passed
+  default_passed=$(echo "${output}" | python3 -c "import sys,json; d=json.load(sys.stdin); print(str(d['passed']).lower())" 2>/dev/null)
+  echo "  INFO: default (threshold=0.10): ratio=${ratio}, passed=${default_passed}"
+  PASS=$((PASS + 1))
+
+  # TC-2: --threshold 0.30 應該使用該閾值
+  output=$(bash "${MEASURE_SCRIPT}" --threshold 0.30 "${TMP_DIR}/test-threshold.md")
+  local passed_30
+  passed_30=$(echo "${output}" | python3 -c "import sys,json; d=json.load(sys.stdin); print(str(d['passed']).lower())" 2>/dev/null)
+
+  TOTAL=$((TOTAL + 1))
+  if echo "${output}" | python3 -c "import sys,json; d=json.load(sys.stdin); v=d['ratio']; print('pass' if (v >= 0.30) == (d['passed']) else 'fail')" 2>/dev/null | grep -q "pass"; then
+    echo "  PASS: --threshold 0.30 applied correctly (passed=${passed_30})"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL: --threshold 0.30 not applied"
+    FAIL=$((FAIL + 1))
+  fi
+
+  teardown
+}
+
+# ── Test 11: RULE_RATIO_THRESHOLD 環境變數（Story #996 AC-2）──
+
+test_threshold_env_variable() {
+  echo "Test 11: RULE_RATIO_THRESHOLD 環境變數"
+  setup
+
+  cat > "${TMP_DIR}/test-env.md" <<'PROMPT_EOF'
+## 規則片段
+
+你必須遵守規則。
+Follow the rules strictly.
+
+## 輸入契約
+
+Input: planning.md
+Output: task-list.md
+PROMPT_EOF
+
+  # TC-3: RULE_RATIO_THRESHOLD=0.25 應該使用該值
+  local output
+  output=$(RULE_RATIO_THRESHOLD=0.25 bash "${MEASURE_SCRIPT}" "${TMP_DIR}/test-env.md")
+
+  TOTAL=$((TOTAL + 1))
+  if echo "${output}" | python3 -c "import sys,json; d=json.load(sys.stdin); v=d['ratio']; print('pass' if (v >= 0.25) == (d['passed']) else 'fail')" 2>/dev/null | grep -q "pass"; then
+    echo "  PASS: RULE_RATIO_THRESHOLD=0.25 applied"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL: RULE_RATIO_THRESHOLD not applied"
+    FAIL=$((FAIL + 1))
+  fi
+
+  teardown
+}
+
+# ── Test 12: CLI 優先於 ENV（Story #996 AC-3）──
+
+test_threshold_precedence() {
+  echo "Test 12: CLI > ENV > 預設（優先順序）"
+  setup
+
+  cat > "${TMP_DIR}/test-precedence.md" <<'PROMPT_EOF'
+## 規則片段
+
+Rule section.
+
+## 輸入契約
+
+Input section.
+PROMPT_EOF
+
+  # TC-4: CLI 和 ENV 同時設定，CLI 應勝出
+  local output
+  output=$(RULE_RATIO_THRESHOLD=0.50 bash "${MEASURE_SCRIPT}" --threshold 0.10 "${TMP_DIR}/test-precedence.md")
+
+  TOTAL=$((TOTAL + 1))
+  if echo "${output}" | python3 -c "import sys,json; d=json.load(sys.stdin); v=d['ratio']; print('pass' if (v >= 0.10) == (d['passed']) else 'fail')" 2>/dev/null | grep -q "pass"; then
+    echo "  PASS: CLI threshold 0.10 wins over ENV 0.50"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL: precedence not correct"
+    FAIL=$((FAIL + 1))
+  fi
+
+  teardown
+}
+
+# ── Test 13: 超出範圍值驗證（Story #996 AC-1）──
+
+test_threshold_validation() {
+  echo "Test 13: 超出範圍值驗證（AC-1）"
+
+  # TC-5: --threshold -0.1 應 exit != 0
+  TOTAL=$((TOTAL + 1))
+  local exit_code=0
+  bash "${MEASURE_SCRIPT}" --threshold -0.1 /dev/null >/dev/null 2>&1 || exit_code=$?
+
+  if [[ ${exit_code} -ne 0 ]]; then
+    echo "  PASS: --threshold -0.1 exits with error (exit=${exit_code})"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL: --threshold -0.1 should exit != 0"
+    FAIL=$((FAIL + 1))
+  fi
+
+  # TC-5b: --threshold 1.5 應 exit != 0
+  TOTAL=$((TOTAL + 1))
+  exit_code=0
+  bash "${MEASURE_SCRIPT}" --threshold 1.5 /dev/null >/dev/null 2>&1 || exit_code=$?
+
+  if [[ ${exit_code} -ne 0 ]]; then
+    echo "  PASS: --threshold 1.5 exits with error (exit=${exit_code})"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL: --threshold 1.5 should exit != 0"
+    FAIL=$((FAIL + 1))
+  fi
+
+  # TC-5c: 有效值 0.0 應正常執行
+  TOTAL=$((TOTAL + 1))
+  local tmp_dir
+  tmp_dir=$(mktemp -d)
+  cat > "${tmp_dir}/test.md" <<'EOF'
+## 規則片段
+Rule.
+## 輸入契約
+Input.
+EOF
+  exit_code=0
+  bash "${MEASURE_SCRIPT}" --threshold 0.0 "${tmp_dir}/test.md" >/dev/null 2>&1 || exit_code=$?
+  rm -rf "${tmp_dir}"
+
+  if [[ ${exit_code} -eq 0 ]]; then
+    echo "  PASS: --threshold 0.0 is valid (exit=0)"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL: --threshold 0.0 should be valid"
+    FAIL=$((FAIL + 1))
+  fi
+
+  # TC-5d: 有效值 1.0 應正常執行
+  TOTAL=$((TOTAL + 1))
+  tmp_dir=$(mktemp -d)
+  cat > "${tmp_dir}/test.md" <<'EOF'
+## 規則片段
+Rule.
+## 輸入契約
+Input.
+EOF
+  exit_code=0
+  bash "${MEASURE_SCRIPT}" --threshold 1.0 "${tmp_dir}/test.md" >/dev/null 2>&1 || exit_code=$?
+  rm -rf "${tmp_dir}"
+
+  if [[ ${exit_code} -eq 0 ]]; then
+    echo "  PASS: --threshold 1.0 is valid (exit=0)"
+    PASS=$((PASS + 1))
+  else
+    echo "  FAIL: --threshold 1.0 should be valid"
+    FAIL=$((FAIL + 1))
+  fi
+}
+
 # ── 執行所有測試 ──
 
-echo "=== Rule Ratio Measure Tests (Story #983 AC-2) ==="
+echo "=== Rule Ratio Measure Tests (Story #983 AC-2 + #996 AC-1~5) ==="
 echo ""
 
 test_script_exists
@@ -470,6 +660,14 @@ echo ""
 test_token_estimation_formula
 echo ""
 test_task_list_init_prompt_ratio
+echo ""
+test_threshold_cli_parameter
+echo ""
+test_threshold_env_variable
+echo ""
+test_threshold_precedence
+echo ""
+test_threshold_validation
 echo ""
 
 echo "=== Results: ${PASS}/${TOTAL} passed, ${FAIL} failed ==="
