@@ -13,10 +13,10 @@
 
 | Story | Issue | Size | Points | 狀態 | 負責 | Routing Tier |
 |-------|-------|------|--------|------|------|-------------|
-| retro: sprint-execution 整合 short-lived subagent — ADR-045 落地第一步 | #983 | M-L | 3 | DONE | PR#985 | sonnet（Score 9, FEAT） |
-| retro: backlog 水位趨勢腳本整合至自動化報告 | #982 | S | 1 | DONE | PR#986 | haiku（Score 5, FEAT） |
-| retro: 建立 hooks 架構說明文件 — hook-runner.sh 使用時機指南 | #984 | S | 1 | DONE | PR#987 | haiku（Score 4, DOC） |
-| retro: TDD 外部工具模擬最佳實踐指南 — fake binary vs PATH 清空陷阱 | #953 | S | 1 | DONE (PROCESS-VIOLATION) | direct-main | haiku（Score 4, DOC） |
+| retro: sprint-execution 整合 short-lived subagent — ADR-045 落地第一步 | #983 | M-L | 3 | DONE (PR#985, CLOSED) | PR#985 | sonnet（Score 9, FEAT） |
+| retro: backlog 水位趨勢腳本整合至自動化報告 | #982 | S | 1 | DONE (PR#986, CLOSED) | PR#986 | haiku（Score 5, FEAT） |
+| retro: 建立 hooks 架構說明文件 — hook-runner.sh 使用時機指南 | #984 | S | 1 | DONE (PR#987, CLOSED) | PR#987 | haiku（Score 4, DOC） |
+| retro: TDD 外部工具模擬最佳實踐指南 — fake binary vs PATH 清空陷阱 | #953 | S | 1 | DONE (PROCESS-VIOLATION, CLOSED) | direct-main | haiku（Score 4, DOC） |
 
 **總計**：4 Stories / 6 pts
 
@@ -93,3 +93,23 @@
 - **#983 M-L Story 佔 50% 容量**：3 pts 單一 Story，若 task-list-init 整合遇阻礙影響大 → 緩解：Scope Buffer 允許規則佔比量測腳本降級為 v0（手動跑），自動化整合排 Sprint 181。
 - **#983 coordinator-only 檔案獨占**：與其他 Story 平行會衝突 → 緩解：排入 Wave 1 獨占執行。
 - **#983 軟性指標無 PASS/FAIL**：AC-3 僅作為觀察記錄 → 緩解：AC-1/AC-2/AC-4 為可立即驗證的交付物，DoD 以這三項為準。
+
+---
+
+## Sprint Review 結果（2026-04-09）
+
+**Velocity**：6 pts（4/4 Stories completed）
+**Sprint Goal**：達成 ✓
+
+### Process Violations
+- **[PROCESS-VIOLATION] Story #953 未透過 PR 交付**：haiku subagent 直推 main（commit 4de02fb），自圓其說為「純文件 Story 無需 PR 流程」，違反 Sprint 165 Retro #853 HARD-GATE（所有 Story 必須透過 PR）。此為 ADR-045 注意力衰減問題的實證案例，作為 Sprint 180 Retro 核心議題。
+
+### QA 測試結果
+- `tests/test-step-subagent-poc.sh`：30/30 PASS
+- `tests/test-*.sh`（全套）：12 PASS / 4 FAIL（既有問題，非 Sprint 180 引入）
+
+### Backlog 健康度
+- sprint-candidate 水位：4（偏低，Sprint 181 Planning 前需補充）
+
+### 會議紀錄
+見 `docs/meetings/2026-04-09-sprint-180-review.md`
