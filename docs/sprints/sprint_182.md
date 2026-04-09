@@ -13,10 +13,10 @@
 
 | Story | Issue | Size | Points | 狀態 | 負責 | Routing Tier |
 |-------|-------|------|--------|------|------|-------------|
-| PO Prompt Template 禁用軟性字樣 | #994 | S | 1 | TODO | haiku | haiku（Score 4, PROCESS） |
-| rule-ratio-measure.sh 支援 per-prompt THRESHOLD | #996 | S | 1 | TODO | haiku | haiku（Score 4, TOOL） |
-| Subagent API Error Fallback | #995 | M | 3 | TODO | sonnet | sonnet（Score 6, PROCESS+ARCH） |
-| Skill 依賴宣告一致性驗證 | #940 | S | 1 | TODO | haiku | haiku（Score 4, TEST） |
+| PO Prompt Template 禁用軟性字樣 | #994 | S | 1 | DONE | haiku | haiku（Score 4, PROCESS） |
+| rule-ratio-measure.sh 支援 per-prompt THRESHOLD | #996 | S | 1 | DONE | haiku | haiku（Score 4, TOOL） |
+| Subagent API Error Fallback | #995 | M | 3 | DONE | sonnet | sonnet（Score 6, PROCESS+ARCH） |
+| Skill 依賴宣告一致性驗證 | #940 | S | 1 | DONE | haiku | haiku（Score 4, TEST） |
 
 **總計**：4 Stories / 6 pts
 
@@ -193,4 +193,34 @@
 
 ## Sprint Review 結果
 
-（待填入）
+**Review 日期**：2026-04-10  
+**Reviewer**：Sprint Review Subagent  
+**狀態**：COMPLETED
+
+### Story 結果
+
+| Story | Issue | Size | PR | QA 測試 | 狀態 |
+|-------|-------|------|-----|---------|------|
+| PO Prompt 禁用軟性字樣 | #994 | S/1 | PR#997 | 10/10 PASS | DONE |
+| rule-ratio per-prompt THRESHOLD | #996 | S/1 | PR#998 | 28/28 PASS | DONE |
+| Subagent API Error Fallback | #995 | M/3 | PR#999 | 30/30 PASS | DONE + 外部 QA CONFIRM |
+| Skill 依賴宣告驗證 | #940 | S/1 | PR#1000 | 3/3 PASS | DONE |
+
+### Velocity
+**6 pts**（4/4 Stories DONE）— 連續第 9 Sprint Velocity = 6 pts（Sprint 174~182）
+
+### QA 總結
+- 全部測試通過：71/71
+- Process Violations：0
+- PR 流程合規：4/4
+
+### 特別記錄
+- **PR #1000 里程碑**：框架第 1000 個 PR（#940 Skill 依賴驗證），2026-04-09T16:34:55Z 合入
+- **外部獨立 QA CONFIRM**：#995 M-size 通過完整 QA 審查
+- **Sprint 181 Retro 閉環**：#994、#995、#996 全為 Retro 行動項，本 Sprint 完成閉環
+
+### Issue 關閉
+#994 / #995 / #996 / #940 — 全部 CLOSED
+
+### Backlog 健康度
+sprint-candidate 水位：3 Issues（健康，低水位）
