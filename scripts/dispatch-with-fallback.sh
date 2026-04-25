@@ -57,11 +57,14 @@ cmd_detect_error() {
     echo "[NONE] empty input"
     return 1
   fi
-  if grep -qE "$PATTERN_HTTP_429" <<< "$text"; then
+  # API 錯誤訊息來源多樣（不同 SDK / proxy / log），大小寫不一定統一
+  # 用 -i 確保「Rate limit exceeded」「Internal Server Error」等變體也能匹配
+  # （codex review P2 第三輪）
+  if grep -iqE "$PATTERN_HTTP_429" <<< "$text"; then
     echo "[DETECTED] type=HTTP_429 action=RETRY_SAME(backoff=30,60,120) then=DOWNGRADE_SONNET"
     return 0
   fi
-  if grep -qE "$PATTERN_HTTP_5XX" <<< "$text"; then
+  if grep -iqE "$PATTERN_HTTP_5XX" <<< "$text"; then
     echo "[DETECTED] type=HTTP_5XX action=DOWNGRADE_SONNET_IMMEDIATE then=BACKOFF_SONNET(30,60,120)"
     return 0
   fi

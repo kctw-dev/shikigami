@@ -43,6 +43,10 @@ declare -a ERR_429_CASES=(
   "rate_limit_error: too many requests"
   "Anthropic API: rate limit exceeded"
   "anthropic.RateLimitError"
+  # codex review P2 第三輪：case-insensitive 變體
+  "Rate Limit Exceeded"
+  "RATE LIMIT EXCEEDED"
+  "Rate_Limit_Error"
 )
 for t in "${ERR_429_CASES[@]}"; do
   out=$(bash "$SCRIPT" detect-error --text "$t" 2>&1)
@@ -59,6 +63,11 @@ declare -a ERR_5XX_CASES=(
   "Internal server error: 500"
   "anthropic.OverloadedError: overloaded_error"
   "server_error from upstream"
+  # codex review P2 第三輪：case-insensitive 變體
+  "Internal Server Error"
+  "INTERNAL SERVER ERROR"
+  "OVERLOADED"
+  "Server_Error"
 )
 for t in "${ERR_5XX_CASES[@]}"; do
   out=$(bash "$SCRIPT" detect-error --text "$t" 2>&1)
