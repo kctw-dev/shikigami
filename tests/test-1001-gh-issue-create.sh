@@ -150,7 +150,9 @@ NO_GH_DIR=""
 if NO_GH_DIR="$(mktemp -d 2>/dev/null)" && [[ -n "$NO_GH_DIR" && -d "$NO_GH_DIR" ]]; then
   trap 'rm -rf "$NO_GH_DIR" "$TMP_INPUT"' EXIT INT TERM
   # 只 link script 需要的工具（gh 故意不 link）
-  for cmd in bash cat mktemp wc tail rm printf; do
+  # tr 用於 newline check（line 129 of gh-issue-create.sh）— 缺它會吐
+  # stderr 但腳本仍 fall-through，codex review 第九輪指出此漏接
+  for cmd in bash cat mktemp wc tail rm printf tr; do
     src=$(command -v "$cmd" 2>/dev/null || true)
     [[ -n "$src" && -x "$src" ]] && ln -s "$src" "$NO_GH_DIR/$cmd" 2>/dev/null
   done
