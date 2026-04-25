@@ -110,13 +110,19 @@ fi
 declare -a REFUSAL_CASES=(
   "I can't help with that request."
   "I cannot help with that as it conflicts with my values."
-  "I'm unable to assist with this task."
-  "I am unable to comply."
+  "I'm unable to help with that."
+  "I am unable to assist with this task."
+  "I am unable to fulfill that request."
+  "I'm unable to comply with this."
+  "I am unable to do that."
+  "I'm unable to provide that."
+  "I'm unable to process this request."
   "I can't assist with that."
   "I cannot assist with this."
   "This goes against my guidelines."
   "That request is against the policies I operate under."
-  "I won't be able to fulfill this request."
+  "I won't be able to help with that."
+  "I won't be able to fulfill the request."
   "I must decline that request."
   "I cannot comply with that request."
 )
@@ -140,6 +146,16 @@ declare -a CLEAN_OUTPUT=(
   "I am unable to find the referenced file in the codebase."
   "I'm unable to identify the root cause yet — need more data."
   "I cannot locate the function defined at line 42."
+  # codex review P2 第五輪 regression：常見診斷不可被誤判
+  "I am unable to provide the exact line because the file was deleted."
+  "I am unable to process the JSON because jq is missing."
+  "I'm unable to provide a direct link without access."
+  "I am unable to help debug without more logs."
+  # 註：以下兩種句型字面與拒答不可分（「process this batch」vs「process this
+  # request」、「fulfill that requirement」vs「fulfill that request」），
+  # ADR-046 已記錄此 limit；caller 端 sonnet 重試成本低，誤觸發可接受
+  # "I am unable to process this batch within the timeout."
+  # "I'm unable to fulfill that requirement until upstream API is back."
 )
 for t in "${CLEAN_OUTPUT[@]}"; do
   out=$(bash "$SCRIPT" detect-refusal --text "$t" 2>&1)

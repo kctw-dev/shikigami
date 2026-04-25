@@ -104,6 +104,22 @@ Sprint 182 Planning 期間 Architect + QA subagent 同時遭 **usage policy refu
 
 ---
 
+## 已知限制（codex review 第 5 輪後）
+
+正則式區分「拒答」與「診斷」存在語言固有歧義：
+
+| 句型 | 視為 | 為何 |
+|------|------|------|
+| `I am unable to process this batch within the timeout.` | 診斷（無法區分） | `process this` 字面與「process this request」相同 |
+| `I'm unable to fulfill that requirement until upstream API is back.` | 診斷（無法區分） | `fulfill that` 字面與「fulfill that request」相同 |
+
+當前選擇：**寬鬆 → 偏向觸發 sonnet 重試一次**。理由：
+- 一次 sonnet 重試成本低（~1 秒延遲、模型費用）
+- 若 sonnet 也「拒答」（=同樣 pattern 命中診斷文字）→ 升級人工 → 人工確認後若是診斷，標記 `[FALSE-POSITIVE]` 並結束
+- 反向（漏判真實 refusal）成本較高：subagent 卡住，主 session 不知道為何
+
+caller 端如果觀測到大量 false positive，可在 ADR-046 後續迭代加入「診斷標誌詞」（because / until / without / missing）作為負向過濾。
+
 ## 後續工作
 
 | 項目 | 觸發條件 | Owner |

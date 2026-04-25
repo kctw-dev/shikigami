@@ -35,9 +35,11 @@ readonly PATTERN_HTTP_429='(^|[^0-9])429([^0-9]|$)|rate[_ -]?limit|rate limit er
 # HTTP 500 / 529 — Server Error / Overload
 readonly PATTERN_HTTP_5XX='(^|[^0-9])(500|529)([^0-9]|$)|Overloaded|overloaded_error|server[_ -]error|Internal server error'
 # Usage Policy Refusal — subagent 正常完成但內容是拒答
-# 收窄至「不協助」語境片語，避免「I'm unable to reproduce / find / identify」
-# 這類正常診斷被誤判（codex review P2-3）
-readonly PATTERN_REFUSAL="I can't help with (that|this|your)|I cannot help with (that|this|your)|I'm unable to (help|assist|comply|fulfill|provide that|process this)|I am unable to (help|assist|comply|fulfill|provide|process)|I can't assist with (that|this|your)|I cannot assist with (that|this|your)|I won't be able to (help|assist|comply|fulfill|do that|provide)|against (my|our|the) (guidelines|policies|policy|rules|values)|goes against (my|our|the) (guidelines|policies|policy|rules|values)|cannot comply with (that|this|your) request|I (must|have to) decline (that|this|your)"
+# 設計原則（codex review P2-3 / P2-5）：所有「不協助」動詞片語都必須帶有
+# 「明確指向請求」的限定詞（that / this / your / the request / with X），
+# 才能與技術診斷區分（例如「I am unable to provide the exact line」是診斷，
+# 「I am unable to provide that」是拒答）。
+readonly PATTERN_REFUSAL="I can't help with (that|this|your)|I cannot help with (that|this|your)|I'm unable to (help|assist|comply|fulfill|provide|process|do) (with )?(that|this|your|the request|the task)|I am unable to (help|assist|comply|fulfill|provide|process|do) (with )?(that|this|your|the request|the task)|I can't assist with (that|this|your)|I cannot assist with (that|this|your)|I won't be able to (help|assist|comply|fulfill|do|provide) (with )?(that|this|your|the request|the task)|I (must|have to) decline (that|this|your)|cannot comply with (that|this|your) request|against (my|our|the) (guidelines|policies|policy|rules|values)|goes against (my|our|the) (guidelines|policies|policy|rules|values)"
 
 # Exit code 2 = usage / contract error（呼叫方有問題）
 # Exit code 1 = no match / no fallback needed（正常無 fallback）
