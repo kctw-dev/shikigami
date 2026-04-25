@@ -36,9 +36,11 @@
 10. **CI Actions 版本釘定**：所有 GitHub Actions 統一使用 `@v4`，升級需先確認 self-hosted runner 相容性，並經人工審核後才能更新版本號。新增或修改 workflow 時執行 `bash scripts/validate-ci-versions.sh` 驗證。**升級確認時機**：INFRA Story 涉及 CI Actions 版本升級時，確認須在 Sprint Planning 前完成，避免 Sprint 中途因版本不相容而阻塞。
 11. **GitHub URL 可讀取**：遇到 GitHub URL（含 attachment），帶 `gh auth token` 認證直接讀取，不要報「無法讀取」。
 12. **平行 Worktree OOM 防護**：平行 worktree subagent 過多會 OOM（Sprint 127 歷史案例：4 個 worktree 觸發 core dump）。`SHIKIGAMI_MAX_PARALLEL` 預設 2，**未設定時亦視為 2，不得無限平行**。派遣前必須執行 `git worktree list` 計算現存數量；重派前必須確認同任務 agent 是否還在跑，避免重複派遣。詳見 `skills/sprint-execution/references/parallel-safety.md`。
-13. **Workflow issue body 一律使用 `--body-file` 模式**：GitHub Actions workflow 中建立或更新 Issue body 時，禁止直接以 `--body "..."` 傳入多行字串。body 內容必須寫入暫存檔案後以 `--body-file <file>` 引用，避免 body 含冒號（`:`）、星號（`*`）、引號等 YAML 特殊字符導致 workflow YAML parse error（Sprint 135 歷史案例：#597）。範例：
+13. **Issue body 一律使用 `--body-file` 模式（含 workflow 與 Sprint Planning）**：建立或更新 Issue body 時，禁止直接以 `--body "..."` 傳入多行字串。body 內容必須走 `--body-file` 引用，避免含冒號（`:`）、星號（`*`）、引號等特殊字元時被截斷或讓 YAML/shell 解譯失敗（Sprint 135 #597、Sprint 182 #994/#995/#996 已有歷史案例）。**首選封裝：`bash scripts/gh-issue-create.sh`（#1001）**，自動處理暫存檔建立、寫入、清理；範例：
     ```bash
-    # 正確（--body-file 模式）
+    # 推薦：透過 helper（自動 --body-file + trap 清理）
+    bash scripts/gh-issue-create.sh --title "..." --body "含冒號：或 *星號* 的內容"
+    # 也可（手動暫存檔）
     printf '%s\n' "Issue body content" "可安全使用：冒號、*星號*" > /tmp/issue-body.txt
     gh issue create --title "..." --body-file /tmp/issue-body.txt
     # 錯誤（直接 --body，禁止）

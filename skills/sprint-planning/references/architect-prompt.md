@@ -354,13 +354,11 @@ Architect 在平行分群時，**必須**額外執行同檔案衝突偵測：
 
 ### ADR 補建流程（AC1）
 
-當觸發條件成立時，Architect **自動建立 ADR Issue**：
+當觸發條件成立時，Architect **自動建立 ADR Issue**（一律透過 `scripts/gh-issue-create.sh` helper，避免特殊字元截斷 — CLAUDE.md 紅線 #13 / Sprint 182 #1001）：
 
 ```bash
-gh issue create \
-  -R ${OWNER_REPO} \
-  --title "RESEARCH: ADR — {決策主題}" \
-  --body "## ADR 補建需求
+ADR_BODY=$(cat <<'BODY'
+## ADR 補建需求
 
 **觸發 Story**：#{story_number} {story_title}
 **決策主題**：{具體需要 ADR 的技術決策描述}
@@ -371,7 +369,14 @@ gh issue create \
 - [ ] ADR 狀態標記為 Accepted
 - [ ] 相關 Story 更新 ADR 參照欄位
 
-> 此 Issue 由 Architect Refinement 自動建立。" \
+> 此 Issue 由 Architect Refinement 自動建立。
+BODY
+)
+
+bash scripts/gh-issue-create.sh \
+  --repo  "${OWNER_REPO}" \
+  --title "RESEARCH: ADR — {決策主題}" \
+  --body  "$ADR_BODY" \
   --label "RESEARCH,size:S,story-points:1"
 ```
 
