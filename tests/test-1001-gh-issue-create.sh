@@ -118,6 +118,31 @@ assert_contains "$OUT6" "缺少必要參數 --title" "AC5.1 缺 --title 應拒�
 OUT7=$(bash "$SCRIPT_PATH" --title "x" --body "y" --weird-flag --dry-run 2>&1 || true)
 assert_contains "$OUT7" "未知參數" "AC5.2 未知 flag 應拒絕"
 
+# AC5.3（codex review P2-2 regression）：缺值參數應立即 die，不可無限迴圈
+# 跨平台 timeout（macOS 無 timeout/gtimeout）
+run_with_timeout() {
+  local secs="$1"; shift
+  ( "$@" >/dev/null 2>&1 ) &
+  local pid=$!
+  ( sleep "$secs" && kill -9 "$pid" 2>/dev/null ) &
+  local watchdog=$!
+  wait "$pid" 2>/dev/null
+  local rc=$?
+  kill -9 "$watchdog" 2>/dev/null
+  wait "$watchdog" 2>/dev/null
+  # 若被 watchdog 殺掉，bash wait 會回傳 137（128 + SIGKILL=9）
+  echo "$rc"
+}
+
+rc=$(run_with_timeout 3 bash "$SCRIPT_PATH" --title)
+if [[ "$rc" == "1" ]]; then
+  pass "AC5.3 --title 缺值立即 die（codex review P2-2 regression）"
+elif [[ "$rc" == "137" ]]; then
+  fail "AC5.3 --title 缺值被 watchdog 殺掉（疑似無限迴圈），應 die"
+else
+  fail "AC5.3 --title 缺值返回意外 rc=$rc（期望 1）"
+fi
+
 # ---------------------------------------------------------------------------
 # AC6：選用參數會被帶入 dry-run 顯示的指令中
 # ---------------------------------------------------------------------------

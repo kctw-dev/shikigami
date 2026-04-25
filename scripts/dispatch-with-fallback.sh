@@ -39,6 +39,13 @@ readonly PATTERN_REFUSAL="I can't help with that|I cannot help with that|I'm una
 
 die() { echo "[ERROR] $*" >&2; exit 1; }
 
+# require_value <flag-name> <remaining-arg-count>
+# 在 shift 2 之前呼叫，避免缺值 + 無 set -e 導致無限迴圈
+require_value() {
+  local flag="$1" remaining="$2"
+  [[ "$remaining" -ge 2 ]] || die "$flag requires a value"
+}
+
 # ---------------------------------------------------------------------------
 # 子命令：偵測錯誤（429/5xx）
 # ---------------------------------------------------------------------------
@@ -48,11 +55,11 @@ cmd_detect_error() {
     echo "[NONE] empty input"
     return 1
   fi
-  if echo "$text" | grep -qE "$PATTERN_HTTP_429"; then
+  if grep -qE "$PATTERN_HTTP_429" <<< "$text"; then
     echo "[DETECTED] type=HTTP_429 action=RETRY_SAME(backoff=30,60,120) then=DOWNGRADE_SONNET"
     return 0
   fi
-  if echo "$text" | grep -qE "$PATTERN_HTTP_5XX"; then
+  if grep -qE "$PATTERN_HTTP_5XX" <<< "$text"; then
     echo "[DETECTED] type=HTTP_5XX action=DOWNGRADE_SONNET_IMMEDIATE then=BACKOFF_SONNET(30,60,120)"
     return 0
   fi
@@ -69,7 +76,7 @@ cmd_detect_refusal() {
     echo "[NONE] empty input"
     return 1
   fi
-  if echo "$text" | grep -qE "$PATTERN_REFUSAL"; then
+  if grep -qE "$PATTERN_REFUSAL" <<< "$text"; then
     echo "[DETECTED] type=POLICY_REFUSAL action=DOWNGRADE_AND_RETRY_ONCE then=ESCALATE_HUMAN"
     return 0
   fi
@@ -84,11 +91,11 @@ cmd_record_event() {
   local story="" from="" to="" reason="" retry_count="0"
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --story)       story="${2:-}"; shift 2 ;;
-      --from)        from="${2:-}"; shift 2 ;;
-      --to)          to="${2:-}"; shift 2 ;;
-      --reason)      reason="${2:-}"; shift 2 ;;
-      --retry-count) retry_count="${2:-0}"; shift 2 ;;
+      --story)       require_value --story "$#";       story="$2";       shift 2 ;;
+      --from)        require_value --from "$#";        from="$2";        shift 2 ;;
+      --to)          require_value --to "$#";          to="$2";          shift 2 ;;
+      --reason)      require_value --reason "$#";      reason="$2";      shift 2 ;;
+      --retry-count) require_value --retry-count "$#"; retry_count="$2"; shift 2 ;;
       *)             die "unknown arg: $1" ;;
     esac
   done
@@ -177,8 +184,8 @@ read_input() {
   local input_file="" text=""
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --input-file) input_file="${2:-}"; shift 2 ;;
-      --text)       text="${2:-}"; shift 2 ;;
+      --input-file) require_value --input-file "$#"; input_file="$2"; shift 2 ;;
+      --text)       require_value --text "$#";       text="$2";       shift 2 ;;
       *)            die "unknown arg: $1" ;;
     esac
   done

@@ -200,6 +200,52 @@ fi
 rm -f "$LOG_FILE.tmp"
 
 # ---------------------------------------------------------------------------
+# AC4.6（codex review P2-1）：grep 在 pipefail 下不可有 SIGPIPE 漏判
+# 大輸入 + refusal 在開頭 → 必須仍偵測到（非 [NONE]）
+# ---------------------------------------------------------------------------
+LARGE_INPUT="I can't help with that request.$(printf 'x%.0s' {1..50000})"
+out=$(bash "$SCRIPT" detect-refusal --text "$LARGE_INPUT" 2>&1)
+rc=$?
+if [[ $rc -eq 0 ]] && [[ "$out" == *"POLICY_REFUSAL"* ]]; then
+  pass "AC4.6 大輸入下 refusal 仍被偵測（無 SIGPIPE 漏判）"
+else
+  fail "AC4.6 大輸入下 refusal 漏判 (rc=$rc, out=${out:0:100})"
+fi
+
+# AC4.7 / AC4.8（codex review P2-2）：缺值參數應立即 die，不可無限迴圈
+# 跨平台 timeout（macOS 無 timeout/gtimeout）
+run_with_timeout() {
+  local secs="$1"; shift
+  ( "$@" >/dev/null 2>&1 ) &
+  local pid=$!
+  ( sleep "$secs" && kill -9 "$pid" 2>/dev/null ) &
+  local watchdog=$!
+  wait "$pid" 2>/dev/null
+  local rc=$?
+  kill -9 "$watchdog" 2>/dev/null
+  wait "$watchdog" 2>/dev/null
+  echo "$rc"
+}
+
+rc=$(run_with_timeout 3 bash "$SCRIPT" detect-error --text)
+if [[ "$rc" == "1" ]]; then
+  pass "AC4.7 detect-error 缺 --text 值立即 die"
+elif [[ "$rc" == "137" ]]; then
+  fail "AC4.7 detect-error 缺值被 watchdog 殺掉（疑似無限迴圈），應 die"
+else
+  fail "AC4.7 detect-error 缺值返回意外 rc=$rc"
+fi
+
+rc=$(run_with_timeout 3 bash "$SCRIPT" record-event --story)
+if [[ "$rc" == "1" ]]; then
+  pass "AC4.8 record-event 缺 --story 值立即 die"
+elif [[ "$rc" == "137" ]]; then
+  fail "AC4.8 record-event 缺值被 watchdog 殺掉（疑似無限迴圈），應 die"
+else
+  fail "AC4.8 record-event 缺值返回意外 rc=$rc"
+fi
+
+# ---------------------------------------------------------------------------
 # AC5：record-event 參數驗證
 # ---------------------------------------------------------------------------
 # 缺 --story

@@ -50,6 +50,13 @@ EOF
 
 die() { echo "[ERROR] $*" >&2; exit 1; }
 
+# require_value <flag-name> <remaining-arg-count>
+# 避免缺值參數在 set -uo pipefail（無 -e）下使 shift 2 失敗導致無限迴圈
+require_value() {
+  local flag="$1" remaining="$2"
+  [[ "$remaining" -ge 2 ]] || die "$flag requires a value"
+}
+
 # ---------------------------------------------------------------------------
 # 參數解析
 # ---------------------------------------------------------------------------
@@ -65,14 +72,14 @@ DRY_RUN=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --title)      TITLE="${2:-}"; shift 2 ;;
-    --body)       BODY="${2:-}"; shift 2 ;;
-    --body-file)  BODY_FILE="${2:-}"; shift 2 ;;
+    --title)      require_value --title "$#";     TITLE="$2";     shift 2 ;;
+    --body)       require_value --body "$#";      BODY="$2";      shift 2 ;;
+    --body-file)  require_value --body-file "$#"; BODY_FILE="$2"; shift 2 ;;
     -)            READ_STDIN=1; shift ;;
-    --repo)       REPO="${2:-}"; shift 2 ;;
-    --label)      LABEL="${2:-}"; shift 2 ;;
-    --milestone)  MILESTONE="${2:-}"; shift 2 ;;
-    --assignee)   ASSIGNEE="${2:-}"; shift 2 ;;
+    --repo)       require_value --repo "$#";      REPO="$2";      shift 2 ;;
+    --label)      require_value --label "$#";     LABEL="$2";     shift 2 ;;
+    --milestone)  require_value --milestone "$#"; MILESTONE="$2"; shift 2 ;;
+    --assignee)   require_value --assignee "$#";  ASSIGNEE="$2";  shift 2 ;;
     --dry-run)    DRY_RUN=1; shift ;;
     -h|--help)    usage; exit 0 ;;
     *)            die "未知參數：$1（-h 查看用法）" ;;
