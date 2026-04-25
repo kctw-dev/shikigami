@@ -1,0 +1,251 @@
+#!/usr/bin/env bash
+# tests/test-1003-dispatch-fallback.sh
+# Issue #1003 (Sprint 182 Retro A3) / ADR-046：dispatch-with-fallback.sh 驗證
+#
+# 覆蓋 AC：
+#   AC1 — script 存在、四個子命令可執行
+#   AC2 — detect-error 正確分類 HTTP 429 vs HTTP 5xx vs 無錯誤
+#   AC3 — detect-refusal 偵測 8 種典型拒答字樣，無誤命中乾淨輸出
+#   AC4 — record-event 正確寫入 jsonl + 必要欄位驗證
+#   AC5 — record-event 拒絕無效的 reason 與必要參數缺失
+#   AC6 — ADR-046 與 SKILL.md §2.1.1 結構性更新
+
+set -uo pipefail
+
+PASS=0
+FAIL=0
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SCRIPT="$REPO_ROOT/scripts/dispatch-with-fallback.sh"
+ADR="$REPO_ROOT/docs/adr/ADR-046-agent-tool-fallback-verification.md"
+SKILL="$REPO_ROOT/skills/sprint-execution/SKILL.md"
+
+pass() { echo "[PASS] $1"; PASS=$((PASS+1)); }
+fail() { echo "[FAIL] $1"; FAIL=$((FAIL+1)); }
+
+# 暫存：每次測試的事件紀錄各自隔離
+TMPDIR_TEST="$(mktemp -d -t test-1003.XXXXXX)"
+trap 'rm -rf "$TMPDIR_TEST"' EXIT
+
+# ---------------------------------------------------------------------------
+# AC1：script + 子命令存在
+# ---------------------------------------------------------------------------
+[[ -f "$SCRIPT" ]] && pass "AC1.1 script 存在" || { fail "AC1.1 script 缺失"; exit 1; }
+[[ -x "$SCRIPT" ]] && pass "AC1.2 script 可執行" || fail "AC1.2 script 缺 +x"
+
+bash "$SCRIPT" -h >/dev/null 2>&1 && pass "AC1.3 -h 可執行" || fail "AC1.3 -h 失敗"
+bash "$SCRIPT" patterns >/dev/null 2>&1 && pass "AC1.4 patterns 子命令" || fail "AC1.4 patterns 失敗"
+
+# ---------------------------------------------------------------------------
+# AC2：detect-error
+# ---------------------------------------------------------------------------
+declare -a ERR_429_CASES=(
+  "Server returned 429 Too Many Requests"
+  "rate_limit_error: too many requests"
+  "Anthropic API: rate limit exceeded"
+  "anthropic.RateLimitError"
+)
+for t in "${ERR_429_CASES[@]}"; do
+  out=$(bash "$SCRIPT" detect-error --text "$t" 2>&1)
+  rc=$?
+  if [[ $rc -eq 0 ]] && [[ "$out" == *"HTTP_429"* ]]; then
+    pass "AC2.1 偵測 HTTP_429: \"$t\""
+  else
+    fail "AC2.1 應偵測為 HTTP_429 但失敗: \"$t\" (rc=$rc, out=$out)"
+  fi
+done
+
+declare -a ERR_5XX_CASES=(
+  "Got HTTP 529 Overloaded"
+  "Internal server error: 500"
+  "anthropic.OverloadedError: overloaded_error"
+  "server_error from upstream"
+)
+for t in "${ERR_5XX_CASES[@]}"; do
+  out=$(bash "$SCRIPT" detect-error --text "$t" 2>&1)
+  rc=$?
+  if [[ $rc -eq 0 ]] && [[ "$out" == *"HTTP_5XX"* ]]; then
+    pass "AC2.2 偵測 HTTP_5XX: \"$t\""
+  else
+    fail "AC2.2 應偵測為 HTTP_5XX 但失敗: \"$t\" (rc=$rc, out=$out)"
+  fi
+done
+
+# AC2.3：乾淨 stderr 不應觸發
+declare -a CLEAN_STDERR=(
+  "Tool executed successfully"
+  "subagent finished in 12s"
+  "[INFO] dispatching architect"
+)
+for t in "${CLEAN_STDERR[@]}"; do
+  out=$(bash "$SCRIPT" detect-error --text "$t" 2>&1)
+  rc=$?
+  if [[ $rc -eq 1 ]] && [[ "$out" == *"NONE"* ]]; then
+    pass "AC2.3 乾淨 stderr 不誤觸發: \"$t\""
+  else
+    fail "AC2.3 不應觸發但被誤判: \"$t\" (rc=$rc, out=$out)"
+  fi
+done
+
+# AC2.4：包含「429 行數」這種數字串不應誤判（用 word-boundary 避免）
+out=$(bash "$SCRIPT" detect-error --text "modified 4290 files in repo" 2>&1)
+rc=$?
+if [[ $rc -eq 1 ]]; then
+  pass "AC2.4 4290 不誤判為 429"
+else
+  fail "AC2.4 4290 被誤判為 429 (out=$out)"
+fi
+
+# ---------------------------------------------------------------------------
+# AC3：detect-refusal
+# ---------------------------------------------------------------------------
+declare -a REFUSAL_CASES=(
+  "I can't help with that request."
+  "I cannot help with that as it conflicts with my values."
+  "I'm unable to assist with this task."
+  "I am unable to comply."
+  "I can't assist with that."
+  "I cannot assist further."
+  "This goes against my guidelines."
+  "That request is against the policies I operate under."
+  "I won't be able to fulfill this request."
+)
+for t in "${REFUSAL_CASES[@]}"; do
+  out=$(bash "$SCRIPT" detect-refusal --text "$t" 2>&1)
+  rc=$?
+  if [[ $rc -eq 0 ]] && [[ "$out" == *"POLICY_REFUSAL"* ]]; then
+    pass "AC3.1 偵測 refusal: \"$t\""
+  else
+    fail "AC3.1 應偵測為 refusal 但失敗: \"$t\" (rc=$rc, out=$out)"
+  fi
+done
+
+declare -a CLEAN_OUTPUT=(
+  "Implementation complete. Tests pass."
+  "Sprint Story #1003 implemented as specified."
+  "I have completed the analysis as requested."
+  "The user's request was fulfilled."
+)
+for t in "${CLEAN_OUTPUT[@]}"; do
+  out=$(bash "$SCRIPT" detect-refusal --text "$t" 2>&1)
+  rc=$?
+  if [[ $rc -eq 1 ]] && [[ "$out" == *"NONE"* ]]; then
+    pass "AC3.2 乾淨輸出不誤觸發 refusal: \"$t\""
+  else
+    fail "AC3.2 不應觸發但被誤判: \"$t\" (rc=$rc, out=$out)"
+  fi
+done
+
+# ---------------------------------------------------------------------------
+# AC4：record-event 寫入 jsonl
+# ---------------------------------------------------------------------------
+# 用日期作隔離，本次測試後刪掉的測試紀錄
+DATE_STR="$(date -u '+%Y-%m-%d')"
+LOG_FILE="$REPO_ROOT/docs/cruise-logs/model-fallback-${DATE_STR}.jsonl"
+
+# 先記下測試前的 line count，測試結束後刪測試新增的行
+PRE_COUNT=0
+[[ -f "$LOG_FILE" ]] && PRE_COUNT=$(wc -l < "$LOG_FILE")
+
+bash "$SCRIPT" record-event --story 1003 --from opus --to sonnet --reason HTTP529 >/dev/null 2>&1
+rc=$?
+if [[ $rc -eq 0 ]]; then pass "AC4.1 record-event HTTP529 exit 0"
+else fail "AC4.1 record-event 失敗 (rc=$rc)"; fi
+
+[[ -f "$LOG_FILE" ]] && pass "AC4.2 jsonl 檔案被建立" || fail "AC4.2 jsonl 未建立"
+
+# 抓最後一行驗證 schema
+LAST_LINE=$(tail -1 "$LOG_FILE")
+for field in '"timestamp"' '"story_id":"#1003"' '"from_model":"opus"' '"to_model":"sonnet"' '"reason":"HTTP529"' '"retry_count":0'; do
+  if [[ "$LAST_LINE" == *"$field"* ]]; then
+    pass "AC4.3 jsonl 含欄位 $field"
+  else
+    fail "AC4.3 jsonl 缺欄位 $field (line=$LAST_LINE)"
+  fi
+done
+
+# 驗證 jq 可解析（若有 jq）
+if command -v jq >/dev/null 2>&1; then
+  if echo "$LAST_LINE" | jq -e . >/dev/null 2>&1; then
+    pass "AC4.4 jsonl 為合法 JSON（jq 解析成功）"
+  else
+    fail "AC4.4 jsonl 非合法 JSON (line=$LAST_LINE)"
+  fi
+else
+  pass "AC4.4 jq 不存在，跳過 JSON 解析驗證"
+fi
+
+# 補一筆 POLICY_REFUSAL
+bash "$SCRIPT" record-event --story 1003 --from opus --to sonnet --reason POLICY_REFUSAL --retry-count 1 >/dev/null 2>&1
+LAST_LINE=$(tail -1 "$LOG_FILE")
+if [[ "$LAST_LINE" == *'"reason":"POLICY_REFUSAL"'* ]] && [[ "$LAST_LINE" == *'"retry_count":1'* ]]; then
+  pass "AC4.5 record-event POLICY_REFUSAL 紀錄成功"
+else
+  fail "AC4.5 POLICY_REFUSAL 紀錄不正確 (line=$LAST_LINE)"
+fi
+
+# 清理本次測試新增的行（保留歷史資料）
+POST_COUNT=$(wc -l < "$LOG_FILE" 2>/dev/null || echo 0)
+ADDED=$((POST_COUNT - PRE_COUNT))
+if [[ $ADDED -gt 0 ]]; then
+  if [[ $PRE_COUNT -eq 0 ]]; then
+    # 原本不存在或為空 → 直接移除（本次測試新增的整檔）
+    rm -f "$LOG_FILE"
+  else
+    # 原本有歷史資料 → 截掉本次新增行，保留歷史
+    TMP_TRUNC="$(mktemp -t test-1003-trunc.XXXXXX)"
+    head -n "$PRE_COUNT" "$LOG_FILE" > "$TMP_TRUNC" && mv -f "$TMP_TRUNC" "$LOG_FILE"
+  fi
+fi
+# 確保 .tmp 殘留也被清掉（保險）
+rm -f "$LOG_FILE.tmp"
+
+# ---------------------------------------------------------------------------
+# AC5：record-event 參數驗證
+# ---------------------------------------------------------------------------
+# 缺 --story
+bash "$SCRIPT" record-event --from opus --to sonnet --reason HTTP429 >/dev/null 2>&1
+rc=$?
+[[ $rc -ne 0 ]] && pass "AC5.1 缺 --story 應失敗" || fail "AC5.1 缺 --story 未拒絕"
+
+# 無效 reason
+bash "$SCRIPT" record-event --story 1003 --from opus --to sonnet --reason BOGUS >/dev/null 2>&1
+rc=$?
+[[ $rc -ne 0 ]] && pass "AC5.2 無效 reason 應失敗" || fail "AC5.2 無效 reason 未拒絕"
+
+# ---------------------------------------------------------------------------
+# AC6：ADR-046 與 SKILL.md §2.1.1 結構性更新
+# ---------------------------------------------------------------------------
+[[ -f "$ADR" ]] && pass "AC6.1 ADR-046 存在" || fail "AC6.1 ADR-046 缺失"
+
+# ADR 包含必要 section
+for s in "## 背景與問題" "## 驗證範圍與限制" "## 三類錯誤的區分" "## 決策" "## 拒絕的替代方案"; do
+  if grep -qF "$s" "$ADR" 2>/dev/null; then
+    pass "AC6.2 ADR-046 含 section: $s"
+  else
+    fail "AC6.2 ADR-046 缺 section: $s"
+  fi
+done
+
+# SKILL §2.1.1 升級為三段式 + ADR 引用
+grep -q "## 2.1.1 API Error Fallback 策略" "$SKILL" \
+  && pass "AC6.3 §2.1.1 標題仍存在" \
+  || fail "AC6.3 §2.1.1 標題遺失"
+grep -q "ADR-046" "$SKILL" \
+  && pass "AC6.4 SKILL.md §2.1.1 引用 ADR-046" \
+  || fail "AC6.4 SKILL.md §2.1.1 未引用 ADR-046"
+grep -q "Usage Policy Refusal" "$SKILL" \
+  && pass "AC6.5 §2.1.1 含 Policy Refusal 路徑" \
+  || fail "AC6.5 §2.1.1 缺 Policy Refusal 路徑"
+grep -q "dispatch-with-fallback.sh" "$SKILL" \
+  && pass "AC6.6 §2.1.1 引用 wrapper script" \
+  || fail "AC6.6 §2.1.1 未引用 wrapper script"
+
+# ---------------------------------------------------------------------------
+# 結算
+# ---------------------------------------------------------------------------
+echo ""
+echo "=========================================="
+echo "Test Result: PASS=$PASS  FAIL=$FAIL"
+echo "=========================================="
+
+[[ $FAIL -eq 0 ]] && exit 0 || exit 1

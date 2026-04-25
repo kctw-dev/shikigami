@@ -39,10 +39,23 @@ Sprint 執行支援**雙軌派遣機制**：由環境變數 `SHIKIGAMI_MODEL_PRO
 ## 2.1.1 API Error Fallback 策略
 
 <!-- #995 Subagent API Error Fallback — opus 529/500 自動降級或退避 — Sprint 182 -->
+<!-- #1003 / ADR-046 升級為「策略 + 偵測 + 限制」三段式 — Sprint 183 -->
 
-Sprint Execution 中 subagent 呼叫 LLM API 遇到錯誤時，依以下決策樹自動處理。**不降級至 haiku**（haiku 不在 fallback 路徑中）。
+Sprint Execution 中 subagent 呼叫 LLM API 遇到錯誤時，依下列三類路徑處理。**不降級至 haiku**（haiku 不在 fallback 路徑中）。
 
-### HTTP 429（Rate Limit）路徑
+### 驗證狀態圖例（ADR-046）
+
+| 標記 | 意義 |
+|------|------|
+| 🟢 已驗證 | 框架自有實作，由 `scripts/dispatch-with-fallback.sh` 提供 |
+| 🟡 防禦性假設 | 假設 Claude Code Agent tool 不自動 fallback，主 session 派遣層自行處理 |
+| 🔴 依賴外部 | 取決於 Claude Code 實際行為，無法在框架側驗證 |
+
+> 偵測 pattern 的單一來源在 `scripts/dispatch-with-fallback.sh`（ADR-046 D3）。本節僅描述決策樹，不重複 pattern 字面以避免 drift。
+
+### (a) HTTP 429（Rate Limit）路徑
+
+🟡 防禦性假設：Claude Code Agent tool 是否內建 retry 不可驗證，主 session 自行偵測並重試。
 
 指數退避重試**同模型**，耗盡後降級 sonnet：
 
@@ -54,7 +67,9 @@ Sprint Execution 中 subagent 呼叫 LLM API 遇到錯誤時，依以下決策�
 | 3 次全失敗 | 降級至 sonnet 重試 1 次 |
 | sonnet 亦失敗 | → `[API-FALLBACK-EXHAUSTED]`，Story=BLOCKED |
 
-### HTTP 500 / HTTP 529（Server Error / Overload）路徑
+### (b) HTTP 500 / HTTP 529（Server Error / Overload）路徑
+
+🟡 防禦性假設：同 (a)。
 
 立即降級至 sonnet，不重試原模型：
 
@@ -64,11 +79,44 @@ Sprint Execution 中 subagent 呼叫 LLM API 遇到錯誤時，依以下決策�
 | sonnet 失敗 | 指數退避 sonnet：30s → 60s → 120s，最多 3 次 |
 | 3 次全失敗 | → `[API-FALLBACK-EXHAUSTED]`，Story=BLOCKED |
 
+### (c) Usage Policy Refusal 路徑（#1003 / ADR-046 新增）
+
+🟢 已驗證偵測 / 🟡 重試動作為防禦性
+
+與 (a)(b) 不同，subagent **正常完成**但回傳內容是拒答字樣（如 `I can't help with that`、`against my guidelines`）。try-catch 抓不到，必須**比對輸出內容**：
+
+| 步驟 | 行為 |
+|------|------|
+| 主 session 收到 subagent result | 呼叫 `bash scripts/dispatch-with-fallback.sh detect-refusal --input-file <result>` |
+| 偵測到 → 換 sonnet 重試 1 次 | 同樣 prompt 改派 sonnet（policy 較寬鬆） |
+| 仍拒答 | → `[POLICY-REFUSAL] story_id=#N` 並轉人工確認 |
+
+> Sprint 182 Planning 期間 Architect + QA 同時遭此情境，主 session 手動降級。本路徑將該手動行為自動化。
+
 ### 終止條件
 
-所有重試耗盡後：
-1. stdout 輸出：`[API-FALLBACK-EXHAUSTED]`
+所有重試耗盡後（429/5xx 路徑）或政策性拒答 sonnet 仍失敗（refusal 路徑）：
+1. stdout 輸出：`[API-FALLBACK-EXHAUSTED]` 或 `[POLICY-REFUSAL]`
 2. 將 Story 標記為 `BLOCKED`（在 sprint checkpoint 記錄原因）
+
+### 偵測與紀錄 helper（#1003 / ADR-046 D1）
+
+主 session 派遣 subagent 後依結果判斷：
+
+```bash
+# 1) 例外訊息偵測（429/5xx）
+bash scripts/dispatch-with-fallback.sh detect-error --input-file /tmp/agent-stderr.txt
+# exit 0 + 輸出建議動作；exit 1 = 不需 fallback
+
+# 2) 正常輸出偵測（policy refusal）
+bash scripts/dispatch-with-fallback.sh detect-refusal --input-file /tmp/agent-stdout.txt
+
+# 3) 紀錄事件
+bash scripts/dispatch-with-fallback.sh record-event \
+  --story 1003 --from opus --to sonnet --reason POLICY_REFUSAL --retry-count 0
+```
+
+注意：實際的 Agent tool 重新派遣只能由主 session（LLM）執行。Wrapper 提供**判斷與紀錄**功能，不替代派遣動作。
 
 ### 降級 Log（AC-4）
 
