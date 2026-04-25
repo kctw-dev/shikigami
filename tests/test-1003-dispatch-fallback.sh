@@ -104,10 +104,12 @@ declare -a REFUSAL_CASES=(
   "I'm unable to assist with this task."
   "I am unable to comply."
   "I can't assist with that."
-  "I cannot assist further."
+  "I cannot assist with this."
   "This goes against my guidelines."
   "That request is against the policies I operate under."
   "I won't be able to fulfill this request."
+  "I must decline that request."
+  "I cannot comply with that request."
 )
 for t in "${REFUSAL_CASES[@]}"; do
   out=$(bash "$SCRIPT" detect-refusal --text "$t" 2>&1)
@@ -124,6 +126,11 @@ declare -a CLEAN_OUTPUT=(
   "Sprint Story #1003 implemented as specified."
   "I have completed the analysis as requested."
   "The user's request was fulfilled."
+  # codex review P2-3 regression：subagent 正常診斷不可被誤判為 refusal
+  "I'm unable to reproduce the failure locally, please share more logs."
+  "I am unable to find the referenced file in the codebase."
+  "I'm unable to identify the root cause yet — need more data."
+  "I cannot locate the function defined at line 42."
 )
 for t in "${CLEAN_OUTPUT[@]}"; do
   out=$(bash "$SCRIPT" detect-refusal --text "$t" 2>&1)
@@ -243,6 +250,19 @@ elif [[ "$rc" == "137" ]]; then
   fail "AC4.8 record-event 缺值被 watchdog 殺掉（疑似無限迴圈），應 die"
 else
   fail "AC4.8 record-event 缺值返回意外 rc=$rc"
+fi
+
+# AC4.9（codex review P2-4）：log 寫入失敗應 die，不可靜默報 success
+# 結構性檢查：確認 mkdir 與 printf 都有 || die 包裹
+if grep -q '|| die "無法建立 log 目錄' "$SCRIPT"; then
+  pass "AC4.9 mkdir 失敗有 die 處理（codex review P2-4）"
+else
+  fail "AC4.9 mkdir 失敗無 die 處理"
+fi
+if grep -q 'die "無法寫入 log 檔' "$SCRIPT"; then
+  pass "AC4.10 printf >> 失敗有 die 處理（codex review P2-4）"
+else
+  fail "AC4.10 printf >> 失敗無 die 處理"
 fi
 
 # ---------------------------------------------------------------------------

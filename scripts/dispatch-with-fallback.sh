@@ -35,7 +35,9 @@ readonly PATTERN_HTTP_429='(^|[^0-9])429([^0-9]|$)|rate[_ -]?limit|rate limit er
 # HTTP 500 / 529 — Server Error / Overload
 readonly PATTERN_HTTP_5XX='(^|[^0-9])(500|529)([^0-9]|$)|Overloaded|overloaded_error|server[_ -]error|Internal server error'
 # Usage Policy Refusal — subagent 正常完成但內容是拒答
-readonly PATTERN_REFUSAL="I can't help with that|I cannot help with that|I'm unable to|I am unable to|I can't assist|I cannot assist|against my guidelines|against (my|our|the) policies|I won't be able to"
+# 收窄至「不協助」語境片語，避免「I'm unable to reproduce / find / identify」
+# 這類正常診斷被誤判（codex review P2-3）
+readonly PATTERN_REFUSAL="I can't help with (that|this|your)|I cannot help with (that|this|your)|I'm unable to (help|assist|comply|fulfill|provide that|process this)|I am unable to (help|assist|comply|fulfill|provide|process)|I can't assist with (that|this|your)|I cannot assist with (that|this|your)|I won't be able to (help|assist|comply|fulfill|do that|provide)|against (my|our|the) (guidelines|policies|policy|rules|values)|goes against (my|our|the) (guidelines|policies|policy|rules|values)|cannot comply with (that|this|your) request|I (must|have to) decline (that|this|your)"
 
 die() { echo "[ERROR] $*" >&2; exit 1; }
 
@@ -113,7 +115,9 @@ cmd_record_event() {
   local repo_root
   repo_root="$(cd "$(dirname "$0")/.." && pwd)"
   local log_dir="$repo_root/docs/cruise-logs"
-  mkdir -p "$log_dir"
+  # 寫入失敗（read-only / permission / disk-full）必須立即 die，
+  # 不可在沒寫成功的情況下回傳 [RECORDED]（codex review P2-4）
+  mkdir -p "$log_dir" || die "無法建立 log 目錄：$log_dir"
 
   local date_str
   date_str="$(date -u '+%Y-%m-%d')"
@@ -123,9 +127,11 @@ cmd_record_event() {
   timestamp="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
 
   # 嚴格 JSON — 所有欄位均為字串或數字，避免 jq 解析失敗
-  printf '{"timestamp":"%s","story_id":"#%s","from_model":"%s","to_model":"%s","reason":"%s","retry_count":%d}\n' \
+  if ! printf '{"timestamp":"%s","story_id":"#%s","from_model":"%s","to_model":"%s","reason":"%s","retry_count":%d}\n' \
     "$timestamp" "$story" "$from" "$to" "$reason" "$retry_count" \
-    >> "$log_file"
+    >> "$log_file"; then
+    die "無法寫入 log 檔：$log_file"
+  fi
 
   echo "[RECORDED] $log_file"
   echo "[MODEL-FALLBACK] #$story from=$from to=$to reason=$reason"

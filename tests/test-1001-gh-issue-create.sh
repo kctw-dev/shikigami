@@ -143,6 +143,24 @@ else
   fail "AC5.3 --title 缺值返回意外 rc=$rc（期望 1）"
 fi
 
+# AC5.4（codex review P3）：dry-run 不應該需要 gh
+# 用 PATH 切空模擬無 gh 環境
+OUT9=$(PATH=/usr/bin:/bin bash "$SCRIPT_PATH" --title "no-gh test" --body "should still work" --dry-run 2>&1)
+rc=$?
+if [[ $rc -eq 0 ]] && [[ "$OUT9" == *"DRY-RUN"* ]]; then
+  pass "AC5.4 dry-run 在無 gh 環境仍可執行（codex review P3 regression）"
+else
+  fail "AC5.4 dry-run 在無 gh 環境失敗 (rc=$rc, out=${OUT9:0:100})"
+fi
+
+# AC5.5（codex review P3 反向）：非 dry-run 在無 gh 環境必須 die
+OUT10=$(PATH=/usr/bin:/bin bash "$SCRIPT_PATH" --title "no-gh real" --body "fails without gh" 2>&1 || true)
+if [[ "$OUT10" == *"找不到 gh CLI"* ]]; then
+  pass "AC5.5 非 dry-run 在無 gh 環境必須 die"
+else
+  fail "AC5.5 非 dry-run 在無 gh 環境未拒絕 (out=${OUT10:0:100})"
+fi
+
 # ---------------------------------------------------------------------------
 # AC6：選用參數會被帶入 dry-run 顯示的指令中
 # ---------------------------------------------------------------------------

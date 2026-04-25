@@ -104,7 +104,10 @@ if [[ -n "$BODY_FILE" && ! -r "$BODY_FILE" ]]; then
   die "--body-file 指定的檔案不存在或無法讀取：$BODY_FILE"
 fi
 
-command -v gh >/dev/null 2>&1 || die "找不到 gh CLI，請先安裝 GitHub CLI"
+# 僅在「實際呼叫 gh」時才需要 gh — dry-run 純預覽不需要（codex review P3）
+if [[ "$DRY_RUN" -ne 1 ]]; then
+  command -v gh >/dev/null 2>&1 || die "找不到 gh CLI，請先安裝 GitHub CLI"
+fi
 
 # ---------------------------------------------------------------------------
 # 寫入暫存檔（核心安全機制）
