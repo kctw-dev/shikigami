@@ -143,22 +143,38 @@ else
   fail "AC5.3 --title 缺值返回意外 rc=$rc（期望 2）"
 fi
 
-# AC5.4（codex review P3）：dry-run 不應該需要 gh
-# 用 PATH 切空模擬無 gh 環境
-OUT9=$(PATH=/usr/bin:/bin bash "$SCRIPT_PATH" --title "no-gh test" --body "should still work" --dry-run 2>&1)
+# AC5.4 / AC5.5（codex review P3）：dry-run 不應該需要 gh
+# 用 tmp dir + symlink 建立確定不含 gh 的 PATH（CI 上 /usr/bin/gh 存在，
+# 直接 PATH=/usr/bin:/bin 不可靠 — codex review P2 第六輪）
+NO_GH_DIR="$(mktemp -d -t test-1001-no-gh.XXXXXX)"
+trap 'rm -rf "$NO_GH_DIR" "$TMP_INPUT"' EXIT INT TERM
+# 只 link script 需要的工具（gh 故意不 link）
+for cmd in bash cat mktemp wc tail rm printf; do
+  src=$(command -v "$cmd" 2>/dev/null || true)
+  [[ -n "$src" ]] && ln -s "$src" "$NO_GH_DIR/$cmd" 2>/dev/null
+done
+
+# 確認 NO_GH_DIR 中真的沒有 gh
+if PATH="$NO_GH_DIR" command -v gh >/dev/null 2>&1; then
+  fail "AC5.4 前置：NO_GH_DIR 不應含 gh"
+else
+  pass "AC5.4 前置：NO_GH_DIR 確認不含 gh"
+fi
+
+OUT9=$(PATH="$NO_GH_DIR" "$NO_GH_DIR/bash" "$SCRIPT_PATH" --title "no-gh test" --body "should still work" --dry-run 2>&1)
 rc=$?
 if [[ $rc -eq 0 ]] && [[ "$OUT9" == *"DRY-RUN"* ]]; then
   pass "AC5.4 dry-run 在無 gh 環境仍可執行（codex review P3 regression）"
 else
-  fail "AC5.4 dry-run 在無 gh 環境失敗 (rc=$rc, out=${OUT9:0:100})"
+  fail "AC5.4 dry-run 在無 gh 環境失敗 (rc=$rc, out=${OUT9:0:200})"
 fi
 
-# AC5.5（codex review P3 反向）：非 dry-run 在無 gh 環境必須 die
-OUT10=$(PATH=/usr/bin:/bin bash "$SCRIPT_PATH" --title "no-gh real" --body "fails without gh" 2>&1 || true)
+# AC5.5：非 dry-run 在無 gh 環境必須 die
+OUT10=$(PATH="$NO_GH_DIR" "$NO_GH_DIR/bash" "$SCRIPT_PATH" --title "no-gh real" --body "fails without gh" 2>&1 || true)
 if [[ "$OUT10" == *"找不到 gh CLI"* ]]; then
   pass "AC5.5 非 dry-run 在無 gh 環境必須 die"
 else
-  fail "AC5.5 非 dry-run 在無 gh 環境未拒絕 (out=${OUT10:0:100})"
+  fail "AC5.5 非 dry-run 在無 gh 環境未拒絕 (out=${OUT10:0:200})"
 fi
 
 # ---------------------------------------------------------------------------
