@@ -244,21 +244,21 @@ run_with_timeout() {
 }
 
 rc=$(run_with_timeout 3 bash "$SCRIPT" detect-error --text)
-if [[ "$rc" == "1" ]]; then
-  pass "AC4.7 detect-error 缺 --text 值立即 die"
+if [[ "$rc" == "2" ]]; then
+  pass "AC4.7 detect-error 缺 --text 值立即 die（exit 2 = usage error）"
 elif [[ "$rc" == "137" ]]; then
   fail "AC4.7 detect-error 缺值被 watchdog 殺掉（疑似無限迴圈），應 die"
 else
-  fail "AC4.7 detect-error 缺值返回意外 rc=$rc"
+  fail "AC4.7 detect-error 缺值返回意外 rc=$rc（期望 2）"
 fi
 
 rc=$(run_with_timeout 3 bash "$SCRIPT" record-event --story)
-if [[ "$rc" == "1" ]]; then
-  pass "AC4.8 record-event 缺 --story 值立即 die"
+if [[ "$rc" == "2" ]]; then
+  pass "AC4.8 record-event 缺 --story 值立即 die（exit 2 = usage error）"
 elif [[ "$rc" == "137" ]]; then
   fail "AC4.8 record-event 缺值被 watchdog 殺掉（疑似無限迴圈），應 die"
 else
-  fail "AC4.8 record-event 缺值返回意外 rc=$rc"
+  fail "AC4.8 record-event 缺值返回意外 rc=$rc（期望 2）"
 fi
 
 # AC4.9（codex review P2-4）：log 寫入失敗應 die，不可靜默報 success
@@ -272,6 +272,43 @@ if grep -q 'die "無法寫入 log 檔' "$SCRIPT"; then
   pass "AC4.10 printf >> 失敗有 die 處理（codex review P2-4）"
 else
   fail "AC4.10 printf >> 失敗無 die 處理"
+fi
+
+# AC4.11（codex review P2 第四輪）：使用者錯誤必須以 exit 2 區分於 no-match
+# detect-error 收到不存在 --input-file 時必須 exit 2（不可走 [NONE] + exit 1）
+bash "$SCRIPT" detect-error --input-file /no/such/file/anywhere >/dev/null 2>&1
+rc=$?
+if [[ $rc -eq 2 ]]; then
+  pass "AC4.11 不可讀 --input-file 必須 exit 2（usage error）"
+else
+  fail "AC4.11 不可讀 --input-file 返回 rc=$rc（期望 2，不可被當成 no-match）"
+fi
+
+# AC4.12：互斥旗標必須 exit 2，不可被當成 no-match
+bash "$SCRIPT" detect-error --input-file /tmp/x --text "y" >/dev/null 2>&1
+rc=$?
+if [[ $rc -eq 2 ]]; then
+  pass "AC4.12 --input-file + --text 互斥必須 exit 2"
+else
+  fail "AC4.12 互斥旗標返回 rc=$rc（期望 2）"
+fi
+
+# AC4.13：record-event 無效 reason 必須 exit 2
+bash "$SCRIPT" record-event --story 1 --from opus --to sonnet --reason BOGUS >/dev/null 2>&1
+rc=$?
+if [[ $rc -eq 2 ]]; then
+  pass "AC4.13 record-event 無效 --reason 必須 exit 2"
+else
+  fail "AC4.13 record-event 無效 reason 返回 rc=$rc（期望 2）"
+fi
+
+# AC4.14：detect-error 真正 no-match 仍然是 exit 1（沒被升級成 2）
+bash "$SCRIPT" detect-error --text "everything is fine" >/dev/null 2>&1
+rc=$?
+if [[ $rc -eq 1 ]]; then
+  pass "AC4.14 detect-error 純 no-match 仍是 exit 1（與 usage error 區分）"
+else
+  fail "AC4.14 純 no-match 返回 rc=$rc（期望 1）"
 fi
 
 # ---------------------------------------------------------------------------

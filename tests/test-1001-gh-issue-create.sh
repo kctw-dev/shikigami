@@ -135,12 +135,12 @@ run_with_timeout() {
 }
 
 rc=$(run_with_timeout 3 bash "$SCRIPT_PATH" --title)
-if [[ "$rc" == "1" ]]; then
-  pass "AC5.3 --title 缺值立即 die（codex review P2-2 regression）"
+if [[ "$rc" == "2" ]]; then
+  pass "AC5.3 --title 缺值立即 die（exit 2 = usage error，codex P2-2 regression）"
 elif [[ "$rc" == "137" ]]; then
   fail "AC5.3 --title 缺值被 watchdog 殺掉（疑似無限迴圈），應 die"
 else
-  fail "AC5.3 --title 缺值返回意外 rc=$rc（期望 1）"
+  fail "AC5.3 --title 缺值返回意外 rc=$rc（期望 2）"
 fi
 
 # AC5.4（codex review P3）：dry-run 不應該需要 gh

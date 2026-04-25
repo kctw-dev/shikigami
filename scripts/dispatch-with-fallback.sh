@@ -39,7 +39,10 @@ readonly PATTERN_HTTP_5XX='(^|[^0-9])(500|529)([^0-9]|$)|Overloaded|overloaded_e
 # 這類正常診斷被誤判（codex review P2-3）
 readonly PATTERN_REFUSAL="I can't help with (that|this|your)|I cannot help with (that|this|your)|I'm unable to (help|assist|comply|fulfill|provide that|process this)|I am unable to (help|assist|comply|fulfill|provide|process)|I can't assist with (that|this|your)|I cannot assist with (that|this|your)|I won't be able to (help|assist|comply|fulfill|do that|provide)|against (my|our|the) (guidelines|policies|policy|rules|values)|goes against (my|our|the) (guidelines|policies|policy|rules|values)|cannot comply with (that|this|your) request|I (must|have to) decline (that|this|your)"
 
-die() { echo "[ERROR] $*" >&2; exit 1; }
+# Exit code 2 = usage / contract error（呼叫方有問題）
+# Exit code 1 = no match / no fallback needed（正常無 fallback）
+# Exit code 0 = match / fallback recommended
+die() { echo "[ERROR] $*" >&2; exit 2; }
 
 # require_value <flag-name> <remaining-arg-count>
 # 在 shift 2 之前呼叫，避免缺值 + 無 set -e 導致無限迴圈
@@ -170,11 +173,9 @@ usage() {
 子命令：
   detect-error    --input-file FILE | --text TEXT
                   從 stderr / 例外訊息偵測 HTTP 429 / 5xx
-                  exit 0 = 偵測到並輸出建議動作；exit 1 = 未偵測到
 
   detect-refusal  --input-file FILE | --text TEXT
                   從 subagent 正常輸出偵測 policy refusal 字樣
-                  exit 0 = 偵測到並輸出建議動作；exit 1 = 未偵測到
 
   record-event    --story N --from MODEL --to MODEL --reason TYPE [--retry-count N]
                   紀錄 fallback 事件至 docs/cruise-logs/model-fallback-<date>.jsonl
@@ -183,13 +184,22 @@ usage() {
   patterns        顯示三類錯誤的偵測 pattern（debug）
 
   -h, --help      顯示此說明
+
+Exit codes:
+  0  detect-* 偵測到 → 輸出建議動作；其他子命令正常完成
+  1  detect-* 未偵測到 → 不需 fallback（正常路徑）
+  2  使用者錯誤（缺值、互斥旗標、無效 reason、檔案不可讀、寫入失敗等）
 EOF
 }
 
 # ---------------------------------------------------------------------------
-# 共用：解析 --input-file / --text
+# 共用：解析 --input-file / --text → 寫入全域 $INPUT
+# 不能用 $(...) command substitution + stdout 回傳，因為 die 在 subshell 中
+# 只殺 subshell，主流程會以空字串繼續跑出 "[NONE] empty input" 假成功
+# （codex review P2 第四輪）
 # ---------------------------------------------------------------------------
-read_input() {
+INPUT=""
+read_input_to_global() {
   local input_file="" text=""
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -203,9 +213,9 @@ read_input() {
   fi
   if [[ -n "$input_file" ]]; then
     [[ -r "$input_file" ]] || die "input file 不可讀：$input_file"
-    cat "$input_file"
+    INPUT="$(cat "$input_file")"
   else
-    printf '%s' "$text"
+    INPUT="$text"
   fi
 }
 
@@ -219,12 +229,12 @@ shift
 
 case "$cmd" in
   detect-error)
-    text="$(read_input "$@")"
-    cmd_detect_error "$text"
+    read_input_to_global "$@"
+    cmd_detect_error "$INPUT"
     ;;
   detect-refusal)
-    text="$(read_input "$@")"
-    cmd_detect_refusal "$text"
+    read_input_to_global "$@"
+    cmd_detect_refusal "$INPUT"
     ;;
   record-event)
     cmd_record_event "$@"

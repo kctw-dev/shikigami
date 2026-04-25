@@ -48,7 +48,8 @@ usage() {
 EOF
 }
 
-die() { echo "[ERROR] $*" >&2; exit 1; }
+# Exit code 2 = usage / contract error；保留 0 給成功、1 給 gh CLI 失敗
+die() { echo "[ERROR] $*" >&2; exit 2; }
 
 # require_value <flag-name> <remaining-arg-count>
 # 避免缺值參數在 set -uo pipefail（無 -e）下使 shift 2 失敗導致無限迴圈
