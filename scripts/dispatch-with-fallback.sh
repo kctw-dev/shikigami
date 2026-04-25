@@ -213,6 +213,12 @@ read_input_to_global() {
   if [[ -n "$input_file" && -n "$text" ]]; then
     die "--input-file 與 --text 互斥，擇一即可"
   fi
+  # 完全沒給 input source（被遺漏的 caller bug）必須當 usage error，
+  # 否則 INPUT="" 會走進 [NONE] empty input + exit 1 → 與「正常無 fallback」
+  # 撞碼，靜默吞掉真正的 caller error（codex review P2 第七輪）
+  if [[ -z "$input_file" && -z "$text" ]]; then
+    die "需指定 --input-file FILE 或 --text TEXT 之一"
+  fi
   if [[ -n "$input_file" ]]; then
     [[ -r "$input_file" ]] || die "input file 不可讀：$input_file"
     INPUT="$(cat "$input_file")"

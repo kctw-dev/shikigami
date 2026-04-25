@@ -327,6 +327,25 @@ else
   fail "AC4.14 純 no-match 返回 rc=$rc（期望 1）"
 fi
 
+# AC4.15（codex review P2 第七輪）：完全沒給 input source 必須 exit 2
+# 不可被當成 no-match（exit 1）→ 否則 caller 的「忘記傳 input」bug 會被
+# 靜默當成「沒有 fallback 訊號」處理
+bash "$SCRIPT" detect-error >/dev/null 2>&1
+rc=$?
+if [[ $rc -eq 2 ]]; then
+  pass "AC4.15 detect-error 無 input source 必須 exit 2"
+else
+  fail "AC4.15 detect-error 無 input source 返回 rc=$rc（期望 2，不可當成 no-match）"
+fi
+
+bash "$SCRIPT" detect-refusal >/dev/null 2>&1
+rc=$?
+if [[ $rc -eq 2 ]]; then
+  pass "AC4.16 detect-refusal 無 input source 必須 exit 2"
+else
+  fail "AC4.16 detect-refusal 無 input source 返回 rc=$rc（期望 2）"
+fi
+
 # ---------------------------------------------------------------------------
 # AC5：record-event 參數驗證
 # ---------------------------------------------------------------------------
