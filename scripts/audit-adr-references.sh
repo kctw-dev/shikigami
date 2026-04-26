@@ -94,8 +94,21 @@ count_runtime_refs() {
 count_docs_refs() {
   local num="$1"
   local pattern="ADR-0*${num}\\b"
+  # 排除 ADR 自身檔案（含 archive/ 內的真檔）— codex review P2：
+  # ADR 自身內容必含自身編號（標題、metadata），若計入會讓無外部引用的
+  # ADR 被誤判為 DOCS-ONLY，DORMANT 分類失效。
+  local own_files=()
+  while IFS= read -r f; do
+    own_files+=("$f")
+  done < <(find "$REPO_ROOT/docs/adr" -maxdepth 2 -name "ADR-${num}*.md" 2>/dev/null)
+
+  local exclude_args=()
+  for f in "${own_files[@]}"; do
+    exclude_args+=(--exclude="$(basename "$f")")
+  done
+
   local count
-  count=$(grep -rhE "$pattern" "$REPO_ROOT/docs" 2>/dev/null \
+  count=$(grep -rhE "${exclude_args[@]}" "$pattern" "$REPO_ROOT/docs" 2>/dev/null \
     | grep -cE "$pattern" 2>/dev/null)
   echo "${count:-0}"
 }

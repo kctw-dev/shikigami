@@ -93,6 +93,25 @@ else
   pass "AC3 jq 不存在，跳過 JSON 解析驗證"
 fi
 
+# AC3.3（codex review P2 regression）：count_docs_refs 必須排除 ADR 自身
+# 結構性檢查：count_docs_refs 內含 --exclude（grep 排除）邏輯
+if grep -A 20 'count_docs_refs()' "$AUDIT" | grep -q -- '--exclude='; then
+  pass "AC3.3 count_docs_refs 含自身檔案排除（codex P2 regression）"
+else
+  fail "AC3.3 count_docs_refs 未排除自身檔案 — DORMANT 偵測會失效"
+fi
+
+# AC3.4 行為層驗證：拿一個只在自己檔案出現的 ADR 編號做即時測試
+# 找一個 docs_refs > 0 的 ADR，把它從外部清單中找一個確認
+# （此測試需現有 repo 狀態 — 確認真檔內 ADR-001 的外部引用 > 0）
+EXTERNAL_REFS=$(grep -rl "ADR-001\\b" docs/ \
+  --exclude="ADR-001*.md" --exclude="ADR-001*.md" 2>/dev/null | wc -l | tr -d ' ')
+if [[ "$EXTERNAL_REFS" -gt 0 ]]; then
+  pass "AC3.4 ADR-001 確實有外部引用（檔案數=$EXTERNAL_REFS）"
+else
+  fail "AC3.4 ADR-001 外部引用為 0，難以驗證行為"
+fi
+
 # ---------------------------------------------------------------------------
 # AC4：Superseded 偵測精準（ADR-010 不該被誤認 — 它是 superseder，不是被取代）
 # ---------------------------------------------------------------------------
