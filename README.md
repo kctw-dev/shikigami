@@ -314,4 +314,22 @@ tail -f logs/live/*.log
 
 ## 授權
 
-MIT
+本專案採用 **MIT License** 開放原始碼授權。
+
+你可以自由地：
+- ✅ 商業使用（Commercial use）
+- ✅ 修改（Modification）
+- ✅ 散布（Distribution）
+- ✅ 私人使用（Private use）
+
+唯一條件：保留原始的著作權聲明與 MIT 授權文件。
+
+完整授權條款：[LICENSE](LICENSE) ｜ Copyright (c) 2026 KCTW
+
+---
+
+## 貢獻與社群
+
+- 遇到問題或有功能建議？[開 Issue](https://github.com/kctw-dev/shikigami/issues/new)
+- 想了解框架演進？查看 [CHANGELOG](docs/CHANGELOG.md) 與 [ADR 目錄](docs/adr/README.md)
+- Shikigami 本身就用 Shikigami 開發 🪄
