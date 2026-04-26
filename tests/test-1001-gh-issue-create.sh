@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+# tests/test-1001-gh-issue-create.sh
+# Issue #1001：gh-issue-create.sh helper 測試
+#
+# 覆蓋 AC：
+#   AC1 — script 存在、可執行、封裝 --body-file 模式
+#   AC2 — 自動建立暫存檔、寫入 body、清理暫存檔（trap）
+#   AC3 — 含冒號 / 星號 / 引號 / 反引號的 body 完整保留（dry-run 驗證）
+#   AC4 — body 來源三選一互斥檢查（--body / --body-file / stdin）
+#   AC5 — 必要參數缺失 / 未知參數時應失敗
+
+set -uo pipefail
+
+# ---------------------------------------------------------------------------
+# 測試框架
+# ---------------------------------------------------------------------------
+PASS_COUNT=0
+FAIL_COUNT=0
+
+pass() { echo "PASS: $1"; PASS_COUNT=$((PASS_COUNT + 1)); }
+fail() { echo "FAIL: $1"; FAIL_COUNT=$((FAIL_COUNT + 1)); }
+
+assert_eq() {
+  local expected="$1" actual="$2" label="$3"
+  if [[ "$expected" == "$actual" ]]; then
+    pass "$label"
+  else
+    fail "$label (期望 [$expected]，實際 [$actual])"
+  fi
+}
+
+assert_contains() {
+  local haystack="$1" needle="$2" label="$3"
+  if printf '%s' "$haystack" | grep -qF -- "$needle"; then
+    pass "$label"
+  else
+    fail "$label (找不到子字串：[$needle])"
+  fi
+}
+
+assert_not_contains() {
+  local haystack="$1" needle="$2" label="$3"
+  if printf '%s' "$haystack" | grep -qF -- "$needle"; then
+    fail "$label (不應出現的子字串：[$needle])"
+  else
+    pass "$label"
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# 設定
+# ---------------------------------------------------------------------------
+SCRIPT_PATH="$(cd "$(dirname "$0")/.." && pwd)/scripts/gh-issue-create.sh"
+
+# AC1：script 存在 + 可執行
+[[ -f "$SCRIPT_PATH" ]] && pass "AC1.1 script 存在：$SCRIPT_PATH" \
+  || { fail "AC1.1 script 不存在：$SCRIPT_PATH"; exit 1; }
+[[ -x "$SCRIPT_PATH" ]] && pass "AC1.2 script 可執行" \
+  || fail "AC1.2 script 缺少 +x 權限"
+
+# AC1.3：原始檔有呼叫 --body-file
+if grep -q -- "--body-file" "$SCRIPT_PATH"; then
+  pass "AC1.3 內部使用 --body-file 模式"
+else
+  fail "AC1.3 內部未使用 --body-file 模式"
+fi
+
+# ---------------------------------------------------------------------------
+# AC3：特殊字元 dry-run 驗證
+# ---------------------------------------------------------------------------
+SPECIAL_BODY=$'冒號：以及 *星號*\n單引號 \' 雙引號 " 反引號 `code`\n還有 YAML 危險的 - dash 開頭'
+
+OUT=$(bash "$SCRIPT_PATH" --title "test: 特殊字元 dry-run" --body "$SPECIAL_BODY" --dry-run 2>&1)
+
+assert_contains "$OUT" "冒號："                   "AC3.1 dry-run 保留冒號"
+assert_contains "$OUT" "*星號*"                   "AC3.2 dry-run 保留星號"
+assert_contains "$OUT" "單引號 '"                 "AC3.3 dry-run 保留單引號"
+assert_contains "$OUT" '雙引號 "'                 "AC3.4 dry-run 保留雙引號"
+assert_contains "$OUT" '反引號 `code`'            "AC3.5 dry-run 保留反引號"
+assert_contains "$OUT" "- dash 開頭"              "AC3.6 dry-run 保留 dash 開頭行"
+assert_contains "$OUT" "----- BEGIN BODY -----"   "AC3.7 dry-run 輸出包含 body 區塊"
+assert_contains "$OUT" "--body-file"              "AC3.8 dry-run 顯示的指令含 --body-file"
+
+# AC2：dry-run 提到暫存檔；正式呼叫透過 trap 清理（無法直接驗 trap，但可驗 dry-run 顯示路徑）
+assert_contains "$OUT" "[DRY-RUN] 暫存 body 檔案：" "AC2.1 dry-run 顯示暫存檔路徑"
+
+# ---------------------------------------------------------------------------
+# AC3 補強：用 --body-file 來源也應保留特殊字元
+# ---------------------------------------------------------------------------
+TMP_INPUT=$(mktemp -t test-1001-input.XXXXXX)
+trap 'rm -f "$TMP_INPUT"' EXIT
+printf '%s\n' "$SPECIAL_BODY" > "$TMP_INPUT"
+
+OUT2=$(bash "$SCRIPT_PATH" --title "test: body-file" --body-file "$TMP_INPUT" --dry-run 2>&1)
+assert_contains "$OUT2" "冒號："  "AC3.9 --body-file 來源保留冒號"
+assert_contains "$OUT2" "*星號*"  "AC3.10 --body-file 來源保留星號"
+
+# AC3 補強：stdin 來源
+OUT3=$(printf '%s\n' "$SPECIAL_BODY" | bash "$SCRIPT_PATH" --title "test: stdin" - --dry-run 2>&1)
+assert_contains "$OUT3" "冒號："  "AC3.11 stdin 來源保留冒號"
+assert_contains "$OUT3" "*星號*"  "AC3.12 stdin 來源保留星號"
+
+# ---------------------------------------------------------------------------
+# AC4：body 來源互斥
+# ---------------------------------------------------------------------------
+OUT4=$(bash "$SCRIPT_PATH" --title "x" --body "a" --body-file "$TMP_INPUT" --dry-run 2>&1 || true)
+assert_contains "$OUT4" "需且僅需指定一種 body 來源" "AC4.1 同時給 --body + --body-file 應拒絕"
+
+OUT5=$(bash "$SCRIPT_PATH" --title "x" --dry-run 2>&1 || true)
+assert_contains "$OUT5" "需且僅需指定一種 body 來源" "AC4.2 完全沒給 body 應拒絕"
+
+# ---------------------------------------------------------------------------
+# AC5：必要參數缺失 / 未知參數
+# ---------------------------------------------------------------------------
+OUT6=$(bash "$SCRIPT_PATH" --body "x" --dry-run 2>&1 || true)
+assert_contains "$OUT6" "缺少必要參數 --title" "AC5.1 缺 --title 應拒絕"
+
+OUT7=$(bash "$SCRIPT_PATH" --title "x" --body "y" --weird-flag --dry-run 2>&1 || true)
+assert_contains "$OUT7" "未知參數" "AC5.2 未知 flag 應拒絕"
+
+# ---------------------------------------------------------------------------
+# AC6：選用參數會被帶入 dry-run 顯示的指令中
+# ---------------------------------------------------------------------------
+OUT8=$(bash "$SCRIPT_PATH" --title "x" --body "y" \
+  --repo kctw-dev/shikigami --label "enhancement,retro-action" \
+  --milestone 5 --assignee KCTW --dry-run 2>&1)
+assert_contains "$OUT8" "--repo"      "AC6.1 dry-run 指令含 --repo"
+assert_contains "$OUT8" "--label"     "AC6.2 dry-run 指令含 --label"
+assert_contains "$OUT8" "--milestone" "AC6.3 dry-run 指令含 --milestone"
+assert_contains "$OUT8" "--assignee"  "AC6.4 dry-run 指令含 --assignee"
+
+# ---------------------------------------------------------------------------
+# 測試結果總結
+# ---------------------------------------------------------------------------
+echo ""
+echo "=========================================="
+echo "Test Result: PASS=$PASS_COUNT  FAIL=$FAIL_COUNT"
+echo "=========================================="
+
+[[ "$FAIL_COUNT" -eq 0 ]] && exit 0 || exit 1

@@ -67,6 +67,22 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 
 任何涉及技術選型的 Story 必須先完成 ADR 並獲得 Accepted 狀態。未通過此門禁的 Story 退回 Backlog。
 
+<HARD-GATE>
+Sprint Planning 建立任何 GitHub Issue 一律透過 `bash scripts/gh-issue-create.sh`，禁止直接呼叫 `gh issue create --body "..."`。
+</HARD-GATE>
+
+依 CLAUDE.md 紅線 #13 與 Sprint 182 retro action #1001：直接以 `--body "..."` 傳入含冒號（`:`）、星號（`*`）、引號等字元的多行內容會被截斷或破壞 YAML/shell 解譯（Sprint 135 #597、Sprint 182 #994/#995/#996 已有歷史案例）。helper script 會強制走 `--body-file` 模式並自動清理暫存檔。
+
+```bash
+bash scripts/gh-issue-create.sh \
+  --title "RESEARCH: ADR — 決策主題" \
+  --body  "$BODY" \
+  --repo  "$OWNER_REPO" \
+  --label "RESEARCH,size:S,story-points:1"
+```
+
+支援 `--body` / `--body-file` / stdin (`-`) 三種來源；不熟悉的情境先以 `--dry-run` 檢視將寫入的內容。詳見 `scripts/gh-issue-create.sh -h`。
+
 ---
 
 ## 3.1 排程模式（Scheduled Mode）
