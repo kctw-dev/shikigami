@@ -420,3 +420,34 @@ commit + push 完成後清理同步 signal：`rm -f docs/sprints/.review-signal-
     # 範例：kctw-dev/shikigami/sprint-129-done-next-action
     # agent compact 後看到此 Task 即知道要繼續 Sprint Planning 或 Cruise
   ```
+
+---
+
+## 8. Compliance Audit（強制輸出）
+
+<HARD-GATE>
+Sprint Review 結束前必須輸出 [COMPLIANCE-AUDIT] 區塊。無論步驟是否完整執行，都不得省略此輸出。
+</HARD-GATE>
+
+Sprint Review 完成（或中止）前，**最後一個動作**必須是輸出以下格式的 Compliance Audit：
+
+```
+[COMPLIANCE-AUDIT] sprint-review Sprint N
+✅ Demo / 驗收        — N 個 Stories 驗收通過
+✅ Retrospective      — What Went Well / What Didn't / Actions 完整
+✅ Action Items       — N 個 Actions → GitHub Issues #XXX, #XXX
+✅ Sprint Review 紀錄 — docs/meetings/YYYY-MM-DD-sprint-N-review.md 已建立
+✅ Retro 紀錄         — docs/meetings/YYYY-MM-DD-sprint-N-retro.md 已建立
+✅ Metrics 更新       — docs/km/Metrics_Log.md 已更新
+✅ commit + push      — 完成
+⏭ 歸檔觸發           — 跳過（未達歸檔條件）
+
+Artifacts:
+  Sprint Review: docs/meetings/YYYY-MM-DD-sprint-N-review.md ✅
+  Retro:         docs/meetings/YYYY-MM-DD-sprint-N-retro.md  ✅
+```
+
+**符號規則**：
+- `✅` 已執行且有對應 artifact 或可驗證結果
+- `⏭` 跳過，必須附上原因
+- `❌` 應執行但未執行或失敗，必須附上原因
