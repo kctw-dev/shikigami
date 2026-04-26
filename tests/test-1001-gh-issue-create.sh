@@ -118,6 +118,73 @@ assert_contains "$OUT6" "缺少必要參數 --title" "AC5.1 缺 --title 應拒�
 OUT7=$(bash "$SCRIPT_PATH" --title "x" --body "y" --weird-flag --dry-run 2>&1 || true)
 assert_contains "$OUT7" "未知參數" "AC5.2 未知 flag 應拒絕"
 
+# AC5.3（codex review P2-2 regression）：缺值參數應立即 die，不可無限迴圈
+# 跨平台 timeout（macOS 無 timeout/gtimeout）
+run_with_timeout() {
+  local secs="$1"; shift
+  ( "$@" >/dev/null 2>&1 ) &
+  local pid=$!
+  ( sleep "$secs" && kill -9 "$pid" 2>/dev/null ) &
+  local watchdog=$!
+  wait "$pid" 2>/dev/null
+  local rc=$?
+  kill -9 "$watchdog" 2>/dev/null
+  wait "$watchdog" 2>/dev/null
+  # 若被 watchdog 殺掉，bash wait 會回傳 137（128 + SIGKILL=9）
+  echo "$rc"
+}
+
+rc=$(run_with_timeout 3 bash "$SCRIPT_PATH" --title)
+if [[ "$rc" == "2" ]]; then
+  pass "AC5.3 --title 缺值立即 die（exit 2 = usage error，codex P2-2 regression）"
+elif [[ "$rc" == "137" ]]; then
+  fail "AC5.3 --title 缺值被 watchdog 殺掉（疑似無限迴圈），應 die"
+else
+  fail "AC5.3 --title 缺值返回意外 rc=$rc（期望 2）"
+fi
+
+# AC5.4 / AC5.5（codex review P3 + 第六輪 P2 + 第八輪 sandbox）
+# 用 tmp dir + symlink 建立確定不含 gh 的 PATH。對 mktemp 失敗 / sandbox
+# 限制等異常做防呆，避免測試自身因環境問題而誤報 fail。
+NO_GH_DIR=""
+if NO_GH_DIR="$(mktemp -d 2>/dev/null)" && [[ -n "$NO_GH_DIR" && -d "$NO_GH_DIR" ]]; then
+  trap 'rm -rf "$NO_GH_DIR" "$TMP_INPUT"' EXIT INT TERM
+  # 只 link script 需要的工具（gh 故意不 link）
+  # tr 用於 newline check（line 129 of gh-issue-create.sh）— 缺它會吐
+  # stderr 但腳本仍 fall-through，codex review 第九輪指出此漏接
+  for cmd in bash cat mktemp wc tail rm printf tr; do
+    src=$(command -v "$cmd" 2>/dev/null || true)
+    [[ -n "$src" && -x "$src" ]] && ln -s "$src" "$NO_GH_DIR/$cmd" 2>/dev/null
+  done
+
+  # 前置：NO_GH_DIR 真的不含 gh + bash symlink 真的可執行
+  if PATH="$NO_GH_DIR" command -v gh >/dev/null 2>&1; then
+    fail "AC5.4 前置：NO_GH_DIR 不應含 gh"
+  elif [[ ! -x "$NO_GH_DIR/bash" ]]; then
+    fail "AC5.4 前置：NO_GH_DIR/bash symlink 失效，跳過此情境"
+  else
+    pass "AC5.4 前置：NO_GH_DIR 不含 gh 且 bash 可用"
+
+    OUT9=$(PATH="$NO_GH_DIR" "$NO_GH_DIR/bash" "$SCRIPT_PATH" --title "no-gh test" --body "should still work" --dry-run 2>&1)
+    rc=$?
+    if [[ $rc -eq 0 ]] && [[ "$OUT9" == *"DRY-RUN"* ]]; then
+      pass "AC5.4 dry-run 在無 gh 環境仍可執行（codex review P3 regression）"
+    else
+      fail "AC5.4 dry-run 在無 gh 環境失敗 (rc=$rc, out=${OUT9:0:200})"
+    fi
+
+    OUT10=$(PATH="$NO_GH_DIR" "$NO_GH_DIR/bash" "$SCRIPT_PATH" --title "no-gh real" --body "fails without gh" 2>&1 || true)
+    if [[ "$OUT10" == *"找不到 gh CLI"* ]]; then
+      pass "AC5.5 非 dry-run 在無 gh 環境必須 die"
+    else
+      fail "AC5.5 非 dry-run 在無 gh 環境未拒絕 (out=${OUT10:0:200})"
+    fi
+  fi
+else
+  # mktemp 失敗 / sandbox 限制 → 標記跳過，不誤報 fail
+  pass "AC5.4/5.5 mktemp -d 在當前環境不可用，跳過 no-gh 情境驗證"
+fi
+
 # ---------------------------------------------------------------------------
 # AC6：選用參數會被帶入 dry-run 顯示的指令中
 # ---------------------------------------------------------------------------
