@@ -8,6 +8,7 @@
 
 | 版本 | 主題 | Sprint | 交付內容 |
 |------|------|--------|----------|
+| **v0.119.0** | **流程安全強化 + ADR 歸檔 + Cruise 智能化** | 183 | **#1001** `gh-issue-create.sh` 強制 `--body-file`；**#1002** Architect/QA 禁用軟性字樣清單（8 條）；**#1003** `dispatch-with-fallback.sh` + ADR-046 Agent fallback 驗證；**D5** ADR 歸檔政策 + `audit-adr-references.sh` + ADR-009 歸檔；**#1005** Cruise Patrol L-size sprint-candidate 自動觸發 Refinement（Architect 拆解 → S/M sub-stories） |
 | v0.1–0.9 | 核心建立與穩定化 | 1–24 | 25 Skills + 8 Agents 基礎架構、CI Pipeline、Hard Gate 機制、dispel 解咒模式、schedule/shoot 自動化、parallel-dispatch、使用者文件 |
 | v0.13–0.29 | 多平台 + 自動化閉環 | 25–50 | OpenCode 平台整合、排程四條流程、版號同步腳本、環境可攜性方案、diagram Skill（drawio MCP 整合） |
 | v0.30–0.41 | Design 體系 + 方法論強化 | 51–73 | UIUX Agent + Figma 整合管線 + Vision Critic、QA 雙階段審查強化、模型分層策略、Gemini CLI / Cursor 平台整合 |
