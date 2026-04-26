@@ -32,8 +32,11 @@ extract_field() {
   local file="$1"
   local field="$2"
   # 支援 **狀態**:、**狀態**：、**Status**: 等格式
+  # 注意：不能用 [：:] 字元類，BSD sed 會 byte-by-byte 處理多字節 ：，
+  # 吃掉 1 byte 留下 2 bytes 殘渣 → ��Accepted。改成兩段獨立替換。
   grep -m1 -iE "^\*\*${field}\*\*[：:]" "$file" 2>/dev/null \
-    | sed -E "s/^\*\*[^*]+\*\*[：:][[:space:]]*//" \
+    | sed -E "s/^\*\*[^*]+\*\*：[[:space:]]*//" \
+    | sed -E "s/^\*\*[^*]+\*\*:[[:space:]]*//" \
     | tr -d '\r' \
     | head -1 \
     || echo "—"
@@ -50,10 +53,24 @@ extract_title() {
 
 extract_number() {
   local file="$1"
-  basename "$file" | grep -oP 'ADR-\d+' | head -1 || echo "—"
+  # 改用 grep -oE（POSIX 擴充），相容 BSD / macOS
+  basename "$file" | grep -oE 'ADR-[0-9]+' | head -1 || echo "—"
 }
 
 # ── 產生 README.md ───────────────────────────────────────────────────
+
+# 識別 forwarding stub（已歸檔 ADR 的轉址檔案）
+is_forwarding_stub() {
+  local f="$1"
+  grep -qE "^# ADR-[0-9]+ — 已歸檔|^> \*\*此 ADR 已歸檔" "$f" 2>/dev/null
+}
+
+# 掃描 archive 子目錄
+ARCHIVE_DIR="${ADR_DIR}/archive"
+ARCHIVED_FILES=""
+if [ -d "$ARCHIVE_DIR" ]; then
+  ARCHIVED_FILES=$(ls "${ARCHIVE_DIR}/ADR-"*.md 2>/dev/null | sort || true)
+fi
 
 {
   cat << 'HEADER'
@@ -68,9 +85,18 @@ extract_number() {
 |---------|------|------|------|
 HEADER
 
+  declare -a STUB_FILES
+  STUB_FILES=()
+
   if [ -n "$ADR_FILES" ]; then
     while IFS= read -r adr_file; do
       [ -f "$adr_file" ] || continue
+
+      # 把 forwarding stub 抽出，稍後在「已歸檔 ADR」段落呈現
+      if is_forwarding_stub "$adr_file"; then
+        STUB_FILES+=("$adr_file")
+        continue
+      fi
 
       NUMBER=$(extract_number "$adr_file")
       TITLE=$(extract_title "$adr_file")
@@ -87,13 +113,72 @@ HEADER
     done <<< "$ADR_FILES"
   fi
 
+  # ── 已歸檔 ADR 段落（forwarding stub + archive/ 實際檔案）──
+  if [ "${#STUB_FILES[@]}" -gt 0 ] || [ -n "$ARCHIVED_FILES" ]; then
+    cat << 'ARCHIVED_HEADER'
+
+## 已歸檔 ADR（Archived）
+
+> 歸檔依據：[ARCHIVAL_POLICY.md](ARCHIVAL_POLICY.md)。歸檔的 ADR 仍保留歷史脈絡，但不再驅動執行面決策。
+
+| ADR 編號 | 標題 | 取代者 / 狀態 | Stub | 實檔位置 |
+|---------|------|-------------|------|---------|
+ARCHIVED_HEADER
+
+    for stub in "${STUB_FILES[@]:-}"; do
+      [ -z "${stub:-}" ] && continue
+      [ -f "$stub" ] || continue
+      NUMBER=$(extract_number "$stub")
+      # Stub 的 H1 是 forwarding 用，無有意義標題；改從 archive/ 實檔讀真標題
+      ARCHIVE_FILE="archive/$(basename "$stub")"
+      ARCHIVE_PATH="${ADR_DIR}/${ARCHIVE_FILE}"
+      if [ -f "$ARCHIVE_PATH" ]; then
+        TITLE=$(extract_title "$ARCHIVE_PATH")
+      else
+        TITLE="(歸檔實檔遺失)"
+      fi
+      # 取代者：抓「Superseded by ADR-NN」中緊跟其後的 ADR 編號（不是行內第一個）
+      SUPERSEDER=$(awk '/Superseded by ADR-[0-9]+/ {
+        match($0, /Superseded by ADR-[0-9]+/);
+        if (RSTART > 0) {
+          chunk = substr($0, RSTART, RLENGTH);
+          match(chunk, /ADR-[0-9]+/);
+          print substr(chunk, RSTART, RLENGTH);
+          exit;
+        }
+      }' "$stub" 2>/dev/null)
+      [ -z "$SUPERSEDER" ] && SUPERSEDER="—"
+      STUB_FILE=$(basename "$stub")
+      echo "| ${NUMBER} | ${TITLE} | ${SUPERSEDER} | [stub](${STUB_FILE}) | [${ARCHIVE_FILE}](${ARCHIVE_FILE}) |"
+    done
+
+    # 也列出 archive/ 中沒有 stub 的孤兒（直接歸檔未保留 forwarding）
+    if [ -n "$ARCHIVED_FILES" ]; then
+      while IFS= read -r archived; do
+        [ -f "$archived" ] || continue
+        archived_basename=$(basename "$archived")
+        # 若 stub 列表已含對應 ADR，跳過
+        skip=0
+        for stub in "${STUB_FILES[@]:-}"; do
+          [ -z "${stub:-}" ] && continue
+          [ "$(basename "$stub")" = "$archived_basename" ] && skip=1 && break
+        done
+        [ "$skip" -eq 1 ] && continue
+        NUMBER=$(extract_number "$archived")
+        TITLE=$(extract_title "$archived")
+        ARCHIVE_FILE="archive/${archived_basename}"
+        echo "| ${NUMBER} | ${TITLE} | — | （無 stub）| [${ARCHIVE_FILE}](${ARCHIVE_FILE}) |"
+      done <<< "$ARCHIVED_FILES"
+    fi
+  fi
+
 } > "${OUTPUT_FILE}.tmp"
 
-# 替換時間戳
+# 替換時間戳（用兩段 mv 避免 sed -i 在 BSD/macOS 與 GNU/Linux 語法分歧）
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
-sed -i "s/TIMESTAMP_PLACEHOLDER/${TIMESTAMP}/" "${OUTPUT_FILE}.tmp"
-
-mv "${OUTPUT_FILE}.tmp" "${OUTPUT_FILE}"
+sed "s/TIMESTAMP_PLACEHOLDER/${TIMESTAMP}/" "${OUTPUT_FILE}.tmp" > "${OUTPUT_FILE}.tmp2"
+mv "${OUTPUT_FILE}.tmp2" "${OUTPUT_FILE}"
+rm -f "${OUTPUT_FILE}.tmp"
 
 echo "[OK] ADR 索引已更新：${OUTPUT_FILE}"
 echo "[OK] 共掃描 $(echo "$ADR_FILES" | grep -c "." || echo 0) 個 ADR 檔案"

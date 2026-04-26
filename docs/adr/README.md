@@ -1,7 +1,7 @@
 # ADR 目錄索引
 
 > 本文件由 `scripts/update-adr-index.sh` 自動產生，請勿手動修改。
-> 最後更新：2026-03-25 22:33:45
+> 最後更新：2026-04-27 04:56:05
 
 ## 架構決策紀錄（Architecture Decision Records）
 
@@ -15,7 +15,6 @@
 | ADR-006 | [ADR-006：Issue 內容提示注入防護](ADR-006-prompt-injection-protection.md) | Accepted | 2026-03-02 |
 | ADR-007 | [ADR-007：Story 生命週期 Subagent 封裝](ADR-007-story-lifecycle-subagent.md) | Accepted | 2026-03-02 |
 | ADR-008 | [ADR-008：OpenCode 平台整合策略](ADR-008.md) | Accepted | 2026-03-03 |
-| ADR-009 | [ADR-009：Backlog Intake 自動化技術決策](ADR-009.md) | Accepted | 2026-03-03 |
 | ADR-010 | [ADR-010：Backlog Source of Truth — GitHub Issues 優先策略](ADR-010.md) | Accepted | 2026-03-03 |
 | ADR-011 | [ADR-011：GitHub Actions 整合架構決策](ADR-011-github-actions-integration.md) | Accepted | 2026-05-11 |
 | ADR-012 | [ADR-012：Claude Max 多開發環境認證架構決策](ADR-012-max-account-rotation.md) | Accepted | 2026-03-05 |
@@ -51,3 +50,12 @@
 | ADR-042 | [ADR-042: Session Watchdog — 存活監控與自動重啟設計](ADR-042-session-watchdog-design.md) | Accepted | 2026-03-24 |
 | ADR-043 | [ADR-043: Backlog Replenishment Strategy — 提前預警機制與 2-Sprint 提前期設計](ADR-043-backlog-replenishment-strategy.md) | Accepted | 2026-03-25 |
 | ADR-044 | [ADR-044: A2A Protocol — Agent-to-Agent 結構化通訊協議標準化](ADR-044-a2a-protocol.md) | Accepted | 2026-03-25 |
+| ADR-045 | [ADR-045: Short-lived Subagent + Progress Tracker — 解決 LLM 規則衰減](ADR-045-external-state-machine.md) | Accepted | 2026-04-09 |
+
+## 已歸檔 ADR（Archived）
+
+> 歸檔依據：[ARCHIVAL_POLICY.md](ARCHIVAL_POLICY.md)。歸檔的 ADR 仍保留歷史脈絡，但不再驅動執行面決策。
+
+| ADR 編號 | 標題 | 取代者 / 狀態 | Stub | 實檔位置 |
+|---------|------|-------------|------|---------|
+| ADR-009 | ADR-009：Backlog Intake 自動化技術決策 | ADR-010 | [stub](ADR-009.md) | [archive/ADR-009.md](archive/ADR-009.md) |
