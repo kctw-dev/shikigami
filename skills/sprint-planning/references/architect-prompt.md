@@ -494,10 +494,13 @@ Architect 在擔任 Refinement Chair 時，必須對每個 M/L Story 逐一回�
 
 ### 排程模式與 Refinement 的互動
 
-| 執行模式 | Refinement 行為 |
+| 執行路徑 | Refinement 行為 |
 |---------|----------------|
-| **排程模式**（`SHIKIGAMI_SCHEDULED=true`） | **完全跳過 Refinement**。排程模式僅允許 S-size Story，S-size 預設豁免 Refinement。 |
-| **手動模式**（非排程） | 依觸發條件執行 Refinement，M/L size 必須，S size 預設豁免（豁免例外見上方）。 |
+| **排程 Sprint Planning**（`SHIKIGAMI_SCHEDULED=true`） | Sprint Planning 本身**完全跳過 Refinement**。排程模式僅允許 S-size Story，S-size 預設豁免 Refinement。 |
+| **手動 Sprint Planning**（非排程） | 依觸發條件執行 Refinement，M/L size 必須，S size 預設豁免（豁免例外見上方）。 |
+| **Cruise Patrol 偵測 L-size sprint-candidate**（#1005） | Patrol 自動觸發「**L-size Patrol Refinement**」（見下方），由 Architect subagent 執行拆解，不經 Sprint Planning 流程。 |
+
+> **設計理由（#1005）**：Cruise 巡邏模式下，L-size Story 被標為 sprint-candidate 後因排程 Sprint Planning HARD-GATE 永遠無法進入 Sprint，正確出路是由 Patrol 偵測並自動啟動 Refinement，Architect 拆解為 S/M sub-stories 後讓下輪 Patrol 自動選入。
 
 **跨 Type 依賴的特殊處置**：
 
@@ -505,6 +508,136 @@ Architect 在擔任 Refinement Chair 時，必須對每個 M/L Story 逐一回�
 |------|---------|
 | SRE 工作量不可忽略（需要獨立設計、建置或審查） | 拆分為獨立 INFRA Story，Contract Owner 由 SRE 擔任 |
 | SRE 工作量極小（設定調整、參數修改等） | 在 FEATURE Contract 中附加 Infra Prerequisites Checklist，由 SRE 簽核後合併在 FEATURE Story 中執行 |
+
+---
+
+## L-size Patrol Refinement（#1005）
+
+<!-- #1005 排程模式 L-size sprint-candidate 自動 Refinement — Sprint 183 -->
+
+Cruise Patrol 偵測到 L-size sprint-candidate 觀察期達標（`updatedAt >= 24h`，`project_level=low`）時，派遣 Architect subagent 執行本流程（詳見 `skills/cruise/references/po-patrol.md` Step 3.7）。
+
+### 觸發前提
+
+| 項目 | 條件 |
+|------|------|
+| Issue label | `sprint-candidate` + `size:L` + `needs-refinement` |
+| 未帶有 | `stakeholder` label |
+| 觸發方 | Cruise Patrol PO subagent（project_level=low） |
+
+### Architect 執行步驟
+
+Architect subagent 在接到 Patrol Refinement 指令後，對指定 Issue 執行以下步驟：
+
+**Step A — 讀取 Story**
+
+```bash
+gh issue view ${ISSUE_NUMBER} -R ${OWNER_REPO} --json title,body,labels,comments
+```
+
+**Step B — 複雜度分析**
+
+依照標準 Refinement 依賴分析 Checklist（Q1–Q5，見上方），對此 L-size Story 進行評估：
+
+| 問題 | 評估目的 |
+|------|---------|
+| Q1 前置依賴 | 拆解後 sub-stories 是否有執行順序約束？ |
+| Q2 後置依賴 | 原 L story 是否為他處前置條件？拆解後需通知依賴方 |
+| Q3 跨模組 | 哪些模組/檔案需要修改，是否可分離為獨立 sub-stories？ |
+| Q5 Sprint 內完成性 | 每個 sub-story 是否可在一個 Sprint 內完成（S=1pt / M=2pt）？ |
+
+**Step C — 拆解決策**
+
+| 評估結果 | 處置 |
+|---------|------|
+| **可拆解**：Story 可分離為 2–4 個 S/M sub-stories，各自獨立可測試 | 執行 Step D（建立 sub-issues）→ Step E（關閉原 Story） |
+| **不可拆解**：Story 本身整體性強（如單一資料庫遷移），無法有意義分割 | 執行 Step F（NOT_READY 標記），留言說明 |
+| **需補充資訊**：原 Story AC 不足，無法判斷拆解方向 | 執行 Step G（awaitning-reply），留言請 PO 補充 |
+
+**Step D — 建立 sub-issues（僅可拆解情況）**
+
+```bash
+# 每個 sub-story 建立 Issue（使用 --body-file，CLAUDE.md 紅線 13）
+printf '%s\n' \
+  "## 背景" "" \
+  "此 sub-story 由 L-size Story #${PARENT_NUMBER} 拆解而來（Patrol Refinement #1005）。" "" \
+  "## User Story" "" \
+  "${SUB_STORY_DESCRIPTION}" "" \
+  "## Acceptance Criteria" "" \
+  "- AC1: ${SUB_AC_1}" \
+  "- AC2: ${SUB_AC_2}" "" \
+  "## 非功能性需求" "" \
+  "NFR1: ${SUB_NFR}" "" \
+  "---" "" \
+  "**Parent Story**: #${PARENT_NUMBER}" \
+  > /tmp/sub-story-${i}.txt
+
+bash scripts/gh-issue-create.sh \
+  --title "${SUB_STORY_TITLE}" \
+  --body-file /tmp/sub-story-${i}.txt \
+  --label "type: backlog-item,status: backlog,sprint-candidate,size:${SUB_SIZE}" \
+  --repo "${OWNER_REPO}"
+```
+
+**Step E — 關閉原 L Story（僅可拆解情況）**
+
+```bash
+printf '%s\n' \
+  "## [Patrol Refinement 完成]" "" \
+  "此 L-size Story 已由 Patrol Refinement（#1005）拆解為以下 sub-stories：" "" \
+  "${SUB_STORY_LINKS}" "" \
+  "Sub-stories 已加入 sprint-candidate，將在下輪 Patrol 自動選入 Sprint。" "" \
+  "- 執行時間：$(date '+%Y-%m-%dT%H:%M:%S')" \
+  "- Session: ${SESSION_ID}" \
+  > /tmp/close-comment.txt
+gh issue comment ${ISSUE_NUMBER} -R ${OWNER_REPO} --body-file /tmp/close-comment.txt
+gh issue close ${ISSUE_NUMBER} -R ${OWNER_REPO}
+```
+
+**Step F — NOT_READY 標記（不可拆解情況）**
+
+```bash
+# 移除 needs-refinement（已評估），加 pending label
+gh issue edit ${ISSUE_NUMBER} -R ${OWNER_REPO} \
+  --remove-label "needs-refinement" \
+  --add-label "pending"
+
+printf '%s\n' \
+  "## [Patrol Refinement：不可拆解]" "" \
+  "Architect 評估此 L-size Story 無法有意義拆解（原因：${REASON}）。" "" \
+  "建議：在手動模式下由 PO + Architect 共同評估，或調整 Story 範圍。" "" \
+  "此 Issue 已標記 \`pending\`，等待人工確認。" \
+  > /tmp/not-ready-comment.txt
+gh issue comment ${ISSUE_NUMBER} -R ${OWNER_REPO} --body-file /tmp/not-ready-comment.txt
+```
+
+**Step G — awaiting-reply（需補充資訊情況）**
+
+```bash
+gh issue edit ${ISSUE_NUMBER} -R ${OWNER_REPO} \
+  --remove-label "needs-refinement" \
+  --add-label "awaiting-reply"
+
+printf '%s\n' \
+  "## [Patrol Refinement：需補充資訊]" "" \
+  "Architect 無法根據現有 AC 判斷拆解方向，需要以下補充：" "" \
+  "- ${MISSING_INFO}" "" \
+  "請 PO 補充後移除 \`awaiting-reply\` label，系統將在下輪 Patrol 重新評估。" \
+  > /tmp/awaiting-comment.txt
+gh issue comment ${ISSUE_NUMBER} -R ${OWNER_REPO} --body-file /tmp/awaiting-comment.txt
+```
+
+### 結果輸出格式
+
+```json
+{
+  "type": "l-size-patrol-refinement",
+  "issue": ${ISSUE_NUMBER},
+  "decision": "split | not-splittable | needs-info",
+  "sub_issues": [<created_issue_numbers>],
+  "reason": "<簡短說明>"
+}
+```
 
 ---
 

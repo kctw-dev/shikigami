@@ -334,11 +334,74 @@ project_level=${PROJECT_LEVEL}，請確認是否轉送。
     # 交付物已明確，不標記 awaiting-reply，依 Size 直接分流
     log action: "deliverable-${DELIVERABLE_TYPE} #<issue.number>"
 
+  # ── Step 3.7：L-size sprint-candidate → 自動觸發 Refinement（#1005）──
+  # L-size Story 在排程模式（SHIKIGAMI_SCHEDULED=true）下無法進入 Sprint Backlog
+  # （sprint-planning §3.1 HARD-GATE），若無自動出口將永遠卡住。
+  # 正確回應是由巡邏自動觸發 Refinement 拆解為 S/M sub-stories。
+  #
+  # 觸發條件（全部成立）：
+  #   1. Issue 帶有 sprint-candidate label
+  #   2. Issue 帶有 size:L label
+  #   3. updatedAt >= 24h（觀察期 — 避免剛加入就立刻拆解）
+  #   4. 未帶有 needs-refinement label（避免重複觸發）
+  #   5. 未帶有 stakeholder label（安全邊界）
+  if "sprint-candidate" in issue.labels AND "size:L" in issue.labels:
+    if "needs-refinement" in issue.labels OR "stakeholder" in issue.labels:
+      # 已觸發或安全邊界 → 跳過
+      continue
+
+    AGE_HOURS = (now - issue.updatedAt) in hours
+    if AGE_HOURS < 24:
+      # 觀察期未滿 → 記錄，繼續等待
+      log action: "l-size-candidate-observing #<issue.number>: ${AGE_HOURS}h < 24h"
+      continue
+
+    # ── 觸發 Refinement ──
+
+    # 1. 更新 label：加 needs-refinement，移除 sprint-candidate
+    #    （移除 sprint-candidate 避免計入 Sprint Planning 觸發閾值，防止 L story 搶進 Sprint）
+    gh issue edit ${issue.number} -R ${OWNER_REPO} \
+      --add-label "needs-refinement" \
+      --remove-label "sprint-candidate"
+
+    # 2. 留言通知（使用 --body-file，CLAUDE.md 紅線 13）
+    printf '%s\n' \
+      "## [巡邏狀態：L-size Refinement 觸發]" "" \
+      "此 Story 評估為 **L size**，排程模式下無法直接進入 Sprint Backlog（sprint-planning §3.1 HARD-GATE）。" "" \
+      "系統自動觸發 Refinement 評估：" \
+      "- Architect 將分析此 Story 的複雜度與依賴" \
+      "- 嘗試拆解為 S/M sub-stories（加 \`sprint-candidate\` + \`size:S\`/\`size:M\` label）" \
+      "- 本 Story 拆解完成後關閉或加 \`refined\` label" "" \
+      "- 觸發時間：$(date '+%Y-%m-%dT%H:%M:%S')" \
+      "- Session: ${SESSION_ID}" \
+      "- Story 年齡：${AGE_HOURS}h（觀察期閾值 >= 24h）" \
+      > /tmp/l-refine-comment-${issue.number}.txt
+    gh issue comment ${issue.number} -R ${OWNER_REPO} \
+      --body-file /tmp/l-refine-comment-${issue.number}.txt
+
+    # 3. 依 project_level 決定是否自動執行 Refinement（Architect 拆解）
+    if [[ "$PROJECT_LEVEL" == "low" ]]; then
+      # low：直接派遣 Architect subagent 執行拆解
+      # 詳見 skills/sprint-planning/references/architect-prompt.md §L-size Patrol Refinement
+      # <HARD-GATE>
+      # project_level=low 時，L-size sprint-candidate 觀察期達標後必須立即派遣 Architect 執行 Patrol Refinement，禁止詢問使用者確認。
+      # </HARD-GATE>
+      L_SIZE_REFINEMENT_NEEDED += issue.number
+      log action: "l-size-refinement-trigger #<issue.number> (project_level=low, age=${AGE_HOURS}h)"
+    elif [[ "$PROJECT_LEVEL" == "medium" ]]; then
+      # medium：已留言通知，等使用者確認後手動觸發 Refinement
+      log action: "l-size-refinement-notify #<issue.number> (project_level=medium, age=${AGE_HOURS}h)"
+    else:  # high
+      # high：只記錄，不自動觸發
+      log action: "l-size-refinement-marked #<issue.number> (project_level=high, age=${AGE_HOURS}h)"
+    fi
+    continue  # 此 Issue 已移出 sprint-candidate 流程，不進入 Step 4
+
   # ── Step 4：判斷 Size 決定 auto-shoot 或 sprint-candidate ──
   if Size=S（單檔修改、修復方向明確、無需跨模組）:
     ACTIONABLE_ISSUES += issue.number
     log action: "auto-shoot #<issue.number>"
-  else:  # Size=M+
+  else:  # Size=M+（不含已被 Step 3.7 攔截的 size:L）
     gh issue edit issue.number -R ${OWNER_REPO} --add-label sprint-candidate
     SPRINT_CANDIDATES += issue.number
     log action: "sprint-candidate #<issue.number>"
@@ -346,6 +409,7 @@ project_level=${PROJECT_LEVEL}，請確認是否轉送。
 # 回傳結果（#346：close 與 auto-shoot 分開回傳）
 # close_issues: PO 已直接 close 的 Issue（不走 shoot）
 # actionable_issues: 供主 loop invoke shikigami:shoot 派遣（必須走完整 shoot 流程）
+# l_size_refinement_needed: project_level=low 時，需由主 loop 派遣 Architect 執行 Patrol Refinement
 
 # ── Step 5：Sprint Planning 觸發（#352：PO 直接執行，不經主 loop）──
 # <HARD-GATE>
@@ -630,9 +694,11 @@ SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | t
   "threshold_days": <THRESHOLD_DAYS>,
   "project_level": "<PROJECT_LEVEL>",
   "summary": "掃描 <X> 個 open issues，發現 <Y> 個逾期，<Z> 個無回應",
-  "actions": ["triage #<N1>", "auto-shoot #<N2>", "sprint-candidate #<N3>", "awaiting-reply #<N4>", "pending #<N5>", "close #<N6>", "close-pending-approval #<N7>", "auto-close #<N8>", "waiting #<N9>: Xh elapsed", "skipped #<N10>: stakeholder-issue"],
+  "actions": ["triage #<N1>", "auto-shoot #<N2>", "sprint-candidate #<N3>", "awaiting-reply #<N4>", "pending #<N5>", "close #<N6>", "close-pending-approval #<N7>", "auto-close #<N8>", "waiting #<N9>: Xh elapsed", "skipped #<N10>: stakeholder-issue", "l-size-refinement-trigger #<N11> (project_level=low, age=Xh)", "l-size-refinement-notify #<N12> (project_level=medium, age=Xh)", "l-size-refinement-marked #<N13> (project_level=high, age=Xh)", "l-size-candidate-observing #<N14>: Xh < 24h"],
   "actionable_issues": [<issue_numbers>],
-  "sprint_candidates": [<issue_numbers>]
+  "sprint_candidates": [<issue_numbers>],
+  "l_size_refinement_triggered": [<issue_numbers>],
+  "l_size_observing": [<issue_numbers>]
 }
 ```
 
@@ -683,6 +749,10 @@ SPRINT_FILE=$(ls ${REPO_PATH}/docs/sprints/sprint_*.md 2>/dev/null | sort -V | t
 | `"auto-close"` | `awaiting-reply`/`pending` 超過 2h 未回應，自動關閉（AC-4） |
 | `"waiting"` | `awaiting-reply`/`pending` 未超時，維持等待（AC-1 全覆蓋） |
 | `"skipped"` | Stakeholder Issue 跳過（含 reason） |
+| `"l-size-refinement-trigger"` | L-size sprint-candidate 觀察期達標（age >= 24h），project_level=low → 派遣 Architect 執行 Patrol Refinement（#1005） |
+| `"l-size-refinement-notify"` | L-size sprint-candidate 觀察期達標，project_level=medium → 留言通知，等使用者確認（#1005） |
+| `"l-size-refinement-marked"` | L-size sprint-candidate 觀察期達標，project_level=high → 只記錄，不自動觸發（#1005） |
+| `"l-size-candidate-observing"` | L-size sprint-candidate 觀察期未滿（age < 24h），暫不觸發（#1005） |
 
 # ── Step 5.6：Backlog 健康度檢查與信號消費（#698）──
 
