@@ -1,11 +1,21 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.118.1-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.119.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 ![Sprints](https://img.shields.io/badge/sprints-175%2B-orange?style=flat-square)
 ![Skills](https://img.shields.io/badge/skills-31-purple?style=flat-square)
 
 **為你的 AI 開發工具注入 8 個專業角色，涵蓋 Discovery → Definition → Delivery 全產品生命週期。**
+
+### 🆕 v0.119.0 更新（Sprint 183）
+
+| 新功能 | 說明 |
+|--------|------|
+| **Issue 建立安全封裝** | `scripts/gh-issue-create.sh`：強制 `--body-file` 模式，防止特殊字元截斷（紅線 #13 強化） |
+| **禁用軟性字樣清單** | Architect / QA prompt 新增 8 條禁用詞表（考慮、適當、合理…），PO Round 1 自動自檢 |
+| **Agent fallback 驗證** | `dispatch-with-fallback.sh` + ADR-046：偵測 HTTP 429 / 5xx / Policy Refusal，自動切換模型 |
+| **ADR 歸檔政策** | `audit-adr-references.sh`（ACTIVE / DOCS-ONLY / DORMANT / SUPERSEDED 分類）+ ADR-009 已歸檔 |
+| **L-size 自動 Refinement** | 排程模式下 L-size sprint-candidate 觀察期達標後，Cruise Patrol 自動觸發 Architect 拆解 |
 
 ```
 /plugin marketplace add KCTW/shikigami
