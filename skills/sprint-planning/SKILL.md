@@ -48,8 +48,8 @@ Sprint Planning 是每個 Sprint 週期的起點儀式。由 **PO** 主持，**A
 - [ ] 檢查選入 Story 是否標注「需要 ADR」— 若需要，ADR 必須已 Accepted 或已在本 Sprint 納入 ADR RESEARCH Story
 - [ ] **複雜度影響評估**（#462）：對每個新增功能 Story，執行 `bash scripts/measure-complexity.sh` 評估複雜度影響；若預計新增 Skill/Agent，須同步評估是否刪減等量舊功能（見 §13 複雜度預算）
 - [ ] 確認 INFRA Story 涉及的 CI Actions 版本升級已完成人工審核確認（未完成者須退回 Backlog 或延至下一 Sprint）
-- [ ] **Architect** 技術評估（詳見 [architect-prompt.md](./references/architect-prompt.md)）
-- [ ] **QA** 驗收標準確認（詳見 [qa-prompt.md](./references/qa-prompt.md)）
+- [ ] **Architect** 技術評估（詳見 [architect-prompt.md](./references/architect-prompt.md)）— 輸出技術評估表 / Schema / ADR Issue body 前須執行軟性字樣自檢（#1002，含禁用字樣時標 `[NEEDS_REVISION]` 並打回重寫）
+- [ ] **QA** 驗收標準確認（詳見 [qa-prompt.md](./references/qa-prompt.md)）— 輸出 AC 補捉表 / Challenge 訊息前須執行軟性字樣自檢（#1002，含禁用字樣時標 `[NEEDS_REVISION]` 並打回重寫）
 - [ ] 上個 Sprint 的 Retro Action Items 自動列入 Backlog（若有未完成項目）
 - [ ] **Retro-Action Grooming 偵測**（#493）：掃描 `retro-action` label 的 open Issues，對 Sprint Review 觸發的 `[RETRO-GROOMING-TRIGGER]` Issues 執行 Backlog Grooming 重評估（詳見 `skills/sprint-review/references/retro-grooming.md`）
 - [ ] **PO** 建立 `docs/sprints/sprint_N.md`、更新 `docs/PROJECT_BOARD.md`、GitHub label/milestone 操作（詳見 [po-prompt.md](./references/po-prompt.md) Round 2）

@@ -540,3 +540,47 @@ M size 以上的 Refactor 或 Restructure 類 Story 必須通過 Architect 前�
 |------|------|
 | READY | 繼續進入 Sprint Planning，Architect 確認摘要記錄於技術評估表格 |
 | NOT_READY | 退回 Backlog，標注缺失項目，PO 補齊後重新提交 |
+
+---
+
+## 禁用軟性字樣清單（#1002，Sprint 183）
+
+<!-- Sprint 182 retro action A2：將 PO 防護機制延伸至 Architect 角色 -->
+
+Architect 在輸出 **技術評估表格、Schema Contract、ADR 補建 Issue body** 等任何結構化文件前，**必須**執行自檢步驟確保內容不含軟性字樣。技術文件含模糊表述會讓 QA 與 Developer 無法精準理解，導致返工。
+
+> **單一來源**：禁用字樣清單與改寫規則的權威定義在 [`po-prompt.md` §禁用軟性字樣清單（#994）](./po-prompt.md)。下方為 Architect 視角的對照與自檢流程。
+
+### 禁用字樣（與 PO 同份 8 個詞）
+
+| 禁用字樣 | Architect 常見誤用情境 | 改寫示例 |
+|---------|---------------------|---------|
+| 考慮 | 「估點時考慮複雜度」 | 「估點 = 受影響檔案數 × 0.5 + 新增 ADR 數 × 1」 |
+| 明確 | 「Schema 應明確定義欄位」 | 「Schema 必須列出每個欄位的 type / required / default」 |
+| 適當 | 「採用適當的設計模式」 | 「使用 Strategy Pattern 注入 N 種實作（詳列於 ADR-XXX §3）」 |
+| 合理 | 「合理的平行分群」 | 「依 file overlap 分群，同檔案 Stories 序列化執行」 |
+| 盡量 | 「盡量避免循環依賴」 | 「禁止 import skill A → skill B → skill A 的環狀引用，由 validate-xrefs.sh 驗證」 |
+| 儘可能 | 「儘可能拆小 Story」 | 「Story T-shirt size > M 時，Architect 必須執行 Refinement 拆解」 |
+| 必要時 | 「必要時補建 ADR」 | 「Story 涉及新技術選型 ∨ 跨模組設計 → Architect 自動建立 RESEARCH ADR Issue」 |
+| 建議 | 「建議使用 jq 解析 JSON」 | 「JSON 解析統一使用 jq；shell 內建 parse 視為違規（由 validate-json.sh 偵測）」 |
+
+### Architect Round 1 自檢步驟
+
+每次輸出技術評估表格、Schema Contract、ADR Issue body 前：
+
+1. 將候選文字組合為 `$arch_text`
+2. 執行 grep 自檢：
+   ```bash
+   # 檢測禁用字樣（任一匹配即為需改寫）
+   echo "$arch_text" | grep -E '考慮|明確|適當|合理|盡量|儘可能|必要時|建議'
+   ```
+3. 若有匹配 → 在輸出末尾標記 `[NEEDS_REVISION] 含禁用軟性字樣：<逐項列出>`，不得進入下一階段
+4. 若無匹配 → 輸出通過自檢，可進入下一步
+
+### 與 PO 自檢的差異
+
+| 角色 | 自檢時機 | 主要對象 |
+|------|---------|---------|
+| PO | Round 1 輸出 AC 表格前 | Story 的 Acceptance Criteria 文本 |
+| **Architect** | **技術評估 / Schema / ADR 補建 Issue body 輸出前** | **估點理由、設計決策說明、ADR body** |
+| QA | Round 3 驗收 AC 前 | AC 可測試性確認、隱性需求補捉 |
