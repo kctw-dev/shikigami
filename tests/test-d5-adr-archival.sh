@@ -44,14 +44,15 @@ done
 # AC2：--candidates 只列 DORMANT / SUPERSEDED
 # ---------------------------------------------------------------------------
 CAND=$("$AUDIT" --candidates 2>&1)
-# 不該出現 ACTIVE / DOCS-ONLY 的列
-if printf '%s' "$CAND" | grep -E '^\| *ADR-[0-9]+ *\| *(ACTIVE|DOCS-ONLY) ' >/dev/null; then
+# 不該出現 ACTIVE / DOCS-ONLY 的列（修 codex P3：grep pattern 對應實際輸出
+# 格式 `ADR-001      | ACTIVE`，不是 markdown 表格 `| ADR-001 |`）
+if printf '%s' "$CAND" | grep -E '^ADR-[0-9]+[[:space:]]*\| (ACTIVE|DOCS-ONLY)\b' >/dev/null; then
   fail "AC2.1 --candidates 不應包含 ACTIVE / DOCS-ONLY 列"
 else
   pass "AC2.1 --candidates 只列候選類別"
 fi
 # ADR-009 已歸檔，不該再出現在 candidates（forwarding stub 不被視為候選）
-if printf '%s' "$CAND" | grep -E '^\| *ADR-009 ' >/dev/null; then
+if printf '%s' "$CAND" | grep -E '^ADR-009[[:space:]]' >/dev/null; then
   fail "AC2.2 ADR-009 已歸檔，不該再列為 candidate"
 else
   pass "AC2.2 ADR-009 已歸檔後不再列入 candidates"

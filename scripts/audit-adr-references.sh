@@ -106,6 +106,9 @@ count_docs_refs() {
   for f in "${own_files[@]}"; do
     exclude_args+=(--exclude="$(basename "$f")")
   done
+  # 同時排除 update-adr-index.sh 產生的 README.md — 它列出每個 ADR，
+  # 會讓所有 ADR 都得 +1 docs ref，DORMANT 永遠抓不到（codex P2 第二輪）
+  exclude_args+=(--exclude="README.md")
 
   local count
   count=$(grep -rhE "${exclude_args[@]}" "$pattern" "$REPO_ROOT/docs" 2>/dev/null \
