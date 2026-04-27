@@ -778,3 +778,47 @@ Sprint Execution 支援 Live Log Streaming，讓使用者在另一個 terminal �
 Developer 在 Refinement 中負責提供技術實作面的輸入，協助 Architect（Refinement Chair）識別實作風險與依賴，確保 Story 進入 Sprint 後不因技術細節阻塞開發。Developer 在 Refinement 中為**諮詢（Consulted）**角色，不主持、不輸出正式報告。
 
 > 詳見 `references/developer-refinement.md`（職責說明表、Refinement 輸出定義）
+
+---
+
+## 11. Compliance Audit（強制輸出）
+
+<HARD-GATE>
+每個 Story 的 Story-Lifecycle subagent 結束前，以及所有 Stories 完成後的主 session 彙總，都必須輸出 [COMPLIANCE-AUDIT] 區塊。不得省略。
+</HARD-GATE>
+
+### 11.1 Story 層級 Audit（每個 Story 結束時）
+
+Story-Lifecycle subagent 完成後，回傳摘要必須包含：
+
+```
+[COMPLIANCE-AUDIT] sprint-execution Story #N
+✅ TDD Red    — 失敗測試已寫（N 個 tests）
+✅ TDD Green  — 最小實作通過
+✅ TDD Refactor — 重構完成（N commits）
+✅ Spec Compliance Review — 通過（N 個 AC 全部覆蓋）
+✅ Code Quality Review    — 通過
+⏭ Security Review        — 跳過（非外部輸入 Story）
+✅ PR 建立   — PR #N 已開啟
+
+Artifact: PR #N ✅ / 未開啟 ❌
+```
+
+### 11.2 Sprint Execution 彙總 Audit（所有 Stories 完成後）
+
+主 session 在所有 Stories 執行完畢後輸出：
+
+```
+[COMPLIANCE-AUDIT] sprint-execution Sprint N 彙總
+Stories 完成：N 個
+✅ #XXX「Story Title」→ PR #N
+✅ #XXX「Story Title」→ PR #N
+❌ #XXX「Story Title」→ 失敗（原因）
+
+整體結果：N/N 通過 ✅ / 有失敗項目 ❌
+```
+
+**符號規則**：
+- `✅` 已執行且 artifact 可驗證
+- `⏭` 跳過，必須附上原因
+- `❌` 應執行但失敗，必須附上原因

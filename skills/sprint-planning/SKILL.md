@@ -215,3 +215,33 @@ Sprint Planning 流程中的業務規則以 SBE 範例作為 ground truth，格�
 - `docs/definition/sbe-examples/SBE_TO_TEST_RULES.md`：SBE → 測試案例轉換規則
 - `docs/definition/sbe-examples/sprint-lifecycle/sprint_planning_scheduled_mode.sbe.md`：§3.1 排程模式 HARD-GATE
 - `docs/definition/sbe-examples/sprint-lifecycle/sprint_planning_refinement_gate.sbe.md`：§9.2 Refinement 觸發條件
+
+---
+
+## 11. Compliance Audit（強制輸出）
+
+<HARD-GATE>
+Sprint Planning 結束前必須輸出 [COMPLIANCE-AUDIT] 區塊。無論步驟是否完整執行，都不得省略此輸出。
+</HARD-GATE>
+
+Sprint Planning 完成（或中止）前，**最後一個動作**必須是輸出以下格式的 Compliance Audit：
+
+```
+[COMPLIANCE-AUDIT] sprint-planning Sprint N
+✅ PO Round 1    — N 個 Stories 選入（#XXX, #XXX, ...）
+✅ Architect     — 技術評估表已輸出
+✅ QA            — AC 驗收表已確認
+✅ PO Round 2    — docs/sprints/sprint_N.md 已建立
+✅ commit + push — 完成
+⏭ 健康檢查      — 跳過（快思模式）
+⏭ Token 記錄    — 跳過（快思模式）
+
+Artifact: docs/sprints/sprint_N.md ✅
+```
+
+**符號規則**：
+- `✅` 已執行且有對應 artifact 或可驗證結果
+- `⏭` 跳過，必須附上原因（快思模式 / 排程模式 / 條件不符）
+- `❌` 應執行但未執行或失敗，必須附上原因
+
+每個列出的項目對應 §2 流程 Checklist 的一個主要步驟。**不得合併、不得省略**。
