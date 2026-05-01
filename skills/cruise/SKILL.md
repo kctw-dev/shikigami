@@ -98,11 +98,17 @@ project_level=low 的所有自動行為（auto-shoot、auto-close、auto-sprint-
 
 ## Once Mode 執行摘要（`/cruise --once`）
 
+> **預估執行時間（#2214 補注）**：`project_level=low` 時，Once Mode 會依序串聯完整 Sprint 週期（PO Patrol → Sprint Planning → Sprint Execution → Sprint Review），總時間約 **20-30 分鐘**。時間組成：PO 巡邏 + Issue 處理（~3 min）+ Sprint Planning（~5 min）+ Sprint Execution 每個 Story（~5-10 min/story）+ Sprint Review（~3 min）。**請勿中途中斷**，等待完成後再進行下一步。
+
 ```
 CYCLE=1 → 寫入 cruise-init log
 → 依 PATROL_MODE 派遣 PO-patrol / SRE-inspection subagent
 → 等待完成，寫入 patrol-complete log
 → [AUTO-CONTINUE] project_level=low：auto-shoot ACTIONABLE_ISSUES
+  ↳ sprint-candidate ≥ 3 → invoke sprint-planning（HARD-GATE）
+  ↳ sprint-planning 完成 → invoke sprint-execution（HARD-GATE）
+  ↳ sprint-execution 完成 → invoke sprint-review（常態）
+  ↳ 全鏈式串聯：~20-30 分鐘（勿中途中斷）
 → 寫入 once-mode-complete + cruise-cleanup log
 → 清除 flag file，exit 0
 ```
