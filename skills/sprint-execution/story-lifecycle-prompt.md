@@ -340,6 +340,25 @@ commit + 取得 commit SHA
    - **doc-only 路徑**：同樣必須執行三問，不因 doc_only=true 而豁免
    - **不取代 Spec Compliance self-review**：三問是前置檢查，不替代 §5 Spec Compliance 審查
 
+7.5 **Pre-Implementation Check（#2287 Sprint 215 Retro A2）**：在 TDD 開始前，確認 Story 功能是否已在過去 Sprint 中實作。**僅在 `doc_only=false` 且 `story_type ∈ {FEATURE, INTEGRATION, INFRA}` 時執行**；doc-only、RESEARCH、DESIGN 路徑豁免。
+
+   ```
+   步驟：
+   1. 搜尋 closed PRs / Issues（關鍵字來自 Story title 與主要 AC 函式名）：
+        gh pr list --search "<關鍵字>" --state merged --limit 10 --repo <OWNER_REPO>
+        gh issue list --search "<關鍵字>" --state closed --limit 10 --repo <OWNER_REPO>
+   2. grep 現有程式碼（AC 提到的主要函式/Component 名稱）：
+        grep -rn "<功能關鍵字>" app/  （或 scripts/）
+   3. 判斷結果 → 輸出 tag：
+        |-- 完整實作（所有 AC 已覆蓋）→ [PRE-IMPL-DONE] 回傳主 session，由主 session 重新界定 Story 範圍（改為 AC verification，doc_only=true）
+        |-- 部分實作（部分 AC 已覆蓋）→ [PRE-IMPL-PARTIAL] 輸出 AC gap 清單，繼續開發剩餘部分
+        +-- 未實作（未找到相關實作）→ [PRE-IMPL-CLEAR] 繼續正常 TDD 流程
+   ```
+
+   **[PRE-IMPL-DONE] 處理**：subagent 輸出 `[PRE-IMPL-DONE] 功能已完整實作於 PR#NNN / commit SHA`，回傳 ESCALATE: ALREADY_IMPLEMENTED 至主 session。**禁止**自行重新實作已存在的功能。
+
+   **gh 指令失敗降級**：若 `gh` 不可用，跳過步驟 1，僅執行步驟 2（grep），輸出 `[PRE-IMPL-SEARCH-DEGRADED]`。
+
 8. **Knowledge Ingestion via MCP（步驟 7.5，ADR-017）**：觸發條件：三問 (2) 含 API 相關 `[UNCERTAIN]` 項目，或 AC 含 API 文件 URL。完整執行邏輯（MCP 查詢、WebFetch fallback、ADR-006 防護）請 Read `skills/sprint-execution/SKILL.md §2.8`（ADR-017 實作細節）。CI=true 時跳過（輸出 `[KNOWLEDGE-INGESTION-SKIPPED: CI_ENV]`）。
 
 <!-- US-216 Knowledge Ingestion via MCP — Sprint 81, ADR-017 -->
