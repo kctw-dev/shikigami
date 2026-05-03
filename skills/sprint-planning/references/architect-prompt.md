@@ -45,6 +45,40 @@ bash scripts/check-adr-conflict.sh docs/adr
 
 ---
 
+## Pre-Implementation Check（#2287 Sprint 215 Retro A2）
+
+<!-- #2287 Sprint Planning pre-implementation check — Sprint 215 -->
+
+**Architect 技術評估開始前**，對 PO 選取的每個 Story 執行 pre-implementation check：確認「此 Story 是否在過去 Sprint 中已部分或完整實作」。
+
+### Pre-Implementation Check 步驟
+
+```
+對每個 PO 選取的 Story：
+  1. 搜尋 closed + merged PRs / Issues：
+       gh pr list --search "<Story title keywords>" --state merged --limit 10
+       gh issue list --search "<Story title keywords>" --state closed --limit 10
+  2. 檢查現有程式碼路徑（grep Story AC 的關鍵函式/Component 名稱）
+  3. 判斷結果：
+       |-- 完整實作（AC 已全部覆蓋）→ [PRE-IMPL-DONE] Story 改為「AC verification Story」（doc_only=true）
+       |-- 部分實作（部分 AC 已覆蓋）→ [PRE-IMPL-PARTIAL] 標注已實作的 AC gap，PO 重新範圍界定
+       +-- 未實作 → [PRE-IMPL-CLEAR] 繼續正常技術評估流程
+```
+
+**輸出要求**：技術評估表格新增 `Pre-Impl` 欄位：
+
+| 值 | 意義 |
+|----|------|
+| `CLEAR` | 未找到既有實作，可正常開發 |
+| `PARTIAL: <說明>` | 部分已實作，標注 AC gap |
+| `DONE` | 完整已實作，改為 AC verification |
+
+**PO 決策觸發**（AC2）：
+- `[PRE-IMPL-DONE]` → PO 在 Sprint Planning 文件標注「已實作，改為 AC verification Story」，估點下修（≤ 0.25pt）
+- `[PRE-IMPL-PARTIAL]` → PO 重新評估 Story 範圍，僅列入 AC gap 部分
+
+---
+
 ## 技術評估
 
 對 PO 選取的每個 Story 進行技術可行性評估，給出 T-shirt size 估算（S/M/L），並檢查需要 ADR 的 Story 是否已有對應的 Accepted ADR。若涉及 API 互動的 Story，必須產出 API 契約（參閱 [Architect 角色決策指引 §7](../architect/SKILL.md)）。若發現 Hard Gate 問題，該 Story 退回 Backlog。詳細決策標準（估點策略、ADR 需求判斷、平行分群策略、API 契約產出）請參閱 [Architect 角色決策指引](../architect/SKILL.md)。
@@ -54,11 +88,11 @@ bash scripts/check-adr-conflict.sh docs/adr
 ```markdown
 ## 技術評估結果
 
-| Story | T-shirt | ADR 需求 | API 契約 | Related SDDs | 說明 |
-|-------|---------|---------|---------|-------------|------|
-| US-#N | M | 無需 ADR | **有**（見下方契約定義） | SDD-000 §3, SDD-001 §2 | {說明} |
-| US-#M | S | 無需 ADR | **無**（需補充，阻擋開發） | SDD-000 §5 | {說明} |
-| US-#K | S | 無需 ADR | **不適用** | — | doc-only，無架構涉及 |
+| Story | T-shirt | Pre-Impl | ADR 需求 | API 契約 | Related SDDs | 說明 |
+|-------|---------|----------|---------|---------|-------------|------|
+| US-#N | M | CLEAR | 無需 ADR | **有**（見下方契約定義） | SDD-000 §3, SDD-001 §2 | {說明} |
+| US-#M | S | PARTIAL: AC3 已覆蓋 | 無需 ADR | **無**（需補充，阻擋開發） | SDD-000 §5 | {說明} |
+| US-#K | S | CLEAR | 無需 ADR | **不適用** | — | doc-only，無架構涉及 |
 ```
 
 **API 契約欄位說明**：
