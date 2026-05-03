@@ -182,7 +182,8 @@ stdout 格式：`[MODEL-FALLBACK] #N from=opus to=sonnet reason=HTTP529`
 1. **執行全局 fetch**：`git fetch origin main`（一次性準備）
 2. **記錄 epoch commit**：`EPOCH_COMMIT=$(git rev-parse origin/main)` — 記錄派遣時刻的 main 版本
 3. **派遣各 Story subagent**，各自執行：
-   - 建立 worktree 時明確指定 base ref：`git worktree add <path> -b <branch> origin/main`
+   - 建立 worktree 時使用 `worktree-setup.sh`（自動建立 `app/node_modules` symlink）：`bash scripts/worktree-setup.sh <path> -b <branch> origin/main`（#2286 Sprint 215）
+   - **禁止**直接使用 `git worktree add <path> -b <branch> origin/main`（缺少 node_modules symlink，vitest/eslint/tsc 無法執行）
    - 驗證初始 commit：`WORKTREE_HEAD=$(git rev-parse HEAD)` 應等於 EPOCH_COMMIT
 4. **平行完成後**：主 session 驗證所有 PR 的 commit 歷史無污染（PR review 時檢查）
 

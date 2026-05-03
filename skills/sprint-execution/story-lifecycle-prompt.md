@@ -281,6 +281,24 @@ commit + 取得 commit SHA
 
 ## 開始前準備
 
+<!-- #2286 worktree-setup.sh 補注 — Sprint 215 -->
+0. **Worktree 環境確認**（`doc_only=false` 時必做；`doc_only=true` 時可跳過）：確認 subagent 執行環境在正確的 worktree 路徑內，且 `app/node_modules` symlink 已建立。
+
+   ```bash
+   # 確認 pwd 在預期 worktree 路徑內（非主 repo root）
+   pwd  # 應為 .claude/worktrees/agent-<id>-<desc>
+
+   # 確認 app/node_modules symlink 存在（由 worktree-setup.sh 自動建立）
+   ls -la app/node_modules
+   ```
+
+   **若 symlink 不存在**（`ls -la app/node_modules` 失敗或顯示 `No such file or directory`）：
+   - 輸出 `[WORKTREE-SETUP-WARN] app/node_modules symlink 不存在，vitest/eslint/tsc 將無法執行`
+   - 手動修復：`ln -sf <主 repo 絕對路徑>/app/node_modules app/node_modules`（其中 `<主 repo 絕對路徑>` 由 `git worktree list --porcelain | grep "^worktree" | head -1 | awk '{print $2}'` 取得）
+   - 修復後重新確認 `ls -la app/node_modules` 回傳 symlink
+
+   **根本原因**：若 worktree 由 `git worktree add` 直接建立（未使用 `bash scripts/worktree-setup.sh`），則缺少自動 symlink 步驟。coordinator（主 session）應改用 `bash scripts/worktree-setup.sh <path> -b <branch> origin/main` 建立 worktree，詳見 `CLAUDE.md §開發環境`。
+
 1. 讀取 `sprint_file` 路徑下的 Sprint 文件，取得 Story ID 對應的完整 AC 清單
 2. 讀取所有 `related_adrs` 路徑下的 ADR 文件（若有）
 3. 讀取所有 `related_sdds` 路徑下的 SDD 文件（若有），並**提取 SDD 架構約束**（ADR-020）：

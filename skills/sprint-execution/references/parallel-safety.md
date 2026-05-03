@@ -238,10 +238,12 @@ Sprint Execution 派遣 Story-Lifecycle subagent 時，使用 Claude Code Agent 
   CURRENT_MAIN_COMMIT=$(git rev-parse origin/main)
   |-- 記錄當前 origin/main 的 commit hash
 
-步驟 3：建立 worktree 並明確指定 base
-  git worktree add <worktree-path> -b <branch-name> origin/main
+步驟 3：建立 worktree 並明確指定 base（#2286 Sprint 215）
+  bash scripts/worktree-setup.sh <worktree-path> -b <branch-name> origin/main
+  |-- 使用 worktree-setup.sh（非 git worktree add），自動建立 app/node_modules symlink
   |-- 使用 origin/main 作為 base ref，確保從乾淨起點建立
   |-- 禁止使用本地 main 或 HEAD（可能含有未推送變更）
+  |-- 禁止直接 git worktree add（缺少 node_modules symlink，vitest/eslint/tsc 無法執行）
 
 步驟 4：驗證 worktree 初始 commit
   cd <worktree-path>
@@ -257,11 +259,12 @@ Sprint Execution 派遣 Story-Lifecycle subagent 時，使用 Claude Code Agent 
 git fetch origin main
 BASE_COMMIT=$(git rev-parse origin/main)
 
-# 建立隔離 worktree，明確指定 base
+# 建立隔離 worktree，明確指定 base（#2286：改用 worktree-setup.sh 自動建立 node_modules symlink）
 BRANCH_NAME="sprint-${SPRINT_NUM}/${STORY_ID}-feature"
 WORKTREE_PATH=".claude/worktrees/${BRANCH_NAME}"
 
-git worktree add "${WORKTREE_PATH}" -b "${BRANCH_NAME}" origin/main
+bash scripts/worktree-setup.sh "${WORKTREE_PATH}" -b "${BRANCH_NAME}" origin/main
+# 取代舊寫法：git worktree add "${WORKTREE_PATH}" -b "${BRANCH_NAME}" origin/main
 
 # 驗證初始狀態
 cd "${WORKTREE_PATH}"
