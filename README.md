@@ -1,11 +1,11 @@
 # 式神 Shikigami — AI Agent Scrum Team 框架
 
-![Version](https://img.shields.io/badge/version-v0.119.0-blue?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.120.0-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 ![Sprints](https://img.shields.io/badge/sprints-175%2B-orange?style=flat-square)
 ![Skills](https://img.shields.io/badge/skills-31-purple?style=flat-square)
 
-**為你的 AI 開發工具注入 8 個專業角色，涵蓋 Discovery → Definition → Delivery 全產品生命週期。**
+**為你的 AI 開發工具注入 9 個專業角色，涵蓋 Discovery → Definition → Delivery 全產品生命週期。**
 
 ### 🆕 v0.119.0 更新（Sprint 183）
 
@@ -181,12 +181,13 @@ Architect：ADR-002 狀態 → Accepted
 | **Security Engineer** | 安全掃描、漏洞評估、OWASP 檢查 |
 | **SRE Engineer** | 部署檢查、監控配置、環境管理 |
 | **UI/UX Designer** | 設計系統維護、Figma 原型製作、視覺品質審查 |
+| **Product Analyst** | 需求展開、spec 撰寫、驗收條件推導（產出為草稿，待人類 PO 簽核）|
 | **Stakeholder** | 最終仲裁、打破僵局 |
 
-**重點：它們互相制衡，不是 8 個獨立助手。**
+**重點：它們互相制衡，不是 9 個獨立助手。**
 
 <details>
-<summary>完整 31 個 Skills 列表</summary>
+<summary>完整 32 個 Skills 列表</summary>
 
 **Discovery（產品探索）**
 
@@ -218,6 +219,7 @@ Architect：ADR-002 狀態 → Accepted
 | **architect** | Architect 角色知識框架、架構評估決策指引 |
 | **qa-engineer** | QA 角色知識框架、審查策略與 Story-Lifecycle 整合指引 |
 | **team-debate** | 同職能 Critic Agent 對 M/L Stories 的獨立 peer critique |
+| **product-team** | 產品工程團隊三檔變速：客觀換檔規則決定人數與 pipeline 深度，能大能小 |
 
 **Design（設計）**
 

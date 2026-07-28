@@ -10,7 +10,7 @@
 
 ## 版號策略
 
-每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.118.1**（#958 #959 修正：外部獨立 QA 審查從 30% 抽樣提升至 100% 全量、Prompt Template Integrity Hard Gate）。
+每個 Sprint 完成後 minor bump（v0.4.0, v0.5.0...），直到達成 v1.0.0 條件。目前版本：**v0.120.0**（Product Team 三檔變速產品工程團隊：客觀換檔規則、隔離邊界、Agent Teams 品質閘）。
 
 | 版號 | 含義 |
 |------|------|

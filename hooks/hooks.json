@@ -30,6 +30,39 @@
             }
         ],
         "Stop": [],
+        "TaskCreated": [
+            {
+                "matcher": "",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/team-task-created-gate.sh'"
+                    }
+                ]
+            }
+        ],
+        "TaskCompleted": [
+            {
+                "matcher": "",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/team-task-completed-gate.sh'"
+                    }
+                ]
+            }
+        ],
+        "TeammateIdle": [
+            {
+                "matcher": "",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/teammate-idle-gate.sh'"
+                    }
+                ]
+            }
+        ],
         "PostToolUse": [
             {
                 "matcher": "Agent",

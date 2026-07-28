@@ -4,7 +4,7 @@
 
 - **專案名稱**：Shikigami（式神）
 - **性質**：Claude Code Plugin — AI Agent Scrum Team 框架
-- **目前版本**：v0.119.0
+- **目前版本**：v0.120.0
 - **授權**：MIT
 - **Repository**：https://github.com/KCTW/shikigami
 
@@ -54,10 +54,10 @@
 ├── plugin.json              # Plugin manifest（版號 source of truth）
 └── marketplace.json         # Marketplace 發布資訊
 
-agents/                      # 8 個角色定義
-skills/                      # 31 個 Skill
+agents/                      # 9 個角色定義
+skills/                      # 32 個 Skill
 hooks/                       # Hook 配置（hooks.json + session-start/）
-commands/                    # 4 個 slash command
+commands/                    # 5 個 slash command
 mcp-servers/                 # MCP server（quality-observer：品質指標查詢，stdio transport）
 templates/                   # CLAUDE.md / GEMINI.md / SDD 模板
 scripts/                     # 驗證腳本（validate-*.sh）
